@@ -6,14 +6,14 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="650"
+        Title="Yacht Dice" Height="800" Width="700"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
 
     <!-- El Viewbox con margen asegura que la tarjeta nunca toque los bordes de la ventana -->
     <Viewbox Stretch="Uniform" Margin="0,20,0,20">
-        <Grid Width="600">
+        <Grid Width="650">
             <views:LanguageSwitcher HorizontalAlignment="Right"
                                      VerticalAlignment="Top"
                                      Margin="0,0,10,0"
@@ -32,8 +32,8 @@
                            FontSize="16"
                            Margin="0,0,0,20"/>
 
-                <!-- TARJETA (Ajustada para ser más compacta) -->
-                <Border Style="{StaticResource CardPanel}" Width="380" VerticalAlignment="Center" Padding="25">
+                <!-- TARJETA (Ancho expandido de 380 a 450 para dar más espacio a los campos dobles) -->
+                <Border Style="{StaticResource CardPanel}" Width="450" VerticalAlignment="Center" Padding="25">
                     <StackPanel>
 
                         <!-- TABS -->
@@ -88,19 +88,33 @@
                         <!-- ===== CAMPOS: REGISTRO (oculto por defecto) ===== -->
                         <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
 
-                            <!-- Nombre -->
-                            <TextBlock Text="{x:Static properties:Strings.Auth_FirstName}"
-                                       Style="{StaticResource FieldLabel}" FontSize="15"/>
-                            <TextBox x:Name="FirstNameTextBox"
-                                     Style="{StaticResource TextBoxRounded}"
-                                     Margin="0,0,0,10" FontSize="16" Padding="10,8"/>
+                            <!-- Nombre y Apellidos en la misma línea (ahora con más ancho) -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <!-- Espaciador -->
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <!-- Apellidos -->
-                            <TextBlock Text="{x:Static properties:Strings.Auth_LastName}"
-                                       Style="{StaticResource FieldLabel}" FontSize="15"/>
-                            <TextBox x:Name="LastNameTextBox"
-                                     Style="{StaticResource TextBoxRounded}"
-                                     Margin="0,0,0,10" FontSize="16" Padding="10,8"/>
+                                <!-- Nombre -->
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{x:Static properties:Strings.Auth_FirstName}"
+                                               Style="{StaticResource FieldLabel}" FontSize="15"/>
+                                    <TextBox x:Name="FirstNameTextBox"
+                                             Style="{StaticResource TextBoxRounded}"
+                                             FontSize="16" Padding="10,8"/>
+                                </StackPanel>
+
+                                <!-- Apellidos -->
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="{x:Static properties:Strings.Auth_LastName}"
+                                               Style="{StaticResource FieldLabel}" FontSize="15"/>
+                                    <TextBox x:Name="LastNameTextBox"
+                                             Style="{StaticResource TextBoxRounded}"
+                                             FontSize="16" Padding="10,8"/>
+                                </StackPanel>
+                            </Grid>
 
                             <!-- Usuario -->
                             <TextBlock Text="{x:Static properties:Strings.Auth_Username}"
