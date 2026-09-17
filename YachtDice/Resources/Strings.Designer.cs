@@ -97,6 +97,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Nombre.
+        /// </summary>
+        public static string Auth_FirstName {
+            get {
+                return ResourceManager.GetString("Auth_FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a ¿Olvidaste tu contraseña?.
         /// </summary>
         public static string Auth_ForgotPassword {
@@ -111,6 +120,15 @@ namespace YachtDice.Resources {
         public static string Auth_GuestButton {
             get {
                 return ResourceManager.GetString("Auth_GuestButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Apellidos.
+        /// </summary>
+        public static string Auth_LastName {
+            get {
+                return ResourceManager.GetString("Auth_LastName", resourceCulture);
             }
         }
         

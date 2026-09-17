@@ -162,6 +162,12 @@
   <data name="Auth_UsernamePlaceholder" xml:space="preserve">
     <value>MyNick123</value>
   </data>
+  <data name="Auth_FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="Auth_LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
   <data name="Game_KickPlayerButton" xml:space="preserve">
     <value>Kick player</value>
   </data>

@@ -6,147 +6,168 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="906" Width="716"
+        Title="Yacht Dice" Height="750" Width="600"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
-        ResizeMode="NoResize"
         FontFamily="{StaticResource FontBody}">
 
-    <Grid>
-        <views:LanguageSwitcher HorizontalAlignment="Right"
-                                 VerticalAlignment="Top"
-                                 Margin="0,16,16,0"
-                                 Panel.ZIndex="99"/>
+    <!-- El Viewbox escala automáticamente toda la interfaz para que quepa en cualquier pantalla -->
+    <Viewbox Stretch="Uniform">
+        <Grid Width="716" Height="950">
+            <views:LanguageSwitcher HorizontalAlignment="Right"
+                                     VerticalAlignment="Top"
+                                     Margin="0,16,16,0"
+                                     Panel.ZIndex="99"/>
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-10,0,0">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-10,0,0">
 
-            <!-- LOGO -->
-            <TextBlock Text="{x:Static properties:Strings.Auth_Logo}"
-                       Style="{StaticResource TitleDisplay}"
-                       FontSize="60"
-                       HorizontalAlignment="Center"/>
-            <TextBlock Text="{x:Static properties:Strings.Auth_Subtitle}"
-                       Style="{StaticResource SubtitleDisplay}"
-                       HorizontalAlignment="Center"
-                       FontSize="18"
-                       Margin="0,4,0,26"/>
+                <!-- LOGO -->
+                <TextBlock Text="{x:Static properties:Strings.Auth_Logo}"
+                           Style="{StaticResource TitleDisplay}"
+                           FontSize="60"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="{x:Static properties:Strings.Auth_Subtitle}"
+                           Style="{StaticResource SubtitleDisplay}"
+                           HorizontalAlignment="Center"
+                           FontSize="18"
+                           Margin="0,4,0,26"/>
 
-            <!-- TARJETA -->
-            <Border Style="{StaticResource CardPanel}" Width="390" Height="539">
-                <StackPanel>
+                <!-- TARJETA (Se eliminó el Height fijo para que se adapte sola) -->
+                <Border Style="{StaticResource CardPanel}" Width="390" VerticalAlignment="Center">
+                    <StackPanel>
 
-                    <!-- TABS -->
-                    <Grid Margin="0,0,0,20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- TABS -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Button x:Name="LoginTabButton" Grid.Column="0"
-                                Content="{x:Static properties:Strings.Auth_LoginTab}"
-                                Style="{StaticResource TabButtonActive}"
-                                Margin="0,0,4,0"
-                                FontSize="17"
-                                Click="LoginTabButton_Click"/>
+                            <Button x:Name="LoginTabButton" Grid.Column="0"
+                                    Content="{x:Static properties:Strings.Auth_LoginTab}"
+                                    Style="{StaticResource TabButtonActive}"
+                                    Margin="0,0,4,0"
+                                    FontSize="17"
+                                    Click="LoginTabButton_Click"/>
 
-                        <Button x:Name="RegisterTabButton" Grid.Column="1"
-                                Content="{x:Static properties:Strings.Auth_RegisterTab}"
-                                Style="{StaticResource TabButtonInactive}"
-                                Margin="4,0,0,0"
-                                FontSize="17"
-                                Click="RegisterTabButton_Click"/>
-                    </Grid>
+                            <Button x:Name="RegisterTabButton" Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Auth_RegisterTab}"
+                                    Style="{StaticResource TabButtonInactive}"
+                                    Margin="4,0,0,0"
+                                    FontSize="17"
+                                    Click="RegisterTabButton_Click"/>
+                        </Grid>
 
-                    <!-- ===== CAMPOS: LOGIN ===== -->
-                    <StackPanel x:Name="LoginPanel">
-                        <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
-                                   Style="{StaticResource FieldLabel}"
-                                   FontSize="17"/>
-                        <TextBox x:Name="EmailTextBox"
-                                 Style="{StaticResource TextBoxRounded}"
-                                 Margin="0,0,0,14"
-                                 FontSize="17"
-                                 Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
+                        <!-- ===== CAMPOS: LOGIN ===== -->
+                        <StackPanel x:Name="LoginPanel">
+                            <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <TextBox x:Name="EmailTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     Margin="0,0,0,14"
+                                     FontSize="17"
+                                     Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
 
-                        <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
-                                   Style="{StaticResource FieldLabel}"
-                                   FontSize="17"/>
+                            <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
 
-                        <PasswordBox x:Name="LoginPasswordBox"
-                                     Style="{StaticResource PasswordBoxRounded}"
-                                     Margin="0,0,0,10"/>
+                            <PasswordBox x:Name="LoginPasswordBox"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Margin="0,0,0,10"/>
 
-                        <TextBlock Text="{x:Static properties:Strings.Auth_ForgotPassword}"
-                                   Style="{StaticResource LinkText}"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,0,18"
-                                   FontSize="15"
-                                   MouseLeftButtonUp="ForgotPasswordLink_Click"/>
-                    </StackPanel>
+                            <TextBlock Text="{x:Static properties:Strings.Auth_ForgotPassword}"
+                                       Style="{StaticResource LinkText}"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,0,0,18"
+                                       FontSize="15"
+                                       MouseLeftButtonUp="ForgotPasswordLink_Click"/>
+                        </StackPanel>
 
-                    <!-- ===== CAMPOS: REGISTRO (oculto por defecto) ===== -->
-                    <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
-                        <TextBlock Text="{x:Static properties:Strings.Auth_Username}"
-                                   Style="{StaticResource FieldLabel}"
-                                   FontSize="17"/>
-                        <TextBox x:Name="UsernameTextBox"
-                                 Style="{StaticResource TextBoxRounded}"
-                                 Margin="0,0,0,14"
-                                 FontSize="17"
-                                 Tag="{x:Static properties:Strings.Auth_UsernamePlaceholder}"/>
+                        <!-- ===== CAMPOS: REGISTRO (oculto por defecto) ===== -->
+                        <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
 
-                        <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
-                                   Style="{StaticResource FieldLabel}"
-                                   FontSize="17"/>
-                        <TextBox x:Name="RegisterEmailTextBox"
-                                 Style="{StaticResource TextBoxRounded}"
-                                 Margin="0,0,0,14"
-                                 FontSize="17"
-                                 Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
-
-                        <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
-                                   Style="{StaticResource FieldLabel}"
-                                   FontSize="17"/>
-                        <PasswordBox x:Name="RegisterPasswordBox"
-                                     Style="{StaticResource PasswordBoxRounded}"
-                                     Margin="0,0,0,18"
+                            <!-- Nombre -->
+                            <TextBlock Text="{x:Static properties:Strings.Auth_FirstName}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <TextBox x:Name="FirstNameTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     Margin="0,0,0,14"
                                      FontSize="17"/>
+
+                            <!-- Apellidos -->
+                            <TextBlock Text="{x:Static properties:Strings.Auth_LastName}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <TextBox x:Name="LastNameTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     Margin="0,0,0,14"
+                                     FontSize="17"/>
+
+                            <TextBlock Text="{x:Static properties:Strings.Auth_Username}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <TextBox x:Name="UsernameTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     Margin="0,0,0,14"
+                                     FontSize="17"
+                                     Tag="{x:Static properties:Strings.Auth_UsernamePlaceholder}"/>
+
+                            <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <TextBox x:Name="RegisterEmailTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     Margin="0,0,0,14"
+                                     FontSize="17"
+                                     Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
+
+                            <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
+                                       Style="{StaticResource FieldLabel}"
+                                       FontSize="17"/>
+                            <PasswordBox x:Name="RegisterPasswordBox"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Margin="0,0,0,18"
+                                         FontSize="17"/>
+                        </StackPanel>
+
+                        <!-- BOTÓN PRINCIPAL -->
+                        <Button x:Name="AuthSubmitButton"
+                                Content="{x:Static properties:Strings.Auth_LoginButton}"
+                                Style="{StaticResource BtnPrimary}"
+                                HorizontalAlignment="Stretch"
+                                FontSize="17"
+                                Padding="0,13"
+                                Click="AuthSubmitButton_Click"/>
+
+                        <!-- DIVISOR -->
+                        <Grid Margin="0,18,0,18">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Height="1" Background="{StaticResource BrushBorder}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{x:Static properties:Strings.Auth_Divider}"
+                                       Foreground="{StaticResource BrushTextMuted}" Margin="10,0" FontSize="12"/>
+                            <Border Grid.Column="2" Height="1" Background="{StaticResource BrushBorder}" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- BOTÓN INVITADO -->
+                        <Button x:Name="GuestButton"
+                                Content="{x:Static properties:Strings.Auth_GuestButton}"
+                                Style="{StaticResource BtnOutline}"
+                                HorizontalAlignment="Stretch"
+                                Padding="0,12"
+                                FontSize="16"
+                                Click="GuestButton_Click"/>
+
                     </StackPanel>
+                </Border>
 
-                    <!-- BOTÓN PRINCIPAL -->
-                    <Button x:Name="AuthSubmitButton"
-                            Content="{x:Static properties:Strings.Auth_LoginButton}"
-                            Style="{StaticResource BtnPrimary}"
-                            HorizontalAlignment="Stretch"
-                            FontSize="17"
-                            Padding="0,13"
-                            Click="AuthSubmitButton_Click"/>
-
-                    <!-- DIVISOR -->
-                    <Grid Margin="0,18,0,18">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Height="1" Background="{StaticResource BrushBorder}" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="{x:Static properties:Strings.Auth_Divider}"
-                                   Foreground="{StaticResource BrushTextMuted}" Margin="10,0" FontSize="12"/>
-                        <Border Grid.Column="2" Height="1" Background="{StaticResource BrushBorder}" VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <!-- BOTÓN INVITADO -->
-                    <Button x:Name="GuestButton"
-                            Content="{x:Static properties:Strings.Auth_GuestButton}"
-                            Style="{StaticResource BtnOutline}"
-                            HorizontalAlignment="Stretch"
-                            Padding="0,12"
-                            FontSize="16"
-                            Click="GuestButton_Click"/>
-
-                </StackPanel>
-            </Border>
-
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </Grid>
+    </Viewbox>
 </Window>
