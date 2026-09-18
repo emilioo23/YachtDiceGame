@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using YachtDice.Data;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Modelo simple para mostrar datos de ejemplo en el marcador global.
-    /// Mas adelante se reemplazara por datos reales del backend.
+    /// Representa una fila calculada del marcador global, resultado de
+    /// agrupar el historial de partidas por jugador.
     /// </summary>
     public class LeaderboardEntry
     {
@@ -19,9 +21,15 @@ namespace YachtDice.Views
         public int Wins { get; set; }
     }
 
+    /// <summary>
+    /// Ventana del marcador global, mostrando el ranking de jugadores
+    /// segun el puntaje acumulado en partidas terminadas.
+    /// </summary>
     public partial class LeaderboardWindow : Window
     {
-        private const int YourMockRank = 47;
+        private const int TopRankGold = 1;
+        private const int TopRankSilver = 2;
+        private const int TopRankBronze = 3;
 
         private readonly string _playerName;
 
@@ -35,23 +43,95 @@ namespace YachtDice.Views
             _playerName = playerName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(playerName);
 
-            LoadSampleRanking();
-            YourPositionTextBlock.Text = string.Format(Strings.Leaderboard_YourPosition, YourMockRank);
+            LoadRanking();
         }
 
-        private void LoadSampleRanking()
+        private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            var ranking = new List<LeaderboardEntry>
-            {
-                new LeaderboardEntry { Medal = "🥇", Name = "DiceKing99",  Level = 42, Points = 125400, Wins = 156 },
-                new LeaderboardEntry { Medal = "🥈", Name = "YachtMaster", Level = 38, Points = 110200, Wins = 203 },
-                new LeaderboardEntry { Medal = "🥉", Name = "SofiaR",      Level = 35, Points = 98700,  Wins = 141 },
-            };
+            GlobalFilterButton.Style = (Style)FindResource("TabButtonActive");
+            FriendsFilterButton.Style = (Style)FindResource("BtnOutline");
+        }
 
-            foreach (var entry in ranking)
+        private void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            FriendsFilterButton.Style = (Style)FindResource("TabButtonActive");
+            GlobalFilterButton.Style = (Style)FindResource("BtnOutline");
+        }
+
+        private void BackLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var menuWindow = new MenuWindow(_playerName);
+            menuWindow.Show();
+            this.Close();
+        }
+
+        private void LoadRanking()
+        {
+            using (var context = new YachtDiceContext())
             {
-                AddRankingRow(entry);
+                var ranking = context.GameHistoryPlayers
+                    .GroupBy(entry => entry.PlayerId)
+                    .Select(group => new
+                    {
+                        PlayerId = group.Key,
+                        TotalScore = group.Sum(entry => entry.FinalScore),
+                        TotalWins = group.Count(entry => entry.IsWinner == true)
+                    })
+                    .Join(context.Players,
+                        stats => stats.PlayerId,
+                        player => player.Id,
+                        (stats, player) => new LeaderboardEntry
+                        {
+                            Name = player.DisplayName,
+                            Level = player.Level ?? 0,
+                            Points = stats.TotalScore,
+                            Wins = stats.TotalWins
+                        })
+                    .OrderByDescending(entry => entry.Points)
+                    .ToList();
+
+                RenderRanking(ranking);
             }
+        }
+
+        private void RenderRanking(List<LeaderboardEntry> ranking)
+        {
+            int currentRank = 0;
+            int viewerRank = 0;
+
+            foreach (LeaderboardEntry entry in ranking)
+            {
+                currentRank++;
+                entry.Medal = GetMedalForRank(currentRank);
+                AddRankingRow(entry);
+
+                if (entry.Name == _playerName)
+                {
+                    viewerRank = currentRank;
+                }
+            }
+
+            YourPositionTextBlock.Text = string.Format(Strings.Leaderboard_YourPosition, viewerRank);
+        }
+
+        private string GetMedalForRank(int rank)
+        {
+            if (rank == TopRankGold)
+            {
+                return "🥇";
+            }
+
+            if (rank == TopRankSilver)
+            {
+                return "🥈";
+            }
+
+            if (rank == TopRankBronze)
+            {
+                return "🥉";
+            }
+
+            return rank.ToString();
         }
 
         private void AddRankingRow(LeaderboardEntry entry)
@@ -83,25 +163,6 @@ namespace YachtDice.Views
             row.Children.Add(winsLabel);
 
             RankingPanel.Children.Add(row);
-        }
-
-        private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalFilterButton.Style = (Style)FindResource("TabButtonActive");
-            FriendsFilterButton.Style = (Style)FindResource("BtnOutline");
-        }
-
-        private void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
-        {
-            FriendsFilterButton.Style = (Style)FindResource("TabButtonActive");
-            GlobalFilterButton.Style = (Style)FindResource("BtnOutline");
-        }
-
-        private void BackLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var menuWindow = new MenuWindow(_playerName);
-            menuWindow.Show();
-            this.Close();
         }
     }
 }

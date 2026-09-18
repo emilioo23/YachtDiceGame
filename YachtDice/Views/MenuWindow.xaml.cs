@@ -105,10 +105,11 @@ namespace YachtDice.Views
         {
             if (string.IsNullOrWhiteSpace(JoinRoomCodeTextBox.Text))
             {
-                MessageBox.Show("Ingresa un codigo de sala.");
+                MessageBox.Show(Strings.MainMenu_Play_ErrorRequiredRoomCode);
                 return;
             }
-            MessageBox.Show("Uniendose a sala " + JoinRoomCodeTextBox.Text + " (se conectara mas adelante).");
+
+            MessageBox.Show(string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text));
         }
     }
 }

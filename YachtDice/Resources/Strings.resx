@@ -624,4 +624,49 @@
   <data name="Game_RoundInfo" xml:space="preserve">
     <value>Ronda {0} / {1}</value>
   </data>
+  <data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>Completa todos los campos obligatorios.</value>
+  </data>
+  <data name="Auth_ErrorUserNotFound" xml:space="preserve">
+    <value>No encontramos una cuenta con ese correo.</value>
+  </data>
+  <data name="Auth_ErrorWrongPassword" xml:space="preserve">
+    <value>Contraseña incorrecta.</value>
+  </data>
+  <data name="Auth_ErrorEmailTaken" xml:space="preserve">
+    <value>Ese correo ya está registrado.</value>
+  </data>
+  <data name="Auth_ErrorUsernameTaken" xml:space="preserve">
+    <value>Ese nombre de usuario ya está en uso.</value>
+  </data>
+  <data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>Cuenta creada con éxito. Ya puedes iniciar sesión.</value>
+  </data>
+  <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>Ingresa tu correo electrónico.</value>
+  </data>
+  <data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
+    <value>Enlace de recuperación enviado a {0}</value>
+  </data>
+  <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>Completa el código de 4 dígitos.</value>
+  </data>
+  <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>Código reenviado (simulado).</value>
+  </data>
+  <data name="Lobby_CodeCopiedMessage" xml:space="preserve">
+    <value>Código copiado: {0}</value>
+  </data>
+  <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>Ingresa un código de sala.</value>
+  </data>
+  <data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
+    <value>Uniéndose a sala {0} (se conectará más adelante).</value>
+  </data>
+  <data name="Profile_SavedMessage" xml:space="preserve">
+    <value>Perfil guardado correctamente.</value>
+  </data>
+  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+    <value>Esta función se implementará más adelante.</value>
+  </data>
 </root>

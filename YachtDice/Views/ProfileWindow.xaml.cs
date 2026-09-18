@@ -1,9 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana de edicion de perfil del jugador.
+    /// </summary>
     public partial class ProfileWindow : Window
     {
         private readonly string _playerName;
@@ -37,7 +41,7 @@ namespace YachtDice.Views
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             // Aqui, mas adelante, se guardaran los cambios reales en el backend.
-            MessageBox.Show("Perfil guardado correctamente.");
+            MessageBox.Show(Strings.Profile_SavedMessage);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

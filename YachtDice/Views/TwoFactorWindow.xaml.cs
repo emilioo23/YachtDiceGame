@@ -5,23 +5,29 @@ using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana de verificacion en dos pasos, mostrada despues de un login exitoso.
+    /// </summary>
     public partial class TwoFactorWindow : Window
     {
         private const int CodeLength = 4;
 
+        private readonly string _playerDisplayName;
+
         /// <summary>
-        /// Inicializa la ventana de verificacion en dos pasos para el correo indicado.
+        /// Inicializa la ventana de verificacion en dos pasos para el jugador indicado.
         /// </summary>
         /// <param name="email">Correo al que se envio el codigo de verificacion.</param>
-        public TwoFactorWindow(string email)
+        /// <param name="playerDisplayName">Nombre para mostrar del jugador que inicio sesion.</param>
+        public TwoFactorWindow(string email, string playerDisplayName)
         {
             InitializeComponent();
+            _playerDisplayName = playerDisplayName;
             DestinationEmailTextBlock.Text = email;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName);
             Digit1.Focus();
         }
 
-        // Salta automaticamente a la siguiente casilla al escribir un digito
         private void Digit_TextChanged(object sender, TextChangedEventArgs e)
         {
             var box = sender as TextBox;
@@ -50,19 +56,19 @@ namespace YachtDice.Views
 
             if (code.Length < CodeLength)
             {
-                MessageBox.Show(Strings.TwoFactor_Title + ": " + "Completa el codigo de 4 digitos.");
+                MessageBox.Show(Strings.TwoFactor_ErrorIncompleteCode);
                 return;
             }
 
             // Aqui, mas adelante, se validara el codigo real contra el backend.
-            var menuWindow = new MenuWindow(DestinationEmailTextBlock.Text);
+            var menuWindow = new MenuWindow(_playerDisplayName);
             menuWindow.Show();
             this.Close();
         }
 
         private void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Codigo reenviado (simulado).");
+            MessageBox.Show(Strings.TwoFactor_CodeResentMessage);
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)

@@ -1,8 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana de recuperacion de contrasena por correo electronico.
+    /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
         /// <summary>
@@ -17,16 +21,12 @@ namespace YachtDice.Views
         {
             if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
             {
-                MessageBox.Show("Ingresa tu correo electronico.");
+                MessageBox.Show(Strings.ForgotPassword_ErrorRequiredEmail);
                 return;
             }
 
-            // Aqui, mas adelante, se conectara con el backend para enviar el enlace real.
-            MessageBox.Show("Enlace de recuperacion enviado a " + EmailTextBox.Text);
-
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            this.Close();
+            // Aqui, mas adelante, se conectara el envio real del correo de recuperacion.
+            MessageBox.Show(string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text));
         }
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)

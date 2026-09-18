@@ -1,9 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana de sala de espera previa al inicio de una partida.
+    /// </summary>
     public partial class LobbyWindow : Window
     {
         private readonly string _playerName;
@@ -53,7 +57,7 @@ namespace YachtDice.Views
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(RoomCodeTextBlock.Text);
-            MessageBox.Show("Codigo copiado: " + RoomCodeTextBlock.Text);
+            MessageBox.Show(string.Format(Strings.Lobby_CodeCopiedMessage, RoomCodeTextBlock.Text));
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)

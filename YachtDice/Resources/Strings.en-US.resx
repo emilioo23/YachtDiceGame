@@ -624,4 +624,49 @@
   <data name="Game_RoundInfo" xml:space="preserve">
     <value>Round {0} / {1}</value>
   </data>
+  <data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>Please fill in all required fields.</value>
+  </data>
+  <data name="Auth_ErrorUserNotFound" xml:space="preserve">
+    <value>We couldn't find an account with that email.</value>
+  </data>
+  <data name="Auth_ErrorWrongPassword" xml:space="preserve">
+    <value>Incorrect password.</value>
+  </data>
+  <data name="Auth_ErrorEmailTaken" xml:space="preserve">
+    <value>That email is already registered.</value>
+  </data>
+  <data name="Auth_ErrorUsernameTaken" xml:space="preserve">
+    <value>That username is already taken.</value>
+  </data>
+  <data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>Account created successfully. You can now log in.</value>
+  </data>
+  <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>Please enter your email address.</value>
+  </data>
+  <data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
+    <value>Recovery link sent to {0}</value>
+  </data>
+  <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>Please complete the 4-digit code.</value>
+  </data>
+  <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>Code resent (simulated).</value>
+  </data>
+  <data name="Lobby_CodeCopiedMessage" xml:space="preserve">
+    <value>Code copied: {0}</value>
+  </data>
+  <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>Please enter a room code.</value>
+  </data>
+  <data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
+    <value>Joining room {0} (will connect later).</value>
+  </data>
+  <data name="Profile_SavedMessage" xml:space="preserve">
+    <value>Profile saved successfully.</value>
+  </data>
+  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+    <value>This feature will be implemented later.</value>
+  </data>
 </root>

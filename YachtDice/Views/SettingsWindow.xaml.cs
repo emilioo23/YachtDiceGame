@@ -1,9 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana de ajustes del jugador, organizada en secciones navegables.
+    /// </summary>
     public partial class SettingsWindow : Window
     {
         private const string AccountSection = "Account";
@@ -132,7 +136,7 @@ namespace YachtDice.Views
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // Aqui, mas adelante, se conectara el flujo real de eliminacion de cuenta.
-            MessageBox.Show("Esta funcion se implementara mas adelante.");
+            MessageBox.Show(Strings.Settings_FeatureNotImplementedMessage);
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)

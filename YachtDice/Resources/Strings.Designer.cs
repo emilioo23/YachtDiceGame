@@ -97,6 +97,51 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ese correo ya está registrado..
+        /// </summary>
+        public static string Auth_ErrorEmailTaken {
+            get {
+                return ResourceManager.GetString("Auth_ErrorEmailTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Completa todos los campos obligatorios..
+        /// </summary>
+        public static string Auth_ErrorRequiredFields {
+            get {
+                return ResourceManager.GetString("Auth_ErrorRequiredFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ese nombre de usuario ya está en uso..
+        /// </summary>
+        public static string Auth_ErrorUsernameTaken {
+            get {
+                return ResourceManager.GetString("Auth_ErrorUsernameTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No encontramos una cuenta con ese correo..
+        /// </summary>
+        public static string Auth_ErrorUserNotFound {
+            get {
+                return ResourceManager.GetString("Auth_ErrorUserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Contraseña incorrecta..
+        /// </summary>
+        public static string Auth_ErrorWrongPassword {
+            get {
+                return ResourceManager.GetString("Auth_ErrorWrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Nombre.
         /// </summary>
         public static string Auth_FirstName {
@@ -196,6 +241,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Cuenta creada con éxito. Ya puedes iniciar sesión..
+        /// </summary>
+        public static string Auth_SuccessRegister {
+            get {
+                return ResourceManager.GetString("Auth_SuccessRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Usuario.
         /// </summary>
         public static string Auth_Username {
@@ -237,6 +291,24 @@ namespace YachtDice.Resources {
         public static string ForgotPassword_Email {
             get {
                 return ResourceManager.GetString("ForgotPassword_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ingresa tu correo electrónico..
+        /// </summary>
+        public static string ForgotPassword_ErrorRequiredEmail {
+            get {
+                return ResourceManager.GetString("ForgotPassword_ErrorRequiredEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enlace de recuperación enviado a {0}.
+        /// </summary>
+        public static string ForgotPassword_LinkSentMessage {
+            get {
+                return ResourceManager.GetString("ForgotPassword_LinkSentMessage", resourceCulture);
             }
         }
         
@@ -601,6 +673,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Código copiado: {0}.
+        /// </summary>
+        public static string Lobby_CodeCopiedMessage {
+            get {
+                return ResourceManager.GetString("Lobby_CodeCopiedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Copiar código.
         /// </summary>
         public static string Lobby_CopyCodeButton {
@@ -925,11 +1006,29 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ingresa un código de sala..
+        /// </summary>
+        public static string MainMenu_Play_ErrorRequiredRoomCode {
+            get {
+                return ResourceManager.GetString("MainMenu_Play_ErrorRequiredRoomCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Entrar →.
         /// </summary>
         public static string MainMenu_Play_JoinButton {
             get {
                 return ResourceManager.GetString("MainMenu_Play_JoinButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Uniéndose a sala {0} (se conectará más adelante)..
+        /// </summary>
+        public static string MainMenu_Play_JoiningRoomMessage {
+            get {
+                return ResourceManager.GetString("MainMenu_Play_JoiningRoomMessage", resourceCulture);
             }
         }
         
@@ -1092,6 +1191,15 @@ namespace YachtDice.Resources {
         public static string Profile_SaveChangesButton {
             get {
                 return ResourceManager.GetString("Profile_SaveChangesButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Perfil guardado correctamente..
+        /// </summary>
+        public static string Profile_SavedMessage {
+            get {
+                return ResourceManager.GetString("Profile_SavedMessage", resourceCulture);
             }
         }
         
@@ -1339,6 +1447,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Esta función se implementará más adelante..
+        /// </summary>
+        public static string Settings_FeatureNotImplementedMessage {
+            get {
+                return ResourceManager.GetString("Settings_FeatureNotImplementedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Mi cuenta.
         /// </summary>
         public static string Settings_NavAccount {
@@ -1533,6 +1650,24 @@ namespace YachtDice.Resources {
         public static string TwoFactor_BackLink {
             get {
                 return ResourceManager.GetString("TwoFactor_BackLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código reenviado (simulado)..
+        /// </summary>
+        public static string TwoFactor_CodeResentMessage {
+            get {
+                return ResourceManager.GetString("TwoFactor_CodeResentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Completa el código de 4 dígitos..
+        /// </summary>
+        public static string TwoFactor_ErrorIncompleteCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorIncompleteCode", resourceCulture);
             }
         }
         
