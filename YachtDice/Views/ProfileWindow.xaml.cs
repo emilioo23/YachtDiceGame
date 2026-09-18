@@ -33,7 +33,6 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Cambia el color de fondo del avatar grande al color elegido.
             var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
             avatarBorder.Background = swatch.Background;
         }

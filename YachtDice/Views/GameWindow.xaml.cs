@@ -70,8 +70,6 @@ namespace YachtDice.Views
             this.Close();
         }
 
-        // ============ DADOS ============
-
         private void CreateDiceOnCanvas()
         {
             for (int i = 0; i < DiceCount; i++)
@@ -93,7 +91,6 @@ namespace YachtDice.Views
             }
         }
 
-        // Construye visualmente una cara de dado (fondo blanco + puntos) segun el valor 1-6.
         private Border CreateDiceFace(int value)
         {
             var border = new Border
@@ -175,7 +172,7 @@ namespace YachtDice.Views
         {
             if (_rollsLeft == 0)
             {
-                return; // no se puede fijar antes del primer tiro
+                return;
             }
 
             _heldDice[diceIndex] = !_heldDice[diceIndex];
@@ -207,8 +204,6 @@ namespace YachtDice.Views
             RollButton.Content = string.Format(Strings.Game_RollButton, _rollsLeft);
             RollButton.IsEnabled = _rollsLeft < MaxRolls;
         }
-
-        // ============ TABLA DE PUNTAJE (2 columnas: Tu / Rival) ============
 
         private void LoadCategories()
         {
@@ -314,7 +309,7 @@ namespace YachtDice.Views
             }
             if (myScoreLabel.Text != "")
             {
-                return; // ya anotada
+                return;
             }
 
             // Calculo simplificado: suma de los 5 dados.
@@ -335,7 +330,6 @@ namespace YachtDice.Views
                 _totalScoreLabel.Text = _totalScore.ToString();
             }
 
-            // Reinicia la mano para el siguiente turno.
             _rollsLeft = 0;
             for (int i = 0; i < DiceCount; i++)
             {
@@ -344,8 +338,6 @@ namespace YachtDice.Views
             }
             UpdateRollButton();
         }
-
-        // ============ NAVEGACION ============
 
         private void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
         {
