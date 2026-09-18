@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace YachtDice.Views
 {
@@ -29,14 +28,13 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Cambia el color de fondo del avatar grande al color elegido.
             var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
             avatarBorder.Background = swatch.Background;
         }
 
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Aqui, mas adelante, se guardaran los cambios reales en el backend.
+            // TODO: Aqui, mas adelante, se guardaran los cambios reales en el backend.
             MessageBox.Show("Perfil guardado correctamente.");
         }
 

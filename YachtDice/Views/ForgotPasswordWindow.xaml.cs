@@ -21,7 +21,7 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Aqui, mas adelante, se conectara con el backend para enviar el enlace real.
+            // TODO: Aqui, mas adelante, se conectara con el backend para enviar el enlace real.
             MessageBox.Show("Enlace de recuperacion enviado a " + EmailTextBox.Text);
 
             var loginWindow = new LoginWindow();

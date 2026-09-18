@@ -21,7 +21,6 @@ namespace YachtDice.Views
             Digit1.Focus();
         }
 
-        // Salta automaticamente a la siguiente casilla al escribir un digito
         private void Digit_TextChanged(object sender, TextChangedEventArgs e)
         {
             var box = sender as TextBox;
@@ -54,7 +53,7 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Aqui, mas adelante, se validara el codigo real contra el backend.
+            // TODO: Aqui, mas adelante, se validara el codigo real contra el backend.
             var menuWindow = new MenuWindow(DestinationEmailTextBlock.Text);
             menuWindow.Show();
             this.Close();

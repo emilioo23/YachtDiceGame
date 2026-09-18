@@ -25,7 +25,7 @@ namespace YachtDice.Views
             WinnerTitleTextBlock.Text = string.Format(Strings.Results_WinnerTitle, playerName);
             ScoreSubtitleTextBlock.Text = string.Format(Strings.Results_ScoreSubtitle, playerScore);
 
-            // Datos del rival simulado, mas adelante vendran del backend.
+            // TODO: Datos del rival simulado, mas adelante vendran del backend.
             var random = new Random();
             int scoreGap = random.Next(MinOpponentScoreGap, MaxOpponentScoreGapExclusive);
             OpponentScoreTextBlock.Text = Math.Max(0, playerScore - scoreGap).ToString();

@@ -131,7 +131,7 @@ namespace YachtDice.Views
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            // Aqui, mas adelante, se conectara el flujo real de eliminacion de cuenta.
+            // TODO: Aqui, mas adelante, se conectara el flujo real de eliminacion de cuenta.
             MessageBox.Show("Esta funcion se implementara mas adelante.");
         }
 

@@ -45,7 +45,7 @@ namespace YachtDice.Views
             }
             else
             {
-                // Aqui, mas adelante, se validara el registro real.
+                // TODO: Aqui, mas adelante, se validara el registro real.
                 MessageBox.Show("Aqui se conectara la logica de registro mas adelante.");
             }
         }

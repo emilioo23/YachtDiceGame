@@ -19,7 +19,6 @@ namespace YachtDice
         {
             base.OnStartup(e);
 
-            // Cultura y tema por defecto al arrancar: espanol (Mexico) y tema claro.
             SetCulture(DefaultCultureCode);
             SetTheme(isDark: false);
 
