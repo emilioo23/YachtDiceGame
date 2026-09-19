@@ -34,7 +34,7 @@
                     <Border Width="120" Height="120" CornerRadius="60" Background="{StaticResource BrushCream2}"
                         BorderBrush="{StaticResource BrushGold}" BorderThickness="3"
                         HorizontalAlignment="Center" Margin="0,0,0,20">
-                        <TextBlock x:Name="AvatarInitialTextBlock" Text="{Binding TODO_Propiedad}" d:Text="J" FontFamily="{StaticResource FontDisplay}" FontSize="48"
+                        <TextBlock x:Name="AvatarInitialTextBlock" d:Text="J" FontFamily="{StaticResource FontDisplay}" FontSize="48"
                                Foreground="{StaticResource BrushWoodDark}"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
@@ -89,19 +89,19 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="24" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+                                <TextBlock d:Text="24" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Static properties:Strings.Profile_StatGames}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="11" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+                                <TextBlock d:Text="11" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Static properties:Strings.Profile_StatWins}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="287" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+                                <TextBlock d:Text="287" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Static properties:Strings.Profile_StatBestScore}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Grid.Column="3" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="240" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+                                <TextBlock d:Text="240" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Static properties:Strings.Profile_TotalXp}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Grid>

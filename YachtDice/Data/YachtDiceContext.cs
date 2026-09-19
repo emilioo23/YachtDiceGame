@@ -16,7 +16,13 @@ namespace YachtDice.Data
         {
         }
 
+        /// <summary>
+        /// Obtiene o establece la colección de jugadores registrados en la base de datos.
+        /// </summary>
         public DbSet<Player> Players { get; set; }
+        /// <summary>
+        /// Obtiene o establece la colección del historial de partidas por jugador.
+        /// </summary>
         public DbSet<GameHistoryPlayer> GameHistoryPlayers { get; set; }
 
         /// <summary>

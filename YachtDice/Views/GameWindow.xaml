@@ -60,10 +60,10 @@
                         <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                             <Border Width="42" Height="42" CornerRadius="21" Background="{StaticResource BrushWood}"
                                 BorderBrush="{StaticResource BrushGold}" BorderThickness="2" HorizontalAlignment="Center">
-                                <TextBlock x:Name="PlayerInitialTextBlock" Text="{Binding TODO_Propiedad}" d:Text="U" Foreground="White" FontWeight="Bold" FontSize="15"
+                                <TextBlock x:Name="PlayerInitialTextBlock" d:Text="U" Foreground="White" FontWeight="Bold" FontSize="15"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock x:Name="PlayerNameTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Tú" FontSize="15" FontWeight="SemiBold"
+                            <TextBlock x:Name="PlayerNameTextBlock" d:Text="Tú" FontSize="15" FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushText}"
                                    HorizontalAlignment="Center" Margin="0,4,0,0"/>
                         </StackPanel>
@@ -71,10 +71,10 @@
                         <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                             <Border Width="42" Height="42" CornerRadius="21" Background="{StaticResource BrushFeltLight}"
                                 BorderBrush="{StaticResource BrushBorder}" BorderThickness="2" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="D" Foreground="White" FontWeight="Bold" FontSize="15"
+                                <TextBlock d:Text="D" Foreground="White" FontWeight="Bold" FontSize="15"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="{Binding TODO_Propiedad}" d:Text="DiegoL" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource BrushText}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock d:Text="DiegoL" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource BrushText}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -112,14 +112,14 @@
                         </Border>
                     </Border>
 
-                    <Button x:Name="RollButton" Content="{Binding TODO_Propiedad}" d:Content="Tirar (0/3)" Style="{StaticResource BtnPrimary}"
+                    <Button x:Name="RollButton" d:Content="Tirar (0/3)" Style="{StaticResource BtnPrimary}"
                         HorizontalAlignment="Center" FontSize="23" Padding="50,15" Margin="0,0,0,10"
                         Click="RollButton_Click"/>
 
                     <TextBlock x:Name="HintTextBlock" Text="{x:Static properties:Strings.Game_PressRollHint}"
                            FontSize="12" Foreground="{StaticResource BrushCream2}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
 
-                    <TextBlock Text="{Binding TODO_Propiedad}" d:Text="Finalizar partida (demo)" FontSize="11" Foreground="{StaticResource BrushCream2}"
+                    <TextBlock Text="Finalizar partida (demo)" FontSize="11" Foreground="{StaticResource BrushCream2}"
                            HorizontalAlignment="Center" TextDecorations="Underline" Cursor="Hand"
                            MouseLeftButtonUp="FinishDemoLink_Click"/>
 

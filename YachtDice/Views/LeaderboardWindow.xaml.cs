@@ -14,17 +14,28 @@ namespace YachtDice.Views
     /// </summary>
     public class LeaderboardEntry
     {
+        /// <summary>
+        /// Obtiene o establece la medalla o posición del jugador (ej. 🥇, 🥈, 🥉).
+        /// </summary>
         public string Medal { get; set; }
+        /// <summary>
+        /// Obtiene o establece el nombre visible del jugador en el ranking.
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Obtiene o establece el nivel actual del jugador.
+        /// </summary>
         public int Level { get; set; }
+        /// <summary>
+        /// Obtiene o establece la puntuación total acumulada.
+        /// </summary>
         public int Points { get; set; }
+        /// <summary>
+        /// Obtiene o establece la cantidad de partidas ganadas.
+        /// </summary>
         public int Wins { get; set; }
     }
 
-    /// <summary>
-    /// Ventana del marcador global, mostrando el ranking de jugadores
-    /// segun el puntaje acumulado en partidas terminadas.
-    /// </summary>
     /// <summary>
     /// Ventana que muestra la tabla de clasificación, rangos y puntuaciones de los jugadores.
     /// </summary>

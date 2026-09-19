@@ -22,10 +22,10 @@
         <Border Style="{StaticResource CardPanel}" Width="480" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel>
 
-                <TextBlock x:Name="WinnerTitleTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Jugador ganó"
+                <TextBlock x:Name="WinnerTitleTextBlock" d:Text="Jugador ganó"
                            FontFamily="{StaticResource FontDisplay}" FontSize="26"
                            Foreground="{StaticResource BrushText}" HorizontalAlignment="Center"/>
-                <TextBlock x:Name="ScoreSubtitleTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Puntaje ganador: 0 pts"
+                <TextBlock x:Name="ScoreSubtitleTextBlock" d:Text="Puntaje ganador: 0 pts"
                            FontSize="14" Foreground="{StaticResource BrushTextMuted}"
                            HorizontalAlignment="Center" Margin="0,4,0,26"/>
 
@@ -43,7 +43,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding TODO_Propiedad}" d:Text="🥇" FontSize="16" Padding="14,10" Grid.ColumnSpan="2" Margin="6,3,229,26" Grid.RowSpan="2"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="🥇" FontSize="16" Padding="14,10" Grid.ColumnSpan="2" Margin="6,3,229,26" Grid.RowSpan="2"/>
                         <TextBlock Grid.Column="1" Text="{x:Static properties:Strings.Results_ColumnPlayer}"
                                    FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="16,18,38,0"/>
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="{x:Static properties:Strings.Results_ColumnTotal}"
@@ -51,10 +51,10 @@
                         <TextBlock Grid.Row="0" Grid.Column="3" Text="{x:Static properties:Strings.Results_ColumnXp}"
                                    FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center" Padding="0,0,14,0"/>
 
-                        <TextBlock Grid.Column="0" Text="{Binding TODO_Propiedad}" d:Text="🥈" FontSize="16" Padding="14,10" Grid.ColumnSpan="2" Margin="6,41,229,0" Grid.RowSpan="2"/>
-                        <TextBlock x:Name="OpponentNameTextBlock" Grid.Row="1" Grid.Column="1" Text="{Binding TODO_Propiedad}" d:Text="DiegoL" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushText}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="16,7,38,0"/>
-                        <TextBlock x:Name="OpponentScoreTextBlock" Grid.Row="1" Grid.Column="2" Text="{Binding TODO_Propiedad}" d:Text="0" FontSize="13" Foreground="{StaticResource BrushText}" VerticalAlignment="Center" Padding="14,0"/>
-                        <TextBlock Text="{Binding TODO_Propiedad}" d:Text="+0" FontSize="13" Foreground="{StaticResource BrushFeltLight}" FontWeight="Bold" VerticalAlignment="Center" Padding="0,0,14,0"/>
+                        <TextBlock Grid.Column="0" Text="🥈" FontSize="16" Padding="14,10" Grid.ColumnSpan="2" Margin="6,41,229,0" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="OpponentNameTextBlock" Grid.Row="1" Grid.Column="1" d:Text="DiegoL" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushText}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="16,7,38,0"/>
+                        <TextBlock x:Name="OpponentScoreTextBlock" Grid.Row="1" Grid.Column="2" d:Text="0" FontSize="13" Foreground="{StaticResource BrushText}" VerticalAlignment="Center" Padding="14,0"/>
+                        <TextBlock d:Text="+0" FontSize="13" Foreground="{StaticResource BrushFeltLight}" FontWeight="Bold" VerticalAlignment="Center" Padding="0,0,14,0"/>
                     </Grid>
                 </Border>
 
