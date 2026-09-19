@@ -32,7 +32,7 @@
                            FontSize="15"
                            Foreground="#2d6a4f"
                            VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="▾" Margin="6,0,0,0" FontSize="16" Foreground="#2d6a4f" VerticalAlignment="Center"/>
+                <TextBlock Text="▾" Margin="6,0,0,0" FontSize="16" Foreground="#2d6a4f" VerticalAlignment="Center"/>
             </StackPanel>
         </ToggleButton>
 
@@ -71,7 +71,7 @@
                                     <Rectangle Grid.Row="2" Fill="#AA151B"/>
                                 </Grid>
                             </Border>
-                            <TextBlock Text="{Binding TODO_Propiedad}" d:Text="Español" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Español" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="EnglishOptionButton"
@@ -103,7 +103,7 @@
                                     <Rectangle Grid.RowSpan="4" Width="9" HorizontalAlignment="Left" Fill="#3C3B6E"/>
                                 </Grid>
                             </Border>
-                            <TextBlock Text="{Binding TODO_Propiedad}" d:Text="English" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="English" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

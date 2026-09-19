@@ -10,9 +10,6 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana de inicio de sesion y registro de jugadores.
-    /// </summary>
-    /// <summary>
     /// Ventana inicial para la autenticación de usuarios y acceso al sistema.
     /// </summary>
     public partial class LoginWindow : Window

@@ -6,15 +6,28 @@ using YachtDice.Views;
 
 namespace YachtDice
 {
+    /// <summary>
+    /// Clase principal que representa la aplicación WPF y gestiona su ciclo de vida y estado global.
+    /// </summary>
     public partial class App : Application
     {
         private const string LightThemeSource = "Styles/Theme.xaml";
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
         private const string DefaultCultureCode = "es-MX";
 
+        /// <summary>
+        /// Obtiene un valor que indica si el tema oscuro está activo actualmente en la aplicación.
+        /// </summary>
         public static bool IsDarkTheme { get; private set; }
+        /// <summary>
+        /// Obtiene el código de la cultura activa actual para la internacionalización.
+        /// </summary>
         public static string CurrentCultureCode { get; private set; }
 
+        /// <summary>
+        /// Se ejecuta al iniciar la aplicación, configurando el idioma, el tema y abriendo la ventana principal.
+        /// </summary>
+        /// <param name="e">Argumentos del evento de inicio.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);

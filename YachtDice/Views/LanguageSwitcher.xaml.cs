@@ -7,11 +7,6 @@ using System.Windows.Shapes;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Control flotante reutilizable de cambio de idioma (ES/EN), pensado para
-    /// colocarse en la esquina de cualquier ventana. Reutiliza App.SetCulture,
-    /// el mismo mecanismo ya conectado en SettingsWindow.
-    /// </summary>
-    /// <summary>
     /// Ventana o control encargado de cambiar el idioma y cultura de la interfaz en tiempo de ejecución.
     /// </summary>
     public partial class LanguageSwitcher : UserControl
@@ -27,6 +22,9 @@ namespace YachtDice.Views
         /// </summary>
         public Func<Window> ReopenWindowFunc { get; set; }
 
+        /// <summary>
+        /// Inicializa una nueva instancia del control flotante de cambio de idioma.
+        /// </summary>
         public LanguageSwitcher()
         {
             InitializeComponent();

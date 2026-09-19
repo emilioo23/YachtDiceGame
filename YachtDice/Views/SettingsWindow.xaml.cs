@@ -6,9 +6,6 @@ using YachtDice.Resources;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana de ajustes del jugador, organizada en secciones navegables.
-    /// </summary>
-    /// <summary>
     /// Ventana de configuración para ajustar preferencias de la aplicación como el tema y notificaciones.
     /// </summary>
     public partial class SettingsWindow : Window
