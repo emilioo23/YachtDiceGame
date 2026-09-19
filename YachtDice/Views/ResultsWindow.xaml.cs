@@ -4,6 +4,9 @@ using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana que muestra el marcador final y ganador al terminar una partida.
+    /// </summary>
     public partial class ResultsWindow : Window
     {
         private const int MinOpponentScoreGap = 10;

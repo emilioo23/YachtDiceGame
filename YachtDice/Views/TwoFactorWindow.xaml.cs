@@ -8,6 +8,9 @@ namespace YachtDice.Views
     /// <summary>
     /// Ventana de verificacion en dos pasos, mostrada despues de un login exitoso.
     /// </summary>
+    /// <summary>
+    /// Ventana para la validación del código de autenticación de dos factores (2FA).
+    /// </summary>
     public partial class TwoFactorWindow : Window
     {
         private const int CodeLength = 4;

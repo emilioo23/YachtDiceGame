@@ -8,6 +8,9 @@ using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Ventana principal del juego donde se gestionan los turnos, lanzamientos de dados y puntuaciones.
+    /// </summary>
     public partial class GameWindow : Window
     {
         private const int DiceCount = 5;
@@ -21,6 +24,9 @@ namespace YachtDice.Views
         private const double ScoredRowOpacity = 0.75;
         private const int CurrentRoundMock = 1;
         private const int TotalRoundsMock = 12;
+        private const int CategoryColumnWidth = 200;
+        private const int LabelPaddingHorizontal = 10;
+        private const int LabelPaddingVertical = 8;
 
         private readonly Random _random = new Random();
         private readonly int[] _diceValues = new int[DiceCount];
@@ -228,7 +234,7 @@ namespace YachtDice.Views
         private Grid CreateBaseRow(string categoryName, Brush background)
         {
             var grid = new Grid { Background = background, Margin = new Thickness(0, 0, 0, 2) };
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(200) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(CategoryColumnWidth) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
@@ -238,7 +244,7 @@ namespace YachtDice.Views
                 FontSize = 12,
                 FontWeight = FontWeights.SemiBold,
                 Foreground = (SolidColorBrush)FindResource("BrushText"),
-                Padding = new Thickness(10, 8, 0, 8),
+                Padding = new Thickness(LabelPaddingHorizontal, LabelPaddingVertical, 0, LabelPaddingVertical),
                 VerticalAlignment = VerticalAlignment.Center
             };
             Grid.SetColumn(label, 0);

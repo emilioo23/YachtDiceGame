@@ -25,11 +25,16 @@ namespace YachtDice.Views
     /// Ventana del marcador global, mostrando el ranking de jugadores
     /// segun el puntaje acumulado en partidas terminadas.
     /// </summary>
+    /// <summary>
+    /// Ventana que muestra la tabla de clasificación, rangos y puntuaciones de los jugadores.
+    /// </summary>
     public partial class LeaderboardWindow : Window
     {
         private const int TopRankGold = 1;
         private const int TopRankSilver = 2;
         private const int TopRankBronze = 3;
+        private const int RankColumnWidth = 60;
+        private const int StandardColumnWidth = 120;
 
         private readonly string _playerName;
 
@@ -137,11 +142,11 @@ namespace YachtDice.Views
         private void AddRankingRow(LeaderboardEntry entry)
         {
             var row = new Grid { Margin = new Thickness(0, 0, 0, 2) };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(RankColumnWidth) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
 
             var textBrush = (Brush)FindResource("BrushText");
             var medalLabel = new TextBlock { Text = entry.Medal, FontSize = 16, Padding = new Thickness(14, 10, 0, 10) };

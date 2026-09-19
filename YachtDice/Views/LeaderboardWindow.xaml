@@ -74,7 +74,7 @@
                         </StackPanel>
                     </Border>
 
-                    <TextBlock x:Name="YourPositionTextBlock" Text="Tu posición: #0"
+                    <TextBlock x:Name="YourPositionTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Tu posición: #0"
                            FontSize="16" Foreground="{StaticResource BrushTextMuted}"/>
 
                 </StackPanel>

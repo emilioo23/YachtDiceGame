@@ -33,7 +33,7 @@
                                FontFamily="{StaticResource FontDisplay}" FontSize="36"
                                Foreground="{StaticResource BrushText}"/>
                         <Border Grid.Column="1" Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="12,6">
-                            <TextBlock x:Name="RoomCodeTextBlock" Text="ID: 4821" FontWeight="Bold" FontSize="23"
+                            <TextBlock x:Name="RoomCodeTextBlock" Text="{Binding TODO_Propiedad}" d:Text="ID: 4821" FontWeight="Bold" FontSize="23"
                                    Foreground="{StaticResource BrushWoodDark}"/>
                         </Border>
                     </Grid>
@@ -60,9 +60,9 @@
                         <StackPanel Grid.Column="1" Margin="10,0,0,0">
                             <TextBlock Text="{x:Static properties:Strings.Lobby_MaxPlayers}" Style="{StaticResource FieldLabel}" FontSize="15"/>
                             <ComboBox x:Name="MaxPlayersComboBox" Padding="10,8" FontSize="17" SelectedIndex="2">
-                                <ComboBoxItem Content="2"/>
-                                <ComboBoxItem Content="3"/>
-                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="{Binding TODO_Propiedad}" d:Content="2"/>
+                                <ComboBoxItem Content="{Binding TODO_Propiedad}" d:Content="3"/>
+                                <ComboBoxItem Content="{Binding TODO_Propiedad}" d:Content="4"/>
                             </ComboBox>
                         </StackPanel>
                     </Grid>
@@ -103,7 +103,7 @@
                     <Grid Margin="0,0,0,10">
                         <TextBlock Text="{x:Static properties:Strings.Lobby_Players}"
                                FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}"/>
-                        <TextBlock x:Name="PlayerCountTextBlock" Text="(1/4)" FontSize="11"
+                        <TextBlock x:Name="PlayerCountTextBlock" Text="{Binding TODO_Propiedad}" d:Text="(1/4)" FontSize="11"
                                Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
                     </Grid>
 
@@ -118,11 +118,11 @@
                         <Border Grid.Column="0" Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="10" Margin="0,0,6,0">
                             <StackPanel Orientation="Horizontal">
                                 <Border Width="30" Height="30" CornerRadius="15" Background="{StaticResource BrushWood}" Margin="0,0,8,0">
-                                    <TextBlock x:Name="PlayerInitialTextBlock" Text="U" Foreground="White" FontWeight="Bold"
+                                    <TextBlock x:Name="PlayerInitialTextBlock" Text="{Binding TODO_Propiedad}" d:Text="U" Foreground="White" FontWeight="Bold"
                                            HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15"/>
                                 </Border>
                                 <StackPanel>
-                                    <TextBlock x:Name="PlayerNameTextBlock" Text="Tú" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource BrushText}"/>
+                                    <TextBlock x:Name="PlayerNameTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Tú" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource BrushText}"/>
                                     <TextBlock Text="{x:Static properties:Strings.Lobby_HostTag}" FontSize="12" Foreground="{StaticResource BrushFeltLight}"/>
                                 </StackPanel>
                             </StackPanel>

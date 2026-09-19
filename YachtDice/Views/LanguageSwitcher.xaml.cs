@@ -11,6 +11,9 @@ namespace YachtDice.Views
     /// colocarse en la esquina de cualquier ventana. Reutiliza App.SetCulture,
     /// el mismo mecanismo ya conectado en SettingsWindow.
     /// </summary>
+    /// <summary>
+    /// Ventana o control encargado de cambiar el idioma y cultura de la interfaz en tiempo de ejecución.
+    /// </summary>
     public partial class LanguageSwitcher : UserControl
     {
         private const string SpanishCultureCode = "es-MX";

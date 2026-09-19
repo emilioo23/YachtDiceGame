@@ -10,11 +10,25 @@ namespace YachtDice.Views
     /// </summary>
     public class FriendItem
     {
+        /// <summary>
+        /// Nombre a mostrar del amigo.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Inicial del nombre para el avatar.
+        /// </summary>
         public string Initial { get; set; }
+
+        /// <summary>
+        /// Estado actual de conexión o actividad.
+        /// </summary>
         public string Status { get; set; }
     }
 
+    /// <summary>
+    /// Ventana principal de navegación del juego tras iniciar sesión.
+    /// </summary>
     public partial class MenuWindow : Window
     {
         private const int PlayerLevelMock = 3;

@@ -57,7 +57,7 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Account_Username}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock x:Name="AccountUsernameTextBlock" Text="Jugador" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+                                <TextBlock x:Name="AccountUsernameTextBlock" Text="{Binding TODO_Propiedad}" d:Text="Jugador" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
                             </StackPanel>
                             <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Account_ChangeButton}" Style="{StaticResource BtnOutline}" Padding="14,6" FontSize="15"/>
                         </Grid>
@@ -70,7 +70,7 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Account_Email}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="usuario@ejemplo.com" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+                                <TextBlock Text="{Binding TODO_Propiedad}" d:Text="usuario@ejemplo.com" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
                             </StackPanel>
                             <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Account_ChangeButton}" Style="{StaticResource BtnOutline}" Padding="14,6" FontSize="15"/>
                         </Grid>
@@ -172,8 +172,8 @@
                             <TextBlock Grid.Column="0" Text="{x:Static properties:Strings.Settings_Preferences_Language}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
                             <ComboBox x:Name="LanguageComboBox" Grid.Column="1" Width="160" Padding="10,8"
                                 SelectionChanged="LanguageComboBox_SelectionChanged">
-                                <ComboBoxItem Content="Español" Tag="es-MX"/>
-                                <ComboBoxItem Content="English" Tag="en-US" FontSize="18"/>
+                                <ComboBoxItem Content="{Binding TODO_Propiedad}" d:Content="Español" Tag="es-MX"/>
+                                <ComboBoxItem Content="{Binding TODO_Propiedad}" d:Content="English" Tag="en-US" FontSize="18"/>
                             </ComboBox>
                         </Grid>
                         <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>

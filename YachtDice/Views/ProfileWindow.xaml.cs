@@ -8,6 +8,9 @@ namespace YachtDice.Views
     /// <summary>
     /// Ventana de edicion de perfil del jugador.
     /// </summary>
+    /// <summary>
+    /// Ventana que permite visualizar y editar la información del perfil del jugador y sus estadísticas.
+    /// </summary>
     public partial class ProfileWindow : Window
     {
         private readonly string _playerName;

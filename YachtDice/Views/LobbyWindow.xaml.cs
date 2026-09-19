@@ -8,6 +8,9 @@ namespace YachtDice.Views
     /// <summary>
     /// Ventana de sala de espera previa al inicio de una partida.
     /// </summary>
+    /// <summary>
+    /// Ventana de sala de espera donde los jugadores se preparan y conectan antes de iniciar una partida.
+    /// </summary>
     public partial class LobbyWindow : Window
     {
         private readonly string _playerName;

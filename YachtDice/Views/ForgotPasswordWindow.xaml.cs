@@ -7,6 +7,9 @@ namespace YachtDice.Views
     /// <summary>
     /// Ventana de recuperacion de contrasena por correo electronico.
     /// </summary>
+    /// <summary>
+    /// Ventana que gestiona el flujo de recuperación de contraseña de la cuenta del usuario.
+    /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
         /// <summary>
