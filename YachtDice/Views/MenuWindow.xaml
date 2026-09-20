@@ -41,7 +41,6 @@
                 <StackPanel>
 
                     <TextBlock Text="{x:Static properties:Strings.Auth_Logo}"
-                               d:Text="YACHT DICE"
                                FontFamily="{StaticResource FontDisplay}"
                                FontSize="33"
                                Foreground="{StaticResource BrushGold}"
@@ -70,7 +69,7 @@
                                         Margin="0,0,10,0">
 
                                     <TextBlock x:Name="PlayerInitialTextBlock"
-                                               d:Text="J"
+                                               Text="-"
                                                FontWeight="Bold"
                                                FontSize="19"
                                                Foreground="{StaticResource BrushText}"
@@ -81,12 +80,13 @@
                                 <StackPanel VerticalAlignment="Center">
 
                                     <TextBlock x:Name="PlayerNameTextBlock"
-                                               d:Text="Jugador"
+                                               Text="..."
                                                FontWeight="Bold"
                                                FontSize="15"
                                                Foreground="{StaticResource BrushText}"/>
 
                                     <TextBlock x:Name="PlayerLevelTextBlock"
+                                               Text="..."
                                                FontSize="13"
                                                Foreground="{StaticResource BrushTextMuted}"/>
                                 </StackPanel>
@@ -164,7 +164,7 @@
                                Foreground="{StaticResource BrushTextMuted}"/>
 
                     <TextBlock x:Name="PlayerNameHeadingTextBlock"
-                               d:Text="Jugador"
+                               Text="..."
                                FontFamily="{StaticResource FontDisplay}"
                                FontSize="38"
                                Foreground="{StaticResource BrushText}"
@@ -272,7 +272,8 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,16">
 
-                                <TextBlock d:Text="24"
+                                <TextBlock x:Name="StatGamesTextBlock"
+                                           Text="0"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="32"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -288,7 +289,8 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,16">
 
-                                <TextBlock d:Text="11"
+                                <TextBlock x:Name="StatWinsTextBlock"
+                                           Text="0"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="32"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -304,7 +306,8 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,16">
 
-                                <TextBlock d:Text="287"
+                                <TextBlock x:Name="StatBestScoreTextBlock"
+                                           Text="0"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="32"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -320,7 +323,8 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,16">
 
-                                <TextBlock d:Text="46%"
+                                <TextBlock x:Name="StatWinRateTextBlock"
+                                           Text="0%"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="32"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -370,7 +374,7 @@
                                 VerticalAlignment="Top">
 
                             <TextBlock x:Name="OnlineCountBadgeTextBlock"
-                                       d:Text="3 en línea"
+                                       Text="0"
                                        FontSize="19"
                                        FontWeight="Bold"
                                        Foreground="{StaticResource BrushFeltLight}"/>
@@ -426,7 +430,7 @@
                                             Background="{StaticResource BrushWood}"
                                             Margin="0,2,10,0">
 
-                                        <TextBlock d:Text="N"
+                                        <TextBlock Text="N"
                                                    Foreground="White"
                                                    FontWeight="Bold"
                                                    HorizontalAlignment="Center"
@@ -437,7 +441,7 @@
                                     <StackPanel Grid.Column="1"
                                                 VerticalAlignment="Center">
 
-                                        <TextBlock d:Text="NuevoJugador"
+                                        <TextBlock Text="NuevoJugador"
                                                    FontWeight="SemiBold"
                                                    FontSize="15"
                                                    Foreground="{StaticResource BrushText}"/>
@@ -487,7 +491,7 @@
                                             Background="{StaticResource BrushWood}"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock d:Text="G"
+                                        <TextBlock Text="G"
                                                    Foreground="White"
                                                    FontWeight="Bold"
                                                    HorizontalAlignment="Center"
@@ -498,7 +502,7 @@
                                     <StackPanel Grid.Column="1"
                                                 VerticalAlignment="Center">
 
-                                        <TextBlock d:Text="GamePro2024"
+                                        <TextBlock Text="GamePro2024"
                                                    FontWeight="SemiBold"
                                                    FontSize="15"
                                                    Foreground="{StaticResource BrushText}"/>

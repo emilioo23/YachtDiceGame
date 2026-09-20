@@ -283,7 +283,7 @@
     <value>Start game →</value>
   </data>
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
-    <value>Code copied: {codigo}</value>
+    <value>Code copied: {0}</value>
   </data>
   <data name="Lobby_NotificationEnterCode" xml:space="preserve">
     <value>Enter a room code</value>
@@ -349,7 +349,7 @@
     <value>Wins</value>
   </data>
   <data name="Leaderboard_YourPosition" xml:space="preserve">
-    <value>Your position: #{n}</value>
+    <value>Your position: #{0}</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
@@ -565,7 +565,7 @@
     <value>YOUR TURN</value>
   </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
-    <value>Round {n} / {total}</value>
+    <value>Round {n} / {1}</value>
   </data>
   <data name="Game_Scorecard_Title" xml:space="preserve">
     <value>Scorecard</value>
@@ -574,7 +574,7 @@
     <value>TOTAL</value>
   </data>
   <data name="Game_Dice_ButtonRoll" xml:space="preserve">
-    <value>Roll ({n}/3)</value>
+    <value>Roll ({0}/3)</value>
   </data>
   <data name="Game_Dice_ButtonRollOpponent" xml:space="preserve">
     <value>Opponent's turn</value>
@@ -652,13 +652,13 @@
     <value>Match finished</value>
   </data>
   <data name="Results_TitleWinner" xml:space="preserve">
-    <value>{nombre} won</value>
+    <value>{0} won</value>
   </data>
   <data name="Results_Subtitle" xml:space="preserve">
     <value>Final results</value>
   </data>
   <data name="Results_SubtitleScore" xml:space="preserve">
-    <value>Winning score: {n} pts</value>
+    <value>Winning score: {0} pts</value>
   </data>
   <data name="Results_ColumnNumber" xml:space="preserve">
     <value>#</value>
