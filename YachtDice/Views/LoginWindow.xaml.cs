@@ -85,13 +85,13 @@ namespace YachtDice.Views
 
                 if (player == null)
                 {
-                    MessageBox.Show(Strings.Auth_ErrorUserNotFound);
+                    MessageBox.Show(Strings.Dialogs_D13_Login);
                     return;
                 }
 
                 if (!PasswordHasher.Verify(password, player.PasswordHash))
                 {
-                    MessageBox.Show(Strings.Auth_ErrorWrongPassword);
+                    MessageBox.Show(Strings.Dialogs_D14_Security);
                     return;
                 }
 
@@ -123,7 +123,7 @@ namespace YachtDice.Views
 
                 if (emailTaken)
                 {
-                    MessageBox.Show(Strings.Auth_ErrorEmailTaken);
+                    MessageBox.Show(Strings.Dialogs_D16_Register);
                     return;
                 }
 
@@ -131,7 +131,7 @@ namespace YachtDice.Views
 
                 if (usernameTaken)
                 {
-                    MessageBox.Show(Strings.Auth_ErrorUsernameTaken);
+                    MessageBox.Show(Strings.Dialogs_D15_Register);
                     return;
                 }
 

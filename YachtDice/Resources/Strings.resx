@@ -109,6 +109,72 @@
   <data name="Auth_GuestButton" xml:space="preserve">
     <value>Jugar como invitado</value>
   </data>
+	<data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>Todos los campos son obligatorios.</value>
+  </data>
+	<data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>Registro exitoso.</value>
+  </data>
+	<data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>El correo electrónico es requerido.</value>
+  </data>
+	<data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
+    <value>Enlace de recuperación enviado a {0}.</value>
+  </data>
+	<data name="Leaderboard_BackLink" xml:space="preserve">
+    <value>← Volver</value>
+  </data>
+	<data name="MainMenu_EditProfileButton" xml:space="preserve">
+    <value>Editar perfil</value>
+  </data>
+	<data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
+    <value>{0} en línea</value>
+  </data>
+	<data name="MainMenu_Friends_StatusInLobby" xml:space="preserve">
+    <value>En partida · Lobby</value>
+  </data>
+	<data name="MainMenu_Friends_StatusInMatchRound" xml:space="preserve">
+    <value>En partida · Ronda {0}</value>
+  </data>
+	<data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
+    <value>En línea</value>
+  </data>
+	<data name="MainMenu_LogoutButton" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+	<data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
+    <value>Marcador</value>
+  </data>
+	<data name="MainMenu_Nav_Lobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
+	<data name="MainMenu_Nav_Play" xml:space="preserve">
+    <value>Jugar</value>
+  </data>
+	<data name="MainMenu_Nav_Settings" xml:space="preserve">
+    <value>Ajustes</value>
+  </data>
+	<data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>Ingresa un código de sala.</value>
+  </data>
+	<data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
+    <value>Uniéndose a la sala {0}...</value>
+  </data>
+	<data name="MainMenu_PlayerLevel" xml:space="preserve">
+    <value>Nivel {0}</value>
+  </data>
+	<data name="Profile_SavedMessage" xml:space="preserve">
+    <value>Perfil guardado con éxito.</value>
+  </data>
+	<data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+    <value>Característica no implementada.</value>
+  </data>
+	<data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>Código reenviado.</value>
+  </data>
+	<data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>Código incompleto.</value>
+  </data>
   <data name="TwoFactor_Eyebrow" xml:space="preserve">
     <value>Verificación en dos pasos</value>
   </data>
@@ -124,7 +190,7 @@
   <data name="TwoFactor_ResendLink" xml:space="preserve">
     <value>Reenviar</value>
   </data>
-  <data name="TwoFactor_ViewifyButton" xml:space="preserve">
+  <data name="TwoFactor_VerifyButton" xml:space="preserve">
     <value>Verificar →</value>
   </data>
   <data name="TwoFactor_BackLink" xml:space="preserve">
@@ -163,7 +229,7 @@
   <data name="MainMenu_Friends_AddButton" xml:space="preserve">
     <value>+ Agregar</value>
   </data>
-  <data name="MainMenu_Friends_InvitePorCode" xml:space="preserve">
+  <data name="MainMenu_Friends_InviteByCode" xml:space="preserve">
     <value>Invitar a sala por código</value>
   </data>
   <data name="MainMenu_Friends_CodePlaceholder" xml:space="preserve">
@@ -211,10 +277,10 @@
   <data name="Lobby_Title" xml:space="preserve">
     <value>Sala de espera</value>
   </data>
-  <data name="Lobby_IdRoom" xml:space="preserve">
+  <data name="Lobby_RoomId" xml:space="preserve">
     <value>ID: ----</value>
   </data>
-  <data name="Lobby_BackPlay" xml:space="preserve">
+  <data name="Lobby_BackToPlay" xml:space="preserve">
     <value>← Volver a Jugar</value>
   </data>
   <data name="Lobby_Privacy" xml:space="preserve">
@@ -235,16 +301,16 @@
   <data name="Lobby_GameMode" xml:space="preserve">
     <value>Modo de juego</value>
   </data>
-  <data name="Lobby_Mode1MinTitle" xml:space="preserve">
+  <data name="Lobby_Mode1MinuteTitle" xml:space="preserve">
     <value>1 minuto</value>
   </data>
-  <data name="Lobby_Mode1MinSub" xml:space="preserve">
+  <data name="Lobby_Mode1MinuteSub" xml:space="preserve">
     <value>Ritmo normal · Sin presión</value>
   </data>
-  <data name="Lobby_Mode30sTitle" xml:space="preserve">
+  <data name="Lobby_Mode30SecondsTitle" xml:space="preserve">
     <value>30 segundos</value>
   </data>
-  <data name="Lobby_Mode30sSub" xml:space="preserve">
+  <data name="Lobby_Mode30SecondsSub" xml:space="preserve">
     <value>Ritmo rápido · Bajo presión</value>
   </data>
   <data name="Lobby_Players" xml:space="preserve">
@@ -274,7 +340,7 @@
   <data name="Friends_Title" xml:space="preserve">
     <value>Amigos</value>
   </data>
-  <data name="Friends_Fromscripcion" xml:space="preserve">
+  <data name="Friends_Description" xml:space="preserve">
     <value>Administra tus amigos y solicitudes desde el panel izquierdo.</value>
   </data>
   <data name="Friends_TabAll" xml:space="preserve">
@@ -283,7 +349,7 @@
   <data name="Friends_TabOnline" xml:space="preserve">
     <value>En línea</value>
   </data>
-  <data name="Friends_TabRequestes" xml:space="preserve">
+  <data name="Friends_TabRequests" xml:space="preserve">
     <value>Solicitudes ({n})</value>
   </data>
   <data name="Friends_ButtonAccept" xml:space="preserve">
@@ -400,7 +466,7 @@
   <data name="Settings_Security_TwoFactor" xml:space="preserve">
     <value>Verificación en 2 pasos</value>
   </data>
-  <data name="Settings_Security_Viewificacion2PasosSub" xml:space="preserve">
+  <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
     <value>Código de correo al iniciar sesión</value>
   </data>
   <data name="Settings_Notifications_NotificationMatch" xml:space="preserve">
@@ -409,10 +475,10 @@
   <data name="Settings_Notifications_NotificationMatchSub" xml:space="preserve">
     <value>Cuando te inviten a jugar</value>
   </data>
-  <data name="Settings_Notifications_FriendsConectados" xml:space="preserve">
+  <data name="Settings_Notifications_FriendsOnline" xml:space="preserve">
     <value>Amigos conectados</value>
   </data>
-  <data name="Settings_Notifications_FriendsConectadosSub" xml:space="preserve">
+  <data name="Settings_Notifications_FriendsOnlineSub" xml:space="preserve">
     <value>Cuando un amigo se conecte</value>
   </data>
   <data name="Settings_Notifications_SoundsGame" xml:space="preserve">
@@ -421,16 +487,16 @@
   <data name="Settings_Notifications_SoundsGameSub" xml:space="preserve">
     <value>Efectos al tirar dados</value>
   </data>
-  <data name="Settings_Preferences_ShowPuntosPotentials" xml:space="preserve">
+  <data name="Settings_Preferences_ShowPotentialPoints" xml:space="preserve">
     <value>Mostrar puntos potenciales</value>
   </data>
-  <data name="Settings_Preferences_ShowPuntosPotentialsSub" xml:space="preserve">
+  <data name="Settings_Preferences_ShowPotentialPointsSub" xml:space="preserve">
     <value>Ver puntos antes de anotar</value>
   </data>
-  <data name="Settings_Preferences_ConfirmAlScore" xml:space="preserve">
+  <data name="Settings_Preferences_ConfirmBeforeScoring" xml:space="preserve">
     <value>Confirmar al anotar</value>
   </data>
-  <data name="Settings_Preferences_ConfirmAlScoreSub" xml:space="preserve">
+  <data name="Settings_Preferences_ConfirmBeforeScoringSub" xml:space="preserve">
     <value>Pedir confirmación antes de registrar</value>
   </data>
   <data name="Settings_Preferences_Language" xml:space="preserve">
@@ -447,6 +513,18 @@
   </data>
   <data name="Settings_Appearance_ThemeDarkSub" xml:space="preserve">
     <value>Cambia la apariencia de toda la interfaz</value>
+  </data>
+	<data name="Settings_Security_ChangeButton" xml:space="preserve">
+    <value>Cambiar</value>
+  </data>
+	<data name="Settings_BackLink" xml:space="preserve">
+    <value>← Volver</value>
+  </data>
+	<data name="Settings_Privacy_PublicProfile" xml:space="preserve">
+    <value>Perfil público</value>
+  </data>
+	<data name="Settings_Privacy_PublicProfileSubtitle" xml:space="preserve">
+    <value>Permitir que otros vean tu perfil</value>
   </data>
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
     <value>Eliminar cuenta</value>
@@ -484,7 +562,7 @@
   <data name="Profile_TitleStrategist" xml:space="preserve">
     <value>Estratega</value>
   </data>
-  <data name="Profile_ColumnorFromBackground" xml:space="preserve">
+  <data name="Profile_BackgroundColor" xml:space="preserve">
     <value>Color de fondo</value>
   </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
@@ -523,13 +601,13 @@
   <data name="Game_Sidebar_ButtonLeave" xml:space="preserve">
     <value>Salir de la partida</value>
   </data>
-  <data name="Game_Topbar_TuTurn" xml:space="preserve">
+  <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Tu turno</value>
   </data>
-  <data name="Game_Topbar_TurnFrom" xml:space="preserve">
+  <data name="Game_Topbar_PlayerTurn" xml:space="preserve">
     <value>Turno de {nombre}</value>
   </data>
-  <data name="Game_Topbar_BadgeTuTurn" xml:space="preserve">
+  <data name="Game_Topbar_YourTurnBadge" xml:space="preserve">
     <value>TU TURNO</value>
   </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
@@ -568,7 +646,7 @@
   <data name="Game_Chat_ButtonChat" xml:space="preserve">
     <value>Chat</value>
   </data>
-  <data name="Game_NotificationEsTuTurn" xml:space="preserve">
+  <data name="Game_NotificationYourTurn" xml:space="preserve">
     <value>Es tu turno</value>
   </data>
   <data name="Game_CategoryOnes" xml:space="preserve">
@@ -598,7 +676,7 @@
   <data name="Game_Category_ThreesOfAKind" xml:space="preserve">
     <value>3 Iguales</value>
   </data>
-  <data name="Game_Category_CuatroOfAKind" xml:space="preserve">
+  <data name="Game_Category_FourOfAKind" xml:space="preserve">
     <value>4 Iguales</value>
   </data>
   <data name="Game_CategoryFullHouse" xml:space="preserve">
@@ -805,7 +883,7 @@
   <data name="Dialogs_SendReportButton" xml:space="preserve">
     <value>Enviar reporte</value>
   </data>
-  <data name="Dialogs_DeletecuentaButton" xml:space="preserve">
+  <data name="Dialogs_DeleteAccountButton" xml:space="preserve">
     <value>Eliminar cuenta</value>
   </data>
   <data name="Dialogs_ContinueDeletionButton" xml:space="preserve">
@@ -897,6 +975,9 @@
   </data>
   <data name="Game_QuickChat_NeedStraight" xml:space="preserve">
     <value>Necesito esa escalera.</value>
+  </data>
+  <data name="Game_Sidebar_ButtonHowToPlay" xml:space="preserve">
+    <value>Cómo jugar</value>
   </data>
   <data name="Results_DefaultTitle" xml:space="preserve">
     <value>Partida terminada</value>

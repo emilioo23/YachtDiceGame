@@ -58,7 +58,7 @@ namespace YachtDice.Views
             _playerName = playerName;
             PlayerNameTextBlock.Text = playerName;
             PlayerInitialTextBlock.Text = playerName.Length > 0 ? playerName.Substring(0, 1).ToUpper() : "U";
-            RoundInfoTextBlock.Text = string.Format(Strings.Game_RoundInfo, CurrentRoundMock, TotalRoundsMock);
+            RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
             LanguageSwitcherControl.ReopenWindowFunc = () => new GameWindow(playerName);
 
             CreateDiceOnCanvas();
@@ -207,28 +207,28 @@ namespace YachtDice.Views
 
         private void UpdateRollButton()
         {
-            RollButton.Content = string.Format(Strings.Game_RollButton, _rollsLeft);
+            RollButton.Content = string.Format(Strings.Game_Dice_ButtonRoll, _rollsLeft);
             RollButton.IsEnabled = _rollsLeft < MaxRolls;
         }
 
         private void LoadCategories()
         {
             AddCategoryRow(Strings.Game_CategoryOnes);
-            AddCategoryRow(Strings.Game_CategoryTwos);
-            AddCategoryRow(Strings.Game_CategoryThrees);
+            AddCategoryRow(Strings.Game_Category_Twos);
+            AddCategoryRow(Strings.Game_Category_Threes);
             AddCategoryRow(Strings.Game_CategoryFours);
             AddCategoryRow(Strings.Game_CategoryFives);
             AddCategoryRow(Strings.Game_CategorySixes);
             AddMetaRow(Strings.Game_CategorySum);
-            AddMetaRow(Strings.Game_CategoryBonus);
-            AddCategoryRow(Strings.Game_CategoryThreeOfAKind);
-            AddCategoryRow(Strings.Game_CategoryFourOfAKind);
+            AddMetaRow(Strings.Game_Category_Bonus);
+            AddCategoryRow(Strings.Game_Category_ThreesOfAKind);
+            AddCategoryRow(Strings.Game_Category_FourOfAKind);
             AddCategoryRow(Strings.Game_CategoryFullHouse);
-            AddCategoryRow(Strings.Game_CategorySmallStraight);
-            AddCategoryRow(Strings.Game_CategoryLargeStraight);
+            AddCategoryRow(Strings.Game_Category_SmallStraight);
+            AddCategoryRow(Strings.Game_Category_LargeStraight);
             AddCategoryRow(Strings.Game_CategoryYacht);
             AddCategoryRow(Strings.Game_CategoryChance);
-            AddMetaRow(Strings.Game_TotalLabel);
+            AddMetaRow(Strings.Game_Scorecard_Total);
         }
 
         private Grid CreateBaseRow(string categoryName, Brush background)
@@ -298,7 +298,7 @@ namespace YachtDice.Views
             row.Children.Add(myValueLabel);
             row.Children.Add(opponentValueLabel);
 
-            if (text == Strings.Game_TotalLabel)
+            if (text == Strings.Game_Scorecard_Total)
             {
                 _totalScoreLabel = myValueLabel;
             }

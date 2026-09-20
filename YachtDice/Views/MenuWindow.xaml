@@ -6,13 +6,18 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="1280"
+        Title="Yacht Dice"
+        Height="800"
+        Width="1280"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
 
     <Viewbox Stretch="Uniform">
-        <Grid Margin="24" Width="1280" Height="800">
+        <Grid Margin="24"
+              Width="1280"
+              Height="800">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="260"/>
                 <ColumnDefinition Width="*"/>
@@ -20,75 +25,150 @@
             </Grid.ColumnDefinitions>
 
             <views:LanguageSwitcher x:Name="LanguageSwitcherControl"
-                                     Grid.Column="0" Grid.ColumnSpan="3"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Top"
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
             <!-- ===================== COLUMNA IZQUIERDA: PERFIL + NAV ===================== -->
-            <Border Grid.Column="0" Style="{StaticResource CardPanel}" Padding="16" Margin="0,0,16,0">
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Padding="16"
+                    Margin="0,0,16,0">
+
                 <StackPanel>
-                    <TextBlock Text="{x:Static properties:Strings.Auth_Logo}" d:Text="YACHT DICE" FontFamily="{StaticResource FontDisplay}" FontSize="33"
-                           Foreground="{StaticResource BrushGold}" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="{x:Static properties:Strings.Auth_Logo}"
+                               d:Text="YACHT DICE"
+                               FontFamily="{StaticResource FontDisplay}"
+                               FontSize="33"
+                               Foreground="{StaticResource BrushGold}"
+                               Margin="0,0,0,20"
+                               HorizontalAlignment="Center"/>
 
                     <!-- TARJETA MINI-PERFIL -->
-                    <Border Background="{StaticResource BrushCream2}" CornerRadius="10"
-                        BorderBrush="{StaticResource BrushBorder}" BorderThickness="1"
-                        Padding="12" Margin="0,0,0,20">
+                    <Border Background="{StaticResource BrushCream2}"
+                            CornerRadius="10"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="1"
+                            Padding="12"
+                            Margin="0,0,0,20">
+
                         <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <Border Width="47" Height="47" CornerRadius="26" Background="{StaticResource BrushCream2}"
-                                    BorderBrush="{StaticResource BrushBorder}" BorderThickness="1.5" Margin="0,0,10,0">
-                                    <TextBlock x:Name="PlayerInitialTextBlock" d:Text="J" FontWeight="Bold" FontSize="19"
-                                           Foreground="{StaticResource BrushText}"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,10">
+
+                                <Border Width="47"
+                                        Height="47"
+                                        CornerRadius="26"
+                                        Background="{StaticResource BrushCream2}"
+                                        BorderBrush="{StaticResource BrushBorder}"
+                                        BorderThickness="1.5"
+                                        Margin="0,0,10,0">
+
+                                    <TextBlock x:Name="PlayerInitialTextBlock"
+                                               d:Text="J"
+                                               FontWeight="Bold"
+                                               FontSize="19"
+                                               Foreground="{StaticResource BrushText}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
                                 </Border>
+
                                 <StackPanel VerticalAlignment="Center">
-                                    <TextBlock x:Name="PlayerNameTextBlock" d:Text="Jugador" FontWeight="Bold" FontSize="15"
-                                           Foreground="{StaticResource BrushText}"/>
-                                    <TextBlock x:Name="PlayerLevelTextBlock" FontSize="13"
-                                           Foreground="{StaticResource BrushTextMuted}"/>
+
+                                    <TextBlock x:Name="PlayerNameTextBlock"
+                                               d:Text="Jugador"
+                                               FontWeight="Bold"
+                                               FontSize="15"
+                                               Foreground="{StaticResource BrushText}"/>
+
+                                    <TextBlock x:Name="PlayerLevelTextBlock"
+                                               FontSize="13"
+                                               Foreground="{StaticResource BrushTextMuted}"/>
                                 </StackPanel>
+
                             </StackPanel>
 
-                            <Border Height="6" Background="{StaticResource BrushBorder}" CornerRadius="3">
-                                <Border HorizontalAlignment="Left" Width="55" Background="{StaticResource BrushFeltLight}" CornerRadius="3"/>
+                            <Border Height="6"
+                                    Background="{StaticResource BrushBorder}"
+                                    CornerRadius="3">
+
+                                <Border HorizontalAlignment="Left"
+                                        Width="55"
+                                        Background="{StaticResource BrushFeltLight}"
+                                        CornerRadius="3"/>
                             </Border>
 
                             <Button Content="{x:Static properties:Strings.MainMenu_EditProfileButton}"
-                                Style="{StaticResource BtnOutline}" FontSize="15" Padding="0,8"
-                                Margin="0,12,0,0" Click="EditProfileButton_Click"/>
+                                    Style="{StaticResource BtnOutline}"
+                                    FontSize="15"
+                                    Padding="0,8"
+                                    Margin="0,12,0,0"
+                                    Click="EditProfileButton_Click"/>
                         </StackPanel>
                     </Border>
 
-                    <Button x:Name="PlayNavButton" Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
-                        Style="{StaticResource TabButtonActive}" Margin="0,0,0,8" Click="PlayNavButton_Click" FontSize="19"/>
-                    <Button x:Name="LobbyNavButton" Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="LobbyNavButton_Click" FontSize="19"/>
-                    <Button x:Name="LeaderboardNavButton" Content="{x:Static properties:Strings.MainMenu_Nav_Leaderboard}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="LeaderboardNavButton_Click" FontSize="19"/>
-                    <Button x:Name="SettingsNavButton" Content="{x:Static properties:Strings.MainMenu_Nav_Settings}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="SettingsNavButton_Click" FontSize="19"/>
+                    <Button x:Name="PlayNavButton"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
+                            Style="{StaticResource TabButtonActive}"
+                            Margin="0,0,0,8"
+                            Click="PlayNavButton_Click"
+                            FontSize="19"/>
 
-                    <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,20,0,20"/>
+                    <Button x:Name="LobbyNavButton"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="LobbyNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button x:Name="LeaderboardNavButton"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Leaderboard}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="LeaderboardNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button x:Name="SettingsNavButton"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Settings}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="SettingsNavButton_Click"
+                            FontSize="19"/>
+
+                    <Border Height="1"
+                            Background="{StaticResource BrushBorder}"
+                            Margin="0,20,0,20"/>
 
                     <Button Content="{x:Static properties:Strings.MainMenu_LogoutButton}"
-                        Style="{StaticResource BtnOutline}"
-                        Foreground="{StaticResource BrushDanger}"
-                        Click="LogoutButton_Click" FontSize="19"/>
+                            Style="{StaticResource BtnOutline}"
+                            Foreground="{StaticResource BrushDanger}"
+                            Click="LogoutButton_Click"
+                            FontSize="19"/>
                 </StackPanel>
             </Border>
 
             <!-- ===================== COLUMNA CENTRAL: JUGAR ===================== -->
-            <Border Grid.Column="1" Style="{StaticResource CardPanel}" Margin="0,0,16,0">
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0,0,16,0">
+
                 <StackPanel VerticalAlignment="Top">
 
-                    <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_WelcomeText}"
-                           FontSize="24" Foreground="{StaticResource BrushTextMuted}"/>
-                    <TextBlock x:Name="PlayerNameHeadingTextBlock" d:Text="Jugador"
-                           FontFamily="{StaticResource FontDisplay}" FontSize="38"
-                           Foreground="{StaticResource BrushText}" Margin="0,0,0,24"/>
+                    <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_Welcome}"
+                               FontSize="24"
+                               Foreground="{StaticResource BrushTextMuted}"/>
+
+                    <TextBlock x:Name="PlayerNameHeadingTextBlock"
+                               d:Text="Jugador"
+                               FontFamily="{StaticResource FontDisplay}"
+                               FontSize="38"
+                               Foreground="{StaticResource BrushText}"
+                               Margin="0,0,0,24"/>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -97,50 +177,89 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- CREAR SALA -->
-                        <Border Grid.Column="0" Background="{StaticResource BrushCream2}" CornerRadius="12"
-                            BorderBrush="{StaticResource BrushBorder}" BorderThickness="1"
-                            Effect="{StaticResource ShadowSoft}" Padding="20" Margin="0,0,31,0">
+                        <Border Grid.Column="0"
+                                Background="{StaticResource BrushCream2}"
+                                CornerRadius="12"
+                                BorderBrush="{StaticResource BrushBorder}"
+                                BorderThickness="1"
+                                Effect="{StaticResource ShadowSoft}"
+                                Padding="20"
+                                Margin="0,0,31,0">
+
                             <StackPanel>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_CreateRoomTitle}"
-                                       FontFamily="{StaticResource FontBodySemibold}" FontSize="23"
-                                       Foreground="{StaticResource BrushWoodDark}" Margin="0,0,0,4"/>
+                                           FontFamily="{StaticResource FontBodySemibold}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushWoodDark}"
+                                           Margin="0,0,0,4"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_CreateRoomDescription}"
-                                       FontSize="15" Foreground="{StaticResource BrushTextMuted}"
-                                       TextWrapping="Wrap" Margin="0,0,0,16"/>
+                                           FontSize="15"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,16"/>
+
                                 <Button Content="{x:Static properties:Strings.MainMenu_Play_CreateRoomTitle}"
-                                    Style="{StaticResource BtnPrimary}" HorizontalAlignment="Stretch"
-                                    Click="CreateRoomButton_Click"  FontSize="17"/>
+                                        Style="{StaticResource BtnPrimary}"
+                                        HorizontalAlignment="Stretch"
+                                        Click="CreateRoomButton_Click"
+                                        FontSize="17"/>
                             </StackPanel>
                         </Border>
 
                         <!-- UNIRSE A SALA -->
-                        <Border Grid.Column="1" Background="{StaticResource BrushCream2}" CornerRadius="12"
-                            BorderBrush="{StaticResource BrushBorder}" BorderThickness="1"
-                            Effect="{StaticResource ShadowSoft}" Padding="20">
+                        <Border Grid.Column="1"
+                                Background="{StaticResource BrushCream2}"
+                                CornerRadius="12"
+                                BorderBrush="{StaticResource BrushBorder}"
+                                BorderThickness="1"
+                                Effect="{StaticResource ShadowSoft}"
+                                Padding="20">
+
                             <StackPanel>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_JoinRoomTitle}"
-                                       FontFamily="{StaticResource FontBodySemibold}" FontSize="23"
-                                       Foreground="{StaticResource BrushWoodDark}" Margin="0,0,0,4"/>
+                                           FontFamily="{StaticResource FontBodySemibold}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushWoodDark}"
+                                           Margin="0,0,0,4"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_JoinRoomDescription}"
-                                       FontSize="15" Foreground="{StaticResource BrushTextMuted}"
-                                       TextWrapping="Wrap" Margin="0,0,0,16"/>
+                                           FontSize="15"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,16"/>
+
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="JoinRoomCodeTextBox" Grid.Column="0" Style="{StaticResource TextBoxRounded}" Margin="0,0,8,0"/>
-                                    <Button Grid.Column="1" Content="{x:Static properties:Strings.MainMenu_Play_JoinButton}"
-                                        Style="{StaticResource BtnPrimary}" Click="JoinRoomButton_Click" FontSize="17"/>
+
+                                    <TextBox x:Name="JoinRoomCodeTextBox"
+                                             Grid.Column="0"
+                                             Style="{StaticResource TextBoxRounded}"
+                                             Margin="0,0,8,0"/>
+
+                                    <Button Grid.Column="1"
+                                            Content="{x:Static properties:Strings.MainMenu_Play_JoinButton}"
+                                            Style="{StaticResource BtnPrimary}"
+                                            Click="JoinRoomButton_Click"
+                                            FontSize="17"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
                     </Grid>
 
                     <!-- STATS -->
-                    <Border Background="{StaticResource BrushCream2}" CornerRadius="12"
-                        BorderBrush="{StaticResource BrushBorder}" BorderThickness="1"
-                        Padding="0" Margin="0,20,0,0">
+                    <Border Background="{StaticResource BrushCream2}"
+                            CornerRadius="12"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="1"
+                            Padding="0"
+                            Margin="0,20,0,0">
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -149,29 +268,68 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="0,16">
-                                <TextBlock d:Text="24" FontFamily="{StaticResource FontDisplay}" FontSize="32"
-                                       Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+                            <StackPanel Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,16">
+
+                                <TextBlock d:Text="24"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="32"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_StatGames}"
-                                       FontSize="16" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+                                           FontSize="16"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="0,16">
-                                <TextBlock d:Text="11" FontFamily="{StaticResource FontDisplay}" FontSize="32"
-                                       Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,16">
+
+                                <TextBlock d:Text="11"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="32"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_StatWins}"
-                                       FontSize="16" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+                                           FontSize="16"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="0,16">
-                                <TextBlock d:Text="287" FontFamily="{StaticResource FontDisplay}" FontSize="32"
-                                       Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,16">
+
+                                <TextBlock d:Text="287"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="32"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_StatBestScore}"
-                                       FontSize="16" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+                                           FontSize="16"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="3" HorizontalAlignment="Center" Margin="0,16">
-                                <TextBlock d:Text="46%" FontFamily="{StaticResource FontDisplay}" FontSize="32"
-                                       Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="3"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,16">
+
+                                <TextBlock d:Text="46%"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="32"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
                                 <TextBlock Text="{x:Static properties:Strings.MainMenu_Play_StatWinRate}"
-                                       FontSize="16" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+                                           FontSize="16"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -180,7 +338,10 @@
             </Border>
 
             <!-- ===================== COLUMNA DERECHA: AMIGOS ===================== -->
-            <Border Grid.Column="2" Style="{StaticResource CardPanel}" Padding="18">
+            <Border Grid.Column="2"
+                    Style="{StaticResource CardPanel}"
+                    Padding="18">
+
                 <StackPanel>
 
                     <!-- Encabezado con badge de "en linea" -->
@@ -189,16 +350,30 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+
                         <StackPanel Grid.Column="0">
+
                             <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_Title}"
-                                   FontFamily="{StaticResource FontBodySemibold}" FontSize="27"
-                                   Foreground="{StaticResource BrushText}"/>
+                                       FontFamily="{StaticResource FontBodySemibold}"
+                                       FontSize="27"
+                                       Foreground="{StaticResource BrushText}"/>
+
                             <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_Subtitle}"
-                                   FontSize="18" Foreground="{StaticResource BrushTextMuted}"/>
+                                       FontSize="18"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
                         </StackPanel>
-                        <Border Grid.Column="1" Background="{StaticResource BrushCream2}" CornerRadius="10" Padding="8,4" VerticalAlignment="Top">
-                            <TextBlock x:Name="OnlineCountBadgeTextBlock" d:Text="3 en línea" FontSize="19" FontWeight="Bold"
-                                   Foreground="{StaticResource BrushFeltLight}"/>
+
+                        <Border Grid.Column="1"
+                                Background="{StaticResource BrushCream2}"
+                                CornerRadius="10"
+                                Padding="8,4"
+                                VerticalAlignment="Top">
+
+                            <TextBlock x:Name="OnlineCountBadgeTextBlock"
+                                       d:Text="3 en línea"
+                                       FontSize="19"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushFeltLight}"/>
                         </Border>
                     </Grid>
 
@@ -208,110 +383,256 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" Style="{StaticResource TextBoxRounded}" Margin="0,0,8,0"
-                             Tag="{x:Static properties:Strings.MainMenu_Friends_SearchPlaceholder}"/>
-                        <Button Grid.Column="1" Content="{x:Static properties:Strings.MainMenu_Friends_AddButton}"
-                            Style="{StaticResource BtnOutline}" FontSize="16" Padding="10,8"/>
+
+                        <TextBox Grid.Column="0"
+                                 Style="{StaticResource TextBoxRounded}"
+                                 Margin="0,0,8,0"
+                                 Tag="{x:Static properties:Strings.MainMenu_Friends_SearchPlaceholder}"/>
+
+                        <Button Grid.Column="1"
+                                Content="{x:Static properties:Strings.MainMenu_Friends_AddButton}"
+                                Style="{StaticResource BtnOutline}"
+                                FontSize="16"
+                                Padding="10,8"/>
                     </Grid>
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="520">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  MaxHeight="520">
+
                         <StackPanel>
 
                             <!-- SOLICITUDES -->
-                            <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_RequestsHeader}"
-                                   FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}"
-                                   Margin="0,0,0,8"/>
+                            <TextBlock Text="{x:Static properties:Strings.Friends_Section_Requests}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,0,0,8"/>
 
-                            <Border Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="10" Margin="0,0,0,8">
+                            <Border Background="{StaticResource BrushCream2}"
+                                    CornerRadius="8"
+                                    Padding="10"
+                                    Margin="0,0,0,8">
+
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="34" CornerRadius="17" Background="{StaticResource BrushWood}" Margin="0,2,10,0">
-                                        <TextBlock d:Text="N" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+
+                                    <Border Grid.Column="0"
+                                            Width="34"
+                                            CornerRadius="17"
+                                            Background="{StaticResource BrushWood}"
+                                            Margin="0,2,10,0">
+
+                                        <TextBlock d:Text="N"
+                                                   Foreground="White"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="16"/>
                                     </Border>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock d:Text="NuevoJugador" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource BrushText}"/>
-                                        <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_WantsToBeFriend}"
-                                               FontSize="13" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center">
+
+                                        <TextBlock d:Text="NuevoJugador"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="15"
+                                                   Foreground="{StaticResource BrushText}"/>
+
+                                        <TextBlock Text="{x:Static properties:Strings.Friends_Status_WantsFriend}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource BrushTextMuted}"/>
                                     </StackPanel>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Button Content="✓" Width="28" Height="28" Margin="0,0,4,0"
-                                            Background="{StaticResource BrushFeltLight}" Foreground="White" BorderThickness="0"/>
-                                        <Button Content="✕" Width="28" Height="28" Background="{StaticResource BrushCream2}" BorderThickness="0"/>
+
+                                    <StackPanel Grid.Column="2"
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+
+                                        <Button Content="✓"
+                                                Width="28"
+                                                Height="28"
+                                                Margin="0,0,4,0"
+                                                Background="{StaticResource BrushFeltLight}"
+                                                Foreground="White"
+                                                BorderThickness="0"/>
+
+                                        <Button Content="✕"
+                                                Width="28"
+                                                Height="28"
+                                                Background="{StaticResource BrushCream2}"
+                                                BorderThickness="0"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <Border Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="10" Margin="0,0,0,16">
+                            <Border Background="{StaticResource BrushCream2}"
+                                    CornerRadius="8"
+                                    Padding="10"
+                                    Margin="0,0,0,16">
+
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="34" Height="34" CornerRadius="17" Background="{StaticResource BrushWood}" Margin="0,0,10,0">
-                                        <TextBlock d:Text="G" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+
+                                    <Border Grid.Column="0"
+                                            Width="34"
+                                            Height="34"
+                                            CornerRadius="17"
+                                            Background="{StaticResource BrushWood}"
+                                            Margin="0,0,10,0">
+
+                                        <TextBlock d:Text="G"
+                                                   Foreground="White"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="16"/>
                                     </Border>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock d:Text="GamePro2024" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource BrushText}"/>
-                                        <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_WantsToBeFriend}"
-                                               FontSize="13" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center">
+
+                                        <TextBlock d:Text="GamePro2024"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="15"
+                                                   Foreground="{StaticResource BrushText}"/>
+
+                                        <TextBlock Text="{x:Static properties:Strings.Friends_Status_WantsFriend}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource BrushTextMuted}"/>
                                     </StackPanel>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Button Content="✓" Width="28" Height="28" Margin="0,0,4,0"
-                                            Background="{StaticResource BrushFeltLight}" Foreground="White" BorderThickness="0"/>
-                                        <Button Content="✕" Width="28" Height="28" Background="{StaticResource BrushCream2}" BorderThickness="0"/>
+
+                                    <StackPanel Grid.Column="2"
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+
+                                        <Button Content="✓"
+                                                Width="28"
+                                                Height="28"
+                                                Margin="0,0,4,0"
+                                                Background="{StaticResource BrushFeltLight}"
+                                                Foreground="White"
+                                                BorderThickness="0"/>
+
+                                        <Button Content="✕"
+                                                Width="28"
+                                                Height="28"
+                                                Background="{StaticResource BrushCream2}"
+                                                BorderThickness="0"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
                             <!-- EN PARTIDA -->
-                            <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_InMatchHeader}"
-                                   FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}"
-                                   Margin="0,0,0,8"/>
-                            <ItemsControl x:Name="InMatchFriendsList" Margin="0,0,0,16">
+                            <TextBlock Text="{x:Static properties:Strings.Friends_Section_InGame}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,0,0,8"/>
+
+                            <ItemsControl x:Name="InMatchFriendsList"
+                                          Margin="0,0,0,16">
+
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="10" Margin="0,0,0,8">
+
+                                        <Border Background="{StaticResource BrushCream2}"
+                                                CornerRadius="8"
+                                                Padding="10"
+                                                Margin="0,0,0,8">
+
                                             <StackPanel Orientation="Horizontal">
-                                                <Border Width="34" Height="34" CornerRadius="17" Background="{StaticResource BrushWood}" Margin="0,0,10,0">
-                                                    <TextBlock Text="{Binding Initial}" Foreground="White" FontWeight="Bold"
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                <Border Width="34"
+                                                        Height="34"
+                                                        CornerRadius="17"
+                                                        Background="{StaticResource BrushWood}"
+                                                        Margin="0,0,10,0">
+
+                                                    <TextBlock Text="{Binding Initial}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
                                                 </Border>
+
                                                 <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource BrushText}"/>
-                                                    <TextBlock Text="{Binding Status}" FontSize="11" Foreground="#D9A400"/>
+
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource BrushText}"/>
+
+                                                    <TextBlock Text="{Binding Status}"
+                                                               FontSize="11"
+                                                               Foreground="#D9A400"/>
                                                 </StackPanel>
+
                                             </StackPanel>
                                         </Border>
+
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
+
                             </ItemsControl>
 
                             <!-- EN LINEA -->
-                            <TextBlock x:Name="OnlineHeaderTextBlock" Text="{x:Static properties:Strings.MainMenu_Friends_OnlineHeader}"
-                                   FontSize="15" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}"
-                                   Margin="0,0,0,8"/>
+                            <TextBlock x:Name="OnlineHeaderTextBlock"
+                                       Text="{x:Static properties:Strings.MainMenu_Friends_OnlineHeader}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,0,0,8"/>
+
                             <ItemsControl x:Name="OnlineFriendsList">
+
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{StaticResource BrushCream2}" CornerRadius="8" Padding="10" Margin="0,0,0,8">
+
+                                        <Border Background="{StaticResource BrushCream2}"
+                                                CornerRadius="8"
+                                                Padding="10"
+                                                Margin="0,0,0,8">
+
                                             <StackPanel Orientation="Horizontal">
-                                                <Border Width="34" Height="34" CornerRadius="17" Background="{StaticResource BrushWood}" Margin="0,0,10,0">
-                                                    <TextBlock Text="{Binding Initial}" Foreground="White" FontWeight="Bold"
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                <Border Width="34"
+                                                        Height="34"
+                                                        CornerRadius="17"
+                                                        Background="{StaticResource BrushWood}"
+                                                        Margin="0,0,10,0">
+
+                                                    <TextBlock Text="{Binding Initial}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
                                                 </Border>
+
                                                 <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource BrushText}"/>
-                                                    <TextBlock Text="{Binding Status}" FontSize="11" Foreground="{StaticResource BrushFeltLight}"/>
+
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource BrushText}"/>
+
+                                                    <TextBlock Text="{Binding Status}"
+                                                               FontSize="11"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
                                                 </StackPanel>
+
                                             </StackPanel>
                                         </Border>
+
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
+
                             </ItemsControl>
 
                         </StackPanel>

@@ -5,212 +5,488 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="1000"
+        Title="Yacht Dice"
+        Height="800"
+        Width="1000"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
 
     <Viewbox Stretch="Uniform">
-        <Grid Margin="24" Width="1000" Height="800">
+        <Grid Margin="24"
+              Width="1000"
+              Height="800">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- ===================== NAV IZQUIERDA ===================== -->
-            <Border Grid.Column="0" Style="{StaticResource CardPanel}" Padding="16" Margin="0,0,16,0">
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Padding="16"
+                    Margin="0,0,16,0">
+
                 <StackPanel>
+
                     <TextBlock Text="{x:Static properties:Strings.Settings_Title}"
-                           FontFamily="{StaticResource FontDisplay}" FontSize="28"
-                           Foreground="{StaticResource BrushText}" Margin="0,0,0,20"/>
+                               FontFamily="{StaticResource FontDisplay}"
+                               FontSize="28"
+                               Foreground="{StaticResource BrushText}"
+                               Margin="0,0,0,20"/>
 
-                    <Button x:Name="AccountNavButton" Content="{x:Static properties:Strings.Settings_NavAccount}"
-                        Style="{StaticResource TabButtonActive}" Margin="0,0,0,8" Click="AccountNavButton_Click" FontSize="17"/>
-                    <Button x:Name="AppearanceNavButton" Content="{x:Static properties:Strings.Settings_NavAppearance}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="AppearanceNavButton_Click" FontSize="17"/>
-                    <Button x:Name="SecurityNavButton" Content="{x:Static properties:Strings.Settings_NavSecurity}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="SecurityNavButton_Click" FontSize="17"/>
-                    <Button x:Name="NotificationsNavButton" Content="{x:Static properties:Strings.Settings_NavNotifications}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="NotificationsNavButton_Click" FontSize="17"/>
-                    <Button x:Name="PreferencesNavButton" Content="{x:Static properties:Strings.Settings_NavPreferences}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,8" Click="PreferencesNavButton_Click" FontSize="17"/>
-                    <Button x:Name="PrivacyNavButton" Content="{x:Static properties:Strings.Settings_NavPrivacy}"
-                        Style="{StaticResource BtnOutline}" Margin="0,0,0,20" Click="PrivacyNavButton_Click" FontSize="17"/>
+                    <Button x:Name="AccountNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavAccount}"
+                            Style="{StaticResource TabButtonActive}"
+                            Margin="0,0,0,8"
+                            Click="AccountNavButton_Click"
+                            FontSize="17"/>
 
-                    <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,20"/>
+                    <Button x:Name="AppearanceNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavAppearance}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="AppearanceNavButton_Click"
+                            FontSize="17"/>
+
+                    <Button x:Name="SecurityNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavSecurity}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="SecurityNavButton_Click"
+                            FontSize="17"/>
+
+                    <Button x:Name="NotificationsNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavNotifications}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="NotificationsNavButton_Click"
+                            FontSize="17"/>
+
+                    <Button x:Name="PreferencesNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavPreferences}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="PreferencesNavButton_Click"
+                            FontSize="17"/>
+
+                    <Button x:Name="PrivacyNavButton"
+                            Content="{x:Static properties:Strings.Settings_NavPrivacy}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,20"
+                            Click="PrivacyNavButton_Click"
+                            FontSize="17"/>
+
+                    <Border Height="1"
+                            Background="{StaticResource BrushBorder}"
+                            Margin="0,0,0,20"/>
 
                     <TextBlock Text="{x:Static properties:Strings.Settings_BackLink}"
-                           Style="{StaticResource LinkText}" MouseLeftButtonUp="BackLink_Click" FontSize="15"/>
+                               Style="{StaticResource LinkText}"
+                               MouseLeftButtonUp="BackLink_Click"
+                               FontSize="15"/>
+
                 </StackPanel>
             </Border>
 
             <!-- ===================== CONTENIDO ===================== -->
-            <Border Grid.Column="1" Style="{StaticResource CardPanel}">
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardPanel}">
+
                 <Grid>
 
                     <!-- ===== CUENTA ===== -->
                     <StackPanel x:Name="AccountPanel">
-                        <Grid Margin="0,0,0,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Username}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock x:Name="AccountUsernameTextBlock" d:Text="Jugador" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
-                            </StackPanel>
-                            <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Account_ChangeButton}" Style="{StaticResource BtnOutline}" Padding="14,6" FontSize="15"/>
-                        </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>
 
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Email}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock d:Text="usuario@ejemplo.com" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Username}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock x:Name="AccountUsernameTextBlock"
+                                           d:Text="Jugador"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Account_ChangeButton}" Style="{StaticResource BtnOutline}" Padding="14,6" FontSize="15"/>
+
+                            <Button Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Settings_Account_ButtonChange}"
+                                    Style="{StaticResource BtnOutline}"
+                                    Padding="14,6"
+                                    FontSize="15"/>
                         </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,16"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Email}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock d:Text="usuario@ejemplo.com"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Settings_Account_ButtonChange}"
+                                    Style="{StaticResource BtnOutline}"
+                                    Padding="14,6"
+                                    FontSize="15"/>
+                        </Grid>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,16"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{x:Static properties:Strings.Settings_Account_Avatar}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
-                            <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Account_EditProfileButton}" Style="{StaticResource BtnPrimary}" Padding="14,8" FontSize="15" Click="EditProfileButton_Click"/>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Static properties:Strings.Settings_Account_Avatar}"
+                                       FontWeight="Bold"
+                                       FontSize="17"
+                                       VerticalAlignment="Center"/>
+
+                            <Button Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Settings_Account_ButtonEditProfile}"
+                                    Style="{StaticResource BtnPrimary}"
+                                    Padding="14,8"
+                                    FontSize="15"
+                                    Click="EditProfileButton_Click"/>
                         </Grid>
+
                     </StackPanel>
 
                     <!-- ===== APARIENCIA ===== -->
-                    <StackPanel x:Name="AppearancePanel" Visibility="Collapsed">
+                    <StackPanel x:Name="AppearancePanel"
+                                Visibility="Collapsed">
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkThemeSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_ThemeDarkSub}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border x:Name="DarkThemeToggle" Grid.Column="1" Width="46" Height="24" CornerRadius="12"
-                                Background="{StaticResource BrushBorder}" Cursor="Hand" MouseLeftButtonUp="DarkThemeToggle_Click">
-                                <Border x:Name="DarkThemeToggleKnob" Width="18" Height="18" CornerRadius="9" Background="White"
-                                    HorizontalAlignment="Left" Margin="3,0,0,0"/>
+
+                            <Border x:Name="DarkThemeToggle"
+                                    Grid.Column="1"
+                                    Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushBorder}"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="DarkThemeToggle_Click">
+
+                                <Border x:Name="DarkThemeToggleKnob"
+                                        Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Left"
+                                        Margin="3,0,0,0"/>
+
                             </Border>
                         </Grid>
+
                     </StackPanel>
 
                     <!-- ===== SEGURIDAD ===== -->
-                    <StackPanel x:Name="SecurityPanel" Visibility="Collapsed">
+                    <StackPanel x:Name="SecurityPanel"
+                                Visibility="Collapsed">
+
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{x:Static properties:Strings.Settings_Security_Password}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
-                            <Button Grid.Column="1" Content="{x:Static properties:Strings.Settings_Security_ChangeButton}" Style="{StaticResource BtnOutline}" Padding="14,6" FontSize="12"/>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Static properties:Strings.Settings_Security_Password}"
+                                       FontWeight="Bold"
+                                       FontSize="17"
+                                       VerticalAlignment="Center"/>
+
+                            <Button Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Settings_Security_ChangeButton}"
+                                    Style="{StaticResource BtnOutline}"
+                                    Padding="14,6"
+                                    FontSize="12"/>
                         </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,16"/>
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactor}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactorSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactor}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactorSub}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border Width="46" Height="24" CornerRadius="12" Background="{StaticResource BrushFeltLight}" Grid.Column="1">
-                                <Border Width="18" Height="18" CornerRadius="9" Background="White" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+
+                            <Border Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Grid.Column="1">
+
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
                             </Border>
                         </Grid>
+
                     </StackPanel>
 
                     <!-- ===== NOTIFICACIONES ===== -->
-                    <StackPanel x:Name="NotificationsPanel" Visibility="Collapsed">
+                    <StackPanel x:Name="NotificationsPanel"
+                                Visibility="Collapsed">
+
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_Match}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_MatchSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_NotificationMatch}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_NotificationMatchSub}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border Width="46" Height="24" CornerRadius="12" Background="{StaticResource BrushFeltLight}" Grid.Column="1">
-                                <Border Width="18" Height="18" CornerRadius="9" Background="White" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+
+                            <Border Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Grid.Column="1">
+
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
                             </Border>
                         </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,16"/>
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_Sounds}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsGame}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsGameSub}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border Width="46" Height="24" CornerRadius="12" Background="{StaticResource BrushFeltLight}" Grid.Column="1">
-                                <Border Width="18" Height="18" CornerRadius="9" Background="White" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+
+                            <Border Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Grid.Column="1">
+
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
                             </Border>
                         </Grid>
+
                     </StackPanel>
 
                     <!-- ===== PREFERENCIAS ===== -->
-                    <StackPanel x:Name="PreferencesPanel" Visibility="Collapsed">
+                    <StackPanel x:Name="PreferencesPanel"
+                                Visibility="Collapsed">
+
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{x:Static properties:Strings.Settings_Preferences_Language}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="LanguageComboBox" Grid.Column="1" Width="160" Padding="10,8"
-                                SelectionChanged="LanguageComboBox_SelectionChanged">
-                                <ComboBoxItem Content="Español" Tag="es-MX"/>
-                                <ComboBoxItem Content="English" Tag="en-US" FontSize="18"/>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{x:Static properties:Strings.Settings_Preferences_Language}"
+                                       FontWeight="Bold"
+                                       FontSize="17"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="LanguageComboBox"
+                                      Grid.Column="1"
+                                      Width="160"
+                                      Padding="10,8"
+                                      SelectionChanged="LanguageComboBox_SelectionChanged">
+
+                                <ComboBoxItem Content="Español"
+                                              Tag="es-MX"/>
+
+                                <ComboBoxItem Content="English"
+                                              Tag="en-US"
+                                              FontSize="18"/>
+
                             </ComboBox>
                         </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,16"/>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,16"/>
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPointsSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPointsSub}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border Width="46" Height="24" CornerRadius="12" Background="{StaticResource BrushFeltLight}" Grid.Column="1">
-                                <Border Width="18" Height="18" CornerRadius="9" Background="White" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+
+                            <Border Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Grid.Column="1">
+
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
                             </Border>
                         </Grid>
+
                     </StackPanel>
 
                     <!-- ===== PRIVACIDAD ===== -->
-                    <StackPanel x:Name="PrivacyPanel" Visibility="Collapsed">
+                    <StackPanel x:Name="PrivacyPanel"
+                                Visibility="Collapsed">
+
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}" FontWeight="Bold" FontSize="17"/>
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfileSubtitle}" FontSize="14" Foreground="{StaticResource BrushTextMuted}"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}"
+                                           FontWeight="Bold"
+                                           FontSize="17"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfileSubtitle}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
                             </StackPanel>
-                            <Border Width="46" Height="24" CornerRadius="12" Background="{StaticResource BrushFeltLight}" Grid.Column="1">
-                                <Border Width="18" Height="18" CornerRadius="9" Background="White" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+
+                            <Border Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Grid.Column="1">
+
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
                             </Border>
                         </Grid>
-                        <Border Height="1" Background="{StaticResource BrushBorder}" Margin="0,0,0,20"/>
-                        <Button Content="{x:Static properties:Strings.Settings_Privacy_DeleteAccountButton}"
-                            Style="{StaticResource BtnOutline}" Foreground="{StaticResource BrushDanger}"
-                            Padding="16,8" FontSize="13" HorizontalAlignment="Left" Click="DeleteAccountButton_Click"/>
+
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,0,0,20"/>
+
+                        <Button Content="{x:Static properties:Strings.Settings_Privacy_ButtonDeleteAccount}"
+                                Style="{StaticResource BtnOutline}"
+                                Foreground="{StaticResource BrushDanger}"
+                                Padding="16,8"
+                                FontSize="13"
+                                HorizontalAlignment="Left"
+                                Click="DeleteAccountButton_Click"/>
+
                     </StackPanel>
 
                 </Grid>
