@@ -1123,7 +1123,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Tirar ({n}/3).
+        ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {
             get {
@@ -1348,7 +1348,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Ronda {n} / {total}.
+        ///   Busca una cadena traducida similar a Ronda {0} / {1}.
         /// </summary>
         public static string Game_Topbar_RoundInfo {
             get {
@@ -1483,7 +1483,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Tu posición: #{n}.
+        ///   Busca una cadena traducida similar a Tu posición: #{0}.
         /// </summary>
         public static string Leaderboard_YourPosition {
             get {
@@ -1582,7 +1582,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Código copiado: {codigo}.
+        ///   Busca una cadena traducida similar a Código copiado: {0}.
         /// </summary>
         public static string Lobby_NotificationCodeCopied {
             get {
@@ -2347,7 +2347,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Puntaje ganador: {n} pts.
+        ///   Busca una cadena traducida similar a Puntaje ganador: {0} pts.
         /// </summary>
         public static string Results_SubtitleScore {
             get {
@@ -2365,7 +2365,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a {nombre} ganó.
+        ///   Busca una cadena traducida similar a {0} ganó.
         /// </summary>
         public static string Results_TitleWinner {
             get {

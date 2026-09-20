@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Data;
+using YachtDice.Models;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
     /// <summary>
     /// Modelo simple para mostrar datos de ejemplo en la lista de amigos.
-    /// Mas adelante se reemplazara por datos reales del backend.
     /// </summary>
     public class FriendItem
     {
@@ -31,7 +36,14 @@ namespace YachtDice.Views
     /// </summary>
     public partial class MenuWindow : Window
     {
+        private const int DefaultPlayerLevel = 1;
+        private const int EmptyLength = 0;
+        private const int FirstCharacterIndex = 0;
+        private const int MatchRoundMock = 5;
+        private const int PercentageMultiplier = 100;
         private const int PlayerLevelMock = 3;
+        private const int RoundDecimals = 0;
+        private const int SingleCharacterLength = 1;
 
         /// <summary>
         /// Inicializa el menu principal para el jugador indicado.
@@ -40,37 +52,99 @@ namespace YachtDice.Views
         public MenuWindow(string playerName)
         {
             InitializeComponent();
+
             PlayerNameTextBlock.Text = playerName;
             PlayerNameHeadingTextBlock.Text = playerName;
-            PlayerInitialTextBlock.Text = playerName.Length > 0 ? playerName.Substring(0, 1).ToUpper() : "J";
+
+            if (playerName.Length > EmptyLength)
+            {
+                PlayerInitialTextBlock.Text = playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
+            }
+            else
+            {
+                PlayerInitialTextBlock.Text = "J";
+            }
+
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, PlayerLevelMock);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(playerName);
+
             LoadSampleFriends();
+
+            _ = LoadPlayerStatisticsAsync(playerName);
+        }
+
+        private async Task LoadPlayerStatisticsAsync(string playerName)
+        {
+            try
+            {
+                using (var context = new YachtDiceContext())
+                {
+                    Player player = await context.Players.FirstOrDefaultAsync(p => p.DisplayName == playerName || p.Username == playerName);
+
+                    if (player != null)
+                    {
+                        List<GameHistoryPlayer> playerStatistics = await context.GameHistoryPlayers
+                            .Where(g => g.PlayerId == player.Id)
+                            .ToListAsync();
+
+                        int totalGames = playerStatistics.Count;
+                        int totalWins = playerStatistics.Count(g => g.IsWinner == true);
+                        int bestScore = EmptyLength;
+
+                        if (playerStatistics.Any())
+                        {
+                            bestScore = playerStatistics.Max(g => g.FinalScore);
+                        }
+
+                        double winRate = EmptyLength;
+
+                        if (totalGames > EmptyLength)
+                        {
+                            winRate = ((double)totalWins / totalGames) * PercentageMultiplier;
+                        }
+
+                        StatGamesTextBlock.Text = totalGames.ToString();
+                        StatWinsTextBlock.Text = totalWins.ToString();
+                        StatBestScoreTextBlock.Text = bestScore.ToString();
+                        StatWinRateTextBlock.Text = $"{Math.Round(winRate, RoundDecimals)}%";
+
+                        int level = player.Level ?? DefaultPlayerLevel;
+                        PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, level);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidOperationException("Fallo critico al intentar cargar las estadisticas de la base de datos.", exception);
+            }
         }
 
         private void LoadSampleFriends()
         {
             var inMatchFriends = new List<FriendItem>
             {
-                new FriendItem { Name = "SofiaR", Initial = "S", Status = string.Format(Strings.MainMenu_Friends_StatusInMatchRound, 5) },
-                new FriendItem { Name = "DiegoL", Initial = "D", Status = Strings.MainMenu_Friends_StatusInLobby },
+                new FriendItem { Name = "SofiaR", Initial = "S", Status = string.Format(Strings.MainMenu_Friends_StatusInMatchRound, MatchRoundMock) },
+                new FriendItem { Name = "DiegoL", Initial = "D", Status = Strings.MainMenu_Friends_StatusInLobby }
             };
+
             InMatchFriendsList.ItemsSource = inMatchFriends;
 
             var onlineFriends = new List<FriendItem>
             {
                 new FriendItem { Name = "CarlosM",  Initial = "C", Status = Strings.MainMenu_Friends_StatusOnline },
                 new FriendItem { Name = "AnaP",     Initial = "A", Status = Strings.MainMenu_Friends_StatusOnline },
-                new FriendItem { Name = "RobertoK", Initial = "R", Status = Strings.MainMenu_Friends_StatusOnline },
+                new FriendItem { Name = "RobertoK", Initial = "R", Status = Strings.MainMenu_Friends_StatusOnline }
             };
-            OnlineFriendsList.ItemsSource = onlineFriends;
 
+            OnlineFriendsList.ItemsSource = onlineFriends;
             OnlineCountBadgeTextBlock.Text = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
         }
 
         private void PlayNavButton_Click(object sender, RoutedEventArgs e)
         {
-            // Ya estamos en esta vista; no se hace nada.
+            var lobbyWindow = new LobbyWindow(PlayerNameTextBlock.Text);
+            lobbyWindow.Show();
+            this.Close();
         }
 
         private void LobbyNavButton_Click(object sender, RoutedEventArgs e)
@@ -120,10 +194,11 @@ namespace YachtDice.Views
             if (string.IsNullOrWhiteSpace(JoinRoomCodeTextBox.Text))
             {
                 MessageBox.Show(Strings.MainMenu_Play_ErrorRequiredRoomCode);
-                return;
             }
-
-            MessageBox.Show(string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text));
+            else
+            {
+                MessageBox.Show(string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text));
+            }
         }
     }
 }

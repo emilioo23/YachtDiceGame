@@ -329,7 +329,7 @@
     <value>Iniciar partida →</value>
   </data>
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
-    <value>Código copiado: {codigo}</value>
+    <value>Código copiado: {0}</value>
   </data>
   <data name="Lobby_NotificationEnterCode" xml:space="preserve">
     <value>Ingresa un código de sala</value>
@@ -395,7 +395,7 @@
     <value>Victorias</value>
   </data>
   <data name="Leaderboard_YourPosition" xml:space="preserve">
-    <value>Tu posición: #{n}</value>
+    <value>Tu posición: #{0}</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Ajustes</value>
@@ -611,7 +611,7 @@
     <value>TU TURNO</value>
   </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
-    <value>Ronda {n} / {total}</value>
+    <value>Ronda {0} / {1}</value>
   </data>
   <data name="Game_Scorecard_Title" xml:space="preserve">
     <value>Tabla de puntaje</value>
@@ -620,7 +620,7 @@
     <value>TOTAL</value>
   </data>
   <data name="Game_Dice_ButtonRoll" xml:space="preserve">
-    <value>Tirar ({n}/3)</value>
+    <value>Tirar ({0}/3)</value>
   </data>
   <data name="Game_Dice_ButtonRollOpponent" xml:space="preserve">
     <value>Turno del rival</value>
@@ -698,13 +698,13 @@
     <value>Partida terminada</value>
   </data>
   <data name="Results_TitleWinner" xml:space="preserve">
-    <value>{nombre} ganó</value>
+    <value>{0} ganó</value>
   </data>
   <data name="Results_Subtitle" xml:space="preserve">
     <value>Resultados finales</value>
   </data>
   <data name="Results_SubtitleScore" xml:space="preserve">
-    <value>Puntaje ganador: {n} pts</value>
+    <value>Puntaje ganador: {0} pts</value>
   </data>
   <data name="Results_ColumnNumber" xml:space="preserve">
     <value>#</value>
