@@ -25,8 +25,8 @@ namespace YachtDice.Views
             _playerName = playerName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(playerName, playerScore);
 
-            WinnerTitleTextBlock.Text = string.Format(Strings.Results_WinnerTitle, playerName);
-            ScoreSubtitleTextBlock.Text = string.Format(Strings.Results_ScoreSubtitle, playerScore);
+            WinnerTitleTextBlock.Text = string.Format(Strings.Results_TitleWinner, playerName);
+            ScoreSubtitleTextBlock.Text = string.Format(Strings.Results_SubtitleScore, playerScore);
 
             // TODO: Datos del rival simulado, mas adelante vendran del backend.
             var random = new Random();

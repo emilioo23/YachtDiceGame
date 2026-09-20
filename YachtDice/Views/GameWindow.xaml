@@ -43,7 +43,8 @@
                     <!-- TOPBAR: turno / ronda -->
                     <Border Background="{StaticResource BrushWood}" CornerRadius="10" Padding="14,10" Margin="0,0,0,18">
                         <Grid>
-                            <TextBlock x:Name="TurnStatusTextBlock" Text="{x:Static properties:Strings.Game_YourTurnText}" Foreground="White" FontWeight="Bold" FontSize="19" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TurnStatusTextBlock" Text="{x:Static properties:Strings.Game_Topbar_YourTurn}" Foreground="White" FontWeight="Bold" FontSize="19" VerticalAlignment="Center"/>
+                            
                             <TextBlock x:Name="RoundInfoTextBlock" Foreground="{StaticResource BrushCream2}" FontSize="12"
                                    HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </Grid>
@@ -87,11 +88,11 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="{x:Static properties:Strings.Game_HowToPlayButton}" Style="{StaticResource BtnOutline}"
+                        <Button Grid.Column="0" Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}" Style="{StaticResource BtnOutline}"
                             HorizontalAlignment="Left" FontSize="15" Padding="16,8"/>
-                        <Button Grid.Column="1" Content="{x:Static properties:Strings.Game_KickPlayerButton}"
+                        <Button Grid.Column="1" Content="{x:Static properties:Strings.Game_Sidebar_ButtonKick}"
                             Style="{StaticResource BtnOutline}" FontSize="15" Padding="10,8" Margin="0,0,8,0"/>
-                        <Button Grid.Column="2" Content="{x:Static properties:Strings.Game_LeaveMatchButton}"
+                        <Button Grid.Column="2" Content="{x:Static properties:Strings.Game_Sidebar_ButtonLeave}"
                             Style="{StaticResource BtnOutline}" Foreground="{StaticResource BrushDanger}"
                             FontSize="15" Padding="10,8" Click="LeaveMatchButton_Click"/>
                     </Grid>
@@ -116,7 +117,7 @@
                         HorizontalAlignment="Center" FontSize="23" Padding="50,15" Margin="0,0,0,10"
                         Click="RollButton_Click"/>
 
-                    <TextBlock x:Name="HintTextBlock" Text="{x:Static properties:Strings.Game_PressRollHint}"
+                    <TextBlock x:Name="HintTextBlock" Text="{x:Static properties:Strings.Game_Dice_HintPress}"
                            FontSize="12" Foreground="{StaticResource BrushCream2}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
 
                     <TextBlock Text="Finalizar partida (demo)" FontSize="11" Foreground="{StaticResource BrushCream2}"

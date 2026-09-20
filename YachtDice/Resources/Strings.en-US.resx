@@ -1,51 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -109,6 +63,72 @@
   <data name="Auth_GuestButton" xml:space="preserve">
     <value>Play as guest</value>
   </data>
+	<data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>All fields are required.</value>
+  </data>
+	<data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>Registration successful.</value>
+  </data>
+	<data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>Email is required.</value>
+  </data>
+	<data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
+    <value>Recovery link sent to {0}.</value>
+  </data>
+	<data name="Leaderboard_BackLink" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+	<data name="MainMenu_EditProfileButton" xml:space="preserve">
+    <value>Edit profile</value>
+  </data>
+	<data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
+    <value>{0} online</value>
+  </data>
+	<data name="MainMenu_Friends_StatusInLobby" xml:space="preserve">
+    <value>In match · Lobby</value>
+  </data>
+	<data name="MainMenu_Friends_StatusInMatchRound" xml:space="preserve">
+    <value>In match · Round {0}</value>
+  </data>
+	<data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
+    <value>Online</value>
+  </data>
+	<data name="MainMenu_LogoutButton" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+	<data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
+    <value>Leaderboard</value>
+  </data>
+	<data name="MainMenu_Nav_Lobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
+	<data name="MainMenu_Nav_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+	<data name="MainMenu_Nav_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+	<data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>Enter a room code.</value>
+  </data>
+	<data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
+    <value>Joining room {0}...</value>
+  </data>
+	<data name="MainMenu_PlayerLevel" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
+	<data name="Profile_SavedMessage" xml:space="preserve">
+    <value>Profile saved successfully.</value>
+  </data>
+	<data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+    <value>Feature not implemented.</value>
+  </data>
+	<data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>Code resent.</value>
+  </data>
+	<data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>Incomplete code.</value>
+  </data>
   <data name="TwoFactor_Eyebrow" xml:space="preserve">
     <value>Two-step verification</value>
   </data>
@@ -124,7 +144,7 @@
   <data name="TwoFactor_ResendLink" xml:space="preserve">
     <value>Resend</value>
   </data>
-  <data name="TwoFactor_ViewifyButton" xml:space="preserve">
+  <data name="TwoFactor_VerifyButton" xml:space="preserve">
     <value>Verify →</value>
   </data>
   <data name="TwoFactor_BackLink" xml:space="preserve">
@@ -163,7 +183,7 @@
   <data name="MainMenu_Friends_AddButton" xml:space="preserve">
     <value>+ Add</value>
   </data>
-  <data name="MainMenu_Friends_InvitePorCode" xml:space="preserve">
+  <data name="MainMenu_Friends_InviteByCode" xml:space="preserve">
     <value>Invite to room by code</value>
   </data>
   <data name="MainMenu_Friends_CodePlaceholder" xml:space="preserve">
@@ -211,10 +231,10 @@
   <data name="Lobby_Title" xml:space="preserve">
     <value>Waiting room</value>
   </data>
-  <data name="Lobby_IdRoom" xml:space="preserve">
+  <data name="Lobby_RoomId" xml:space="preserve">
     <value>ID: ----</value>
   </data>
-  <data name="Lobby_BackPlay" xml:space="preserve">
+  <data name="Lobby_BackToPlay" xml:space="preserve">
     <value>← Back to Play</value>
   </data>
   <data name="Lobby_Privacy" xml:space="preserve">
@@ -235,16 +255,16 @@
   <data name="Lobby_GameMode" xml:space="preserve">
     <value>Game mode</value>
   </data>
-  <data name="Lobby_Mode1MinTitle" xml:space="preserve">
+  <data name="Lobby_Mode1MinuteTitle" xml:space="preserve">
     <value>1 minute</value>
   </data>
-  <data name="Lobby_Mode1MinSub" xml:space="preserve">
+  <data name="Lobby_Mode1MinuteSub" xml:space="preserve">
     <value>Normal pace · No pressure</value>
   </data>
-  <data name="Lobby_Mode30sTitle" xml:space="preserve">
+  <data name="Lobby_Mode30SecondsTitle" xml:space="preserve">
     <value>30 seconds</value>
   </data>
-  <data name="Lobby_Mode30sSub" xml:space="preserve">
+  <data name="Lobby_Mode30SecondsSub" xml:space="preserve">
     <value>Fast pace · Under pressure</value>
   </data>
   <data name="Lobby_Players" xml:space="preserve">
@@ -274,7 +294,7 @@
   <data name="Friends_Title" xml:space="preserve">
     <value>Friends</value>
   </data>
-  <data name="Friends_Fromscripcion" xml:space="preserve">
+  <data name="Friends_Description" xml:space="preserve">
     <value>Manage your friends and requests from the left-hand panel.</value>
   </data>
   <data name="Friends_TabAll" xml:space="preserve">
@@ -283,7 +303,7 @@
   <data name="Friends_TabOnline" xml:space="preserve">
     <value>Online</value>
   </data>
-  <data name="Friends_TabRequestes" xml:space="preserve">
+  <data name="Friends_TabRequests" xml:space="preserve">
     <value>Requests ({n})</value>
   </data>
   <data name="Friends_ButtonAccept" xml:space="preserve">
@@ -400,7 +420,7 @@
   <data name="Settings_Security_TwoFactor" xml:space="preserve">
     <value>Two-step verification</value>
   </data>
-  <data name="Settings_Security_Viewificacion2PasosSub" xml:space="preserve">
+  <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
     <value>Email code at login</value>
   </data>
   <data name="Settings_Notifications_NotificationMatch" xml:space="preserve">
@@ -409,10 +429,10 @@
   <data name="Settings_Notifications_NotificationMatchSub" xml:space="preserve">
     <value>When you're invited to play</value>
   </data>
-  <data name="Settings_Notifications_FriendsConectados" xml:space="preserve">
+  <data name="Settings_Notifications_FriendsOnline" xml:space="preserve">
     <value>Friends online</value>
   </data>
-  <data name="Settings_Notifications_FriendsConectadosSub" xml:space="preserve">
+  <data name="Settings_Notifications_FriendsOnlineSub" xml:space="preserve">
     <value>When a friend comes online</value>
   </data>
   <data name="Settings_Notifications_SoundsGame" xml:space="preserve">
@@ -421,16 +441,16 @@
   <data name="Settings_Notifications_SoundsGameSub" xml:space="preserve">
     <value>Sound effects when rolling dice</value>
   </data>
-  <data name="Settings_Preferences_ShowPuntosPotentials" xml:space="preserve">
+  <data name="Settings_Preferences_ShowPotentialPoints" xml:space="preserve">
     <value>Show potential points</value>
   </data>
-  <data name="Settings_Preferences_ShowPuntosPotentialsSub" xml:space="preserve">
+  <data name="Settings_Preferences_ShowPotentialPointsSub" xml:space="preserve">
     <value>See points before scoring</value>
   </data>
-  <data name="Settings_Preferences_ConfirmAlScore" xml:space="preserve">
+  <data name="Settings_Preferences_ConfirmBeforeScoring" xml:space="preserve">
     <value>Confirm before scoring</value>
   </data>
-  <data name="Settings_Preferences_ConfirmAlScoreSub" xml:space="preserve">
+  <data name="Settings_Preferences_ConfirmBeforeScoringSub" xml:space="preserve">
     <value>Ask for confirmation before recording</value>
   </data>
   <data name="Settings_Preferences_Language" xml:space="preserve">
@@ -447,6 +467,18 @@
   </data>
   <data name="Settings_Appearance_ThemeDarkSub" xml:space="preserve">
     <value>Changes the appearance of the whole interface</value>
+  </data>
+	<data name="Settings_Security_ChangeButton" xml:space="preserve">
+    <value>Change</value>
+  </data>
+	<data name="Settings_BackLink" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+	<data name="Settings_Privacy_PublicProfile" xml:space="preserve">
+    <value>Public profile</value>
+  </data>
+	<data name="Settings_Privacy_PublicProfileSubtitle" xml:space="preserve">
+    <value>Allow others to view your profile</value>
   </data>
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
     <value>Delete account</value>
@@ -484,7 +516,7 @@
   <data name="Profile_TitleStrategist" xml:space="preserve">
     <value>Strategist</value>
   </data>
-  <data name="Profile_ColumnorFromBackground" xml:space="preserve">
+  <data name="Profile_BackgroundColor" xml:space="preserve">
     <value>Background color</value>
   </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
@@ -523,13 +555,13 @@
   <data name="Game_Sidebar_ButtonLeave" xml:space="preserve">
     <value>Leave match</value>
   </data>
-  <data name="Game_Topbar_TuTurn" xml:space="preserve">
+  <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Your turn</value>
   </data>
-  <data name="Game_Topbar_TurnFrom" xml:space="preserve">
+  <data name="Game_Topbar_PlayerTurn" xml:space="preserve">
     <value>{nombre}'s turn</value>
   </data>
-  <data name="Game_Topbar_BadgeTuTurn" xml:space="preserve">
+  <data name="Game_Topbar_YourTurnBadge" xml:space="preserve">
     <value>YOUR TURN</value>
   </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
@@ -568,7 +600,7 @@
   <data name="Game_Chat_ButtonChat" xml:space="preserve">
     <value>Chat</value>
   </data>
-  <data name="Game_NotificationEsTuTurn" xml:space="preserve">
+  <data name="Game_NotificationYourTurn" xml:space="preserve">
     <value>It's your turn</value>
   </data>
   <data name="Game_CategoryOnes" xml:space="preserve">
@@ -598,7 +630,7 @@
   <data name="Game_Category_ThreesOfAKind" xml:space="preserve">
     <value>3 of a Kind</value>
   </data>
-  <data name="Game_Category_CuatroOfAKind" xml:space="preserve">
+  <data name="Game_Category_FourOfAKind" xml:space="preserve">
     <value>4 of a Kind</value>
   </data>
   <data name="Game_CategoryFullHouse" xml:space="preserve">
@@ -805,7 +837,7 @@
   <data name="Dialogs_SendReportButton" xml:space="preserve">
     <value>Send report</value>
   </data>
-  <data name="Dialogs_DeletecuentaButton" xml:space="preserve">
+  <data name="Dialogs_DeleteAccountButton" xml:space="preserve">
     <value>Delete account</value>
   </data>
   <data name="Dialogs_ContinueDeletionButton" xml:space="preserve">
@@ -897,6 +929,9 @@
   </data>
   <data name="Game_QuickChat_NeedStraight" xml:space="preserve">
     <value>I need that straight.</value>
+  </data>
+  <data name="Game_Sidebar_ButtonHowToPlay" xml:space="preserve">
+    <value>How to play</value>
   </data>
   <data name="Results_DefaultTitle" xml:space="preserve">
     <value>Match finished</value>

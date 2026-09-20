@@ -6,81 +6,182 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="1100"
+        Title="Yacht Dice"
+        Height="800"
+        Width="1100"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
 
     <Viewbox Stretch="Uniform">
-        <Grid Margin="24" Width="1100" Height="800">
+        <Grid Margin="24"
+              Width="1100"
+              Height="800">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <views:LanguageSwitcher x:Name="LanguageSwitcherControl"
-                                     Grid.Column="0" Grid.ColumnSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="2"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Top"
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
             <!-- ===================== IZQUIERDA: AVATAR ===================== -->
-            <Border Grid.Column="0" Style="{StaticResource CardPanel}" Margin="0,0,16,0">
-                <StackPanel>
-                    <TextBlock Text="{x:Static properties:Strings.Profile_ChooseAvatar}"
-                           FontSize="21" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,16"/>
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0,0,16,0">
 
-                    <Border Width="120" Height="120" CornerRadius="60" Background="{StaticResource BrushCream2}"
-                        BorderBrush="{StaticResource BrushGold}" BorderThickness="3"
-                        HorizontalAlignment="Center" Margin="0,0,0,20">
-                        <TextBlock x:Name="AvatarInitialTextBlock" d:Text="J" FontFamily="{StaticResource FontDisplay}" FontSize="48"
-                               Foreground="{StaticResource BrushWoodDark}"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel>
+
+                    <TextBlock Text="{x:Static properties:Strings.Profile_ChooseAvatar}"
+                               FontSize="21"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushTextMuted}"
+                               Margin="0,0,0,16"/>
+
+                    <Border Width="120"
+                            Height="120"
+                            CornerRadius="60"
+                            Background="{StaticResource BrushCream2}"
+                            BorderBrush="{StaticResource BrushGold}"
+                            BorderThickness="3"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,20">
+
+                        <TextBlock x:Name="AvatarInitialTextBlock"
+                                   d:Text="J"
+                                   FontFamily="{StaticResource FontDisplay}"
+                                   FontSize="48"
+                                   Foreground="{StaticResource BrushWoodDark}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
                     </Border>
 
                     <TextBlock Text="{x:Static properties:Strings.Profile_BackgroundColor}"
-                           FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,10"/>
-                    <UniformGrid Columns="6" Margin="0,0,0,20">
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#E0E0E0" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#F5D368" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#8FD3B6" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#A9C9F0" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#F0A9C4" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
-                        <Border Width="34" Height="34" Margin="3" CornerRadius="17" Background="#D2A9F0" Cursor="Hand" MouseLeftButtonUp="ColorSwatch_Click"/>
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushTextMuted}"
+                               Margin="0,0,0,10"/>
+
+                    <UniformGrid Columns="6"
+                                 Margin="0,0,0,20">
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#E0E0E0"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#F5D368"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#8FD3B6"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#A9C9F0"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#F0A9C4"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
+
+                        <Border Width="34"
+                                Height="34"
+                                Margin="3"
+                                CornerRadius="17"
+                                Background="#D2A9F0"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="ColorSwatch_Click"/>
                     </UniformGrid>
+
                 </StackPanel>
             </Border>
 
             <!-- ===================== DERECHA: DATOS ===================== -->
-            <Border Grid.Column="1" Style="{StaticResource CardPanel}">
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardPanel}">
+
                 <StackPanel>
 
                     <Grid Margin="0,0,0,20">
+
                         <TextBlock Text="{x:Static properties:Strings.Profile_CustomizeProfileTitle}"
-                               FontFamily="{StaticResource FontDisplay}" FontSize="26"
-                               Foreground="{StaticResource BrushText}"/>
-                        <Button Content="{x:Static properties:Strings.Profile_BackButton}"
-                            Style="{StaticResource BtnOutline}" HorizontalAlignment="Right"
-                            Padding="14,6" FontSize="18" Click="BackButton_Click"/>
+                                   FontFamily="{StaticResource FontDisplay}"
+                                   FontSize="26"
+                                   Foreground="{StaticResource BrushText}"/>
+
+                        <Button Content="{x:Static properties:Strings.Profile_ButtonBack}"
+                                Style="{StaticResource BtnOutline}"
+                                HorizontalAlignment="Right"
+                                Padding="14,6"
+                                FontSize="18"
+                                Click="BackButton_Click"/>
                     </Grid>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_Username}" Style="{StaticResource FieldLabel}" FontSize="18"/>
-                    <TextBox x:Name="UsernameTextBox" Style="{StaticResource TextBoxRounded}" Margin="0,0,0,16"/>
+                    <TextBlock Text="{x:Static properties:Strings.Profile_Username}"
+                               Style="{StaticResource FieldLabel}"
+                               FontSize="18"/>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_TitleLabel}" Style="{StaticResource FieldLabel}" FontSize="18"/>
-                    <ComboBox x:Name="TitleComboBox" Padding="10,8" FontSize="17" Margin="0,0,0,24" SelectedIndex="0">
+                    <TextBox x:Name="UsernameTextBox"
+                             Style="{StaticResource TextBoxRounded}"
+                             Margin="0,0,0,16"/>
+
+                    <TextBlock Text="{x:Static properties:Strings.Profile_TitleLabel}"
+                               Style="{StaticResource FieldLabel}"
+                               FontSize="18"/>
+
+                    <ComboBox x:Name="TitleComboBox"
+                              Padding="10,8"
+                              FontSize="17"
+                              Margin="0,0,0,24"
+                              SelectedIndex="0">
+
                         <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleBeginner}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleDiceExpert}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleYachtChampion}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleFastRoller}"/>
+                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleExpert}"/>
+                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleChampion}"/>
+                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleShooter}"/>
                         <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleStrategist}"/>
+
                     </ComboBox>
 
                     <TextBlock Text="{x:Static properties:Strings.Profile_StatisticsHeader}"
-                           FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,10"/>
-                    <Border Background="{StaticResource BrushCream2}" CornerRadius="10"
-                        BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" Margin="0,0,0,24">
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushTextMuted}"
+                               Margin="0,0,0,10"/>
+
+                    <Border Background="{StaticResource BrushCream2}"
+                            CornerRadius="10"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="1"
+                            Margin="0,0,0,24">
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -88,42 +189,123 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock d:Text="24" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Static properties:Strings.Profile_StatGames}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,14">
+
+                                <TextBlock d:Text="24"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Profile_StatGames}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock d:Text="11" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Static properties:Strings.Profile_StatWins}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,14">
+
+                                <TextBlock d:Text="11"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Profile_StatWins}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock d:Text="287" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Static properties:Strings.Profile_StatBestScore}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,14">
+
+                                <TextBlock d:Text="287"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Profile_StatBestScore}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="3" HorizontalAlignment="Center" Margin="0,14">
-                                <TextBlock d:Text="240" FontFamily="{StaticResource FontDisplay}" FontSize="23" Foreground="{StaticResource BrushFeltLight}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{x:Static properties:Strings.Profile_TotalXp}" FontSize="14" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="3"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,14">
+
+                                <TextBlock d:Text="240"
+                                           FontFamily="{StaticResource FontDisplay}"
+                                           FontSize="23"
+                                           Foreground="{StaticResource BrushFeltLight}"
+                                           HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Profile_TotalXp}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource BrushTextMuted}"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </Border>
 
                     <TextBlock Text="{x:Static properties:Strings.Profile_AchievementsHeader}"
-                           FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,10"/>
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushTextMuted}"
+                               Margin="0,0,0,10"/>
+
                     <WrapPanel Margin="0,0,0,24">
-                        <Border Background="{StaticResource BrushGoldButton}" CornerRadius="16" Padding="12,7" Margin="0,0,8,8">
-                            <TextBlock Text="{x:Static properties:Strings.Profile_BadgeFirstMatch}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushFeltDark}"/>
+
+                        <Border Background="{StaticResource BrushGoldButton}"
+                                CornerRadius="16"
+                                Padding="12,7"
+                                Margin="0,0,8,8">
+
+                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstMatch}"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushFeltDark}"/>
                         </Border>
-                        <Border Background="{StaticResource BrushGoldButton}" CornerRadius="16" Padding="12,7" Margin="0,0,8,8">
-                            <TextBlock Text="{x:Static properties:Strings.Profile_BadgeFirstWin}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushFeltDark}"/>
+
+                        <Border Background="{StaticResource BrushGoldButton}"
+                                CornerRadius="16"
+                                Padding="12,7"
+                                Margin="0,0,8,8">
+
+                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstWin}"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushFeltDark}"/>
                         </Border>
-                        <Border Background="{StaticResource BrushBorder}" CornerRadius="16" Padding="12,7" Margin="0,0,8,8" Opacity="0.6">
-                            <TextBlock Text="{x:Static properties:Strings.Profile_BadgeFastRoller}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}"/>
+
+                        <Border Background="{StaticResource BrushBorder}"
+                                CornerRadius="16"
+                                Padding="12,7"
+                                Margin="0,0,8,8"
+                                Opacity="0.6">
+
+                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_SpeedRoller}"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
                         </Border>
+
                     </WrapPanel>
 
-                    <Button Content="{x:Static properties:Strings.Profile_SaveChangesButton}"
-                        Style="{StaticResource BtnPrimary}" HorizontalAlignment="Stretch"
-                        FontSize="18" Padding="0,13" Click="SaveChangesButton_Click"/>
+                    <Button Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
+                            Style="{StaticResource BtnPrimary}"
+                            HorizontalAlignment="Stretch"
+                            FontSize="18"
+                            Padding="0,13"
+                            Click="SaveChangesButton_Click"/>
 
                 </StackPanel>
             </Border>
