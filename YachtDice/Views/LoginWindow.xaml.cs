@@ -14,6 +14,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
+        string generatedFriendCode = "FRD-" + Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
         /// <summary>
         /// Inicializa la ventana de inicio de sesion y registro.
         /// </summary>
@@ -147,7 +149,8 @@ namespace YachtDice.Views
                     Level = 1,
                     DisplayName = username,
                     FirstName = firstName,
-                    LastName = lastName
+                    LastName = lastName,
+                    FriendCode = generatedFriendCode
                 };
 
                 context.Players.Add(newPlayer);
