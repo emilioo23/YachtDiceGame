@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using YachtDice.Data;
-using YachtDice.Models;
 using YachtDice.Resources;
+
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -83,7 +82,7 @@ namespace YachtDice.Views
 
             using (var context = new YachtDiceContext())
             {
-                Player player = context.Players.FirstOrDefault(p => p.Email == email);
+                PLAYER player = context.PLAYER.FirstOrDefault(p => p.Email == email);
 
                 if (player == null)
                 {
@@ -91,7 +90,7 @@ namespace YachtDice.Views
                     return;
                 }
 
-                if (!PasswordHasher.Verify(password, player.PasswordHash))
+                if (!PasswordHasher.Verify(password, player.PwdHash))
                 {
                     MessageBox.Show(Strings.Dialogs_D14_Security);
                     return;
@@ -121,7 +120,7 @@ namespace YachtDice.Views
 
             using (var context = new YachtDiceContext())
             {
-                bool emailTaken = context.Players.Any(p => p.Email == email);
+                bool emailTaken = context.PLAYER.Any(p => p.Email == email);
 
                 if (emailTaken)
                 {
@@ -129,7 +128,7 @@ namespace YachtDice.Views
                     return;
                 }
 
-                bool usernameTaken = context.Players.Any(p => p.Username == username);
+                bool usernameTaken = context.PLAYER.Any(p => p.Username == username);
 
                 if (usernameTaken)
                 {
@@ -137,15 +136,15 @@ namespace YachtDice.Views
                     return;
                 }
 
-                var newPlayer = new Player
+                var newPlayer = new PLAYER
                 {
                     AvatarId = 1,
                     Username = username,
                     Email = email,
-                    PasswordHash = PasswordHasher.ComputeHash(password),
+                    PwdHash = PasswordHasher.ComputeHash(password),
                     State = "Activo",
-                    RegistrationDate = DateTime.Now,
-                    Xp = 0,
+                    RegDate = DateTime.Now,
+                    XP = 0,
                     Level = 1,
                     DisplayName = username,
                     FirstName = firstName,
@@ -153,7 +152,7 @@ namespace YachtDice.Views
                     FriendCode = generatedFriendCode
                 };
 
-                context.Players.Add(newPlayer);
+                context.PLAYER.Add(newPlayer);
                 context.SaveChanges();
             }
 

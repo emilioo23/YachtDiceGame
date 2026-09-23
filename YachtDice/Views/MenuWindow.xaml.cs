@@ -4,8 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using YachtDice.Data;
-using YachtDice.Models;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -79,11 +77,11 @@ namespace YachtDice.Views
             {
                 using (var context = new YachtDiceContext())
                 {
-                    Player player = await context.Players.FirstOrDefaultAsync(p => p.DisplayName == playerName || p.Username == playerName);
+                    PLAYER player = await context.PLAYER.FirstOrDefaultAsync(p => p.DisplayName == playerName || p.Username == playerName);
 
                     if (player != null)
                     {
-                        List<GameHistoryPlayer> playerStatistics = await context.GameHistoryPlayers
+                        List<GAME_HISTORY_PLAYER> playerStatistics = await context.GAME_HISTORY_PLAYER
                             .Where(g => g.PlayerId == player.Id)
                             .ToListAsync();
 

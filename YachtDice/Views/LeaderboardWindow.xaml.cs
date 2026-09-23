@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using YachtDice.Data;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -85,7 +84,7 @@ namespace YachtDice.Views
         {
             using (var context = new YachtDiceContext())
             {
-                var ranking = context.GameHistoryPlayers
+                var ranking = context.GAME_HISTORY_PLAYER
                     .GroupBy(entry => entry.PlayerId)
                     .Select(group => new
                     {
@@ -93,7 +92,7 @@ namespace YachtDice.Views
                         TotalScore = group.Sum(entry => entry.FinalScore),
                         TotalWins = group.Count(entry => entry.IsWinner == true)
                     })
-                    .Join(context.Players,
+                    .Join(context.PLAYER,
                         stats => stats.PlayerId,
                         player => player.Id,
                         (stats, player) => new LeaderboardEntry

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d1c78f82ccfb44f18d65a8619b44b1d7" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="YachtDice.Models.GAME_HISTORY_PLAYER" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDice.Models.PLAYER" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="YachtDice.Models.FK__GAME_HIST__Playe__123EB7A3" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDice.Models.FK__GAME_HIST__Playe__4C6B5938" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

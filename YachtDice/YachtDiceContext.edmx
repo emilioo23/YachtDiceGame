@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="YachtDice.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="GAME_HISTORY_PLAYER">
+          <Key>
+            <PropertyRef Name="GameId" />
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="FinalScore" Type="int" Nullable="false" />
+          <Property Name="IsWinner" Type="bit" />
+          <Property Name="Status" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="PLAYER">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AvatarId" Type="int" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PwdHash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="State" Type="varchar" MaxLength="30" />
+          <Property Name="RegDate" Type="datetime" />
+          <Property Name="XP" Type="int" />
+          <Property Name="Level" Type="int" />
+          <Property Name="FriendCode" Type="varchar" MaxLength="10" />
+          <Property Name="DisplayName" Type="varchar" MaxLength="20" />
+          <Property Name="LastUserChange" Type="datetime" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__GAME_HIST__Playe__123EB7A3">
+          <End Role="PLAYER" Type="Self.PLAYER" Multiplicity="1" />
+          <End Role="GAME_HISTORY_PLAYER" Type="Self.GAME_HISTORY_PLAYER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PLAYER">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GAME_HISTORY_PLAYER">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GAME_HIST__Playe__4C6B5938">
+          <End Role="PLAYER" Type="Self.PLAYER" Multiplicity="1" />
+          <End Role="GAME_HISTORY_PLAYER" Type="Self.GAME_HISTORY_PLAYER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PLAYER">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GAME_HISTORY_PLAYER">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="YachtDiceModelsStoreContainer">
+          <EntitySet Name="GAME_HISTORY_PLAYER" EntityType="Self.GAME_HISTORY_PLAYER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PLAYER" EntityType="Self.PLAYER" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__GAME_HIST__Playe__123EB7A3" Association="Self.FK__GAME_HIST__Playe__123EB7A3">
+            <End Role="PLAYER" EntitySet="PLAYER" />
+            <End Role="GAME_HISTORY_PLAYER" EntitySet="GAME_HISTORY_PLAYER" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GAME_HIST__Playe__4C6B5938" Association="Self.FK__GAME_HIST__Playe__4C6B5938">
+            <End Role="PLAYER" EntitySet="PLAYER" />
+            <End Role="GAME_HISTORY_PLAYER" EntitySet="GAME_HISTORY_PLAYER" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="YachtDice.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="GAME_HISTORY_PLAYER">
+          <Key>
+            <PropertyRef Name="GameId" />
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="FinalScore" Type="Int32" Nullable="false" />
+          <Property Name="IsWinner" Type="Boolean" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PLAYER" Relationship="Self.FK__GAME_HIST__Playe__123EB7A3" FromRole="GAME_HISTORY_PLAYER" ToRole="PLAYER" />
+          <NavigationProperty Name="PLAYER1" Relationship="Self.FK__GAME_HIST__Playe__4C6B5938" FromRole="GAME_HISTORY_PLAYER" ToRole="PLAYER" />
+        </EntityType>
+        <EntityType Name="PLAYER">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AvatarId" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="RegDate" Type="DateTime" Precision="3" />
+          <Property Name="XP" Type="Int32" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="FriendCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LastUserChange" Type="DateTime" Precision="3" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="GAME_HISTORY_PLAYER" Relationship="Self.FK__GAME_HIST__Playe__123EB7A3" FromRole="PLAYER" ToRole="GAME_HISTORY_PLAYER" />
+          <NavigationProperty Name="GAME_HISTORY_PLAYER1" Relationship="Self.FK__GAME_HIST__Playe__4C6B5938" FromRole="PLAYER" ToRole="GAME_HISTORY_PLAYER" />
+        </EntityType>
+        <Association Name="FK__GAME_HIST__Playe__123EB7A3">
+          <End Role="PLAYER" Type="Self.PLAYER" Multiplicity="1" />
+          <End Role="GAME_HISTORY_PLAYER" Type="Self.GAME_HISTORY_PLAYER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PLAYER">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GAME_HISTORY_PLAYER">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GAME_HIST__Playe__4C6B5938">
+          <End Role="PLAYER" Type="Self.PLAYER" Multiplicity="1" />
+          <End Role="GAME_HISTORY_PLAYER" Type="Self.GAME_HISTORY_PLAYER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PLAYER">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GAME_HISTORY_PLAYER">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="YachtDiceContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="GAME_HISTORY_PLAYER" EntityType="Self.GAME_HISTORY_PLAYER" />
+          <EntitySet Name="PLAYER" EntityType="Self.PLAYER" />
+          <AssociationSet Name="FK__GAME_HIST__Playe__123EB7A3" Association="Self.FK__GAME_HIST__Playe__123EB7A3">
+            <End Role="PLAYER" EntitySet="PLAYER" />
+            <End Role="GAME_HISTORY_PLAYER" EntitySet="GAME_HISTORY_PLAYER" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GAME_HIST__Playe__4C6B5938" Association="Self.FK__GAME_HIST__Playe__4C6B5938">
+            <End Role="PLAYER" EntitySet="PLAYER" />
+            <End Role="GAME_HISTORY_PLAYER" EntitySet="GAME_HISTORY_PLAYER" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="YachtDiceModelsStoreContainer" CdmEntityContainer="YachtDiceContext">
+          <EntitySetMapping Name="GAME_HISTORY_PLAYER">
+            <EntityTypeMapping TypeName="YachtDice.Models.GAME_HISTORY_PLAYER">
+              <MappingFragment StoreEntitySet="GAME_HISTORY_PLAYER">
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="FinalScore" ColumnName="FinalScore" />
+                <ScalarProperty Name="IsWinner" ColumnName="IsWinner" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PLAYER">
+            <EntityTypeMapping TypeName="YachtDice.Models.PLAYER">
+              <MappingFragment StoreEntitySet="PLAYER">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AvatarId" ColumnName="AvatarId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="XP" ColumnName="XP" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="FriendCode" ColumnName="FriendCode" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="LastUserChange" ColumnName="LastUserChange" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
