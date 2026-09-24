@@ -2788,6 +2788,33 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a PRESIONA CUALQUIER BOTÓN O TECLA PARA CONTINUAR.
+        /// </summary>
+        public static string Splash_ContinueHint {
+            get {
+                return ResourceManager.GetString("Splash_ContinueHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a YACHT.
+        /// </summary>
+        public static string Splash_TitleLine1 {
+            get {
+                return ResourceManager.GetString("Splash_TitleLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a DICE GAME.
+        /// </summary>
+        public static string Splash_TitleLine2 {
+            get {
+                return ResourceManager.GetString("Splash_TitleLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a ← Volver.
         /// </summary>
         public static string TwoFactor_BackLink {

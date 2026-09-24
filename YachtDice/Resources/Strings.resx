@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -109,70 +168,70 @@
   <data name="Auth_GuestButton" xml:space="preserve">
     <value>Jugar como invitado</value>
   </data>
-	<data name="Auth_ErrorRequiredFields" xml:space="preserve">
+  <data name="Auth_ErrorRequiredFields" xml:space="preserve">
     <value>Todos los campos son obligatorios.</value>
   </data>
-	<data name="Auth_SuccessRegister" xml:space="preserve">
+  <data name="Auth_SuccessRegister" xml:space="preserve">
     <value>Registro exitoso.</value>
   </data>
-	<data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+  <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>El correo electrónico es requerido.</value>
   </data>
-	<data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
+  <data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
     <value>Enlace de recuperación enviado a {0}.</value>
   </data>
-	<data name="Leaderboard_BackLink" xml:space="preserve">
+  <data name="Leaderboard_BackLink" xml:space="preserve">
     <value>← Volver</value>
   </data>
-	<data name="MainMenu_EditProfileButton" xml:space="preserve">
+  <data name="MainMenu_EditProfileButton" xml:space="preserve">
     <value>Editar perfil</value>
   </data>
-	<data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
+  <data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
     <value>{0} en línea</value>
   </data>
-	<data name="MainMenu_Friends_StatusInLobby" xml:space="preserve">
+  <data name="MainMenu_Friends_StatusInLobby" xml:space="preserve">
     <value>En partida · Lobby</value>
   </data>
-	<data name="MainMenu_Friends_StatusInMatchRound" xml:space="preserve">
+  <data name="MainMenu_Friends_StatusInMatchRound" xml:space="preserve">
     <value>En partida · Ronda {0}</value>
   </data>
-	<data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
+  <data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
     <value>En línea</value>
   </data>
-	<data name="MainMenu_LogoutButton" xml:space="preserve">
+  <data name="MainMenu_LogoutButton" xml:space="preserve">
     <value>Cerrar sesión</value>
   </data>
-	<data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
+  <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
     <value>Marcador</value>
   </data>
-	<data name="MainMenu_Nav_Lobby" xml:space="preserve">
+  <data name="MainMenu_Nav_Lobby" xml:space="preserve">
     <value>Lobby</value>
   </data>
-	<data name="MainMenu_Nav_Play" xml:space="preserve">
+  <data name="MainMenu_Nav_Play" xml:space="preserve">
     <value>Jugar</value>
   </data>
-	<data name="MainMenu_Nav_Settings" xml:space="preserve">
+  <data name="MainMenu_Nav_Settings" xml:space="preserve">
     <value>Ajustes</value>
   </data>
-	<data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+  <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
     <value>Ingresa un código de sala.</value>
   </data>
-	<data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
+  <data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
     <value>Uniéndose a la sala {0}...</value>
   </data>
-	<data name="MainMenu_PlayerLevel" xml:space="preserve">
+  <data name="MainMenu_PlayerLevel" xml:space="preserve">
     <value>Nivel {0}</value>
   </data>
-	<data name="Profile_SavedMessage" xml:space="preserve">
+  <data name="Profile_SavedMessage" xml:space="preserve">
     <value>Perfil guardado con éxito.</value>
   </data>
-	<data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
     <value>Característica no implementada.</value>
   </data>
-	<data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+  <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>Código reenviado.</value>
   </data>
-	<data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+  <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
     <value>Código incompleto.</value>
   </data>
   <data name="TwoFactor_Eyebrow" xml:space="preserve">
@@ -514,16 +573,16 @@
   <data name="Settings_Appearance_ThemeDarkSub" xml:space="preserve">
     <value>Cambia la apariencia de toda la interfaz</value>
   </data>
-	<data name="Settings_Security_ChangeButton" xml:space="preserve">
+  <data name="Settings_Security_ChangeButton" xml:space="preserve">
     <value>Cambiar</value>
   </data>
-	<data name="Settings_BackLink" xml:space="preserve">
+  <data name="Settings_BackLink" xml:space="preserve">
     <value>← Volver</value>
   </data>
-	<data name="Settings_Privacy_PublicProfile" xml:space="preserve">
+  <data name="Settings_Privacy_PublicProfile" xml:space="preserve">
     <value>Perfil público</value>
   </data>
-	<data name="Settings_Privacy_PublicProfileSubtitle" xml:space="preserve">
+  <data name="Settings_Privacy_PublicProfileSubtitle" xml:space="preserve">
     <value>Permitir que otros vean tu perfil</value>
   </data>
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
@@ -993,5 +1052,14 @@
   </data>
   <data name="Global_FormatNumber" xml:space="preserve">
     <value>1.234,56 (coma decimal)</value>
+  </data>
+  <data name="Splash_TitleLine1" xml:space="preserve">
+    <value>YACHT</value>
+  </data>
+  <data name="Splash_TitleLine2" xml:space="preserve">
+    <value>DICE GAME</value>
+  </data>
+  <data name="Splash_ContinueHint" xml:space="preserve">
+    <value>PRESIONA CUALQUIER BOTÓN O TECLA PARA CONTINUAR</value>
   </data>
 </root>

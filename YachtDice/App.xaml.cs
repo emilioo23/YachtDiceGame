@@ -35,8 +35,8 @@ namespace YachtDice
             SetCulture(DefaultCultureCode);
             SetTheme(isDark: false);
 
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
+            var splashWindow = new SplashWindow();
+            splashWindow.Show();
         }
 
         /// <summary>
