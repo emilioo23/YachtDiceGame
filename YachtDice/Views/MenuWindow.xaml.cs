@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Resources;
+using YachtDiceGame.Data;
 
 namespace YachtDice.Views
 {
@@ -77,11 +78,13 @@ namespace YachtDice.Views
             {
                 using (var context = new YachtDiceContext())
                 {
-                    PLAYER player = await context.PLAYER.FirstOrDefaultAsync(p => p.DisplayName == playerName || p.Username == playerName);
+                    // Corrección: Uso de la entidad 'Player' en PascalCase generada por EF
+                    Player player = await context.Player.FirstOrDefaultAsync(p => p.DisplayName == playerName || p.Username == playerName);
 
                     if (player != null)
                     {
-                        List<GAME_HISTORY_PLAYER> playerStatistics = await context.GAME_HISTORY_PLAYER
+                        // Corrección: Uso de la entidad 'GameHistoryPlayer' en PascalCase generada por EF
+                        List<GameHistoryPlayer> playerStatistics = await context.GameHistoryPlayer
                             .Where(g => g.PlayerId == player.Id)
                             .ToListAsync();
 
