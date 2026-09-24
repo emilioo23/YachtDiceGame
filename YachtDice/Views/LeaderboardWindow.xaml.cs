@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using YachtDice.Resources;
+using YachtDiceGame.Data;
 
 namespace YachtDice.Views
 {
@@ -58,7 +61,7 @@ namespace YachtDice.Views
             _playerName = playerName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(playerName);
 
-            LoadRanking();
+            _ = LoadRankingAsync(); // Ejecución asíncrona de la consulta
         }
 
         private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
@@ -80,11 +83,12 @@ namespace YachtDice.Views
             this.Close();
         }
 
-        private void LoadRanking()
+        private async Task LoadRankingAsync()
         {
             using (var context = new YachtDiceContext())
             {
-                var ranking = context.GAME_HISTORY_PLAYER
+                // Corrección: Uso de GameHistoryPlayer y Player en PascalCase con consulta asíncrona
+                var ranking = await context.GameHistoryPlayer
                     .GroupBy(entry => entry.PlayerId)
                     .Select(group => new
                     {
@@ -92,7 +96,7 @@ namespace YachtDice.Views
                         TotalScore = group.Sum(entry => entry.FinalScore),
                         TotalWins = group.Count(entry => entry.IsWinner == true)
                     })
-                    .Join(context.PLAYER,
+                    .Join(context.Player,
                         stats => stats.PlayerId,
                         player => player.Id,
                         (stats, player) => new LeaderboardEntry
@@ -103,7 +107,7 @@ namespace YachtDice.Views
                             Wins = stats.TotalWins
                         })
                     .OrderByDescending(entry => entry.Points)
-                    .ToList();
+                    .ToListAsync();
 
                 RenderRanking(ranking);
             }

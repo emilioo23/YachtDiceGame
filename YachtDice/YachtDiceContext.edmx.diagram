@@ -4,11 +4,56 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d1c78f82ccfb44f18d65a8619b44b1d7" Name="Diagram1" ZoomLevel="74">
-        <EntityTypeShape EntityType="YachtDice.Models.GAME_HISTORY_PLAYER" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="YachtDice.Models.PLAYER" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="YachtDice.Models.FK__GAME_HIST__Playe__123EB7A3" ManuallyRouted="false" />
-        <AssociationConnector Association="YachtDice.Models.FK__GAME_HIST__Playe__4C6B5938" ManuallyRouted="false" />
+      <Diagram DiagramId="ffd0b2f25d0d4d659eed0e1808f6e680" Name="Diagram1" ZoomLevel="55">
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Avatar" Width="1.5" PointX="0.75" PointY="22.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.BackupCode" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Category" Width="1.5" PointX="12.75" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Friendship" Width="1.5" PointX="5.25" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.GameHistory" Width="1.5" PointX="7.5" PointY="39.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.GameHistoryPlayer" Width="1.5" PointX="9.75" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.KickLog" Width="1.5" PointX="7.5" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Passkey" Width="1.5" PointX="5.25" PointY="25.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Player" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.PlayerReport" Width="1.5" PointX="12.75" PointY="32.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.PlayerSettings" Width="1.5" PointX="5.25" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.PwdResetToken" Width="1.5" PointX="5.25" PointY="35.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Room" Width="1.5" PointX="5.25" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.RoomInvite" Width="1.5" PointX="7.5" PointY="33.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.RoomPlayer" Width="1.5" PointX="7.5" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.Scorecard" Width="1.5" PointX="12.75" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.ScorecardEntry" Width="1.5" PointX="15" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.TurnState" Width="1.5" PointX="9.75" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.TwoFactorAuth" Width="1.5" PointX="5.25" PointY="43.25" IsExpanded="true" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER__AvatarId__17036CC0" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__BACKUP_CO__Playe__0D7A0286" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__SCORECARD__Categ__25518C17" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__FRIENDSHI__Addre__489AC854" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__FRIENDSHI__Reque__498EEC8D" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__GAME_HIST__GameI__4B7734FF" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__GAME_HIST__RoomI__10566F31" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER_RE__GameI__5224328E" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__SCORECARD__GameI__5D95E53A" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__TURN_STAT__GameI__6166761E" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__GAME_HIST__Playe__4C6B5938" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__KICK_LOG__HostId__1332DBDC" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__KICK_LOG__RoomId__14270015" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__KICK_LOG__Target__151B244E" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PASSKEY__PlayerI__503BEA1C" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER_RE__Repor__531856C7" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER_RE__Repor__540C7B00" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER_SE__Playe__1BC821DD" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PWD_RESET__Playe__56E8E7AB" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM__HostPlayer__1DB06A4F" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM_INVI__Invit__58D1301D" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM_INVI__Invit__59C55456" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM_PLAY__Playe__2180FB33" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__SCORECARD__Playe__5E8A0973" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__TURN_STAT__Playe__625A9A57" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__TWO_FACTO__Playe__29221CFB" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__PLAYER_RE__RoomI__55009F39" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM_INVI__RoomI__5AB9788F" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__ROOM_PLAY__RoomI__22751F6C" ManuallyRouted="false" />
+        <AssociationConnector Association="YachtDiceGame.Data.FK__SCORECARD__Score__2645B050" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YachtDice
+namespace YachtDiceGame.Data
 {
     using System;
     using System.Data.Entity;
@@ -25,7 +25,24 @@ namespace YachtDice
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<GAME_HISTORY_PLAYER> GAME_HISTORY_PLAYER { get; set; }
-        public virtual DbSet<PLAYER> PLAYER { get; set; }
+        public virtual DbSet<Avatar> Avatar { get; set; }
+        public virtual DbSet<BackupCode> BackupCode { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Friendship> Friendship { get; set; }
+        public virtual DbSet<GameHistory> GameHistory { get; set; }
+        public virtual DbSet<GameHistoryPlayer> GameHistoryPlayer { get; set; }
+        public virtual DbSet<KickLog> KickLog { get; set; }
+        public virtual DbSet<Passkey> Passkey { get; set; }
+        public virtual DbSet<Player> Player { get; set; }
+        public virtual DbSet<PlayerReport> PlayerReport { get; set; }
+        public virtual DbSet<PlayerSettings> PlayerSettings { get; set; }
+        public virtual DbSet<PwdResetToken> PwdResetToken { get; set; }
+        public virtual DbSet<Room> Room { get; set; }
+        public virtual DbSet<RoomInvite> RoomInvite { get; set; }
+        public virtual DbSet<RoomPlayer> RoomPlayer { get; set; }
+        public virtual DbSet<Scorecard> Scorecard { get; set; }
+        public virtual DbSet<ScorecardEntry> ScorecardEntry { get; set; }
+        public virtual DbSet<TurnState> TurnState { get; set; }
+        public virtual DbSet<TwoFactorAuth> TwoFactorAuth { get; set; }
     }
 }

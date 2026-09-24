@@ -7,20 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YachtDice
+namespace YachtDiceGame.Data
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
     
-    public partial class GAME_HISTORY_PLAYER
+    public partial class BackupCode
     {
-        public int GameId { get; set; }
+        public int Id { get; set; }
         public int PlayerId { get; set; }
-        public int FinalScore { get; set; }
-        public Nullable<bool> IsWinner { get; set; }
+        public string Code { get; set; }
         public string Status { get; set; }
     
-        public virtual PLAYER PLAYER { get; set; }
-        public virtual PLAYER PLAYER1 { get; set; }
+        public virtual Player Player { get; set; }
     }
 }

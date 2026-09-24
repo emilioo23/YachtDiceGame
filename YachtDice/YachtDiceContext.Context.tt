@@ -29,7 +29,7 @@ if (container == null)
 
 <#
 
-var codeNamespace = code.VsNamespaceSuggestion();
+var codeNamespace = "YachtDiceGame.Data";
 if (!String.IsNullOrEmpty(codeNamespace))
 {
 #>

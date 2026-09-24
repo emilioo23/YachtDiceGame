@@ -5,6 +5,7 @@ using System.Windows.Input;
 using YachtDice.Resources;
 
 using YachtDice.Utils;
+using YachtDiceGame.Data;
 
 namespace YachtDice.Views
 {
@@ -82,7 +83,7 @@ namespace YachtDice.Views
 
             using (var context = new YachtDiceContext())
             {
-                PLAYER player = context.PLAYER.FirstOrDefault(p => p.Email == email);
+                Player player = context.Player.FirstOrDefault(p => p.Email == email);
 
                 if (player == null)
                 {
@@ -120,7 +121,7 @@ namespace YachtDice.Views
 
             using (var context = new YachtDiceContext())
             {
-                bool emailTaken = context.PLAYER.Any(p => p.Email == email);
+                bool emailTaken = context.Player.Any(p => p.Email == email);
 
                 if (emailTaken)
                 {
@@ -128,7 +129,7 @@ namespace YachtDice.Views
                     return;
                 }
 
-                bool usernameTaken = context.PLAYER.Any(p => p.Username == username);
+                bool usernameTaken = context.Player.Any(p => p.Username == username);
 
                 if (usernameTaken)
                 {
@@ -136,7 +137,7 @@ namespace YachtDice.Views
                     return;
                 }
 
-                var newPlayer = new PLAYER
+                var newPlayer = new Player
                 {
                     AvatarId = 1,
                     Username = username,
@@ -152,7 +153,7 @@ namespace YachtDice.Views
                     FriendCode = generatedFriendCode
                 };
 
-                context.PLAYER.Add(newPlayer);
+                context.Player.Add(newPlayer);
                 context.SaveChanges();
             }
 

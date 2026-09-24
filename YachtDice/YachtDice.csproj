@@ -82,16 +82,67 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="GAME_HISTORY_PLAYER.cs">
+    <Compile Include="Avatar.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="PLAYER.cs">
+    <Compile Include="BackupCode.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Category.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Friendship.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GameHistory.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GameHistoryPlayer.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KickLog.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Passkey.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Player.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PlayerReport.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PlayerSettings.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Room.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RoomInvite.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPlayer.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Scorecard.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScorecardEntry.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TurnState.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TwoFactorAuth.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\PasswordHasher.cs" />
     <Compile Include="Views\ForgotPasswordWindow.xaml.cs">
