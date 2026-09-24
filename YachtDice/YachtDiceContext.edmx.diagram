@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ffd0b2f25d0d4d659eed0e1808f6e680" Name="Diagram1" ZoomLevel="55">
         <EntityTypeShape EntityType="YachtDiceGame.Data.Avatar" Width="1.5" PointX="0.75" PointY="22.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="YachtDiceGame.Data.BackupCode" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDiceGame.Data.BackupCode" Width="1.5" PointX="8.25" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDiceGame.Data.Category" Width="1.5" PointX="12.75" PointY="25.875" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDiceGame.Data.Friendship" Width="1.5" PointX="5.25" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDiceGame.Data.GameHistory" Width="1.5" PointX="7.5" PointY="39.125" IsExpanded="true" />

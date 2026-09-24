@@ -1053,4 +1053,13 @@
   <data name="Global_FormatNumber" xml:space="preserve">
     <value>1,234.56 (punto decimal)</value>
   </data>
+  <data name="Splash_TitleLine1" xml:space="preserve">
+    <value>YACHT</value>
+  </data>
+  <data name="Splash_TitleLine2" xml:space="preserve">
+    <value>DICE GAME</value>
+  </data>
+  <data name="Splash_ContinueHint" xml:space="preserve">
+    <value>PRESS ANY BUTTON OR KEY TO CONTINUE</value>
+  </data>
 </root>
