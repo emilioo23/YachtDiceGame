@@ -32,7 +32,6 @@
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
-            <!-- ===================== COLUMNA IZQUIERDA: PERFIL + NAV ===================== -->
             <Border Grid.Column="0"
                     Style="{StaticResource CardPanel}"
                     Padding="16"
