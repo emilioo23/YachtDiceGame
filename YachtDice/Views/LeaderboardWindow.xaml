@@ -26,7 +26,6 @@
             <Border Style="{StaticResource CardPanel}" Grid.ColumnSpan="2">
                 <StackPanel>
 
-                    <!-- ENCABEZADO -->
                     <Grid Margin="0,0,0,6">
                         <TextBlock Text="{x:Static properties:Strings.Leaderboard_Title}"
                                FontFamily="{StaticResource FontDisplay}" FontSize="33"
@@ -36,7 +35,6 @@
                            Style="{StaticResource LinkText}" Margin="0,0,0,20" FontSize="18"
                            MouseLeftButtonUp="BackLink_Click"/>
 
-                    <!-- FILTROS -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                         <Button x:Name="GlobalFilterButton" Content="{x:Static properties:Strings.Leaderboard_FilterGlobal}"
                             Style="{StaticResource TabButtonActive}" Padding="24,9" Margin="0,0,10,0"
@@ -46,12 +44,10 @@
                             Click="FriendsFilterButton_Click" FontSize="18"/>
                     </StackPanel>
 
-                    <!-- TABLA -->
                     <Border Background="{StaticResource BrushCream2}" CornerRadius="10"
                         BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" Margin="0,0,0,16">
                         <StackPanel>
 
-                            <!-- CABECERA DE TABLA -->
                             <Grid Background="{StaticResource BrushWood}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -72,7 +68,6 @@
                                        FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
                             </Grid>
 
-                            <!-- FILAS: se generan por codigo -->
                             <StackPanel x:Name="RankingPanel"/>
 
                         </StackPanel>

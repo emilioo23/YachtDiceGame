@@ -31,7 +31,6 @@
 
                 <StackPanel>
 
-                    <!-- ENCABEZADO -->
                     <Grid Margin="0,0,0,6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -63,7 +62,6 @@
                                FontSize="15"
                                MouseLeftButtonUp="BackToPlayLink_Click"/>
 
-                    <!-- PRIVACIDAD / MAX JUGADORES -->
                     <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -108,7 +106,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- MODO DE JUEGO -->
                     <TextBlock Text="{x:Static properties:Strings.Lobby_GameMode}"
                                FontSize="16"
                                FontWeight="Bold"
@@ -174,7 +171,6 @@
                         </Border>
                     </Grid>
 
-                    <!-- JUGADORES -->
                     <Grid Margin="0,0,0,10">
 
                         <TextBlock Text="{x:Static properties:Strings.Lobby_Players}"
@@ -282,7 +278,6 @@
                         </Border>
                     </Grid>
 
-                    <!-- BOTONES -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

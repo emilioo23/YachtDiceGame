@@ -18,13 +18,11 @@
     <Viewbox Stretch="Uniform">
         <Grid Width="1024" Height="574">
 
-            <!-- Imagen de fondo original, sin tocar -->
             <Image x:Name="BaseImage"
                    Source="/Assets/SplashBackground.png"
                    Stretch="Uniform"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
 
-            <!-- Brillo pulsante sobre el titulo -->
             <Image x:Name="TitleGlowImage"
                    Source="/Assets/SplashBackground.png"
                    Stretch="Uniform"
@@ -35,7 +33,6 @@
                 </Image.Effect>
             </Image>
 
-            <!-- Brillo pulsante sobre el texto inferior -->
             <Image x:Name="HintGlowImage"
                    Source="/Assets/SplashBackground.png"
                    Stretch="Uniform"

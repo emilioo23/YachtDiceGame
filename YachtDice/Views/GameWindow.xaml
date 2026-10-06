@@ -36,11 +36,9 @@
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
-            <!-- ===================== IZQUIERDA: TABLA DE PUNTAJE ===================== -->
             <Border Grid.Column="0" Style="{StaticResource CardPanel}" Margin="0,0,16,0">
                 <StackPanel>
 
-                    <!-- TOPBAR: turno / ronda -->
                     <Border Background="{StaticResource BrushWood}" CornerRadius="10" Padding="14,10" Margin="0,0,0,18">
                         <Grid>
                             <TextBlock x:Name="TurnStatusTextBlock" Text="{x:Static properties:Strings.Game_Topbar_YourTurn}" Foreground="White" FontWeight="Bold" FontSize="19" VerticalAlignment="Center"/>
@@ -50,7 +48,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- ENCABEZADOS DE JUGADORES -->
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"/>
@@ -79,7 +76,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- FILAS DE CATEGORIAS (se generan por codigo) -->
                     <StackPanel x:Name="CategoriesPanel" Margin="0,0,0,16"/>
 
                     <Grid>
@@ -100,11 +96,9 @@
                 </StackPanel>
             </Border>
 
-            <!-- ===================== DERECHA: MESA DE DADOS ===================== -->
             <Border Grid.Column="1" Style="{StaticResource CardPanel}">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                    <!-- ARO DE MADERA -->
                     <Border Width="440" Height="440" CornerRadius="220" Background="{StaticResource BrushAroMadera}"
                         Effect="{StaticResource ShadowCard}" Margin="0,0,0,26">
                         <Border Width="380" Height="380" CornerRadius="190" Background="{StaticResource BrushMesaFieltro}"
