@@ -22,7 +22,6 @@ namespace YachtDice.Views
         private const string FriendCodePrefix = "FRD-";
         private const int FriendCodeLength = 6;
 
-        // El servicio es estático para que los códigos sobrevivan al reabrir la ventana (cambio de idioma o volver).
         private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
 
         private readonly TwoFactorDeliveryService _deliveryService;
