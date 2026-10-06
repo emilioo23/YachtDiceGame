@@ -22,7 +22,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ===================== NAV IZQUIERDA ===================== -->
             <Border Grid.Column="0"
                     Style="{StaticResource CardPanel}"
                     Padding="16"
@@ -96,7 +95,6 @@
 
                 <Grid>
 
-                    <!-- ===== CUENTA ===== -->
                     <StackPanel x:Name="AccountPanel">
 
                         <Grid Margin="0,0,0,16">
@@ -180,7 +178,6 @@
 
                     </StackPanel>
 
-                    <!-- ===== APARIENCIA ===== -->
                     <StackPanel x:Name="AppearancePanel"
                                 Visibility="Collapsed">
 
@@ -224,7 +221,6 @@
 
                     </StackPanel>
 
-                    <!-- ===== SEGURIDAD ===== -->
                     <StackPanel x:Name="SecurityPanel"
                                 Visibility="Collapsed">
 
@@ -287,7 +283,6 @@
 
                     </StackPanel>
 
-                    <!-- ===== NOTIFICACIONES ===== -->
                     <StackPanel x:Name="NotificationsPanel"
                                 Visibility="Collapsed">
 
@@ -365,7 +360,6 @@
 
                     </StackPanel>
 
-                    <!-- ===== PREFERENCIAS ===== -->
                     <StackPanel x:Name="PreferencesPanel"
                                 Visibility="Collapsed">
 
@@ -437,7 +431,6 @@
 
                     </StackPanel>
 
-                    <!-- ===== PRIVACIDAD ===== -->
                     <StackPanel x:Name="PrivacyPanel"
                                 Visibility="Collapsed">
 
