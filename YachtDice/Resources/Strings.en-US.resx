@@ -1062,4 +1062,19 @@
   <data name="Splash_ContinueHint" xml:space="preserve">
     <value>PRESS ANY BUTTON OR KEY TO CONTINUE</value>
   </data>
+  <data name="TwoFactor_EmailSubject" xml:space="preserve">
+    <value>Your Yacht Dice verification code</value>
+  </data>
+  <data name="TwoFactor_EmailBody" xml:space="preserve">
+    <value>Hi {0}, your verification code is: {1}. This code expires in {2} minutes. If you did not try to sign in, ignore this message.</value>
+  </data>
+  <data name="TwoFactor_ErrorSendFailed" xml:space="preserve">
+    <value>The verification code could not be sent. Check your connection and try again.</value>
+  </data>
+  <data name="TwoFactor_ErrorCodeExpired" xml:space="preserve">
+    <value>The code has expired. Request a new one with the resend link.</value>
+  </data>
+  <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
+    <value>Wait a few seconds before requesting another code.</value>
+  </data>
 </root>

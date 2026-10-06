@@ -19,7 +19,7 @@
                                  Margin="0,16,16,0"
                                  Panel.ZIndex="99"/>
 
-        <Border Style="{StaticResource CardPanel}" Width="340" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Style="{StaticResource CardPanel}" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel>
 
                 <TextBlock Text="{x:Static properties:Strings.TwoFactor_Title}"
@@ -45,27 +45,47 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,22"/>
 
-                <!-- 4 CASILLAS DE CODIGO -->
+                <!-- 6 CASILLAS DE CODIGO -->
                 <Grid Margin="0,0,0,18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="Digit1" Grid.Column="0" Margin="4,0" Style="{StaticResource TextBoxRounded}"
-                             MaxLength="1" FontSize="22" TextAlignment="Center" Height="56"
-                             TextChanged="Digit_TextChanged"/>
-                    <TextBox x:Name="Digit2" Grid.Column="1" Margin="4,0" Style="{StaticResource TextBoxRounded}"
-                             MaxLength="1" FontSize="22" TextAlignment="Center" Height="56"
-                             TextChanged="Digit_TextChanged"/>
-                    <TextBox x:Name="Digit3" Grid.Column="2" Margin="4,0" Style="{StaticResource TextBoxRounded}"
-                             MaxLength="1" FontSize="22" TextAlignment="Center" Height="56"
-                             TextChanged="Digit_TextChanged"/>
-                    <TextBox x:Name="Digit4" Grid.Column="3" Margin="4,0" Style="{StaticResource TextBoxRounded}"
-                             MaxLength="1" FontSize="22" TextAlignment="Center" Height="56"
-                             TextChanged="Digit_TextChanged"/>
+                    <TextBox x:Name="Digit1TextBox" Grid.Column="0" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
+                    <TextBox x:Name="Digit2TextBox" Grid.Column="1" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
+                    <TextBox x:Name="Digit3TextBox" Grid.Column="2" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
+                    <TextBox x:Name="Digit4TextBox" Grid.Column="3" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
+                    <TextBox x:Name="Digit5TextBox" Grid.Column="4" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
+                    <TextBox x:Name="Digit6TextBox" Grid.Column="5" Margin="3,0" Style="{StaticResource TextBoxRounded}"
+                             MaxLength="1" FontSize="20" TextAlignment="Center" Height="52" Padding="0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"
+                             PreviewKeyDown="DigitTextBox_PreviewKeyDown"
+                             TextChanged="DigitTextBox_TextChanged"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">

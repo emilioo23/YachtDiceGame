@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using YachtDice.Resources;
+using YachtDice.Services;
 
 namespace YachtDice.Views
 {
@@ -10,65 +13,118 @@ namespace YachtDice.Views
     /// </summary>
     public partial class TwoFactorWindow : Window
     {
-        private const int CodeLength = 4;
+        private const int CodeLength = TwoFactorCodeService.CodeLength;
+        private const int VisibleLocalPartChars = 2;
+        private const char MaskCharacter = '*';
 
+        private readonly string _email;
         private readonly string _playerDisplayName;
+        private readonly TwoFactorCodeService _codeService;
+        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly TextBox[] _digitBoxes;
 
         /// <summary>
-        /// Inicializa la ventana de verificacion en dos pasos para el jugador indicado.
+        /// Inicializa la ventana de verificación en dos pasos para el jugador indicado.
         /// </summary>
-        /// <param name="email">Correo al que se envio el codigo de verificacion.</param>
-        /// <param name="playerDisplayName">Nombre para mostrar del jugador que inicio sesion.</param>
-        public TwoFactorWindow(string email, string playerDisplayName)
+        /// <param name="email">Correo al que se envió el código de verificación.</param>
+        /// <param name="playerDisplayName">Nombre para mostrar del jugador que inició sesión.</param>
+        /// <param name="codeService">Servicio que guarda y valida los códigos generados.</param>
+        public TwoFactorWindow(string email, string playerDisplayName, TwoFactorCodeService codeService)
         {
             InitializeComponent();
+
+            _email = email;
             _playerDisplayName = playerDisplayName;
-            DestinationEmailTextBlock.Text = email;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName);
-            Digit1.Focus();
+            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService));
+            _deliveryService = new TwoFactorDeliveryService(_codeService);
+            _digitBoxes = new[]
+            {
+                Digit1TextBox, Digit2TextBox, Digit3TextBox,
+                Digit4TextBox, Digit5TextBox, Digit6TextBox
+            };
+
+            DestinationEmailTextBlock.Text = MaskEmail(email);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName, codeService);
+            Digit1TextBox.Focus();
         }
 
-        private void Digit_TextChanged(object sender, TextChangedEventArgs e)
+        private void DigitTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var box = sender as TextBox;
-            if (box == null || box.Text.Length == 0)
-            {
-                return;
-            }
+            e.Handled = !e.Text.All(char.IsDigit);
+        }
 
-            if (box == Digit1)
+        private void DigitTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var box = (TextBox)sender;
+            int index = Array.IndexOf(_digitBoxes, box);
+            bool isPaste = e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
+            bool isBackOnEmptyBox = e.Key == Key.Back && box.Text.Length == 0 && index > 0;
+
+            if (isPaste)
             {
-                Digit2.Focus();
+                PasteCodeFromClipboard();
+                e.Handled = true;
             }
-            else if (box == Digit2)
+            else if (isBackOnEmptyBox)
             {
-                Digit3.Focus();
+                _digitBoxes[index - 1].Clear();
+                _digitBoxes[index - 1].Focus();
+                e.Handled = true;
             }
-            else if (box == Digit3)
+        }
+
+        private void DigitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var box = (TextBox)sender;
+            int index = Array.IndexOf(_digitBoxes, box);
+            bool hasNextBox = index < _digitBoxes.Length - 1;
+
+            if (box.Text.Length > 0 && hasNextBox)
             {
-                Digit4.Focus();
+                _digitBoxes[index + 1].Focus();
+            }
+            else if (IsCodeComplete())
+            {
+                VerifyCode();
             }
         }
 
         private void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
-            string code = Digit1.Text + Digit2.Text + Digit3.Text + Digit4.Text;
-
-            if (code.Length < CodeLength)
+            if (!IsCodeComplete())
             {
                 MessageBox.Show(Strings.TwoFactor_ErrorIncompleteCode);
                 return;
             }
 
-            // Aqui, mas adelante, se validara el codigo real contra el backend.
-            var menuWindow = new MenuWindow(_playerDisplayName);
-            menuWindow.Show();
-            this.Close();
+            VerifyCode();
         }
 
-        private void ResendLink_Click(object sender, MouseButtonEventArgs e)
+        private async void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show(Strings.TwoFactor_CodeResentMessage);
+            if (_codeService.IsLocked(_email))
+            {
+                MessageBox.Show(Strings.Dialogs_D19_Validation2FA);
+                return;
+            }
+
+            if (!_codeService.IsResendAllowed(_email))
+            {
+                MessageBox.Show(Strings.TwoFactor_ErrorResendTooSoon);
+                return;
+            }
+
+            bool wasSent = await _deliveryService.SendCodeAsync(_email, _playerDisplayName);
+
+            if (wasSent)
+            {
+                ClearDigits();
+                MessageBox.Show(Strings.TwoFactor_CodeResentMessage);
+            }
+            else
+            {
+                MessageBox.Show(Strings.TwoFactor_ErrorSendFailed);
+            }
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
@@ -76,6 +132,87 @@ namespace YachtDice.Views
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             this.Close();
+        }
+
+        private static string MaskEmail(string email)
+        {
+            int atIndex = email.IndexOf('@');
+            string maskedEmail = email;
+
+            if (atIndex > VisibleLocalPartChars)
+            {
+                string visiblePart = email.Substring(0, VisibleLocalPartChars);
+                string hiddenPart = new string(MaskCharacter, atIndex - VisibleLocalPartChars);
+
+                maskedEmail = visiblePart + hiddenPart + email.Substring(atIndex);
+            }
+
+            return maskedEmail;
+        }
+
+        private bool IsCodeComplete()
+        {
+            return _digitBoxes.All(box => box.Text.Length > 0);
+        }
+
+        private void VerifyCode()
+        {
+            string code = string.Concat(_digitBoxes.Select(box => box.Text));
+            TwoFactorValidationResult result = _codeService.Validate(_email, code);
+
+            HandleValidationResult(result);
+        }
+
+        private void HandleValidationResult(TwoFactorValidationResult result)
+        {
+            switch (result)
+            {
+                case TwoFactorValidationResult.Valid:
+                    OpenMenuWindow();
+                    break;
+                case TwoFactorValidationResult.Expired:
+                    MessageBox.Show(Strings.TwoFactor_ErrorCodeExpired);
+                    ClearDigits();
+                    break;
+                case TwoFactorValidationResult.Locked:
+                    MessageBox.Show(Strings.Dialogs_D19_Validation2FA);
+                    ClearDigits();
+                    break;
+                default:
+                    MessageBox.Show(Strings.Dialogs_D18_Validation2FA);
+                    ClearDigits();
+                    break;
+            }
+        }
+
+        private void OpenMenuWindow()
+        {
+            var menuWindow = new MenuWindow(_playerDisplayName);
+            menuWindow.Show();
+            this.Close();
+        }
+
+        private void PasteCodeFromClipboard()
+        {
+            string clipboardText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
+            var digits = new string(clipboardText.Where(char.IsDigit).Take(CodeLength).ToArray());
+
+            ClearDigits();
+
+            for (int index = 0; index < digits.Length; index++)
+            {
+                _digitBoxes[index].Text = digits[index].ToString();
+            }
+        }
+
+        private void ClearDigits()
+        {
+            foreach (TextBox box in _digitBoxes)
+            {
+                box.Clear();
+            }
+
+            Digit1TextBox.Focus();
         }
     }
 }

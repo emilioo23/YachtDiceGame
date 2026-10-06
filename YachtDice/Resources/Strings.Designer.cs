@@ -2833,11 +2833,56 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Hola {0}, tu código de verificación es: {1}. Este código vence en {2} minutos. Si no intentaste iniciar sesión, ignora este mensaje..
+        /// </summary>
+        public static string TwoFactor_EmailBody {
+            get {
+                return ResourceManager.GetString("TwoFactor_EmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu código de verificación de Yacht Dice.
+        /// </summary>
+        public static string TwoFactor_EmailSubject {
+            get {
+                return ResourceManager.GetString("TwoFactor_EmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código expiró. Solicita uno nuevo con el enlace de reenvío..
+        /// </summary>
+        public static string TwoFactor_ErrorCodeExpired {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorCodeExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Código incompleto..
         /// </summary>
         public static string TwoFactor_ErrorIncompleteCode {
             get {
                 return ResourceManager.GetString("TwoFactor_ErrorIncompleteCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Espera unos segundos antes de solicitar otro código..
+        /// </summary>
+        public static string TwoFactor_ErrorResendTooSoon {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorResendTooSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo enviar el código de verificación. Revisa tu conexión e inténtalo de nuevo..
+        /// </summary>
+        public static string TwoFactor_ErrorSendFailed {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorSendFailed", resourceCulture);
             }
         }
         
