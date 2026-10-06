@@ -13,13 +13,17 @@
 
     <Viewbox Stretch="Uniform">
         <Grid Margin="24" Width="1000" Height="800">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="607*"/>
+                <ColumnDefinition Width="393*"/>
+            </Grid.ColumnDefinitions>
             <views:LanguageSwitcher x:Name="LanguageSwitcherControl"
-                                     HorizontalAlignment="Right"
-                                     VerticalAlignment="Top"
-                                     Margin="0,-16,0,0"
-                                     Panel.ZIndex="99"/>
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="308,0,0,0"
+                                     Panel.ZIndex="99" Grid.Column="1"/>
 
-            <Border Style="{StaticResource CardPanel}">
+            <Border Style="{StaticResource CardPanel}" Grid.ColumnSpan="2">
                 <StackPanel>
 
                     <!-- ENCABEZADO -->

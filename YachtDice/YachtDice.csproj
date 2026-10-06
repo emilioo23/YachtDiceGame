@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -138,12 +139,18 @@
     <Compile Include="ScorecardEntry.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\TwoFactorCodeEntry.cs" />
+    <Compile Include="Services\TwoFactorCodeService.cs" />
+    <Compile Include="Services\TwoFactorDeliveryService.cs" />
+    <Compile Include="Services\TwoFactorValidationResult.cs" />
     <Compile Include="TurnState.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="TwoFactorAuth.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\PasswordHasher.cs" />
     <Compile Include="Views\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
@@ -294,6 +301,9 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Secrets.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="YachtDiceContext.edmx.diagram">
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
     </None>
