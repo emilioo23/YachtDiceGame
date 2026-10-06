@@ -83,40 +83,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Avatar.cs">
+    <Compile Include="Data\Avatar.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="BackupCode.cs">
+    <Compile Include="Data\BackupCode.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Category.cs">
+    <Compile Include="Data\Category.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Friendship.cs">
+    <Compile Include="Data\Friendship.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="GameHistory.cs">
+    <Compile Include="Data\GameHistory.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="GameHistoryPlayer.cs">
+    <Compile Include="Data\GameHistoryPlayer.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="KickLog.cs">
+    <Compile Include="Data\KickLog.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Passkey.cs">
+    <Compile Include="Data\Passkey.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Player.cs">
+    <Compile Include="Data\Player.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="PlayerReport.cs">
+    <Compile Include="Data\PlayerReport.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="PlayerSettings.cs">
+    <Compile Include="Data\PlayerSettings.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="PwdResetToken.cs">
+    <Compile Include="Data\PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Resources\Strings.Designer.cs">
@@ -124,19 +124,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Room.cs">
+    <Compile Include="Data\Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="RoomInvite.cs">
+    <Compile Include="Data\RoomInvite.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="RoomPlayer.cs">
+    <Compile Include="Data\RoomPlayer.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Scorecard.cs">
+    <Compile Include="Data\Scorecard.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="ScorecardEntry.cs">
+    <Compile Include="Data\ScorecardEntry.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\EmailService.cs" />
@@ -144,10 +144,10 @@
     <Compile Include="Services\TwoFactorCodeService.cs" />
     <Compile Include="Services\TwoFactorDeliveryService.cs" />
     <Compile Include="Services\TwoFactorValidationResult.cs" />
-    <Compile Include="TurnState.cs">
+    <Compile Include="Data\TurnState.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="TwoFactorAuth.cs">
+    <Compile Include="Data\TwoFactorAuth.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\AppLogger.cs" />
@@ -192,17 +192,17 @@
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext.Context.cs">
+    <Compile Include="Data\YachtDiceContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext.cs">
+    <Compile Include="Data\YachtDiceContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext.Designer.cs">
+    <Compile Include="Data\YachtDiceContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
@@ -297,14 +297,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <EntityDeploy Include="YachtDiceContext.edmx">
+    <EntityDeploy Include="Data\YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Secrets.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="YachtDiceContext.edmx.diagram">
+    <None Include="Data\YachtDiceContext.edmx.diagram">
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
     </None>
   </ItemGroup>
@@ -312,7 +312,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -332,12 +331,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\SplashBackground.png" />
-    <Content Include="YachtDiceContext.Context.tt">
+    <Content Include="Data\YachtDiceContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
       <LastGenOutput>YachtDiceContext.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="YachtDiceContext.tt">
+    <Content Include="Data\YachtDiceContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
       <LastGenOutput>YachtDiceContext.cs</LastGenOutput>
