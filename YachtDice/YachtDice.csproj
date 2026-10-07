@@ -252,11 +252,6 @@
     <Compile Include="Data\PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
     <Compile Include="Data\Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
@@ -271,6 +266,11 @@
     </Compile>
     <Compile Include="Data\ScorecardEntry.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\EmailService.cs" />

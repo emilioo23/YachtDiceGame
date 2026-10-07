@@ -71,17 +71,17 @@ namespace YachtDice.Views
             }
             catch (EntityException ex)
             {
-                AppLogger.Error("Error de conexión a la base de datos mediante Entity Framework.", ex);
+                await AppLogger.ErrorAsync("Error de conexión a la base de datos mediante Entity Framework.", ex);
                 ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
             }
             catch (SqlException ex)
             {
-                AppLogger.Error("Error de conexión de red o servidor SQL no disponible.", ex);
+                await AppLogger.ErrorAsync("Error de conexión de red o servidor SQL no disponible.", ex);
                 ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
             }
             catch (Exception ex)
             {
-                AppLogger.Error("Excepción inesperada en la autenticación.", ex);
+                await AppLogger.ErrorAsync("Excepción inesperada en la autenticación.", ex);
                 ShowDialogMessage("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
             }
         }
