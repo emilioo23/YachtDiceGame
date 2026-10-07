@@ -1077,4 +1077,7 @@
   <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
     <value>Espera unos segundos antes de solicitar otro código.</value>
   </data>
+  <data name="Dialogs_DatabaseConnectionError" xml:space="preserve">
+    <value>No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.</value>
+  </data>
 </root>
