@@ -601,6 +601,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
+        /// </summary>
+        public static string Dialogs_DatabaseConnectionError {
+            get {
+                return ResourceManager.GetString("Dialogs_DatabaseConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Eliminar cuenta.
         /// </summary>
         public static string Dialogs_DeleteAccountButton {

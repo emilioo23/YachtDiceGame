@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +25,6 @@ namespace YachtDice.Views
         private const int FriendCodeLength = 6;
 
         private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
-
         private readonly TwoFactorDeliveryService _deliveryService;
 
         /// <summary>
@@ -55,15 +56,33 @@ namespace YachtDice.Views
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            bool isLogin = LoginPanel.Visibility == Visibility.Visible;
+            try
+            {
+                bool isLogin = LoginPanel.Visibility == Visibility.Visible;
 
-            if (isLogin)
-            {
-                await ProcessLoginAsync();
+                if (isLogin)
+                {
+                    await ProcessLoginAsync();
+                }
+                else
+                {
+                    await ProcessRegisterAsync();
+                }
             }
-            else
+            catch (EntityException ex)
             {
-                await ProcessRegisterAsync();
+                AppLogger.Error("Error de conexión a la base de datos mediante Entity Framework.", ex);
+                ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
+            }
+            catch (SqlException ex)
+            {
+                AppLogger.Error("Error de conexión de red o servidor SQL no disponible.", ex);
+                ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error("Excepción inesperada en la autenticación.", ex);
+                ShowDialogMessage("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
             }
         }
 
@@ -88,7 +107,7 @@ namespace YachtDice.Views
 
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_ErrorRequiredFields }).ShowDialog();
+                ShowDialogMessage(Strings.Auth_ErrorRequiredFields);
                 return;
             }
 
@@ -96,7 +115,7 @@ namespace YachtDice.Views
 
             if (matches.Count == 0)
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D13_Login }).ShowDialog();
+                ShowDialogMessage(Strings.Dialogs_D13_Login);
                 return;
             }
 
@@ -104,13 +123,13 @@ namespace YachtDice.Views
 
             if (!PasswordHasher.Verify(password, player.PwdHash))
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D13_Login }).ShowDialog();
+                ShowDialogMessage(Strings.Dialogs_D13_Login);
                 return;
             }
 
             if (_codeService.IsLocked(player.Email))
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
+                ShowDialogMessage(Strings.Dialogs_D19_Validation2FA);
                 return;
             }
 
@@ -139,7 +158,7 @@ namespace YachtDice.Views
             }
             else
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorSendFailed }).ShowDialog();
+                ShowDialogMessage(Strings.TwoFactor_ErrorSendFailed);
                 AuthSubmitButton.IsEnabled = true;
             }
         }
@@ -148,21 +167,21 @@ namespace YachtDice.Views
         {
             if (!HasRequiredRegisterFields())
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_ErrorRequiredFields }).ShowDialog();
+                ShowDialogMessage(Strings.Auth_ErrorRequiredFields);
                 return;
             }
 
             Player newPlayer = CreatePlayerFromForm();
             string conflictMessage = await SaveNewPlayerAsync(newPlayer);
 
-            if (conflictMessage.Length == 0)
+            if (string.IsNullOrEmpty(conflictMessage))
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_SuccessRegister }).ShowDialog();
+                ShowDialogMessage(Strings.Auth_SuccessRegister);
                 LoginTabButton_Click(this, new RoutedEventArgs());
             }
             else
             {
-                new CustomDialogWindow(new DialogContentDto { Message = conflictMessage }).ShowDialog();
+                ShowDialogMessage(conflictMessage);
             }
         }
 
@@ -223,8 +242,19 @@ namespace YachtDice.Views
         private static string CreateFriendCode()
         {
             string randomPart = Guid.NewGuid().ToString("N").Substring(0, FriendCodeLength).ToUpper();
-
             return FriendCodePrefix + randomPart;
+        }
+
+        /// <summary>
+        /// Muestra un cuadro de diálogo centrado en la ventana actual con el mensaje especificado.
+        /// </summary>
+        private void ShowDialogMessage(string message)
+        {
+            var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })
+            {
+                Owner = this
+            };
+            dialog.ShowDialog();
         }
     }
 }
