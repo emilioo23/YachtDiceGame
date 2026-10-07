@@ -88,7 +88,7 @@ namespace YachtDice.Views
 
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show(Strings.Auth_ErrorRequiredFields);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_ErrorRequiredFields }).ShowDialog();
                 return;
             }
 
@@ -96,7 +96,7 @@ namespace YachtDice.Views
 
             if (matches.Count == 0)
             {
-                MessageBox.Show(Strings.Dialogs_D13_Login);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D13_Login }).ShowDialog();
                 return;
             }
 
@@ -104,13 +104,13 @@ namespace YachtDice.Views
 
             if (!PasswordHasher.Verify(password, player.PwdHash))
             {
-                MessageBox.Show(Strings.Dialogs_D13_Login);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D13_Login }).ShowDialog();
                 return;
             }
 
             if (_codeService.IsLocked(player.Email))
             {
-                MessageBox.Show(Strings.Dialogs_D19_Validation2FA);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace YachtDice.Views
             }
             else
             {
-                MessageBox.Show(Strings.TwoFactor_ErrorSendFailed);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorSendFailed }).ShowDialog();
                 AuthSubmitButton.IsEnabled = true;
             }
         }
@@ -148,7 +148,7 @@ namespace YachtDice.Views
         {
             if (!HasRequiredRegisterFields())
             {
-                MessageBox.Show(Strings.Auth_ErrorRequiredFields);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_ErrorRequiredFields }).ShowDialog();
                 return;
             }
 
@@ -157,12 +157,12 @@ namespace YachtDice.Views
 
             if (conflictMessage.Length == 0)
             {
-                MessageBox.Show(Strings.Auth_SuccessRegister);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Auth_SuccessRegister }).ShowDialog();
                 LoginTabButton_Click(this, new RoutedEventArgs());
             }
             else
             {
-                MessageBox.Show(conflictMessage);
+                new CustomDialogWindow(new DialogContentDto { Message = conflictMessage }).ShowDialog();
             }
         }
 

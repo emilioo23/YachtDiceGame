@@ -1,35 +1,34 @@
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
     public partial class CustomDialogWindow : Window
     {
-        public CustomDialogWindow(string title, string message, string primaryButtonText, string secondaryButtonText = null)
+        public CustomDialogWindow(DialogContentDto dialogContent)
         {
             InitializeComponent();
+            
+            TitleText.Text = string.IsNullOrEmpty(dialogContent.Title) ? "Yacht Dice" : dialogContent.Title;
+            MessageText.Text = dialogContent.Message;
+        }
 
-            TitleTextBlock.Text = title;
-            MessageTextBlock.Text = message;
-            PrimaryButton.Content = primaryButtonText;
-
-            if (string.IsNullOrWhiteSpace(secondaryButtonText))
+        private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
             {
-                SecondaryButton.Visibility = Visibility.Collapsed;
-                Grid.SetColumnSpan(PrimaryButton, 3);
-            }
-            else
-            {
-                SecondaryButton.Content = secondaryButtonText;
+                DragMove();
             }
         }
 
-        private void PrimaryButtonClick(object sender, RoutedEventArgs routedEventArgs)
+        private void PrimaryButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
             Close();
         }
 
-        private void SecondaryButtonClick(object sender, RoutedEventArgs routedEventArgs)
+        private void SecondaryButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             Close();

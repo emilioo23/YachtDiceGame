@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Utils;
+using YachtDice.Views;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -194,11 +196,11 @@ namespace YachtDice.Views
         {
             if (string.IsNullOrWhiteSpace(JoinRoomCodeTextBox.Text))
             {
-                MessageBox.Show(Strings.MainMenu_Play_ErrorRequiredRoomCode);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.MainMenu_Play_ErrorRequiredRoomCode }).ShowDialog();
             }
             else
             {
-                MessageBox.Show(string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text));
+                new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text) }).ShowDialog();
             }
         }
     }

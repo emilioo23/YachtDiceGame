@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using YachtDice.Resources;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -40,7 +40,7 @@ namespace YachtDice.Views
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             // Aqui, mas adelante, se guardaran los cambios reales en el backend.
-            MessageBox.Show(Strings.Profile_SavedMessage);
+            new CustomDialogWindow(new DialogContentDto { Message = Strings.Profile_SavedMessage }).ShowDialog();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

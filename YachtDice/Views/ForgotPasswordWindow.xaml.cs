@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using YachtDice.Resources;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -21,12 +22,12 @@ namespace YachtDice.Views
         {
             if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
             {
-                MessageBox.Show(Strings.ForgotPassword_ErrorRequiredEmail);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.ForgotPassword_ErrorRequiredEmail }).ShowDialog();
                 return;
             }
 
             // Aqui, mas adelante, se conectara el envio real del correo de recuperacion.
-            MessageBox.Show(string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text));
+            new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text) }).ShowDialog();
         }
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)

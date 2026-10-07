@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Resources;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -57,7 +58,7 @@ namespace YachtDice.Views
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(RoomCodeTextBlock.Text);
-            MessageBox.Show(string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text));
+            new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text) }).ShowDialog();
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)

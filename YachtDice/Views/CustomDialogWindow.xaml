@@ -1,55 +1,69 @@
-<Window x:Class="YachtDice.Views.CustomDialogWindow"
+﻿<Window x:Class="YachtDice.Views.CustomDialogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Diálogo" Height="800" Width="1280"
-        WindowStartupLocation="CenterOwner"
-        WindowStyle="None" AllowsTransparency="True" Background="#99000000"
-        ShowInTaskbar="False"
-        FontFamily="{StaticResource FontBody}">
+        Title="Dialog" Width="420" SizeToContent="Height"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
+    
+    <Window.Resources>
+        <Style x:Key="GameButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Background" Value="#48B8A6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-    <Grid>
-        <Border Style="{StaticResource CardPanel}" Width="480" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <StackPanel>
-                
-                <TextBlock x:Name="TitleTextBlock" 
-                           Text="Atención"
-                           FontFamily="{StaticResource FontDisplay}" 
-                           FontSize="28" 
-                           Foreground="{StaticResource BrushWoodDark}"
-                           HorizontalAlignment="Center" 
-                           Margin="0,0,0,16"/>
-
-                <TextBlock x:Name="MessageTextBlock" 
-                           Text="Este es el mensaje del diálogo."
-                           FontSize="16" 
-                           Foreground="{StaticResource BrushTextMuted}"
-                           TextWrapping="Wrap" 
-                           TextAlignment="Center"
-                           Margin="0,0,0,32"/>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="16"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button x:Name="SecondaryButton" 
-                            Grid.Column="0" 
-                            Content="Cancelar" 
-                            Style="{StaticResource BtnOutline}" 
-                            FontSize="16" Padding="0,12"
-                            Click="SecondaryButtonClick"/>
-
-                    <Button x:Name="PrimaryButton" 
-                            Grid.Column="2" 
-                            Content="Aceptar" 
-                            Style="{StaticResource BtnPrimary}" 
-                            FontSize="16" Padding="0,12"
-                            Click="PrimaryButtonClick"/>
-                </Grid>
-                
-            </StackPanel>
-        </Border>
-    </Grid>
+    <Border Background="#212121" BorderBrush="#48B8A6" BorderThickness="1.5" CornerRadius="10" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="3" Opacity="0.4" Color="Black"/>
+        </Border.Effect>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" Background="#151515" CornerRadius="8,8,0,0" MouseLeftButtonDown="Header_MouseLeftButtonDown"/>
+            
+            <TextBlock Grid.Row="0" x:Name="TitleText" Foreground="#48B8A6" FontSize="14" FontWeight="Bold" 
+                       VerticalAlignment="Center" Margin="20,0,0,0" IsHitTestVisible="False"/>
+            
+            <Button Grid.Row="0" Content="✕" Foreground="#888888" Background="Transparent" BorderThickness="0"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" Width="30" Height="30"
+                    FontSize="14" Click="SecondaryButton_Click" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent">
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            
+            <TextBlock Grid.Row="1" x:Name="MessageText" Foreground="#ffffff" FontSize="14" 
+                       TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="20,30,20,15"/>
+                       
+            <Button Grid.Row="2" x:Name="PrimaryButton" Content="Aceptar" Style="{StaticResource GameButtonStyle}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="130" Height="38" 
+                    Click="PrimaryButton_Click"/>
+        </Grid>
+    </Border>
 </Window>
