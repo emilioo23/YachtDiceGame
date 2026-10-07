@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Utils;
+using YachtDice.Views;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,7 +95,7 @@ namespace YachtDice.Views
         {
             if (!IsCodeComplete())
             {
-                MessageBox.Show(Strings.TwoFactor_ErrorIncompleteCode);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorIncompleteCode }).ShowDialog();
                 return;
             }
 
@@ -104,13 +106,13 @@ namespace YachtDice.Views
         {
             if (_codeService.IsLocked(_email))
             {
-                MessageBox.Show(Strings.Dialogs_D19_Validation2FA);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
                 return;
             }
 
             if (!_codeService.IsResendAllowed(_email))
             {
-                MessageBox.Show(Strings.TwoFactor_ErrorResendTooSoon);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorResendTooSoon }).ShowDialog();
                 return;
             }
 
@@ -119,11 +121,11 @@ namespace YachtDice.Views
             if (wasSent)
             {
                 ClearDigits();
-                MessageBox.Show(Strings.TwoFactor_CodeResentMessage);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_CodeResentMessage }).ShowDialog();
             }
             else
             {
-                MessageBox.Show(Strings.TwoFactor_ErrorSendFailed);
+                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorSendFailed }).ShowDialog();
             }
         }
 
@@ -171,15 +173,15 @@ namespace YachtDice.Views
                     OpenMenuWindow();
                     break;
                 case TwoFactorValidationResult.Expired:
-                    MessageBox.Show(Strings.TwoFactor_ErrorCodeExpired);
+                    new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorCodeExpired }).ShowDialog();
                     ClearDigits();
                     break;
                 case TwoFactorValidationResult.Locked:
-                    MessageBox.Show(Strings.Dialogs_D19_Validation2FA);
+                    new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
                     ClearDigits();
                     break;
                 default:
-                    MessageBox.Show(Strings.Dialogs_D18_Validation2FA);
+                    new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D18_Validation2FA }).ShowDialog();
                     ClearDigits();
                     break;
             }

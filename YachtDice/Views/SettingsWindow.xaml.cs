@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using YachtDice.Resources;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -136,7 +137,7 @@ namespace YachtDice.Views
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // Aqui, mas adelante, se conectara el flujo real de eliminacion de cuenta.
-            MessageBox.Show(Strings.Settings_FeatureNotImplementedMessage);
+            new CustomDialogWindow(new DialogContentDto { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)

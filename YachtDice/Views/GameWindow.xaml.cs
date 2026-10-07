@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Utils;
+using YachtDice.Views;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -310,7 +312,7 @@ namespace YachtDice.Views
         {
             if (_rollsLeft == 0)
             {
-                MessageBox.Show("Primero tira los dados.");
+                new CustomDialogWindow(new DialogContentDto { Message = "Primero tira los dados." }).ShowDialog();
                 return;
             }
             if (myScoreLabel.Text != "")
@@ -347,9 +349,8 @@ namespace YachtDice.Views
 
         private void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Tu progreso no se guardara. Deseas salir?", "Salir de la partida",
-                MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
+            var result = new CustomDialogWindow(new DialogContentDto { Title = "Salir de la partida", Message = "Tu progreso no se guardará. ¿Deseas salir?", PrimaryButtonText = "Sí, salir", SecondaryButtonText = "Cancelar" }).ShowDialog();
+            if (result == true)
             {
                 var menuWindow = new MenuWindow(_playerName);
                 menuWindow.Show();
