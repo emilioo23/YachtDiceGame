@@ -1,80 +1,92 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
+using log4net;
+using log4net.Core;
 
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Registra eventos de la aplicación en un archivo de texto.
+    /// Registro de eventos del videojuego con los niveles del estándar del equipo
+    /// (Trace, Debug, Info, Warning, Error) sobre log4net.
     /// </summary>
-    public static class AppLogger
+    public class AppLogger
     {
-        private const string LogFolderName = "logs";
-        private const string LogFileName = "yachtdice.log";
-        private const string TimestampFormat = "yyyy-MM-dd HH:mm:ss";
-        private const string InfoLevel = "INFO";
-        private const string ErrorLevel = "ERROR";
-        private const string LineFormat = "{0} [{1}] {2}";
-        private const string ExceptionFormat = "{0} | {1}: {2}";
-        private const int SingleAccessCount = 1;
-        private const bool AppendMode = true;
+        private const int MaxStackLevels = 3;
 
-        private static readonly SemaphoreSlim _writeLock = new SemaphoreSlim(SingleAccessCount);
+        private readonly ILog _log;
 
         /// <summary>
-        /// Registra un mensaje informativo.
+        /// Crea un logger asociado a la clase que lo usa.
         /// </summary>
-        /// <param name="message">Texto del evento.</param>
-        public static Task InfoAsync(string message) => WriteAsync(InfoLevel, message);
-
-        /// <summary>
-        /// Registra un error junto con la excepción que lo causó.
-        /// </summary>
-        /// <param name="message">Texto descriptivo del error.</param>
-        /// <param name="exception">Excepción capturada.</param>
-        public static Task ErrorAsync(string message, Exception exception)
+        /// <param name="ownerType">Tipo de la clase que registra los eventos.</param>
+        public AppLogger(Type ownerType)
         {
-            string fullMessage = string.Format(
-                CultureInfo.InvariantCulture,
-                ExceptionFormat,
-                message,
-                exception.GetType().Name,
-                exception.Message);
+            if (ownerType == null)
+            {
+                throw new ArgumentNullException(nameof(ownerType));
+            }
 
-            return WriteAsync(ErrorLevel, fullMessage);
+            _log = LogManager.GetLogger(ownerType);
         }
 
-        private static async Task WriteAsync(string level, string message)
+        /// <summary>
+        /// Registra el detalle más fino del flujo interno; solo para desarrollo.
+        /// </summary>
+        /// <param name="message">Mensaje a registrar.</param>
+        public void Trace(string message)
         {
-            string timestamp = DateTime.Now.ToString(TimestampFormat, CultureInfo.InvariantCulture);
-            string line = string.Format(CultureInfo.InvariantCulture, LineFormat, timestamp, level, message);
-            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LogFolderName);
+            _log.Logger.Log(typeof(AppLogger), Level.Trace, message, null);
+        }
 
-            await _writeLock.WaitAsync();
+        /// <summary>
+        /// Registra información útil para depurar durante desarrollo y pruebas.
+        /// </summary>
+        /// <param name="message">Mensaje a registrar.</param>
+        public void Debug(string message)
+        {
+            _log.Debug(message);
+        }
 
-            try
-            {
-                Directory.CreateDirectory(folderPath);
+        /// <summary>
+        /// Registra un evento relevante del flujo normal.
+        /// </summary>
+        /// <param name="message">Mensaje a registrar.</param>
+        public void Info(string message)
+        {
+            _log.Info(message);
+        }
 
-                using (var writer = new StreamWriter(Path.Combine(folderPath, LogFileName), AppendMode))
-                {
-                    await writer.WriteLineAsync(line);
-                }
-            }
-            catch (IOException)
+        /// <summary>
+        /// Registra una situación inesperada que no interrumpe la ejecución.
+        /// </summary>
+        /// <param name="message">Mensaje a registrar.</param>
+        public void Warning(string message)
+        {
+            _log.Warn(message);
+        }
+
+        /// <summary>
+        /// Registra una falla que impidió completar una operación, con la pila limitada a 3 niveles.
+        /// </summary>
+        /// <param name="exception">Excepción capturada.</param>
+        /// <param name="message">Contexto de la operación que falló.</param>
+        public void Error(Exception exception, string message)
+        {
+            if (exception == null)
             {
-                // Un fallo al escribir el log no debe detener la aplicación
+                throw new ArgumentNullException(nameof(exception));
             }
-            catch (UnauthorizedAccessException)
-            {
-                // Sin permisos de escritura se omite el registro
-            }
-            finally
-            {
-                _writeLock.Release();
-            }
+
+            _log.Error(BuildErrorMessage(exception, message));
+        }
+
+        private static string BuildErrorMessage(Exception exception, string message)
+        {
+            string[] stackLines = (exception.StackTrace ?? string.Empty)
+                .Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            string limitedStack = string.Join(Environment.NewLine, stackLines.Take(MaxStackLevels));
+
+            return $"{message} {exception.GetType().Name}: {exception.Message}{Environment.NewLine}{limitedStack}";
         }
     }
 }

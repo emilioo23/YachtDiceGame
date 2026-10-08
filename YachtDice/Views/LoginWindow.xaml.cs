@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -23,8 +24,20 @@ namespace YachtDice.Views
         private const string ActivePlayerState = "Activo";
         private const string FriendCodePrefix = "FRD-";
         private const int FriendCodeLength = 6;
+        private const int UsernameMaxLength = 20;
+        private const int EmailMaxLength = 100;
+        private const int NameMaxLength = 50;
+        private const string EntityErrorLogMessage = "Error de conexión a la base de datos mediante Entity Framework.";
+        private const string SqlErrorLogMessage = "Error de conexión de red o servidor SQL no disponible.";
+        private const string UnexpectedErrorLogMessage = "Excepción inesperada en la autenticación.";
+        private const string InvalidCredentialsLogMessage = "Intento de inicio de sesión con credenciales inválidas.";
+        private const string LockedAccountLogMessage = "Intento de inicio de sesión con la verificación en dos pasos bloqueada.";
+        private const string PlayerRegisteredLogMessage = "Jugador registrado correctamente.";
 
+        // El servicio es estático para que los códigos sobrevivan al reabrir la ventana (cambio de idioma o volver).
         private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
+
+        private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
         private readonly TwoFactorDeliveryService _deliveryService;
 
         /// <summary>
@@ -71,18 +84,18 @@ namespace YachtDice.Views
             }
             catch (EntityException ex)
             {
-                await AppLogger.ErrorAsync("Error de conexión a la base de datos mediante Entity Framework.", ex);
+                _logger.Error(ex, EntityErrorLogMessage);
                 ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
             }
             catch (SqlException ex)
             {
-                await AppLogger.ErrorAsync("Error de conexión de red o servidor SQL no disponible.", ex);
+                _logger.Error(ex, SqlErrorLogMessage);
                 ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
             }
             catch (Exception ex)
             {
-                await AppLogger.ErrorAsync("Excepción inesperada en la autenticación.", ex);
-                ShowDialogMessage("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
+                _logger.Error(ex, UnexpectedErrorLogMessage);
+                ShowDialogMessage(Strings.Dialogs_UnexpectedError);
             }
         }
 
@@ -112,28 +125,22 @@ namespace YachtDice.Views
             }
 
             List<Player> matches = await FindPlayersByEmailAsync(email);
+            bool areCredentialsValid = matches.Count > 0 && PasswordHasher.Verify(password, matches[0].PwdHash);
 
-            if (matches.Count == 0)
+            if (!areCredentialsValid)
             {
+                _logger.Warning(InvalidCredentialsLogMessage);
                 ShowDialogMessage(Strings.Dialogs_D13_Login);
-                return;
             }
-
-            Player player = matches[0];
-
-            if (!PasswordHasher.Verify(password, player.PwdHash))
+            else if (_codeService.IsLocked(matches[0].Email))
             {
-                ShowDialogMessage(Strings.Dialogs_D13_Login);
-                return;
-            }
-
-            if (_codeService.IsLocked(player.Email))
-            {
+                _logger.Warning(LockedAccountLogMessage);
                 ShowDialogMessage(Strings.Dialogs_D19_Validation2FA);
-                return;
             }
-
-            await SendCodeAndOpenVerificationAsync(player);
+            else
+            {
+                await SendCodeAndOpenVerificationAsync(matches[0]);
+            }
         }
 
         private async Task<List<Player>> FindPlayersByEmailAsync(string email)
@@ -165,9 +172,11 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            if (!HasRequiredRegisterFields())
+            string formError = GetRegisterFormError();
+
+            if (formError.Length > 0)
             {
-                ShowDialogMessage(Strings.Auth_ErrorRequiredFields);
+                ShowDialogMessage(formError);
                 return;
             }
 
@@ -176,6 +185,7 @@ namespace YachtDice.Views
 
             if (string.IsNullOrEmpty(conflictMessage))
             {
+                _logger.Info(PlayerRegisteredLogMessage);
                 ShowDialogMessage(Strings.Auth_SuccessRegister);
                 LoginTabButton_Click(this, new RoutedEventArgs());
             }
@@ -185,6 +195,26 @@ namespace YachtDice.Views
             }
         }
 
+        private string GetRegisterFormError()
+        {
+            string errorMessage = string.Empty;
+
+            if (!HasRequiredRegisterFields())
+            {
+                errorMessage = Strings.Auth_ErrorRequiredFields;
+            }
+            else if (!HasValidFieldLengths())
+            {
+                errorMessage = Strings.Auth_ErrorFieldTooLong;
+            }
+            else if (!IsValidEmail(RegisterEmailTextBox.Text.Trim()))
+            {
+                errorMessage = Strings.Auth_ErrorInvalidEmail;
+            }
+
+            return errorMessage;
+        }
+
         private bool HasRequiredRegisterFields()
         {
             return !string.IsNullOrWhiteSpace(FirstNameTextBox.Text)
@@ -192,6 +222,31 @@ namespace YachtDice.Views
                 && !string.IsNullOrWhiteSpace(UsernameTextBox.Text)
                 && !string.IsNullOrWhiteSpace(RegisterEmailTextBox.Text)
                 && !string.IsNullOrWhiteSpace(RegisterPasswordBox.Password);
+        }
+
+        private bool HasValidFieldLengths()
+        {
+            return UsernameTextBox.Text.Trim().Length <= UsernameMaxLength
+                && RegisterEmailTextBox.Text.Trim().Length <= EmailMaxLength
+                && FirstNameTextBox.Text.Trim().Length <= NameMaxLength
+                && LastNameTextBox.Text.Trim().Length <= NameMaxLength;
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            bool isValid;
+
+            try
+            {
+                var address = new MailAddress(email);
+                isValid = address.Address == email;
+            }
+            catch (FormatException)
+            {
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         private Player CreatePlayerFromForm()
@@ -242,18 +297,21 @@ namespace YachtDice.Views
         private static string CreateFriendCode()
         {
             string randomPart = Guid.NewGuid().ToString("N").Substring(0, FriendCodeLength).ToUpper();
+
             return FriendCodePrefix + randomPart;
         }
 
         /// <summary>
         /// Muestra un cuadro de diálogo centrado en la ventana actual con el mensaje especificado.
         /// </summary>
+        /// <param name="message">Texto que se mostrará en el diálogo.</param>
         private void ShowDialogMessage(string message)
         {
             var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })
             {
                 Owner = this
             };
+
             dialog.ShowDialog();
         }
     }

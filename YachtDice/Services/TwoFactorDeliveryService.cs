@@ -15,6 +15,7 @@ namespace YachtDice.Services
         private const string SentLogMessage = "Código de verificación enviado por correo.";
         private const string SendFailedLogMessage = "No se pudo enviar el código de verificación.";
 
+        private readonly AppLogger _logger = new AppLogger(typeof(TwoFactorDeliveryService));
         private readonly EmailService _emailService = new EmailService();
         private readonly TwoFactorCodeService _codeService;
 
@@ -54,23 +55,23 @@ namespace YachtDice.Services
             {
                 await _emailService.SendAsync(email, Strings.TwoFactor_EmailSubject, body);
                 wasSent = true;
-                await AppLogger.InfoAsync(SentLogMessage);
+                _logger.Info(SentLogMessage);
             }
             catch (SmtpException ex)
             {
-                await AppLogger.ErrorAsync(SendFailedLogMessage, ex);
+                _logger.Error(ex, SendFailedLogMessage);
             }
             catch (InvalidOperationException ex)
             {
-                await AppLogger.ErrorAsync(SendFailedLogMessage, ex);
+                _logger.Error(ex, SendFailedLogMessage);
             }
             catch (FormatException ex)
             {
-                await AppLogger.ErrorAsync(SendFailedLogMessage, ex);
+                _logger.Error(ex, SendFailedLogMessage);
             }
             catch (ArgumentException ex)
             {
-                await AppLogger.ErrorAsync(SendFailedLogMessage, ex);
+                _logger.Error(ex, SendFailedLogMessage);
             }
 
             return wasSent;

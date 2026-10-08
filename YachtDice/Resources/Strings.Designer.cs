@@ -97,6 +97,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Algún campo es demasiado largo. Usuario: máximo 20 caracteres, correo: 100, nombre y apellido: 50..
+        /// </summary>
+        public static string Auth_ErrorFieldTooLong {
+            get {
+                return ResourceManager.GetString("Auth_ErrorFieldTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ingresa un correo electrónico válido..
+        /// </summary>
+        public static string Auth_ErrorInvalidEmail {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Todos los campos son obligatorios..
         /// </summary>
         public static string Auth_ErrorRequiredFields {
@@ -687,6 +705,15 @@ namespace YachtDice.Resources {
         public static string Dialogs_SendReportButton {
             get {
                 return ResourceManager.GetString("Dialogs_SendReportButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ocurrió un error inesperado. Inténtalo de nuevo..
+        /// </summary>
+        public static string Dialogs_UnexpectedError {
+            get {
+                return ResourceManager.GetString("Dialogs_UnexpectedError", resourceCulture);
             }
         }
         
