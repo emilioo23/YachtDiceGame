@@ -1080,4 +1080,13 @@
   <data name="Dialogs_DatabaseConnectionError" xml:space="preserve">
     <value>No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.</value>
   </data>
+  <data name="Dialogs_UnexpectedError" xml:space="preserve">
+    <value>Ocurrió un error inesperado. Inténtalo de nuevo.</value>
+  </data>
+  <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
+    <value>Algún campo es demasiado largo. Usuario: máximo 20 caracteres, correo: 100, nombre y apellido: 50.</value>
+  </data>
+  <data name="Auth_ErrorInvalidEmail" xml:space="preserve">
+    <value>Ingresa un correo electrónico válido.</value>
+  </data>
 </root>
