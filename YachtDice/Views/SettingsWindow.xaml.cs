@@ -7,7 +7,7 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana de configuración para ajustar preferencias de la aplicación como el tema y notificaciones.
+    /// Settings window to adjust application preferences such as the theme and notifications.
     /// </summary>
     public partial class SettingsWindow : Window
     {
@@ -22,10 +22,10 @@ namespace YachtDice.Views
         private bool _isInitializing;
 
         /// <summary>
-        /// Inicializa la ventana de ajustes para el jugador indicado.
+        /// Initializes the settings window for the given player.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador que abre los ajustes.</param>
-        /// <param name="initialSection">Seccion que debe mostrarse al abrir la ventana.</param>
+        /// <param name="playerName">Name of the player who opens the settings.</param>
+        /// <param name="initialSection">Section that must be shown when the window opens.</param>
         public SettingsWindow(string playerName, string initialSection = AccountSection)
         {
             InitializeComponent();
@@ -136,7 +136,7 @@ namespace YachtDice.Views
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            // Aqui, mas adelante, se conectara el flujo real de eliminacion de cuenta.
+            // The real account deletion flow will be connected here later.
             new CustomDialogWindow(new DialogContentDto { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
         }
 

@@ -373,7 +373,6 @@
                         </Border>
                     </Grid>
 
-                    <!-- Buscador + Agregar -->
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -524,7 +523,6 @@
                                 </Grid>
                             </Border>
 
-                            <!-- EN PARTIDA -->
                             <TextBlock Text="{x:Static properties:Strings.Friends_Section_InGame}"
                                        FontSize="15"
                                        FontWeight="Bold"

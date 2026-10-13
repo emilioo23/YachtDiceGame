@@ -11,7 +11,7 @@ using YachtDice.Services;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana para la validación del código de autenticación de dos factores (2FA).
+    /// Window to validate the two-factor authentication (2FA) code.
     /// </summary>
     public partial class TwoFactorWindow : Window
     {
@@ -26,11 +26,11 @@ namespace YachtDice.Views
         private readonly TextBox[] _digitBoxes;
 
         /// <summary>
-        /// Inicializa la ventana de verificación en dos pasos para el jugador indicado.
+        /// Initializes the two-step verification window for the given player.
         /// </summary>
-        /// <param name="email">Correo al que se envió el código de verificación.</param>
-        /// <param name="playerDisplayName">Nombre para mostrar del jugador que inició sesión.</param>
-        /// <param name="codeService">Servicio que guarda y valida los códigos generados.</param>
+        /// <param name="email">Email address the verification code was sent to.</param>
+        /// <param name="playerDisplayName">Display name of the player who logged in.</param>
+        /// <param name="codeService">Service that stores and validates the generated codes.</param>
         public TwoFactorWindow(string email, string playerDisplayName, TwoFactorCodeService codeService)
         {
             InitializeComponent();

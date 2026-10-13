@@ -1,20 +1,20 @@
 ﻿namespace YachtDice.Services
 {
     /// <summary>
-    /// Resultado de validar un código de verificación en dos pasos.
+    /// Result of validating a two-step verification code.
     /// </summary>
     public enum TwoFactorValidationResult
     {
-        /// <summary>El código es correcto y vigente.</summary>
+        /// <summary>The code is correct and still valid.</summary>
         Valid,
 
-        /// <summary>El código no coincide con el emitido.</summary>
+        /// <summary>The code does not match the issued one.</summary>
         Incorrect,
 
-        /// <summary>El código ya venció o no existe uno emitido.</summary>
+        /// <summary>The code has expired or none was issued.</summary>
         Expired,
 
-        /// <summary>El correo está bloqueado por demasiados intentos fallidos.</summary>
+        /// <summary>The email is locked because of too many failed attempts.</summary>
         Locked
     }
 }

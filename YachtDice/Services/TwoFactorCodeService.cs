@@ -6,17 +6,17 @@ using System.Security.Cryptography;
 namespace YachtDice.Services
 {
     /// <summary>
-    /// Genera y valida códigos de verificación en dos pasos, guardados en memoria.
+    /// Generates and validates two-step verification codes, stored in memory.
     /// </summary>
     public class TwoFactorCodeService
     {
         /// <summary>
-        /// Cantidad de dígitos que tiene el código de verificación.
+        /// Number of digits in the verification code.
         /// </summary>
         public const int CodeLength = 6;
 
         /// <summary>
-        /// Minutos que un código permanece vigente.
+        /// Minutes a code stays valid.
         /// </summary>
         public const int ExpirationMinutes = 10;
 
@@ -33,10 +33,10 @@ namespace YachtDice.Services
             new Dictionary<string, TwoFactorCodeEntry>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Genera un código nuevo para el correo indicado y lo guarda.
+        /// Generates a new code for the given email and stores it.
         /// </summary>
-        /// <param name="email">Correo del jugador.</param>
-        /// <returns>Código numérico de <see cref="CodeLength"/> dígitos.</returns>
+        /// <param name="email">Player's email address.</param>
+        /// <returns>Numeric code of <see cref="CodeLength"/> digits.</returns>
         public string GenerateCode(string email)
         {
             string code = CreateRandomCode();
@@ -47,7 +47,7 @@ namespace YachtDice.Services
                 DateTime lockedUntil = DateTime.MinValue;
                 TwoFactorCodeEntry previousEntry;
 
-                // Se conserva el bloqueo vigente para que reenviar no lo salte
+                // The current lockout is kept so that resending the code does not skip it
                 if (_entries.TryGetValue(email, out previousEntry))
                 {
                     lockedUntil = previousEntry.LockedUntil;
@@ -67,11 +67,11 @@ namespace YachtDice.Services
         }
 
         /// <summary>
-        /// Valida el código ingresado contra el último emitido para el correo.
+        /// Validates the entered code against the last one issued for the email.
         /// </summary>
-        /// <param name="email">Correo del jugador.</param>
-        /// <param name="code">Código ingresado por el jugador.</param>
-        /// <returns>Resultado de la validación.</returns>
+        /// <param name="email">Player's email address.</param>
+        /// <param name="code">Code entered by the player.</param>
+        /// <returns>Validation result.</returns>
         public TwoFactorValidationResult Validate(string email, string code)
         {
             TwoFactorValidationResult result = TwoFactorValidationResult.Expired;
@@ -90,10 +90,10 @@ namespace YachtDice.Services
         }
 
         /// <summary>
-        /// Indica si el correo está bloqueado por demasiados intentos fallidos.
+        /// Indicates whether the email is locked because of too many failed attempts.
         /// </summary>
-        /// <param name="email">Correo del jugador.</param>
-        /// <returns>True si el bloqueo sigue vigente.</returns>
+        /// <param name="email">Player's email address.</param>
+        /// <returns>True if the lockout is still active.</returns>
         public bool IsLocked(string email)
         {
             var isLocked = false;
@@ -112,10 +112,10 @@ namespace YachtDice.Services
         }
 
         /// <summary>
-        /// Indica si ya pasó el tiempo mínimo para solicitar otro código.
+        /// Indicates whether the minimum wait to request another code has passed.
         /// </summary>
-        /// <param name="email">Correo del jugador.</param>
-        /// <returns>True si se puede reenviar el código.</returns>
+        /// <param name="email">Player's email address.</param>
+        /// <returns>True if the code can be resent.</returns>
         public bool IsResendAllowed(string email)
         {
             var isAllowed = true;

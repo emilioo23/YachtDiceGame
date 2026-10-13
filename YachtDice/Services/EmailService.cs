@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace YachtDice.Services
 {
     /// <summary>
-    /// Envía correos electrónicos de la aplicación por SMTP.
+    /// Sends the application's emails through SMTP.
     /// </summary>
     public class EmailService
     {
@@ -18,11 +18,11 @@ namespace YachtDice.Services
         private const string SmtpPasswordKey = "SmtpPassword";
 
         /// <summary>
-        /// Envía un correo de texto plano al destinatario indicado.
+        /// Sends a plain-text email to the given recipient.
         /// </summary>
-        /// <param name="toAddress">Correo del destinatario.</param>
-        /// <param name="subject">Asunto del correo.</param>
-        /// <param name="body">Cuerpo del correo en texto plano.</param>
+        /// <param name="toAddress">Recipient's email address.</param>
+        /// <param name="subject">Subject of the email.</param>
+        /// <param name="body">Plain-text body of the email.</param>
         public async Task SendAsync(string toAddress, string subject, string body)
         {
             if (string.IsNullOrWhiteSpace(toAddress))

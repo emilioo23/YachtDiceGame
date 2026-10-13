@@ -16,7 +16,7 @@ using YachtDiceGame.Data;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana inicial para la autenticación de usuarios y acceso al sistema.
+    /// Initial window for user authentication and access to the system.
     /// </summary>
     public partial class LoginWindow : Window
     {
@@ -34,14 +34,14 @@ namespace YachtDice.Views
         private const string LockedAccountLogMessage = "Intento de inicio de sesión con la verificación en dos pasos bloqueada.";
         private const string PlayerRegisteredLogMessage = "Jugador registrado correctamente.";
 
-        // El servicio es estático para que los códigos sobrevivan al reabrir la ventana (cambio de idioma o volver).
+        // The service is static so the codes survive when the window is reopened (language change or going back).
         private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
 
         private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
         private readonly TwoFactorDeliveryService _deliveryService;
 
         /// <summary>
-        /// Inicializa la ventana de inicio de sesión y registro.
+        /// Initializes the login and registration window.
         /// </summary>
         public LoginWindow()
         {
@@ -302,9 +302,9 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Muestra un cuadro de diálogo centrado en la ventana actual con el mensaje especificado.
+        /// Shows a dialog box centered on the current window with the given message.
         /// </summary>
-        /// <param name="message">Texto que se mostrará en el diálogo.</param>
+        /// <param name="message">Text to show in the dialog.</param>
         private void ShowDialogMessage(string message)
         {
             var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })

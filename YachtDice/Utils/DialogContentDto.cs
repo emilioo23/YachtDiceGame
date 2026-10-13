@@ -3,27 +3,27 @@ using System;
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Objeto de transferencia de datos que contiene la configuración de texto para un diálogo.
+    /// Data transfer object that holds the text settings for a dialog.
     /// </summary>
     public class DialogContentDto
     {
         /// <summary>
-        /// Obtiene o establece el título del diálogo.
+        /// Gets or sets the title of the dialog.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Obtiene o establece el mensaje principal del diálogo.
+        /// Gets or sets the main message of the dialog.
         /// </summary>
         public string Message { get; set; }
 
         /// <summary>
-        /// Obtiene o establece el texto del botón principal.
+        /// Gets or sets the text of the primary button.
         /// </summary>
         public string PrimaryButtonText { get; set; }
 
         /// <summary>
-        /// Obtiene o establece el texto del botón secundario.
+        /// Gets or sets the text of the secondary button.
         /// </summary>
         public string SecondaryButtonText { get; set; }
     }
