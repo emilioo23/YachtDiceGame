@@ -20,19 +20,18 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string GuestDisplayName = "Invitado";
-        private const string ActivePlayerState = "Activo";
+        private const string ActivePlayerState = "Active";
         private const string FriendCodePrefix = "FRD-";
         private const int FriendCodeLength = 6;
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
-        private const string EntityErrorLogMessage = "Error de conexión a la base de datos mediante Entity Framework.";
-        private const string SqlErrorLogMessage = "Error de conexión de red o servidor SQL no disponible.";
-        private const string UnexpectedErrorLogMessage = "Excepción inesperada en la autenticación.";
-        private const string InvalidCredentialsLogMessage = "Intento de inicio de sesión con credenciales inválidas.";
-        private const string LockedAccountLogMessage = "Intento de inicio de sesión con la verificación en dos pasos bloqueada.";
-        private const string PlayerRegisteredLogMessage = "Jugador registrado correctamente.";
+        private const string EntityErrorLogMessage = "Database connection error through Entity Framework.";
+        private const string SqlErrorLogMessage = "Network connection error or SQL Server unavailable.";
+        private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
+        private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
+        private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
+        private const string PlayerRegisteredLogMessage = "Player registered successfully.";
 
         // The service is static so the codes survive when the window is reopened (language change or going back).
         private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
@@ -101,7 +100,7 @@ namespace YachtDice.Views
 
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(GuestDisplayName);
+            var menuWindow = new MenuWindow(Strings.Auth_GuestDisplayName);
             menuWindow.Show();
             this.Close();
         }

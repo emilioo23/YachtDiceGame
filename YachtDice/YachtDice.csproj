@@ -289,9 +289,9 @@
     <Compile Include="Data\TwoFactorAuth.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utils\AppLogger.cs" />
-    <Compile Include="Utils\DialogContentDto.cs" />
-    <Compile Include="Utils\PasswordHasher.cs" />
+    <Compile Include="Resources\Utils\AppLogger.cs" />
+    <Compile Include="Resources\Utils\DialogContentDto.cs" />
+    <Compile Include="Resources\Utils\PasswordHasher.cs" />
     <Compile Include="Views\CustomDialogWindow.xaml.cs">
       <DependentUpon>CustomDialogWindow.xaml</DependentUpon>
     </Compile>
@@ -437,6 +437,7 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="ConnectionStrings.config" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\GAME_HISTORY_PLAYER.datasource" />
     <None Include="Properties\DataSources\PLAYER.datasource" />

@@ -1089,4 +1089,7 @@
   <data name="Auth_ErrorInvalidEmail" xml:space="preserve">
     <value>Ingresa un correo electrónico válido.</value>
   </data>
+  <data name="Auth_GuestDisplayName" xml:space="preserve">
+    <value>Invitado</value>
+  </data>
 </root>

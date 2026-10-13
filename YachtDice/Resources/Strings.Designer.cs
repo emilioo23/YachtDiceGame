@@ -151,6 +151,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Invitado.
+        /// </summary>
+        public static string Auth_GuestDisplayName {
+            get {
+                return ResourceManager.GetString("Auth_GuestDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Apellidos.
         /// </summary>
         public static string Auth_LastName {
