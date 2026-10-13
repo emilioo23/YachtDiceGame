@@ -7,16 +7,16 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana de sala de espera donde los jugadores se preparan y conectan antes de iniciar una partida.
+    /// Waiting room window where the players get ready and connect before a game starts.
     /// </summary>
     public partial class LobbyWindow : Window
     {
         private readonly string _playerName;
 
         /// <summary>
-        /// Inicializa la ventana de sala de espera para el jugador indicado.
+        /// Initializes the waiting room window for the given player.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador que entra a la sala.</param>
+        /// <param name="playerName">Name of the player who enters the room.</param>
         public LobbyWindow(string playerName)
         {
             InitializeComponent();

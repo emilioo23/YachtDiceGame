@@ -45,7 +45,6 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,22"/>
 
-                <!-- 6 CASILLAS DE CODIGO -->
                 <Grid Margin="0,0,0,18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

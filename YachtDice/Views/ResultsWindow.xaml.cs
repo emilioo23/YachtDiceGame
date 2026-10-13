@@ -5,7 +5,7 @@ using YachtDice.Resources;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana que muestra el marcador final y ganador al terminar una partida.
+    /// Window that shows the final scoreboard and the winner when a game ends.
     /// </summary>
     public partial class ResultsWindow : Window
     {
@@ -15,10 +15,10 @@ namespace YachtDice.Views
         private readonly string _playerName;
 
         /// <summary>
-        /// Inicializa la ventana de resultados con el jugador y el puntaje obtenido.
+        /// Initializes the results window with the player and the score obtained.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador que jugo la partida.</param>
-        /// <param name="playerScore">Puntaje final obtenido por el jugador.</param>
+        /// <param name="playerName">Name of the player who played the game.</param>
+        /// <param name="playerScore">Final score obtained by the player.</param>
         public ResultsWindow(string playerName, int playerScore)
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace YachtDice.Views
             WinnerTitleTextBlock.Text = string.Format(Strings.Results_TitleWinner, playerName);
             ScoreSubtitleTextBlock.Text = string.Format(Strings.Results_SubtitleScore, playerScore);
 
-            // TODO: Datos del rival simulado, mas adelante vendran del backend.
+            // TODO: Simulated opponent data; it will come from the backend later.
             var random = new Random();
             int scoreGap = random.Next(MinOpponentScoreGap, MaxOpponentScoreGapExclusive);
             OpponentScoreTextBlock.Text = Math.Max(0, playerScore - scoreGap).ToString();

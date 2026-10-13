@@ -8,7 +8,7 @@ using YachtDice.Utils;
 namespace YachtDice.Services
 {
     /// <summary>
-    /// Genera un código de verificación y lo envía al correo del jugador.
+    /// Generates a verification code and sends it to the player's email.
     /// </summary>
     public class TwoFactorDeliveryService
     {
@@ -20,9 +20,9 @@ namespace YachtDice.Services
         private readonly TwoFactorCodeService _codeService;
 
         /// <summary>
-        /// Inicializa el servicio con el generador de códigos que se compartirá con la validación.
+        /// Initializes the service with the code generator that is shared with the validation.
         /// </summary>
-        /// <param name="codeService">Servicio que genera y valida los códigos.</param>
+        /// <param name="codeService">Service that generates and validates the codes.</param>
         public TwoFactorDeliveryService(TwoFactorCodeService codeService)
         {
             if (codeService == null)
@@ -34,11 +34,11 @@ namespace YachtDice.Services
         }
 
         /// <summary>
-        /// Genera un código nuevo y lo envía al correo indicado.
+        /// Generates a new code and sends it to the given email.
         /// </summary>
-        /// <param name="email">Correo del jugador (destinatario).</param>
-        /// <param name="playerDisplayName">Nombre del jugador para el saludo.</param>
-        /// <returns>True si el correo se envió correctamente.</returns>
+        /// <param name="email">Player's email address (recipient).</param>
+        /// <param name="playerDisplayName">Player's name, used in the greeting.</param>
+        /// <returns>True if the email was sent successfully.</returns>
         public async Task<bool> SendCodeAsync(string email, string playerDisplayName)
         {
             var wasSent = false;

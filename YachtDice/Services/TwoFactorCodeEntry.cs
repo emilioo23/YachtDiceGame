@@ -3,32 +3,32 @@
 namespace YachtDice.Services
 {
     /// <summary>
-    /// Estado en memoria de un código de verificación emitido a un correo.
+    /// In-memory state of a verification code issued to an email address.
     /// </summary>
     internal class TwoFactorCodeEntry
     {
         /// <summary>
-        /// Código numérico emitido al jugador.
+        /// Numeric code issued to the player.
         /// </summary>
         public string Code { get; set; }
 
         /// <summary>
-        /// Momento (UTC) en que se generó el código; sirve para el tiempo de espera del reenvío.
+        /// Moment (UTC) when the code was generated; used for the resend cooldown.
         /// </summary>
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// Momento (UTC) a partir del cual el código ya no es válido.
+        /// Moment (UTC) from which the code is no longer valid.
         /// </summary>
         public DateTime ExpiresAt { get; set; }
 
         /// <summary>
-        /// Intentos fallidos acumulados antes de aplicar el bloqueo.
+        /// Failed attempts accumulated before the lockout is applied.
         /// </summary>
         public int FailedAttempts { get; set; }
 
         /// <summary>
-        /// Momento (UTC) hasta el cual el correo permanece bloqueado.
+        /// Moment (UTC) until which the email stays locked.
         /// </summary>
         public DateTime LockedUntil { get; set; }
     }

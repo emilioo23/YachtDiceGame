@@ -6,12 +6,12 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana que gestiona el flujo de recuperación de contraseña de la cuenta del usuario.
+    /// Window that handles the password recovery flow of the user's account.
     /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
         /// <summary>
-        /// Inicializa la ventana de recuperacion de contrasena.
+        /// Initializes the password recovery window.
         /// </summary>
         public ForgotPasswordWindow()
         {
@@ -26,7 +26,7 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Aqui, mas adelante, se conectara el envio real del correo de recuperacion.
+            // The real sending of the recovery email will be connected here later.
             new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text) }).ShowDialog();
         }
 

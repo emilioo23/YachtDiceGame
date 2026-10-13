@@ -6,16 +6,16 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana que permite visualizar y editar la información del perfil del jugador y sus estadísticas.
+    /// Window to view and edit the profile information and the statistics of the player.
     /// </summary>
     public partial class ProfileWindow : Window
     {
         private readonly string _playerName;
 
         /// <summary>
-        /// Inicializa la ventana de perfil para el jugador indicado.
+        /// Initializes the profile window for the given player.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador cuyo perfil se esta editando.</param>
+        /// <param name="playerName">Name of the player whose profile is being edited.</param>
         public ProfileWindow(string playerName)
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace YachtDice.Views
 
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Aqui, mas adelante, se guardaran los cambios reales en el backend.
+            // The real changes will be saved in the backend here later.
             new CustomDialogWindow(new DialogContentDto { Message = Strings.Profile_SavedMessage }).ShowDialog();
         }
 

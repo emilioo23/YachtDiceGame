@@ -6,8 +6,8 @@ using log4net.Core;
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Registro de eventos del videojuego con los niveles del estándar del equipo
-    /// (Trace, Debug, Info, Warning, Error) sobre log4net.
+    /// Game event logger that uses the log levels of the team standard
+    /// (Trace, Debug, Info, Warning, Error) on top of log4net.
     /// </summary>
     public class AppLogger
     {
@@ -16,9 +16,9 @@ namespace YachtDice.Utils
         private readonly ILog _log;
 
         /// <summary>
-        /// Crea un logger asociado a la clase que lo usa.
+        /// Creates a logger tied to the class that uses it.
         /// </summary>
-        /// <param name="ownerType">Tipo de la clase que registra los eventos.</param>
+        /// <param name="ownerType">Type of the class that logs the events.</param>
         public AppLogger(Type ownerType)
         {
             if (ownerType == null)
@@ -30,46 +30,46 @@ namespace YachtDice.Utils
         }
 
         /// <summary>
-        /// Registra el detalle más fino del flujo interno; solo para desarrollo.
+        /// Logs the finest detail of the internal flow; for development only.
         /// </summary>
-        /// <param name="message">Mensaje a registrar.</param>
+        /// <param name="message">Message to log.</param>
         public void Trace(string message)
         {
             _log.Logger.Log(typeof(AppLogger), Level.Trace, message, null);
         }
 
         /// <summary>
-        /// Registra información útil para depurar durante desarrollo y pruebas.
+        /// Logs information that is useful for debugging during development and testing.
         /// </summary>
-        /// <param name="message">Mensaje a registrar.</param>
+        /// <param name="message">Message to log.</param>
         public void Debug(string message)
         {
             _log.Debug(message);
         }
 
         /// <summary>
-        /// Registra un evento relevante del flujo normal.
+        /// Logs a relevant event of the normal flow.
         /// </summary>
-        /// <param name="message">Mensaje a registrar.</param>
+        /// <param name="message">Message to log.</param>
         public void Info(string message)
         {
             _log.Info(message);
         }
 
         /// <summary>
-        /// Registra una situación inesperada que no interrumpe la ejecución.
+        /// Logs an unexpected situation that does not stop the execution.
         /// </summary>
-        /// <param name="message">Mensaje a registrar.</param>
+        /// <param name="message">Message to log.</param>
         public void Warning(string message)
         {
             _log.Warn(message);
         }
 
         /// <summary>
-        /// Registra una falla que impidió completar una operación, con la pila limitada a 3 niveles.
+        /// Logs a failure that prevented an operation from completing, with the stack trace limited to 3 levels.
         /// </summary>
-        /// <param name="exception">Excepción capturada.</param>
-        /// <param name="message">Contexto de la operación que falló.</param>
+        /// <param name="exception">Caught exception.</param>
+        /// <param name="message">Context of the operation that failed.</param>
         public void Error(Exception exception, string message)
         {
             if (exception == null)

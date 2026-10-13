@@ -7,7 +7,7 @@ using YachtDice.Views;
 namespace YachtDice
 {
     /// <summary>
-    /// Clase principal que representa la aplicación WPF y gestiona su ciclo de vida y estado global.
+    /// Main class of the WPF application; manages its lifecycle and global state.
     /// </summary>
     public partial class App : Application
     {
@@ -16,18 +16,18 @@ namespace YachtDice
         private const string DefaultCultureCode = "es-MX";
 
         /// <summary>
-        /// Obtiene un valor que indica si el tema oscuro está activo actualmente en la aplicación.
+        /// Gets a value indicating whether the dark theme is currently active in the application.
         /// </summary>
         public static bool IsDarkTheme { get; private set; }
         /// <summary>
-        /// Obtiene el código de la cultura activa actual para la internacionalización.
+        /// Gets the code of the currently active culture, used for internationalization.
         /// </summary>
         public static string CurrentCultureCode { get; private set; }
 
         /// <summary>
-        /// Se ejecuta al iniciar la aplicación, configurando el idioma, el tema y abriendo la ventana principal.
+        /// Runs when the application starts: sets the language and the theme and opens the first window.
         /// </summary>
-        /// <param name="e">Argumentos del evento de inicio.</param>
+        /// <param name="e">Startup event arguments.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -40,9 +40,9 @@ namespace YachtDice
         }
 
         /// <summary>
-        /// Cambia la cultura activa de la aplicacion (idioma de los textos).
+        /// Changes the active culture of the application (the language of the texts).
         /// </summary>
-        /// <param name="cultureCode">Codigo de cultura, por ejemplo "es-MX" o "en-US".</param>
+        /// <param name="cultureCode">Culture code, for example "es-MX" or "en-US".</param>
         public static void SetCulture(string cultureCode)
         {
             var culture = new CultureInfo(cultureCode);
@@ -54,9 +54,9 @@ namespace YachtDice
         }
 
         /// <summary>
-        /// Cambia el tema visual activo de la aplicacion (claro u oscuro).
+        /// Changes the active visual theme of the application (light or dark).
         /// </summary>
-        /// <param name="isDark">Verdadero para aplicar el tema oscuro; falso para el tema claro.</param>
+        /// <param name="isDark">True to apply the dark theme; false for the light theme.</param>
         public static void SetTheme(bool isDark)
         {
             IsDarkTheme = isDark;

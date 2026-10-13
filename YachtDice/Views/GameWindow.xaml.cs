@@ -11,7 +11,7 @@ using YachtDice.Resources;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana principal del juego donde se gestionan los turnos, lanzamientos de dados y puntuaciones.
+    /// Main game window that handles the turns, dice rolls and scores.
     /// </summary>
     public partial class GameWindow : Window
     {
@@ -39,8 +39,8 @@ namespace YachtDice.Views
         private int _totalScore;
         private TextBlock _totalScoreLabel;
 
-        // Posiciones y rotaciones fijas para que los dados se vean "arrojados"
-        // dentro del tazon, en vez de alineados en fila.
+        // Fixed positions and rotations so the dice look "thrown"
+        // inside the bowl instead of lined up in a row.
         private readonly (double left, double top, double angle)[] _dicePositions =
         {
             (150, 40,  -8),
@@ -51,9 +51,9 @@ namespace YachtDice.Views
         };
 
         /// <summary>
-        /// Inicializa la ventana de juego para el jugador indicado.
+        /// Initializes the game window for the given player.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador que inicia la partida.</param>
+        /// <param name="playerName">Name of the player who starts the game.</param>
         public GameWindow(string playerName)
         {
             InitializeComponent();
@@ -69,7 +69,7 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Navega a la pantalla de Resultados con el puntaje acumulado en esta partida.
+        /// Navigates to the Results screen with the score accumulated in this game.
         /// </summary>
         public void GoToResultsWindow()
         {
@@ -90,7 +90,7 @@ namespace YachtDice.Views
                 Canvas.SetTop(die, position.top);
                 die.RenderTransform = new RotateTransform(position.angle, DiceSize / 2, DiceSize / 2);
 
-                int diceIndex = i; // captura local para el evento
+                int diceIndex = i; // local capture for the event
                 die.MouseLeftButtonUp += (s, e) => ToggleHoldDice(diceIndex);
 
                 _diceBorders[i] = die;
@@ -320,9 +320,9 @@ namespace YachtDice.Views
                 return;
             }
 
-            // Calculo simplificado: suma de los 5 dados.
-            // La logica real de puntaje por categoria (Yacht, Full House, etc.)
-            // se implementara cuando se programe el juego completo.
+            // Simplified calculation: sum of the 5 dice.
+            // The real scoring logic per category (Yacht, Full House, etc.)
+            // will be implemented when the full game is programmed.
             int scoreObtained = 0;
             foreach (var value in _diceValues)
             {

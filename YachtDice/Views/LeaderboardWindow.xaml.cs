@@ -11,35 +11,35 @@ using YachtDiceGame.Data;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Representa una fila calculada del marcador global, resultado de
-    /// agrupar el historial de partidas por jugador.
+    /// Represents a computed row of the global leaderboard, the result of
+    /// grouping the game history by player.
     /// </summary>
     public class LeaderboardEntry
     {
         /// <summary>
-        /// Obtiene o establece la medalla o posición del jugador (ej. 🥇, 🥈, 🥉).
+        /// Gets or sets the medal or position of the player (e.g. 🥇, 🥈, 🥉).
         /// </summary>
         public string Medal { get; set; }
         /// <summary>
-        /// Obtiene o establece el nombre visible del jugador en el ranking.
+        /// Gets or sets the display name of the player in the ranking.
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Obtiene o establece el nivel actual del jugador.
+        /// Gets or sets the current level of the player.
         /// </summary>
         public int Level { get; set; }
         /// <summary>
-        /// Obtiene o establece la puntuación total acumulada.
+        /// Gets or sets the total accumulated score.
         /// </summary>
         public int Points { get; set; }
         /// <summary>
-        /// Obtiene o establece la cantidad de partidas ganadas.
+        /// Gets or sets the number of games won.
         /// </summary>
         public int Wins { get; set; }
     }
 
     /// <summary>
-    /// Ventana que muestra la tabla de clasificación, rangos y puntuaciones de los jugadores.
+    /// Window that shows the leaderboard table with the ranks and scores of the players.
     /// </summary>
     public partial class LeaderboardWindow : Window
     {
@@ -52,16 +52,16 @@ namespace YachtDice.Views
         private readonly string _playerName;
 
         /// <summary>
-        /// Inicializa la ventana de marcador global para el jugador indicado.
+        /// Initializes the global leaderboard window for the given player.
         /// </summary>
-        /// <param name="playerName">Nombre del jugador que consulta el marcador.</param>
+        /// <param name="playerName">Name of the player who views the leaderboard.</param>
         public LeaderboardWindow(string playerName)
         {
             InitializeComponent();
             _playerName = playerName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(playerName);
 
-            _ = LoadRankingAsync(); // Ejecución asíncrona de la consulta
+            _ = LoadRankingAsync(); // Asynchronous execution of the query
         }
 
         private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
@@ -87,7 +87,7 @@ namespace YachtDice.Views
         {
             using (var context = new YachtDiceContext())
             {
-                // Corrección: Uso de GameHistoryPlayer y Player en PascalCase con consulta asíncrona
+                // Fix: uses GameHistoryPlayer and Player in PascalCase with an asynchronous query
                 var ranking = await context.GameHistoryPlayer
                     .GroupBy(entry => entry.PlayerId)
                     .Select(group => new

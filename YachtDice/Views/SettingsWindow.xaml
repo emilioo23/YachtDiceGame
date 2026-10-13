@@ -89,7 +89,6 @@
                 </StackPanel>
             </Border>
 
-            <!-- ===================== CONTENIDO ===================== -->
             <Border Grid.Column="1"
                     Style="{StaticResource CardPanel}">
 

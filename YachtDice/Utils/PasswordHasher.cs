@@ -5,13 +5,13 @@ using System.Text;
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Utilidad para generar y verificar hashes SHA-256 de contraseñas.
+    /// Utility to generate and verify SHA-256 password hashes.
     /// </summary>
     public static class PasswordHasher
     {
         /// <summary>
-        /// Calcula el hash SHA-256 de una contraseña en texto plano,
-        /// devuelto como cadena hexadecimal en minúsculas.
+        /// Computes the SHA-256 hash of a plain-text password,
+        /// returned as a lowercase hexadecimal string.
         /// </summary>
         public static string ComputeHash(string plainPassword)
         {
@@ -24,7 +24,7 @@ namespace YachtDice.Utils
         }
 
         /// <summary>
-        /// Compara una contraseña en texto plano contra un hash almacenado.
+        /// Compares a plain-text password against a stored hash.
         /// </summary>
         public static bool Verify(string plainPassword, string storedHash)
         {

@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Ventana o control encargado de cambiar el idioma y cultura de la interfaz en tiempo de ejecución.
+    /// Control in charge of changing the interface language and culture at runtime.
     /// </summary>
     public partial class LanguageSwitcher : UserControl
     {
@@ -15,15 +15,15 @@ namespace YachtDice.Views
         private const string EnglishCultureCode = "en-US";
 
         /// <summary>
-        /// Funcion que la ventana contenedora asigna para indicar como reabrirse a si misma
-        /// (con sus propios parametros de constructor, por ejemplo el nombre del jugador).
-        /// Si no se asigna, se usa Activator.CreateInstance como respaldo (solo funciona
-        /// con ventanas de constructor sin parametros, como LoginWindow).
+        /// Function that the containing window assigns to indicate how to reopen itself
+        /// (with its own constructor parameters, for example the player name).
+        /// If it is not assigned, Activator.CreateInstance is used as a fallback (it only works
+        /// with windows whose constructor has no parameters, such as LoginWindow).
         /// </summary>
         public Func<Window> ReopenWindowFunc { get; set; }
 
         /// <summary>
-        /// Inicializa una nueva instancia del control flotante de cambio de idioma.
+        /// Initializes a new instance of the floating language switch control.
         /// </summary>
         public LanguageSwitcher()
         {
@@ -47,9 +47,9 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Aplica la cultura elegida y reabre la ventana actual para refrescar los textos.
+        /// Applies the chosen culture and reopens the current window to refresh the texts.
         /// </summary>
-        /// <param name="cultureCode">Codigo de cultura, por ejemplo "es-MX" o "en-US".</param>
+        /// <param name="cultureCode">Culture code, for example "es-MX" or "en-US".</param>
         private void ApplyLanguage(string cultureCode)
         {
             LanguagePopup.IsOpen = false;
@@ -65,8 +65,8 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Cierra la ventana que contiene este control y abre una instancia nueva
-        /// del mismo tipo, ya con el idioma aplicado (mismo patron usado en Ajustes).
+        /// Closes the window that contains this control and opens a new instance
+        /// of the same type, already with the language applied (same pattern used in Settings).
         /// </summary>
         private void ReopenParentWindow()
         {
