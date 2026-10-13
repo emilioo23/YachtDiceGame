@@ -118,7 +118,7 @@ namespace YachtDice.Views
             }
             catch (Exception exception)
             {
-                throw new InvalidOperationException("Fallo critico al intentar cargar las estadisticas de la base de datos.", exception);
+                throw new InvalidOperationException("Critical failure while trying to load the statistics from the database.", exception);
             }
         }
 
