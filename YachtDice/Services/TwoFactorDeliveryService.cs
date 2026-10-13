@@ -12,8 +12,8 @@ namespace YachtDice.Services
     /// </summary>
     public class TwoFactorDeliveryService
     {
-        private const string SentLogMessage = "Código de verificación enviado por correo.";
-        private const string SendFailedLogMessage = "No se pudo enviar el código de verificación.";
+        private const string SentLogMessage = "Verification code sent by email.";
+        private const string SendFailedLogMessage = "The verification code could not be sent.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(TwoFactorDeliveryService));
         private readonly EmailService _emailService = new EmailService();
