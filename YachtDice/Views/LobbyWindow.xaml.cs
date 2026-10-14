@@ -11,6 +11,13 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LobbyWindow : Window
     {
+        private const int EmptyLength = 0;
+        private const int FirstCharacterIndex = 0;
+        private const int SingleCharacterLength = 1;
+        private const string DefaultPlayerInitial = "U";
+        private const double SelectedBorderThickness = 2.0;
+        private const double UnselectedBorderThickness = 1.5;
+
         private readonly string _playerName;
 
         /// <summary>
@@ -22,7 +29,9 @@ namespace YachtDice.Views
             InitializeComponent();
             _playerName = playerName;
             PlayerNameTextBlock.Text = playerName;
-            PlayerInitialTextBlock.Text = playerName.Length > 0 ? playerName.Substring(0, 1).ToUpper() : "U";
+            PlayerInitialTextBlock.Text = playerName.Length > EmptyLength
+                ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
+                : DefaultPlayerInitial;
             LanguageSwitcherControl.ReopenWindowFunc = () => new LobbyWindow(playerName);
         }
 
@@ -30,22 +39,22 @@ namespace YachtDice.Views
         {
             NormalModeBorder.Background = (SolidColorBrush)FindResource("BrushCream2");
             NormalModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushFeltLight");
-            NormalModeBorder.BorderThickness = new Thickness(2);
+            NormalModeBorder.BorderThickness = new Thickness(SelectedBorderThickness);
 
             FastModeBorder.Background = Brushes.Transparent;
             FastModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushBorder");
-            FastModeBorder.BorderThickness = new Thickness(1.5);
+            FastModeBorder.BorderThickness = new Thickness(UnselectedBorderThickness);
         }
 
         private void FastMode_Click(object sender, MouseButtonEventArgs e)
         {
             FastModeBorder.Background = (SolidColorBrush)FindResource("BrushCream2");
             FastModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushFeltLight");
-            FastModeBorder.BorderThickness = new Thickness(2);
+            FastModeBorder.BorderThickness = new Thickness(SelectedBorderThickness);
 
             NormalModeBorder.Background = Brushes.Transparent;
             NormalModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushBorder");
-            NormalModeBorder.BorderThickness = new Thickness(1.5);
+            NormalModeBorder.BorderThickness = new Thickness(UnselectedBorderThickness);
         }
 
         private void BackToPlayLink_Click(object sender, MouseButtonEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Archivo: YachtDice/App.xaml.cs
+using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -7,7 +8,7 @@ using YachtDice.Views;
 namespace YachtDice
 {
     /// <summary>
-    /// Main class of the WPF application; manages its lifecycle and global state.
+    /// Main class of the WPF application; manages its life cycle and global state.
     /// </summary>
     public partial class App : Application
     {
@@ -19,13 +20,14 @@ namespace YachtDice
         /// Gets a value indicating whether the dark theme is currently active in the application.
         /// </summary>
         public static bool IsDarkTheme { get; private set; }
+
         /// <summary>
-        /// Gets the code of the currently active culture, used for internationalization.
+        /// Gets the current active culture code, used for internationalization.
         /// </summary>
         public static string CurrentCultureCode { get; private set; }
 
         /// <summary>
-        /// Runs when the application starts: sets the language and the theme and opens the first window.
+        /// Executes when the application starts: sets the language, the theme, and opens the initial window.
         /// </summary>
         /// <param name="e">Startup event arguments.</param>
         protected override void OnStartup(StartupEventArgs e)
@@ -43,7 +45,7 @@ namespace YachtDice
         /// <summary>
         /// Changes the active culture of the application (the language of the texts).
         /// </summary>
-        /// <param name="cultureCode">Culture code, for example "es-MX" or "en-US".</param>
+        /// <param name="cultureCode">Culture code, e.g., "es-MX" or "en-US".</param>
         public static void SetCulture(string cultureCode)
         {
             var culture = new CultureInfo(cultureCode);
