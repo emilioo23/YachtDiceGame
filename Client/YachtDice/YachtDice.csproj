@@ -492,6 +492,12 @@
       <LastGenOutput>YachtDiceContext.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
+      <Project>{661920f3-f041-4e22-8e60-82d4233217a5}</Project>
+      <Name>YachtDice.Client.Logic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

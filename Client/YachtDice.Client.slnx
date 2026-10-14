@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="YachtDice.Client.Logic/YachtDice.Client.Logic.csproj" Id="661920f3-f041-4e22-8e60-82d4233217a5" />
+  <Project Path="YachtDice.Client.Tests/YachtDice.Client.Tests.csproj" Id="af455de3-ca51-40b5-97f9-5d7a883e0281" />
   <Project Path="YachtDice/YachtDice.csproj" Id="34361500-4622-4842-bed5-ee1db51dc434" />
 </Solution>
