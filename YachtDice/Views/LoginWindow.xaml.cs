@@ -20,6 +20,9 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
+        private const int DefaultAvatarId = 1;
+        private const int InitialXp = 0;
+        private const int InitialLevel = 1;
         private const string ActivePlayerState = "Active";
         private const string FriendCodePrefix = "FRD-";
         private const int FriendCodeLength = 6;
@@ -254,14 +257,14 @@ namespace YachtDice.Views
 
             return new Player
             {
-                AvatarId = 1,
+                AvatarId = DefaultAvatarId,
                 Username = username,
                 Email = RegisterEmailTextBox.Text.Trim(),
                 PwdHash = PasswordHasher.ComputeHash(RegisterPasswordBox.Password),
                 State = ActivePlayerState,
                 RegDate = DateTime.Now,
-                XP = 0,
-                Level = 1,
+                XP = InitialXp,
+                Level = InitialLevel,
                 DisplayName = username,
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),

@@ -48,7 +48,7 @@ namespace YachtDice.Views
         private const int TopRankBronze = 3;
         private const int RankColumnWidth = 60;
         private const int StandardColumnWidth = 120;
-
+        private const int DefaultPlayerLevel = 0;
         private readonly string _playerName;
 
         /// <summary>
@@ -87,7 +87,6 @@ namespace YachtDice.Views
         {
             using (var context = new YachtDiceContext())
             {
-                // Fix: uses GameHistoryPlayer and Player in PascalCase with an asynchronous query
                 var ranking = await context.GameHistoryPlayer
                     .GroupBy(entry => entry.PlayerId)
                     .Select(group => new
@@ -102,7 +101,7 @@ namespace YachtDice.Views
                         (stats, player) => new LeaderboardEntry
                         {
                             Name = player.DisplayName,
-                            Level = player.Level ?? 0,
+                            Level = player.Level ?? DefaultPlayerLevel,
                             Points = stats.TotalScore,
                             Wins = stats.TotalWins
                         })

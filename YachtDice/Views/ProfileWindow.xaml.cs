@@ -10,6 +10,11 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ProfileWindow : Window
     {
+        private const int EmptyLength = 0;
+        private const int FirstCharacterIndex = 0;
+        private const int SingleCharacterLength = 1;
+        private const string DefaultPlayerInitial = "J";
+
         private readonly string _playerName;
 
         /// <summary>
@@ -21,7 +26,9 @@ namespace YachtDice.Views
             InitializeComponent();
             _playerName = playerName;
             UsernameTextBox.Text = playerName;
-            AvatarInitialTextBlock.Text = playerName.Length > 0 ? playerName.Substring(0, 1).ToUpper() : "J";
+            AvatarInitialTextBlock.Text = playerName.Length > EmptyLength
+                ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
+                : DefaultPlayerInitial;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(playerName);
         }
 
@@ -39,7 +46,7 @@ namespace YachtDice.Views
 
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            // The real changes will be saved in the backend here later.
+            // TODO: The real changes will be saved in the backend here later.
             new CustomDialogWindow(new DialogContentDto { Message = Strings.Profile_SavedMessage }).ShowDialog();
         }
 

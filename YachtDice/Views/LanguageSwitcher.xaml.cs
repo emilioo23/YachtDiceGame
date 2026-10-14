@@ -13,6 +13,11 @@ namespace YachtDice.Views
     {
         private const string SpanishCultureCode = "es-MX";
         private const string EnglishCultureCode = "en-US";
+        private const int UsFlagTotalRows = 7;
+        private const int UsFlagCantonRowSpan = 4;
+        private const double UsFlagCantonWidth = 9.0;
+        private const int EvenRowDivisor = 2;
+        private const int ZeroRemainder = 0;
 
         /// <summary>
         /// Function that the containing window assigns to indicate how to reopen itself
@@ -116,7 +121,7 @@ namespace YachtDice.Views
         private static Grid BuildEnglishFlag()
         {
             var grid = new Grid();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < UsFlagTotalRows; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
             }
@@ -124,20 +129,20 @@ namespace YachtDice.Views
             var stripeRed = new SolidColorBrush(Color.FromRgb(0xB2, 0x22, 0x34));
             var stripeWhite = new SolidColorBrush(Colors.White);
 
-            for (int row = 0; row < 7; row++)
+            for (int row = 0; row < UsFlagTotalRows; row++)
             {
-                var stripe = new Rectangle { Fill = row % 2 == 0 ? stripeRed : stripeWhite };
+                var stripe = new Rectangle { Fill = row % EvenRowDivisor == ZeroRemainder ? stripeRed : stripeWhite };
                 Grid.SetRow(stripe, row);
                 grid.Children.Add(stripe);
             }
 
             var canton = new Rectangle
             {
-                Width = 9,
+                Width = UsFlagCantonWidth,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Fill = new SolidColorBrush(Color.FromRgb(0x3C, 0x3B, 0x6E))
             };
-            Grid.SetRowSpan(canton, 4);
+            Grid.SetRowSpan(canton, UsFlagCantonRowSpan);
             grid.Children.Add(canton);
 
             return grid;

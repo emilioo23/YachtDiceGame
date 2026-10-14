@@ -17,6 +17,9 @@ namespace YachtDice.Views
         private const string NotificationsSection = "Notifications";
         private const string PreferencesSection = "Preferences";
         private const string PrivacySection = "Privacy";
+        private const string SpanishCultureCode = "es-MX";
+        private const int SpanishLanguageIndex = 0;
+        private const int OtherLanguageIndex = 1;
 
         private readonly string _playerName;
         private bool _isInitializing;
@@ -33,7 +36,7 @@ namespace YachtDice.Views
             _isInitializing = true;
 
             AccountUsernameTextBlock.Text = playerName;
-            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == "es-MX" ? 0 : 1;
+            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode ? SpanishLanguageIndex : OtherLanguageIndex;
             SetDarkThemeToggleVisual(App.IsDarkTheme);
 
             ShowSection(initialSection);

@@ -11,6 +11,7 @@ namespace YachtDice.Views
     {
         private const int MinOpponentScoreGap = 10;
         private const int MaxOpponentScoreGapExclusive = 60;
+        private const int MinimumPossibleScore = 0;
 
         private readonly string _playerName;
 
@@ -31,7 +32,7 @@ namespace YachtDice.Views
             // TODO: Simulated opponent data; it will come from the backend later.
             var random = new Random();
             int scoreGap = random.Next(MinOpponentScoreGap, MaxOpponentScoreGapExclusive);
-            OpponentScoreTextBlock.Text = Math.Max(0, playerScore - scoreGap).ToString();
+            OpponentScoreTextBlock.Text = Math.Max(MinimumPossibleScore, playerScore - scoreGap).ToString();
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
