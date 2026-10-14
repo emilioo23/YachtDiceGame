@@ -437,7 +437,9 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="ConnectionStrings.config" />
+    <None Include="ConnectionStrings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\GAME_HISTORY_PLAYER.datasource" />
     <None Include="Properties\DataSources\PLAYER.datasource" />
@@ -449,11 +451,11 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Secrets.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Data\YachtDiceContext.edmx.diagram">
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
+    </None>
+    <None Include="Secrets.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

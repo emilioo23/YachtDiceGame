@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="YachtDice.Server.Data/YachtDice.Server.Data.csproj" />
+  <Project Path="YachtDice.Server.Host/YachtDice.Server.Host.csproj" />
+  <Project Path="YachtDice.Server.Logic/YachtDice.Server.Logic.csproj" />
+  <Project Path="YachtDice.Server.Services/YachtDice.Server.Services.csproj" />
+  <Project Path="YachtDice.Server.Tests/YachtDice.Server.Tests.csproj" />
+</Solution>
