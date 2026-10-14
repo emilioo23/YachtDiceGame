@@ -363,5 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Credenciales locales (SMTP)
+*.conf
+ConnectionStrings.config
+Secrets.config
 
 logs/
