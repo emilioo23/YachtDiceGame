@@ -88,6 +88,8 @@
     <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IPlayerRepository.cs" />
+    <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
