@@ -47,6 +47,8 @@
     <Compile Include="Contracts\LoginRequestDto.cs" />
     <Compile Include="Contracts\LoginResponseDto.cs" />
     <Compile Include="Contracts\LoginResultCode.cs" />
+    <Compile Include="Contracts\PlayerStatisticsDto.cs" />
+    <Compile Include="Contracts\PlayerStatisticsRequestDto.cs" />
     <Compile Include="Contracts\RegisterRequestDto.cs" />
     <Compile Include="Contracts\RegisterResultCode.cs" />
     <Compile Include="Contracts\ResendCodeRequestDto.cs" />
@@ -57,11 +59,15 @@
     <Compile Include="Contracts\VerificationResultCode.cs" />
     <Compile Include="Contracts\VerifyCodeRequestDto.cs" />
     <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="IPlayerService.cs" />
     <Compile Include="Mapping\CultureParser.cs" />
     <Compile Include="Mapping\EnumMapper.cs" />
     <Compile Include="Mapping\LoginMapper.cs" />
+    <Compile Include="Mapping\PlayerStatisticsMapper.cs" />
     <Compile Include="Mapping\RegistrationMapper.cs" />
+    <Compile Include="PlayerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Server.Logic\YachtDice.Server.Logic.csproj">

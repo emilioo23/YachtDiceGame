@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Server.Logic.Authentication;
-using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Services.Contracts;
 using YachtDice.Server.Services.Mapping;
@@ -18,18 +15,10 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(
         InstanceContextMode = InstanceContextMode.Single,
         ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : ServiceBase, IAuthenticationService
     {
-        private const string NullRequestMessage = "The request cannot be empty.";
         private const string NullDependencyMessage = "The dependency cannot be null.";
-        private const string InvalidRequestMessage = "The request has invalid data.";
-        private const string DatabaseFaultMessage = "The database is not available.";
-        private const string UnexpectedFaultMessage = "An unexpected error occurred.";
-        private const string DatabaseLogMessage = "Database error while processing a request.";
-        private const string InvalidRequestLogMessage = "A request with invalid data was received.";
-        private const string UnexpectedLogMessage = "Unexpected error while processing a request.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(AuthenticationService));
         private readonly LoginService _loginService;
         private readonly RegistrationService _registrationService;
         private readonly TwoFactorVerificationService _verificationService;
@@ -103,59 +92,6 @@ namespace YachtDice.Server.Services
         public Task<ResendResultCode> ResendCodeAsync(ResendCodeRequestDto request)
         {
             return ExecuteAsync(request, () => ProcessResendCodeAsync(request));
-        }
-
-        private static FaultException<ServiceFault> CreateFault(ServiceErrorCode code, string message)
-        {
-            var fault = new ServiceFault
-            {
-                Code = code,
-                Message = message
-            };
-
-            return new FaultException<ServiceFault>(fault, new FaultReason(message));
-        }
-
-        private async Task<TResponse> ExecuteAsync<TResponse>(object request, Func<Task<TResponse>> operation)
-        {
-            if (request == null)
-            {
-                throw CreateFault(ServiceErrorCode.InvalidRequest, NullRequestMessage);
-            }
-
-            TResponse response;
-
-            try
-            {
-                response = await operation();
-            }
-            catch (DbException ex)
-            {
-                throw CreateDatabaseFault(ex);
-            }
-            catch (DataException ex)
-            {
-                throw CreateDatabaseFault(ex);
-            }
-            catch (ArgumentException ex)
-            {
-                _logger.Error(ex, InvalidRequestLogMessage);
-                throw CreateFault(ServiceErrorCode.InvalidRequest, InvalidRequestMessage);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedLogMessage);
-                throw CreateFault(ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
-            }
-
-            return response;
-        }
-
-        private FaultException<ServiceFault> CreateDatabaseFault(Exception exception)
-        {
-            _logger.Error(exception, DatabaseLogMessage);
-
-            return CreateFault(ServiceErrorCode.DatabaseUnavailable, DatabaseFaultMessage);
         }
 
         private async Task<LoginResponseDto> ProcessLoginAsync(LoginRequestDto request)
