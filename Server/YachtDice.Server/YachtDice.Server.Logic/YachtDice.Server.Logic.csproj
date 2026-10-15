@@ -46,9 +46,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\LoginRequest.cs" />
+    <Compile Include="Authentication\LoginResult.cs" />
+    <Compile Include="Authentication\LoginService.cs" />
+    <Compile Include="Authentication\LoginStatus.cs" />
+    <Compile Include="Authentication\RegisterPlayerRequest.cs" />
+    <Compile Include="Authentication\RegistrationResult.cs" />
+    <Compile Include="Authentication\RegistrationService.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Logging\AppLogger.cs" />
+    <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\EmailStrings.Designer.cs">
       <AutoGen>True</AutoGen>
