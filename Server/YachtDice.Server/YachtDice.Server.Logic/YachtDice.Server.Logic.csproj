@@ -64,10 +64,12 @@
       <DependentUpon>EmailStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Security\PasswordHasher.cs" />
+    <Compile Include="TwoFactor\ResendCodeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorCodeEntry.cs" />
     <Compile Include="TwoFactor\TwoFactorCodeService.cs" />
     <Compile Include="TwoFactor\TwoFactorDeliveryService.cs" />
     <Compile Include="TwoFactor\TwoFactorValidationResult.cs" />
+    <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">
