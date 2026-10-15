@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Login">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:LoginRequestDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LoginRequestDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginRequestDto" nillable="true" type="tns:LoginRequestDto" />
+  <xs:element name="LoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="tns:LoginResponseDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LoginResponseDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:LoginResultCode" />
+      <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginResponseDto" nillable="true" type="tns:LoginResponseDto" />
+  <xs:simpleType name="LoginResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VerificationCodeSent" />
+      <xs:enumeration value="MissingRequiredField" />
+      <xs:enumeration value="InvalidCredentials" />
+      <xs:enumeration value="VerificationLocked" />
+      <xs:enumeration value="CodeSendFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LoginResultCode" nillable="true" type="tns:LoginResultCode" />
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="InvalidRequest" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
+</xs:schema>

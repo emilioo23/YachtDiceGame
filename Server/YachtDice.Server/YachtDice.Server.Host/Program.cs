@@ -45,11 +45,14 @@ namespace YachtDice.Server.Host
 
         private static AuthenticationService CreateAuthenticationService()
         {
+            var playerRepository = new PlayerRepository();
             var codeService = new TwoFactorCodeService();
             var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
-            var loginService = new LoginService(new PlayerRepository(), codeService, deliveryService);
 
-            return new AuthenticationService(loginService);
+            return new AuthenticationService(
+                new LoginService(playerRepository, codeService, deliveryService),
+                new RegistrationService(playerRepository),
+                new TwoFactorVerificationService(playerRepository, codeService, deliveryService));
         }
     }
 }

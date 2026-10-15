@@ -47,11 +47,20 @@
     <Compile Include="Contracts\LoginRequestDto.cs" />
     <Compile Include="Contracts\LoginResponseDto.cs" />
     <Compile Include="Contracts\LoginResultCode.cs" />
+    <Compile Include="Contracts\RegisterRequestDto.cs" />
+    <Compile Include="Contracts\RegisterResultCode.cs" />
+    <Compile Include="Contracts\ResendCodeRequestDto.cs" />
+    <Compile Include="Contracts\ResendResultCode.cs" />
     <Compile Include="Contracts\ServiceErrorCode.cs" />
     <Compile Include="Contracts\ServiceFault.cs" />
     <Compile Include="Contracts\ServiceNamespaces.cs" />
+    <Compile Include="Contracts\VerificationResultCode.cs" />
+    <Compile Include="Contracts\VerifyCodeRequestDto.cs" />
     <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="Mapping\CultureParser.cs" />
+    <Compile Include="Mapping\EnumMapper.cs" />
     <Compile Include="Mapping\LoginMapper.cs" />
+    <Compile Include="Mapping\RegistrationMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

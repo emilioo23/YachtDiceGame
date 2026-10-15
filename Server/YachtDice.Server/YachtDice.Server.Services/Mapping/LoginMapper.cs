@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Services.Contracts;
 
@@ -31,7 +30,7 @@ namespace YachtDice.Server.Services.Mapping
             {
                 Email = dto.Email,
                 Password = dto.Password,
-                Culture = ParseCulture(dto.CultureName)
+                Culture = CultureParser.Parse(dto.CultureName)
             };
         }
 
@@ -47,26 +46,6 @@ namespace YachtDice.Server.Services.Mapping
                 Code = _resultCodes[result.Status],
                 DisplayName = result.DisplayName
             };
-        }
-
-        private static CultureInfo ParseCulture(string cultureName)
-        {
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            if (!string.IsNullOrWhiteSpace(cultureName))
-            {
-                try
-                {
-                    culture = CultureInfo.GetCultureInfo(cultureName);
-                }
-                catch (CultureNotFoundException)
-                {
-                    // An unknown language name falls back to the default language
-                    culture = CultureInfo.InvariantCulture;
-                }
-            }
-
-            return culture;
         }
     }
 }
