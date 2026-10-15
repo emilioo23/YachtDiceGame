@@ -15,11 +15,53 @@
   <wsdl:message name="IAuthenticationService_Login_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IAuthenticationService_Register_InputMessage">
+    <wsdl:part name="parameters" element="tns:Register" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_Register_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_Register_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_VerifyCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyCode" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_VerifyCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_VerifyCode_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResendCode" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResendCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendCode_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="Login">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/Login" message="tns:IAuthenticationService_Login_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginResponse" message="tns:IAuthenticationService_Login_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_Login_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Register">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/Register" message="tns:IAuthenticationService_Register_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/RegisterResponse" message="tns:IAuthenticationService_Register_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/RegisterServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_Register_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyCode">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode" message="tns:IAuthenticationService_VerifyCode_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse" message="tns:IAuthenticationService_VerifyCode_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_VerifyCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResendCode">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode" message="tns:IAuthenticationService_ResendCode_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse" message="tns:IAuthenticationService_ResendCode_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ResendCode_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

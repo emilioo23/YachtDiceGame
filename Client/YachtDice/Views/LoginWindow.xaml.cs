@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using YachtDice.AuthenticationServiceReference;
+using YachtDice.Gateway;
 using YachtDice.Resources;
-using YachtDice.Services;
 using YachtDice.Utils;
-using YachtDiceGame.Data;
 
 namespace YachtDice.Views
 {
@@ -20,27 +14,10 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const int DefaultAvatarId = 1;
-        private const int InitialXp = 0;
-        private const int InitialLevel = 1;
-        private const string ActivePlayerState = "Active";
-        private const string FriendCodePrefix = "FRD-";
-        private const int FriendCodeLength = 6;
-        private const int UsernameMaxLength = 20;
-        private const int EmailMaxLength = 100;
-        private const int NameMaxLength = 50;
-        private const string EntityErrorLogMessage = "Database connection error through Entity Framework.";
-        private const string SqlErrorLogMessage = "Network connection error or SQL Server unavailable.";
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
-        private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
-        private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
-        private const string PlayerRegisteredLogMessage = "Player registered successfully.";
-
-        // The service is static so the codes survive when the window is reopened (language change or going back).
-        private static readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
 
         private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
-        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
         /// Initializes the login and registration window.
@@ -48,7 +25,6 @@ namespace YachtDice.Views
         public LoginWindow()
         {
             InitializeComponent();
-            _deliveryService = new TwoFactorDeliveryService(_codeService);
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
@@ -71,6 +47,8 @@ namespace YachtDice.Views
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            AuthSubmitButton.IsEnabled = false;
+
             try
             {
                 bool isLogin = LoginPanel.Visibility == Visibility.Visible;
@@ -84,20 +62,18 @@ namespace YachtDice.Views
                     await ProcessRegisterAsync();
                 }
             }
-            catch (EntityException ex)
+            catch (GatewayException ex)
             {
-                _logger.Error(ex, EntityErrorLogMessage);
-                ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
-            }
-            catch (SqlException ex)
-            {
-                _logger.Error(ex, SqlErrorLogMessage);
-                ShowDialogMessage(Strings.Dialogs_DatabaseConnectionError);
+                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, UnexpectedErrorLogMessage);
                 ShowDialogMessage(Strings.Dialogs_UnexpectedError);
+            }
+            finally
+            {
+                AuthSubmitButton.IsEnabled = true;
             }
         }
 
@@ -115,192 +91,111 @@ namespace YachtDice.Views
             this.Close();
         }
 
+        private static string GetLoginMessage(LoginResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
+                case LoginResultCode.MissingRequiredField:
+                    message = Strings.Auth_ErrorRequiredFields;
+                    break;
+                case LoginResultCode.InvalidCredentials:
+                    message = Strings.Dialogs_D13_Login;
+                    break;
+                case LoginResultCode.VerificationLocked:
+                    message = Strings.Dialogs_D19_Validation2FA;
+                    break;
+                case LoginResultCode.CodeSendFailed:
+                    message = Strings.TwoFactor_ErrorSendFailed;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
+        }
+
+        private static string GetRegisterMessage(RegisterResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
+                case RegisterResultCode.MissingRequiredField:
+                    message = Strings.Auth_ErrorRequiredFields;
+                    break;
+                case RegisterResultCode.FieldTooLong:
+                    message = Strings.Auth_ErrorFieldTooLong;
+                    break;
+                case RegisterResultCode.InvalidEmail:
+                    message = Strings.Auth_ErrorInvalidEmail;
+                    break;
+                case RegisterResultCode.EmailAlreadyRegistered:
+                    message = Strings.Dialogs_D16_Register;
+                    break;
+                case RegisterResultCode.UsernameAlreadyTaken:
+                    message = Strings.Dialogs_D15_Register;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
+        }
+
         private async Task ProcessLoginAsync()
         {
-            string email = EmailTextBox.Text.Trim();
-            string password = LoginPasswordBox.Password;
-
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            var request = new LoginRequestDto
             {
-                ShowDialogMessage(Strings.Auth_ErrorRequiredFields);
-                return;
-            }
+                Email = EmailTextBox.Text.Trim(),
+                Password = LoginPasswordBox.Password,
+                CultureName = App.CurrentCultureCode
+            };
 
-            List<Player> matches = await FindPlayersByEmailAsync(email);
-            bool areCredentialsValid = matches.Count > 0 && PasswordHasher.Verify(password, matches[0].PwdHash);
+            LoginResponseDto response = await _gateway.LoginAsync(request);
 
-            if (!areCredentialsValid)
+            if (response.Code == LoginResultCode.VerificationCodeSent)
             {
-                _logger.Warning(InvalidCredentialsLogMessage);
-                ShowDialogMessage(Strings.Dialogs_D13_Login);
-            }
-            else if (_codeService.IsLocked(matches[0].Email))
-            {
-                _logger.Warning(LockedAccountLogMessage);
-                ShowDialogMessage(Strings.Dialogs_D19_Validation2FA);
+                OpenVerificationWindow(request.Email, response.DisplayName);
             }
             else
             {
-                await SendCodeAndOpenVerificationAsync(matches[0]);
-            }
-        }
-
-        private async Task<List<Player>> FindPlayersByEmailAsync(string email)
-        {
-            using (var context = new YachtDiceContext())
-            {
-                return await context.Player.Where(p => p.Email == email).Take(1).ToListAsync();
-            }
-        }
-
-        private async Task SendCodeAndOpenVerificationAsync(Player player)
-        {
-            AuthSubmitButton.IsEnabled = false;
-
-            bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName);
-
-            if (wasSent)
-            {
-                var twoFactorWindow = new TwoFactorWindow(player.Email, player.DisplayName, _codeService);
-                twoFactorWindow.Show();
-                this.Close();
-            }
-            else
-            {
-                ShowDialogMessage(Strings.TwoFactor_ErrorSendFailed);
-                AuthSubmitButton.IsEnabled = true;
+                ShowDialogMessage(GetLoginMessage(response.Code));
             }
         }
 
         private async Task ProcessRegisterAsync()
         {
-            string formError = GetRegisterFormError();
-
-            if (formError.Length > 0)
+            var request = new RegisterRequestDto
             {
-                ShowDialogMessage(formError);
-                return;
-            }
+                FirstName = FirstNameTextBox.Text.Trim(),
+                LastName = LastNameTextBox.Text.Trim(),
+                Username = UsernameTextBox.Text.Trim(),
+                Email = RegisterEmailTextBox.Text.Trim(),
+                Password = RegisterPasswordBox.Password
+            };
 
-            Player newPlayer = CreatePlayerFromForm();
-            string conflictMessage = await SaveNewPlayerAsync(newPlayer);
+            RegisterResultCode result = await _gateway.RegisterAsync(request);
 
-            if (string.IsNullOrEmpty(conflictMessage))
+            if (result == RegisterResultCode.Success)
             {
-                _logger.Info(PlayerRegisteredLogMessage);
                 ShowDialogMessage(Strings.Auth_SuccessRegister);
                 LoginTabButton_Click(this, new RoutedEventArgs());
             }
             else
             {
-                ShowDialogMessage(conflictMessage);
+                ShowDialogMessage(GetRegisterMessage(result));
             }
         }
 
-        private string GetRegisterFormError()
+        private void OpenVerificationWindow(string email, string playerDisplayName)
         {
-            string errorMessage = string.Empty;
-
-            if (!HasRequiredRegisterFields())
-            {
-                errorMessage = Strings.Auth_ErrorRequiredFields;
-            }
-            else if (!HasValidFieldLengths())
-            {
-                errorMessage = Strings.Auth_ErrorFieldTooLong;
-            }
-            else if (!IsValidEmail(RegisterEmailTextBox.Text.Trim()))
-            {
-                errorMessage = Strings.Auth_ErrorInvalidEmail;
-            }
-
-            return errorMessage;
-        }
-
-        private bool HasRequiredRegisterFields()
-        {
-            return !string.IsNullOrWhiteSpace(FirstNameTextBox.Text)
-                && !string.IsNullOrWhiteSpace(LastNameTextBox.Text)
-                && !string.IsNullOrWhiteSpace(UsernameTextBox.Text)
-                && !string.IsNullOrWhiteSpace(RegisterEmailTextBox.Text)
-                && !string.IsNullOrWhiteSpace(RegisterPasswordBox.Password);
-        }
-
-        private bool HasValidFieldLengths()
-        {
-            return UsernameTextBox.Text.Trim().Length <= UsernameMaxLength
-                && RegisterEmailTextBox.Text.Trim().Length <= EmailMaxLength
-                && FirstNameTextBox.Text.Trim().Length <= NameMaxLength
-                && LastNameTextBox.Text.Trim().Length <= NameMaxLength;
-        }
-
-        private static bool IsValidEmail(string email)
-        {
-            bool isValid;
-
-            try
-            {
-                var address = new MailAddress(email);
-                isValid = address.Address == email;
-            }
-            catch (FormatException)
-            {
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        private Player CreatePlayerFromForm()
-        {
-            string username = UsernameTextBox.Text.Trim();
-
-            return new Player
-            {
-                AvatarId = DefaultAvatarId,
-                Username = username,
-                Email = RegisterEmailTextBox.Text.Trim(),
-                PwdHash = PasswordHasher.ComputeHash(RegisterPasswordBox.Password),
-                State = ActivePlayerState,
-                RegDate = DateTime.Now,
-                XP = InitialXp,
-                Level = InitialLevel,
-                DisplayName = username,
-                FirstName = FirstNameTextBox.Text.Trim(),
-                LastName = LastNameTextBox.Text.Trim(),
-                FriendCode = CreateFriendCode()
-            };
-        }
-
-        private async Task<string> SaveNewPlayerAsync(Player newPlayer)
-        {
-            string conflictMessage = string.Empty;
-
-            using (var context = new YachtDiceContext())
-            {
-                if (await context.Player.AnyAsync(p => p.Email == newPlayer.Email))
-                {
-                    conflictMessage = Strings.Dialogs_D16_Register;
-                }
-                else if (await context.Player.AnyAsync(p => p.Username == newPlayer.Username))
-                {
-                    conflictMessage = Strings.Dialogs_D15_Register;
-                }
-                else
-                {
-                    context.Player.Add(newPlayer);
-                    await context.SaveChangesAsync();
-                }
-            }
-
-            return conflictMessage;
-        }
-
-        private static string CreateFriendCode()
-        {
-            string randomPart = Guid.NewGuid().ToString("N").Substring(0, FriendCodeLength).ToUpper();
-
-            return FriendCodePrefix + randomPart;
+            var twoFactorWindow = new TwoFactorWindow(email, playerDisplayName);
+            twoFactorWindow.Show();
+            this.Close();
         }
 
         /// <summary>

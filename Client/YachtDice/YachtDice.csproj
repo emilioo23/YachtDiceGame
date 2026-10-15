@@ -277,11 +277,15 @@
     <Compile Include="Data\ScorecardEntry.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Gateway\AuthenticationGateway.cs" />
+    <Compile Include="Gateway\GatewayErrorCode.cs" />
+    <Compile Include="Gateway\GatewayException.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Utils\GatewayErrorMessages.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\SignalRService.cs" />
@@ -452,6 +456,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginResponseDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.RegisterResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.ResendResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.VerificationResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="ConnectionStrings.config">

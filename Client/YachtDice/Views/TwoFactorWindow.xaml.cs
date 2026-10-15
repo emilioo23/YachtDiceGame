@@ -1,12 +1,13 @@
 ﻿using System;
-using YachtDice.Utils;
-using YachtDice.Views;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using YachtDice.AuthenticationServiceReference;
+using YachtDice.Gateway;
 using YachtDice.Resources;
-using YachtDice.Services;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -15,14 +16,12 @@ namespace YachtDice.Views
     /// </summary>
     public partial class TwoFactorWindow : Window
     {
-        private const int CodeLength = TwoFactorCodeService.CodeLength;
         private const int VisibleLocalPartChars = 2;
         private const char MaskCharacter = '*';
 
         private readonly string _email;
         private readonly string _playerDisplayName;
-        private readonly TwoFactorCodeService _codeService;
-        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
         private readonly TextBox[] _digitBoxes;
 
         /// <summary>
@@ -30,15 +29,12 @@ namespace YachtDice.Views
         /// </summary>
         /// <param name="email">Email address the verification code was sent to.</param>
         /// <param name="playerDisplayName">Display name of the player who logged in.</param>
-        /// <param name="codeService">Service that stores and validates the generated codes.</param>
-        public TwoFactorWindow(string email, string playerDisplayName, TwoFactorCodeService codeService)
+        public TwoFactorWindow(string email, string playerDisplayName)
         {
             InitializeComponent();
 
             _email = email;
             _playerDisplayName = playerDisplayName;
-            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService));
-            _deliveryService = new TwoFactorDeliveryService(_codeService);
             _digitBoxes = new[]
             {
                 Digit1TextBox, Digit2TextBox, Digit3TextBox,
@@ -46,7 +42,7 @@ namespace YachtDice.Views
             };
 
             DestinationEmailTextBlock.Text = MaskEmail(email);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName, codeService);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName);
             Digit1TextBox.Focus();
         }
 
@@ -75,7 +71,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void DigitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void DigitTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var box = (TextBox)sender;
             int index = Array.IndexOf(_digitBoxes, box);
@@ -87,45 +83,37 @@ namespace YachtDice.Views
             }
             else if (IsCodeComplete())
             {
-                VerifyCode();
+                await VerifyCodeAsync();
             }
         }
 
-        private void VerifyButton_Click(object sender, RoutedEventArgs e)
+        private async void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
             if (!IsCodeComplete())
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorIncompleteCode }).ShowDialog();
+                ShowMessage(Strings.TwoFactor_ErrorIncompleteCode);
                 return;
             }
 
-            VerifyCode();
+            await VerifyCodeAsync();
         }
 
         private async void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            if (_codeService.IsLocked(_email))
+            var request = new ResendCodeRequestDto
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
-                return;
-            }
+                Email = _email,
+                CultureName = App.CurrentCultureCode
+            };
 
-            if (!_codeService.IsResendAllowed(_email))
+            try
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorResendTooSoon }).ShowDialog();
-                return;
+                ResendResultCode result = await _gateway.ResendCodeAsync(request);
+                HandleResendResult(result);
             }
-
-            bool wasSent = await _deliveryService.SendCodeAsync(_email, _playerDisplayName);
-
-            if (wasSent)
+            catch (GatewayException ex)
             {
-                ClearDigits();
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_CodeResentMessage }).ShowDialog();
-            }
-            else
-            {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorSendFailed }).ShowDialog();
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -152,37 +140,73 @@ namespace YachtDice.Views
             return maskedEmail;
         }
 
+        private static void ShowMessage(string message)
+        {
+            new CustomDialogWindow(new DialogContentDto { Message = message }).ShowDialog();
+        }
+
         private bool IsCodeComplete()
         {
             return _digitBoxes.All(box => box.Text.Length > 0);
         }
 
-        private void VerifyCode()
+        private async Task VerifyCodeAsync()
         {
-            string code = string.Concat(_digitBoxes.Select(box => box.Text));
-            TwoFactorValidationResult result = _codeService.Validate(_email, code);
+            var request = new VerifyCodeRequestDto
+            {
+                Email = _email,
+                Code = string.Concat(_digitBoxes.Select(box => box.Text))
+            };
 
-            HandleValidationResult(result);
+            try
+            {
+                VerificationResultCode result = await _gateway.VerifyCodeAsync(request);
+                HandleVerificationResult(result);
+            }
+            catch (GatewayException ex)
+            {
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
         }
 
-        private void HandleValidationResult(TwoFactorValidationResult result)
+        private void HandleVerificationResult(VerificationResultCode result)
         {
             switch (result)
             {
-                case TwoFactorValidationResult.Valid:
+                case VerificationResultCode.Valid:
                     OpenMenuWindow();
                     break;
-                case TwoFactorValidationResult.Expired:
-                    new CustomDialogWindow(new DialogContentDto { Message = Strings.TwoFactor_ErrorCodeExpired }).ShowDialog();
+                case VerificationResultCode.Expired:
+                    ShowMessage(Strings.TwoFactor_ErrorCodeExpired);
                     ClearDigits();
                     break;
-                case TwoFactorValidationResult.Locked:
-                    new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D19_Validation2FA }).ShowDialog();
+                case VerificationResultCode.Locked:
+                    ShowMessage(Strings.Dialogs_D19_Validation2FA);
                     ClearDigits();
                     break;
                 default:
-                    new CustomDialogWindow(new DialogContentDto { Message = Strings.Dialogs_D18_Validation2FA }).ShowDialog();
+                    ShowMessage(Strings.Dialogs_D18_Validation2FA);
                     ClearDigits();
+                    break;
+            }
+        }
+
+        private void HandleResendResult(ResendResultCode result)
+        {
+            switch (result)
+            {
+                case ResendResultCode.CodeSent:
+                    ClearDigits();
+                    ShowMessage(Strings.TwoFactor_CodeResentMessage);
+                    break;
+                case ResendResultCode.ResendTooSoon:
+                    ShowMessage(Strings.TwoFactor_ErrorResendTooSoon);
+                    break;
+                case ResendResultCode.VerificationLocked:
+                    ShowMessage(Strings.Dialogs_D19_Validation2FA);
+                    break;
+                default:
+                    ShowMessage(Strings.TwoFactor_ErrorSendFailed);
                     break;
             }
         }
@@ -197,7 +221,7 @@ namespace YachtDice.Views
         private void PasteCodeFromClipboard()
         {
             string clipboardText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
-            var digits = new string(clipboardText.Where(char.IsDigit).Take(CodeLength).ToArray());
+            var digits = new string(clipboardText.Where(char.IsDigit).Take(_digitBoxes.Length).ToArray());
 
             ClearDigits();
 
