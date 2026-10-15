@@ -74,6 +74,17 @@ namespace YachtDice.Server.Services
             return response;
         }
 
+        /// <summary>
+        /// Runs an operation that needs no data from the client and converts any failure into a fault.
+        /// </summary>
+        /// <typeparam name="TResponse">Type of the answer of the operation.</typeparam>
+        /// <param name="operation">Operation to run.</param>
+        /// <returns>The answer of the operation.</returns>
+        protected Task<TResponse> ExecuteAsync<TResponse>(Func<Task<TResponse>> operation)
+        {
+            return ExecuteAsync(new object(), operation);
+        }
+
         private static FaultException<ServiceFault> CreateFault(ServiceErrorCode code, string message)
         {
             var fault = new ServiceFault

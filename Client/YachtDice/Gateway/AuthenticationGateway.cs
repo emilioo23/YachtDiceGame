@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.AuthenticationServiceReference;
-using YachtDice.Utils;
 
 namespace YachtDice.Gateway
 {
     /// <summary>
     /// Single entry point of the client to the authentication operations of the server.
     /// </summary>
-    public class AuthenticationGateway
+    public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient>
     {
-        private const string FaultLogMessage = "The server reported an error.";
-        private const string UnavailableLogMessage = "The server could not be reached.";
-        private const string FaultMessage = "The server could not complete the request.";
-        private const string UnavailableMessage = "The server is not available.";
-
         private static readonly Dictionary<ServiceErrorCode, GatewayErrorCode> _errorCodes =
             new Dictionary<ServiceErrorCode, GatewayErrorCode>
             {
@@ -24,8 +17,6 @@ namespace YachtDice.Gateway
                 { ServiceErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
                 { ServiceErrorCode.InvalidRequest, GatewayErrorCode.InvalidRequest }
             };
-
-        private readonly AppLogger _logger = new AppLogger(typeof(AuthenticationGateway));
 
         /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
@@ -71,41 +62,18 @@ namespace YachtDice.Gateway
             return ExecuteAsync(client => client.ResendCodeAsync(request));
         }
 
-        private async Task<TResponse> ExecuteAsync<TResponse>(
-            Func<AuthenticationServiceClient, Task<TResponse>> operation)
+        /// <inheritdoc />
+        protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
-            var client = new AuthenticationServiceClient();
-            TResponse response;
+            var typedFault = fault as FaultException<ServiceFault>;
+            GatewayErrorCode errorCode;
 
-            try
+            if (typedFault == null || !_errorCodes.TryGetValue(typedFault.Detail.Code, out errorCode))
             {
-                response = await operation(client);
-                client.Close();
-            }
-            catch (FaultException<ServiceFault> ex)
-            {
-                _logger.Error(ex, FaultLogMessage);
-                throw new GatewayException(_errorCodes[ex.Detail.Code], FaultMessage, ex);
-            }
-            catch (CommunicationException ex)
-            {
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
-            }
-            catch (TimeoutException ex)
-            {
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
-            }
-            finally
-            {
-                if (client.State != CommunicationState.Closed)
-                {
-                    client.Abort();
-                }
+                errorCode = GatewayErrorCode.UnexpectedError;
             }
 
-            return response;
+            return errorCode;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Server.Logic.Players;
@@ -18,19 +19,27 @@ namespace YachtDice.Server.Services
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly PlayerStatisticsService _statisticsService;
+        private readonly LeaderboardService _leaderboardService;
 
         /// <summary>
         /// Initializes the service with the logic it uses.
         /// </summary>
         /// <param name="statisticsService">Logic that calculates the statistics of the players.</param>
-        public PlayerService(PlayerStatisticsService statisticsService)
+        /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
+        public PlayerService(PlayerStatisticsService statisticsService, LeaderboardService leaderboardService)
         {
             if (statisticsService == null)
             {
                 throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
             }
 
+            if (leaderboardService == null)
+            {
+                throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
+            }
+
             _statisticsService = statisticsService;
+            _leaderboardService = leaderboardService;
         }
 
         /// <summary>
@@ -43,11 +52,27 @@ namespace YachtDice.Server.Services
             return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
         }
 
+        /// <summary>
+        /// Gets the ranking of the best players.
+        /// </summary>
+        /// <returns>The ranking, from the player with most points to the one with least.</returns>
+        public Task<List<LeaderboardEntryDto>> GetLeaderboardAsync()
+        {
+            return ExecuteAsync(ProcessGetLeaderboardAsync);
+        }
+
         private async Task<PlayerStatisticsDto> ProcessGetStatisticsAsync(PlayerStatisticsRequestDto request)
         {
             PlayerStatistics statistics = await _statisticsService.GetStatisticsAsync(request.PlayerName);
 
             return PlayerStatisticsMapper.ToDto(statistics);
+        }
+
+        private async Task<List<LeaderboardEntryDto>> ProcessGetLeaderboardAsync()
+        {
+            List<LeaderboardEntry> entries = await _leaderboardService.GetTopPlayersAsync();
+
+            return LeaderboardMapper.ToDtos(entries);
         }
     }
 }

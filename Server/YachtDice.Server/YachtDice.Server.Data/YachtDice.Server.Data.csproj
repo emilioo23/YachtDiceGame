@@ -91,6 +91,7 @@
     <Compile Include="Repositories\GameHistoryRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
+    <Compile Include="Repositories\PlayerRankingRecord.cs" />
     <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
