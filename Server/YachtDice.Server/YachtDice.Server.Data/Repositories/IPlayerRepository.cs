@@ -16,6 +16,13 @@ namespace YachtDice.Server.Data.Repositories
         Task<List<Player>> FindByEmailAsync(string email);
 
         /// <summary>
+        /// Looks for the player whose display name or username matches the given name.
+        /// </summary>
+        /// <param name="name">Display name or username to look for.</param>
+        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
+        Task<List<Player>> FindByNameAsync(string name);
+
+        /// <summary>
         /// Indicates whether the email is already registered.
         /// </summary>
         /// <param name="email">Email address to check.</param>

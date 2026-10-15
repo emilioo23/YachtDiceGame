@@ -32,6 +32,23 @@ namespace YachtDice.Server.Data.Repositories
                     .ToListAsync();
             }
         }
+        /// <summary>
+        /// Looks for the player whose display name or username matches the given name.
+        /// </summary>
+        /// <param name="name">Display name or username to look for.</param>
+        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
+        public async Task<List<Player>> FindByNameAsync(string name)
+        {
+            ValidateText(name, nameof(name));
+
+            using (var context = new YachtDiceContext())
+            {
+                return await context.Player
+                    .Where(player => player.DisplayName == name || player.Username == name)
+                    .Take(SingleResultCount)
+                    .ToListAsync();
+            }
+        }
 
         /// <summary>
         /// Indicates whether the email is already registered.
