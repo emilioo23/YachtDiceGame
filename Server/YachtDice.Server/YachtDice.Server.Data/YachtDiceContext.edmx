@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="YachtDice.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="YachtDice.Server.Data.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Avatar">
           <Key>
             <PropertyRef Name="Id" />
@@ -708,7 +708,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="YachtDice.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="YachtDice.Server.Data" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Avatar">
           <Key>
             <PropertyRef Name="Id" />
@@ -1475,7 +1475,7 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="YachtDiceModelsStoreContainer" CdmEntityContainer="YachtDiceContext">
           <EntitySetMapping Name="Avatar">
-            <EntityTypeMapping TypeName="YachtDice.Models.Avatar">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Avatar">
               <MappingFragment StoreEntitySet="Avatar">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
@@ -1483,7 +1483,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BackupCode">
-            <EntityTypeMapping TypeName="YachtDice.Models.BackupCode">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.BackupCode">
               <MappingFragment StoreEntitySet="BackupCode">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1493,7 +1493,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Category">
-            <EntityTypeMapping TypeName="YachtDice.Models.Category">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Category">
               <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1501,7 +1501,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Friendship">
-            <EntityTypeMapping TypeName="YachtDice.Models.Friendship">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Friendship">
               <MappingFragment StoreEntitySet="Friendship">
                 <ScalarProperty Name="RequesterId" ColumnName="RequesterId" />
                 <ScalarProperty Name="AddresseeId" ColumnName="AddresseeId" />
@@ -1511,7 +1511,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GameHistory">
-            <EntityTypeMapping TypeName="YachtDice.Models.GameHistory">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.GameHistory">
               <MappingFragment StoreEntitySet="GameHistory">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
@@ -1520,7 +1520,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GameHistoryPlayer">
-            <EntityTypeMapping TypeName="YachtDice.Models.GameHistoryPlayer">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.GameHistoryPlayer">
               <MappingFragment StoreEntitySet="GameHistoryPlayer">
                 <ScalarProperty Name="GameId" ColumnName="GameId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1531,7 +1531,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="KickLog">
-            <EntityTypeMapping TypeName="YachtDice.Models.KickLog">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.KickLog">
               <MappingFragment StoreEntitySet="KickLog">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="HostId" ColumnName="HostId" />
@@ -1543,7 +1543,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Passkey">
-            <EntityTypeMapping TypeName="YachtDice.Models.Passkey">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Passkey">
               <MappingFragment StoreEntitySet="Passkey">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1553,7 +1553,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Player">
-            <EntityTypeMapping TypeName="YachtDice.Models.Player">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Player">
               <MappingFragment StoreEntitySet="Player">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AvatarId" ColumnName="AvatarId" />
@@ -1573,7 +1573,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PlayerReport">
-            <EntityTypeMapping TypeName="YachtDice.Models.PlayerReport">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.PlayerReport">
               <MappingFragment StoreEntitySet="PlayerReport">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ReporterId" ColumnName="ReporterId" />
@@ -1587,7 +1587,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PlayerSettings">
-            <EntityTypeMapping TypeName="YachtDice.Models.PlayerSettings">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.PlayerSettings">
               <MappingFragment StoreEntitySet="PlayerSettings">
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -1599,7 +1599,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PwdResetToken">
-            <EntityTypeMapping TypeName="YachtDice.Models.PwdResetToken">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.PwdResetToken">
               <MappingFragment StoreEntitySet="PwdResetToken">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1609,7 +1609,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Room">
-            <EntityTypeMapping TypeName="YachtDice.Models.Room">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Room">
               <MappingFragment StoreEntitySet="Room">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="HostPlayerId" ColumnName="HostPlayerId" />
@@ -1624,7 +1624,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RoomInvite">
-            <EntityTypeMapping TypeName="YachtDice.Models.RoomInvite">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.RoomInvite">
               <MappingFragment StoreEntitySet="RoomInvite">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="InviterId" ColumnName="InviterId" />
@@ -1635,7 +1635,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RoomPlayer">
-            <EntityTypeMapping TypeName="YachtDice.Models.RoomPlayer">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.RoomPlayer">
               <MappingFragment StoreEntitySet="RoomPlayer">
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1645,7 +1645,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Scorecard">
-            <EntityTypeMapping TypeName="YachtDice.Models.Scorecard">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.Scorecard">
               <MappingFragment StoreEntitySet="Scorecard">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
@@ -1656,7 +1656,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ScorecardEntry">
-            <EntityTypeMapping TypeName="YachtDice.Models.ScorecardEntry">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.ScorecardEntry">
               <MappingFragment StoreEntitySet="ScorecardEntry">
                 <ScalarProperty Name="ScorecardId" ColumnName="ScorecardId" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
@@ -1666,7 +1666,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TurnState">
-            <EntityTypeMapping TypeName="YachtDice.Models.TurnState">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.TurnState">
               <MappingFragment StoreEntitySet="TurnState">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="GameId" ColumnName="GameId" />
@@ -1677,7 +1677,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TwoFactorAuth">
-            <EntityTypeMapping TypeName="YachtDice.Models.TwoFactorAuth">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.TwoFactorAuth">
               <MappingFragment StoreEntitySet="TwoFactorAuth">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />

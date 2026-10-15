@@ -97,14 +97,8 @@ namespace YachtDice.Server.Services
         private async Task<LoginResponseDto> ProcessLoginAsync(LoginRequestDto request)
         {
             LoginResult result = await _loginService.LoginAsync(LoginMapper.ToLoginRequest(request));
-            var response = LoginMapper.ToResponse(result);
 
-            if (result.Status == LoginStatus.VerificationCodeSent)
-            {
-                response.ChallengeId = _verificationService.CreateChallenge();
-            }
-
-            return response;
+            return LoginMapper.ToResponse(result);
         }
 
         private async Task<RegisterResultCode> ProcessRegisterAsync(RegisterRequestDto request)

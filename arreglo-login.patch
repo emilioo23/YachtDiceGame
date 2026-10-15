@@ -1,0 +1,358 @@
+diff --git a/Client/YachtDice/App.config b/Client/YachtDice/App.config
+index cee8009..3cca451 100644
+--- a/Client/YachtDice/App.config
++++ b/Client/YachtDice/App.config
+@@ -55,20 +55,14 @@
+      <security mode="None" />
+     </binding>
+     <binding name="NetTcpBinding_IPlayerService">
+-     <security mode="Transport">
+-      <transport clientCredentialType="None" />
+-     </security>
++     <security mode="None" />
+     </binding>
+    </netTcpBinding>
+   </bindings>
+ 		<client>
+    <endpoint address="net.tcp://localhost:8734/YachtDice/Player"
+     binding="netTcpBinding" bindingConfiguration="NetTcpBinding_IPlayerService"
+-    contract="PlayerServiceReference.IPlayerService" name="NetTcpBinding_IPlayerService">
+-    <identity>
+-     <dns value="localhost" />
+-    </identity>
+-   </endpoint>
++    contract="PlayerServiceReference.IPlayerService" name="NetTcpBinding_IPlayerService" />
+    <endpoint address="net.tcp://localhost:8733/YachtDice/Authentication"
+     binding="netTcpBinding" bindingConfiguration="NetTcpBinding_IAuthenticationService"
+     contract="AuthenticationServiceReference.IAuthenticationService"
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Data/YachtDiceContext.edmx b/Server/YachtDice.Server/YachtDice.Server.Data/YachtDiceContext.edmx
+index a9b1364..baab860 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Data/YachtDiceContext.edmx
++++ b/Server/YachtDice.Server/YachtDice.Server.Data/YachtDiceContext.edmx
+@@ -4,7 +4,7 @@
+   <edmx:Runtime>
+     <!-- SSDL content -->
+     <edmx:StorageModels>
+-      <Schema Namespace="YachtDice.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
++      <Schema Namespace="YachtDice.Server.Data.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+         <EntityType Name="Avatar">
+           <Key>
+             <PropertyRef Name="Id" />
+@@ -708,7 +708,7 @@
+     </edmx:StorageModels>
+     <!-- CSDL content -->
+     <edmx:ConceptualModels>
+-      <Schema Namespace="YachtDice.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
++      <Schema Namespace="YachtDice.Server.Data" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+         <EntityType Name="Avatar">
+           <Key>
+             <PropertyRef Name="Id" />
+@@ -1475,7 +1475,7 @@
+       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+         <EntityContainerMapping StorageEntityContainer="YachtDiceModelsStoreContainer" CdmEntityContainer="YachtDiceContext">
+           <EntitySetMapping Name="Avatar">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Avatar">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Avatar">
+               <MappingFragment StoreEntitySet="Avatar">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+@@ -1483,7 +1483,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="BackupCode">
+-            <EntityTypeMapping TypeName="YachtDice.Models.BackupCode">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.BackupCode">
+               <MappingFragment StoreEntitySet="BackupCode">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1493,7 +1493,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Category">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Category">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Category">
+               <MappingFragment StoreEntitySet="Category">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="Name" ColumnName="Name" />
+@@ -1501,7 +1501,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Friendship">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Friendship">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Friendship">
+               <MappingFragment StoreEntitySet="Friendship">
+                 <ScalarProperty Name="RequesterId" ColumnName="RequesterId" />
+                 <ScalarProperty Name="AddresseeId" ColumnName="AddresseeId" />
+@@ -1511,7 +1511,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="GameHistory">
+-            <EntityTypeMapping TypeName="YachtDice.Models.GameHistory">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.GameHistory">
+               <MappingFragment StoreEntitySet="GameHistory">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+@@ -1520,7 +1520,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="GameHistoryPlayer">
+-            <EntityTypeMapping TypeName="YachtDice.Models.GameHistoryPlayer">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.GameHistoryPlayer">
+               <MappingFragment StoreEntitySet="GameHistoryPlayer">
+                 <ScalarProperty Name="GameId" ColumnName="GameId" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1531,7 +1531,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="KickLog">
+-            <EntityTypeMapping TypeName="YachtDice.Models.KickLog">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.KickLog">
+               <MappingFragment StoreEntitySet="KickLog">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="HostId" ColumnName="HostId" />
+@@ -1543,7 +1543,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Passkey">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Passkey">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Passkey">
+               <MappingFragment StoreEntitySet="Passkey">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1553,7 +1553,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Player">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Player">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Player">
+               <MappingFragment StoreEntitySet="Player">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="AvatarId" ColumnName="AvatarId" />
+@@ -1573,7 +1573,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="PlayerReport">
+-            <EntityTypeMapping TypeName="YachtDice.Models.PlayerReport">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.PlayerReport">
+               <MappingFragment StoreEntitySet="PlayerReport">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="ReporterId" ColumnName="ReporterId" />
+@@ -1587,7 +1587,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="PlayerSettings">
+-            <EntityTypeMapping TypeName="YachtDice.Models.PlayerSettings">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.PlayerSettings">
+               <MappingFragment StoreEntitySet="PlayerSettings">
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                 <ScalarProperty Name="Title" ColumnName="Title" />
+@@ -1599,7 +1599,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="PwdResetToken">
+-            <EntityTypeMapping TypeName="YachtDice.Models.PwdResetToken">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.PwdResetToken">
+               <MappingFragment StoreEntitySet="PwdResetToken">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1609,7 +1609,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Room">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Room">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Room">
+               <MappingFragment StoreEntitySet="Room">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="HostPlayerId" ColumnName="HostPlayerId" />
+@@ -1624,7 +1624,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="RoomInvite">
+-            <EntityTypeMapping TypeName="YachtDice.Models.RoomInvite">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.RoomInvite">
+               <MappingFragment StoreEntitySet="RoomInvite">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="InviterId" ColumnName="InviterId" />
+@@ -1635,7 +1635,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="RoomPlayer">
+-            <EntityTypeMapping TypeName="YachtDice.Models.RoomPlayer">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.RoomPlayer">
+               <MappingFragment StoreEntitySet="RoomPlayer">
+                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1645,7 +1645,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="Scorecard">
+-            <EntityTypeMapping TypeName="YachtDice.Models.Scorecard">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.Scorecard">
+               <MappingFragment StoreEntitySet="Scorecard">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+@@ -1656,7 +1656,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="ScorecardEntry">
+-            <EntityTypeMapping TypeName="YachtDice.Models.ScorecardEntry">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.ScorecardEntry">
+               <MappingFragment StoreEntitySet="ScorecardEntry">
+                 <ScalarProperty Name="ScorecardId" ColumnName="ScorecardId" />
+                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+@@ -1666,7 +1666,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="TurnState">
+-            <EntityTypeMapping TypeName="YachtDice.Models.TurnState">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.TurnState">
+               <MappingFragment StoreEntitySet="TurnState">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="GameId" ColumnName="GameId" />
+@@ -1677,7 +1677,7 @@
+             </EntityTypeMapping>
+           </EntitySetMapping>
+           <EntitySetMapping Name="TwoFactorAuth">
+-            <EntityTypeMapping TypeName="YachtDice.Models.TwoFactorAuth">
++            <EntityTypeMapping TypeName="YachtDice.Server.Data.TwoFactorAuth">
+               <MappingFragment StoreEntitySet="TwoFactorAuth">
+                 <ScalarProperty Name="Id" ColumnName="Id" />
+                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Host/App.config b/Server/YachtDice.Server/YachtDice.Server.Host/App.config
+index ec68ca7..f3d5681 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Host/App.config
++++ b/Server/YachtDice.Server/YachtDice.Server.Host/App.config
+@@ -60,12 +60,6 @@
+ 				<behavior name="DefaultServiceBehavior">
+ 					<serviceMetadata />
+ 					<serviceDebug includeExceptionDetailInFaults="false" />
+-					<serviceCredentials>
+-						<serviceCertificate findValue="330F3CC1C7711F3F5B0AB4B2CD755C25829A68BC" 
+-											storeLocation="LocalMachine" 
+-											storeName="My" 
+-											x509FindType="FindByThumbprint" />
+-					</serviceCredentials>
+ 				</behavior>
+ 			</serviceBehaviors>
+ 		</behaviors>
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Host/Program.cs b/Server/YachtDice.Server/YachtDice.Server.Host/Program.cs
+index 22906a0..d583a4c 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Host/Program.cs
++++ b/Server/YachtDice.Server/YachtDice.Server.Host/Program.cs
+@@ -1,6 +1,5 @@
+ ﻿using System;
+ using System.Collections.Generic;
+-using System.Reflection;
+ using System.ServiceModel;
+ using YachtDice.Server.Data.Repositories;
+ using YachtDice.Server.Logic.Authentication;
+@@ -21,23 +20,6 @@ namespace YachtDice.Server.Host
+ 
+         private static void Main()
+         {
+-            Console.WriteLine("=== DIAGNÓSTICO DE RECURSOS INCRUSTADOS ===");
+-
+-            // Usamos PlayerRepository porque sabemos que pertenece al ensamblado YachtDice.Server.Data
+-            Assembly assembly = typeof(PlayerRepository).Assembly;
+-            string[] resourceNames = assembly.GetManifestResourceNames();
+-
+-            foreach (string name in resourceNames)
+-            {
+-                if (name.EndsWith(".csdl") || name.EndsWith(".ssdl") || name.EndsWith(".msl"))
+-                {
+-                    Console.ForegroundColor = ConsoleColor.Green;
+-                    Console.WriteLine(name);
+-                    Console.ResetColor();
+-                }
+-            }
+-            Console.WriteLine("===========================================\n");
+-
+             var logger = new AppLogger(typeof(Program));
+             var serviceHosts = new List<ServiceHost>();
+ 
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginResult.cs b/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginResult.cs
+index 931a724..c62ab0b 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginResult.cs
++++ b/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginResult.cs
+@@ -11,9 +11,21 @@
+         /// <param name="status">Status of the login.</param>
+         /// <param name="displayName">Player's display name.</param>
+         public LoginResult(LoginStatus status, string displayName)
++            : this(status, displayName, string.Empty)
++        {
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="LoginResult"/> class with its verification challenge.
++        /// </summary>
++        /// <param name="status">Status of the login.</param>
++        /// <param name="displayName">Player's display name.</param>
++        /// <param name="challengeId">Identifier of the verification challenge the code was sent for.</param>
++        public LoginResult(LoginStatus status, string displayName, string challengeId)
+         {
+             Status = status;
+             DisplayName = displayName;
++            ChallengeId = challengeId;
+         }
+ 
+         /// <summary>
+@@ -25,5 +37,10 @@
+         /// Player's display name.
+         /// </summary>
+         public string DisplayName { get; }
++
++        /// <summary>
++        /// Identifier of the verification challenge; empty if no code was sent.
++        /// </summary>
++        public string ChallengeId { get; }
+     }
+ }
+\ No newline at end of file
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginService.cs b/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginService.cs
+index 5910e79..f01dbe6 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginService.cs
++++ b/Server/YachtDice.Server/YachtDice.Server.Logic/Authentication/LoginService.cs
+@@ -122,7 +122,7 @@ namespace YachtDice.Server.Logic.Authentication
+             bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
+             LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
+ 
+-            return new LoginResult(status, player.DisplayName);
++            return new LoginResult(status, player.DisplayName, challengeId);
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Services/AuthenticationService.cs b/Server/YachtDice.Server/YachtDice.Server.Services/AuthenticationService.cs
+index ab1dafd..b46758e 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Services/AuthenticationService.cs
++++ b/Server/YachtDice.Server/YachtDice.Server.Services/AuthenticationService.cs
+@@ -97,14 +97,8 @@ namespace YachtDice.Server.Services
+         private async Task<LoginResponseDto> ProcessLoginAsync(LoginRequestDto request)
+         {
+             LoginResult result = await _loginService.LoginAsync(LoginMapper.ToLoginRequest(request));
+-            var response = LoginMapper.ToResponse(result);
+ 
+-            if (result.Status == LoginStatus.VerificationCodeSent)
+-            {
+-                response.ChallengeId = _verificationService.CreateChallenge();
+-            }
+-
+-            return response;
++            return LoginMapper.ToResponse(result);
+         }
+ 
+         private async Task<RegisterResultCode> ProcessRegisterAsync(RegisterRequestDto request)
+diff --git a/Server/YachtDice.Server/YachtDice.Server.Services/Mapping/LoginMapper.cs b/Server/YachtDice.Server/YachtDice.Server.Services/Mapping/LoginMapper.cs
+index 37dec20..74c6c0b 100644
+--- a/Server/YachtDice.Server/YachtDice.Server.Services/Mapping/LoginMapper.cs
++++ b/Server/YachtDice.Server/YachtDice.Server.Services/Mapping/LoginMapper.cs
+@@ -44,7 +44,8 @@ namespace YachtDice.Server.Services.Mapping
+             return new LoginResponseDto
+             {
+                 Code = _resultCodes[result.Status],
+-                DisplayName = result.DisplayName
++                DisplayName = result.DisplayName,
++                ChallengeId = result.ChallengeId
+             };
+         }
+     }

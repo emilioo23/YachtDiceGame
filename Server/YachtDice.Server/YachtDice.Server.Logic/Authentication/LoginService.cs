@@ -122,7 +122,7 @@ namespace YachtDice.Server.Logic.Authentication
             bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
             LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
-            return new LoginResult(status, player.DisplayName);
+            return new LoginResult(status, player.DisplayName, challengeId);
         }
     }
 }
