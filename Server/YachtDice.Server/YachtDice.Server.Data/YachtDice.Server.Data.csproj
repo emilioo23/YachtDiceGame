@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -114,17 +116,17 @@
     <Compile Include="TwoFactorAuth.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext.Context1.cs">
+    <Compile Include="YachtDiceContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext1.cs">
+    <Compile Include="YachtDiceContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext1.Designer.cs">
+    <Compile Include="YachtDiceContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
@@ -135,24 +137,26 @@
     <None Include="packages.config" />
     <EntityDeploy Include="YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>YachtDiceContext1.Designer.cs</LastGenOutput>
+      <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="YachtDiceContext.edmx.diagram">
       <DependentUpon>YachtDiceContext.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="YachtDiceContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>YachtDiceContext.Context1.cs</LastGenOutput>
+      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
+      <LastGenOutput>YachtDiceContext.Context.cs</LastGenOutput>
     </Content>
     <Content Include="YachtDiceContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>YachtDiceContext1.cs</LastGenOutput>
+      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
+      <LastGenOutput>YachtDiceContext.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -46,4 +46,31 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
+  <xs:element name="GetLeaderboard">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLeaderboardResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetLeaderboardResult" nillable="true" type="tns:ArrayOfLeaderboardEntryDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfLeaderboardEntryDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LeaderboardEntryDto" nillable="true" type="tns:LeaderboardEntryDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLeaderboardEntryDto" nillable="true" type="tns:ArrayOfLeaderboardEntryDto" />
+  <xs:complexType name="LeaderboardEntryDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Position" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalPoints" type="xs:int" />
+      <xs:element minOccurs="0" name="Wins" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardEntryDto" nillable="true" type="tns:LeaderboardEntryDto" />
 </xs:schema>

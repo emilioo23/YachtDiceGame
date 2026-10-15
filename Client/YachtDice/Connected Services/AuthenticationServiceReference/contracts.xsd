@@ -24,6 +24,7 @@
   </xs:element>
   <xs:complexType name="LoginResponseDto">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" type="tns:LoginResultCode" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -98,6 +99,7 @@
   </xs:element>
   <xs:complexType name="VerifyCodeRequestDto">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -128,6 +130,7 @@
   </xs:element>
   <xs:complexType name="ResendCodeRequestDto">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>

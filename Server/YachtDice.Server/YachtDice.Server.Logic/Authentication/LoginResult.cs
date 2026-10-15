@@ -1,15 +1,15 @@
 ﻿namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Result of the first step of the login.
+    /// Represents the outcome of an authentication attempt.
     /// </summary>
     public class LoginResult
     {
         /// <summary>
-        /// Initializes the result.
+        /// Initializes a new instance of the <see cref="LoginResult"/> class.
         /// </summary>
-        /// <param name="status">Outcome of the login attempt.</param>
-        /// <param name="displayName">Player's name, or an empty text if the login did not succeed.</param>
+        /// <param name="status">Status of the login.</param>
+        /// <param name="displayName">Player's display name.</param>
         public LoginResult(LoginStatus status, string displayName)
         {
             Status = status;
@@ -17,12 +17,12 @@
         }
 
         /// <summary>
-        /// Outcome of the login attempt.
+        /// Status of the login attempt.
         /// </summary>
         public LoginStatus Status { get; }
 
         /// <summary>
-        /// Player's name, used by the client in the verification step.
+        /// Player's display name.
         /// </summary>
         public string DisplayName { get; }
     }

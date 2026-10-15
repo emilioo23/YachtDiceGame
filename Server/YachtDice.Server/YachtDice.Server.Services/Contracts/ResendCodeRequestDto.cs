@@ -15,6 +15,12 @@ namespace YachtDice.Server.Services.Contracts
         public string Email { get; set; }
 
         /// <summary>
+        /// Unique challenge identifier tied to the login session.
+        /// </summary>
+        [DataMember]
+        public string ChallengeId { get; set; }
+
+        /// <summary>
         /// Name of the language of the client (for example "es-MX"), used to write the email.
         /// </summary>
         [DataMember]

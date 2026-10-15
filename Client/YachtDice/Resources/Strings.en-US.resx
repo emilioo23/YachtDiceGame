@@ -1092,4 +1092,7 @@
   <data name="Auth_GuestDisplayName" xml:space="preserve">
     <value>Guest</value>
   </data>
+  <data name="Leaderboard_ConnectionError" xml:space="preserve">
+    <value>Could not connect to the server to retrieve the leaderboard.</value>
+  </data>
 </root>

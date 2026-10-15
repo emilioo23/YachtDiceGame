@@ -9,9 +9,6 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
-    /// <summary>
-    /// Initial window for user authentication and access to the system.
-    /// </summary>
     public partial class LoginWindow : Window
     {
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
@@ -19,9 +16,6 @@ namespace YachtDice.Views
         private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
-        /// <summary>
-        /// Initializes the login and registration window.
-        /// </summary>
         public LoginWindow()
         {
             InitializeComponent();
@@ -159,7 +153,7 @@ namespace YachtDice.Views
 
             if (response.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(request.Email, response.DisplayName);
+                OpenVerificationWindow(request.Email, response.DisplayName, response.ChallengeId);
             }
             else
             {
@@ -191,17 +185,13 @@ namespace YachtDice.Views
             }
         }
 
-        private void OpenVerificationWindow(string email, string playerDisplayName)
+        private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
         {
-            var twoFactorWindow = new TwoFactorWindow(email, playerDisplayName);
+            var twoFactorWindow = new TwoFactorWindow(email, playerDisplayName, challengeId);
             twoFactorWindow.Show();
             this.Close();
         }
 
-        /// <summary>
-        /// Shows a dialog box centered on the current window with the given message.
-        /// </summary>
-        /// <param name="message">Text to show in the dialog.</param>
         private void ShowDialogMessage(string message)
         {
             var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })

@@ -19,5 +19,11 @@ namespace YachtDice.Server.Services.Contracts
         /// </summary>
         [DataMember]
         public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Unique challenge identifier tied to the login session.
+        /// </summary>
+        [DataMember]
+        public string ChallengeId { get; set; }
     }
 }

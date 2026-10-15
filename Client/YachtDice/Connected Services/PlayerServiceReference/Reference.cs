@@ -258,6 +258,99 @@ namespace YachtDice.PlayerServiceReference {
         InvalidRequest = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LeaderboardEntryDto", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class LeaderboardEntryDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DisplayNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PositionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalPointsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DisplayName {
+            get {
+                return this.DisplayNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
+                    this.DisplayNameField = value;
+                    this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Position {
+            get {
+                return this.PositionField;
+            }
+            set {
+                if ((this.PositionField.Equals(value) != true)) {
+                    this.PositionField = value;
+                    this.RaisePropertyChanged("Position");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TotalPoints {
+            get {
+                return this.TotalPointsField;
+            }
+            set {
+                if ((this.TotalPointsField.Equals(value) != true)) {
+                    this.TotalPointsField = value;
+                    this.RaisePropertyChanged("TotalPoints");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -268,6 +361,13 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
         System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatisticsDto> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.LeaderboardEntryDto[] GetLeaderboard();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
+        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntryDto[]> GetLeaderboardAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -303,6 +403,14 @@ namespace YachtDice.PlayerServiceReference {
         
         public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatisticsDto> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request) {
             return base.Channel.GetStatisticsAsync(request);
+        }
+        
+        public YachtDice.PlayerServiceReference.LeaderboardEntryDto[] GetLeaderboard() {
+            return base.Channel.GetLeaderboard();
+        }
+        
+        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntryDto[]> GetLeaderboardAsync() {
+            return base.Channel.GetLeaderboardAsync();
         }
     }
 }

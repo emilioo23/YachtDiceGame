@@ -25,6 +25,7 @@ namespace YachtDice.Server.Logic.Authentication
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly TwoFactorVerificationService _verificationService;
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -32,10 +33,12 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="codeService">Service that keeps the verification codes (shared instance).</param>
         /// <param name="deliveryService">Service that sends the verification code by email.</param>
+        /// <param name="verificationService">Service that handles verification challenges.</param>
         public LoginService(
             IPlayerRepository playerRepository,
             TwoFactorCodeService codeService,
-            TwoFactorDeliveryService deliveryService)
+            TwoFactorDeliveryService deliveryService,
+            TwoFactorVerificationService verificationService)
         {
             if (playerRepository == null)
             {
@@ -52,9 +55,15 @@ namespace YachtDice.Server.Logic.Authentication
                 throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             }
 
+            if (verificationService == null)
+            {
+                throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+            }
+
             _playerRepository = playerRepository;
             _codeService = codeService;
             _deliveryService = deliveryService;
+            _verificationService = verificationService;
         }
 
         /// <summary>
@@ -109,7 +118,8 @@ namespace YachtDice.Server.Logic.Authentication
 
         private async Task<LoginResult> SendCodeAsync(Player player, CultureInfo culture)
         {
-            bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture);
+            string challengeId = _verificationService.CreateChallenge();
+            bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
             LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player.DisplayName);

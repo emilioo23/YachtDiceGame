@@ -26,7 +26,6 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int DecimalBase = 10;
         private const int BufferStartIndex = 0;
         private const char PaddingCharacter = '0';
-        private const string EmptyEmailMessage = "The email address cannot be empty.";
 
         private readonly object _syncRoot = new object();
 
@@ -34,14 +33,13 @@ namespace YachtDice.Server.Logic.TwoFactor
             new Dictionary<string, TwoFactorCodeEntry>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Generates a new code for the given email and stores it.
+        /// Generates a new code for the given email and stores it with its challenge.
         /// </summary>
         /// <param name="email">Player's email address.</param>
+        /// <param name="challengeId">Unique session challenge identifier.</param>
         /// <returns>Numeric code of <see cref="CodeLength"/> digits.</returns>
-        public string GenerateCode(string email)
+        public string GenerateCode(string email, string challengeId)
         {
-            ValidateEmail(email);
-
             string code = CreateRandomCode();
             DateTime now = DateTime.UtcNow;
 
@@ -50,7 +48,6 @@ namespace YachtDice.Server.Logic.TwoFactor
                 DateTime lockedUntil = DateTime.MinValue;
                 TwoFactorCodeEntry previousEntry;
 
-                // The current lockout is kept so that resending the code does not skip it
                 if (_entries.TryGetValue(email, out previousEntry))
                 {
                     lockedUntil = previousEntry.LockedUntil;
@@ -59,6 +56,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 _entries[email] = new TwoFactorCodeEntry
                 {
                     Code = code,
+                    ChallengeId = challengeId,
                     CreatedAt = now,
                     ExpiresAt = now.AddMinutes(ExpirationMinutes),
                     FailedAttempts = 0,
@@ -70,15 +68,23 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
-        /// Validates the entered code against the last one issued for the email.
+        /// Creates a new unique challenge identifier.
+        /// </summary>
+        /// <returns>Challenge string.</returns>
+        public string CreateNewChallengeId()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+        /// <summary>
+        /// Validates the entered code against the last one issued for the email and challenge.
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="code">Code entered by the player.</param>
+        /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationResult Validate(string email, string code)
+        public TwoFactorValidationResult Validate(string email, string code, string challengeId)
         {
-            ValidateEmail(email);
-
             TwoFactorValidationResult result = TwoFactorValidationResult.Expired;
 
             lock (_syncRoot)
@@ -87,7 +93,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
                 if (_entries.TryGetValue(email, out entry))
                 {
-                    result = EvaluateEntry(email, entry, code);
+                    result = EvaluateEntry(email, entry, code, challengeId);
                 }
             }
 
@@ -101,8 +107,6 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>True if the lockout is still active.</returns>
         public bool IsLocked(string email)
         {
-            ValidateEmail(email);
-
             var isLocked = false;
 
             lock (_syncRoot)
@@ -119,21 +123,20 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
-        /// Indicates whether the minimum wait to request another code has passed.
+        /// Indicates whether the minimum wait to request another code has passed for the challenge.
         /// </summary>
         /// <param name="email">Player's email address.</param>
+        /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>True if the code can be resent.</returns>
-        public bool IsResendAllowed(string email)
+        public bool IsResendAllowed(string email, string challengeId)
         {
-            ValidateEmail(email);
-
             var isAllowed = true;
 
             lock (_syncRoot)
             {
                 TwoFactorCodeEntry entry;
 
-                if (_entries.TryGetValue(email, out entry))
+                if (_entries.TryGetValue(email, out entry) && entry.ChallengeId == challengeId)
                 {
                     isAllowed = DateTime.UtcNow >= entry.CreatedAt.AddSeconds(ResendCooldownSeconds);
                 }
@@ -142,20 +145,16 @@ namespace YachtDice.Server.Logic.TwoFactor
             return isAllowed;
         }
 
-        private static void ValidateEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                throw new ArgumentException(EmptyEmailMessage, nameof(email));
-            }
-        }
-
-        private TwoFactorValidationResult EvaluateEntry(string email, TwoFactorCodeEntry entry, string code)
+        private TwoFactorValidationResult EvaluateEntry(string email, TwoFactorCodeEntry entry, string code, string challengeId)
         {
             TwoFactorValidationResult result;
             DateTime now = DateTime.UtcNow;
 
-            if (entry.LockedUntil > now)
+            if (entry.ChallengeId != challengeId)
+            {
+                result = TwoFactorValidationResult.Incorrect;
+            }
+            else if (entry.LockedUntil > now)
             {
                 result = TwoFactorValidationResult.Locked;
             }
