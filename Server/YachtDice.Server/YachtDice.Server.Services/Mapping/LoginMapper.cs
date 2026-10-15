@@ -44,7 +44,8 @@ namespace YachtDice.Server.Services.Mapping
             return new LoginResponseDto
             {
                 Code = _resultCodes[result.Status],
-                DisplayName = result.DisplayName
+                DisplayName = result.DisplayName,
+                ChallengeId = result.ChallengeId
             };
         }
     }

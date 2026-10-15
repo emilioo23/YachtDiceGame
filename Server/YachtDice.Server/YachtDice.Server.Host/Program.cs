@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.ServiceModel;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
@@ -21,23 +20,6 @@ namespace YachtDice.Server.Host
 
         private static void Main()
         {
-            Console.WriteLine("=== DIAGNÓSTICO DE RECURSOS INCRUSTADOS ===");
-
-            // Usamos PlayerRepository porque sabemos que pertenece al ensamblado YachtDice.Server.Data
-            Assembly assembly = typeof(PlayerRepository).Assembly;
-            string[] resourceNames = assembly.GetManifestResourceNames();
-
-            foreach (string name in resourceNames)
-            {
-                if (name.EndsWith(".csdl") || name.EndsWith(".ssdl") || name.EndsWith(".msl"))
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(name);
-                    Console.ResetColor();
-                }
-            }
-            Console.WriteLine("===========================================\n");
-
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
 
