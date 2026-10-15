@@ -63,9 +63,10 @@ namespace YachtDice.Server.Host
 
         private static PlayerService CreatePlayerService()
         {
-            var statisticsService = new PlayerStatisticsService(new PlayerRepository(), new GameHistoryRepository());
+            var gameHistoryRepository = new GameHistoryRepository();
+            var statisticsService = new PlayerStatisticsService(new PlayerRepository(), gameHistoryRepository);
 
-            return new PlayerService(statisticsService);
+            return new PlayerService(statisticsService, new LeaderboardService(gameHistoryRepository));
         }
     }
 }

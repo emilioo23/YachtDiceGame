@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Server.Services.Contracts;
 
@@ -18,5 +19,13 @@ namespace YachtDice.Server.Services
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         Task<PlayerStatisticsDto> GetStatisticsAsync(PlayerStatisticsRequestDto request);
+
+        /// <summary>
+        /// Gets the ranking of the best players.
+        /// </summary>
+        /// <returns>The ranking, from the player with most points to the one with least.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        Task<List<LeaderboardEntryDto>> GetLeaderboardAsync();
     }
 }

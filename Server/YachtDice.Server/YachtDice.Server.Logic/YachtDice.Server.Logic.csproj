@@ -56,6 +56,8 @@
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Logging\AppLogger.cs" />
+    <Compile Include="Players\LeaderboardEntry.cs" />
+    <Compile Include="Players\LeaderboardService.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Players\PlayerStatistics.cs" />
     <Compile Include="Players\PlayerStatisticsService.cs" />

@@ -24,5 +24,39 @@ namespace YachtDice.Server.Data.Repositories
                     .ToListAsync();
             }
         }
+
+        /// <summary>
+        /// Gets the players with the most accumulated points, from highest to lowest.
+        /// </summary>
+        /// <param name="maxEntries">Maximum number of players to return.</param>
+        /// <returns>The ranking, or an empty list if there are no games played.</returns>
+        public async Task<List<PlayerRankingRecord>> GetRankingAsync(int maxEntries)
+        {
+            using (var context = new YachtDiceContext())
+            {
+                return await context.GameHistoryPlayer
+                    .GroupBy(entry => entry.PlayerId)
+                    .Select(group => new
+                    {
+                        PlayerId = group.Key,
+                        TotalPoints = group.Sum(entry => entry.FinalScore),
+                        Wins = group.Count(entry => entry.IsWinner == true)
+                    })
+                    .Join(
+                        context.Player,
+                        totals => totals.PlayerId,
+                        player => player.Id,
+                        (totals, player) => new PlayerRankingRecord
+                        {
+                            DisplayName = player.DisplayName,
+                            TotalPoints = totals.TotalPoints,
+                            Wins = totals.Wins
+                        })
+                    .OrderByDescending(record => record.TotalPoints)
+                    .ThenBy(record => record.DisplayName)
+                    .Take(maxEntries)
+                    .ToListAsync();
+            }
+        }
     }
 }
