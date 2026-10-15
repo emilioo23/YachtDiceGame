@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationService.cs" />
+    <Compile Include="Contracts\LoginRequestDto.cs" />
+    <Compile Include="Contracts\LoginResponseDto.cs" />
+    <Compile Include="Contracts\LoginResultCode.cs" />
+    <Compile Include="Contracts\ServiceErrorCode.cs" />
+    <Compile Include="Contracts\ServiceFault.cs" />
+    <Compile Include="Contracts\ServiceNamespaces.cs" />
+    <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="Mapping\LoginMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
