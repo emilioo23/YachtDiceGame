@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.PlayerServiceReference;
@@ -41,6 +42,20 @@ namespace YachtDice.Gateway
             }
 
             return errorCode;
+        }
+
+        /// <summary>
+        /// Gets the leaderboard ranking entries.
+        /// </summary>
+        /// <returns>A list of leaderboard entry DTOs.</returns>
+        /// <exception cref="GatewayException">The request could not be completed.</exception>
+        public async Task<List<LeaderboardEntryDto>> GetLeaderboardAsync()
+        {
+            using (var client = new PlayerServiceClient())
+            {
+                var leaderboardArray = await client.GetLeaderboardAsync();
+                return leaderboardArray.ToList();
+            }
         }
     }
 }

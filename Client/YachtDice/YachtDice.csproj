@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,12 +52,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=3.5.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.3.5.0\lib\net462\log4net.dll</HintPath>
     </Reference>
@@ -71,22 +64,6 @@
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Http.Connections.Common, Version=10.0.12.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Http.Connections.Common.10.0.12\lib\net462\Microsoft.AspNetCore.Http.Connections.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Client, Version=10.0.12.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.SignalR.Client.10.0.12\lib\net462\Microsoft.AspNetCore.SignalR.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Client.Core, Version=10.0.12.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.SignalR.Client.Core.10.0.12\lib\net462\Microsoft.AspNetCore.SignalR.Client.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Common, Version=10.0.12.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.SignalR.Common.10.0.12\lib\net462\Microsoft.AspNetCore.SignalR.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Protocols.Json, Version=10.0.12.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.SignalR.Protocols.Json.10.0.12\lib\net462\Microsoft.AspNetCore.SignalR.Protocols.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.12, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.12\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -231,57 +208,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Data\Avatar.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\BackupCode.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Category.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Friendship.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\GameHistory.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\GameHistoryPlayer.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\KickLog.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Passkey.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Player.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\PlayerReport.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\PlayerSettings.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\PwdResetToken.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Room.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\RoomInvite.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\RoomPlayer.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Scorecard.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\ScorecardEntry.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Gateway\AuthenticationGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
@@ -294,21 +220,8 @@
     </Compile>
     <Compile Include="Resources\Utils\GatewayErrorMessages.cs" />
     <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\EmailService.cs" />
-    <Compile Include="Services\SignalRService.cs" />
-    <Compile Include="Services\TwoFactorCodeEntry.cs" />
-    <Compile Include="Services\TwoFactorCodeService.cs" />
-    <Compile Include="Services\TwoFactorDeliveryService.cs" />
-    <Compile Include="Services\TwoFactorValidationResult.cs" />
-    <Compile Include="Data\TurnState.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\TwoFactorAuth.cs">
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Resources\Utils\AppLogger.cs" />
     <Compile Include="Resources\Utils\DialogContentDto.cs" />
-    <Compile Include="Resources\Utils\PasswordHasher.cs" />
     <Compile Include="Views\CustomDialogWindow.xaml.cs">
       <DependentUpon>CustomDialogWindow.xaml</DependentUpon>
     </Compile>
@@ -352,21 +265,6 @@
     </Compile>
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\YachtDiceContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>YachtDiceContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\YachtDiceContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>YachtDiceContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\YachtDiceContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
     </Compile>
     <Page Include="Styles\Theme.Dark.xaml">
       <SubType>Designer</SubType>
@@ -483,35 +381,23 @@
     <None Include="Connected Services\PlayerServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntryDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatisticsDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="ConnectionStrings.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\GAME_HISTORY_PLAYER.datasource" />
-    <None Include="Properties\DataSources\PLAYER.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <EntityDeploy Include="Data\YachtDiceContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Data\YachtDiceContext.edmx.diagram">
-      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
-    </None>
-    <None Include="Secrets.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -542,16 +428,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Data\YachtDiceContext.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
-      <LastGenOutput>YachtDiceContext.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Data\YachtDiceContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>YachtDiceContext.edmx</DependentUpon>
-      <LastGenOutput>YachtDiceContext.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
@@ -571,10 +447,7 @@
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets'))" />
   </Target>
-  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
   <Import Project="..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets')" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceModel;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
@@ -20,6 +21,23 @@ namespace YachtDice.Server.Host
 
         private static void Main()
         {
+            Console.WriteLine("=== DIAGNÓSTICO DE RECURSOS INCRUSTADOS ===");
+
+            // Usamos PlayerRepository porque sabemos que pertenece al ensamblado YachtDice.Server.Data
+            Assembly assembly = typeof(PlayerRepository).Assembly;
+            string[] resourceNames = assembly.GetManifestResourceNames();
+
+            foreach (string name in resourceNames)
+            {
+                if (name.EndsWith(".csdl") || name.EndsWith(".ssdl") || name.EndsWith(".msl"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(name);
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine("===========================================\n");
+
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
 
@@ -54,11 +72,12 @@ namespace YachtDice.Server.Host
             var playerRepository = new PlayerRepository();
             var codeService = new TwoFactorCodeService();
             var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
+            var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
 
             return new AuthenticationService(
-                new LoginService(playerRepository, codeService, deliveryService),
+                new LoginService(playerRepository, codeService, deliveryService, verificationService),
                 new RegistrationService(playerRepository),
-                new TwoFactorVerificationService(playerRepository, codeService, deliveryService));
+                verificationService);
         }
 
         private static PlayerService CreatePlayerService()

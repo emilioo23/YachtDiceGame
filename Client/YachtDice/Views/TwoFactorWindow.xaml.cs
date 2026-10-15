@@ -11,9 +11,6 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
-    /// <summary>
-    /// Window to validate the two-factor authentication (2FA) code.
-    /// </summary>
     public partial class TwoFactorWindow : Window
     {
         private const int VisibleLocalPartChars = 2;
@@ -21,20 +18,17 @@ namespace YachtDice.Views
 
         private readonly string _email;
         private readonly string _playerDisplayName;
+        private readonly string _challengeId;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
         private readonly TextBox[] _digitBoxes;
 
-        /// <summary>
-        /// Initializes the two-step verification window for the given player.
-        /// </summary>
-        /// <param name="email">Email address the verification code was sent to.</param>
-        /// <param name="playerDisplayName">Display name of the player who logged in.</param>
-        public TwoFactorWindow(string email, string playerDisplayName)
+        public TwoFactorWindow(string email, string playerDisplayName, string challengeId)
         {
             InitializeComponent();
 
             _email = email;
             _playerDisplayName = playerDisplayName;
+            _challengeId = challengeId;
             _digitBoxes = new[]
             {
                 Digit1TextBox, Digit2TextBox, Digit3TextBox,
@@ -42,7 +36,7 @@ namespace YachtDice.Views
             };
 
             DestinationEmailTextBlock.Text = MaskEmail(email);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName, challengeId);
             Digit1TextBox.Focus();
         }
 
@@ -103,6 +97,7 @@ namespace YachtDice.Views
             var request = new ResendCodeRequestDto
             {
                 Email = _email,
+                ChallengeId = _challengeId,
                 CultureName = App.CurrentCultureCode
             };
 
@@ -155,6 +150,7 @@ namespace YachtDice.Views
             var request = new VerifyCodeRequestDto
             {
                 Email = _email,
+                ChallengeId = _challengeId,
                 Code = string.Concat(_digitBoxes.Select(box => box.Text))
             };
 

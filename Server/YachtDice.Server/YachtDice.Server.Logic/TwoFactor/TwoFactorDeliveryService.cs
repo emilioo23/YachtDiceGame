@@ -51,8 +51,9 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="email">Player's email address (recipient).</param>
         /// <param name="playerDisplayName">Player's name, used in the greeting.</param>
         /// <param name="culture">Language in which the email is written.</param>
+        /// <param name="challengeId">Unique session challenge identifier.</param>
         /// <returns>True if the email was sent successfully.</returns>
-        public async Task<bool> SendCodeAsync(string email, string playerDisplayName, CultureInfo culture)
+        public async Task<bool> SendCodeAsync(string email, string playerDisplayName, CultureInfo culture, string challengeId)
         {
             if (culture == null)
             {
@@ -60,7 +61,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             var wasSent = false;
-            string code = _codeService.GenerateCode(email);
+            string code = _codeService.GenerateCode(email, challengeId);
             string subject = EmailStrings.ResourceManager.GetString(SubjectResourceKey, culture);
             string body = BuildBody(playerDisplayName, code, culture);
 

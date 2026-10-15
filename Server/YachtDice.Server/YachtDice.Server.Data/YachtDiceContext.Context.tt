@@ -29,7 +29,7 @@ if (container == null)
 
 <#
 
-var codeNamespace = "YachtDice.Server.Data";
+var codeNamespace = code.VsNamespaceSuggestion();
 if (!String.IsNullOrEmpty(codeNamespace))
 {
 #>

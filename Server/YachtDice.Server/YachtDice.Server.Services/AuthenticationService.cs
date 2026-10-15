@@ -97,8 +97,14 @@ namespace YachtDice.Server.Services
         private async Task<LoginResponseDto> ProcessLoginAsync(LoginRequestDto request)
         {
             LoginResult result = await _loginService.LoginAsync(LoginMapper.ToLoginRequest(request));
+            var response = LoginMapper.ToResponse(result);
 
-            return LoginMapper.ToResponse(result);
+            if (result.Status == LoginStatus.VerificationCodeSent)
+            {
+                response.ChallengeId = _verificationService.CreateChallenge();
+            }
+
+            return response;
         }
 
         private async Task<RegisterResultCode> ProcessRegisterAsync(RegisterRequestDto request)
@@ -111,7 +117,10 @@ namespace YachtDice.Server.Services
 
         private VerificationResultCode ProcessVerifyCode(VerifyCodeRequestDto request)
         {
-            TwoFactorValidationResult result = _verificationService.VerifyCode(request.Email, request.Code);
+            TwoFactorValidationResult result = _verificationService.VerifyCode(
+                request.Email,
+                request.Code,
+                request.ChallengeId);
 
             return EnumMapper.Map<TwoFactorValidationResult, VerificationResultCode>(result);
         }
@@ -120,7 +129,8 @@ namespace YachtDice.Server.Services
         {
             ResendCodeStatus status = await _verificationService.ResendCodeAsync(
                 request.Email,
-                CultureParser.Parse(request.CultureName));
+                CultureParser.Parse(request.CultureName),
+                request.ChallengeId);
 
             return EnumMapper.Map<ResendCodeStatus, ResendResultCode>(status);
         }

@@ -1,15 +1,11 @@
 ﻿using System;
+using System.Configuration;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Utils;
 
 namespace YachtDice.Gateway
 {
-    /// <summary>
-    /// Common behavior of the gateways: creates the proxy, runs the operation
-    /// and converts any communication failure into a <see cref="GatewayException"/>.
-    /// </summary>
-    /// <typeparam name="TClient">Generated proxy used to reach the server.</typeparam>
     public abstract class GatewayBase<TClient>
         where TClient : ICommunicationObject, new()
     {
@@ -17,34 +13,21 @@ namespace YachtDice.Gateway
         private const string UnavailableLogMessage = "The server could not be reached.";
         private const string FaultMessage = "The server could not complete the request.";
         private const string UnavailableMessage = "The server is not available.";
+        private const string ServerIpKey = "ServerIp";
+        private const string DefaultServerIp = "localhost";
 
         private readonly AppLogger _logger;
 
-        /// <summary>
-        /// Initializes the gateway.
-        /// </summary>
         protected GatewayBase()
         {
             _logger = new AppLogger(GetType());
         }
 
-        /// <summary>
-        /// Translates the fault sent by the server into the error code understood by the client.
-        /// </summary>
-        /// <param name="fault">Fault received from the server.</param>
-        /// <returns>Error code that represents the fault.</returns>
         protected abstract GatewayErrorCode GetErrorCode(FaultException fault);
 
-        /// <summary>
-        /// Runs an operation against the server and releases the proxy afterwards.
-        /// </summary>
-        /// <typeparam name="TResponse">Type returned by the operation.</typeparam>
-        /// <param name="operation">Call to execute using the proxy.</param>
-        /// <returns>Response sent by the server.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
         protected async Task<TResponse> ExecuteAsync<TResponse>(Func<TClient, Task<TResponse>> operation)
         {
-            var client = new TClient();
+            var client = CreateConfiguredClient();
             TResponse response;
 
             try
@@ -76,6 +59,21 @@ namespace YachtDice.Gateway
             }
 
             return response;
+        }
+
+        private TClient CreateConfiguredClient()
+        {
+            var client = new TClient();
+            var endpointProperty = client.GetType().GetProperty("Endpoint");
+
+            if (endpointProperty?.GetValue(client, null) is System.ServiceModel.Description.ServiceEndpoint endpoint)
+            {
+                string serverIp = ConfigurationManager.AppSettings[ServerIpKey] ?? DefaultServerIp;
+                var builder = new UriBuilder(endpoint.Address.Uri) { Host = serverIp };
+                endpoint.Address = new EndpointAddress(builder.Uri, endpoint.Address.Identity, endpoint.Address.Headers);
+            }
+
+            return client;
         }
     }
 }

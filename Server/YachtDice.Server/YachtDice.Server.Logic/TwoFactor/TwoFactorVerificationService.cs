@@ -51,14 +51,24 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
-        /// Validates the code entered by the player.
+        /// Creates a new unique challenge identifier for a login session.
+        /// </summary>
+        /// <returns>The challenge string.</returns>
+        public string CreateChallenge()
+        {
+            return _codeService.CreateNewChallengeId();
+        }
+
+        /// <summary>
+        /// Validates the code entered by the player against the challenge.
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="code">Code entered by the player.</param>
+        /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationResult VerifyCode(string email, string code)
+        public TwoFactorValidationResult VerifyCode(string email, string code, string challengeId)
         {
-            return _codeService.Validate(email, code);
+            return _codeService.Validate(email, code, challengeId);
         }
 
         /// <summary>
@@ -66,8 +76,9 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="culture">Language in which the email is written.</param>
+        /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Outcome of the request.</returns>
-        public async Task<ResendCodeStatus> ResendCodeAsync(string email, CultureInfo culture)
+        public async Task<ResendCodeStatus> ResendCodeAsync(string email, CultureInfo culture, string challengeId)
         {
             List<Player> matches = await _playerRepository.FindByEmailAsync(email);
             Player player = matches.FirstOrDefault();
@@ -81,13 +92,13 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = ResendCodeStatus.VerificationLocked;
             }
-            else if (!_codeService.IsResendAllowed(player.Email))
+            else if (!_codeService.IsResendAllowed(player.Email, challengeId))
             {
                 status = ResendCodeStatus.ResendTooSoon;
             }
             else
             {
-                bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture);
+                bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
                 status = wasSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

@@ -13,6 +13,11 @@ namespace YachtDice.Server.Logic.TwoFactor
         public string Code { get; set; }
 
         /// <summary>
+        /// Unique session challenge identifier tied to the login attempt.
+        /// </summary>
+        public string ChallengeId { get; set; }
+
+        /// <summary>
         /// Moment (UTC) when the code was generated; used for the resend cooldown.
         /// </summary>
         public DateTime CreatedAt { get; set; }

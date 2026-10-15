@@ -1501,6 +1501,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo conectar con el servidor para obtener el ranking..
+        /// </summary>
+        public static string Leaderboard_ConnectionError {
+            get {
+                return ResourceManager.GetString("Leaderboard_ConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Amigos.
         /// </summary>
         public static string Leaderboard_FilterFriends {

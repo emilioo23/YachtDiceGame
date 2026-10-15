@@ -1092,4 +1092,7 @@
   <data name="Auth_GuestDisplayName" xml:space="preserve">
     <value>Invitado</value>
   </data>
+  <data name="Leaderboard_ConnectionError" xml:space="preserve">
+    <value>No se pudo conectar con el servidor para obtener el ranking.</value>
+  </data>
 </root>

@@ -15,11 +15,25 @@
   <wsdl:message name="IPlayerService_GetStatistics_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_GetLeaderboard_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboard" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetLeaderboard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatistics" message="tns:IPlayerService_GetStatistics_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse" message="tns:IPlayerService_GetStatistics_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetStatistics_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLeaderboard">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard" message="tns:IPlayerService_GetLeaderboard_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse" message="tns:IPlayerService_GetLeaderboard_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
