@@ -6,13 +6,13 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IAuthenticationService_Login_InputMessage">
-    <wsdl:part name="parameters" element="tns:Login" />
+  <wsdl:message name="IAuthenticationService_AuthenticatePlayer_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticatePlayer" />
   </wsdl:message>
-  <wsdl:message name="IAuthenticationService_Login_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  <wsdl:message name="IAuthenticationService_AuthenticatePlayer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticatePlayerResponse" />
   </wsdl:message>
-  <wsdl:message name="IAuthenticationService_Login_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IAuthenticationService_AuthenticatePlayer_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IAuthenticationService_Register_InputMessage">
@@ -43,10 +43,10 @@
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
-    <wsdl:operation name="Login">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/Login" message="tns:IAuthenticationService_Login_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginResponse" message="tns:IAuthenticationService_Login_OutputMessage" />
-      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_Login_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="AuthenticatePlayer">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayer" message="tns:IAuthenticationService_AuthenticatePlayer_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayerResponse" message="tns:IAuthenticationService_AuthenticatePlayer_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayerServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_AuthenticatePlayer_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/Register" message="tns:IAuthenticationService_Register_InputMessage" />

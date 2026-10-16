@@ -13,7 +13,7 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="dto">Data sent by the client.</param>
         /// <returns>Request for the logic layer.</returns>
-        public static RegisterPlayerRequest ToRegisterRequest(RegisterRequestDto dto)
+        public static RegisterPlayerRequest ToRegisterRequest(RegisterRequest dto)
         {
             return new RegisterPlayerRequest
             {

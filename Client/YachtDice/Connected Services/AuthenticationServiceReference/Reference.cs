@@ -15,9 +15,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequestDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequest", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class LoginRequestDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LoginRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -92,9 +92,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResponseDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResponse", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class LoginResponseDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LoginResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -264,9 +264,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RegisterRequestDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RegisterRequest", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class RegisterRequestDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class RegisterRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -396,9 +396,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerifyCodeRequestDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerifyCodeRequest", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class VerifyCodeRequestDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class VerifyCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -490,9 +490,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeRequestDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeRequest", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class ResendCodeRequestDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ResendCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -589,33 +589,34 @@ namespace YachtDice.AuthenticationServiceReference {
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Login", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/LoginServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.LoginResponseDto Login(YachtDice.AuthenticationServiceReference.LoginRequestDto request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayer", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayerServiceFaultFaul" +
+            "t", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.LoginResponse AuthenticatePlayer(YachtDice.AuthenticationServiceReference.LoginRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Login", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginResponseDto> LoginAsync(YachtDice.AuthenticationServiceReference.LoginRequestDto request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayer", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayerResponse")]
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginResponse> AuthenticatePlayerAsync(YachtDice.AuthenticationServiceReference.LoginRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Register", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RegisterResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RegisterServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.RegisterResultCode Register(YachtDice.AuthenticationServiceReference.RegisterRequestDto request);
+        YachtDice.AuthenticationServiceReference.RegisterResultCode Register(YachtDice.AuthenticationServiceReference.RegisterRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Register", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RegisterResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.AuthenticationServiceReference.RegisterRequestDto request);
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.AuthenticationServiceReference.RegisterRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerifyCodeRequestDto request);
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerifyCodeRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerifyCodeRequestDto request);
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerifyCodeRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeRequestDto request);
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeRequestDto request);
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeRequest request);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -645,35 +646,35 @@ namespace YachtDice.AuthenticationServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.AuthenticationServiceReference.LoginResponseDto Login(YachtDice.AuthenticationServiceReference.LoginRequestDto request) {
-            return base.Channel.Login(request);
+        public YachtDice.AuthenticationServiceReference.LoginResponse AuthenticatePlayer(YachtDice.AuthenticationServiceReference.LoginRequest request) {
+            return base.Channel.AuthenticatePlayer(request);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginResponseDto> LoginAsync(YachtDice.AuthenticationServiceReference.LoginRequestDto request) {
-            return base.Channel.LoginAsync(request);
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginResponse> AuthenticatePlayerAsync(YachtDice.AuthenticationServiceReference.LoginRequest request) {
+            return base.Channel.AuthenticatePlayerAsync(request);
         }
         
-        public YachtDice.AuthenticationServiceReference.RegisterResultCode Register(YachtDice.AuthenticationServiceReference.RegisterRequestDto request) {
+        public YachtDice.AuthenticationServiceReference.RegisterResultCode Register(YachtDice.AuthenticationServiceReference.RegisterRequest request) {
             return base.Channel.Register(request);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.AuthenticationServiceReference.RegisterRequestDto request) {
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.AuthenticationServiceReference.RegisterRequest request) {
             return base.Channel.RegisterAsync(request);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerifyCodeRequestDto request) {
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerifyCodeRequest request) {
             return base.Channel.VerifyCode(request);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerifyCodeRequestDto request) {
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerifyCodeRequest request) {
             return base.Channel.VerifyCodeAsync(request);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeRequestDto request) {
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeRequest request) {
             return base.Channel.ResendCode(request);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeRequestDto request) {
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeRequest request) {
             return base.Channel.ResendCodeAsync(request);
         }
     }

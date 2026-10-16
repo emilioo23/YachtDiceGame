@@ -3,10 +3,10 @@
 namespace YachtDice.Server.Services.Contracts
 {
     /// <summary>
-    /// Data sent by the client to ask for a new verification code.
+    /// Data sent by the client to start a login.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class ResendCodeRequestDto
+    public class LoginRequest
     {
         /// <summary>
         /// Player's email address.
@@ -15,13 +15,13 @@ namespace YachtDice.Server.Services.Contracts
         public string Email { get; set; }
 
         /// <summary>
-        /// Unique challenge identifier tied to the login session.
+        /// Password in plain text.
         /// </summary>
         [DataMember]
-        public string ChallengeId { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
-        /// Name of the language of the client (for example "es-MX"), used to write the email.
+        /// Name of the language of the client (for example "es-MX"), used to write the verification email.
         /// </summary>
         [DataMember]
         public string CultureName { get; set; }

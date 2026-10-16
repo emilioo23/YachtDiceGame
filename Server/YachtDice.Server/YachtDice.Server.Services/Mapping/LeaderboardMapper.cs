@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using YachtDice.Server.Logic.Players;
-using YachtDice.Server.Services.Contracts;
 
 namespace YachtDice.Server.Services.Mapping
 {
@@ -15,10 +13,10 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="entries">Ranking produced by the logic layer.</param>
         /// <returns>Answer for the client, in the same order.</returns>
-        public static List<LeaderboardEntryDto> ToDtos(List<LeaderboardEntry> entries)
+        public static List<Contracts.LeaderboardEntry> ToContracts(List<Logic.Players.LeaderboardEntry> entries)
         {
             return entries
-                .Select(entry => new LeaderboardEntryDto
+                .Select(entry => new Contracts.LeaderboardEntry
                 {
                     Position = entry.Position,
                     DisplayName = entry.DisplayName,

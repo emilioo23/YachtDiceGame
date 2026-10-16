@@ -142,14 +142,14 @@ namespace YachtDice.Views
 
         private async Task ProcessLoginAsync()
         {
-            var request = new LoginRequestDto
+            var request = new LoginRequest
             {
                 Email = EmailTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginResponseDto response = await _gateway.LoginAsync(request);
+            LoginResponse response = await _gateway.LoginAsync(request);
 
             if (response.Code == LoginResultCode.VerificationCodeSent)
             {
@@ -163,7 +163,7 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            var request = new RegisterRequestDto
+            var request = new RegisterRequest
             {
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),
