@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3CADCCEF-83A9-4432-A1DF-AF32C9C53072}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YachtDice.Server.Logic</RootNamespace>
+    <AssemblyName>YachtDice.Server.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=3.5.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.3.5.0\lib\net462\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authentication\LoginRequest.cs" />
+    <Compile Include="Authentication\LoginResult.cs" />
+    <Compile Include="Authentication\LoginService.cs" />
+    <Compile Include="Authentication\LoginStatus.cs" />
+    <Compile Include="Authentication\RegisterPlayerRequest.cs" />
+    <Compile Include="Authentication\RegistrationResult.cs" />
+    <Compile Include="Authentication\RegistrationService.cs" />
+    <Compile Include="Email\EmailService.cs" />
+    <Compile Include="Email\IEmailService.cs" />
+    <Compile Include="Logging\AppLogger.cs" />
+    <Compile Include="Players\LeaderboardEntry.cs" />
+    <Compile Include="Players\LeaderboardService.cs" />
+    <Compile Include="Players\PlayerState.cs" />
+    <Compile Include="Players\PlayerStatistics.cs" />
+    <Compile Include="Players\PlayerStatisticsService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\EmailStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\PasswordHasher.cs" />
+    <Compile Include="TwoFactor\ResendCodeStatus.cs" />
+    <Compile Include="TwoFactor\TwoFactorCodeEntry.cs" />
+    <Compile Include="TwoFactor\TwoFactorCodeService.cs" />
+    <Compile Include="TwoFactor\TwoFactorDeliveryService.cs" />
+    <Compile Include="TwoFactor\TwoFactorValidationResult.cs" />
+    <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">
+      <Project>{273823dc-da56-4ef1-8d9a-fa2fe4ed0542}</Project>
+      <Name>YachtDice.Server.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EmailStrings.en-US.resx" />
+    <EmbeddedResource Include="Resources\EmailStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
