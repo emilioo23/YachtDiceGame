@@ -46,7 +46,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Name of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<Contracts.PlayerStatistics> GetStatisticsAsync(Contracts.PlayerStatisticsQuery request)
+        public Task<Contracts.PlayerStatistics> GetStatisticsAsync(Contracts.PlayerStatisticsFilter request)
         {
             return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
         }
@@ -60,7 +60,7 @@ namespace YachtDice.Server.Services
             return ExecuteAsync(ProcessGetLeaderboardAsync);
         }
 
-        private async Task<Contracts.PlayerStatistics> ProcessGetStatisticsAsync(Contracts.PlayerStatisticsQuery request)
+        private async Task<Contracts.PlayerStatistics> ProcessGetStatisticsAsync(Contracts.PlayerStatisticsFilter request)
         {
             PlayerStatistics statistics = await _statisticsService.GetStatisticsAsync(request.PlayerName);
             return PlayerStatisticsMapper.ToContract(statistics);

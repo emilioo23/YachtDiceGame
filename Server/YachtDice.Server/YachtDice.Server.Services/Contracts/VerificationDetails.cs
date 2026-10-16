@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// Data sent by the client to validate a verification code.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class VerifyCodeRequest
+    public class VerificationDetails
     {
         /// <summary>
         /// Email address the code was sent to.

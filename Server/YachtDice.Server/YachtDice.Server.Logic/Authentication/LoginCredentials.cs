@@ -5,7 +5,7 @@ namespace YachtDice.Server.Logic.Authentication
     /// <summary>
     /// Data needed to start a login.
     /// </summary>
-    public class LoginRequest
+    public class LoginCredentials
     {
         /// <summary>
         /// Player's email address.

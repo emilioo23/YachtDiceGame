@@ -3,7 +3,7 @@
     /// <summary>
     /// Data needed to register a new player.
     /// </summary>
-    public class RegisterPlayerRequest
+    public class PlayerRegistrationInfo
     {
         /// <summary>
         /// Player's first name.

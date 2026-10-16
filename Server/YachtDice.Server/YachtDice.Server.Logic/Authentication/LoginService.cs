@@ -71,7 +71,7 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="request">Credentials and language of the player.</param>
         /// <returns>Result of the login attempt.</returns>
-        public async Task<LoginResult> LoginAsync(LoginRequest request)
+        public async Task<LoginResult> LoginAsync(LoginCredentials request)
         {
             if (request == null)
             {
@@ -92,7 +92,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private async Task<LoginResult> AuthenticateAsync(LoginRequest request)
+        private async Task<LoginResult> AuthenticateAsync(LoginCredentials request)
         {
             List<Player> matches = await _playerRepository.FindByEmailAsync(request.Email.Trim());
             Player player = matches.FirstOrDefault();
