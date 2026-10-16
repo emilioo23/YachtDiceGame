@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="YachtDice.Server.Data/YachtDice.Server.Data.csproj" Id="273823dc-da56-4ef1-8d9a-fa2fe4ed0542" />
+  <Project Path="YachtDice.Server.Host/YachtDice.Server.Host.csproj" Id="fd3f61c9-196e-4c9d-81ce-01218289e4bb" />
+  <Project Path="YachtDice.Server.Logic/YachtDice.Server.Logic.csproj" Id="3cadccef-83a9-4432-a1df-af32c9c53072" />
+  <Project Path="YachtDice.Server.Services/YachtDice.Server.Services.csproj" Id="41804ae3-e254-4b5c-a192-c5251948a887" />
+  <Project Path="YachtDice.Server.Tests/YachtDice.Server.Tests.csproj" Id="a0bdf417-7c15-48e0-80c4-c93e1acdc3d1" />
+</Solution>
