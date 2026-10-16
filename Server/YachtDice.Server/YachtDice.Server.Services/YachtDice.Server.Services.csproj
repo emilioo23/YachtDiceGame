@@ -44,10 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
+    <Compile Include="Contracts\ChatMessage.cs" />
+    <Compile Include="Contracts\IChatCallback.cs" />
+    <Compile Include="Contracts\IChatManager.cs" />
+    <Compile Include="Contracts\IGameCallback.cs" />
+    <Compile Include="Contracts\IGameManager.cs" />
+    <Compile Include="Contracts\ILeaderboardManager.cs" />
+    <Compile Include="Contracts\IRoomCallback.cs" />
+    <Compile Include="Contracts\IRoomManager.cs" />
     <Compile Include="Contracts\LeaderboardEntry.cs" />
     <Compile Include="Contracts\LoginCredentials.cs" />
     <Compile Include="Contracts\LoginData.cs" />
     <Compile Include="Contracts\LoginResultCode.cs" />
+    <Compile Include="Contracts\PlayerProfile.cs" />
     <Compile Include="Contracts\PlayerStatistics.cs" />
     <Compile Include="Contracts\PlayerStatisticsFilter.cs" />
     <Compile Include="Contracts\PlayerRegistrationInfo.cs" />
@@ -57,6 +66,7 @@
     <Compile Include="Contracts\ServiceErrorCode.cs" />
     <Compile Include="Contracts\ServiceFault.cs" />
     <Compile Include="Contracts\ServiceNamespaces.cs" />
+    <Compile Include="Contracts\TurnDetails.cs" />
     <Compile Include="Contracts\VerificationResultCode.cs" />
     <Compile Include="Contracts\VerificationDetails.cs" />
     <Compile Include="IAuthenticationService.cs" />
