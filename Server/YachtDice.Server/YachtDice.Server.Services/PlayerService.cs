@@ -46,7 +46,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Name of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<Contracts.PlayerStatistics> GetStatisticsAsync(Contracts.PlayerStatisticsFilter request)
+        public Task<Contracts.PlayerStatistics> GetStatistics(Contracts.PlayerStatisticsFilter request)
         {
             return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
         }
@@ -55,7 +55,7 @@ namespace YachtDice.Server.Services
         /// Gets the ranking of the best players.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<Contracts.LeaderboardEntry>> GetLeaderboardAsync()
+        public Task<List<Contracts.LeaderboardEntry>> GetLeaderboard()
         {
             return ExecuteAsync(ProcessGetLeaderboardAsync);
         }
