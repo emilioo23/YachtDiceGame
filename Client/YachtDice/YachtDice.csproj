@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -361,7 +361,7 @@
     <None Include="Connected Services\AuthenticationServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginResponseDto.datasource">
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.RegisterResultCode.datasource">
@@ -381,10 +381,10 @@
     <None Include="Connected Services\PlayerServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntryDto.datasource">
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntry.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatisticsDto.datasource">
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatistics.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -416,18 +416,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\SplashBackground.png" />
-    <None Include="Connected Services\AuthenticationServiceReference\configuration91.svcinfo" />
-    <None Include="Connected Services\AuthenticationServiceReference\configuration.svcinfo" />
-    <None Include="Connected Services\AuthenticationServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Connected Services\PlayerServiceReference\configuration91.svcinfo" />
-    <None Include="Connected Services\PlayerServiceReference\configuration.svcinfo" />
-    <None Include="Connected Services\PlayerServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
@@ -441,6 +429,30 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AuthenticationServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\PlayerServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PlayerServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PlayerServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PlayerServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AuthenticationServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AuthenticationServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AuthenticationServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

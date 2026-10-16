@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// Summary of the games played by a player, as seen by the client.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class PlayerStatisticsDto
+    public class PlayerStatistics
     {
         /// <summary>
         /// Indicates whether the player exists; if not, the other values are empty.

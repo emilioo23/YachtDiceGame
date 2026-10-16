@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="1ecc26cb-39b1-429a-8707-bd9095886253" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="0f064c77-cf1b-464a-a524-33a3834e1bec" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,10 +22,10 @@
     <MetadataSource Address="net.tcp://localhost:8733/YachtDice/Authentication/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="d0343912-9ac1-41d8-980e-c4ea7d241786" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="996498d5-9386-411e-b30f-72553140e49b" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
-    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="3e60f850-219b-44ed-8b84-fa464e58aa48" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="7e908492-4bc7-4838-818e-f84dbc2c9c8c" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="41190962-3853-4c16-9554-9d7f049a60ae" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="73e0c437-550a-40e7-a000-f6dcaab7513b" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="95be495e-72d0-4238-99cb-d31d5e95d76e" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="70cc6962-8b40-489f-a905-cf91e0d6fee8" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

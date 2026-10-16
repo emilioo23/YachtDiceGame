@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -44,21 +44,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
-    <Compile Include="Contracts\LeaderboardEntryDto.cs" />
-    <Compile Include="Contracts\LoginRequestDto.cs" />
-    <Compile Include="Contracts\LoginResponseDto.cs" />
+    <Compile Include="Contracts\LeaderboardEntry.cs" />
+    <Compile Include="Contracts\LoginRequest.cs" />
+    <Compile Include="Contracts\LoginResponse.cs" />
     <Compile Include="Contracts\LoginResultCode.cs" />
-    <Compile Include="Contracts\PlayerStatisticsDto.cs" />
-    <Compile Include="Contracts\PlayerStatisticsRequestDto.cs" />
-    <Compile Include="Contracts\RegisterRequestDto.cs" />
+    <Compile Include="Contracts\PlayerStatistics.cs" />
+    <Compile Include="Contracts\PlayerStatisticsQuery.cs" />
+    <Compile Include="Contracts\RegisterRequest.cs" />
     <Compile Include="Contracts\RegisterResultCode.cs" />
-    <Compile Include="Contracts\ResendCodeRequestDto.cs" />
+    <Compile Include="Contracts\ResendCodeRequest.cs" />
     <Compile Include="Contracts\ResendResultCode.cs" />
     <Compile Include="Contracts\ServiceErrorCode.cs" />
     <Compile Include="Contracts\ServiceFault.cs" />
     <Compile Include="Contracts\ServiceNamespaces.cs" />
     <Compile Include="Contracts\VerificationResultCode.cs" />
-    <Compile Include="Contracts\VerifyCodeRequestDto.cs" />
+    <Compile Include="Contracts\VerifyCodeRequest.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IPlayerService.cs" />
     <Compile Include="Mapping\CultureParser.cs" />

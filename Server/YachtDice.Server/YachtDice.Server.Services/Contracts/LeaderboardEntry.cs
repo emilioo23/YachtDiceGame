@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// One row of the ranking of players, as seen by the client.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class LeaderboardEntryDto
+    public class LeaderboardEntry
     {
         /// <summary>
         /// Place of the player in the ranking, starting at 1.

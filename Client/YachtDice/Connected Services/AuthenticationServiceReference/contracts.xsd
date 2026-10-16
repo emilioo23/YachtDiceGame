@@ -1,35 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Login">
+  <xs:element name="AuthenticatePlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:LoginRequestDto" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:LoginRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="LoginRequestDto">
+  <xs:complexType name="LoginRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LoginRequestDto" nillable="true" type="tns:LoginRequestDto" />
-  <xs:element name="LoginResponse">
+  <xs:element name="LoginRequest" nillable="true" type="tns:LoginRequest" />
+  <xs:element name="AuthenticatePlayerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="tns:LoginResponseDto" />
+        <xs:element minOccurs="0" name="AuthenticatePlayerResult" nillable="true" type="tns:LoginResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="LoginResponseDto">
+  <xs:complexType name="LoginResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" type="tns:LoginResultCode" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LoginResponseDto" nillable="true" type="tns:LoginResponseDto" />
+  <xs:element name="LoginResponse" nillable="true" type="tns:LoginResponse" />
   <xs:simpleType name="LoginResultCode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="VerificationCodeSent" />
@@ -58,11 +58,11 @@
   <xs:element name="Register">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:RegisterRequestDto" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:RegisterRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="RegisterRequestDto">
+  <xs:complexType name="RegisterRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
@@ -71,7 +71,7 @@
       <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="RegisterRequestDto" nillable="true" type="tns:RegisterRequestDto" />
+  <xs:element name="RegisterRequest" nillable="true" type="tns:RegisterRequest" />
   <xs:element name="RegisterResponse">
     <xs:complexType>
       <xs:sequence>
@@ -93,18 +93,18 @@
   <xs:element name="VerifyCode">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:VerifyCodeRequestDto" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:VerifyCodeRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="VerifyCodeRequestDto">
+  <xs:complexType name="VerifyCodeRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="VerifyCodeRequestDto" nillable="true" type="tns:VerifyCodeRequestDto" />
+  <xs:element name="VerifyCodeRequest" nillable="true" type="tns:VerifyCodeRequest" />
   <xs:element name="VerifyCodeResponse">
     <xs:complexType>
       <xs:sequence>
@@ -124,18 +124,18 @@
   <xs:element name="ResendCode">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:ResendCodeRequestDto" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:ResendCodeRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ResendCodeRequestDto">
+  <xs:complexType name="ResendCodeRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ResendCodeRequestDto" nillable="true" type="tns:ResendCodeRequestDto" />
+  <xs:element name="ResendCodeRequest" nillable="true" type="tns:ResendCodeRequest" />
   <xs:element name="ResendCodeResponse">
     <xs:complexType>
       <xs:sequence>

@@ -59,7 +59,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Credentials and language of the player.</param>
         /// <returns>Outcome of the login attempt.</returns>
-        public Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
+        public Task<LoginResponse> LoginAsync(Contracts.LoginRequest request)
         {
             return ExecuteAsync(request, () => ProcessLoginAsync(request));
         }
@@ -69,7 +69,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Data of the new player.</param>
         /// <returns>Outcome of the registration.</returns>
-        public Task<RegisterResultCode> RegisterAsync(RegisterRequestDto request)
+        public Task<RegisterResultCode> RegisterAsync(RegisterRequest request)
         {
             return ExecuteAsync(request, () => ProcessRegisterAsync(request));
         }
@@ -79,7 +79,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Email and code entered by the player.</param>
         /// <returns>Result of the validation.</returns>
-        public Task<VerificationResultCode> VerifyCodeAsync(VerifyCodeRequestDto request)
+        public Task<VerificationResultCode> VerifyCodeAsync(VerifyCodeRequest request)
         {
             return ExecuteAsync(request, () => Task.FromResult(ProcessVerifyCode(request)));
         }
@@ -89,19 +89,19 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Email and language of the player.</param>
         /// <returns>Outcome of the request.</returns>
-        public Task<ResendResultCode> ResendCodeAsync(ResendCodeRequestDto request)
+        public Task<ResendResultCode> ResendCodeAsync(ResendCodeRequest request)
         {
             return ExecuteAsync(request, () => ProcessResendCodeAsync(request));
         }
 
-        private async Task<LoginResponseDto> ProcessLoginAsync(LoginRequestDto request)
+        private async Task<LoginResponse> ProcessLoginAsync(Contracts.LoginRequest request)
         {
             LoginResult result = await _loginService.LoginAsync(LoginMapper.ToLoginRequest(request));
 
             return LoginMapper.ToResponse(result);
         }
 
-        private async Task<RegisterResultCode> ProcessRegisterAsync(RegisterRequestDto request)
+        private async Task<RegisterResultCode> ProcessRegisterAsync(RegisterRequest request)
         {
             RegistrationResult result = await _registrationService.RegisterAsync(
                 RegistrationMapper.ToRegisterRequest(request));
@@ -109,7 +109,7 @@ namespace YachtDice.Server.Services
             return EnumMapper.Map<RegistrationResult, RegisterResultCode>(result);
         }
 
-        private VerificationResultCode ProcessVerifyCode(VerifyCodeRequestDto request)
+        private VerificationResultCode ProcessVerifyCode(VerifyCodeRequest request)
         {
             TwoFactorValidationResult result = _verificationService.VerifyCode(
                 request.Email,
@@ -119,7 +119,7 @@ namespace YachtDice.Server.Services
             return EnumMapper.Map<TwoFactorValidationResult, VerificationResultCode>(result);
         }
 
-        private async Task<ResendResultCode> ProcessResendCodeAsync(ResendCodeRequestDto request)
+        private async Task<ResendResultCode> ProcessResendCodeAsync(ResendCodeRequest request)
         {
             ResendCodeStatus status = await _verificationService.ResendCodeAsync(
                 request.Email,

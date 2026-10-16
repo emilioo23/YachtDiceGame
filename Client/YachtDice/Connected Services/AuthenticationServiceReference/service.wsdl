@@ -16,8 +16,8 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IAuthenticationService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Login">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/Login" style="document" />
+    <wsdl:operation name="AuthenticatePlayer">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/AuthenticatePlayer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

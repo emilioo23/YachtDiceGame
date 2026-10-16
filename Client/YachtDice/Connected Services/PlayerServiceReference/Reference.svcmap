@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="941ae65c-2de8-4f39-b377-1e2fc2e1c19f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="b73151ef-5cca-49bc-acd9-3bc5efb353c7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,10 +22,10 @@
     <MetadataSource Address="net.tcp://localhost:8734/YachtDice/Player/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="b297db80-d494-49e1-ba14-6ef348f5fe0d" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="351566ac-757b-4238-90a3-95daa6feccea" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
-    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="16ac6a5c-58fb-403a-9dda-5467a71d169a" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="8cd7fc4c-2d5b-4919-8d0d-4b112c7cc46d" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
+    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="cac323ec-60b9-445d-899a-94a99f124a7a" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="893de87e-996f-45fc-8168-991bceb61a30" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
+    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="bd4e3ea6-a5f5-4d90-b306-d63ce37f18ad" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a0863d95-6c05-4a60-8ff7-990cce8f7ade" SourceId="1" SourceUrl="net.tcp://localhost:8734/YachtDice/Player/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

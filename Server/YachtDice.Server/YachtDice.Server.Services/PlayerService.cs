@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Server.Logic.Players;
-using YachtDice.Server.Services.Contracts;
 using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
@@ -47,7 +46,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="request">Name of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<PlayerStatisticsDto> GetStatisticsAsync(PlayerStatisticsRequestDto request)
+        public Task<Contracts.PlayerStatistics> GetStatisticsAsync(Contracts.PlayerStatisticsQuery request)
         {
             return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
         }
@@ -56,23 +55,21 @@ namespace YachtDice.Server.Services
         /// Gets the ranking of the best players.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<LeaderboardEntryDto>> GetLeaderboardAsync()
+        public Task<List<Contracts.LeaderboardEntry>> GetLeaderboardAsync()
         {
             return ExecuteAsync(ProcessGetLeaderboardAsync);
         }
 
-        private async Task<PlayerStatisticsDto> ProcessGetStatisticsAsync(PlayerStatisticsRequestDto request)
+        private async Task<Contracts.PlayerStatistics> ProcessGetStatisticsAsync(Contracts.PlayerStatisticsQuery request)
         {
             PlayerStatistics statistics = await _statisticsService.GetStatisticsAsync(request.PlayerName);
-
-            return PlayerStatisticsMapper.ToDto(statistics);
+            return PlayerStatisticsMapper.ToContract(statistics);
         }
 
-        private async Task<List<LeaderboardEntryDto>> ProcessGetLeaderboardAsync()
+        private async Task<List<Contracts.LeaderboardEntry>> ProcessGetLeaderboardAsync()
         {
             List<LeaderboardEntry> entries = await _leaderboardService.GetTopPlayersAsync();
-
-            return LeaderboardMapper.ToDtos(entries);
+            return LeaderboardMapper.ToContracts(entries);
         }
     }
 }

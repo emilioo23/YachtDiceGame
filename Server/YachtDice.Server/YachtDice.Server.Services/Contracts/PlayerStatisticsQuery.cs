@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// Data sent by the client to ask for the statistics of a player.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class PlayerStatisticsRequestDto
+    public class PlayerStatisticsQuery
     {
         /// <summary>
         /// Display name or username of the player.

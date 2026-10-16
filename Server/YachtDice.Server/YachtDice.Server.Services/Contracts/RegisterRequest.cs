@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// Data sent by the client to register a new player.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class RegisterRequestDto
+    public class RegisterRequest
     {
         /// <summary>
         /// Player's first name.
