@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
-    /// <summary>
-    /// Main game window that handles the turns, dice rolls and scores.
-    /// </summary>
     public partial class GameWindow : Window
     {
         private const int DiceCount = 5;
@@ -28,29 +28,43 @@ namespace YachtDice.Views
         private const int CategoryColumnWidth = 200;
         private const int LabelPaddingHorizontal = 10;
         private const int LabelPaddingVertical = 8;
-
         private const int FontSizeSmall = 12;
         private const int FontSizeNormal = 13;
         private const int BorderThicknessNormal = 2;
         private const int BorderThicknessSelected = 3;
         private const int RowMarginBottom = 2;
+        private const int ChatMessageMarginBottom = 4;
         private const string DefaultZeroText = "0";
         private const int EmptyLength = 0;
         private const int FirstCharacterIndex = 0;
         private const int SingleCharacterLength = 1;
         private const string DefaultPlayerInitial = "U";
+        private const int PipGridIndexZero = 0;
+        private const int PipGridIndexOne = 1;
+        private const int PipGridIndexTwo = 2;
+        private const int DiceFaceOne = 1;
+        private const int DiceFaceTwo = 2;
+        private const int DiceFaceThree = 3;
+        private const int DiceFaceFour = 4;
+        private const int DiceFaceFive = 5;
+        private const string ResourceBrushBorder = "BrushBorder";
+        private const string ResourceShadowSoft = "ShadowSoft";
+        private const string ResourceBrushWoodDark = "BrushWoodDark";
+        private const string ResourceBrushGold = "BrushGold";
+        private const string ResourceBrushText = "BrushText";
+        private const string ResourceBrushTextMuted = "BrushTextMuted";
+        private const string ResourceBrushCream2 = "BrushCream2";
+        private const string ResourceBrushFeltLight = "BrushFeltLight";
+        private const string ResourceBrushWood = "BrushWood";
+        private const string ResourceBrushDanger = "BrushDanger";
+        private const string ChatSenderSeparator = ": ";
 
         private readonly Random _random = new Random();
         private readonly int[] _diceValues = new int[DiceCount];
         private readonly bool[] _heldDice = new bool[DiceCount];
         private readonly Border[] _diceBorders = new Border[DiceCount];
         private readonly string _playerName;
-        private int _rollsLeft;
-        private int _totalScore;
-        private TextBlock _totalScoreLabel;
 
-        // Fixed positions and rotations so the dice look "thrown"
-        // inside the bowl instead of lined up in a row.
         private readonly (double left, double top, double angle)[] _dicePositions =
         {
             (150, 40,  -8),
@@ -60,29 +74,30 @@ namespace YachtDice.Views
             (250, 230, -12),
         };
 
-        /// <summary>
-        /// Initializes the game window for the given player.
-        /// </summary>
-        /// <param name="playerName">Name of the player who starts the game.</param>
+        private int _rollsLeft;
+        private int _totalScore;
+        private TextBlock _totalScoreLabel;
+
         public GameWindow(string playerName)
         {
             InitializeComponent();
             _playerName = playerName;
             PlayerNameTextBlock.Text = playerName;
+
             PlayerInitialTextBlock.Text = playerName.Length > EmptyLength
                 ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
                 : DefaultPlayerInitial;
+
             RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
             LanguageSwitcherControl.ReopenWindowFunc = () => new GameWindow(playerName);
 
             CreateDiceOnCanvas();
             LoadCategories();
             UpdateRollButton();
+
+            AppendMessageToChat(Strings.Game_Chat_SystemName, Strings.Game_Chat_MatchStartedMessage, true);
         }
 
-        /// <summary>
-        /// Navigates to the Results screen with the score accumulated in this game.
-        /// </summary>
         public void GoToResultsWindow()
         {
             var resultsWindow = new ResultsWindow(_playerName, _totalScore);
@@ -90,19 +105,74 @@ namespace YachtDice.Views
             this.Close();
         }
 
+        private void SendChatButton_Click(object sender, RoutedEventArgs e)
+        {
+            SendChatMessage();
+        }
+
+        private void ChatInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SendChatMessage();
+                e.Handled = true;
+            }
+        }
+
+        private void SendChatMessage()
+        {
+            var messageText = ChatInputTextBox.Text.Trim();
+
+            if (messageText.Length > EmptyLength)
+            {
+                ChatInputTextBox.Clear();
+                AppendMessageToChat(_playerName, messageText, false);
+            }
+        }
+
+        private void AppendMessageToChat(string sender, string message, bool isSystem)
+        {
+            var textBlock = new TextBlock
+            {
+                Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, ChatMessageMarginBottom),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var textColor = isSystem
+                ? (SolidColorBrush)FindResource(ResourceBrushDanger)
+                : (SolidColorBrush)FindResource(ResourceBrushText);
+
+            var senderRun = new Run(sender + ChatSenderSeparator)
+            {
+                FontWeight = FontWeights.Bold,
+                Foreground = textColor
+            };
+
+            var messageRun = new Run(message)
+            {
+                Foreground = textColor
+            };
+
+            textBlock.Inlines.Add(senderRun);
+            textBlock.Inlines.Add(messageRun);
+
+            ChatMessagesPanel.Children.Add(textBlock);
+            ChatScrollViewer.ScrollToEnd();
+        }
+
         private void CreateDiceOnCanvas()
         {
-            for (int i = 0; i < DiceCount; i++)
+            for (int i = EmptyLength; i < DiceCount; i++)
             {
                 var die = CreateDiceFace(MinDiceValue);
-                die.Cursor = System.Windows.Input.Cursors.Hand;
+                die.Cursor = Cursors.Hand;
 
                 var position = _dicePositions[i];
                 Canvas.SetLeft(die, position.left);
                 Canvas.SetTop(die, position.top);
                 die.RenderTransform = new RotateTransform(position.angle, DiceSize / 2, DiceSize / 2);
 
-                int diceIndex = i; // local capture for the event
+                int diceIndex = i;
                 die.MouseLeftButtonUp += (s, e) => ToggleHoldDice(diceIndex);
 
                 _diceBorders[i] = die;
@@ -119,13 +189,14 @@ namespace YachtDice.Views
                 Height = DiceSize,
                 Background = Brushes.White,
                 CornerRadius = new CornerRadius(DiceCornerRadius),
-                BorderBrush = (SolidColorBrush)FindResource("BrushBorder"),
+                BorderBrush = (SolidColorBrush)FindResource(ResourceBrushBorder),
                 BorderThickness = new Thickness(BorderThicknessNormal),
-                Effect = (System.Windows.Media.Effects.DropShadowEffect)FindResource("ShadowSoft")
+                Effect = (DropShadowEffect)FindResource(ResourceShadowSoft)
             };
 
             var grid = new Grid { Margin = new Thickness(DiceCornerRadius) };
-            for (int i = 0; i < ScoreGridSize; i++)
+
+            for (int i = EmptyLength; i < ScoreGridSize; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -137,10 +208,11 @@ namespace YachtDice.Views
                 {
                     Width = DicePipSize,
                     Height = DicePipSize,
-                    Fill = (SolidColorBrush)FindResource("BrushWoodDark"),
+                    Fill = (SolidColorBrush)FindResource(ResourceBrushWoodDark),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center
                 };
+
                 Grid.SetRow(pip, row);
                 Grid.SetColumn(pip, column);
                 grid.Children.Add(pip);
@@ -148,20 +220,52 @@ namespace YachtDice.Views
 
             border.Child = grid;
             border.Tag = value;
+
             return border;
         }
 
         private List<(int row, int column)> GetPipPositions(int value)
         {
+            var positions = new List<(int row, int column)>();
+
             switch (value)
             {
-                case 1: return new List<(int, int)> { (1, 1) };
-                case 2: return new List<(int, int)> { (0, 0), (2, 2) };
-                case 3: return new List<(int, int)> { (0, 0), (1, 1), (2, 2) };
-                case 4: return new List<(int, int)> { (0, 0), (0, 2), (2, 0), (2, 2) };
-                case 5: return new List<(int, int)> { (0, 0), (0, 2), (1, 1), (2, 0), (2, 2) };
-                default: return new List<(int, int)> { (0, 0), (0, 2), (1, 0), (1, 2), (2, 0), (2, 2) };
+                case DiceFaceOne:
+                    positions.Add((PipGridIndexOne, PipGridIndexOne));
+                    break;
+                case DiceFaceTwo:
+                    positions.Add((PipGridIndexZero, PipGridIndexZero));
+                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
+                    break;
+                case DiceFaceThree:
+                    positions.Add((PipGridIndexZero, PipGridIndexZero));
+                    positions.Add((PipGridIndexOne, PipGridIndexOne));
+                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
+                    break;
+                case DiceFaceFour:
+                    positions.Add((PipGridIndexZero, PipGridIndexZero));
+                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
+                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
+                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
+                    break;
+                case DiceFaceFive:
+                    positions.Add((PipGridIndexZero, PipGridIndexZero));
+                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
+                    positions.Add((PipGridIndexOne, PipGridIndexOne));
+                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
+                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
+                    break;
+                default:
+                    positions.Add((PipGridIndexZero, PipGridIndexZero));
+                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
+                    positions.Add((PipGridIndexOne, PipGridIndexZero));
+                    positions.Add((PipGridIndexOne, PipGridIndexTwo));
+                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
+                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
+                    break;
             }
+
+            return positions;
         }
 
         private void UpdateDiceFace(int diceIndex)
@@ -172,14 +276,14 @@ namespace YachtDice.Views
             Canvas.SetLeft(newFace, Canvas.GetLeft(previousFace));
             Canvas.SetTop(newFace, Canvas.GetTop(previousFace));
             newFace.RenderTransform = previousFace.RenderTransform;
-            newFace.Cursor = System.Windows.Input.Cursors.Hand;
+            newFace.Cursor = Cursors.Hand;
 
             int diceIndexCopy = diceIndex;
             newFace.MouseLeftButtonUp += (s, e) => ToggleHoldDice(diceIndexCopy);
 
             if (_heldDice[diceIndex])
             {
-                newFace.BorderBrush = (SolidColorBrush)FindResource("BrushGold");
+                newFace.BorderBrush = (SolidColorBrush)FindResource(ResourceBrushGold);
                 newFace.BorderThickness = new Thickness(BorderThicknessSelected);
             }
 
@@ -190,33 +294,29 @@ namespace YachtDice.Views
 
         private void ToggleHoldDice(int diceIndex)
         {
-            if (_rollsLeft == EmptyLength)
+            if (_rollsLeft > EmptyLength)
             {
-                return;
+                _heldDice[diceIndex] = !_heldDice[diceIndex];
+                UpdateDiceFace(diceIndex);
             }
-
-            _heldDice[diceIndex] = !_heldDice[diceIndex];
-            UpdateDiceFace(diceIndex);
         }
 
         private void RollButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_rollsLeft >= MaxRolls)
+            if (_rollsLeft < MaxRolls)
             {
-                return;
-            }
-
-            for (int i = 0; i < DiceCount; i++)
-            {
-                if (!_heldDice[i])
+                for (int i = EmptyLength; i < DiceCount; i++)
                 {
-                    _diceValues[i] = _random.Next(MinDiceValue, MaxDiceValueExclusive);
-                    UpdateDiceFace(i);
+                    if (!_heldDice[i])
+                    {
+                        _diceValues[i] = _random.Next(MinDiceValue, MaxDiceValueExclusive);
+                        UpdateDiceFace(i);
+                    }
                 }
-            }
 
-            _rollsLeft++;
-            UpdateRollButton();
+                _rollsLeft++;
+                UpdateRollButton();
+            }
         }
 
         private void UpdateRollButton()
@@ -247,7 +347,7 @@ namespace YachtDice.Views
 
         private Grid CreateBaseRow(string categoryName, Brush background)
         {
-            var grid = new Grid { Background = background, Margin = new Thickness(0, 0, 0, RowMarginBottom) };
+            var grid = new Grid { Background = background, Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, RowMarginBottom) };
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(CategoryColumnWidth) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -257,11 +357,12 @@ namespace YachtDice.Views
                 Text = categoryName,
                 FontSize = FontSizeSmall,
                 FontWeight = FontWeights.SemiBold,
-                Foreground = (SolidColorBrush)FindResource("BrushText"),
-                Padding = new Thickness(LabelPaddingHorizontal, LabelPaddingVertical, 0, LabelPaddingVertical),
+                Foreground = (SolidColorBrush)FindResource(ResourceBrushText),
+                Padding = new Thickness(LabelPaddingHorizontal, LabelPaddingVertical, EmptyLength, LabelPaddingVertical),
                 VerticalAlignment = VerticalAlignment.Center
             };
-            Grid.SetColumn(label, 0);
+
+            Grid.SetColumn(label, EmptyLength);
             grid.Children.Add(label);
 
             return grid;
@@ -269,17 +370,18 @@ namespace YachtDice.Views
 
         private void AddCategoryRow(string categoryName)
         {
-            var row = CreateBaseRow(categoryName, (SolidColorBrush)FindResource("BrushCream2"));
+            var row = CreateBaseRow(categoryName, (SolidColorBrush)FindResource(ResourceBrushCream2));
 
             var myScoreLabel = new TextBlock
             {
                 Text = string.Empty,
                 FontSize = FontSizeNormal,
                 FontWeight = FontWeights.Bold,
-                Foreground = (SolidColorBrush)FindResource("BrushFeltLight"),
+                Foreground = (SolidColorBrush)FindResource(ResourceBrushFeltLight),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
             Grid.SetColumn(myScoreLabel, 1);
             row.Children.Add(myScoreLabel);
 
@@ -287,14 +389,15 @@ namespace YachtDice.Views
             {
                 Text = string.Empty,
                 FontSize = FontSizeNormal,
-                Foreground = (SolidColorBrush)FindResource("BrushTextMuted"),
+                Foreground = (SolidColorBrush)FindResource(ResourceBrushTextMuted),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
             Grid.SetColumn(opponentScoreLabel, 2);
             row.Children.Add(opponentScoreLabel);
 
-            row.Cursor = System.Windows.Input.Cursors.Hand;
+            row.Cursor = Cursors.Hand;
             row.MouseLeftButtonUp += (s, e) => ScoreCategory(row, myScoreLabel);
 
             CategoriesPanel.Children.Add(row);
@@ -302,11 +405,29 @@ namespace YachtDice.Views
 
         private void AddMetaRow(string text)
         {
-            var row = CreateBaseRow(text, (SolidColorBrush)FindResource("BrushWood"));
-            ((TextBlock)row.Children[0]).Foreground = Brushes.White;
+            var row = CreateBaseRow(text, (SolidColorBrush)FindResource(ResourceBrushWood));
+            ((TextBlock)row.Children[EmptyLength]).Foreground = Brushes.White;
 
-            var myValueLabel = new TextBlock { Text = DefaultZeroText, FontSize = FontSizeNormal, FontWeight = FontWeights.Bold, Foreground = Brushes.White, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-            var opponentValueLabel = new TextBlock { Text = DefaultZeroText, FontSize = FontSizeNormal, FontWeight = FontWeights.Bold, Foreground = Brushes.White, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            var myValueLabel = new TextBlock
+            {
+                Text = DefaultZeroText,
+                FontSize = FontSizeNormal,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var opponentValueLabel = new TextBlock
+            {
+                Text = DefaultZeroText,
+                FontSize = FontSizeNormal,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
             Grid.SetColumn(myValueLabel, 1);
             Grid.SetColumn(opponentValueLabel, 2);
             row.Children.Add(myValueLabel);
@@ -322,43 +443,57 @@ namespace YachtDice.Views
 
         private void ScoreCategory(Grid row, TextBlock myScoreLabel)
         {
-            if (_rollsLeft == EmptyLength)
+            if (_rollsLeft > EmptyLength && myScoreLabel.Text == string.Empty)
             {
-                new CustomDialogWindow(new DialogContentDto { Message = "Primero tira los dados." }).ShowDialog();
-                return;
-            }
-            if (myScoreLabel.Text != string.Empty)
-            {
-                return;
-            }
+                int scoreObtained = EmptyLength;
 
-            int scoreObtained = EmptyLength;
-            foreach (var value in _diceValues)
-            {
-                scoreObtained += value;
-            }
+                foreach (var value in _diceValues)
+                {
+                    scoreObtained += value;
+                }
 
-            _totalScore += scoreObtained;
-            myScoreLabel.Text = scoreObtained.ToString();
-            row.Opacity = ScoredRowOpacity;
+                _totalScore += scoreObtained;
+                myScoreLabel.Text = scoreObtained.ToString();
+                row.Opacity = ScoredRowOpacity;
 
-            if (_totalScoreLabel != null)
-            {
-                _totalScoreLabel.Text = _totalScore.ToString();
-            }
+                if (_totalScoreLabel != null)
+                {
+                    _totalScoreLabel.Text = _totalScore.ToString();
+                }
 
-            _rollsLeft = EmptyLength;
-            for (int i = 0; i < DiceCount; i++)
-            {
-                _heldDice[i] = false;
-                UpdateDiceFace(i);
+                _rollsLeft = EmptyLength;
+
+                for (int i = EmptyLength; i < DiceCount; i++)
+                {
+                    _heldDice[i] = false;
+                    UpdateDiceFace(i);
+                }
+
+                UpdateRollButton();
             }
-            UpdateRollButton();
+            else if (_rollsLeft == EmptyLength)
+            {
+                var dialogContent = new DialogContentDto
+                {
+                    Message = Strings.Game_Dice_HintPress
+                };
+
+                new CustomDialogWindow(dialogContent).ShowDialog();
+            }
         }
 
         private void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = new CustomDialogWindow(new DialogContentDto { Title = "Salir de la partida", Message = "Tu progreso no se guardará. ¿Deseas salir?", PrimaryButtonText = "Sí, salir", SecondaryButtonText = "Cancelar" }).ShowDialog();
+            var dialogContent = new DialogContentDto
+            {
+                Title = Strings.Game_Sidebar_ButtonLeave,
+                Message = Strings.Dialogs_D06_LeaveMatch,
+                PrimaryButtonText = Strings.Dialogs_OKButton,
+                SecondaryButtonText = Strings.Dialogs_IgnoreButton
+            };
+
+            var result = new CustomDialogWindow(dialogContent).ShowDialog();
+
             if (result == true)
             {
                 var menuWindow = new MenuWindow(_playerName);
@@ -367,7 +502,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void FinishDemoLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void FinishDemoLink_Click(object sender, MouseButtonEventArgs e)
         {
             GoToResultsWindow();
         }
