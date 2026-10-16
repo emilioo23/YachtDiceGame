@@ -45,20 +45,20 @@
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
     <Compile Include="Contracts\LeaderboardEntry.cs" />
-    <Compile Include="Contracts\LoginRequest.cs" />
-    <Compile Include="Contracts\LoginResponse.cs" />
+    <Compile Include="Contracts\LoginCredentials.cs" />
+    <Compile Include="Contracts\LoginData.cs" />
     <Compile Include="Contracts\LoginResultCode.cs" />
     <Compile Include="Contracts\PlayerStatistics.cs" />
-    <Compile Include="Contracts\PlayerStatisticsQuery.cs" />
-    <Compile Include="Contracts\RegisterRequest.cs" />
+    <Compile Include="Contracts\PlayerStatisticsFilter.cs" />
+    <Compile Include="Contracts\PlayerRegistrationInfo.cs" />
     <Compile Include="Contracts\RegisterResultCode.cs" />
-    <Compile Include="Contracts\ResendCodeRequest.cs" />
+    <Compile Include="Contracts\ResendCodeDetails.cs" />
     <Compile Include="Contracts\ResendResultCode.cs" />
     <Compile Include="Contracts\ServiceErrorCode.cs" />
     <Compile Include="Contracts\ServiceFault.cs" />
     <Compile Include="Contracts\ServiceNamespaces.cs" />
     <Compile Include="Contracts\VerificationResultCode.cs" />
-    <Compile Include="Contracts\VerifyCodeRequest.cs" />
+    <Compile Include="Contracts\VerificationDetails.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IPlayerService.cs" />
     <Compile Include="Mapping\CultureParser.cs" />

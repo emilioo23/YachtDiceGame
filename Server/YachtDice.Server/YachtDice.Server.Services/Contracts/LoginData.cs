@@ -6,7 +6,7 @@ namespace YachtDice.Server.Services.Contracts
     /// Answer of the server to the first step of the login.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class LoginResponse
+    public class LoginData
     {
         /// <summary>
         /// Outcome of the login attempt.

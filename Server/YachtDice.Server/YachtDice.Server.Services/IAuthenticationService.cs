@@ -17,7 +17,7 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the login attempt.</returns>
         [OperationContract(Name = "AuthenticatePlayer")]
         [FaultContract(typeof(ServiceFault))]
-        Task<LoginResponse> LoginAsync(LoginRequest request);
+        Task<LoginData> LoginAsync(LoginCredentials request);
 
         /// <summary>
         /// Validates the data and registers a new player.
@@ -26,7 +26,7 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the registration.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<RegisterResultCode> RegisterAsync(RegisterRequest request);
+        Task<RegisterResultCode> RegisterAsync(PlayerRegistrationInfo request);
 
         /// <summary>
         /// Validates the verification code entered by the player.
@@ -35,7 +35,7 @@ namespace YachtDice.Server.Services
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<VerificationResultCode> VerifyCodeAsync(VerifyCodeRequest request);
+        Task<VerificationResultCode> VerifyCodeAsync(VerificationDetails request);
 
         /// <summary>
         /// Generates a new verification code and sends it by email.
@@ -44,6 +44,6 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<ResendResultCode> ResendCodeAsync(ResendCodeRequest request);
+        Task<ResendResultCode> ResendCodeAsync(ResendCodeDetails request);
     }
 }

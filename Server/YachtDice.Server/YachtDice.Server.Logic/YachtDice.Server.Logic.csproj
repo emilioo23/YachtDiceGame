@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\LoginRequest.cs" />
+    <Compile Include="Authentication\LoginCredentials.cs" />
     <Compile Include="Authentication\LoginResult.cs" />
     <Compile Include="Authentication\LoginService.cs" />
     <Compile Include="Authentication\LoginStatus.cs" />
-    <Compile Include="Authentication\RegisterPlayerRequest.cs" />
+    <Compile Include="Authentication\PlayerRegistrationInfo.cs" />
     <Compile Include="Authentication\RegistrationResult.cs" />
     <Compile Include="Authentication\RegistrationService.cs" />
     <Compile Include="Email\EmailService.cs" />
