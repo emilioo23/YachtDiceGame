@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Authentication;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
     /// Validates the verification codes and sends them again when the player asks for it.
     /// </summary>
-    public class TwoFactorVerificationService
+    public class TwoFactorVerificationService : IVerificationService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
@@ -66,21 +66,21 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="code">Code entered by the player.</param>
         /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationResult VerifyCode(string email, string code, string challengeId)
+        public TwoFactorValidationResult ValidateCode(string email, string code, string challengeId)
         {
             return _codeService.Validate(email, code, challengeId);
         }
 
         /// <summary>
-        /// Generates a new code and sends it, if the player is allowed to ask for one.
+        /// Generates a new code and sends it synchronously, if the player is allowed to ask for one.
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="culture">Language in which the email is written.</param>
         /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Outcome of the request.</returns>
-        public async Task<ResendCodeStatus> ResendCodeAsync(string email, CultureInfo culture, string challengeId)
+        public ResendCodeStatus ProcessResendRequest(string email, CultureInfo culture, string challengeId)
         {
-            List<Player> matches = await _playerRepository.FindByEmailAsync(email);
+            List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
             ResendCodeStatus status;
 
@@ -98,11 +98,33 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else
             {
-                bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
+                bool wasSent = _deliveryService.SendCode(player.Email, player.DisplayName, culture, challengeId);
                 status = wasSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Processes the code verification required by the interface.
+        /// </summary>
+        /// <param name="details">Verification contract payload.</param>
+        /// <returns>Result code of the verification process.</returns>
+        public VerificationResultCode VerifyCode(VerificationDetails details)
+        {
+            TwoFactorValidationResult result = ValidateCode(details.Email, details.Code, details.ChallengeId);
+            return (VerificationResultCode)(int)result;
+        }
+
+        /// <summary>
+        /// Processes the code resend required by the interface.
+        /// </summary>
+        /// <param name="details">Resend contract payload.</param>
+        /// <returns>Result code of the resend process.</returns>
+        public ResendResultCode ResendCode(ResendCodeDetails details)
+        {
+            ResendCodeStatus status = ProcessResendRequest(details.Email, details.Culture, details.ChallengeId);
+            return (ResendResultCode)(int)status;
         }
     }
 }

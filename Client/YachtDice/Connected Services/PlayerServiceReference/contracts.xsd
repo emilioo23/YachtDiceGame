@@ -3,16 +3,16 @@
   <xs:element name="GetStatistics">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsQuery" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsFilter" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerStatisticsQuery">
+  <xs:complexType name="PlayerStatisticsFilter">
     <xs:sequence>
       <xs:element minOccurs="0" name="PlayerName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerStatisticsQuery" nillable="true" type="tns:PlayerStatisticsQuery" />
+  <xs:element name="PlayerStatisticsFilter" nillable="true" type="tns:PlayerStatisticsFilter" />
   <xs:element name="GetStatisticsResponse">
     <xs:complexType>
       <xs:sequence>

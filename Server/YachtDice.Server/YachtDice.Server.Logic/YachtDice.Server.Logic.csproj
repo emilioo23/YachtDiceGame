@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\ILoginService.cs" />
+    <Compile Include="Authentication\IRegistrationService.cs" />
+    <Compile Include="Authentication\IVerificationService.cs" />
     <Compile Include="Authentication\LoginCredentials.cs" />
     <Compile Include="Authentication\LoginResult.cs" />
     <Compile Include="Authentication\LoginService.cs" />
@@ -55,6 +58,7 @@
     <Compile Include="Authentication\RegistrationService.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
+    <Compile Include="VerificationDetails.cs" />
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />

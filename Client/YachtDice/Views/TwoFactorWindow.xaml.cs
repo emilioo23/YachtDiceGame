@@ -94,7 +94,7 @@ namespace YachtDice.Views
 
         private async void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var request = new ResendCodeRequest
+            var request = new ResendCodeDetails
             {
                 Email = _email,
                 ChallengeId = _challengeId,
@@ -147,7 +147,7 @@ namespace YachtDice.Views
 
         private async Task VerifyCodeAsync()
         {
-            var request = new VerifyCodeRequest
+            var request = new VerificationDetails
             {
                 Email = _email,
                 ChallengeId = _challengeId,

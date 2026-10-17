@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
@@ -14,7 +13,7 @@ namespace YachtDice.Server.Logic.Authentication
     /// <summary>
     /// Checks the player's credentials and starts the two-step verification.
     /// </summary>
-    public class LoginService
+    public class LoginService : ILoginService
     {
         private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
@@ -31,7 +30,7 @@ namespace YachtDice.Server.Logic.Authentication
         /// Initializes the service with the components it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
-        /// <param name="codeService">Service that keeps the verification codes (shared instance).</param>
+        /// <param name="codeService">Service that keeps the verification codes.</param>
         /// <param name="deliveryService">Service that sends the verification code by email.</param>
         /// <param name="verificationService">Service that handles verification challenges.</param>
         public LoginService(
@@ -69,36 +68,41 @@ namespace YachtDice.Server.Logic.Authentication
         /// <summary>
         /// Checks the credentials and, if they are correct, sends the verification code.
         /// </summary>
-        /// <param name="request">Credentials and language of the player.</param>
+        /// <param name="credentials">Credentials and language of the player.</param>
         /// <returns>Result of the login attempt.</returns>
-        public async Task<LoginResult> LoginAsync(LoginCredentials request)
+        public LoginResult Login(LoginCredentials credentials)
         {
-            if (request == null)
+            if (credentials == null)
             {
-                throw new ArgumentNullException(nameof(request), NullRequestMessage);
+                throw new ArgumentNullException(nameof(credentials), NullRequestMessage);
             }
 
             LoginResult result;
 
-            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            if (string.IsNullOrWhiteSpace(credentials.Email) || string.IsNullOrWhiteSpace(credentials.Password))
             {
                 result = new LoginResult(LoginStatus.MissingRequiredField, string.Empty);
             }
             else
             {
-                result = await AuthenticateAsync(request);
+                result = Authenticate(credentials);
             }
 
             return result;
         }
 
-        private async Task<LoginResult> AuthenticateAsync(LoginCredentials request)
+        /// <summary>
+        /// Authenticates the user synchronously by checking the database and password hash.
+        /// </summary>
+        /// <param name="credentials">The login credentials provided by the user.</param>
+        /// <returns>The login result status.</returns>
+        private LoginResult Authenticate(LoginCredentials credentials)
         {
-            List<Player> matches = await _playerRepository.FindByEmailAsync(request.Email.Trim());
+            List<Player> matches = _playerRepository.FindByEmail(credentials.Email.Trim());
             Player player = matches.FirstOrDefault();
             LoginResult result;
 
-            if (player == null || !PasswordHasher.Verify(request.Password, player.PwdHash))
+            if (player == null || !PasswordHasher.Verify(credentials.Password, player.PwdHash))
             {
                 _logger.Warning(InvalidCredentialsLogMessage);
                 result = new LoginResult(LoginStatus.InvalidCredentials, string.Empty);
@@ -110,16 +114,22 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else
             {
-                result = await SendCodeAsync(player, request.Culture);
+                result = SendCode(player, credentials.Culture);
             }
 
             return result;
         }
 
-        private async Task<LoginResult> SendCodeAsync(Player player, CultureInfo culture)
+        /// <summary>
+        /// Sends the verification code synchronously to the authenticated user.
+        /// </summary>
+        /// <param name="player">The authenticated player entity.</param>
+        /// <param name="culture">The culture information for localization.</param>
+        /// <returns>The result containing the challenge ID if successful.</returns>
+        private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool wasSent = await _deliveryService.SendCodeAsync(player.Email, player.DisplayName, culture, challengeId);
+            bool wasSent = _deliveryService.SendCode(player.Email, player.DisplayName, culture, challengeId);
             LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player.DisplayName, challengeId);

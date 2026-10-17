@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Gateway;
+using YachtDice.RegistrationServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -142,14 +143,14 @@ namespace YachtDice.Views
 
         private async Task ProcessLoginAsync()
         {
-            var request = new LoginRequest
+            var request = new LoginCredentials
             {
                 Email = EmailTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginResponse response = await _gateway.LoginAsync(request);
+            LoginData response = await _gateway.LoginAsync(request);
 
             if (response.Code == LoginResultCode.VerificationCodeSent)
             {
@@ -163,7 +164,7 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            var request = new RegisterRequest
+            var request = new PlayerRegistrationInfo
             {
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),
@@ -172,7 +173,19 @@ namespace YachtDice.Views
                 Password = RegisterPasswordBox.Password
             };
 
-            RegisterResultCode result = await _gateway.RegisterAsync(request);
+            var registrationClient = new PlayerRegistrationManagerClient();
+            RegisterResultCode result;
+
+            try
+            {
+                result = await registrationClient.RegisterAsync(request);
+                registrationClient.Close();
+            }
+            catch
+            {
+                registrationClient.Abort();
+                throw;
+            }
 
             if (result == RegisterResultCode.Success)
             {

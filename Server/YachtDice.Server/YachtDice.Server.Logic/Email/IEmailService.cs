@@ -1,19 +1,16 @@
-﻿using System.Threading.Tasks;
-
-namespace YachtDice.Server.Logic.Email
+﻿namespace YachtDice.Server.Logic.Email
 {
     /// <summary>
-    /// Sends emails to the players.
+    /// Contract for the email sending service.
     /// </summary>
     public interface IEmailService
     {
         /// <summary>
-        /// Sends a plain-text email to the given recipient.
+        /// Sends an email synchronously.
         /// </summary>
-        /// <param name="toAddress">Recipient's email address.</param>
+        /// <param name="to">Recipient email address.</param>
         /// <param name="subject">Subject of the email.</param>
-        /// <param name="body">Plain-text body of the email.</param>
-        /// <returns>A task that completes when the email has been sent.</returns>
-        Task SendAsync(string toAddress, string subject, string body);
+        /// <param name="body">Body of the email.</param>
+        void Send(string to, string subject, string body);
     }
 }

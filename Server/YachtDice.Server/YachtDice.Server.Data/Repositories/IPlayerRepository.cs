@@ -9,11 +9,11 @@ namespace YachtDice.Server.Data.Repositories
     public interface IPlayerRepository
     {
         /// <summary>
-        /// Looks for the player registered with the given email.
+        /// Finds a list of players matching the given email address.
         /// </summary>
-        /// <param name="email">Email address to look for.</param>
-        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
-        Task<List<Player>> FindByEmailAsync(string email);
+        /// <param name="email">The email address to search for.</param>
+        /// <returns>A list of matching players.</returns>
+        List<Player> FindByEmail(string email);
 
         /// <summary>
         /// Looks for the player whose display name or username matches the given name.

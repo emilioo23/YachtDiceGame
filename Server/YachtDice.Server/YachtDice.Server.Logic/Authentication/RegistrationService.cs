@@ -12,7 +12,7 @@ namespace YachtDice.Server.Logic.Authentication
     /// <summary>
     /// Validates and registers new players.
     /// </summary>
-    public class RegistrationService
+    public class RegistrationService : IRegistrationService
     {
         private const int DefaultAvatarId = 1;
         private const int InitialExperience = 0;
@@ -43,6 +43,14 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             _playerRepository = playerRepository;
+        }
+
+        /// <summary>
+        /// Sincronous wrapper to satisfy IRegistrationService interface.
+        /// </summary>
+        public RegistrationResult Register(PlayerRegistrationInfo request)
+        {
+            return RegisterAsync(request).GetAwaiter().GetResult();
         }
 
         /// <summary>

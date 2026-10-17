@@ -52,7 +52,7 @@ namespace YachtDice.Views
         {
             try
             {
-                var request = new PlayerStatisticsQuery { PlayerName = playerName };
+                var request = new PlayerStatisticsFilter { PlayerName = playerName };
                 PlayerStatistics statistics = await _gateway.GetStatisticsAsync(request);
 
                 ShowStatistics(statistics);
