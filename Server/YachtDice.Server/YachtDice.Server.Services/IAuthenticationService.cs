@@ -1,32 +1,22 @@
 ﻿using System.ServiceModel;
-using System.Threading.Tasks;
 using YachtDice.Server.Services.Contracts;
 
 namespace YachtDice.Server.Services
 {
     /// <summary>
-    /// Operations that the clients can use to authenticate.
+    /// Defines the service contract for player authentication.
     /// </summary>
-    [ServiceContract(Namespace = ServiceNamespaces.Contracts)]
+    [ServiceContract]
     public interface IAuthenticationService
     {
         /// <summary>
-        /// Checks the credentials and, if they are correct, sends the verification code by email.
+        /// Checks the credentials and, if they are correct, sends the verification code.
         /// </summary>
         /// <param name="request">Credentials and language of the player.</param>
         /// <returns>Outcome of the login attempt.</returns>
-        [OperationContract(Name = "AuthenticatePlayer")]
-        [FaultContract(typeof(ServiceFault))]
-        Task<LoginData> Login(LoginCredentials request);
-
-        /// <summary>
-        /// Validates the data and registers a new player.
-        /// </summary>
-        /// <param name="request">Data of the new player.</param>
-        /// <returns>Outcome of the registration.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<RegisterResultCode> Register(PlayerRegistrationInfo request);
+        LoginData Login(LoginCredentials request);
 
         /// <summary>
         /// Validates the verification code entered by the player.
@@ -35,15 +25,15 @@ namespace YachtDice.Server.Services
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<VerificationResultCode> VerifyCode(VerificationDetails request);
+        VerificationResultCode VerifyCode(VerificationDetails request);
 
         /// <summary>
-        /// Generates a new verification code and sends it by email.
+        /// Resends a verification code to the player's email.
         /// </summary>
-        /// <param name="request">Email and language of the player.</param>
-        /// <returns>Outcome of the request.</returns>
+        /// <param name="request">Details required to resend the code.</param>
+        /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<ResendResultCode> ResendCode(ResendCodeDetails request);
+        ResendResultCode ResendCode(ResendCodeDetails request);
     }
 }

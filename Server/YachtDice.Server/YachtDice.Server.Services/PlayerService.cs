@@ -10,9 +10,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
     /// </summary>
-    [ServiceBehavior(
-        InstanceContextMode = InstanceContextMode.Single,
-        ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class PlayerService : ServiceBase, IPlayerService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";

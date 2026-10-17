@@ -24,7 +24,6 @@ namespace YachtDice.Server.Services.Mapping
                 }
                 catch (CultureNotFoundException)
                 {
-                    // An unknown language name falls back to the default language
                     culture = CultureInfo.InvariantCulture;
                 }
             }

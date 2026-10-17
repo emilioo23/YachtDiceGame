@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Services.Contracts
 {
@@ -15,6 +14,6 @@ namespace YachtDice.Server.Services.Contracts
         /// </summary>
         /// <returns>The top players, from highest to lowest score.</returns>
         [OperationContract]
-        Task<List<PlayerProfile>> FetchTopScoresAsync();
+        List<PlayerProfile> FetchTopScores();
     }
 }

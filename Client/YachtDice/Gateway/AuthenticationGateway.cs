@@ -23,32 +23,15 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
         /// </summary>
-        /// <param name="request">Credentials and language of the player.</param>
-        /// <returns>Outcome of the login attempt.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public Task<LoginResponse> LoginAsync(LoginRequest request)
+        public Task<LoginData> LoginAsync(LoginCredentials request)
         {
-            return ExecuteAsync(client => client.AuthenticatePlayerAsync(request));
-        }
-
-        /// <summary>
-        /// Registers a new player.
-        /// </summary>
-        /// <param name="request">Data of the new player.</param>
-        /// <returns>Outcome of the registration.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public Task<RegisterResultCode> RegisterAsync(RegisterRequest request)
-        {
-            return ExecuteAsync(client => client.RegisterAsync(request));
+            return ExecuteAsync(client => client.LoginAsync(request));
         }
 
         /// <summary>
         /// Validates the verification code entered by the player.
         /// </summary>
-        ///<param name="request">Email and code entered by the player.</param>
-        /// <returns>Result of the validation.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public Task<VerificationResultCode> VerifyCodeAsync(VerifyCodeRequest request)
+        public Task<VerificationResultCode> VerifyCodeAsync(VerificationDetails request)
         {
             return ExecuteAsync(client => client.VerifyCodeAsync(request));
         }
@@ -56,10 +39,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server to send a new verification code.
         /// </summary>
-        /// <param name="request">Email and language of the player.</param>
-        /// <returns>Outcome of the request.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public Task<ResendResultCode> ResendCodeAsync(ResendCodeRequest request)
+        public Task<ResendResultCode> ResendCodeAsync(ResendCodeDetails request)
         {
             return ExecuteAsync(client => client.ResendCodeAsync(request));
         }

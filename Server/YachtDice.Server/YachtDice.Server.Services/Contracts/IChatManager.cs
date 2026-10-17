@@ -1,5 +1,4 @@
 using System.ServiceModel;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Services.Contracts
 {
@@ -14,8 +13,7 @@ namespace YachtDice.Server.Services.Contracts
         /// </summary>
         /// <param name="message">Message to send.</param>
         /// <param name="roomId">Identifier of the room.</param>
-        /// <returns>A task that completes when the message has been broadcast.</returns>
-        [OperationContract]
-        Task SendMessageAsync(ChatMessage message, string roomId);
+        [OperationContract(IsOneWay = true)]
+        void SendMessage(ChatMessage message, string roomId);
     }
 }

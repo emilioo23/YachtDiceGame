@@ -22,10 +22,10 @@
     <MetadataSource Address="net.tcp://localhost:8733/YachtDice/Authentication/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="41190962-3853-4c16-9554-9d7f049a60ae" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="73e0c437-550a-40e7-a000-f6dcaab7513b" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
-    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="95be495e-72d0-4238-99cb-d31d5e95d76e" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="bcee85ac-938c-44c3-8e73-f4ca289e2658" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="70cc6962-8b40-489f-a905-cf91e0d6fee8" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
+    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="95be495e-72d0-4238-99cb-d31d5e95d76e" SourceId="1" SourceUrl="net.tcp://localhost:8733/YachtDice/Authentication/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
