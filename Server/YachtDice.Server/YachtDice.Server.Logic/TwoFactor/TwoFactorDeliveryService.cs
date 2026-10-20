@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Resources;
@@ -46,14 +45,14 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
-        /// Generates a new code and sends it to the given email.
+        /// Generates a new code and sends it to the given email synchronously.
         /// </summary>
         /// <param name="email">Player's email address (recipient).</param>
         /// <param name="playerDisplayName">Player's name, used in the greeting.</param>
         /// <param name="culture">Language in which the email is written.</param>
         /// <param name="challengeId">Unique session challenge identifier.</param>
         /// <returns>True if the email was sent successfully.</returns>
-        public async Task<bool> SendCodeAsync(string email, string playerDisplayName, CultureInfo culture, string challengeId)
+        public bool SendCode(string email, string playerDisplayName, CultureInfo culture, string challengeId)
         {
             if (culture == null)
             {
@@ -67,7 +66,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             try
             {
-                await _emailService.SendAsync(email, subject, body);
+                _emailService.Send(email, subject, body);
                 wasSent = true;
                 _logger.Info(SentLogMessage);
             }

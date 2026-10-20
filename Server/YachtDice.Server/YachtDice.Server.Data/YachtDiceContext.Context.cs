@@ -10,6 +10,7 @@
 namespace YachtDice.Server.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
@@ -44,5 +45,6 @@ namespace YachtDice.Server.Data
         public virtual DbSet<ScorecardEntry> ScorecardEntry { get; set; }
         public virtual DbSet<TurnState> TurnState { get; set; }
         public virtual DbSet<TwoFactorAuth> TwoFactorAuth { get; set; }
+        public IEnumerable<object> Players { get; internal set; }
     }
 }

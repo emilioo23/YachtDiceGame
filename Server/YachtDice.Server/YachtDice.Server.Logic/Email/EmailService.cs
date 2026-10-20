@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Logic.Email
 {
@@ -25,8 +24,7 @@ namespace YachtDice.Server.Logic.Email
         /// <param name="toAddress">Recipient's email address.</param>
         /// <param name="subject">Subject of the email.</param>
         /// <param name="body">Plain-text body of the email.</param>
-        /// <returns>A task that completes when the email has been sent.</returns>
-        public async Task SendAsync(string toAddress, string subject, string body)
+        public void Send(string toAddress, string subject, string body)
         {
             if (string.IsNullOrWhiteSpace(toAddress))
             {
@@ -45,7 +43,7 @@ namespace YachtDice.Server.Logic.Email
                     client.EnableSsl = true;
                     client.Credentials = new NetworkCredential(user, password);
 
-                    await client.SendMailAsync(message);
+                    client.Send(message);
                 }
             }
         }

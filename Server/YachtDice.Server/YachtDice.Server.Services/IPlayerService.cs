@@ -18,7 +18,7 @@ namespace YachtDice.Server.Services
         /// <returns>The statistics of the player.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<PlayerStatisticsDto> GetStatisticsAsync(PlayerStatisticsRequestDto request);
+        Task<PlayerStatistics> GetStatistics(PlayerStatisticsFilter request);
 
         /// <summary>
         /// Gets the ranking of the best players.
@@ -26,6 +26,6 @@ namespace YachtDice.Server.Services
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        Task<List<LeaderboardEntryDto>> GetLeaderboardAsync();
+        Task<List<LeaderboardEntry>> GetLeaderboard();
     }
 }

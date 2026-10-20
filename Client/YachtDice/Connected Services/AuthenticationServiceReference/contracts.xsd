@@ -1,35 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Login">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:LoginRequestDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="LoginRequestDto">
+  <xs:complexType name="LoginCredentials">
     <xs:sequence>
       <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LoginRequestDto" nillable="true" type="tns:LoginRequestDto" />
-  <xs:element name="LoginResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="tns:LoginResponseDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="LoginResponseDto">
+  <xs:element name="LoginCredentials" nillable="true" type="tns:LoginCredentials" />
+  <xs:complexType name="LoginData">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" type="tns:LoginResultCode" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LoginResponseDto" nillable="true" type="tns:LoginResponseDto" />
+  <xs:element name="LoginData" nillable="true" type="tns:LoginData" />
   <xs:simpleType name="LoginResultCode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="VerificationCodeSent" />
@@ -55,63 +41,14 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
-  <xs:element name="Register">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:RegisterRequestDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="RegisterRequestDto">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="RegisterRequestDto" nillable="true" type="tns:RegisterRequestDto" />
-  <xs:element name="RegisterResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterResult" type="tns:RegisterResultCode" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:simpleType name="RegisterResultCode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Success" />
-      <xs:enumeration value="MissingRequiredField" />
-      <xs:enumeration value="FieldTooLong" />
-      <xs:enumeration value="InvalidEmail" />
-      <xs:enumeration value="EmailAlreadyRegistered" />
-      <xs:enumeration value="UsernameAlreadyTaken" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="RegisterResultCode" nillable="true" type="tns:RegisterResultCode" />
-  <xs:element name="VerifyCode">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:VerifyCodeRequestDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="VerifyCodeRequestDto">
+  <xs:complexType name="VerificationDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="VerifyCodeRequestDto" nillable="true" type="tns:VerifyCodeRequestDto" />
-  <xs:element name="VerifyCodeResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="VerifyCodeResult" type="tns:VerificationResultCode" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="VerificationDetails" nillable="true" type="tns:VerificationDetails" />
   <xs:simpleType name="VerificationResultCode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Valid" />
@@ -121,28 +58,14 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="VerificationResultCode" nillable="true" type="tns:VerificationResultCode" />
-  <xs:element name="ResendCode">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:ResendCodeRequestDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="ResendCodeRequestDto">
+  <xs:complexType name="ResendCodeDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CultureName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ResendCodeRequestDto" nillable="true" type="tns:ResendCodeRequestDto" />
-  <xs:element name="ResendCodeResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="ResendCodeResult" type="tns:ResendResultCode" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="ResendCodeDetails" nillable="true" type="tns:ResendCodeDetails" />
   <xs:simpleType name="ResendResultCode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="CodeSent" />
