@@ -12,7 +12,7 @@ namespace YachtDice.Server.Logic.Authentication
     /// <summary>
     /// Validates and registers new players.
     /// </summary>
-    public class RegistrationService
+    public class RegistrationService : IRegistrationService
     {
         private const int DefaultAvatarId = 1;
         private const int InitialExperience = 0;
@@ -46,11 +46,19 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
+        /// Sincronous wrapper to satisfy IRegistrationService interface.
+        /// </summary>
+        public RegistrationResult Register(PlayerRegistrationInfo request)
+        {
+            return RegisterAsync(request).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Validates the data and registers the player if everything is correct.
         /// </summary>
         /// <param name="request">Data of the new player.</param>
         /// <returns>Result of the registration attempt.</returns>
-        public async Task<RegistrationResult> RegisterAsync(RegisterPlayerRequest request)
+        public async Task<RegistrationResult> RegisterAsync(PlayerRegistrationInfo request)
         {
             if (request == null)
             {
@@ -72,7 +80,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static RegistrationResult ValidateRequest(RegisterPlayerRequest request)
+        private static RegistrationResult ValidateRequest(PlayerRegistrationInfo request)
         {
             RegistrationResult result = RegistrationResult.Success;
 
@@ -92,7 +100,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static bool HasRequiredFields(RegisterPlayerRequest request)
+        private static bool HasRequiredFields(PlayerRegistrationInfo request)
         {
             return !string.IsNullOrWhiteSpace(request.FirstName)
                 && !string.IsNullOrWhiteSpace(request.LastName)
@@ -101,7 +109,7 @@ namespace YachtDice.Server.Logic.Authentication
                 && !string.IsNullOrWhiteSpace(request.Password);
         }
 
-        private static bool HasValidLengths(RegisterPlayerRequest request)
+        private static bool HasValidLengths(PlayerRegistrationInfo request)
         {
             return request.Username.Trim().Length <= UsernameMaxLength
                 && request.Email.Trim().Length <= EmailMaxLength
@@ -126,7 +134,7 @@ namespace YachtDice.Server.Logic.Authentication
             return isValid;
         }
 
-        private async Task<RegistrationResult> SavePlayerAsync(RegisterPlayerRequest request)
+        private async Task<RegistrationResult> SavePlayerAsync(PlayerRegistrationInfo request)
         {
             RegistrationResult result;
 
@@ -147,7 +155,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static Player CreatePlayer(RegisterPlayerRequest request)
+        private static Player CreatePlayer(PlayerRegistrationInfo request)
         {
             string username = request.Username.Trim();
 

@@ -52,8 +52,8 @@ namespace YachtDice.Views
         {
             try
             {
-                var request = new PlayerStatisticsRequestDto { PlayerName = playerName };
-                PlayerStatisticsDto statistics = await _gateway.GetStatisticsAsync(request);
+                var request = new PlayerStatisticsFilter { PlayerName = playerName };
+                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(request);
 
                 ShowStatistics(statistics);
             }
@@ -68,7 +68,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void ShowStatistics(PlayerStatisticsDto statistics)
+        private void ShowStatistics(PlayerStatistics statistics)
         {
             if (statistics.IsPlayerFound)
             {

@@ -3,24 +3,24 @@
   <xs:element name="GetStatistics">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsRequestDto" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsFilter" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerStatisticsRequestDto">
+  <xs:complexType name="PlayerStatisticsFilter">
     <xs:sequence>
       <xs:element minOccurs="0" name="PlayerName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerStatisticsRequestDto" nillable="true" type="tns:PlayerStatisticsRequestDto" />
+  <xs:element name="PlayerStatisticsFilter" nillable="true" type="tns:PlayerStatisticsFilter" />
   <xs:element name="GetStatisticsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetStatisticsResult" nillable="true" type="tns:PlayerStatisticsDto" />
+        <xs:element minOccurs="0" name="GetStatisticsResult" nillable="true" type="tns:PlayerStatistics" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerStatisticsDto">
+  <xs:complexType name="PlayerStatistics">
     <xs:sequence>
       <xs:element minOccurs="0" name="BestScore" type="xs:int" />
       <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
@@ -30,7 +30,7 @@
       <xs:element minOccurs="0" name="Wins" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerStatisticsDto" nillable="true" type="tns:PlayerStatisticsDto" />
+  <xs:element name="PlayerStatistics" nillable="true" type="tns:PlayerStatistics" />
   <xs:complexType name="ServiceFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
@@ -54,17 +54,17 @@
   <xs:element name="GetLeaderboardResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetLeaderboardResult" nillable="true" type="tns:ArrayOfLeaderboardEntryDto" />
+        <xs:element minOccurs="0" name="GetLeaderboardResult" nillable="true" type="tns:ArrayOfLeaderboardEntry" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfLeaderboardEntryDto">
+  <xs:complexType name="ArrayOfLeaderboardEntry">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="LeaderboardEntryDto" nillable="true" type="tns:LeaderboardEntryDto" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LeaderboardEntry" nillable="true" type="tns:LeaderboardEntry" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfLeaderboardEntryDto" nillable="true" type="tns:ArrayOfLeaderboardEntryDto" />
-  <xs:complexType name="LeaderboardEntryDto">
+  <xs:element name="ArrayOfLeaderboardEntry" nillable="true" type="tns:ArrayOfLeaderboardEntry" />
+  <xs:complexType name="LeaderboardEntry">
     <xs:sequence>
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Position" type="xs:int" />
@@ -72,5 +72,5 @@
       <xs:element minOccurs="0" name="Wins" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LeaderboardEntryDto" nillable="true" type="tns:LeaderboardEntryDto" />
+  <xs:element name="LeaderboardEntry" nillable="true" type="tns:LeaderboardEntry" />
 </xs:schema>

@@ -3,124 +3,322 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:YachtDice.Resources"
         xmlns:views="clr-namespace:YachtDice.Views"
-        mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="1280"
+        mc:Ignorable="d"
+        Title="Yacht Dice"
+        Height="800"
+        Width="1280"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
 
     <Window.Resources>
-        <RadialGradientBrush x:Key="BrushMesaFieltro" Center="0.5,0.5" RadiusX="0.75" RadiusY="0.75">
+        <RadialGradientBrush x:Key="BrushMesaFieltro"
+                             Center="0.5,0.5"
+                             RadiusX="0.75"
+                             RadiusY="0.75">
             <GradientStop Color="#3D8A66" Offset="0"/>
             <GradientStop Color="#1E4A37" Offset="1"/>
         </RadialGradientBrush>
-        <LinearGradientBrush x:Key="BrushAroMadera" StartPoint="0,0" EndPoint="1,1">
+
+        <LinearGradientBrush x:Key="BrushAroMadera"
+                             StartPoint="0,0"
+                             EndPoint="1,1">
             <GradientStop Color="#9C6B3E" Offset="0"/>
             <GradientStop Color="#5C3D24" Offset="1"/>
         </LinearGradientBrush>
     </Window.Resources>
 
-    <Viewbox Stretch="Uniform">
-        <Grid Margin="24" Width="1280" Height="800">
+    <Viewbox Stretch="Uniform"
+             StretchDirection="DownOnly">
+
+        <Grid Margin="16"
+              Width="1248"
+              Height="768">
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="560"/>
+                <ColumnDefinition Width="540"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <views:LanguageSwitcher x:Name="LanguageSwitcherControl"
-                                     Grid.Column="0" Grid.ColumnSpan="2"
-                                     HorizontalAlignment="Right"
-                                     VerticalAlignment="Top"
-                                     Margin="0,-16,0,0"
-                                     Panel.ZIndex="99"/>
+            <views:LanguageSwitcher
+                x:Name="LanguageSwitcherControl"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,-8,0,0"
+                Panel.ZIndex="99"/>
 
-            <Border Grid.Column="0" Style="{StaticResource CardPanel}" Margin="0,0,16,0">
-                <StackPanel>
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0,0,12,0">
 
-                    <Border Background="{StaticResource BrushWood}" CornerRadius="10" Padding="14,10" Margin="0,0,0,18">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Background="{StaticResource BrushWood}"
+                            CornerRadius="8"
+                            Padding="12,8"
+                            Margin="0,0,0,10">
+
                         <Grid>
-                            <TextBlock x:Name="TurnStatusTextBlock" Text="{x:Static properties:Strings.Game_Topbar_YourTurn}" Foreground="White" FontWeight="Bold" FontSize="19" VerticalAlignment="Center"/>
-                            
-                            <TextBlock x:Name="RoundInfoTextBlock" Foreground="{StaticResource BrushCream2}" FontSize="12"
-                                   HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock
+                                x:Name="TurnStatusTextBlock"
+                                Text="{x:Static properties:Strings.Game_Topbar_YourTurn}"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                FontSize="17"
+                                VerticalAlignment="Center"/>
+
+                            <TextBlock
+                                x:Name="RoundInfoTextBlock"
+                                Foreground="{StaticResource BrushCream2}"
+                                FontSize="12"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 
-                    <Grid Margin="0,0,0,10">
+                    <Grid Grid.Row="1"
+                          Margin="0,0,0,8">
+
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="180"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                            <Border Width="42" Height="42" CornerRadius="21" Background="{StaticResource BrushWood}"
-                                BorderBrush="{StaticResource BrushGold}" BorderThickness="2" HorizontalAlignment="Center">
-                                <TextBlock x:Name="PlayerInitialTextBlock" d:Text="U" Foreground="White" FontWeight="Bold" FontSize="15"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1"
+                                    HorizontalAlignment="Center">
+
+                            <Border Width="36"
+                                    Height="36"
+                                    CornerRadius="18"
+                                    Background="{StaticResource BrushWood}"
+                                    BorderBrush="{StaticResource BrushGold}"
+                                    BorderThickness="2"
+                                    HorizontalAlignment="Center">
+
+                                <TextBlock
+                                    x:Name="PlayerInitialTextBlock"
+                                    Foreground="White"
+                                    FontWeight="Bold"
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock x:Name="PlayerNameTextBlock" d:Text="Tú" FontSize="15" FontWeight="SemiBold"
-                                   Foreground="{StaticResource BrushText}"
-                                   HorizontalAlignment="Center" Margin="0,4,0,0"/>
+
+                            <TextBlock
+                                x:Name="PlayerNameTextBlock"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource BrushText}"
+                                HorizontalAlignment="Center"
+                                Margin="0,2,0,0"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                            <Border Width="42" Height="42" CornerRadius="21" Background="{StaticResource BrushFeltLight}"
-                                BorderBrush="{StaticResource BrushBorder}" BorderThickness="2" HorizontalAlignment="Center">
-                                <TextBlock d:Text="D" Foreground="White" FontWeight="Bold" FontSize="15"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="2"
+                                    HorizontalAlignment="Center">
+
+                            <Border Width="36"
+                                    Height="36"
+                                    CornerRadius="18"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    BorderBrush="{StaticResource BrushBorder}"
+                                    BorderThickness="2"
+                                    HorizontalAlignment="Center">
+
+                                <TextBlock
+                                    Foreground="White"
+                                    FontWeight="Bold"
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock d:Text="DiegoL" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource BrushText}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource BrushText}"
+                                HorizontalAlignment="Center"
+                                Margin="0,2,0,0"/>
                         </StackPanel>
                     </Grid>
 
-                    <StackPanel x:Name="CategoriesPanel" Margin="0,0,0,16"/>
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Margin="0,0,0,10">
+
+                        <StackPanel x:Name="CategoriesPanel"/>
+                    </ScrollViewer>
+
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="0"
+                            Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}"
+                            Style="{StaticResource BtnOutline}"
+                            HorizontalAlignment="Left"
+                            FontSize="14"
+                            Padding="12,6"/>
+
+                        <Button
+                            Grid.Column="1"
+                            Content="{x:Static properties:Strings.Game_Sidebar_ButtonKick}"
+                            Style="{StaticResource BtnOutline}"
+                            FontSize="14"
+                            Padding="8,6"
+                            Margin="0,0,6,0"/>
+
+                        <Button
+                            Grid.Column="2"
+                            Content="{x:Static properties:Strings.Game_Sidebar_ButtonLeave}"
+                            Style="{StaticResource BtnOutline}"
+                            Foreground="{StaticResource BrushDanger}"
+                            FontSize="14"
+                            Padding="8,6"
+                            Click="LeaveMatchButton_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="220"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Style="{StaticResource CardPanel}"
+                        Margin="0,0,0,12">
+
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+
+                        <Border Width="380"
+                                Height="380"
+                                CornerRadius="190"
+                                Background="{StaticResource BrushAroMadera}"
+                                Effect="{StaticResource ShadowCard}"
+                                Margin="0,0,0,16">
+
+                            <Border Width="330"
+                                    Height="330"
+                                    CornerRadius="165"
+                                    Background="{StaticResource BrushMesaFieltro}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+
+                                <Canvas x:Name="DiceCanvas"
+                                        Width="330"
+                                        Height="330"/>
+                            </Border>
+                        </Border>
+
+                        <Button
+                            x:Name="RollButton"
+                            Style="{StaticResource BtnPrimary}"
+                            HorizontalAlignment="Center"
+                            FontSize="20"
+                            Padding="40,12"
+                            Margin="0,0,0,8"
+                            Click="RollButton_Click"/>
+
+                        <TextBlock
+                            x:Name="HintTextBlock"
+                            Text="{x:Static properties:Strings.Game_Dice_HintPress}"
+                            FontSize="11"
+                            Foreground="{StaticResource BrushCream2}"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,8"/>
+
+                        <TextBlock
+                            Text="{x:Static properties:Strings.Results_Title}"
+                            FontSize="11"
+                            Foreground="{StaticResource BrushCream2}"
+                            HorizontalAlignment="Center"
+                            TextDecorations="Underline"
+                            Cursor="Hand"
+                            MouseLeftButtonUp="FinishDemoLink_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Style="{StaticResource CardPanel}"
+                        Padding="12">
 
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}" Style="{StaticResource BtnOutline}"
-                            HorizontalAlignment="Left" FontSize="15" Padding="16,8"/>
-                        <Button Grid.Column="1" Content="{x:Static properties:Strings.Game_Sidebar_ButtonKick}"
-                            Style="{StaticResource BtnOutline}" FontSize="15" Padding="10,8" Margin="0,0,8,0"/>
-                        <Button Grid.Column="2" Content="{x:Static properties:Strings.Game_Sidebar_ButtonLeave}"
-                            Style="{StaticResource BtnOutline}" Foreground="{StaticResource BrushDanger}"
-                            FontSize="15" Padding="10,8" Click="LeaveMatchButton_Click"/>
-                    </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                </StackPanel>
-            </Border>
+                        <TextBlock
+                            Grid.Row="0"
+                            Text="{x:Static properties:Strings.Game_Chat_ButtonChat}"
+                            Foreground="{StaticResource BrushText}"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Margin="0,0,0,6"/>
 
-            <Border Grid.Column="1" Style="{StaticResource CardPanel}">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border
+                            Grid.Row="1"
+                            Background="{StaticResource BrushCream2}"
+                            CornerRadius="6"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            Margin="0,0,0,8"
+                            Padding="6">
 
-                    <Border Width="440" Height="440" CornerRadius="220" Background="{StaticResource BrushAroMadera}"
-                        Effect="{StaticResource ShadowCard}" Margin="0,0,0,26">
-                        <Border Width="380" Height="380" CornerRadius="190" Background="{StaticResource BrushMesaFieltro}"
-                            HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Canvas x:Name="DiceCanvas" Width="380" Height="380"/>
+                            <ScrollViewer
+                                x:Name="ChatScrollViewer"
+                                VerticalScrollBarVisibility="Auto">
+
+                                <StackPanel x:Name="ChatMessagesPanel"/>
+                            </ScrollViewer>
                         </Border>
-                    </Border>
 
-                    <Button x:Name="RollButton" d:Content="Tirar (0/3)" Style="{StaticResource BtnPrimary}"
-                        HorizontalAlignment="Center" FontSize="23" Padding="50,15" Margin="0,0,0,10"
-                        Click="RollButton_Click"/>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="HintTextBlock" Text="{x:Static properties:Strings.Game_Dice_HintPress}"
-                           FontSize="12" Foreground="{StaticResource BrushCream2}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                            <TextBox
+                                x:Name="ChatInputTextBox"
+                                Grid.Column="0"
+                                Padding="6,4"
+                                FontSize="13"
+                                VerticalContentAlignment="Center"
+                                KeyDown="ChatInputTextBox_KeyDown"/>
 
-                    <TextBlock Text="Finalizar partida (demo)" FontSize="11" Foreground="{StaticResource BrushCream2}"
-                           HorizontalAlignment="Center" TextDecorations="Underline" Cursor="Hand"
-                           MouseLeftButtonUp="FinishDemoLink_Click"/>
-
-                </StackPanel>
-            </Border>
-
+                            <Button
+                                x:Name="SendChatButton"
+                                Grid.Column="1"
+                                Content="&gt;"
+                                Style="{StaticResource BtnPrimary}"
+                                Margin="6,0,0,0"
+                                Padding="14,4"
+                                FontSize="15"
+                                Click="SendChatButton_Click"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Viewbox>
 </Window>

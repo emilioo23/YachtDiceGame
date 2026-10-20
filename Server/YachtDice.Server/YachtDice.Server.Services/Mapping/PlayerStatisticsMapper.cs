@@ -1,7 +1,4 @@
-﻿using YachtDice.Server.Logic.Players;
-using YachtDice.Server.Services.Contracts;
-
-namespace YachtDice.Server.Services.Mapping
+﻿namespace YachtDice.Server.Services.Mapping
 {
     /// <summary>
     /// Converts the player statistics of the logic layer into the data contract.
@@ -13,9 +10,9 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="statistics">Statistics produced by the logic layer.</param>
         /// <returns>Answer for the client.</returns>
-        public static PlayerStatisticsDto ToDto(PlayerStatistics statistics)
+        public static Contracts.PlayerStatistics ToContract(Logic.Players.PlayerStatistics statistics)
         {
-            return new PlayerStatisticsDto
+            return new Contracts.PlayerStatistics
             {
                 IsPlayerFound = statistics.IsPlayerFound,
                 GamesPlayed = statistics.GamesPlayed,

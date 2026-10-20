@@ -15,9 +15,9 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerStatisticsRequestDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerStatisticsFilter", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class PlayerStatisticsRequestDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PlayerStatisticsFilter : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -60,9 +60,9 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerStatisticsDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerStatistics", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class PlayerStatisticsDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PlayerStatistics : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -260,9 +260,9 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LeaderboardEntryDto", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LeaderboardEntry", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class LeaderboardEntryDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class LeaderboardEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -357,17 +357,17 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.PlayerStatisticsDto GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request);
+        YachtDice.PlayerServiceReference.PlayerStatistics GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatisticsDto> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request);
+        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.LeaderboardEntryDto[] GetLeaderboard();
+        YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard();
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntryDto[]> GetLeaderboardAsync();
+        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -397,19 +397,19 @@ namespace YachtDice.PlayerServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.PlayerServiceReference.PlayerStatisticsDto GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request) {
+        public YachtDice.PlayerServiceReference.PlayerStatistics GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request) {
             return base.Channel.GetStatistics(request);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatisticsDto> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsRequestDto request) {
+        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request) {
             return base.Channel.GetStatisticsAsync(request);
         }
         
-        public YachtDice.PlayerServiceReference.LeaderboardEntryDto[] GetLeaderboard() {
+        public YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard() {
             return base.Channel.GetLeaderboard();
         }
         
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntryDto[]> GetLeaderboardAsync() {
+        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync() {
             return base.Channel.GetLeaderboardAsync();
         }
     }

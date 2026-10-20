@@ -22,10 +22,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the game statistics of a player.
         /// </summary>
-        /// <param name="request">Name of the player.</param>
-        /// <returns>Statistics of the player.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public Task<PlayerStatisticsDto> GetStatisticsAsync(PlayerStatisticsRequestDto request)
+        public Task<PlayerStatistics> GetStatisticsAsync(PlayerStatisticsFilter request)
         {
             return ExecuteAsync(client => client.GetStatisticsAsync(request));
         }
@@ -47,9 +44,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the leaderboard ranking entries.
         /// </summary>
-        /// <returns>A list of leaderboard entry DTOs.</returns>
-        /// <exception cref="GatewayException">The request could not be completed.</exception>
-        public async Task<List<LeaderboardEntryDto>> GetLeaderboardAsync()
+        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
         {
             using (var client = new PlayerServiceClient())
             {

@@ -11,6 +11,9 @@ using YachtDice.Server.Services;
 
 namespace YachtDice.Server.Host
 {
+    /// <summary>
+    /// Represents the main entry point for the WCF service host application.
+    /// </summary>
     internal static class Program
     {
         private const string StartedLogMessage = "Server started. Press Enter to stop it.";
@@ -18,6 +21,9 @@ namespace YachtDice.Server.Host
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
 
+        /// <summary>
+        /// Initializes and opens the service hosts, keeping the application running until stopped.
+        /// </summary>
         private static void Main()
         {
             var logger = new AppLogger(typeof(Program));
@@ -26,7 +32,9 @@ namespace YachtDice.Server.Host
             try
             {
                 serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
+                serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
                 serviceHosts.Add(new ServiceHost(CreatePlayerService()));
+                serviceHosts.Add(new ServiceHost(new GameService()));
                 serviceHosts.ForEach(serviceHost => serviceHost.Open());
                 logger.Info(StartedLogMessage);
                 Console.ReadLine();
@@ -49,6 +57,10 @@ namespace YachtDice.Server.Host
             }
         }
 
+        /// <summary>
+        /// Creates and configures the authentication service with its required dependencies.
+        /// </summary>
+        /// <returns>A fully configured instance of AuthenticationService.</returns>
         private static AuthenticationService CreateAuthenticationService()
         {
             var playerRepository = new PlayerRepository();
@@ -58,10 +70,24 @@ namespace YachtDice.Server.Host
 
             return new AuthenticationService(
                 new LoginService(playerRepository, codeService, deliveryService, verificationService),
-                new RegistrationService(playerRepository),
                 verificationService);
         }
 
+        /// <summary>
+        /// Creates and configures the player registration service with its required dependencies.
+        /// </summary>
+        /// <returns>A fully configured instance of PlayerRegistrationService.</returns>
+        private static PlayerRegistrationService CreatePlayerRegistrationService()
+        {
+            var playerRepository = new PlayerRepository();
+
+            return new PlayerRegistrationService(new RegistrationService(playerRepository));
+        }
+
+        /// <summary>
+        /// Creates and configures the player service with its required dependencies.
+        /// </summary>
+        /// <returns>A fully configured instance of PlayerService.</returns>
         private static PlayerService CreatePlayerService()
         {
             var gameHistoryRepository = new GameHistoryRepository();

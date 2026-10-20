@@ -24,9 +24,9 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="dto">Data sent by the client.</param>
         /// <returns>Request for the logic layer.</returns>
-        public static LoginRequest ToLoginRequest(LoginRequestDto dto)
+        public static Logic.Authentication.LoginCredentials ToLoginRequest(Contracts.LoginCredentials dto)
         {
-            return new LoginRequest
+            return new Logic.Authentication.LoginCredentials
             {
                 Email = dto.Email,
                 Password = dto.Password,
@@ -39,9 +39,9 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="result">Result produced by the logic layer.</param>
         /// <returns>Answer for the client.</returns>
-        public static LoginResponseDto ToResponse(LoginResult result)
+        public static LoginData ToResponse(LoginResult result)
         {
-            return new LoginResponseDto
+            return new LoginData
             {
                 Code = _resultCodes[result.Status],
                 DisplayName = result.DisplayName,
