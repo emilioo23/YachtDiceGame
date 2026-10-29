@@ -227,9 +227,6 @@ namespace YachtDice.RegistrationServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RegistrationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterServiceFaultFault", Name="ServiceFault")]
         YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.Player player);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse")]
-        System.Threading.Tasks.Task<YachtDice.RegistrationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.RegistrationServiceReference.Player player);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -261,10 +258,6 @@ namespace YachtDice.RegistrationServiceReference {
         
         public YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.Player player) {
             return base.Channel.Register(player);
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.RegistrationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.RegistrationServiceReference.Player player) {
-            return base.Channel.RegisterAsync(player);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace YachtDice.Gateway
         /// </summary>
         public Task<PlayerStatistics> GetStatisticsAsync(string username)
         {
-            return ExecuteAsync(client => client.GetStatisticsAsync(username));
+            return ExecuteAsync(client => client.GetStatistics(username));
         }
 
         /// <inheritdoc />
@@ -44,13 +44,9 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the leaderboard ranking entries.
         /// </summary>
-        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
+        public Task<List<LeaderboardEntry>> GetLeaderboardAsync()
         {
-            using (var client = new PlayerServiceClient())
-            {
-                var leaderboardArray = await client.GetLeaderboardAsync();
-                return leaderboardArray.ToList();
-            }
+            return ExecuteAsync(client => client.GetLeaderboard().ToList());
         }
     }
 }

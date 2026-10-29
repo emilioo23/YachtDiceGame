@@ -16,7 +16,7 @@ namespace YachtDice.Gateway
         /// <returns>Outcome of the registration.</returns>
         public Task<RegisterResultCode> RegisterAsync(Player player)
         {
-            return ExecuteAsync(client => client.RegisterAsync(player));
+            return ExecuteAsync(client => client.Register(player));
         }
 
         /// <inheritdoc />

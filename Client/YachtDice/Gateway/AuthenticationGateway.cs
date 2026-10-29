@@ -25,7 +25,7 @@ namespace YachtDice.Gateway
         /// </summary>
         public Task<LoginData> LoginAsync(LoginCredentials request)
         {
-            return ExecuteAsync(client => client.LoginAsync(request));
+            return ExecuteAsync(client => client.Login(request));
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace YachtDice.Gateway
         /// </summary>
         public Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
         {
-            return ExecuteAsync(client => client.VerifyCodeAsync(email, code, challengeId));
+            return ExecuteAsync(client => client.VerifyCode(email, code, challengeId));
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace YachtDice.Gateway
         /// </summary>
         public Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
         {
-            return ExecuteAsync(client => client.ResendCodeAsync(email, challengeId, culture));
+            return ExecuteAsync(client => client.ResendCode(email, challengeId, culture));
         }
 
         /// <inheritdoc />
