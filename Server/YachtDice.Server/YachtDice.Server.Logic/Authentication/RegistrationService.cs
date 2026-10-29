@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
@@ -10,7 +9,7 @@ using YachtDice.Server.Logic.Security;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Validates and registers new players.
+    /// Validates and registers new players synchronously.
     /// </summary>
     public class RegistrationService : IRegistrationService
     {
@@ -20,15 +19,15 @@ namespace YachtDice.Server.Logic.Authentication
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
-        private const string FriendCodePrefix = "FRD-";
         private const int FriendCodeStartIndex = 0;
         private const int FriendCodeLength = 6;
+        private const string FriendCodePrefix = "FRD-";
         private const string GuidFormat = "N";
         private const string RegisteredLogMessage = "Player registered successfully.";
         private const string NullRequestMessage = "The registration request cannot be null.";
         private const string NullRepositoryMessage = "The player repository cannot be null.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(RegistrationService));
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
 
         /// <summary>
@@ -43,33 +42,27 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             _playerRepository = playerRepository;
-        }
-
-        /// <summary>
-        /// Sincronous wrapper to satisfy IRegistrationService interface.
-        /// </summary>
-        public RegistrationResult Register(PlayerRegistrationInfo request)
-        {
-            return RegisterAsync(request).GetAwaiter().GetResult();
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
         /// Validates the data and registers the player if everything is correct.
         /// </summary>
-        /// <param name="request">Data of the new player.</param>
+        /// <param name="newPlayer">Data of the new player.</param>
+        /// <param name="plainPassword">The player's plain text password.</param>
         /// <returns>Result of the registration attempt.</returns>
-        public async Task<RegistrationResult> RegisterAsync(PlayerRegistrationInfo request)
+        public RegistrationResult RegisterPlayer(Player newPlayer, string plainPassword)
         {
-            if (request == null)
+            if (newPlayer == null)
             {
-                throw new ArgumentNullException(nameof(request), NullRequestMessage);
+                throw new ArgumentNullException(nameof(newPlayer), NullRequestMessage);
             }
 
-            RegistrationResult result = ValidateRequest(request);
+            RegistrationResult result = ValidateRequest(newPlayer, plainPassword);
 
             if (result == RegistrationResult.Success)
             {
-                result = await SavePlayerAsync(request);
+                result = SavePlayer(newPlayer, plainPassword);
             }
 
             if (result == RegistrationResult.Success)
@@ -80,19 +73,19 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static RegistrationResult ValidateRequest(PlayerRegistrationInfo request)
+        private static RegistrationResult ValidateRequest(Player player, string plainPassword)
         {
             RegistrationResult result = RegistrationResult.Success;
 
-            if (!HasRequiredFields(request))
+            if (!HasRequiredFields(player, plainPassword))
             {
                 result = RegistrationResult.MissingRequiredField;
             }
-            else if (!HasValidLengths(request))
+            else if (!HasValidLengths(player))
             {
                 result = RegistrationResult.FieldTooLong;
             }
-            else if (!IsValidEmail(request.Email.Trim()))
+            else if (!IsValidEmail(player.Email?.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
             }
@@ -100,80 +93,86 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static bool HasRequiredFields(PlayerRegistrationInfo request)
+        private static bool HasRequiredFields(Player player, string plainPassword)
         {
-            return !string.IsNullOrWhiteSpace(request.FirstName)
-                && !string.IsNullOrWhiteSpace(request.LastName)
-                && !string.IsNullOrWhiteSpace(request.Username)
-                && !string.IsNullOrWhiteSpace(request.Email)
-                && !string.IsNullOrWhiteSpace(request.Password);
+            return !string.IsNullOrWhiteSpace(player.FirstName)
+                && !string.IsNullOrWhiteSpace(player.LastName)
+                && !string.IsNullOrWhiteSpace(player.Username)
+                && !string.IsNullOrWhiteSpace(player.Email)
+                && !string.IsNullOrWhiteSpace(plainPassword);
         }
 
-        private static bool HasValidLengths(PlayerRegistrationInfo request)
+        private static bool HasValidLengths(Player player)
         {
-            return request.Username.Trim().Length <= UsernameMaxLength
-                && request.Email.Trim().Length <= EmailMaxLength
-                && request.FirstName.Trim().Length <= NameMaxLength
-                && request.LastName.Trim().Length <= NameMaxLength;
+            int usernameLength = player.Username?.Trim().Length ?? 0;
+            int emailLength = player.Email?.Trim().Length ?? 0;
+            int firstNameLength = player.FirstName?.Trim().Length ?? 0;
+            int lastNameLength = player.LastName?.Trim().Length ?? 0;
+
+            return usernameLength <= UsernameMaxLength
+                && emailLength <= EmailMaxLength
+                && firstNameLength <= NameMaxLength
+                && lastNameLength <= NameMaxLength;
         }
 
         private static bool IsValidEmail(string email)
         {
-            bool isValid;
+            bool isValid = false;
 
-            try
+            if (!string.IsNullOrWhiteSpace(email))
             {
-                var address = new MailAddress(email);
-                isValid = address.Address == email;
-            }
-            catch (FormatException)
-            {
-                isValid = false;
+                try
+                {
+                    var address = new MailAddress(email);
+                    isValid = address.Address == email;
+                }
+                catch (FormatException)
+                {
+                    isValid = false;
+                }
             }
 
             return isValid;
         }
 
-        private async Task<RegistrationResult> SavePlayerAsync(PlayerRegistrationInfo request)
+        private RegistrationResult SavePlayer(Player player, string plainPassword)
         {
             RegistrationResult result;
+            string email = player.Email.Trim();
+            string username = player.Username.Trim();
 
-            if (await _playerRepository.EmailExistsAsync(request.Email.Trim()))
+            if (_playerRepository.EmailExists(email))
             {
                 result = RegistrationResult.EmailAlreadyRegistered;
             }
-            else if (await _playerRepository.UsernameExistsAsync(request.Username.Trim()))
+            else if (_playerRepository.UsernameExists(username))
             {
                 result = RegistrationResult.UsernameAlreadyTaken;
             }
             else
             {
-                await _playerRepository.AddAsync(CreatePlayer(request));
+                PreparePlayerEntity(player, plainPassword);
+                _playerRepository.Add(player);
                 result = RegistrationResult.Success;
             }
 
             return result;
         }
 
-        private static Player CreatePlayer(PlayerRegistrationInfo request)
+        private static void PreparePlayerEntity(Player player, string plainPassword)
         {
-            string username = request.Username.Trim();
-
-            return new Player
-            {
-                AvatarId = DefaultAvatarId,
-                Username = username,
-                Email = request.Email.Trim(),
-                PwdHash = PasswordHasher.ComputeHash(request.Password),
-                State = PlayerState.Active.ToString(),
-                RegDate = DateTime.UtcNow,
-                XP = InitialExperience,
-                Level = InitialLevel,
-                DisplayName = username,
-                FirstName = request.FirstName.Trim(),
-                LastName = request.LastName.Trim(),
-                FriendCode = CreateFriendCode()
-            };
+            player.AvatarId = DefaultAvatarId;
+            player.Username = player.Username.Trim();
+            player.Email = player.Email.Trim();
+            player.PwdHash = PasswordHasher.ComputeHash(plainPassword);
+            player.State = PlayerState.Active.ToString();
+            player.RegDate = DateTime.UtcNow;
+            player.XP = InitialExperience;
+            player.Level = InitialLevel;
+            player.DisplayName = player.Username;
+            player.FirstName = player.FirstName.Trim();
+            player.LastName = player.LastName.Trim();
+            player.FriendCode = CreateFriendCode();
         }
 
         private static string CreateFriendCode()

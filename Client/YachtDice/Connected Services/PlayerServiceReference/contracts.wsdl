@@ -6,13 +6,13 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPlayerService_GetStatistics_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetStatistics" />
+  <wsdl:message name="IPlayerService_GetPlayerStatistics_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlayerStatistics" />
   </wsdl:message>
-  <wsdl:message name="IPlayerService_GetStatistics_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetStatisticsResponse" />
+  <wsdl:message name="IPlayerService_GetPlayerStatistics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlayerStatisticsResponse" />
   </wsdl:message>
-  <wsdl:message name="IPlayerService_GetStatistics_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPlayerService_GetPlayerStatistics_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPlayerService_GetLeaderboard_InputMessage">
@@ -25,10 +25,10 @@
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:portType name="IPlayerService">
-    <wsdl:operation name="GetStatistics">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatistics" message="tns:IPlayerService_GetStatistics_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse" message="tns:IPlayerService_GetStatistics_OutputMessage" />
-      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetStatistics_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="GetPlayerStatistics">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatisticsResponse" message="tns:IPlayerService_GetPlayerStatistics_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatisticsServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetPlayerStatistics_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetLeaderboard">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard" message="tns:IPlayerService_GetLeaderboard_InputMessage" />

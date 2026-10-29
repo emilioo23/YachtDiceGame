@@ -11,6 +11,9 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Window where the player types the verification code received by email.
+    /// </summary>
     public partial class TwoFactorWindow : Window
     {
         private const int VisibleLocalPartChars = 2;
@@ -19,24 +22,30 @@ namespace YachtDice.Views
         private readonly string _email;
         private readonly string _playerDisplayName;
         private readonly string _challengeId;
+        private readonly bool _isActivation;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
         private readonly TextBox[] _digitBoxes;
 
-        public TwoFactorWindow(string email, string playerDisplayName, string challengeId)
+        /// <summary>
+        /// Initializes the verification window for a pending login.
+        /// </summary>
+        /// <param name="challenge">Data of the verification code that was sent to the player.</param>
+        public TwoFactorWindow(VerificationChallenge challenge)
         {
             InitializeComponent();
 
-            _email = email;
-            _playerDisplayName = playerDisplayName;
-            _challengeId = challengeId;
+            _email = challenge.Email;
+            _playerDisplayName = challenge.PlayerDisplayName;
+            _challengeId = challenge.ChallengeId;
+            _isActivation = challenge.IsActivation;
             _digitBoxes = new[]
             {
                 Digit1TextBox, Digit2TextBox, Digit3TextBox,
                 Digit4TextBox, Digit5TextBox, Digit6TextBox
             };
 
-            DestinationEmailTextBlock.Text = MaskEmail(email);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName, challengeId);
+            DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
         }
 
@@ -83,27 +92,23 @@ namespace YachtDice.Views
 
         private async void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsCodeComplete())
+            if (IsCodeComplete())
+            {
+                await VerifyCodeAsync();
+            }
+            else
             {
                 ShowMessage(Strings.TwoFactor_ErrorIncompleteCode);
-                return;
             }
-
-            await VerifyCodeAsync();
         }
 
         private async void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var request = new ResendCodeDetails
-            {
-                Email = _email,
-                ChallengeId = _challengeId,
-                CultureName = App.CurrentCultureCode
-            };
-
             try
             {
-                ResendResultCode result = await _gateway.ResendCodeAsync(request);
+                ResendResultCode result = _isActivation
+                    ? await _gateway.ResendActivationCodeAsync(_playerDisplayName, _challengeId, App.CurrentCultureCode)
+                    : await _gateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
                 HandleResendResult(result);
             }
             catch (GatewayException ex)
@@ -114,9 +119,16 @@ namespace YachtDice.Views
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            this.Close();
+            if (_isActivation)
+            {
+                OpenSettingsWindow();
+            }
+            else
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                this.Close();
+            }
         }
 
         private static string MaskEmail(string email)
@@ -137,7 +149,7 @@ namespace YachtDice.Views
 
         private static void ShowMessage(string message)
         {
-            new CustomDialogWindow(new DialogContentDto { Message = message }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
         }
 
         private bool IsCodeComplete()
@@ -147,16 +159,13 @@ namespace YachtDice.Views
 
         private async Task VerifyCodeAsync()
         {
-            var request = new VerificationDetails
-            {
-                Email = _email,
-                ChallengeId = _challengeId,
-                Code = string.Concat(_digitBoxes.Select(box => box.Text))
-            };
+            string code = string.Concat(_digitBoxes.Select(box => box.Text));
 
             try
             {
-                VerificationResultCode result = await _gateway.VerifyCodeAsync(request);
+                VerificationResultCode result = _isActivation
+                    ? await _gateway.ConfirmActivationAsync(_playerDisplayName, code, _challengeId)
+                    : await _gateway.VerifyCodeAsync(_email, code, _challengeId);
                 HandleVerificationResult(result);
             }
             catch (GatewayException ex)
@@ -170,7 +179,7 @@ namespace YachtDice.Views
             switch (result)
             {
                 case VerificationResultCode.Valid:
-                    OpenMenuWindow();
+                    CompleteVerification();
                     break;
                 case VerificationResultCode.Expired:
                     ShowMessage(Strings.TwoFactor_ErrorCodeExpired);
@@ -205,6 +214,26 @@ namespace YachtDice.Views
                     ShowMessage(Strings.TwoFactor_ErrorSendFailed);
                     break;
             }
+        }
+
+        private void CompleteVerification()
+        {
+            if (_isActivation)
+            {
+                ShowMessage(Strings.Settings_Security_TwoFactorEnabledMessage);
+                OpenSettingsWindow();
+            }
+            else
+            {
+                OpenMenuWindow();
+            }
+        }
+
+        private void OpenSettingsWindow()
+        {
+            var settingsWindow = new SettingsWindow(_playerDisplayName, SettingsWindow.SecuritySection);
+            settingsWindow.Show();
+            this.Close();
         }
 
         private void OpenMenuWindow()

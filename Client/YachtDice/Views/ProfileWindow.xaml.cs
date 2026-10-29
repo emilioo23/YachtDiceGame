@@ -35,19 +35,18 @@ namespace YachtDice.Views
         private void ColorSwatch_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var swatch = sender as Border;
-            if (swatch == null)
-            {
-                return;
-            }
 
-            var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
-            avatarBorder.Background = swatch.Background;
+            if (swatch != null)
+            {
+                var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
+                avatarBorder.Background = swatch.Background;
+            }
         }
 
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: The real changes will be saved in the backend here later.
-            new CustomDialogWindow(new DialogContentDto { Message = Strings.Profile_SavedMessage }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = Strings.Profile_SavedMessage }).ShowDialog();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

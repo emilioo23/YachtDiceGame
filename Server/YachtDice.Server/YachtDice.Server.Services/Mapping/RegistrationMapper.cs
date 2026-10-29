@@ -1,27 +1,33 @@
-﻿using YachtDice.Server.Logic.Authentication;
-using YachtDice.Server.Services.Contracts;
+﻿using System;
 
 namespace YachtDice.Server.Services.Mapping
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using Data = YachtDice.Server.Data;
+
     /// <summary>
-    /// Converts the registration data contract into the request of the logic layer.
+    /// Converts player registration contracts into logic layer models.
     /// </summary>
     internal static class RegistrationMapper
     {
         /// <summary>
-        /// Creates the logic-layer request from the data sent by the client.
+        /// Creates the data model from the player entity provided by the client.
         /// </summary>
-        /// <param name="dto">Data sent by the client.</param>
-        /// <returns>Request for the logic layer.</returns>
-        public static Logic.Authentication.PlayerRegistrationInfo ToRegisterRequest(Contracts.PlayerRegistrationInfo dto)
+        /// <param name="player">Player entity provided by the client.</param>
+        /// <returns>Player entity for the logic and data layers.</returns>
+        public static Data.Player ToLogicModel(Contracts.Player player)
         {
-            return new Logic.Authentication.PlayerRegistrationInfo
+            if (player == null)
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Username = dto.Username,
-                Email = dto.Email,
-                Password = dto.Password
+                throw new ArgumentNullException(nameof(player), "The contract player cannot be null.");
+            }
+
+            return new Data.Player
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Username = player.Username,
+                Email = player.Email
             };
         }
     }

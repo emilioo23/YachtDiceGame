@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="2198c4ce-85f9-4fde-951f-1d7472694ba1" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:8738/YachtDice/Chat/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="contracts.wsdl" MetadataType="Wsdl" ID="6570d177-5c98-4675-9b7c-33cd21018486" SourceId="1" SourceUrl="net.tcp://localhost:8738/YachtDice/Chat/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="bd844752-30df-4cbf-94e5-35db3a556f44" SourceId="1" SourceUrl="net.tcp://localhost:8738/YachtDice/Chat/mex" />
+    <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="de28f471-b40f-426c-9ef1-6c7890474e77" SourceId="1" SourceUrl="net.tcp://localhost:8738/YachtDice/Chat/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="dc8ef284-b8ab-426f-bd95-2f75fa14fcfe" SourceId="1" SourceUrl="net.tcp://localhost:8738/YachtDice/Chat/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

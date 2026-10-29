@@ -16,15 +16,28 @@ namespace YachtDice.Gateway
             {
                 { ServiceErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
                 { ServiceErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { ServiceErrorCode.InvalidRequest, GatewayErrorCode.InvalidRequest }
+                { ServiceErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
             };
 
         /// <summary>
         /// Gets the game statistics of a player.
         /// </summary>
-        public Task<PlayerStatistics> GetStatisticsAsync(PlayerStatisticsFilter request)
+        /// <param name="username">Username of the player.</param>
+        /// <returns>The statistics of the player.</returns>
+        public Task<PlayerStatistics> GetStatisticsAsync(string username)
         {
-            return ExecuteAsync(client => client.GetStatisticsAsync(request));
+            var player = new Player { Username = username };
+
+            return ExecuteAsync(client => client.GetPlayerStatistics(player));
+        }
+
+        /// <summary>
+        /// Gets the leaderboard ranking entries.
+        /// </summary>
+        /// <returns>The ranking, from the player with most points to the one with least.</returns>
+        public Task<List<LeaderboardEntry>> GetLeaderboardAsync()
+        {
+            return ExecuteAsync(client => client.GetLeaderboard().ToList());
         }
 
         /// <inheritdoc />
@@ -39,18 +52,6 @@ namespace YachtDice.Gateway
             }
 
             return errorCode;
-        }
-
-        /// <summary>
-        /// Gets the leaderboard ranking entries.
-        /// </summary>
-        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
-        {
-            using (var client = new PlayerServiceClient())
-            {
-                var leaderboardArray = await client.GetLeaderboardAsync();
-                return leaderboardArray.ToList();
-            }
         }
     }
 }

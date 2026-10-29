@@ -62,6 +62,7 @@
     <Compile Include="Category.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\DataAccessException.cs" />
     <Compile Include="Friendship.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>

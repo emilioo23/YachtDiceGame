@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using System.Threading.Tasks;
-using YachtDice.Server.Logic.Players;
-using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using LogicPlayers = YachtDice.Server.Logic.Players;
+
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PlayerService : ServiceBase, IPlayerService
+    public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
-        private readonly PlayerStatisticsService _statisticsService;
-        private readonly LeaderboardService _leaderboardService;
+        private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
+        private readonly LogicPlayers.LeaderboardService _leaderboardService;
 
         /// <summary>
         /// Initializes the service with the logic it uses.
         /// </summary>
         /// <param name="statisticsService">Logic that calculates the statistics of the players.</param>
         /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
-        public PlayerService(PlayerStatisticsService statisticsService, LeaderboardService leaderboardService)
+        public PlayerService(
+            LogicPlayers.PlayerStatisticsService statisticsService,
+            LogicPlayers.LeaderboardService leaderboardService)
         {
             if (statisticsService == null)
             {
@@ -42,32 +44,34 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the statistics of a player.
         /// </summary>
-        /// <param name="request">Name of the player.</param>
+        /// <param name="player">Player whose statistics are requested. Only the username is used.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<Contracts.PlayerStatistics> GetStatistics(Contracts.PlayerStatisticsFilter request)
+        public Contracts.PlayerStatistics GetPlayerStatistics(Contracts.Player player)
         {
-            return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
+            return Execute(player, () => ProcessPlayerStatistics(player));
         }
 
         /// <summary>
         /// Gets the ranking of the best players.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<Contracts.LeaderboardEntry>> GetLeaderboard()
+        public List<Contracts.LeaderboardEntry> GetLeaderboard()
         {
-            return ExecuteAsync(ProcessGetLeaderboardAsync);
+            return Execute(ProcessLeaderboard);
         }
 
-        private async Task<Contracts.PlayerStatistics> ProcessGetStatisticsAsync(Contracts.PlayerStatisticsFilter request)
+        private Contracts.PlayerStatistics ProcessPlayerStatistics(Contracts.Player player)
         {
-            PlayerStatistics statistics = await _statisticsService.GetStatisticsAsync(request.PlayerName);
-            return PlayerStatisticsMapper.ToContract(statistics);
+            LogicPlayers.PlayerStatistics statistics = _statisticsService.GetStatistics(player.Username);
+
+            return Mapping.PlayerStatisticsMapper.ToContract(statistics);
         }
 
-        private async Task<List<Contracts.LeaderboardEntry>> ProcessGetLeaderboardAsync()
+        private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
-            List<LeaderboardEntry> entries = await _leaderboardService.GetTopPlayersAsync();
-            return LeaderboardMapper.ToContracts(entries);
+            List<LogicPlayers.LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
+
+            return Mapping.LeaderboardMapper.ToContracts(entries);
         }
     }
 }

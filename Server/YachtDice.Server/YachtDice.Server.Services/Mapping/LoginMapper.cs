@@ -1,51 +1,52 @@
 ﻿using System.Collections.Generic;
-using YachtDice.Server.Logic.Authentication;
-using YachtDice.Server.Services.Contracts;
 
 namespace YachtDice.Server.Services.Mapping
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using LogicAuth = YachtDice.Server.Logic.Authentication;
+
     /// <summary>
-    /// Converts between the login data contracts and the classes of the logic layer.
+    /// Converts between login data contracts and logic layer entities.
     /// </summary>
     internal static class LoginMapper
     {
-        private static readonly Dictionary<LoginStatus, LoginResultCode> _resultCodes =
-            new Dictionary<LoginStatus, LoginResultCode>
+        private static readonly Dictionary<LogicAuth.LoginStatus, Contracts.LoginResultCode> _resultCodes =
+            new Dictionary<LogicAuth.LoginStatus, Contracts.LoginResultCode>
             {
-                { LoginStatus.VerificationCodeSent, LoginResultCode.VerificationCodeSent },
-                { LoginStatus.MissingRequiredField, LoginResultCode.MissingRequiredField },
-                { LoginStatus.InvalidCredentials, LoginResultCode.InvalidCredentials },
-                { LoginStatus.VerificationLocked, LoginResultCode.VerificationLocked },
-                { LoginStatus.CodeSendFailed, LoginResultCode.CodeSendFailed }
+                { LogicAuth.LoginStatus.VerificationCodeSent, Contracts.LoginResultCode.VerificationCodeSent },
+                { LogicAuth.LoginStatus.MissingRequiredField, Contracts.LoginResultCode.MissingRequiredField },
+                { LogicAuth.LoginStatus.InvalidCredentials, Contracts.LoginResultCode.InvalidCredentials },
+                { LogicAuth.LoginStatus.VerificationLocked, Contracts.LoginResultCode.VerificationLocked },
+                { LogicAuth.LoginStatus.CodeSendFailed, Contracts.LoginResultCode.CodeSendFailed }
             };
 
         /// <summary>
-        /// Creates the logic-layer request from the data sent by the client.
+        /// Converts client credentials into logic-layer credentials.
         /// </summary>
-        /// <param name="dto">Data sent by the client.</param>
-        /// <returns>Request for the logic layer.</returns>
-        public static Logic.Authentication.LoginCredentials ToLoginRequest(Contracts.LoginCredentials dto)
+        /// <param name="credentials">Login credentials provided by the client.</param>
+        /// <returns>Credentials model for the logic layer.</returns>
+        public static LogicAuth.LoginCredentials ToLogicCredentials(Contracts.LoginCredentials credentials)
         {
-            return new Logic.Authentication.LoginCredentials
+            return new LogicAuth.LoginCredentials
             {
-                Email = dto.Email,
-                Password = dto.Password,
-                Culture = CultureParser.Parse(dto.CultureName)
+                Email = credentials.Email,
+                Password = credentials.Password,
+                Culture = CultureParser.Parse(credentials.CultureName)
             };
         }
 
         /// <summary>
-        /// Creates the data contract that is sent back to the client.
+        /// Converts the logic-layer login result into a contract data model for the client.
         /// </summary>
-        /// <param name="result">Result produced by the logic layer.</param>
-        /// <returns>Answer for the client.</returns>
-        public static LoginData ToResponse(LoginResult result)
+        /// <param name="result">Result produced by the login logic service.</param>
+        /// <returns>Login data contract containing the challenge and status.</returns>
+        public static Contracts.LoginData ToContract(LogicAuth.LoginResult result)
         {
-            return new LoginData
+            return new Contracts.LoginData
             {
                 Code = _resultCodes[result.Status],
                 DisplayName = result.DisplayName,
-                ChallengeId = result.ChallengeId
+                ChallengeId = result.ChallengeId.ToString()
             };
         }
     }

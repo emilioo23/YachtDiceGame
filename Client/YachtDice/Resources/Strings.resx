@@ -528,6 +528,21 @@
   <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
     <value>Código de correo al iniciar sesión</value>
   </data>
+  <data name="Settings_Security_TwoFactorEnableButton" xml:space="preserve">
+    <value>Activar</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisableButton" xml:space="preserve">
+    <value>Desactivar</value>
+  </data>
+  <data name="Settings_Security_TwoFactorEnabledMessage" xml:space="preserve">
+    <value>Verificación en dos pasos activada.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisabledMessage" xml:space="preserve">
+    <value>Verificación en dos pasos desactivada.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorUnavailableMessage" xml:space="preserve">
+    <value>Necesitas una cuenta registrada para usar esta opción.</value>
+  </data>
   <data name="Settings_Notifications_NotificationMatch" xml:space="preserve">
     <value>Notificaciones de partida</value>
   </data>

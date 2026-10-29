@@ -74,212 +74,52 @@ namespace YachtDice.GameServiceReference {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerProfile", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class PlayerProfile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AvatarIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ScoreField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UsernameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int AvatarId {
-            get {
-                return this.AvatarIdField;
-            }
-            set {
-                if ((this.AvatarIdField.Equals(value) != true)) {
-                    this.AvatarIdField = value;
-                    this.RaisePropertyChanged("AvatarId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Score {
-            get {
-                return this.ScoreField;
-            }
-            set {
-                if ((this.ScoreField.Equals(value) != true)) {
-                    this.ScoreField = value;
-                    this.RaisePropertyChanged("Score");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Username {
-            get {
-                return this.UsernameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
-                    this.UsernameField = value;
-                    this.RaisePropertyChanged("Username");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ChatMessage", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class ChatMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string AuthorField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContentField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime TimestampField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Author {
-            get {
-                return this.AuthorField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.AuthorField, value) != true)) {
-                    this.AuthorField = value;
-                    this.RaisePropertyChanged("Author");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Content {
-            get {
-                return this.ContentField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ContentField, value) != true)) {
-                    this.ContentField = value;
-                    this.RaisePropertyChanged("Content");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Timestamp {
-            get {
-                return this.TimestampField;
-            }
-            set {
-                if ((this.TimestampField.Equals(value) != true)) {
-                    this.TimestampField = value;
-                    this.RaisePropertyChanged("Timestamp");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="GameServiceReference.IGameManager", CallbackContract=typeof(YachtDice.GameServiceReference.IGameManagerCallback))]
-    public interface IGameManager {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="GameServiceReference.IGameService", CallbackContract=typeof(YachtDice.GameServiceReference.IGameServiceCallback))]
+    public interface IGameService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/RollDice")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameService/RollDice")]
         void RollDice(string roomId, string username);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/RollDice")]
-        System.Threading.Tasks.Task RollDiceAsync(string roomId, string username);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameService/SelectScoreCategory")]
         void SelectScoreCategory(string roomId, string username, int categoryId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory")]
-        System.Threading.Tasks.Task SelectScoreCategoryAsync(string roomId, string username, int categoryId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IGameManagerCallback {
+    public interface IGameServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/OnDiceRolled")]
-        void OnDiceRolled(int[] diceValues);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameService/DiceRolled")]
+        void DiceRolled(int[] diceValues);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/OnTurnChanged")]
-        void OnTurnChanged(YachtDice.GameServiceReference.TurnDetails turnDetails);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameService/TurnChanged")]
+        void TurnChanged(YachtDice.GameServiceReference.TurnDetails turnDetails);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IGameManagerChannel : YachtDice.GameServiceReference.IGameManager, System.ServiceModel.IClientChannel {
+    public interface IGameServiceChannel : YachtDice.GameServiceReference.IGameService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class GameManagerClient : System.ServiceModel.DuplexClientBase<YachtDice.GameServiceReference.IGameManager>, YachtDice.GameServiceReference.IGameManager {
+    public partial class GameServiceClient : System.ServiceModel.DuplexClientBase<YachtDice.GameServiceReference.IGameService>, YachtDice.GameServiceReference.IGameService {
         
-        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public GameServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public GameServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public GameServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public GameServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public GameServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
@@ -287,143 +127,8 @@ namespace YachtDice.GameServiceReference {
             base.Channel.RollDice(roomId, username);
         }
         
-        public System.Threading.Tasks.Task RollDiceAsync(string roomId, string username) {
-            return base.Channel.RollDiceAsync(roomId, username);
-        }
-        
         public void SelectScoreCategory(string roomId, string username, int categoryId) {
             base.Channel.SelectScoreCategory(roomId, username, categoryId);
-        }
-        
-        public System.Threading.Tasks.Task SelectScoreCategoryAsync(string roomId, string username, int categoryId) {
-            return base.Channel.SelectScoreCategoryAsync(roomId, username, categoryId);
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="GameServiceReference.IRoomManager", CallbackContract=typeof(YachtDice.GameServiceReference.IRoomManagerCallback))]
-    public interface IRoomManager {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/JoinRoomResponse")]
-        void JoinRoom(YachtDice.GameServiceReference.PlayerProfile player, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/JoinRoomResponse")]
-        System.Threading.Tasks.Task JoinRoomAsync(YachtDice.GameServiceReference.PlayerProfile player, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse")]
-        void LeaveRoom(string username, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse")]
-        System.Threading.Tasks.Task LeaveRoomAsync(string username, string roomId);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IRoomManagerCallback {
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerJoined")]
-        void OnPlayerJoined(YachtDice.GameServiceReference.PlayerProfile player);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerLeft")]
-        void OnPlayerLeft(string username);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IRoomManagerChannel : YachtDice.GameServiceReference.IRoomManager, System.ServiceModel.IClientChannel {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class RoomManagerClient : System.ServiceModel.DuplexClientBase<YachtDice.GameServiceReference.IRoomManager>, YachtDice.GameServiceReference.IRoomManager {
-        
-        public RoomManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
-                base(callbackInstance) {
-        }
-        
-        public RoomManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
-                base(callbackInstance, endpointConfigurationName) {
-        }
-        
-        public RoomManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
-        }
-        
-        public RoomManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
-        }
-        
-        public RoomManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, binding, remoteAddress) {
-        }
-        
-        public void JoinRoom(YachtDice.GameServiceReference.PlayerProfile player, string roomId) {
-            base.Channel.JoinRoom(player, roomId);
-        }
-        
-        public System.Threading.Tasks.Task JoinRoomAsync(YachtDice.GameServiceReference.PlayerProfile player, string roomId) {
-            return base.Channel.JoinRoomAsync(player, roomId);
-        }
-        
-        public void LeaveRoom(string username, string roomId) {
-            base.Channel.LeaveRoom(username, roomId);
-        }
-        
-        public System.Threading.Tasks.Task LeaveRoomAsync(string username, string roomId) {
-            return base.Channel.LeaveRoomAsync(username, roomId);
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="GameServiceReference.IChatManager", CallbackContract=typeof(YachtDice.GameServiceReference.IChatManagerCallback))]
-    public interface IChatManager {
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/SendMessage")]
-        void SendMessage(YachtDice.GameServiceReference.ChatMessage message, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/SendMessage")]
-        System.Threading.Tasks.Task SendMessageAsync(YachtDice.GameServiceReference.ChatMessage message, string roomId);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatManagerCallback {
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/OnMessageReceived")]
-        void OnMessageReceived(YachtDice.GameServiceReference.ChatMessage message);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IChatManagerChannel : YachtDice.GameServiceReference.IChatManager, System.ServiceModel.IClientChannel {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ChatManagerClient : System.ServiceModel.DuplexClientBase<YachtDice.GameServiceReference.IChatManager>, YachtDice.GameServiceReference.IChatManager {
-        
-        public ChatManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
-                base(callbackInstance) {
-        }
-        
-        public ChatManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
-                base(callbackInstance, endpointConfigurationName) {
-        }
-        
-        public ChatManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
-        }
-        
-        public ChatManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
-        }
-        
-        public ChatManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, binding, remoteAddress) {
-        }
-        
-        public void SendMessage(YachtDice.GameServiceReference.ChatMessage message, string roomId) {
-            base.Channel.SendMessage(message, roomId);
-        }
-        
-        public System.Threading.Tasks.Task SendMessageAsync(YachtDice.GameServiceReference.ChatMessage message, string roomId) {
-            return base.Channel.SendMessageAsync(message, roomId);
         }
     }
 }

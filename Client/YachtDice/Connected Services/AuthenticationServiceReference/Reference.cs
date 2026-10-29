@@ -185,6 +185,9 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         CodeSendFailed = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoggedIn = 5,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -259,84 +262,7 @@ namespace YachtDice.AuthenticationServiceReference {
         DatabaseUnavailable = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidRequest = 2,
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationDetails", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class VerificationDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ChallengeIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CodeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ChallengeId {
-            get {
-                return this.ChallengeIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
-                    this.ChallengeIdField = value;
-                    this.RaisePropertyChanged("ChallengeId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Code {
-            get {
-                return this.CodeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
-                    this.CodeField = value;
-                    this.RaisePropertyChanged("Code");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        ValidationFailed = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -354,83 +280,6 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Locked = 3,
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeDetails", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class ResendCodeDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ChallengeIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CultureNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ChallengeId {
-            get {
-                return this.ChallengeIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
-                    this.ChallengeIdField = value;
-                    this.RaisePropertyChanged("ChallengeId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CultureName {
-            get {
-                return this.CultureNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CultureNameField, value) != true)) {
-                    this.CultureNameField = value;
-                    this.RaisePropertyChanged("CultureName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -453,30 +302,157 @@ namespace YachtDice.AuthenticationServiceReference {
         PlayerNotFound = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorActivationData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class TwoFactorActivationData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.AuthenticationServiceReference.TwoFactorActivationResultCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MaskedEmailField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.AuthenticationServiceReference.TwoFactorActivationResultCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MaskedEmail {
+            get {
+                return this.MaskedEmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MaskedEmailField, value) != true)) {
+                    this.MaskedEmailField = value;
+                    this.RaisePropertyChanged("MaskedEmail");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorActivationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum TwoFactorActivationResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyEnabled = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationLocked = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 4,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum TwoFactorChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/Login", ReplyAction="http://tempuri.org/IAuthenticationService/LoginResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/LoginServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayer", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.LoginData LoginPlayer(YachtDice.AuthenticationServiceReference.LoginCredentials credentials);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/Login", ReplyAction="http://tempuri.org/IAuthenticationService/LoginResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/VerifyCode", ReplyAction="http://tempuri.org/IAuthenticationService/VerifyCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/VerifyCodeServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerificationDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/VerifyCode", ReplyAction="http://tempuri.org/IAuthenticationService/VerifyCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerificationDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabled", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabledResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabledServiceFaultFaul" +
+            "t", Name="ServiceFault")]
+        bool IsTwoFactorEnabled(string displayName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/ResendCode", ReplyAction="http://tempuri.org/IAuthenticationService/ResendCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/ResendCodeServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivation", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivationResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivationServiceFau" +
+            "ltFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/ResendCode", ReplyAction="http://tempuri.org/IAuthenticationService/ResendCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivation", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivationResponse" +
+            "")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivationServiceF" +
+            "aultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCodeServiceFaultFa" +
+            "ult", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactor", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactorResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactorServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -506,28 +482,36 @@ namespace YachtDice.AuthenticationServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials request) {
-            return base.Channel.Login(request);
+        public YachtDice.AuthenticationServiceReference.LoginData LoginPlayer(YachtDice.AuthenticationServiceReference.LoginCredentials credentials) {
+            return base.Channel.LoginPlayer(credentials);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials request) {
-            return base.Channel.LoginAsync(request);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId) {
+            return base.Channel.VerifyPlayerCode(email, code, challengeId);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerificationDetails request) {
-            return base.Channel.VerifyCode(request);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture) {
+            return base.Channel.ResendPlayerCode(email, challengeId, culture);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerificationDetails request) {
-            return base.Channel.VerifyCodeAsync(request);
+        public bool IsTwoFactorEnabled(string displayName) {
+            return base.Channel.IsTwoFactorEnabled(displayName);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeDetails request) {
-            return base.Channel.ResendCode(request);
+        public YachtDice.AuthenticationServiceReference.TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture) {
+            return base.Channel.StartTwoFactorActivation(displayName, culture);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeDetails request) {
-            return base.Channel.ResendCodeAsync(request);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId) {
+            return base.Channel.ConfirmTwoFactorActivation(displayName, code, challengeId);
+        }
+        
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture) {
+            return base.Channel.ResendActivationCode(displayName, challengeId, culture);
+        }
+        
+        public YachtDice.AuthenticationServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password) {
+            return base.Channel.DisableTwoFactor(displayName, password);
         }
     }
 }

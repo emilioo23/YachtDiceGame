@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
-    /// Data access for the players.
+    /// Data access operations for players.
     /// </summary>
     public interface IPlayerRepository
     {
@@ -20,27 +19,40 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="name">Display name or username to look for.</param>
         /// <returns>A list with the matching player, or an empty list if there is none.</returns>
-        Task<List<Player>> FindByNameAsync(string name);
+        List<Player> FindByName(string name);
 
         /// <summary>
         /// Indicates whether the email is already registered.
         /// </summary>
         /// <param name="email">Email address to check.</param>
         /// <returns>True if a player already uses the email.</returns>
-        Task<bool> EmailExistsAsync(string email);
+        bool EmailExists(string email);
 
         /// <summary>
         /// Indicates whether the username is already taken.
         /// </summary>
         /// <param name="username">Username to check.</param>
         /// <returns>True if a player already uses the username.</returns>
-        Task<bool> UsernameExistsAsync(string username);
+        bool UsernameExists(string username);
 
         /// <summary>
         /// Saves a new player in the database.
         /// </summary>
-        /// <param name="player">Player to save.</param>
-        /// <returns>A task that completes when the player has been saved.</returns>
-        Task AddAsync(Player player);
+        /// <param name="player">Player entity to save.</param>
+        void Add(Player player);
+
+        /// <summary>
+        /// Indicates whether the player has the two-step verification turned on.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>True if the player has an active two-step verification.</returns>
+        bool HasTwoFactorEnabled(int playerId);
+
+        /// <summary>
+        /// Turns the two-step verification of the player on or off.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
+        void SetTwoFactorEnabled(int playerId, bool isEnabled);
     }
 }

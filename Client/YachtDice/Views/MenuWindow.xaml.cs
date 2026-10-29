@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Gateway;
@@ -16,13 +17,14 @@ namespace YachtDice.Views
     {
         private const int DefaultPlayerLevel = 1;
         private const int FirstCharacterIndex = 0;
-        private const int SampleMatchRound = 5;
         private const int SingleCharacterLength = 1;
         private const string PercentageFormat = "{0}%";
         private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
+        private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(MenuWindow));
         private readonly PlayerGateway _gateway = new PlayerGateway();
+        private readonly string _playerName;
 
         /// <summary>
         /// Initializes the main menu for the given player.
@@ -32,29 +34,61 @@ namespace YachtDice.Views
         {
             InitializeComponent();
 
+            _playerName = playerName;
             PlayerNameTextBlock.Text = playerName;
             PlayerNameHeadingTextBlock.Text = playerName;
 
             if (!string.IsNullOrEmpty(playerName))
             {
-                PlayerInitialTextBlock.Text = playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
+                PlayerInitialTextBlock.Text = GetInitial(playerName);
             }
 
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(playerName);
 
-            LoadSampleFriends();
+            ShowOnlinePlayers();
+            PresenceGateway.Current.PlayersChanged += HandlePlayersChanged;
+            Closed += (sender, args) => PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
 
+            _ = ConnectPresenceAsync(playerName);
             _ = LoadPlayerStatisticsAsync(playerName);
+        }
+
+        private static string GetInitial(string name)
+        {
+            return name.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
+        }
+
+        private static FriendItem CreateFriend(string name, string status)
+        {
+            return new FriendItem { Name = name, Initial = GetInitial(name), Status = status };
+        }
+
+        private async Task ConnectPresenceAsync(string playerName)
+        {
+            if (playerName != Strings.Auth_GuestDisplayName)
+            {
+                try
+                {
+                    await PresenceGateway.Current.ConnectAsync(playerName);
+                }
+                catch (GatewayException)
+                {
+                    _logger.Warning(PresenceFailedLogMessage);
+                }
+            }
+        }
+
+        private void HandlePlayersChanged()
+        {
+            Dispatcher.BeginInvoke(new Action(ShowOnlinePlayers));
         }
 
         private async Task LoadPlayerStatisticsAsync(string playerName)
         {
             try
             {
-                var request = new PlayerStatisticsFilter { PlayerName = playerName };
-                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(request);
-
+                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(playerName);
                 ShowStatistics(statistics);
             }
             catch (GatewayException ex)
@@ -70,7 +104,7 @@ namespace YachtDice.Views
 
         private void ShowStatistics(PlayerStatistics statistics)
         {
-            if (statistics.IsPlayerFound)
+            if (statistics != null)
             {
                 StatGamesTextBlock.Text = statistics.GamesPlayed.ToString();
                 StatWinsTextBlock.Text = statistics.Wins.ToString();
@@ -82,7 +116,7 @@ namespace YachtDice.Views
 
         private void ShowDialogMessage(string message)
         {
-            var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
             {
                 Owner = this
             };
@@ -90,28 +124,15 @@ namespace YachtDice.Views
             dialog.ShowDialog();
         }
 
-        private void LoadSampleFriends()
+        private void ShowOnlinePlayers()
         {
-            var inMatchFriends = new List<FriendItem>
-            {
-                new FriendItem
-                {
-                    Name = "SofiaR",
-                    Initial = "S",
-                    Status = string.Format(Strings.MainMenu_Friends_StatusInMatchRound, SampleMatchRound)
-                },
-                new FriendItem { Name = "DiegoL", Initial = "D", Status = Strings.MainMenu_Friends_StatusInLobby }
-            };
+            List<FriendItem> onlineFriends = PresenceGateway.Current.GetOnlinePlayers()
+                .Where(name => !string.Equals(name, _playerName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(name => name)
+                .Select(name => CreateFriend(name, Strings.MainMenu_Friends_StatusOnline))
+                .ToList();
 
-            InMatchFriendsList.ItemsSource = inMatchFriends;
-
-            var onlineFriends = new List<FriendItem>
-            {
-                new FriendItem { Name = "CarlosM", Initial = "C", Status = Strings.MainMenu_Friends_StatusOnline },
-                new FriendItem { Name = "AnaP", Initial = "A", Status = Strings.MainMenu_Friends_StatusOnline },
-                new FriendItem { Name = "RobertoK", Initial = "R", Status = Strings.MainMenu_Friends_StatusOnline }
-            };
-
+            InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;
             OnlineCountBadgeTextBlock.Text = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
         }
@@ -152,8 +173,10 @@ namespace YachtDice.Views
             Close();
         }
 
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
+            await Task.Run(() => PresenceGateway.Current.Disconnect());
+
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             Close();
