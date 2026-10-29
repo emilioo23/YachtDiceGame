@@ -16,8 +16,8 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IAuthenticationService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Login">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/Login" style="document" />
+    <wsdl:operation name="LoginPlayer">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/LoginPlayer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -28,8 +28,8 @@
         <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="VerifyCode">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCode" style="document" />
+    <wsdl:operation name="VerifyPlayerCode">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCode" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -40,8 +40,8 @@
         <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="ResendCode">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/ResendCode" style="document" />
+    <wsdl:operation name="ResendPlayerCode">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

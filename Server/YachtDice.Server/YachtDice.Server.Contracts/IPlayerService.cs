@@ -12,11 +12,11 @@ namespace YachtDice.Server.Contracts
         /// <summary>
         /// Gets the statistics of a player.
         /// </summary>
-        /// <param name="username">Username of the player.</param>
+        /// <param name="player">Player whose statistics are requested. Only the username is used.</param>
         /// <returns>The statistics of the player.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        PlayerStatistics GetStatistics(string username);
+        PlayerStatistics GetPlayerStatistics(Player player);
 
         /// <summary>
         /// Gets the ranking of the best players.

@@ -16,8 +16,8 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IPlayerService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="GetStatistics">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IPlayerService/GetStatistics" style="document" />
+    <wsdl:operation name="GetPlayerStatistics">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

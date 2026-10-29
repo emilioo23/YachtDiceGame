@@ -303,17 +303,17 @@ namespace YachtDice.AuthenticationServiceReference {
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Login", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/LoginServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials credentials);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayer", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.LoginData LoginPlayer(YachtDice.AuthenticationServiceReference.LoginCredentials credentials);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(string email, string code, string challengeId);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(string email, string challengeId, string culture);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -343,16 +343,16 @@ namespace YachtDice.AuthenticationServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials credentials) {
-            return base.Channel.Login(credentials);
+        public YachtDice.AuthenticationServiceReference.LoginData LoginPlayer(YachtDice.AuthenticationServiceReference.LoginCredentials credentials) {
+            return base.Channel.LoginPlayer(credentials);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(string email, string code, string challengeId) {
-            return base.Channel.VerifyCode(email, code, challengeId);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId) {
+            return base.Channel.VerifyPlayerCode(email, code, challengeId);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(string email, string challengeId, string culture) {
-            return base.Channel.ResendCode(email, challengeId, culture);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture) {
+            return base.Channel.ResendPlayerCode(email, challengeId, culture);
         }
     }
 }

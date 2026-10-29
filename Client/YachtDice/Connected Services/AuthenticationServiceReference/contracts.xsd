@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Login">
+  <xs:element name="LoginPlayer">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="credentials" nillable="true" type="tns:LoginCredentials" />
@@ -15,10 +15,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginCredentials" nillable="true" type="tns:LoginCredentials" />
-  <xs:element name="LoginResponse">
+  <xs:element name="LoginPlayerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="tns:LoginData" />
+        <xs:element minOccurs="0" name="LoginPlayerResult" nillable="true" type="tns:LoginData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -55,7 +55,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
-  <xs:element name="VerifyCode">
+  <xs:element name="VerifyPlayerCode">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
@@ -64,10 +64,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="VerifyCodeResponse">
+  <xs:element name="VerifyPlayerCodeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="VerifyCodeResult" type="tns:VerificationResultCode" />
+        <xs:element minOccurs="0" name="VerifyPlayerCodeResult" type="tns:VerificationResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -80,7 +80,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="VerificationResultCode" nillable="true" type="tns:VerificationResultCode" />
-  <xs:element name="ResendCode">
+  <xs:element name="ResendPlayerCode">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
@@ -89,10 +89,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ResendCodeResponse">
+  <xs:element name="ResendPlayerCodeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ResendCodeResult" type="tns:ResendResultCode" />
+        <xs:element minOccurs="0" name="ResendPlayerCodeResult" type="tns:ResendResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
