@@ -11,32 +11,6 @@ using ServerLeaderboardEntry = YachtDice.PlayerServiceReference.LeaderboardEntry
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Row of the ranking as it is shown in the leaderboard window.
-    /// </summary>
-    public class LeaderboardEntry
-    {
-        /// <summary>
-        /// Gets or sets the medal or the position shown next to the player.
-        /// </summary>
-        public string Medal { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the player.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total points of the player.
-        /// </summary>
-        public int Points { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of games won by the player.
-        /// </summary>
-        public int Wins { get; set; }
-    }
-
-    /// <summary>
     /// Window that shows the ranking of the best players.
     /// </summary>
     public partial class LeaderboardWindow : Window
@@ -59,7 +33,6 @@ namespace YachtDice.Views
         private const string SilverMedal = "\U0001F948";
         private const string BronzeMedal = "\U0001F949";
         private const string PointsFormat = "N0";
-        private const string ErrorDialogTitle = "Error";
 
         private readonly string _playerName;
 
@@ -137,18 +110,24 @@ namespace YachtDice.Views
             }
             catch (GatewayException)
             {
-                MessageBox.Show(
-                    Strings.Leaderboard_ConnectionError,
-                    ErrorDialogTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
             }
+        }
+
+        private void ShowDialogMessage(string message)
+        {
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
+            {
+                Owner = this
+            };
+
+            dialog.ShowDialog();
         }
 
         private void RenderRanking(List<LeaderboardEntry> ranking)
         {
-            int currentRank = 0;
-            int viewerRank = 0;
+            var currentRank = 0;
+            var viewerRank = 0;
 
             foreach (LeaderboardEntry entry in ranking)
             {

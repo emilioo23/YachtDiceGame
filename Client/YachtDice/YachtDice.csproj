@@ -267,6 +267,7 @@
     <Compile Include="Views\LanguageSwitcher.xaml.cs">
       <DependentUpon>LanguageSwitcher.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LeaderboardEntry.cs" />
     <Compile Include="Views\LeaderboardWindow.xaml.cs">
       <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>

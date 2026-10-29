@@ -48,7 +48,7 @@ namespace YachtDice.Views
 
             ShowOnlinePlayers();
             PresenceGateway.Current.PlayersChanged += HandlePlayersChanged;
-            Closed += (sender, args) => PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
+            Closed += (sender, e) => PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
 
             _ = ConnectPresenceAsync(playerName);
             _ = LoadPlayerStatisticsAsync(playerName);
@@ -126,7 +126,7 @@ namespace YachtDice.Views
 
         private void ShowOnlinePlayers()
         {
-            List<FriendItem> onlineFriends = PresenceGateway.Current.GetOnlinePlayers()
+            List<FriendItem> onlineFriends = PresenceGateway.Current.OnlinePlayers
                 .Where(name => !string.Equals(name, _playerName, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(name => name)
                 .Select(name => CreateFriend(name, Strings.MainMenu_Friends_StatusOnline))
