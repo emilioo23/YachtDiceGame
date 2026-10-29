@@ -392,6 +392,12 @@
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.ResendResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.TwoFactorActivationData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.TwoFactorChangeResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.VerificationResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

@@ -33,6 +33,51 @@
   <wsdl:message name="IAuthenticationService_ResendPlayerCode_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IAuthenticationService_IsTwoFactorEnabled_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsTwoFactorEnabled" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_IsTwoFactorEnabled_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsTwoFactorEnabledResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_IsTwoFactorEnabled_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_StartTwoFactorActivation_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartTwoFactorActivation" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_StartTwoFactorActivation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartTwoFactorActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_StartTwoFactorActivation_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmTwoFactorActivation_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmTwoFactorActivation" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmTwoFactorActivation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmTwoFactorActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmTwoFactorActivation_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendActivationCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResendActivationCode" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendActivationCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResendActivationCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ResendActivationCode_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_DisableTwoFactor_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisableTwoFactor" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_DisableTwoFactor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisableTwoFactorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_DisableTwoFactor_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="LoginPlayer">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayer" message="tns:IAuthenticationService_LoginPlayer_InputMessage" />
@@ -48,6 +93,31 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode" message="tns:IAuthenticationService_ResendPlayerCode_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse" message="tns:IAuthenticationService_ResendPlayerCode_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ResendPlayerCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsTwoFactorEnabled">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabled" message="tns:IAuthenticationService_IsTwoFactorEnabled_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabledResponse" message="tns:IAuthenticationService_IsTwoFactorEnabled_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/IsTwoFactorEnabledServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_IsTwoFactorEnabled_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartTwoFactorActivation">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivation" message="tns:IAuthenticationService_StartTwoFactorActivation_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivationResponse" message="tns:IAuthenticationService_StartTwoFactorActivation_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/StartTwoFactorActivationServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_StartTwoFactorActivation_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmTwoFactorActivation">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivation" message="tns:IAuthenticationService_ConfirmTwoFactorActivation_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivationResponse" message="tns:IAuthenticationService_ConfirmTwoFactorActivation_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmTwoFactorActivationServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ConfirmTwoFactorActivation_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResendActivationCode">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCode" message="tns:IAuthenticationService_ResendActivationCode_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCodeResponse" message="tns:IAuthenticationService_ResendActivationCode_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendActivationCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ResendActivationCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisableTwoFactor">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactor" message="tns:IAuthenticationService_DisableTwoFactor_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactorResponse" message="tns:IAuthenticationService_DisableTwoFactor_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/DisableTwoFactorServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_DisableTwoFactor_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
