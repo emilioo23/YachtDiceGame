@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using YachtDice.GameServiceReference;
 
 namespace YachtDice.Callbacks
@@ -6,7 +6,7 @@ namespace YachtDice.Callbacks
     /// <summary>
     /// Handles game related callbacks from the server.
     /// </summary>
-    public class GameCallbackHandler : IGameManagerCallback
+    public class GameCallbackHandler : IGameServiceCallback
     {
         /// <summary>
         /// Event triggered when dice are rolled.
@@ -22,7 +22,7 @@ namespace YachtDice.Callbacks
         /// Raises the dice rolled event when the server reports a roll.
         /// </summary>
         /// <param name="diceValues">Values of the rolled dice.</param>
-        void IGameManagerCallback.DiceRolled(int[] diceValues)
+        void IGameServiceCallback.DiceRolled(int[] diceValues)
         {
             DiceRolled?.Invoke(diceValues);
         }
@@ -31,7 +31,7 @@ namespace YachtDice.Callbacks
         /// Raises the turn changed event when the server reports a new turn.
         /// </summary>
         /// <param name="turnDetails">Details of the new turn.</param>
-        void IGameManagerCallback.TurnChanged(TurnDetails turnDetails)
+        void IGameServiceCallback.TurnChanged(TurnDetails turnDetails)
         {
             TurnChanged?.Invoke(turnDetails);
         }

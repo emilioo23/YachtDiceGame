@@ -6,7 +6,7 @@ namespace YachtDice.Server.Contracts
     /// Operations that the clients can use to join or leave a room.
     /// </summary>
     [ServiceContract(Namespace = ServiceNamespaces.Contracts, CallbackContract = typeof(IRoomCallback))]
-    public interface IRoomManager
+    public interface IRoomService
     {
         /// <summary>
         /// Adds a player to a room.
@@ -19,9 +19,9 @@ namespace YachtDice.Server.Contracts
         /// <summary>
         /// Removes a player from a room.
         /// </summary>
-        /// <param name="username">Username of the player leaving.</param>
+        /// <param name="player">Profile of the player leaving. Only the username is required.</param>
         /// <param name="roomId">Identifier of the room.</param>
         [OperationContract]
-        void LeaveRoom(string username, string roomId);
+        void LeaveRoom(PlayerProfile player, string roomId);
     }
 }
