@@ -2833,6 +2833,51 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Activar
+        /// </summary>
+        public static string Settings_Security_TwoFactorEnableButton {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorEnableButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Desactivar
+        /// </summary>
+        public static string Settings_Security_TwoFactorDisableButton {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorDisableButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Verificación en dos pasos activada.
+        /// </summary>
+        public static string Settings_Security_TwoFactorEnabledMessage {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorEnabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Verificación en dos pasos desactivada.
+        /// </summary>
+        public static string Settings_Security_TwoFactorDisabledMessage {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorDisabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Necesitas una cuenta registrada para usar esta opción.
+        /// </summary>
+        public static string Settings_Security_TwoFactorUnavailableMessage {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorUnavailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ajustes.
         /// </summary>
         public static string Settings_Title {

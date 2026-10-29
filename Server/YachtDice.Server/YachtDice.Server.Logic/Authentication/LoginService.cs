@@ -11,7 +11,7 @@ using YachtDice.Server.Logic.TwoFactor;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Checks the player's credentials and starts the two-step verification.
+    /// Checks the player's credentials and starts the two-step verification when the player has it turned on.
     /// </summary>
     public class LoginService : ILoginService
     {
@@ -57,7 +57,7 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
-        /// Checks the credentials and, if they are correct, sends the verification code.
+        /// Checks the credentials and, if they are correct, sends the verification code or completes the login.
         /// </summary>
         /// <param name="credentials">Credentials and language of the player.</param>
         /// <returns>Result of the login attempt.</returns>
@@ -103,9 +103,13 @@ namespace YachtDice.Server.Logic.Authentication
                 _logger.Warning(LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
-            else
+            else if (_playerRepository.HasTwoFactorEnabled(player.Id))
             {
                 result = SendCode(player, credentials.Culture);
+            }
+            else
+            {
+                result = new LoginResult(LoginStatus.LoggedIn, player.DisplayName);
             }
 
             return result;

@@ -54,6 +54,62 @@ namespace YachtDice.Gateway
             return ExecuteAsync(client => client.ResendPlayerCode(email, challengeId, culture));
         }
 
+        /// <summary>
+        /// Asks the server whether the player has the two-step verification turned on.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>True if the player must enter a code to log in.</returns>
+        public Task<bool> IsTwoFactorEnabledAsync(string displayName)
+        {
+            return ExecuteAsync(client => client.IsTwoFactorEnabled(displayName));
+        }
+
+        /// <summary>
+        /// Asks the server to send the code that confirms the activation of the two-step verification.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the request and the data of the challenge.</returns>
+        public Task<TwoFactorActivationData> StartTwoFactorActivationAsync(string displayName, string culture)
+        {
+            return ExecuteAsync(client => client.StartTwoFactorActivation(displayName, culture));
+        }
+
+        /// <summary>
+        /// Sends the code entered by the player to turn on the two-step verification.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="code">Verification code entered by the player.</param>
+        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <returns>Result of the validation.</returns>
+        public Task<VerificationResultCode> ConfirmActivationAsync(string displayName, string code, string challengeId)
+        {
+            return ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, code, challengeId));
+        }
+
+        /// <summary>
+        /// Asks the server to send a new code while the player turns on the two-step verification.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the resend attempt.</returns>
+        public Task<ResendResultCode> ResendActivationCodeAsync(string displayName, string challengeId, string culture)
+        {
+            return ExecuteAsync(client => client.ResendActivationCode(displayName, challengeId, culture));
+        }
+
+        /// <summary>
+        /// Asks the server to turn off the two-step verification of the player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request.</returns>
+        public Task<TwoFactorChangeResultCode> DisableTwoFactorAsync(string displayName, string password)
+        {
+            return ExecuteAsync(client => client.DisableTwoFactor(displayName, password));
+        }
+
         /// <inheritdoc />
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {

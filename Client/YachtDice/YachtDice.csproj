@@ -287,6 +287,7 @@
     <Compile Include="Views\SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VerificationChallenge.cs" />
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>

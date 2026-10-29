@@ -70,10 +70,15 @@
       <DependentUpon>EmailStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Security\PasswordHasher.cs" />
+    <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />
+    <Compile Include="TwoFactor\TwoFactorActivationResult.cs" />
+    <Compile Include="TwoFactor\TwoFactorActivationStatus.cs" />
+    <Compile Include="TwoFactor\TwoFactorChangeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorCode.cs" />
     <Compile Include="TwoFactor\TwoFactorCodeService.cs" />
     <Compile Include="TwoFactor\TwoFactorDeliveryService.cs" />
+    <Compile Include="TwoFactor\TwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\TwoFactorValidationStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
   </ItemGroup>

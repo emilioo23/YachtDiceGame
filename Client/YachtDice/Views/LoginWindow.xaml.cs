@@ -162,6 +162,10 @@ namespace YachtDice.Views
             {
                 OpenVerificationWindow(credentials.Email, response.DisplayName, response.ChallengeId);
             }
+            else if (response.Code == LoginResultCode.LoggedIn)
+            {
+                OpenMenuWindow(response.DisplayName);
+            }
             else
             {
                 ShowDialogMessage(GetLoginMessage(response.Code));
@@ -193,9 +197,24 @@ namespace YachtDice.Views
             }
         }
 
+        private void OpenMenuWindow(string playerDisplayName)
+        {
+            var menuWindow = new MenuWindow(playerDisplayName);
+            menuWindow.Show();
+            this.Close();
+        }
+
         private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
         {
-            var twoFactorWindow = new TwoFactorWindow(email, playerDisplayName, challengeId);
+            var challenge = new VerificationChallenge
+            {
+                Email = email,
+                PlayerDisplayName = playerDisplayName,
+                ChallengeId = challengeId,
+                IsActivation = false
+            };
+
+            var twoFactorWindow = new TwoFactorWindow(challenge);
             twoFactorWindow.Show();
             this.Close();
         }

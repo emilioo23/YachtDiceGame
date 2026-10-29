@@ -13,6 +13,10 @@ namespace YachtDice.Server.Data.Repositories
     public class PlayerRepository : IPlayerRepository
     {
         private const int SingleResultCount = 1;
+        private const string EmailMethod = "Email";
+        private const string ActiveStatus = "Active";
+        private const string InactiveStatus = "Inactive";
+        private const string NoSecretKey = "";
         private const string EmptyValueMessage = "The value cannot be empty.";
         private const string NullPlayerMessage = "The player cannot be null.";
         private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
@@ -22,6 +26,10 @@ namespace YachtDice.Server.Data.Repositories
             "Database error occurred while verifying username existence.";
         private const string UpdateFailedMessage = "Could not save player due to a database update failure.";
         private const string ConnectionFailedMessage = "Database connection error while saving player.";
+        private const string TwoFactorQueryFailedMessage =
+            "Database error occurred while checking the two-step verification.";
+        private const string TwoFactorUpdateFailedMessage =
+            "Could not save the two-step verification setting due to a database failure.";
 
         /// <summary>
         /// Finds a list of players matching the given email address.
@@ -157,6 +165,67 @@ namespace YachtDice.Server.Data.Repositories
             catch (EntityException ex)
             {
                 throw new DataAccessException(ConnectionFailedMessage, ex);
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the player has the two-step verification turned on.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>True if the player has an active two-step verification.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public bool HasTwoFactorEnabled(int playerId)
+        {
+            bool isEnabled;
+
+            try
+            {
+                using (var context = new YachtDiceContext())
+                {
+                    isEnabled = context.TwoFactorAuth.Any(
+                        auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
+                }
+            }
+            catch (EntityException ex)
+            {
+                throw new DataAccessException(TwoFactorQueryFailedMessage, ex);
+            }
+
+            return isEnabled;
+        }
+
+        /// <summary>
+        /// Turns the two-step verification of the player on or off.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
+        /// <exception cref="DataAccessException">The setting could not be saved.</exception>
+        public void SetTwoFactorEnabled(int playerId, bool isEnabled)
+        {
+            try
+            {
+                using (var context = new YachtDiceContext())
+                {
+                    TwoFactorAuth auth = context.TwoFactorAuth
+                        .FirstOrDefault(row => row.PlayerId == playerId && row.Method == EmailMethod);
+
+                    if (auth == null)
+                    {
+                        auth = new TwoFactorAuth { PlayerId = playerId, Method = EmailMethod, SecretKey = NoSecretKey };
+                        context.TwoFactorAuth.Add(auth);
+                    }
+
+                    auth.Status = isEnabled ? ActiveStatus : InactiveStatus;
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DataAccessException(TwoFactorUpdateFailedMessage, ex);
+            }
+            catch (EntityException ex)
+            {
+                throw new DataAccessException(TwoFactorUpdateFailedMessage, ex);
             }
         }
 

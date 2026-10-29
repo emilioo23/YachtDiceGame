@@ -136,7 +136,8 @@ namespace YachtDice.Server.Host
 
             return new AuthenticationService(
                 new LoginService(playerRepository, verificationService, deliveryService),
-                verificationService);
+                verificationService,
+                new TwoFactorSettingsService(playerRepository, verificationService, deliveryService));
         }
 
         /// <summary>
