@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Threading.Tasks;
@@ -19,8 +18,6 @@ namespace YachtDice.Gateway
         private const string UnavailableLogMessage = "The server could not be reached.";
         private const string FaultMessage = "The server could not complete the request.";
         private const string UnavailableMessage = "The server is not available.";
-        private const string ServerIpKey = "ServerIp";
-        private const string DefaultServerIp = "localhost";
         private const string EndpointPropertyName = "Endpoint";
 
         private readonly AppLogger _logger;
@@ -90,13 +87,7 @@ namespace YachtDice.Gateway
 
             if (endpointProperty?.GetValue(client, null) is ServiceEndpoint endpoint)
             {
-                string serverIp = ConfigurationManager.AppSettings[ServerIpKey] ?? DefaultServerIp;
-                var builder = new UriBuilder(endpoint.Address.Uri) { Host = serverIp };
-
-                endpoint.Address = new EndpointAddress(
-                    builder.Uri,
-                    endpoint.Address.Identity,
-                    endpoint.Address.Headers);
+                ServerAddress.Apply(endpoint);
             }
 
             return client;

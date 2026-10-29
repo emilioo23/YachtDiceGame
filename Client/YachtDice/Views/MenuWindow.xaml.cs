@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Gateway;
@@ -16,18 +17,14 @@ namespace YachtDice.Views
     {
         private const int DefaultPlayerLevel = 1;
         private const int FirstCharacterIndex = 0;
-        private const int SampleMatchRound = 5;
         private const int SingleCharacterLength = 1;
         private const string PercentageFormat = "{0}%";
-        private const string InMatchFriendOneName = "SofiaR";
-        private const string InMatchFriendTwoName = "DiegoL";
-        private const string OnlineFriendOneName = "CarlosM";
-        private const string OnlineFriendTwoName = "AnaP";
-        private const string OnlineFriendThreeName = "RobertoK";
         private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
+        private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(MenuWindow));
         private readonly PlayerGateway _gateway = new PlayerGateway();
+        private readonly string _playerName;
 
         /// <summary>
         /// Initializes the main menu for the given player.
@@ -37,6 +34,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
 
+            _playerName = playerName;
             PlayerNameTextBlock.Text = playerName;
             PlayerNameHeadingTextBlock.Text = playerName;
 
@@ -48,8 +46,11 @@ namespace YachtDice.Views
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(playerName);
 
-            LoadSampleFriends();
+            ShowOnlinePlayers();
+            PresenceGateway.Current.PlayersChanged += HandlePlayersChanged;
+            Closed += (sender, args) => PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
 
+            _ = ConnectPresenceAsync(playerName);
             _ = LoadPlayerStatisticsAsync(playerName);
         }
 
@@ -61,6 +62,26 @@ namespace YachtDice.Views
         private static FriendItem CreateFriend(string name, string status)
         {
             return new FriendItem { Name = name, Initial = GetInitial(name), Status = status };
+        }
+
+        private async Task ConnectPresenceAsync(string playerName)
+        {
+            if (playerName != Strings.Auth_GuestDisplayName)
+            {
+                try
+                {
+                    await PresenceGateway.Current.ConnectAsync(playerName);
+                }
+                catch (GatewayException)
+                {
+                    _logger.Warning(PresenceFailedLogMessage);
+                }
+            }
+        }
+
+        private void HandlePlayersChanged()
+        {
+            Dispatcher.BeginInvoke(new Action(ShowOnlinePlayers));
         }
 
         private async Task LoadPlayerStatisticsAsync(string playerName)
@@ -103,25 +124,15 @@ namespace YachtDice.Views
             dialog.ShowDialog();
         }
 
-        private void LoadSampleFriends()
+        private void ShowOnlinePlayers()
         {
-            var inMatchFriends = new List<FriendItem>
-            {
-                CreateFriend(
-                    InMatchFriendOneName,
-                    string.Format(Strings.MainMenu_Friends_StatusInMatchRound, SampleMatchRound)),
-                CreateFriend(InMatchFriendTwoName, Strings.MainMenu_Friends_StatusInLobby)
-            };
+            List<FriendItem> onlineFriends = PresenceGateway.Current.GetOnlinePlayers()
+                .Where(name => !string.Equals(name, _playerName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(name => name)
+                .Select(name => CreateFriend(name, Strings.MainMenu_Friends_StatusOnline))
+                .ToList();
 
-            InMatchFriendsList.ItemsSource = inMatchFriends;
-
-            var onlineFriends = new List<FriendItem>
-            {
-                CreateFriend(OnlineFriendOneName, Strings.MainMenu_Friends_StatusOnline),
-                CreateFriend(OnlineFriendTwoName, Strings.MainMenu_Friends_StatusOnline),
-                CreateFriend(OnlineFriendThreeName, Strings.MainMenu_Friends_StatusOnline)
-            };
-
+            InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;
             OnlineCountBadgeTextBlock.Text = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
         }
@@ -162,8 +173,10 @@ namespace YachtDice.Views
             Close();
         }
 
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
+            await Task.Run(() => PresenceGateway.Current.Disconnect());
+
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             Close();
