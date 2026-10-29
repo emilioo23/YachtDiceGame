@@ -222,6 +222,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\PresenceServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\RegistrationServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -437,6 +442,17 @@
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatistics.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\PresenceServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PresenceServiceReference\contracts.wsdl" />
+    <None Include="Connected Services\PresenceServiceReference\contracts.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PresenceServiceReference\service.wsdl" />
+    <None Include="Connected Services\PresenceServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\RegistrationServiceReference\contracts.wsdl" />
     <None Include="Connected Services\RegistrationServiceReference\contracts.xsd">
       <SubType>Designer</SubType>
@@ -500,6 +516,7 @@
     <WCFMetadataStorage Include="Connected Services\ChatServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\GameServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\PlayerServiceReference\" />
+    <WCFMetadataStorage Include="Connected Services\PresenceServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\RegistrationServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\RoomServiceReference\" />
   </ItemGroup>
@@ -571,6 +588,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\ChatServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PresenceServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PresenceServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PresenceServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
