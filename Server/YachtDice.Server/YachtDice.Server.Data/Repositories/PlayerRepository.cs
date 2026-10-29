@@ -18,7 +18,8 @@ namespace YachtDice.Server.Data.Repositories
         private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
         private const string FindByNameFailedMessage = "Database error occurred while searching player by name.";
         private const string EmailExistsFailedMessage = "Database error occurred while verifying email existence.";
-        private const string UsernameExistsFailedMessage = "Database error occurred while verifying username existence.";
+        private const string UsernameExistsFailedMessage =
+            "Database error occurred while verifying username existence.";
         private const string UpdateFailedMessage = "Could not save player due to a database update failure.";
         private const string ConnectionFailedMessage = "Database connection error while saving player.";
 

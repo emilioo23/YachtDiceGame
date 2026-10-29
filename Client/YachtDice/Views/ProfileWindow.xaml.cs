@@ -35,13 +35,12 @@ namespace YachtDice.Views
         private void ColorSwatch_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var swatch = sender as Border;
-            if (swatch == null)
-            {
-                return;
-            }
 
-            var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
-            avatarBorder.Background = swatch.Background;
+            if (swatch != null)
+            {
+                var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
+                avatarBorder.Background = swatch.Background;
+            }
         }
 
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)

@@ -19,6 +19,11 @@ namespace YachtDice.Views
         private const int SampleMatchRound = 5;
         private const int SingleCharacterLength = 1;
         private const string PercentageFormat = "{0}%";
+        private const string InMatchFriendOneName = "SofiaR";
+        private const string InMatchFriendTwoName = "DiegoL";
+        private const string OnlineFriendOneName = "CarlosM";
+        private const string OnlineFriendTwoName = "AnaP";
+        private const string OnlineFriendThreeName = "RobertoK";
         private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(MenuWindow));
@@ -37,7 +42,7 @@ namespace YachtDice.Views
 
             if (!string.IsNullOrEmpty(playerName))
             {
-                PlayerInitialTextBlock.Text = playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
+                PlayerInitialTextBlock.Text = GetInitial(playerName);
             }
 
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
@@ -46,6 +51,16 @@ namespace YachtDice.Views
             LoadSampleFriends();
 
             _ = LoadPlayerStatisticsAsync(playerName);
+        }
+
+        private static string GetInitial(string name)
+        {
+            return name.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
+        }
+
+        private static FriendItem CreateFriend(string name, string status)
+        {
+            return new FriendItem { Name = name, Initial = GetInitial(name), Status = status };
         }
 
         private async Task LoadPlayerStatisticsAsync(string playerName)
@@ -92,22 +107,19 @@ namespace YachtDice.Views
         {
             var inMatchFriends = new List<FriendItem>
             {
-                new FriendItem
-                {
-                    Name = "SofiaR",
-                    Initial = "S",
-                    Status = string.Format(Strings.MainMenu_Friends_StatusInMatchRound, SampleMatchRound)
-                },
-                new FriendItem { Name = "DiegoL", Initial = "D", Status = Strings.MainMenu_Friends_StatusInLobby }
+                CreateFriend(
+                    InMatchFriendOneName,
+                    string.Format(Strings.MainMenu_Friends_StatusInMatchRound, SampleMatchRound)),
+                CreateFriend(InMatchFriendTwoName, Strings.MainMenu_Friends_StatusInLobby)
             };
 
             InMatchFriendsList.ItemsSource = inMatchFriends;
 
             var onlineFriends = new List<FriendItem>
             {
-                new FriendItem { Name = "CarlosM", Initial = "C", Status = Strings.MainMenu_Friends_StatusOnline },
-                new FriendItem { Name = "AnaP", Initial = "A", Status = Strings.MainMenu_Friends_StatusOnline },
-                new FriendItem { Name = "RobertoK", Initial = "R", Status = Strings.MainMenu_Friends_StatusOnline }
+                CreateFriend(OnlineFriendOneName, Strings.MainMenu_Friends_StatusOnline),
+                CreateFriend(OnlineFriendTwoName, Strings.MainMenu_Friends_StatusOnline),
+                CreateFriend(OnlineFriendThreeName, Strings.MainMenu_Friends_StatusOnline)
             };
 
             OnlineFriendsList.ItemsSource = onlineFriends;

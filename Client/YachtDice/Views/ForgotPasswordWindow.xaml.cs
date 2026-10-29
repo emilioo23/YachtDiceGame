@@ -20,14 +20,15 @@ namespace YachtDice.Views
 
         private void SendLinkButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
+            string message = Strings.ForgotPassword_ErrorRequiredEmail;
+
+            if (!string.IsNullOrWhiteSpace(EmailTextBox.Text))
             {
-                new CustomDialogWindow(new DialogContent { Message = Strings.ForgotPassword_ErrorRequiredEmail }).ShowDialog();
-                return;
+                // TODO: Connect the real sending of the recovery email.
+                message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text);
             }
 
-            // The real sending of the recovery email will be connected here later.
-            new CustomDialogWindow(new DialogContent { Message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text) }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
         }
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)

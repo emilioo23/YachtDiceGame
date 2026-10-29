@@ -11,6 +11,9 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Window where the player types the verification code received by email.
+    /// </summary>
     public partial class TwoFactorWindow : Window
     {
         private const int VisibleLocalPartChars = 2;
@@ -22,6 +25,12 @@ namespace YachtDice.Views
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
         private readonly TextBox[] _digitBoxes;
 
+        /// <summary>
+        /// Initializes the verification window for a pending login.
+        /// </summary>
+        /// <param name="email">Email where the code was sent.</param>
+        /// <param name="playerDisplayName">Name shown in the menu once the login is verified.</param>
+        /// <param name="challengeId">Identifier of the verification challenge created by the server.</param>
         public TwoFactorWindow(string email, string playerDisplayName, string challengeId)
         {
             InitializeComponent();
@@ -83,13 +92,14 @@ namespace YachtDice.Views
 
         private async void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsCodeComplete())
+            if (IsCodeComplete())
+            {
+                await VerifyCodeAsync();
+            }
+            else
             {
                 ShowMessage(Strings.TwoFactor_ErrorIncompleteCode);
-                return;
             }
-
-            await VerifyCodeAsync();
         }
 
         private async void ResendLink_Click(object sender, MouseButtonEventArgs e)

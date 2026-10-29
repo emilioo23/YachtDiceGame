@@ -2,10 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Services
 {
+    using LogicLogging = YachtDice.Server.Logic.Logging;
+
     /// <summary>
     /// Keeps the callback channels of the clients connected to each room and notifies them.
     /// </summary>
@@ -17,7 +18,8 @@ namespace YachtDice.Server.Services
         private readonly ConcurrentDictionary<string, List<TCallback>> _callbacksByRoom =
             new ConcurrentDictionary<string, List<TCallback>>();
 
-        private readonly AppLogger _logger = new AppLogger(typeof(CallbackRegistry<TCallback>));
+        private readonly LogicLogging.AppLogger _logger =
+            new LogicLogging.AppLogger(typeof(CallbackRegistry<TCallback>));
 
         /// <summary>
         /// Subscribes a client channel to a room. If it was already subscribed, nothing changes.

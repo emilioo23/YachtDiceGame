@@ -26,6 +26,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int DecimalBase = 10;
         private const int BufferStartIndex = 0;
         private const char PaddingCharacter = '0';
+        private const string GuidFormat = "N";
 
         private readonly object _syncRoot = new object();
 
@@ -72,7 +73,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Challenge string.</returns>
         public string CreateNewChallengeId()
         {
-            return Guid.NewGuid().ToString("N");
+            return Guid.NewGuid().ToString(GuidFormat);
         }
 
         /// <summary>
@@ -90,7 +91,12 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 if (_entries.TryGetValue(email, out TwoFactorCode entry))
                 {
-                    status = EvaluateEntry(email, entry, code, challengeId);
+                    status = EvaluateEntry(entry, code, challengeId);
+
+                    if (status == TwoFactorValidationStatus.Valid || status == TwoFactorValidationStatus.Expired)
+                    {
+                        _entries.Remove(email);
+                    }
                 }
             }
 
@@ -138,7 +144,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             return isAllowed;
         }
 
-        private TwoFactorValidationStatus EvaluateEntry(string email, TwoFactorCode entry, string code, string challengeId)
+        private static TwoFactorValidationStatus EvaluateEntry(TwoFactorCode entry, string code, string challengeId)
         {
             TwoFactorValidationStatus status;
             DateTime now = DateTime.UtcNow;
@@ -153,12 +159,10 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else if (entry.ExpiresAt < now)
             {
-                _entries.Remove(email);
                 status = TwoFactorValidationStatus.Expired;
             }
             else if (entry.Code == code)
             {
-                _entries.Remove(email);
                 status = TwoFactorValidationStatus.Valid;
             }
             else

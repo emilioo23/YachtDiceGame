@@ -1,5 +1,4 @@
-﻿// Archivo: YachtDice/App.xaml.cs
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows;

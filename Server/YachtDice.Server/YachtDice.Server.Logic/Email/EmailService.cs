@@ -54,7 +54,9 @@ namespace YachtDice.Server.Logic.Email
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, MissingSettingMessage, key));
+                string message = string.Format(CultureInfo.InvariantCulture, MissingSettingMessage, key);
+
+                throw new InvalidOperationException(message);
             }
 
             return value;

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Resources;
@@ -35,26 +36,25 @@ namespace YachtDice.Views
             LanguageSwitcherControl.ReopenWindowFunc = () => new LobbyWindow(playerName);
         }
 
+        private void SelectModeBorder(Border selected, Border unselected)
+        {
+            selected.Background = (SolidColorBrush)FindResource(ResourceKeys.Cream2BrushKey);
+            selected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey);
+            selected.BorderThickness = new Thickness(SelectedBorderThickness);
+
+            unselected.Background = Brushes.Transparent;
+            unselected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
+            unselected.BorderThickness = new Thickness(UnselectedBorderThickness);
+        }
+
         private void NormalMode_Click(object sender, MouseButtonEventArgs e)
         {
-            NormalModeBorder.Background = (SolidColorBrush)FindResource("BrushCream2");
-            NormalModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushFeltLight");
-            NormalModeBorder.BorderThickness = new Thickness(SelectedBorderThickness);
-
-            FastModeBorder.Background = Brushes.Transparent;
-            FastModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushBorder");
-            FastModeBorder.BorderThickness = new Thickness(UnselectedBorderThickness);
+            SelectModeBorder(NormalModeBorder, FastModeBorder);
         }
 
         private void FastMode_Click(object sender, MouseButtonEventArgs e)
         {
-            FastModeBorder.Background = (SolidColorBrush)FindResource("BrushCream2");
-            FastModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushFeltLight");
-            FastModeBorder.BorderThickness = new Thickness(SelectedBorderThickness);
-
-            NormalModeBorder.Background = Brushes.Transparent;
-            NormalModeBorder.BorderBrush = (SolidColorBrush)FindResource("BrushBorder");
-            NormalModeBorder.BorderThickness = new Thickness(UnselectedBorderThickness);
+            SelectModeBorder(FastModeBorder, NormalModeBorder);
         }
 
         private void BackToPlayLink_Click(object sender, MouseButtonEventArgs e)
@@ -67,7 +67,8 @@ namespace YachtDice.Views
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(RoomCodeTextBlock.Text);
-            new CustomDialogWindow(new DialogContent { Message = string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text) }).ShowDialog();
+            string message = string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text);
+            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)
