@@ -13,11 +13,18 @@ namespace YachtDice.Views
     {
         private const string SpanishCultureCode = "es-MX";
         private const string EnglishCultureCode = "en-US";
+        private const string SpanishLanguageLabel = "ES";
+        private const string EnglishLanguageLabel = "EN";
         private const int UsFlagTotalRows = 7;
         private const int UsFlagCantonRowSpan = 4;
         private const double UsFlagCantonWidth = 9.0;
         private const int EvenRowDivisor = 2;
         private const int ZeroRemainder = 0;
+
+        private static readonly Color _spanishRedColor = Color.FromRgb(0xAA, 0x15, 0x1B);
+        private static readonly Color _spanishYellowColor = Color.FromRgb(0xF1, 0xBF, 0x00);
+        private static readonly Color _usRedColor = Color.FromRgb(0xB2, 0x22, 0x34);
+        private static readonly Color _usBlueColor = Color.FromRgb(0x3C, 0x3B, 0x6E);
 
         /// <summary>
         /// Function that the containing window assigns to indicate how to reopen itself
@@ -60,13 +67,11 @@ namespace YachtDice.Views
             LanguagePopup.IsOpen = false;
             LanguageToggleButton.IsChecked = false;
 
-            if (App.CurrentCultureCode == cultureCode)
+            if (App.CurrentCultureCode != cultureCode)
             {
-                return;
+                App.SetCulture(cultureCode);
+                ReopenParentWindow();
             }
-
-            App.SetCulture(cultureCode);
-            ReopenParentWindow();
         }
 
         /// <summary>
@@ -76,23 +81,22 @@ namespace YachtDice.Views
         private void ReopenParentWindow()
         {
             Window currentWindow = Window.GetWindow(this);
-            if (currentWindow == null)
+
+            if (currentWindow != null)
             {
-                return;
+                Window newWindow = ReopenWindowFunc != null
+                    ? ReopenWindowFunc.Invoke()
+                    : (Window)Activator.CreateInstance(currentWindow.GetType());
+
+                newWindow.Show();
+                currentWindow.Close();
             }
-
-            Window newWindow = ReopenWindowFunc != null
-                ? ReopenWindowFunc.Invoke()
-                : (Window)Activator.CreateInstance(currentWindow.GetType());
-
-            newWindow.Show();
-            currentWindow.Close();
         }
 
         private void RefreshCurrentFlagDisplay()
         {
             bool isSpanish = App.CurrentCultureCode == SpanishCultureCode;
-            CurrentLangText.Text = isSpanish ? "ES" : "EN";
+            CurrentLangText.Text = isSpanish ? SpanishLanguageLabel : EnglishLanguageLabel;
             CurrentFlagGrid.Children.Clear();
             CurrentFlagGrid.Children.Add(isSpanish ? BuildSpanishFlag() : BuildEnglishFlag());
         }
@@ -104,9 +108,9 @@ namespace YachtDice.Views
             grid.RowDefinitions.Add(new RowDefinition());
             grid.RowDefinitions.Add(new RowDefinition());
 
-            var topStripe = new Rectangle { Fill = new SolidColorBrush(Color.FromRgb(0xAA, 0x15, 0x1B)) };
-            var midStripe = new Rectangle { Fill = new SolidColorBrush(Color.FromRgb(0xF1, 0xBF, 0x00)) };
-            var bottomStripe = new Rectangle { Fill = new SolidColorBrush(Color.FromRgb(0xAA, 0x15, 0x1B)) };
+            var topStripe = new Rectangle { Fill = new SolidColorBrush(_spanishRedColor) };
+            var midStripe = new Rectangle { Fill = new SolidColorBrush(_spanishYellowColor) };
+            var bottomStripe = new Rectangle { Fill = new SolidColorBrush(_spanishRedColor) };
 
             Grid.SetRow(topStripe, 0);
             Grid.SetRow(midStripe, 1);
@@ -121,12 +125,12 @@ namespace YachtDice.Views
         private static Grid BuildEnglishFlag()
         {
             var grid = new Grid();
-            for (int i = 0; i < UsFlagTotalRows; i++)
+            for (int rowIndex = 0; rowIndex < UsFlagTotalRows; rowIndex++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
             }
 
-            var stripeRed = new SolidColorBrush(Color.FromRgb(0xB2, 0x22, 0x34));
+            var stripeRed = new SolidColorBrush(_usRedColor);
             var stripeWhite = new SolidColorBrush(Colors.White);
 
             for (int row = 0; row < UsFlagTotalRows; row++)
@@ -140,7 +144,7 @@ namespace YachtDice.Views
             {
                 Width = UsFlagCantonWidth,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Fill = new SolidColorBrush(Color.FromRgb(0x3C, 0x3B, 0x6E))
+                Fill = new SolidColorBrush(_usBlueColor)
             };
             Grid.SetRowSpan(canton, UsFlagCantonRowSpan);
             grid.Children.Add(canton);

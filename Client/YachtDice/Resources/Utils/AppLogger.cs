@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using log4net;
 using log4net.Core;
@@ -12,6 +13,7 @@ namespace YachtDice.Utils
     public class AppLogger
     {
         private const int MaxStackLevels = 3;
+        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}";
 
         private readonly ILog _log;
 
@@ -86,7 +88,14 @@ namespace YachtDice.Utils
                 .Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             string limitedStack = string.Join(Environment.NewLine, stackLines.Take(MaxStackLevels));
 
-            return $"{message} {exception.GetType().Name}: {exception.Message}{Environment.NewLine}{limitedStack}";
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                ErrorMessageFormat,
+                message,
+                exception.GetType().Name,
+                exception.Message,
+                Environment.NewLine,
+                limitedStack);
         }
     }
 }

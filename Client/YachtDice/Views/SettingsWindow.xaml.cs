@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using YachtDice.AuthenticationServiceReference;
+using YachtDice.Gateway;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -11,18 +15,25 @@ namespace YachtDice.Views
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        /// <summary>
+        /// Name of the section that has the password and the two-step verification.
+        /// </summary>
+        public const string SecuritySection = "Security";
+
         private const string AccountSection = "Account";
         private const string AppearanceSection = "Appearance";
-        private const string SecuritySection = "Security";
         private const string NotificationsSection = "Notifications";
         private const string PreferencesSection = "Preferences";
         private const string PrivacySection = "Privacy";
         private const string SpanishCultureCode = "es-MX";
         private const int SpanishLanguageIndex = 0;
         private const int OtherLanguageIndex = 1;
+        private const int ToggleKnobMargin = 3;
 
         private readonly string _playerName;
+        private readonly AuthenticationGateway _authenticationGateway = new AuthenticationGateway();
         private bool _isInitializing;
+        private bool _isTwoFactorEnabled;
 
         /// <summary>
         /// Initializes the settings window for the given player.
@@ -36,37 +47,176 @@ namespace YachtDice.Views
             _isInitializing = true;
 
             AccountUsernameTextBlock.Text = playerName;
-            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode ? SpanishLanguageIndex : OtherLanguageIndex;
-            SetDarkThemeToggleVisual(App.IsDarkTheme);
+            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode
+                ? SpanishLanguageIndex
+                : OtherLanguageIndex;
+            ApplyDarkThemeToggleVisual(App.IsDarkTheme);
 
             ShowSection(initialSection);
             _isInitializing = false;
+
+            _ = LoadTwoFactorStateAsync();
         }
 
         private void ShowSection(string sectionName)
         {
-            AccountPanel.Visibility = sectionName == AccountSection ? Visibility.Visible : Visibility.Collapsed;
-            AppearancePanel.Visibility = sectionName == AppearanceSection ? Visibility.Visible : Visibility.Collapsed;
-            SecurityPanel.Visibility = sectionName == SecuritySection ? Visibility.Visible : Visibility.Collapsed;
-            NotificationsPanel.Visibility = sectionName == NotificationsSection ? Visibility.Visible : Visibility.Collapsed;
-            PreferencesPanel.Visibility = sectionName == PreferencesSection ? Visibility.Visible : Visibility.Collapsed;
-            PrivacyPanel.Visibility = sectionName == PrivacySection ? Visibility.Visible : Visibility.Collapsed;
-
-            AccountNavButton.Style = (Style)FindResource(sectionName == AccountSection ? "TabButtonActive" : "BtnOutline");
-            AppearanceNavButton.Style = (Style)FindResource(sectionName == AppearanceSection ? "TabButtonActive" : "BtnOutline");
-            SecurityNavButton.Style = (Style)FindResource(sectionName == SecuritySection ? "TabButtonActive" : "BtnOutline");
-            NotificationsNavButton.Style = (Style)FindResource(sectionName == NotificationsSection ? "TabButtonActive" : "BtnOutline");
-            PreferencesNavButton.Style = (Style)FindResource(sectionName == PreferencesSection ? "TabButtonActive" : "BtnOutline");
-            PrivacyNavButton.Style = (Style)FindResource(sectionName == PrivacySection ? "TabButtonActive" : "BtnOutline");
+            ShowSectionPanel(AccountPanel, AccountNavButton, sectionName == AccountSection);
+            ShowSectionPanel(AppearancePanel, AppearanceNavButton, sectionName == AppearanceSection);
+            ShowSectionPanel(SecurityPanel, SecurityNavButton, sectionName == SecuritySection);
+            ShowSectionPanel(NotificationsPanel, NotificationsNavButton, sectionName == NotificationsSection);
+            ShowSectionPanel(PreferencesPanel, PreferencesNavButton, sectionName == PreferencesSection);
+            ShowSectionPanel(PrivacyPanel, PrivacyNavButton, sectionName == PrivacySection);
         }
 
-        private void SetDarkThemeToggleVisual(bool isDark)
+        private void ShowSectionPanel(UIElement panel, Control navButton, bool isSelected)
+        {
+            panel.Visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
+            navButton.Style = (Style)FindResource(
+                isSelected ? ResourceKeys.ActiveTabStyleKey : ResourceKeys.OutlineButtonStyleKey);
+        }
+
+        private void ApplyDarkThemeToggleVisual(bool isDark)
         {
             DarkThemeToggle.Background = isDark
-                ? (System.Windows.Media.SolidColorBrush)FindResource("BrushFeltLight")
-                : (System.Windows.Media.SolidColorBrush)FindResource("BrushBorder");
+                ? (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey)
+                : (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
             DarkThemeToggleKnob.HorizontalAlignment = isDark ? HorizontalAlignment.Right : HorizontalAlignment.Left;
-            DarkThemeToggleKnob.Margin = isDark ? new Thickness(0, 0, 3, 0) : new Thickness(3, 0, 0, 0);
+            DarkThemeToggleKnob.Margin = isDark
+                ? new Thickness(0, 0, ToggleKnobMargin, 0)
+                : new Thickness(ToggleKnobMargin, 0, 0, 0);
+        }
+
+        private void ShowMessage(string message)
+        {
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
+            {
+                Owner = this
+            };
+
+            dialog.ShowDialog();
+        }
+
+        private void ShowTwoFactorState(bool isEnabled)
+        {
+            _isTwoFactorEnabled = isEnabled;
+            TwoFactorToggleButton.Content = isEnabled
+                ? Strings.Settings_Security_TwoFactorDisableButton
+                : Strings.Settings_Security_TwoFactorEnableButton;
+            TwoFactorPasswordBox.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
+            TwoFactorToggleButton.IsEnabled = true;
+        }
+
+        private async Task LoadTwoFactorStateAsync()
+        {
+            try
+            {
+                bool isEnabled = await _authenticationGateway.IsTwoFactorEnabledAsync(_playerName);
+                ShowTwoFactorState(isEnabled);
+            }
+            catch (GatewayException ex)
+            {
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private async Task StartTwoFactorActivationAsync()
+        {
+            TwoFactorActivationData data = await _authenticationGateway.StartTwoFactorActivationAsync(
+                _playerName,
+                App.CurrentCultureCode);
+
+            if (data.Code == TwoFactorActivationResultCode.CodeSent)
+            {
+                var challenge = new VerificationChallenge
+                {
+                    Email = data.MaskedEmail,
+                    PlayerDisplayName = _playerName,
+                    ChallengeId = data.ChallengeId,
+                    IsActivation = true
+                };
+
+                var twoFactorWindow = new TwoFactorWindow(challenge);
+                twoFactorWindow.Show();
+                this.Close();
+            }
+            else if (data.Code == TwoFactorActivationResultCode.AlreadyEnabled)
+            {
+                ShowTwoFactorState(true);
+            }
+            else
+            {
+                ShowMessage(GetActivationMessage(data.Code));
+            }
+        }
+
+        private async Task DisableTwoFactorAsync()
+        {
+            TwoFactorChangeResultCode result = await _authenticationGateway.DisableTwoFactorAsync(
+                _playerName,
+                TwoFactorPasswordBox.Password);
+
+            if (result == TwoFactorChangeResultCode.Success)
+            {
+                TwoFactorPasswordBox.Clear();
+                ShowTwoFactorState(false);
+                ShowMessage(Strings.Settings_Security_TwoFactorDisabledMessage);
+            }
+            else if (result == TwoFactorChangeResultCode.InvalidPassword)
+            {
+                ShowMessage(Strings.Dialogs_D13_Login);
+            }
+            else
+            {
+                ShowMessage(Strings.Settings_Security_TwoFactorUnavailableMessage);
+            }
+        }
+
+        private static string GetActivationMessage(TwoFactorActivationResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
+                case TwoFactorActivationResultCode.PlayerNotFound:
+                    message = Strings.Settings_Security_TwoFactorUnavailableMessage;
+                    break;
+                case TwoFactorActivationResultCode.VerificationLocked:
+                    message = Strings.Dialogs_D19_Validation2FA;
+                    break;
+                case TwoFactorActivationResultCode.CodeSendFailed:
+                    message = Strings.TwoFactor_ErrorSendFailed;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
+        }
+
+        private async void TwoFactorToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            TwoFactorToggleButton.IsEnabled = false;
+
+            try
+            {
+                if (_isTwoFactorEnabled)
+                {
+                    await DisableTwoFactorAsync();
+                }
+                else
+                {
+                    await StartTwoFactorActivationAsync();
+                }
+            }
+            catch (GatewayException ex)
+            {
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+            finally
+            {
+                TwoFactorToggleButton.IsEnabled = true;
+            }
         }
 
         private void ReopenSettingsWindow(string sectionToShow)
@@ -108,20 +258,14 @@ namespace YachtDice.Views
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_isInitializing)
-            {
-                return;
-            }
-
             var selectedItem = LanguageComboBox.SelectedItem as ComboBoxItem;
-            if (selectedItem == null)
-            {
-                return;
-            }
 
-            string cultureCode = selectedItem.Tag.ToString();
-            App.SetCulture(cultureCode);
-            ReopenSettingsWindow(PreferencesSection);
+            if (!_isInitializing && selectedItem != null)
+            {
+                string cultureCode = selectedItem.Tag.ToString();
+                App.SetCulture(cultureCode);
+                ReopenSettingsWindow(PreferencesSection);
+            }
         }
 
         private void DarkThemeToggle_Click(object sender, MouseButtonEventArgs e)
@@ -140,7 +284,8 @@ namespace YachtDice.Views
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // The real account deletion flow will be connected here later.
-            new CustomDialogWindow(new DialogContentDto { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
+            var content = new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage };
+            new CustomDialogWindow(content).ShowDialog();
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)

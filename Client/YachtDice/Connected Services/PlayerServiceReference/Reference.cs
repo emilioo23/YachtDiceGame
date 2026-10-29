@@ -15,15 +15,27 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerStatisticsFilter", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Player", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class PlayerStatisticsFilter : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Player : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string PlayerNameField;
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FirstNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PasswordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -36,14 +48,66 @@ namespace YachtDice.PlayerServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string PlayerName {
+        public string Email {
             get {
-                return this.PlayerNameField;
+                return this.EmailField;
             }
             set {
-                if ((object.ReferenceEquals(this.PlayerNameField, value) != true)) {
-                    this.PlayerNameField = value;
-                    this.RaisePropertyChanged("PlayerName");
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Password {
+            get {
+                return this.PasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
+                    this.PasswordField = value;
+                    this.RaisePropertyChanged("Password");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
                 }
             }
         }
@@ -72,9 +136,6 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int GamesPlayedField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsPlayerFoundField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LevelField;
@@ -117,19 +178,6 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.GamesPlayedField.Equals(value) != true)) {
                     this.GamesPlayedField = value;
                     this.RaisePropertyChanged("GamesPlayed");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsPlayerFound {
-            get {
-                return this.IsPlayerFoundField;
-            }
-            set {
-                if ((this.IsPlayerFoundField.Equals(value) != true)) {
-                    this.IsPlayerFoundField = value;
-                    this.RaisePropertyChanged("IsPlayerFound");
                 }
             }
         }
@@ -255,7 +303,7 @@ namespace YachtDice.PlayerServiceReference {
         DatabaseUnavailable = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidRequest = 2,
+        ValidationFailed = 2,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -355,19 +403,13 @@ namespace YachtDice.PlayerServiceReference {
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.PlayerStatistics GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetPlayerStatisticsResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatisticsServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.PlayerStatistics GetPlayerStatistics(YachtDice.PlayerServiceReference.Player player);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -397,20 +439,12 @@ namespace YachtDice.PlayerServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.PlayerServiceReference.PlayerStatistics GetStatistics(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request) {
-            return base.Channel.GetStatistics(request);
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(YachtDice.PlayerServiceReference.PlayerStatisticsFilter request) {
-            return base.Channel.GetStatisticsAsync(request);
+        public YachtDice.PlayerServiceReference.PlayerStatistics GetPlayerStatistics(YachtDice.PlayerServiceReference.Player player) {
+            return base.Channel.GetPlayerStatistics(player);
         }
         
         public YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard() {
             return base.Channel.GetLeaderboard();
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync() {
-            return base.Channel.GetLeaderboardAsync();
         }
     }
 }

@@ -7,78 +7,30 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IGameManager_RollDice_InputMessage">
+  <wsdl:message name="IGameService_RollDice_InputMessage">
     <wsdl:part name="parameters" element="tns:RollDice" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_SelectScoreCategory_InputMessage">
+  <wsdl:message name="IGameService_SelectScoreCategory_InputMessage">
     <wsdl:part name="parameters" element="tns:SelectScoreCategory" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_OnDiceRolled_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnDiceRolled" />
+  <wsdl:message name="IGameService_DiceRolled_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DiceRolled" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_OnTurnChanged_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnTurnChanged" />
+  <wsdl:message name="IGameService_TurnChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:TurnChanged" />
   </wsdl:message>
-  <wsdl:message name="IRoomManager_JoinRoom_InputMessage">
-    <wsdl:part name="parameters" element="tns:JoinRoom" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_JoinRoom_OutputMessage">
-    <wsdl:part name="parameters" element="tns:JoinRoomResponse" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_LeaveRoom_InputMessage">
-    <wsdl:part name="parameters" element="tns:LeaveRoom" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_LeaveRoom_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LeaveRoomResponse" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_OnPlayerJoined_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnPlayerJoined" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_OnPlayerLeft_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnPlayerLeft" />
-  </wsdl:message>
-  <wsdl:message name="IChatManager_SendMessage_InputMessage">
-    <wsdl:part name="parameters" element="tns:SendMessage" />
-  </wsdl:message>
-  <wsdl:message name="IChatManager_OnMessageReceived_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnMessageReceived" />
-  </wsdl:message>
-  <wsdl:portType name="IGameManager">
+  <wsdl:portType name="IGameService">
     <wsdl:operation name="RollDice">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameManager/RollDice" message="tns:IGameManager_RollDice_InputMessage" />
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/RollDice" message="tns:IGameService_RollDice_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SelectScoreCategory">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory" message="tns:IGameManager_SelectScoreCategory_InputMessage" />
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/SelectScoreCategory" message="tns:IGameService_SelectScoreCategory_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnDiceRolled">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/OnDiceRolled" message="tns:IGameManager_OnDiceRolled_OutputCallbackMessage" />
+    <wsdl:operation name="DiceRolled">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/DiceRolled" message="tns:IGameService_DiceRolled_OutputCallbackMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnTurnChanged">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/OnTurnChanged" message="tns:IGameManager_OnTurnChanged_OutputCallbackMessage" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:portType name="IRoomManager">
-    <wsdl:operation name="JoinRoom">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomManager/JoinRoom" message="tns:IRoomManager_JoinRoom_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/JoinRoomResponse" message="tns:IRoomManager_JoinRoom_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LeaveRoom">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom" message="tns:IRoomManager_LeaveRoom_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse" message="tns:IRoomManager_LeaveRoom_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OnPlayerJoined">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerJoined" message="tns:IRoomManager_OnPlayerJoined_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OnPlayerLeft">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerLeft" message="tns:IRoomManager_OnPlayerLeft_OutputCallbackMessage" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:portType name="IChatManager">
-    <wsdl:operation name="SendMessage">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IChatManager/SendMessage" message="tns:IChatManager_SendMessage_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OnMessageReceived">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IChatManager/OnMessageReceived" message="tns:IChatManager_OnMessageReceived_OutputCallbackMessage" />
+    <wsdl:operation name="TurnChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/TurnChanged" message="tns:IGameService_TurnChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

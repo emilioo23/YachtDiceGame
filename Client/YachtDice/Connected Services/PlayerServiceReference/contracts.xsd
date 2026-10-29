@@ -1,22 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="GetStatistics">
+  <xs:element name="GetPlayerStatistics">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsFilter" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerStatisticsFilter">
+  <xs:complexType name="Player">
     <xs:sequence>
-      <xs:element minOccurs="0" name="PlayerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerStatisticsFilter" nillable="true" type="tns:PlayerStatisticsFilter" />
-  <xs:element name="GetStatisticsResponse">
+  <xs:element name="Player" nillable="true" type="tns:Player" />
+  <xs:element name="GetPlayerStatisticsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetStatisticsResult" nillable="true" type="tns:PlayerStatistics" />
+        <xs:element minOccurs="0" name="GetPlayerStatisticsResult" nillable="true" type="tns:PlayerStatistics" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -24,7 +28,6 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BestScore" type="xs:int" />
       <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
-      <xs:element minOccurs="0" name="IsPlayerFound" type="xs:boolean" />
       <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="WinRatePercentage" type="xs:int" />
       <xs:element minOccurs="0" name="Wins" type="xs:int" />
@@ -42,7 +45,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="UnexpectedError" />
       <xs:enumeration value="DatabaseUnavailable" />
-      <xs:enumeration value="InvalidRequest" />
+      <xs:enumeration value="ValidationFailed" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />

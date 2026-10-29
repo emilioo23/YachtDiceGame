@@ -10,6 +10,9 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Window where the player logs in or creates an account.
+    /// </summary>
     public partial class LoginWindow : Window
     {
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
@@ -17,6 +20,9 @@ namespace YachtDice.Views
         private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
+        /// <summary>
+        /// Initializes the login and registration window.
+        /// </summary>
         public LoginWindow()
         {
             InitializeComponent();
@@ -26,8 +32,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginTabButton.Style = (Style)FindResource("TabButtonActive");
-            RegisterTabButton.Style = (Style)FindResource("TabButtonInactive");
+            LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_LoginButton;
         }
 
@@ -35,8 +41,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Collapsed;
             RegisterPanel.Visibility = Visibility.Visible;
-            RegisterTabButton.Style = (Style)FindResource("TabButtonActive");
-            LoginTabButton.Style = (Style)FindResource("TabButtonInactive");
+            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_CreateAccountButton;
         }
 
@@ -143,18 +149,22 @@ namespace YachtDice.Views
 
         private async Task ProcessLoginAsync()
         {
-            var request = new LoginCredentials
+            var credentials = new LoginCredentials
             {
                 Email = EmailTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginData response = await _gateway.LoginAsync(request);
+            LoginData response = await _gateway.LoginAsync(credentials);
 
             if (response.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(request.Email, response.DisplayName, response.ChallengeId);
+                OpenVerificationWindow(credentials.Email, response.DisplayName, response.ChallengeId);
+            }
+            else if (response.Code == LoginResultCode.LoggedIn)
+            {
+                OpenMenuWindow(response.DisplayName);
             }
             else
             {
@@ -164,7 +174,7 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            var request = new PlayerRegistrationInfo
+            var newPlayer = new RegistrationServiceReference.Player
             {
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),
@@ -173,19 +183,8 @@ namespace YachtDice.Views
                 Password = RegisterPasswordBox.Password
             };
 
-            var registrationClient = new PlayerRegistrationManagerClient();
-            RegisterResultCode result;
-
-            try
-            {
-                result = await registrationClient.RegisterAsync(request);
-                registrationClient.Close();
-            }
-            catch
-            {
-                registrationClient.Abort();
-                throw;
-            }
+            var registrationGateway = new RegistrationGateway();
+            RegisterResultCode result = await registrationGateway.RegisterPlayerAsync(newPlayer);
 
             if (result == RegisterResultCode.Success)
             {
@@ -198,16 +197,31 @@ namespace YachtDice.Views
             }
         }
 
+        private void OpenMenuWindow(string playerDisplayName)
+        {
+            var menuWindow = new MenuWindow(playerDisplayName);
+            menuWindow.Show();
+            this.Close();
+        }
+
         private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
         {
-            var twoFactorWindow = new TwoFactorWindow(email, playerDisplayName, challengeId);
+            var challenge = new VerificationChallenge
+            {
+                Email = email,
+                PlayerDisplayName = playerDisplayName,
+                ChallengeId = challengeId,
+                IsActivation = false
+            };
+
+            var twoFactorWindow = new TwoFactorWindow(challenge);
             twoFactorWindow.Show();
             this.Close();
         }
 
         private void ShowDialogMessage(string message)
         {
-            var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
             {
                 Owner = this
             };

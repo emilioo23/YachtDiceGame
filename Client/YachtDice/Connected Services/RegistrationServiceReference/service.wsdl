@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:i0="urn:yachtdice:contracts" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="PlayerRegistrationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsp:Policy wsu:Id="NetTcpBinding_IPlayerRegistrationManager_policy">
+  <wsp:Policy wsu:Id="NetTcpBinding_IPlayerRegistrationService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
@@ -12,22 +12,25 @@
   </wsp:Policy>
   <wsdl:import namespace="urn:yachtdice:contracts" location="" />
   <wsdl:types />
-  <wsdl:binding name="NetTcpBinding_IPlayerRegistrationManager" type="i0:IPlayerRegistrationManager">
-    <wsp:PolicyReference URI="#NetTcpBinding_IPlayerRegistrationManager_policy">
+  <wsdl:binding name="NetTcpBinding_IPlayerRegistrationService" type="i0:IPlayerRegistrationService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IPlayerRegistrationService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Register">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IPlayerRegistrationManager/Register" style="document" />
+    <wsdl:operation name="RegisterPlayer">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PlayerRegistrationService">
-    <wsdl:port name="NetTcpBinding_IPlayerRegistrationManager" binding="tns:NetTcpBinding_IPlayerRegistrationManager">
+    <wsdl:port name="NetTcpBinding_IPlayerRegistrationService" binding="tns:NetTcpBinding_IPlayerRegistrationService">
       <soap12:address location="net.tcp://localhost:8735/YachtDice/Registration" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8735/YachtDice/Registration</wsa10:Address>

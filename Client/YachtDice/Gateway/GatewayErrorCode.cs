@@ -15,6 +15,6 @@
         DatabaseUnavailable,
 
         /// <summary>The server rejected the request because of invalid data.</summary>
-        InvalidRequest
+        ValidationFailed
     }
 }

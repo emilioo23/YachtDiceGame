@@ -1,79 +1,46 @@
 ﻿using System;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Authentication;
-using YachtDice.Server.Services.Contracts;
-using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using Data = YachtDice.Server.Data;
+    using LogicAuth = YachtDice.Server.Logic.Authentication;
+
     /// <summary>
     /// Implements the player registration service contract for the server.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PlayerRegistrationService : IPlayerRegistrationManager
+    public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
-        private readonly IRegistrationService _registrationLogic;
+        private readonly LogicAuth.IRegistrationService _registrationLogic;
 
         /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with default dependencies.
-        /// </summary>
-        public PlayerRegistrationService()
-        {
-            _registrationLogic = new RegistrationService(new YachtDice.Server.Data.Repositories.PlayerRepository());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with a specified player repository.
-        /// </summary>
-        /// <param name="playerRepository">The player repository to use for registration data access.</param>
-        public PlayerRegistrationService(YachtDice.Server.Data.Repositories.IPlayerRepository playerRepository)
-        {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository));
-            }
-
-            _registrationLogic = new RegistrationService(playerRepository);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with a specified registration logic service.
+        /// Initializes a new instance of the PlayerRegistrationService class.
         /// </summary>
         /// <param name="registrationLogic">The registration logic service.</param>
-        public PlayerRegistrationService(IRegistrationService registrationLogic)
+        public PlayerRegistrationService(LogicAuth.IRegistrationService registrationLogic)
         {
             _registrationLogic = registrationLogic ?? throw new ArgumentNullException(nameof(registrationLogic));
         }
 
         /// <summary>
-        /// Registers a new player using the provided registration information.
+        /// Registers a new player.
         /// </summary>
-        /// <param name="request">The player registration information.</param>
+        /// <param name="newPlayer">Data of the player who wants to register.</param>
         /// <returns>A code indicating the result of the registration attempt.</returns>
-        public RegisterResultCode Register(Contracts.PlayerRegistrationInfo request)
+        public Contracts.RegisterResultCode RegisterPlayer(Contracts.Player newPlayer)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            return Execute(newPlayer, () => ProcessRegistration(newPlayer));
+        }
 
-            try
-            {
-                Logic.Authentication.PlayerRegistrationInfo logicInfo = RegistrationMapper.ToRegisterRequest(request);
-                RegistrationResult logicResult = _registrationLogic.Register(logicInfo);
+        private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
+        {
+            Data.Player logicPlayer = Mapping.RegistrationMapper.ToLogicModel(newPlayer);
+            LogicAuth.RegistrationResult logicResult =
+                _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 
-                return EnumMapper.Map<RegistrationResult, RegisterResultCode>(logicResult);
-            }
-            catch (Exception ex)
-            {
-                var fault = new ServiceFault
-                {
-                    Code = ServiceErrorCode.UnexpectedError,
-                    Message = ex.Message
-                };
-
-                throw new FaultException<ServiceFault>(fault, new FaultReason(ex.Message));
-            }
+            return Mapping.EnumMapper.Map<LogicAuth.RegistrationResult, Contracts.RegisterResultCode>(logicResult);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 
@@ -47,16 +46,18 @@ namespace YachtDice.Server.Logic.Players
         /// Gets the statistics of the player with the given display name or username.
         /// </summary>
         /// <param name="playerName">Display name or username of the player.</param>
-        /// <returns>The statistics; <see cref="PlayerStatistics.IsPlayerFound"/> is false if the player does not exist.</returns>
-        public async Task<PlayerStatistics> GetStatisticsAsync(string playerName)
+        /// <returns>
+        /// The statistics; <see cref="PlayerStatistics.IsPlayerFound"/> is false if the player does not exist.
+        /// </returns>
+        public PlayerStatistics GetStatistics(string playerName)
         {
-            List<Player> matches = await _playerRepository.FindByNameAsync(playerName);
+            List<Player> matches = _playerRepository.FindByName(playerName);
             Player player = matches.FirstOrDefault();
             var statistics = new PlayerStatistics();
 
             if (player != null)
             {
-                List<GameHistoryPlayer> history = await _gameHistoryRepository.FindByPlayerIdAsync(player.Id);
+                List<GameHistoryPlayer> history = _gameHistoryRepository.FindByPlayerId(player.Id);
                 statistics = BuildStatistics(player, history);
             }
 

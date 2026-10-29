@@ -15,9 +15,9 @@ namespace YachtDice.RegistrationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerRegistrationInfo", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Player", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class PlayerRegistrationInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Player : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -145,50 +145,120 @@ namespace YachtDice.RegistrationServiceReference {
         UsernameAlreadyTaken = 5,
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="RegistrationServiceReference.IPlayerRegistrationManager")]
-    public interface IPlayerRegistrationManager {
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class ServiceFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse")]
-        YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.PlayerRegistrationInfo request);
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse")]
-        System.Threading.Tasks.Task<YachtDice.RegistrationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.RegistrationServiceReference.PlayerRegistrationInfo request);
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.RegistrationServiceReference.ServiceErrorCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.RegistrationServiceReference.ServiceErrorCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceErrorCode", Namespace="urn:yachtdice:contracts")]
+    public enum ServiceErrorCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnexpectedError = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseUnavailable = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ValidationFailed = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPlayerRegistrationManagerChannel : YachtDice.RegistrationServiceReference.IPlayerRegistrationManager, System.ServiceModel.IClientChannel {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="RegistrationServiceReference.IPlayerRegistrationService")]
+    public interface IPlayerRegistrationService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayer", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RegistrationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerServiceFaultFaul" +
+            "t", Name="ServiceFault")]
+        YachtDice.RegistrationServiceReference.RegisterResultCode RegisterPlayer(YachtDice.RegistrationServiceReference.Player newPlayer);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IPlayerRegistrationServiceChannel : YachtDice.RegistrationServiceReference.IPlayerRegistrationService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PlayerRegistrationManagerClient : System.ServiceModel.ClientBase<YachtDice.RegistrationServiceReference.IPlayerRegistrationManager>, YachtDice.RegistrationServiceReference.IPlayerRegistrationManager {
+    public partial class PlayerRegistrationServiceClient : System.ServiceModel.ClientBase<YachtDice.RegistrationServiceReference.IPlayerRegistrationService>, YachtDice.RegistrationServiceReference.IPlayerRegistrationService {
         
-        public PlayerRegistrationManagerClient() {
+        public PlayerRegistrationServiceClient() {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName, string remoteAddress) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PlayerRegistrationManagerClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PlayerRegistrationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.PlayerRegistrationInfo request) {
-            return base.Channel.Register(request);
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.RegistrationServiceReference.RegisterResultCode> RegisterAsync(YachtDice.RegistrationServiceReference.PlayerRegistrationInfo request) {
-            return base.Channel.RegisterAsync(request);
+        public YachtDice.RegistrationServiceReference.RegisterResultCode RegisterPlayer(YachtDice.RegistrationServiceReference.Player newPlayer) {
+            return base.Channel.RegisterPlayer(newPlayer);
         }
     }
 }

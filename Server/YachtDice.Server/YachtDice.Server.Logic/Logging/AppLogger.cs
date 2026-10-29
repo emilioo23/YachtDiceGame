@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using log4net;
 using log4net.Core;
@@ -12,6 +13,9 @@ namespace YachtDice.Server.Logic.Logging
     public class AppLogger
     {
         private const int MaxStackLevels = 3;
+        private const string NullOwnerTypeMessage = "The owner type cannot be null when initializing the logger.";
+        private const string NullExceptionMessage = "The exception instance cannot be null when logging an error.";
+        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}";
 
         private readonly ILog _log;
 
@@ -23,7 +27,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (ownerType == null)
             {
-                throw new ArgumentNullException(nameof(ownerType));
+                throw new ArgumentNullException(nameof(ownerType), NullOwnerTypeMessage);
             }
 
             _log = LogManager.GetLogger(ownerType);
@@ -75,7 +79,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception));
+                throw new ArgumentNullException(nameof(exception), NullExceptionMessage);
             }
 
             _log.Error(BuildErrorMessage(exception, message));
@@ -87,7 +91,14 @@ namespace YachtDice.Server.Logic.Logging
                 .Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             string limitedStack = string.Join(Environment.NewLine, stackLines.Take(MaxStackLevels));
 
-            return $"{message} {exception.GetType().Name}: {exception.Message}{Environment.NewLine}{limitedStack}";
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                ErrorMessageFormat,
+                message,
+                exception.GetType().Name,
+                exception.Message,
+                Environment.NewLine,
+                limitedStack);
         }
     }
 }

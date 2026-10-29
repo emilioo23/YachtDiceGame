@@ -11,7 +11,7 @@ using YachtDice.Server.Logic.TwoFactor;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Checks the player's credentials and starts the two-step verification.
+    /// Checks the player's credentials and starts the two-step verification when the player has it turned on.
     /// </summary>
     public class LoginService : ILoginService
     {
@@ -22,7 +22,6 @@ namespace YachtDice.Server.Logic.Authentication
 
         private readonly AppLogger _logger = new AppLogger(typeof(LoginService));
         private readonly IPlayerRepository _playerRepository;
-        private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
 
@@ -30,28 +29,16 @@ namespace YachtDice.Server.Logic.Authentication
         /// Initializes the service with the components it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
-        /// <param name="codeService">Service that keeps the verification codes.</param>
+        /// <param name="verificationService">Service that handles verification challenges and lockouts.</param>
         /// <param name="deliveryService">Service that sends the verification code by email.</param>
-        /// <param name="verificationService">Service that handles verification challenges.</param>
         public LoginService(
             IPlayerRepository playerRepository,
-            TwoFactorCodeService codeService,
-            TwoFactorDeliveryService deliveryService,
-            TwoFactorVerificationService verificationService)
+            TwoFactorVerificationService verificationService,
+            TwoFactorDeliveryService deliveryService)
         {
             if (playerRepository == null)
             {
                 throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            }
-
-            if (codeService == null)
-            {
-                throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
-            }
-
-            if (deliveryService == null)
-            {
-                throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             }
 
             if (verificationService == null)
@@ -59,18 +46,22 @@ namespace YachtDice.Server.Logic.Authentication
                 throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             }
 
+            if (deliveryService == null)
+            {
+                throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            }
+
             _playerRepository = playerRepository;
-            _codeService = codeService;
-            _deliveryService = deliveryService;
             _verificationService = verificationService;
+            _deliveryService = deliveryService;
         }
 
         /// <summary>
-        /// Checks the credentials and, if they are correct, sends the verification code.
+        /// Checks the credentials and, if they are correct, sends the verification code or completes the login.
         /// </summary>
         /// <param name="credentials">Credentials and language of the player.</param>
         /// <returns>Result of the login attempt.</returns>
-        public LoginResult Login(LoginCredentials credentials)
+        public LoginResult LoginPlayer(LoginCredentials credentials)
         {
             if (credentials == null)
             {
@@ -107,14 +98,18 @@ namespace YachtDice.Server.Logic.Authentication
                 _logger.Warning(InvalidCredentialsLogMessage);
                 result = new LoginResult(LoginStatus.InvalidCredentials, string.Empty);
             }
-            else if (_codeService.IsLocked(player.Email))
+            else if (_verificationService.IsLocked(player.Email))
             {
                 _logger.Warning(LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
-            else
+            else if (_playerRepository.HasTwoFactorEnabled(player.Id))
             {
                 result = SendCode(player, credentials.Culture);
+            }
+            else
+            {
+                result = new LoginResult(LoginStatus.LoggedIn, player.DisplayName);
             }
 
             return result;
@@ -129,7 +124,7 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool wasSent = _deliveryService.SendCode(player.Email, player.DisplayName, culture, challengeId);
+            bool wasSent = _deliveryService.SendCode(player, culture, challengeId);
             LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player.DisplayName, challengeId);

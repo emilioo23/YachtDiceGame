@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Email;
@@ -16,10 +17,13 @@ namespace YachtDice.Server.Host
     /// </summary>
     internal static class Program
     {
-        private const string StartedLogMessage = "Server started. Press Enter to stop it.";
-        private const string StoppedLogMessage = "Server stopped.";
+        private const string StartedLogMessage = "Server started. Press Enter or Ctrl+C to stop it.";
+        private const string StoppedLogMessage = "Server stopped gracefully.";
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
+        private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
+
+        private static readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
         /// <summary>
         /// Initializes and opens the service hosts, keeping the application running until stopped.
@@ -29,32 +33,95 @@ namespace YachtDice.Server.Host
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
 
+            Console.CancelKeyPress += HandleCancelKeyPress;
+
             try
             {
-                serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
-                serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
-                serviceHosts.Add(new ServiceHost(CreatePlayerService()));
-                serviceHosts.Add(new ServiceHost(new GameService()));
-                serviceHosts.ForEach(serviceHost => serviceHost.Open());
-                logger.Info(StartedLogMessage);
-                Console.ReadLine();
-                serviceHosts.ForEach(serviceHost => serviceHost.Close());
-                logger.Info(StoppedLogMessage);
+                OpenServiceHosts(serviceHosts);
+                ReportStatus(logger, StartedLogMessage);
+                WaitForExit();
+                CloseServiceHosts(serviceHosts);
+                ReportStatus(logger, StoppedLogMessage);
+            }
+            catch (AddressAlreadyInUseException ex)
+            {
+                ReportFailure(logger, ex, AddressInUseLogMessage);
             }
             catch (CommunicationException ex)
             {
-                logger.Error(ex, CommunicationFailedLogMessage);
-                Console.ReadLine();
+                ReportFailure(logger, ex, CommunicationFailedLogMessage);
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex, ConfigurationFailedLogMessage);
-                Console.ReadLine();
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
             finally
             {
-                serviceHosts.ForEach(serviceHost => serviceHost.Abort());
+                AbortServiceHosts(serviceHosts);
             }
+        }
+
+        private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            _quitEvent.Set();
+        }
+
+        private static void OpenServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
+            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
+            serviceHosts.Add(new ServiceHost(CreatePlayerService()));
+            serviceHosts.Add(new ServiceHost(new RoomService()));
+            serviceHosts.Add(new ServiceHost(new GameService()));
+            serviceHosts.Add(new ServiceHost(new ChatService()));
+            serviceHosts.Add(new ServiceHost(new PresenceService()));
+
+            serviceHosts.ForEach(serviceHost => serviceHost.Open());
+        }
+
+        private static void WaitForExit()
+        {
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                Console.ReadLine();
+                _quitEvent.Set();
+            });
+
+            _quitEvent.WaitOne();
+        }
+
+        private static void CloseServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            foreach (ServiceHost serviceHost in serviceHosts)
+            {
+                if (serviceHost.State == CommunicationState.Opened)
+                {
+                    serviceHost.Close();
+                }
+            }
+        }
+
+        private static void AbortServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            foreach (ServiceHost serviceHost in serviceHosts)
+            {
+                if (serviceHost.State != CommunicationState.Closed)
+                {
+                    serviceHost.Abort();
+                }
+            }
+        }
+
+        private static void ReportStatus(AppLogger logger, string message)
+        {
+            logger.Info(message);
+        }
+
+        private static void ReportFailure(AppLogger logger, Exception exception, string message)
+        {
+            logger.Error(exception, message);
+            Console.ReadLine();
         }
 
         /// <summary>
@@ -69,8 +136,9 @@ namespace YachtDice.Server.Host
             var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
 
             return new AuthenticationService(
-                new LoginService(playerRepository, codeService, deliveryService, verificationService),
-                verificationService);
+                new LoginService(playerRepository, verificationService, deliveryService),
+                verificationService,
+                new TwoFactorSettingsService(playerRepository, verificationService, deliveryService));
         }
 
         /// <summary>

@@ -1,12 +1,12 @@
-using System;
-using YachtDice.GameServiceReference;
+﻿using System;
+using YachtDice.ChatServiceReference;
 
 namespace YachtDice.Callbacks
 {
     /// <summary>
     /// Handles chat related callbacks from the server.
     /// </summary>
-    public class ChatCallbackHandler : IChatManagerCallback
+    public class ChatCallbackHandler : IChatServiceCallback
     {
         /// <summary>
         /// Event triggered when a chat message is received.
@@ -14,10 +14,10 @@ namespace YachtDice.Callbacks
         public event Action<ChatMessage> MessageReceived;
 
         /// <summary>
-        /// Invokes the message received event.
+        /// Raises the message received event when the server delivers a message.
         /// </summary>
         /// <param name="message">The received message data.</param>
-        public void OnMessageReceived(ChatMessage message)
+        void IChatServiceCallback.MessageReceived(ChatMessage message)
         {
             MessageReceived?.Invoke(message);
         }

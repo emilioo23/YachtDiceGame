@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Register">
+  <xs:element name="RegisterPlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerRegistrationInfo" />
+        <xs:element minOccurs="0" name="newPlayer" nillable="true" type="tns:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerRegistrationInfo">
+  <xs:complexType name="Player">
     <xs:sequence>
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
@@ -16,11 +16,11 @@
       <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerRegistrationInfo" nillable="true" type="tns:PlayerRegistrationInfo" />
-  <xs:element name="RegisterResponse">
+  <xs:element name="Player" nillable="true" type="tns:Player" />
+  <xs:element name="RegisterPlayerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterResult" type="tns:RegisterResultCode" />
+        <xs:element minOccurs="0" name="RegisterPlayerResult" type="tns:RegisterResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -35,4 +35,19 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RegisterResultCode" nillable="true" type="tns:RegisterResultCode" />
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="ValidationFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
 </xs:schema>

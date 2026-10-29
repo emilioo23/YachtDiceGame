@@ -23,7 +23,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Initializes the service with the components it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
-        /// <param name="codeService">Service that keeps the verification codes (shared instance).</param>
+        /// <param name="codeService">Service that keeps the verification codes.</param>
         /// <param name="deliveryService">Service that sends the verification code by email.</param>
         public TwoFactorVerificationService(
             IPlayerRepository playerRepository,
@@ -60,25 +60,35 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
-        /// Validates the code entered by the player against the challenge.
+        /// Indicates whether verification is locked for the player because of too many failed attempts.
         /// </summary>
-        /// <param name="email">Player's email address.</param>
-        /// <param name="code">Code entered by the player.</param>
-        /// <param name="challengeId">Challenge identifier.</param>
-        /// <returns>Validation result.</returns>
-        public TwoFactorValidationResult ValidateCode(string email, string code, string challengeId)
+        /// <param name="email">The player's email address.</param>
+        /// <returns>True if the lockout is still active.</returns>
+        public bool IsLocked(string email)
+        {
+            return _codeService.IsLocked(email);
+        }
+
+        /// <summary>
+        /// Processes the code verification required by the interface.
+        /// </summary>
+        /// <param name="email">The player's email address.</param>
+        /// <param name="code">The verification code provided.</param>
+        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <returns>Result status of the verification process.</returns>
+        public TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId)
         {
             return _codeService.Validate(email, code, challengeId);
         }
 
         /// <summary>
-        /// Generates a new code and sends it synchronously, if the player is allowed to ask for one.
+        /// Processes the code resend required by the interface.
         /// </summary>
-        /// <param name="email">Player's email address.</param>
-        /// <param name="culture">Language in which the email is written.</param>
-        /// <param name="challengeId">Challenge identifier.</param>
-        /// <returns>Outcome of the request.</returns>
-        public ResendCodeStatus ProcessResendRequest(string email, CultureInfo culture, string challengeId)
+        /// <param name="email">The player's email address.</param>
+        /// <param name="cultureName">The culture name for email localization.</param>
+        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <returns>Result status of the resend process.</returns>
+        public ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId)
         {
             List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
@@ -98,33 +108,12 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else
             {
-                bool wasSent = _deliveryService.SendCode(player.Email, player.DisplayName, culture, challengeId);
+                var culture = new CultureInfo(cultureName);
+                bool wasSent = _deliveryService.SendCode(player, culture, challengeId);
                 status = wasSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 
             return status;
-        }
-
-        /// <summary>
-        /// Processes the code verification required by the interface.
-        /// </summary>
-        /// <param name="details">Verification contract payload.</param>
-        /// <returns>Result code of the verification process.</returns>
-        public VerificationResultCode VerifyCode(VerificationDetails details)
-        {
-            TwoFactorValidationResult result = ValidateCode(details.Email, details.Code, details.ChallengeId);
-            return (VerificationResultCode)(int)result;
-        }
-
-        /// <summary>
-        /// Processes the code resend required by the interface.
-        /// </summary>
-        /// <param name="details">Resend contract payload.</param>
-        /// <returns>Result code of the resend process.</returns>
-        public ResendResultCode ResendCode(ResendCodeDetails details)
-        {
-            ResendCodeStatus status = ProcessResendRequest(details.Email, details.Culture, details.ChallengeId);
-            return (ResendResultCode)(int)status;
         }
     }
 }

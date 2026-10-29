@@ -6,16 +6,20 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPlayerRegistrationManager_Register_InputMessage">
-    <wsdl:part name="parameters" element="tns:Register" />
+  <wsdl:message name="IPlayerRegistrationService_RegisterPlayer_InputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterPlayer" />
   </wsdl:message>
-  <wsdl:message name="IPlayerRegistrationManager_Register_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  <wsdl:message name="IPlayerRegistrationService_RegisterPlayer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterPlayerResponse" />
   </wsdl:message>
-  <wsdl:portType name="IPlayerRegistrationManager">
-    <wsdl:operation name="Register">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register" message="tns:IPlayerRegistrationManager_Register_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse" message="tns:IPlayerRegistrationManager_Register_OutputMessage" />
+  <wsdl:message name="IPlayerRegistrationService_RegisterPlayer_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:portType name="IPlayerRegistrationService">
+    <wsdl:operation name="RegisterPlayer">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayer" message="tns:IPlayerRegistrationService_RegisterPlayer_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerResponse" message="tns:IPlayerRegistrationService_RegisterPlayer_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerRegistrationService_RegisterPlayer_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
