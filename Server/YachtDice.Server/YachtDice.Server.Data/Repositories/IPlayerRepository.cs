@@ -53,6 +53,6 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
-        void SetTwoFactorEnabled(int playerId, bool isEnabled);
+        void SaveTwoFactorEnabled(int playerId, bool isEnabled);
     }
 }

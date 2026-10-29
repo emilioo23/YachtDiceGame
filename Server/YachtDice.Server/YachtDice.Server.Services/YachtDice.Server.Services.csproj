@@ -50,7 +50,6 @@
     <Compile Include="Mapping\CultureParser.cs" />
     <Compile Include="Mapping\EnumMapper.cs" />
     <Compile Include="Mapping\LeaderboardMapper.cs" />
-    <Compile Include="Mapping\LoginMapper.cs" />
     <Compile Include="Mapping\PlayerStatisticsMapper.cs" />
     <Compile Include="Mapping\RegistrationMapper.cs" />
     <Compile Include="PlayerRegistrationService.cs" />

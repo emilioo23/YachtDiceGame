@@ -95,13 +95,13 @@ namespace YachtDice.Server.Data.Repositories
         public bool EmailExists(string email)
         {
             ValidateText(email, nameof(email));
-            bool exists;
+            bool isRegistered;
 
             try
             {
                 using (var context = new YachtDiceContext())
                 {
-                    exists = context.Player.Any(player => player.Email == email);
+                    isRegistered = context.Player.Any(player => player.Email == email);
                 }
             }
             catch (EntityException ex)
@@ -109,7 +109,7 @@ namespace YachtDice.Server.Data.Repositories
                 throw new DataAccessException(EmailExistsFailedMessage, ex);
             }
 
-            return exists;
+            return isRegistered;
         }
 
         /// <summary>
@@ -121,13 +121,13 @@ namespace YachtDice.Server.Data.Repositories
         public bool UsernameExists(string username)
         {
             ValidateText(username, nameof(username));
-            bool exists;
+            bool isTaken;
 
             try
             {
                 using (var context = new YachtDiceContext())
                 {
-                    exists = context.Player.Any(player => player.Username == username);
+                    isTaken = context.Player.Any(player => player.Username == username);
                 }
             }
             catch (EntityException ex)
@@ -135,7 +135,7 @@ namespace YachtDice.Server.Data.Repositories
                 throw new DataAccessException(UsernameExistsFailedMessage, ex);
             }
 
-            return exists;
+            return isTaken;
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
         /// <exception cref="DataAccessException">The setting could not be saved.</exception>
-        public void SetTwoFactorEnabled(int playerId, bool isEnabled)
+        public void SaveTwoFactorEnabled(int playerId, bool isEnabled)
         {
             try
             {

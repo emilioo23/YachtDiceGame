@@ -27,14 +27,6 @@ namespace YachtDice.Views
         private static readonly Color _usBlueColor = Color.FromRgb(0x3C, 0x3B, 0x6E);
 
         /// <summary>
-        /// Function that the containing window assigns to indicate how to reopen itself
-        /// (with its own constructor parameters, for example the player name).
-        /// If it is not assigned, Activator.CreateInstance is used as a fallback (it only works
-        /// with windows whose constructor has no parameters, such as LoginWindow).
-        /// </summary>
-        public Func<Window> ReopenWindowFunc { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the floating language switch control.
         /// </summary>
         public LanguageSwitcher()
@@ -42,6 +34,14 @@ namespace YachtDice.Views
             InitializeComponent();
             RefreshCurrentFlagDisplay();
         }
+
+        /// <summary>
+        /// Function that the containing window assigns to indicate how to reopen itself
+        /// (with its own constructor parameters, for example the player name).
+        /// If it is not assigned, Activator.CreateInstance is used as a fallback (it only works
+        /// with windows whose constructor has no parameters, such as LoginWindow).
+        /// </summary>
+        public Func<Window> ReopenWindowFunc { get; set; }
 
         private void LanguageToggleButton_Click(object sender, RoutedEventArgs e)
         {

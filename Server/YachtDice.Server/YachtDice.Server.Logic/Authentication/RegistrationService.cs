@@ -117,7 +117,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private static bool IsValidEmail(string email)
         {
-            bool isValid = false;
+            var isValid = false;
 
             if (!string.IsNullOrWhiteSpace(email))
             {

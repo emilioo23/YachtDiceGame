@@ -30,7 +30,7 @@ namespace YachtDice.Server.Services
         /// <returns>The names of all the players who are online, including the caller.</returns>
         public string[] Connect(string displayName)
         {
-            string[] onlinePlayers = new string[0];
+            var onlinePlayers = new string[0];
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -73,13 +73,13 @@ namespace YachtDice.Server.Services
         {
             ICommunicationObject channel = OperationContext.Current.Channel;
 
-            channel.Closed += (sender, args) => Remove(displayName, sessionId);
-            channel.Faulted += (sender, args) => Remove(displayName, sessionId);
+            channel.Closed += (sender, e) => Remove(displayName, sessionId);
+            channel.Faulted += (sender, e) => Remove(displayName, sessionId);
         }
 
         private void Remove(string displayName, string sessionId)
         {
-            bool wasRemoved = false;
+            var isRemoved = false;
             OnlinePlayer player;
 
             lock (_syncRoot)
@@ -87,11 +87,11 @@ namespace YachtDice.Server.Services
                 if (_players.TryGetValue(displayName, out player) && player.SessionId == sessionId)
                 {
                     _players.Remove(displayName);
-                    wasRemoved = true;
+                    isRemoved = true;
                 }
             }
 
-            if (wasRemoved)
+            if (isRemoved)
             {
                 _logger.Info(DisconnectedLogMessage);
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
@@ -123,7 +123,7 @@ namespace YachtDice.Server.Services
             string displayName,
             Contracts.PresenceEventType eventType)
         {
-            bool isDelivered = false;
+            var isDelivered = false;
 
             if (((ICommunicationObject)callback).State == CommunicationState.Opened)
             {

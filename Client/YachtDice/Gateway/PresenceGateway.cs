@@ -41,12 +41,14 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the names of the players who are online right now.
         /// </summary>
-        /// <returns>A copy of the list of online players.</returns>
-        public List<string> GetOnlinePlayers()
+        public List<string> OnlinePlayers
         {
-            lock (_syncRoot)
+            get
             {
-                return _onlinePlayers.ToList();
+                lock (_syncRoot)
+                {
+                    return _onlinePlayers.ToList();
+                }
             }
         }
 
@@ -127,7 +129,7 @@ namespace YachtDice.Gateway
             {
                 string[] names = await Task.Run(() => client.Connect(displayName));
 
-                client.InnerChannel.Faulted += (sender, args) => HandleConnectionLost(client);
+                client.InnerChannel.Faulted += (sender, e) => HandleConnectionLost(client);
                 SaveConnection(client, displayName, names);
             }
             catch (CommunicationException ex)
