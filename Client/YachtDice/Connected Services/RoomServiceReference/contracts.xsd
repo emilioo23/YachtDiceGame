@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="JoinRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
+        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PlayerProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerProfile" nillable="true" type="tns:PlayerProfile" />
+  <xs:element name="JoinRoomResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
+        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveRoomResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PlayerChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
+        <xs:element minOccurs="0" name="eventType" type="tns:RoomEventType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="RoomEventType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PlayerJoined" />
+      <xs:enumeration value="PlayerLeft" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />
+</xs:schema>
