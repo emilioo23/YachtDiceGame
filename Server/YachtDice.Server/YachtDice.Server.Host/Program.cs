@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Email;
@@ -16,10 +17,13 @@ namespace YachtDice.Server.Host
     /// </summary>
     internal static class Program
     {
-        private const string StartedLogMessage = "Server started. Press Enter to stop it.";
-        private const string StoppedLogMessage = "Server stopped.";
+        private const string StartedLogMessage = "Server started. Press Enter or Ctrl+C to stop it.";
+        private const string StoppedLogMessage = "Server stopped gracefully.";
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
+        private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
+
+        private static readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
         /// <summary>
         /// Initializes and opens the service hosts, keeping the application running until stopped.
@@ -29,31 +33,70 @@ namespace YachtDice.Server.Host
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
 
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                e.Cancel = true;
+                _quitEvent.Set();
+            };
+
             try
             {
                 serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
                 serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
                 serviceHosts.Add(new ServiceHost(CreatePlayerService()));
                 serviceHosts.Add(new ServiceHost(new GameService()));
+
                 serviceHosts.ForEach(serviceHost => serviceHost.Open());
+
                 logger.Info(StartedLogMessage);
-                Console.ReadLine();
-                serviceHosts.ForEach(serviceHost => serviceHost.Close());
+                Console.WriteLine(StartedLogMessage);
+
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    Console.ReadLine();
+                    _quitEvent.Set();
+                });
+
+                _quitEvent.WaitOne();
+
+                foreach (var serviceHost in serviceHosts)
+                {
+                    if (serviceHost.State == CommunicationState.Opened)
+                    {
+                        serviceHost.Close();
+                    }
+                }
+
                 logger.Info(StoppedLogMessage);
+                Console.WriteLine(StoppedLogMessage);
+            }
+            catch (AddressAlreadyInUseException ex)
+            {
+                logger.Error(ex, AddressInUseLogMessage);
+                Console.WriteLine(AddressInUseLogMessage);
+                Console.ReadLine();
             }
             catch (CommunicationException ex)
             {
                 logger.Error(ex, CommunicationFailedLogMessage);
+                Console.WriteLine(CommunicationFailedLogMessage);
                 Console.ReadLine();
             }
             catch (InvalidOperationException ex)
             {
                 logger.Error(ex, ConfigurationFailedLogMessage);
+                Console.WriteLine(ConfigurationFailedLogMessage);
                 Console.ReadLine();
             }
             finally
             {
-                serviceHosts.ForEach(serviceHost => serviceHost.Abort());
+                foreach (var serviceHost in serviceHosts)
+                {
+                    if (serviceHost.State != CommunicationState.Closed)
+                    {
+                        serviceHost.Abort();
+                    }
+                }
             }
         }
 

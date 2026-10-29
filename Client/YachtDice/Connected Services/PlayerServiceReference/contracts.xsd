@@ -3,16 +3,10 @@
   <xs:element name="GetStatistics">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="request" nillable="true" type="tns:PlayerStatisticsFilter" />
+        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerStatisticsFilter">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="PlayerName" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PlayerStatisticsFilter" nillable="true" type="tns:PlayerStatisticsFilter" />
   <xs:element name="GetStatisticsResponse">
     <xs:complexType>
       <xs:sequence>
@@ -24,7 +18,6 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BestScore" type="xs:int" />
       <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
-      <xs:element minOccurs="0" name="IsPlayerFound" type="xs:boolean" />
       <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="WinRatePercentage" type="xs:int" />
       <xs:element minOccurs="0" name="Wins" type="xs:int" />
@@ -42,7 +35,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="UnexpectedError" />
       <xs:enumeration value="DatabaseUnavailable" />
-      <xs:enumeration value="InvalidRequest" />
+      <xs:enumeration value="ValidationFailed" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />

@@ -68,6 +68,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\YachtDice.Server.Contracts\YachtDice.Server.Contracts.csproj">
+      <Project>{b6895006-2a78-0737-8158-38a63d850565}</Project>
+      <Name>YachtDice.Server.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">
       <Project>{273823dc-da56-4ef1-8d9a-fa2fe4ed0542}</Project>
       <Name>YachtDice.Server.Data</Name>

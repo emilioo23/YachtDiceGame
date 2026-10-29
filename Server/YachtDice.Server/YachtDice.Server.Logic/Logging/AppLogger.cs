@@ -23,7 +23,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (ownerType == null)
             {
-                throw new ArgumentNullException(nameof(ownerType));
+                throw new ArgumentNullException(nameof(ownerType), "The owner type cannot be null when initializing the logger.");
             }
 
             _log = LogManager.GetLogger(ownerType);
@@ -75,7 +75,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception));
+                throw new ArgumentNullException(nameof(exception), "The exception instance cannot be null when logging an error.");
             }
 
             _log.Error(BuildErrorMessage(exception, message));

@@ -259,84 +259,7 @@ namespace YachtDice.AuthenticationServiceReference {
         DatabaseUnavailable = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidRequest = 2,
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationDetails", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class VerificationDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ChallengeIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CodeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ChallengeId {
-            get {
-                return this.ChallengeIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
-                    this.ChallengeIdField = value;
-                    this.RaisePropertyChanged("ChallengeId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Code {
-            get {
-                return this.CodeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
-                    this.CodeField = value;
-                    this.RaisePropertyChanged("Code");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        ValidationFailed = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -354,83 +277,6 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Locked = 3,
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeDetails", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class ResendCodeDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ChallengeIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CultureNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ChallengeId {
-            get {
-                return this.ChallengeIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
-                    this.ChallengeIdField = value;
-                    this.RaisePropertyChanged("ChallengeId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CultureName {
-            get {
-                return this.CultureNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CultureNameField, value) != true)) {
-                    this.CultureNameField = value;
-                    this.RaisePropertyChanged("CultureName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -454,29 +300,29 @@ namespace YachtDice.AuthenticationServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/Login", ReplyAction="http://tempuri.org/IAuthenticationService/LoginResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/LoginServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Login", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/LoginServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials credentials);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/Login", ReplyAction="http://tempuri.org/IAuthenticationService/LoginResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/Login", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/LoginResponse")]
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials credentials);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/VerifyCode", ReplyAction="http://tempuri.org/IAuthenticationService/VerifyCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/VerifyCodeServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerificationDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(string email, string code, string challengeId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/VerifyCode", ReplyAction="http://tempuri.org/IAuthenticationService/VerifyCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerificationDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyCodeResponse")]
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/ResendCode", ReplyAction="http://tempuri.org/IAuthenticationService/ResendCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="http://tempuri.org/IAuthenticationService/ResendCodeServiceFaultFault", Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendCodeServiceFaultFault", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(string email, string challengeId, string culture);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/ResendCode", ReplyAction="http://tempuri.org/IAuthenticationService/ResendCodeResponse")]
-        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeDetails request);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendCodeResponse")]
+        System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -506,28 +352,28 @@ namespace YachtDice.AuthenticationServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials request) {
-            return base.Channel.Login(request);
+        public YachtDice.AuthenticationServiceReference.LoginData Login(YachtDice.AuthenticationServiceReference.LoginCredentials credentials) {
+            return base.Channel.Login(credentials);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials request) {
-            return base.Channel.LoginAsync(request);
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.LoginData> LoginAsync(YachtDice.AuthenticationServiceReference.LoginCredentials credentials) {
+            return base.Channel.LoginAsync(credentials);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(YachtDice.AuthenticationServiceReference.VerificationDetails request) {
-            return base.Channel.VerifyCode(request);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyCode(string email, string code, string challengeId) {
+            return base.Channel.VerifyCode(email, code, challengeId);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(YachtDice.AuthenticationServiceReference.VerificationDetails request) {
-            return base.Channel.VerifyCodeAsync(request);
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId) {
+            return base.Channel.VerifyCodeAsync(email, code, challengeId);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(YachtDice.AuthenticationServiceReference.ResendCodeDetails request) {
-            return base.Channel.ResendCode(request);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendCode(string email, string challengeId, string culture) {
+            return base.Channel.ResendCode(email, challengeId, culture);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(YachtDice.AuthenticationServiceReference.ResendCodeDetails request) {
-            return base.Channel.ResendCodeAsync(request);
+        public System.Threading.Tasks.Task<YachtDice.AuthenticationServiceReference.ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture) {
+            return base.Channel.ResendCodeAsync(email, challengeId, culture);
         }
     }
 }

@@ -29,8 +29,8 @@ namespace YachtDice.Server.Logic.TwoFactor
 
         private readonly object _syncRoot = new object();
 
-        private readonly Dictionary<string, TwoFactorCodeEntry> _entries =
-            new Dictionary<string, TwoFactorCodeEntry>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, TwoFactorCode> _entries =
+            new Dictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Generates a new code for the given email and stores it with its challenge.
@@ -46,14 +46,13 @@ namespace YachtDice.Server.Logic.TwoFactor
             lock (_syncRoot)
             {
                 DateTime lockedUntil = DateTime.MinValue;
-                TwoFactorCodeEntry previousEntry;
 
-                if (_entries.TryGetValue(email, out previousEntry))
+                if (_entries.TryGetValue(email, out TwoFactorCode previousEntry))
                 {
                     lockedUntil = previousEntry.LockedUntil;
                 }
 
-                _entries[email] = new TwoFactorCodeEntry
+                _entries[email] = new TwoFactorCode
                 {
                     Code = code,
                     ChallengeId = challengeId,
@@ -83,21 +82,19 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="code">Code entered by the player.</param>
         /// <param name="challengeId">Challenge identifier.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationResult Validate(string email, string code, string challengeId)
+        public TwoFactorValidationStatus Validate(string email, string code, string challengeId)
         {
-            TwoFactorValidationResult result = TwoFactorValidationResult.Expired;
+            TwoFactorValidationStatus status = TwoFactorValidationStatus.Expired;
 
             lock (_syncRoot)
             {
-                TwoFactorCodeEntry entry;
-
-                if (_entries.TryGetValue(email, out entry))
+                if (_entries.TryGetValue(email, out TwoFactorCode entry))
                 {
-                    result = EvaluateEntry(email, entry, code, challengeId);
+                    status = EvaluateEntry(email, entry, code, challengeId);
                 }
             }
 
-            return result;
+            return status;
         }
 
         /// <summary>
@@ -111,9 +108,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             lock (_syncRoot)
             {
-                TwoFactorCodeEntry entry;
-
-                if (_entries.TryGetValue(email, out entry))
+                if (_entries.TryGetValue(email, out TwoFactorCode entry))
                 {
                     isLocked = entry.LockedUntil > DateTime.UtcNow;
                 }
@@ -134,9 +129,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             lock (_syncRoot)
             {
-                TwoFactorCodeEntry entry;
-
-                if (_entries.TryGetValue(email, out entry) && entry.ChallengeId == challengeId)
+                if (_entries.TryGetValue(email, out TwoFactorCode entry) && entry.ChallengeId == challengeId)
                 {
                     isAllowed = DateTime.UtcNow >= entry.CreatedAt.AddSeconds(ResendCooldownSeconds);
                 }
@@ -145,50 +138,50 @@ namespace YachtDice.Server.Logic.TwoFactor
             return isAllowed;
         }
 
-        private TwoFactorValidationResult EvaluateEntry(string email, TwoFactorCodeEntry entry, string code, string challengeId)
+        private TwoFactorValidationStatus EvaluateEntry(string email, TwoFactorCode entry, string code, string challengeId)
         {
-            TwoFactorValidationResult result;
+            TwoFactorValidationStatus status;
             DateTime now = DateTime.UtcNow;
 
             if (entry.ChallengeId != challengeId)
             {
-                result = TwoFactorValidationResult.Incorrect;
+                status = TwoFactorValidationStatus.Incorrect;
             }
             else if (entry.LockedUntil > now)
             {
-                result = TwoFactorValidationResult.Locked;
+                status = TwoFactorValidationStatus.Locked;
             }
             else if (entry.ExpiresAt < now)
             {
                 _entries.Remove(email);
-                result = TwoFactorValidationResult.Expired;
+                status = TwoFactorValidationStatus.Expired;
             }
             else if (entry.Code == code)
             {
                 _entries.Remove(email);
-                result = TwoFactorValidationResult.Valid;
+                status = TwoFactorValidationStatus.Valid;
             }
             else
             {
-                result = RegisterFailedAttempt(entry, now);
+                status = RegisterFailedAttempt(entry, now);
             }
 
-            return result;
+            return status;
         }
 
-        private static TwoFactorValidationResult RegisterFailedAttempt(TwoFactorCodeEntry entry, DateTime now)
+        private static TwoFactorValidationStatus RegisterFailedAttempt(TwoFactorCode entry, DateTime now)
         {
-            TwoFactorValidationResult result = TwoFactorValidationResult.Incorrect;
+            TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
             entry.FailedAttempts++;
 
             if (entry.FailedAttempts >= MaxFailedAttempts)
             {
                 entry.FailedAttempts = 0;
                 entry.LockedUntil = now.AddMinutes(LockMinutes);
-                result = TwoFactorValidationResult.Locked;
+                status = TwoFactorValidationStatus.Locked;
             }
 
-            return result;
+            return status;
         }
 
         private static string CreateRandomCode()

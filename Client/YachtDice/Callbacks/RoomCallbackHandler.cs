@@ -9,31 +9,18 @@ namespace YachtDice.Callbacks
     public class RoomCallbackHandler : IRoomManagerCallback
     {
         /// <summary>
-        /// Event triggered when a player joins the room.
+        /// Event triggered when a player's state in the room changes (joined or left).
         /// </summary>
-        public event Action<PlayerProfile> PlayerJoined;
+        public event Action<PlayerProfile, RoomEventType> PlayerChanged;
 
         /// <summary>
-        /// Event triggered when a player leaves the room.
+        /// Invokes the player changed event.
         /// </summary>
-        public event Action<string> PlayerLeft;
-
-        /// <summary>
-        /// Invokes the player joined event.
-        /// </summary>
-        /// <param name="player">The profile of the player that joined.</param>
-        public void OnPlayerJoined(PlayerProfile player)
+        /// <param name="player">The profile of the player.</param>
+        /// <param name="eventType">The type of event that occurred.</param>
+        public void OnPlayerChanged(PlayerProfile player, RoomEventType eventType)
         {
-            PlayerJoined?.Invoke(player);
-        }
-
-        /// <summary>
-        /// Invokes the player left event.
-        /// </summary>
-        /// <param name="username">The username of the player that left.</param>
-        public void OnPlayerLeft(string username)
-        {
-            PlayerLeft?.Invoke(username);
+            PlayerChanged?.Invoke(player, eventType);
         }
     }
 }

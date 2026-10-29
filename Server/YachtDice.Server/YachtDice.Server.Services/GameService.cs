@@ -2,23 +2,37 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ServiceModel;
-using YachtDice.Server.Services.Contracts;
+using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Services
 {
+    using Contracts = YachtDice.Server.Contracts;
+
+    /// <summary>
+    /// Implements the game, room, and chat management operations.
+    /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class GameService : IGameManager, IRoomManager, IChatManager
+    public class GameService : ServiceBase, Contracts.IGameManager, Contracts.IRoomManager, Contracts.IChatManager
     {
-        private readonly ConcurrentDictionary<string, List<IChatCallback>> _chatRooms = new ConcurrentDictionary<string, List<IChatCallback>>();
-        private readonly ConcurrentDictionary<string, List<IGameCallback>> _gameRooms = new ConcurrentDictionary<string, List<IGameCallback>>();
-        private readonly ConcurrentDictionary<string, List<IRoomManagerCallback>> _roomManagers = new ConcurrentDictionary<string, List<IRoomManagerCallback>>();
+        private readonly ConcurrentDictionary<string, List<Contracts.IChatCallback>> _chatRooms = new ConcurrentDictionary<string, List<Contracts.IChatCallback>>();
+        private readonly ConcurrentDictionary<string, List<Contracts.IGameCallback>> _gameRooms = new ConcurrentDictionary<string, List<Contracts.IGameCallback>>();
+        private readonly ConcurrentDictionary<string, List<Contracts.IRoomCallback>> _roomManagers = new ConcurrentDictionary<string, List<Contracts.IRoomCallback>>();
+        private readonly AppLogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the GameService.
+        /// </summary>
+        public GameService()
+        {
+            _logger = new AppLogger(typeof(GameService));
+        }
 
         public void RollDice(string roomId, string username)
         {
             Random rng = new Random();
             int[] diceValues = { rng.Next(1, 7), rng.Next(1, 7), rng.Next(1, 7), rng.Next(1, 7), rng.Next(1, 7) };
 
-            RegisterChannel(roomId, OperationContext.Current.GetCallbackChannel<IGameCallback>(), _gameRooms);
+            RegisterChannel(roomId, OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>(), _gameRooms);
 
             if (_gameRooms.TryGetValue(roomId, out var callbacks))
             {
@@ -30,24 +44,24 @@ namespace YachtDice.Server.Services
         {
             if (_gameRooms.TryGetValue(roomId, out var callbacks))
             {
-                NotifyClients(callbacks, client => client.OnTurnChanged(new TurnDetails()));
+                NotifyClients(callbacks, client => client.OnTurnChanged(new Contracts.TurnDetails()));
             }
         }
 
-        public void JoinRoom(PlayerProfile player, string roomId)
+        public void JoinRoom(Contracts.PlayerProfile player, string roomId)
         {
-            var roomCallback = OperationContext.Current.GetCallbackChannel<IRoomManagerCallback>();
+            var roomCallback = OperationContext.Current.GetCallbackChannel<Contracts.IRoomCallback>();
             RegisterChannel(roomId, roomCallback, _roomManagers);
 
             if (_roomManagers.TryGetValue(roomId, out var callbacks))
             {
-                NotifyClients(callbacks, client => client.OnPlayerJoined(player));
+                NotifyClients(callbacks, client => client.OnPlayerChanged(player, Contracts.RoomEventType.PlayerJoined));
             }
         }
 
         public void LeaveRoom(string username, string roomId)
         {
-            var roomCallback = OperationContext.Current.GetCallbackChannel<IRoomManagerCallback>();
+            var roomCallback = OperationContext.Current.GetCallbackChannel<Contracts.IRoomCallback>();
 
             if (_roomManagers.TryGetValue(roomId, out var callbacks))
             {
@@ -56,13 +70,14 @@ namespace YachtDice.Server.Services
                     callbacks.Remove(roomCallback);
                 }
 
-                NotifyClients(callbacks, client => client.OnPlayerLeft(username));
+                var leavingPlayer = new Contracts.PlayerProfile { Username = username };
+                NotifyClients(callbacks, client => client.OnPlayerChanged(leavingPlayer, Contracts.RoomEventType.PlayerLeft));
             }
         }
 
-        public void SendMessage(ChatMessage message, string roomId)
+        public void SendMessage(Contracts.ChatMessage message, string roomId)
         {
-            var chatCallback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
+            var chatCallback = OperationContext.Current.GetCallbackChannel<Contracts.IChatCallback>();
             RegisterChannel(roomId, chatCallback, _chatRooms);
 
             if (_chatRooms.TryGetValue(roomId, out var callbacks))
@@ -72,12 +87,12 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Registra el canal de comunicación del cliente en la sala especificada evitando duplicados.
+        /// Registers the client's communication channel in the specified room, avoiding duplicates.
         /// </summary>
-        /// <typeparam name="T">El tipo de contrato de callback.</typeparam>
-        /// <param name="roomId">El identificador de la sala.</param>
-        /// <param name="callback">El canal de callback del cliente.</param>
-        /// <param name="roomDictionary">El diccionario concurrente donde se almacenan los callbacks por sala.</param>
+        /// <typeparam name="T">The type of the callback contract.</typeparam>
+        /// <param name="roomId">The room identifier.</param>
+        /// <param name="callback">The client's callback channel.</param>
+        /// <param name="roomDictionary">The concurrent dictionary where callbacks are stored by room.</param>
         private void RegisterChannel<T>(string roomId, T callback, ConcurrentDictionary<string, List<T>> roomDictionary) where T : class
         {
             roomDictionary.AddOrUpdate(roomId,
@@ -93,11 +108,11 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Notifica a todos los clientes registrados en una sala y elimina de la lista aquellos canales cerrados o inactivos.
+        /// Notifies all registered clients in a room and removes closed or inactive channels from the list.
         /// </summary>
-        /// <typeparam name="T">El tipo de contrato de callback.</typeparam>
-        /// <param name="callbacks">La lista de canales registrados en la sala.</param>
-        /// <param name="action">La acción o método a invocar en cada cliente.</param>
+        /// <typeparam name="T">The type of the callback contract.</typeparam>
+        /// <param name="callbacks">The list of channels registered in the room.</param>
+        /// <param name="action">The action or method to invoke on each client.</param>
         private void NotifyClients<T>(List<T> callbacks, Action<T> action) where T : class
         {
             lock (callbacks)
@@ -113,8 +128,9 @@ namespace YachtDice.Server.Services
                         {
                             action(callback);
                         }
-                        catch (CommunicationException)
+                        catch (CommunicationException ex)
                         {
+                            _logger.Warning($"[CALLBACK DEMO] Attempted to push to a disconnected client. Exception: {ex.GetType().Name} - {ex.Message}");
                             callbacks.RemoveAt(i);
                         }
                         catch (TimeoutException)

@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using System.Threading.Tasks;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
 {
+    using Contracts = YachtDice.Server.Contracts;
+
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PlayerService : ServiceBase, IPlayerService
+    public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
@@ -42,31 +43,31 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the statistics of a player.
         /// </summary>
-        /// <param name="request">Name of the player.</param>
+        /// <param name="username">Username of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<Contracts.PlayerStatistics> GetStatistics(Contracts.PlayerStatisticsFilter request)
+        public Contracts.PlayerStatistics GetStatistics(string username)
         {
-            return ExecuteAsync(request, () => ProcessGetStatisticsAsync(request));
+            return Execute(username, () => ProcessGetStatistics(username));
         }
 
         /// <summary>
         /// Gets the ranking of the best players.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<Contracts.LeaderboardEntry>> GetLeaderboard()
+        public List<Contracts.LeaderboardEntry> GetLeaderboard()
         {
-            return ExecuteAsync(ProcessGetLeaderboardAsync);
+            return Execute(ProcessGetLeaderboard);
         }
 
-        private async Task<Contracts.PlayerStatistics> ProcessGetStatisticsAsync(Contracts.PlayerStatisticsFilter request)
+        private Contracts.PlayerStatistics ProcessGetStatistics(string username)
         {
-            PlayerStatistics statistics = await _statisticsService.GetStatisticsAsync(request.PlayerName);
+            PlayerStatistics statistics = _statisticsService.GetStatisticsAsync(username).Result;
             return PlayerStatisticsMapper.ToContract(statistics);
         }
 
-        private async Task<List<Contracts.LeaderboardEntry>> ProcessGetLeaderboardAsync()
+        private List<Contracts.LeaderboardEntry> ProcessGetLeaderboard()
         {
-            List<LeaderboardEntry> entries = await _leaderboardService.GetTopPlayersAsync();
+            List<LeaderboardEntry> entries = _leaderboardService.GetTopPlayersAsync().Result;
             return LeaderboardMapper.ToContracts(entries);
         }
     }

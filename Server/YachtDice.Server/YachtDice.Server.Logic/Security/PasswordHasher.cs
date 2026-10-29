@@ -18,9 +18,9 @@ namespace YachtDice.Server.Logic.Security
         /// <returns>The hash as a lowercase hexadecimal string.</returns>
         public static string ComputeHash(string plainPassword)
         {
-            if (plainPassword == null)
+            if (string.IsNullOrWhiteSpace(plainPassword))
             {
-                throw new ArgumentNullException(nameof(plainPassword));
+                throw new ArgumentException("The value cannot be empty.", nameof(plainPassword));
             }
 
             using (var sha256 = SHA256.Create())
@@ -40,6 +40,16 @@ namespace YachtDice.Server.Logic.Security
         /// <returns>True if the password matches the stored hash.</returns>
         public static bool Verify(string plainPassword, string storedHash)
         {
+            if (string.IsNullOrWhiteSpace(plainPassword))
+            {
+                throw new ArgumentException("The value cannot be empty.", nameof(plainPassword));
+            }
+
+            if (string.IsNullOrWhiteSpace(storedHash))
+            {
+                throw new ArgumentException("The value cannot be empty.", nameof(storedHash));
+            }
+
             string computedHash = ComputeHash(plainPassword);
 
             return string.Equals(computedHash, storedHash, StringComparison.OrdinalIgnoreCase);

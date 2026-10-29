@@ -1,5 +1,8 @@
 ﻿namespace YachtDice.Server.Services.Mapping
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using Logic = YachtDice.Server.Logic;
+
     /// <summary>
     /// Converts the player statistics of the logic layer into the data contract.
     /// </summary>
@@ -12,15 +15,25 @@
         /// <returns>Answer for the client.</returns>
         public static Contracts.PlayerStatistics ToContract(Logic.Players.PlayerStatistics statistics)
         {
-            return new Contracts.PlayerStatistics
+            Contracts.PlayerStatistics result;
+
+            if (statistics == null)
             {
-                IsPlayerFound = statistics.IsPlayerFound,
-                GamesPlayed = statistics.GamesPlayed,
-                Wins = statistics.Wins,
-                BestScore = statistics.BestScore,
-                WinRatePercentage = statistics.WinRatePercentage,
-                Level = statistics.Level
-            };
+                result = new Contracts.PlayerStatistics();
+            }
+            else
+            {
+                result = new Contracts.PlayerStatistics
+                {
+                    GamesPlayed = statistics.GamesPlayed,
+                    Wins = statistics.Wins,
+                    BestScore = statistics.BestScore,
+                    WinRatePercentage = statistics.WinRatePercentage,
+                    Level = statistics.Level
+                };
+            }
+
+            return result;
         }
     }
 }
