@@ -43,11 +43,11 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the statistics of a player.
         /// </summary>
-        /// <param name="username">Username of the player.</param>
+        /// <param name="player">Player whose statistics are requested. Only the username is used.</param>
         /// <returns>The statistics of the player.</returns>
-        public Contracts.PlayerStatistics GetStatistics(string username)
+        public Contracts.PlayerStatistics GetPlayerStatistics(Contracts.Player player)
         {
-            return Execute(username, () => ProcessGetStatistics(username));
+            return Execute(player, () => ProcessPlayerStatistics(player));
         }
 
         /// <summary>
@@ -56,18 +56,20 @@ namespace YachtDice.Server.Services
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
         public List<Contracts.LeaderboardEntry> GetLeaderboard()
         {
-            return Execute(ProcessGetLeaderboard);
+            return Execute(ProcessLeaderboard);
         }
 
-        private Contracts.PlayerStatistics ProcessGetStatistics(string username)
+        private Contracts.PlayerStatistics ProcessPlayerStatistics(Contracts.Player player)
         {
-            PlayerStatistics statistics = _statisticsService.GetStatistics(username);
+            PlayerStatistics statistics = _statisticsService.GetStatistics(player.Username);
+
             return PlayerStatisticsMapper.ToContract(statistics);
         }
 
-        private List<Contracts.LeaderboardEntry> ProcessGetLeaderboard()
+        private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
             List<LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
+
             return LeaderboardMapper.ToContracts(entries);
         }
     }

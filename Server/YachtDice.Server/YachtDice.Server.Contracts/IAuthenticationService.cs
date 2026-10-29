@@ -15,7 +15,7 @@ namespace YachtDice.Server.Contracts
         /// <returns>Outcome and initial session data of the login attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        LoginData Login(LoginCredentials credentials);
+        LoginData LoginPlayer(LoginCredentials credentials);
 
         /// <summary>
         /// Validates the verification code entered by the player.
@@ -26,7 +26,7 @@ namespace YachtDice.Server.Contracts
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode VerifyCode(string email, string code, string challengeId);
+        VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
 
         /// <summary>
         /// Resends a verification code to the player's email address.
@@ -37,6 +37,6 @@ namespace YachtDice.Server.Contracts
         /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        ResendResultCode ResendCode(string email, string challengeId, string culture);
+        ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
     }
 }

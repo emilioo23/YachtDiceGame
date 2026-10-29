@@ -21,7 +21,9 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="loginService">The service responsible for login logic.</param>
         /// <param name="verificationService">The service responsible for two-factor verification.</param>
-        public AuthenticationService(LogicAuth.ILoginService loginService, LogicAuth.IVerificationService verificationService)
+        public AuthenticationService(
+            LogicAuth.ILoginService loginService,
+            LogicAuth.IVerificationService verificationService)
         {
             _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
             _verificationService = verificationService ?? throw new ArgumentNullException(nameof(verificationService));
@@ -32,7 +34,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="credentials">Login credentials of the player.</param>
         /// <returns>Outcome and initial session data of the login attempt.</returns>
-        public Contracts.LoginData Login(Contracts.LoginCredentials credentials)
+        public Contracts.LoginData LoginPlayer(Contracts.LoginCredentials credentials)
         {
             return Execute(credentials, () => ProcessLogin(credentials));
         }
@@ -44,9 +46,9 @@ namespace YachtDice.Server.Services
         /// <param name="code">Verification code entered by the player.</param>
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public Contracts.VerificationResultCode VerifyCode(string email, string code, string challengeId)
+        public Contracts.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId)
         {
-            return Execute(email, () => ProcessVerifyCode(email, code, challengeId));
+            return Execute(email, () => ProcessCodeVerification(email, code, challengeId));
         }
 
         /// <summary>
@@ -56,16 +58,11 @@ namespace YachtDice.Server.Services
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendCode(string email, string challengeId, string culture)
+        public Contracts.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture)
         {
-            return Execute(email, () => ProcessResendCode(email, challengeId, culture));
+            return Execute(email, () => ProcessCodeResend(email, challengeId, culture));
         }
 
-        /// <summary>
-        /// Processes the login logic synchronously by mapping contracts to domain models.
-        /// </summary>
-        /// <param name="credentials">The login credentials from the client.</param>
-        /// <returns>The mapped login data result.</returns>
         private Contracts.LoginData ProcessLogin(Contracts.LoginCredentials credentials)
         {
             var logicCredentials = new LogicAuth.LoginCredentials
@@ -85,30 +82,21 @@ namespace YachtDice.Server.Services
             };
         }
 
-        /// <summary>
-        /// Processes the verification code logic synchronously.
-        /// </summary>
-        /// <param name="email">The player's email.</param>
-        /// <param name="code">The verification code.</param>
-        /// <param name="challengeId">The challenge identifier.</param>
-        /// <returns>The verification result code.</returns>
-        private Contracts.VerificationResultCode ProcessVerifyCode(string email, string code, string challengeId)
+        private Contracts.VerificationResultCode ProcessCodeVerification(
+            string email,
+            string code,
+            string challengeId)
         {
-            LogicTwoFactor.TwoFactorValidationStatus logicResult = _verificationService.VerifyCode(email, code, challengeId);
+            LogicTwoFactor.TwoFactorValidationStatus logicResult =
+                _verificationService.VerifyCode(email, code, challengeId);
 
             return (Contracts.VerificationResultCode)(int)logicResult;
         }
 
-        /// <summary>
-        /// Processes the resend code logic synchronously.
-        /// </summary>
-        /// <param name="email">The player's email.</param>
-        /// <param name="challengeId">The challenge identifier.</param>
-        /// <param name="culture">The culture name.</param>
-        /// <returns>The resend result code.</returns>
-        private Contracts.ResendResultCode ProcessResendCode(string email, string challengeId, string culture)
+        private Contracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
         {
-            LogicTwoFactor.ResendCodeStatus logicResult = _verificationService.ResendCode(email, culture, challengeId);
+            LogicTwoFactor.ResendCodeStatus logicResult =
+                _verificationService.ResendCode(email, culture, challengeId);
 
             return (Contracts.ResendResultCode)(int)logicResult;
         }
