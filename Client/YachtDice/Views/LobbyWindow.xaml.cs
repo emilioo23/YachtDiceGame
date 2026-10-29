@@ -67,7 +67,7 @@ namespace YachtDice.Views
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(RoomCodeTextBlock.Text);
-            new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text) }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = string.Format(Strings.Lobby_NotificationCodeCopied, RoomCodeTextBlock.Text) }).ShowDialog();
         }
 
         private void StartGameButton_Click(object sender, RoutedEventArgs e)

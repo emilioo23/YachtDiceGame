@@ -47,7 +47,7 @@ namespace YachtDice.Views
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: The real changes will be saved in the backend here later.
-            new CustomDialogWindow(new DialogContentDto { Message = Strings.Profile_SavedMessage }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = Strings.Profile_SavedMessage }).ShowDialog();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

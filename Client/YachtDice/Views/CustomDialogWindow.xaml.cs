@@ -6,7 +6,7 @@ namespace YachtDice.Views
 {
     public partial class CustomDialogWindow : Window
     {
-        public CustomDialogWindow(DialogContentDto dialogContent)
+        public CustomDialogWindow(DialogContent dialogContent)
         {
             InitializeComponent();
             

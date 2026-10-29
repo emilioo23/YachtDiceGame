@@ -473,7 +473,7 @@ namespace YachtDice.Views
             }
             else if (_rollsLeft == EmptyLength)
             {
-                var dialogContent = new DialogContentDto
+                var dialogContent = new DialogContent
                 {
                     Message = Strings.Game_Dice_HintPress
                 };
@@ -484,7 +484,7 @@ namespace YachtDice.Views
 
         private void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialogContent = new DialogContentDto
+            var dialogContent = new DialogContent
             {
                 Title = Strings.Game_Sidebar_ButtonLeave,
                 Message = Strings.Dialogs_D06_LeaveMatch,

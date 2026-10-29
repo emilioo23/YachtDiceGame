@@ -130,7 +130,7 @@ namespace YachtDice.Views
 
         private static void ShowMessage(string message)
         {
-            new CustomDialogWindow(new DialogContentDto { Message = message }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
         }
 
         private bool IsCodeComplete()

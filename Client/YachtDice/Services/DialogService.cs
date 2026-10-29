@@ -15,7 +15,7 @@ namespace YachtDice.Services
 
         public static void ShowMessage(string title, string message, string okButtonText)
         {
-            var dialog = new CustomDialogWindow(new DialogContentDto { Title = title, Message = message, PrimaryButtonText = okButtonText })
+            var dialog = new CustomDialogWindow(new DialogContent { Title = title, Message = message, PrimaryButtonText = okButtonText })
             {
                 Owner = GetActiveWindow()
             };
@@ -25,7 +25,7 @@ namespace YachtDice.Services
 
         public static bool ShowConfirmation(string title, string message, string confirmButtonText, string cancelButtonText)
         {
-            var dialog = new CustomDialogWindow(new DialogContentDto { Title = title, Message = message, PrimaryButtonText = confirmButtonText, SecondaryButtonText = cancelButtonText })
+            var dialog = new CustomDialogWindow(new DialogContent { Title = title, Message = message, PrimaryButtonText = confirmButtonText, SecondaryButtonText = cancelButtonText })
             {
                 Owner = GetActiveWindow()
             };

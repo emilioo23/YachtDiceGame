@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using YachtDice.Server.Data.Repositories;
 
 namespace YachtDice.Server.Logic.Players
@@ -35,9 +34,9 @@ namespace YachtDice.Server.Logic.Players
         /// Gets the best players, ordered from the one with most points to the one with least.
         /// </summary>
         /// <returns>The ranking, or an empty list if there are no games played.</returns>
-        public async Task<List<LeaderboardEntry>> GetTopPlayersAsync()
+        public List<LeaderboardEntry> GetTopPlayers()
         {
-            List<PlayerRankingRecord> records = await _gameHistoryRepository.GetRankingAsync(MaxEntries);
+            List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxEntries);
 
             return records
                 .Select((record, index) => new LeaderboardEntry

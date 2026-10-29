@@ -141,18 +141,18 @@ namespace YachtDice.Server.Logic.Authentication
             string email = player.Email.Trim();
             string username = player.Username.Trim();
 
-            if (_playerRepository.EmailExistsAsync(email).GetAwaiter().GetResult())
+            if (_playerRepository.EmailExists(email))
             {
                 result = RegistrationResult.EmailAlreadyRegistered;
             }
-            else if (_playerRepository.UsernameExistsAsync(username).GetAwaiter().GetResult())
+            else if (_playerRepository.UsernameExists(username))
             {
                 result = RegistrationResult.UsernameAlreadyTaken;
             }
             else
             {
                 PreparePlayerEntity(player, plainPassword);
-                _playerRepository.AddAsync(player).GetAwaiter().GetResult();
+                _playerRepository.Add(player);
                 result = RegistrationResult.Success;
             }
 
