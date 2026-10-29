@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 using System.ServiceModel;
 using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts;
+    using DataExceptions = YachtDice.Server.Data.Exceptions;
 
     /// <summary>
     /// Common behavior of the services: it runs each operation and converts any failure into a
@@ -41,33 +40,31 @@ namespace YachtDice.Server.Services
         /// <returns>The answer of the operation.</returns>
         protected TResponse Execute<TResponse>(object data, Func<TResponse> operation)
         {
-            if (data == null)
-            {
-                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, NullDataMessage);
-            }
+            ValidateData(data);
+            TResponse response;
 
             try
             {
-                return operation();
+                response = operation();
             }
-            catch (DbException ex)
+            catch (FaultException)
             {
-                throw CreateDatabaseFault(ex);
+                throw;
             }
-            catch (DataException ex)
+            catch (DataExceptions.DataAccessException ex)
             {
                 throw CreateDatabaseFault(ex);
             }
             catch (ArgumentException ex)
             {
-                _logger.Error(ex, InvalidDataLogMessage);
-                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, InvalidDataMessage);
+                throw CreateInvalidDataFault(ex);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, UnexpectedLogMessage);
-                throw CreateFault(Contracts.ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
+                throw CreateUnexpectedFault(ex);
             }
+
+            return response;
         }
 
         /// <summary>
@@ -81,7 +78,17 @@ namespace YachtDice.Server.Services
             return Execute(new object(), operation);
         }
 
-        private static FaultException<Contracts.ServiceFault> CreateFault(Contracts.ServiceErrorCode code, string message)
+        private static void ValidateData(object data)
+        {
+            if (data == null)
+            {
+                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, NullDataMessage);
+            }
+        }
+
+        private static FaultException<Contracts.ServiceFault> CreateFault(
+            Contracts.ServiceErrorCode code,
+            string message)
         {
             var fault = new Contracts.ServiceFault
             {
@@ -95,7 +102,22 @@ namespace YachtDice.Server.Services
         private FaultException<Contracts.ServiceFault> CreateDatabaseFault(Exception exception)
         {
             _logger.Error(exception, DatabaseLogMessage);
+
             return CreateFault(Contracts.ServiceErrorCode.DatabaseUnavailable, DatabaseFaultMessage);
+        }
+
+        private FaultException<Contracts.ServiceFault> CreateInvalidDataFault(Exception exception)
+        {
+            _logger.Error(exception, InvalidDataLogMessage);
+
+            return CreateFault(Contracts.ServiceErrorCode.ValidationFailed, InvalidDataMessage);
+        }
+
+        private FaultException<Contracts.ServiceFault> CreateUnexpectedFault(Exception exception)
+        {
+            _logger.Error(exception, UnexpectedLogMessage);
+
+            return CreateFault(Contracts.ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
         }
     }
 }
