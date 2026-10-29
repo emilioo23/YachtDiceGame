@@ -18,14 +18,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="OnDiceRolled">
+  <xs:element name="DiceRolled">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="diceValues" nillable="true" type="q1:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="OnTurnChanged">
+  <xs:element name="TurnChanged">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="turnDetails" nillable="true" type="tns:TurnDetails" />
@@ -73,7 +73,7 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="OnPlayerChanged">
+  <xs:element name="PlayerChanged">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
@@ -104,7 +104,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
-  <xs:element name="OnMessageReceived">
+  <xs:element name="MessageReceived">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="message" nillable="true" type="tns:ChatMessage" />

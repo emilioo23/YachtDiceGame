@@ -253,11 +253,11 @@ namespace YachtDice.GameServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IGameManagerCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/OnDiceRolled")]
-        void OnDiceRolled(int[] diceValues);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/DiceRolled")]
+        void DiceRolled(int[] diceValues);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/OnTurnChanged")]
-        void OnTurnChanged(YachtDice.GameServiceReference.TurnDetails turnDetails);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/TurnChanged")]
+        void TurnChanged(YachtDice.GameServiceReference.TurnDetails turnDetails);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -311,8 +311,8 @@ namespace YachtDice.GameServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IRoomManagerCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged")]
-        void OnPlayerChanged(YachtDice.GameServiceReference.PlayerProfile player, YachtDice.GameServiceReference.RoomEventType eventType);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/PlayerChanged")]
+        void PlayerChanged(YachtDice.GameServiceReference.PlayerProfile player, YachtDice.GameServiceReference.RoomEventType eventType);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -363,8 +363,8 @@ namespace YachtDice.GameServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IChatManagerCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/OnMessageReceived")]
-        void OnMessageReceived(YachtDice.GameServiceReference.ChatMessage message);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/MessageReceived")]
+        void MessageReceived(YachtDice.GameServiceReference.ChatMessage message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

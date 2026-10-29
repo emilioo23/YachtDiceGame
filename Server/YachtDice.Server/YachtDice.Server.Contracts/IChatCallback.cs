@@ -13,7 +13,6 @@ namespace YachtDice.Server.Contracts
         /// </summary>
         /// <param name="message">Message that was sent.</param>
         [OperationContract(IsOneWay = true)]
-        void OnMessageReceived(ChatMessage message);
+        void MessageReceived(ChatMessage message);
     }
 }
-

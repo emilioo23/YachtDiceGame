@@ -14,11 +14,11 @@ namespace YachtDice.Callbacks
         public event Action<PlayerProfile, RoomEventType> PlayerChanged;
 
         /// <summary>
-        /// Invokes the player changed event.
+        /// Raises the player changed event when the server reports a change in the room.
         /// </summary>
         /// <param name="player">The profile of the player.</param>
         /// <param name="eventType">The type of event that occurred.</param>
-        public void OnPlayerChanged(PlayerProfile player, RoomEventType eventType)
+        void IRoomManagerCallback.PlayerChanged(PlayerProfile player, RoomEventType eventType)
         {
             PlayerChanged?.Invoke(player, eventType);
         }

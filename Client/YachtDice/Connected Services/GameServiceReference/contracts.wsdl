@@ -13,11 +13,11 @@
   <wsdl:message name="IGameManager_SelectScoreCategory_InputMessage">
     <wsdl:part name="parameters" element="tns:SelectScoreCategory" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_OnDiceRolled_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnDiceRolled" />
+  <wsdl:message name="IGameManager_DiceRolled_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DiceRolled" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_OnTurnChanged_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnTurnChanged" />
+  <wsdl:message name="IGameManager_TurnChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:TurnChanged" />
   </wsdl:message>
   <wsdl:message name="IRoomManager_JoinRoom_InputMessage">
     <wsdl:part name="parameters" element="tns:JoinRoom" />
@@ -31,14 +31,14 @@
   <wsdl:message name="IRoomManager_LeaveRoom_OutputMessage">
     <wsdl:part name="parameters" element="tns:LeaveRoomResponse" />
   </wsdl:message>
-  <wsdl:message name="IRoomManager_OnPlayerChanged_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnPlayerChanged" />
+  <wsdl:message name="IRoomManager_PlayerChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerChanged" />
   </wsdl:message>
   <wsdl:message name="IChatManager_SendMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendMessage" />
   </wsdl:message>
-  <wsdl:message name="IChatManager_OnMessageReceived_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnMessageReceived" />
+  <wsdl:message name="IChatManager_MessageReceived_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:MessageReceived" />
   </wsdl:message>
   <wsdl:portType name="IGameManager">
     <wsdl:operation name="RollDice">
@@ -47,11 +47,11 @@
     <wsdl:operation name="SelectScoreCategory">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory" message="tns:IGameManager_SelectScoreCategory_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnDiceRolled">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/OnDiceRolled" message="tns:IGameManager_OnDiceRolled_OutputCallbackMessage" />
+    <wsdl:operation name="DiceRolled">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/DiceRolled" message="tns:IGameManager_DiceRolled_OutputCallbackMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnTurnChanged">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/OnTurnChanged" message="tns:IGameManager_OnTurnChanged_OutputCallbackMessage" />
+    <wsdl:operation name="TurnChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameManager/TurnChanged" message="tns:IGameManager_TurnChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IRoomManager">
@@ -63,16 +63,16 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom" message="tns:IRoomManager_LeaveRoom_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse" message="tns:IRoomManager_LeaveRoom_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnPlayerChanged">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged" message="tns:IRoomManager_OnPlayerChanged_OutputCallbackMessage" />
+    <wsdl:operation name="PlayerChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/PlayerChanged" message="tns:IRoomManager_PlayerChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IChatManager">
     <wsdl:operation name="SendMessage">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IChatManager/SendMessage" message="tns:IChatManager_SendMessage_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnMessageReceived">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IChatManager/OnMessageReceived" message="tns:IChatManager_OnMessageReceived_OutputCallbackMessage" />
+    <wsdl:operation name="MessageReceived">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IChatManager/MessageReceived" message="tns:IChatManager_MessageReceived_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

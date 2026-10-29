@@ -48,14 +48,14 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="OnDiceRolled">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/OnDiceRolled" style="document" />
+    <wsdl:operation name="DiceRolled">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/DiceRolled" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="OnTurnChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/OnTurnChanged" style="document" />
+    <wsdl:operation name="TurnChanged">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/TurnChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -83,8 +83,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="OnPlayerChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged" style="document" />
+    <wsdl:operation name="PlayerChanged">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/PlayerChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -100,8 +100,8 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="OnMessageReceived">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IChatManager/OnMessageReceived" style="document" />
+    <wsdl:operation name="MessageReceived">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IChatManager/MessageReceived" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

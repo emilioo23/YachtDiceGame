@@ -14,10 +14,10 @@ namespace YachtDice.Callbacks
         public event Action<ChatMessage> MessageReceived;
 
         /// <summary>
-        /// Invokes the message received event.
+        /// Raises the message received event when the server delivers a message.
         /// </summary>
         /// <param name="message">The received message data.</param>
-        public void OnMessageReceived(ChatMessage message)
+        void IChatManagerCallback.MessageReceived(ChatMessage message)
         {
             MessageReceived?.Invoke(message);
         }
