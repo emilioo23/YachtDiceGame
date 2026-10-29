@@ -1,26 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:i0="urn:yachtdice:contracts" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="GameService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsp:Policy wsu:Id="NetTcpBinding_IGameManager_policy">
-    <wsp:ExactlyOne>
-      <wsp:All>
-        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
-        </msb:BinaryEncoding>
-        <wsaw:UsingAddressing>
-        </wsaw:UsingAddressing>
-      </wsp:All>
-    </wsp:ExactlyOne>
-  </wsp:Policy>
-  <wsp:Policy wsu:Id="NetTcpBinding_IRoomManager_policy">
-    <wsp:ExactlyOne>
-      <wsp:All>
-        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
-        </msb:BinaryEncoding>
-        <wsaw:UsingAddressing>
-        </wsaw:UsingAddressing>
-      </wsp:All>
-    </wsp:ExactlyOne>
-  </wsp:Policy>
-  <wsp:Policy wsu:Id="NetTcpBinding_IChatManager_policy">
+  <wsp:Policy wsu:Id="NetTcpBinding_IGameService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
@@ -32,98 +12,40 @@
   </wsp:Policy>
   <wsdl:import namespace="urn:yachtdice:contracts" location="" />
   <wsdl:types />
-  <wsdl:binding name="NetTcpBinding_IGameManager" type="i0:IGameManager">
-    <wsp:PolicyReference URI="#NetTcpBinding_IGameManager_policy">
+  <wsdl:binding name="NetTcpBinding_IGameService" type="i0:IGameService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IGameService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="RollDice">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/RollDice" style="document" />
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/RollDice" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="SelectScoreCategory">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/SelectScoreCategory" style="document" />
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/SelectScoreCategory" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="DiceRolled">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/DiceRolled" style="document" />
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/DiceRolled" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="TurnChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameManager/TurnChanged" style="document" />
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:binding name="NetTcpBinding_IRoomManager" type="i0:IRoomManager">
-    <wsp:PolicyReference URI="#NetTcpBinding_IRoomManager_policy">
-    </wsp:PolicyReference>
-    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="JoinRoom">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/JoinRoom" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LeaveRoom">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/LeaveRoom" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PlayerChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/PlayerChanged" style="document" />
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:binding name="NetTcpBinding_IChatManager" type="i0:IChatManager">
-    <wsp:PolicyReference URI="#NetTcpBinding_IChatManager_policy">
-    </wsp:PolicyReference>
-    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="SendMessage">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IChatManager/SendMessage" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="MessageReceived">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IChatManager/MessageReceived" style="document" />
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/TurnChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GameService">
-    <wsdl:port name="NetTcpBinding_IGameManager" binding="tns:NetTcpBinding_IGameManager">
-      <soap12:address location="net.tcp://localhost:8736/YachtDice/Game/Game" />
+    <wsdl:port name="NetTcpBinding_IGameService" binding="tns:NetTcpBinding_IGameService">
+      <soap12:address location="net.tcp://localhost:8737/YachtDice/Game" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8736/YachtDice/Game/Game</wsa10:Address>
-      </wsa10:EndpointReference>
-    </wsdl:port>
-    <wsdl:port name="NetTcpBinding_IRoomManager" binding="tns:NetTcpBinding_IRoomManager">
-      <soap12:address location="net.tcp://localhost:8736/YachtDice/Game/Room" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8736/YachtDice/Game/Room</wsa10:Address>
-      </wsa10:EndpointReference>
-    </wsdl:port>
-    <wsdl:port name="NetTcpBinding_IChatManager" binding="tns:NetTcpBinding_IChatManager">
-      <soap12:address location="net.tcp://localhost:8736/YachtDice/Game/Chat" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8736/YachtDice/Game/Chat</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:8737/YachtDice/Game</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
