@@ -246,14 +246,8 @@ namespace YachtDice.GameServiceReference {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/RollDice")]
         void RollDice(string roomId, string username);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/RollDice")]
-        System.Threading.Tasks.Task RollDiceAsync(string roomId, string username);
-        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory")]
         void SelectScoreCategory(string roomId, string username, int categoryId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IGameManager/SelectScoreCategory")]
-        System.Threading.Tasks.Task SelectScoreCategoryAsync(string roomId, string username, int categoryId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -298,16 +292,8 @@ namespace YachtDice.GameServiceReference {
             base.Channel.RollDice(roomId, username);
         }
         
-        public System.Threading.Tasks.Task RollDiceAsync(string roomId, string username) {
-            return base.Channel.RollDiceAsync(roomId, username);
-        }
-        
         public void SelectScoreCategory(string roomId, string username, int categoryId) {
             base.Channel.SelectScoreCategory(roomId, username, categoryId);
-        }
-        
-        public System.Threading.Tasks.Task SelectScoreCategoryAsync(string roomId, string username, int categoryId) {
-            return base.Channel.SelectScoreCategoryAsync(roomId, username, categoryId);
         }
     }
     
@@ -318,14 +304,8 @@ namespace YachtDice.GameServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/JoinRoomResponse")]
         void JoinRoom(YachtDice.GameServiceReference.PlayerProfile player, string roomId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/JoinRoomResponse")]
-        System.Threading.Tasks.Task JoinRoomAsync(YachtDice.GameServiceReference.PlayerProfile player, string roomId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse")]
         void LeaveRoom(string username, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom", ReplyAction="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse")]
-        System.Threading.Tasks.Task LeaveRoomAsync(string username, string roomId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -367,16 +347,8 @@ namespace YachtDice.GameServiceReference {
             base.Channel.JoinRoom(player, roomId);
         }
         
-        public System.Threading.Tasks.Task JoinRoomAsync(YachtDice.GameServiceReference.PlayerProfile player, string roomId) {
-            return base.Channel.JoinRoomAsync(player, roomId);
-        }
-        
         public void LeaveRoom(string username, string roomId) {
             base.Channel.LeaveRoom(username, roomId);
-        }
-        
-        public System.Threading.Tasks.Task LeaveRoomAsync(string username, string roomId) {
-            return base.Channel.LeaveRoomAsync(username, roomId);
         }
     }
     
@@ -386,9 +358,6 @@ namespace YachtDice.GameServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/SendMessage")]
         void SendMessage(YachtDice.GameServiceReference.ChatMessage message, string roomId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatManager/SendMessage")]
-        System.Threading.Tasks.Task SendMessageAsync(YachtDice.GameServiceReference.ChatMessage message, string roomId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -428,10 +397,6 @@ namespace YachtDice.GameServiceReference {
         
         public void SendMessage(YachtDice.GameServiceReference.ChatMessage message, string roomId) {
             base.Channel.SendMessage(message, roomId);
-        }
-        
-        public System.Threading.Tasks.Task SendMessageAsync(YachtDice.GameServiceReference.ChatMessage message, string roomId) {
-            return base.Channel.SendMessageAsync(message, roomId);
         }
     }
 }

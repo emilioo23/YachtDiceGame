@@ -25,14 +25,14 @@ namespace YachtDice.Gateway
 
         protected abstract GatewayErrorCode GetErrorCode(FaultException fault);
 
-        protected async Task<TResponse> ExecuteAsync<TResponse>(Func<TClient, Task<TResponse>> operation)
+        protected async Task<TResponse> ExecuteAsync<TResponse>(Func<TClient, TResponse> operation)
         {
             var client = CreateConfiguredClient();
             TResponse response;
 
             try
             {
-                response = await operation(client);
+                response = await Task.Run(() => operation(client));
                 client.Close();
             }
             catch (FaultException ex)

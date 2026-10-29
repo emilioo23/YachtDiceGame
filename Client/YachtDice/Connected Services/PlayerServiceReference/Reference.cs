@@ -298,15 +298,9 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetStatisticsServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.PlayerStatistics GetStatistics(string username);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetStatistics", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetStatisticsResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(string username);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
-        System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -340,16 +334,8 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.GetStatistics(username);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.PlayerStatistics> GetStatisticsAsync(string username) {
-            return base.Channel.GetStatisticsAsync(username);
-        }
-        
         public YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard() {
             return base.Channel.GetLeaderboard();
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.PlayerServiceReference.LeaderboardEntry[]> GetLeaderboardAsync() {
-            return base.Channel.GetLeaderboardAsync();
         }
     }
 }
