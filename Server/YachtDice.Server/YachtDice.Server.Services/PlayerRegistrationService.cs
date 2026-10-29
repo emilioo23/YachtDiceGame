@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
@@ -15,35 +14,13 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
-        private readonly IRegistrationService _registrationLogic;
+        private readonly LogicAuth.IRegistrationService _registrationLogic;
 
         /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with default dependencies.
-        /// </summary>
-        public PlayerRegistrationService()
-        {
-            _registrationLogic = new RegistrationService(new Data.Repositories.PlayerRepository());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with a specified player repository.
-        /// </summary>
-        /// <param name="playerRepository">The player repository to use for registration data access.</param>
-        public PlayerRegistrationService(Data.Repositories.IPlayerRepository playerRepository)
-        {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository));
-            }
-
-            _registrationLogic = new RegistrationService(playerRepository);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PlayerRegistrationService class with a specified registration logic service.
+        /// Initializes a new instance of the PlayerRegistrationService class.
         /// </summary>
         /// <param name="registrationLogic">The registration logic service.</param>
-        public PlayerRegistrationService(IRegistrationService registrationLogic)
+        public PlayerRegistrationService(LogicAuth.IRegistrationService registrationLogic)
         {
             _registrationLogic = registrationLogic ?? throw new ArgumentNullException(nameof(registrationLogic));
         }
@@ -61,7 +38,8 @@ namespace YachtDice.Server.Services
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
             Data.Player logicPlayer = RegistrationMapper.ToLogicModel(newPlayer);
-            LogicAuth.RegistrationResult logicResult = _registrationLogic.Register(logicPlayer, newPlayer.Password);
+            LogicAuth.RegistrationResult logicResult =
+                _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 
             return EnumMapper.Map<LogicAuth.RegistrationResult, Contracts.RegisterResultCode>(logicResult);
         }

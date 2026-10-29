@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="credentials">The player's login credentials.</param>
         /// <returns>The result of the authentication attempt.</returns>
-        LoginResult Login(LoginCredentials credentials);
+        LoginResult LoginPlayer(LoginCredentials credentials);
     }
 }

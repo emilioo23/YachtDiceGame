@@ -72,7 +72,7 @@ namespace YachtDice.Server.Services
                 Culture = Mapping.CultureParser.Parse(credentials.CultureName)
             };
 
-            LogicAuth.LoginResult logicResult = _loginService.Login(logicCredentials);
+            LogicAuth.LoginResult logicResult = _loginService.LoginPlayer(logicCredentials);
 
             return new Contracts.LoginData
             {
@@ -88,7 +88,7 @@ namespace YachtDice.Server.Services
             string challengeId)
         {
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
-                _verificationService.VerifyCode(email, code, challengeId);
+                _verificationService.VerifyPlayerCode(email, code, challengeId);
 
             return (Contracts.VerificationResultCode)(int)logicResult;
         }
@@ -96,7 +96,7 @@ namespace YachtDice.Server.Services
         private Contracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
         {
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _verificationService.ResendCode(email, culture, challengeId);
+                _verificationService.ResendPlayerCode(email, culture, challengeId);
 
             return (Contracts.ResendResultCode)(int)logicResult;
         }
