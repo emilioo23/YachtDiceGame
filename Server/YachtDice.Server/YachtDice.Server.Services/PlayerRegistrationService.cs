@@ -13,7 +13,7 @@ namespace YachtDice.Server.Services
     /// Implements the player registration service contract for the server.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationManager
+    public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
         private readonly IRegistrationService _registrationLogic;
 
@@ -49,19 +49,19 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Registers a new player using the provided player entity.
+        /// Registers a new player.
         /// </summary>
-        /// <param name="player">The player entity to register.</param>
+        /// <param name="newPlayer">Data of the player who wants to register.</param>
         /// <returns>A code indicating the result of the registration attempt.</returns>
-        public Contracts.RegisterResultCode Register(Contracts.Player player)
+        public Contracts.RegisterResultCode RegisterPlayer(Contracts.Player newPlayer)
         {
-            return Execute(player, () => ProcessRegistration(player));
+            return Execute(newPlayer, () => ProcessRegistration(newPlayer));
         }
 
-        private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player player)
+        private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
-            Data.Player logicPlayer = RegistrationMapper.ToLogicModel(player);
-            LogicAuth.RegistrationResult logicResult = _registrationLogic.Register(logicPlayer, player.Password);
+            Data.Player logicPlayer = RegistrationMapper.ToLogicModel(newPlayer);
+            LogicAuth.RegistrationResult logicResult = _registrationLogic.Register(logicPlayer, newPlayer.Password);
 
             return EnumMapper.Map<LogicAuth.RegistrationResult, Contracts.RegisterResultCode>(logicResult);
         }

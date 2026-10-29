@@ -7,16 +7,16 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Single entry point of the client to the registration operations of the server.
     /// </summary>
-    public class RegistrationGateway : GatewayBase<PlayerRegistrationManagerClient>
+    public class RegistrationGateway : GatewayBase<PlayerRegistrationServiceClient>
     {
         /// <summary>
         /// Registers a new player.
         /// </summary>
-        /// <param name="player">Data of the new player.</param>
+        /// <param name="newPlayer">Data of the new player.</param>
         /// <returns>Outcome of the registration.</returns>
-        public Task<RegisterResultCode> RegisterAsync(Player player)
+        public Task<RegisterResultCode> RegisterPlayerAsync(Player newPlayer)
         {
-            return ExecuteAsync(client => client.Register(player));
+            return ExecuteAsync(client => client.RegisterPlayer(newPlayer));
         }
 
         /// <inheritdoc />

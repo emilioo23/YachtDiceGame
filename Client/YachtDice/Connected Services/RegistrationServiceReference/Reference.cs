@@ -221,43 +221,44 @@ namespace YachtDice.RegistrationServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="RegistrationServiceReference.IPlayerRegistrationManager")]
-    public interface IPlayerRegistrationManager {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="RegistrationServiceReference.IPlayerRegistrationService")]
+    public interface IPlayerRegistrationService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RegistrationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.Player player);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayer", ReplyAction="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RegistrationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerRegistrationService/RegisterPlayerServiceFaultFaul" +
+            "t", Name="ServiceFault")]
+        YachtDice.RegistrationServiceReference.RegisterResultCode RegisterPlayer(YachtDice.RegistrationServiceReference.Player newPlayer);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPlayerRegistrationManagerChannel : YachtDice.RegistrationServiceReference.IPlayerRegistrationManager, System.ServiceModel.IClientChannel {
+    public interface IPlayerRegistrationServiceChannel : YachtDice.RegistrationServiceReference.IPlayerRegistrationService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PlayerRegistrationManagerClient : System.ServiceModel.ClientBase<YachtDice.RegistrationServiceReference.IPlayerRegistrationManager>, YachtDice.RegistrationServiceReference.IPlayerRegistrationManager {
+    public partial class PlayerRegistrationServiceClient : System.ServiceModel.ClientBase<YachtDice.RegistrationServiceReference.IPlayerRegistrationService>, YachtDice.RegistrationServiceReference.IPlayerRegistrationService {
         
-        public PlayerRegistrationManagerClient() {
+        public PlayerRegistrationServiceClient() {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName, string remoteAddress) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PlayerRegistrationManagerClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PlayerRegistrationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PlayerRegistrationManagerClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PlayerRegistrationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.RegistrationServiceReference.RegisterResultCode Register(YachtDice.RegistrationServiceReference.Player player) {
-            return base.Channel.Register(player);
+        public YachtDice.RegistrationServiceReference.RegisterResultCode RegisterPlayer(YachtDice.RegistrationServiceReference.Player newPlayer) {
+            return base.Channel.RegisterPlayer(newPlayer);
         }
     }
 }

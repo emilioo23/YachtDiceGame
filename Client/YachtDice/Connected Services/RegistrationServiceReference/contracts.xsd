@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Register">
+  <xs:element name="RegisterPlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="player" nillable="true" type="tns:Player" />
+        <xs:element minOccurs="0" name="newPlayer" nillable="true" type="tns:Player" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -17,10 +17,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Player" nillable="true" type="tns:Player" />
-  <xs:element name="RegisterResponse">
+  <xs:element name="RegisterPlayerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterResult" type="tns:RegisterResultCode" />
+        <xs:element minOccurs="0" name="RegisterPlayerResult" type="tns:RegisterResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
