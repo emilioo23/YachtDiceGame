@@ -13,14 +13,13 @@ namespace YachtDice.Server.Contracts
         /// </summary>
         /// <param name="diceValues">Value of each of the five dice.</param>
         [OperationContract(IsOneWay = true)]
-        void OnDiceRolled(int[] diceValues);
+        void DiceRolled(int[] diceValues);
 
         /// <summary>
         /// Called when the turn passes to another player.
         /// </summary>
         /// <param name="turnDetails">Information about the new current turn.</param>
         [OperationContract(IsOneWay = true)]
-        void OnTurnChanged(TurnDetails turnDetails);
+        void TurnChanged(TurnDetails turnDetails);
     }
 }
-
