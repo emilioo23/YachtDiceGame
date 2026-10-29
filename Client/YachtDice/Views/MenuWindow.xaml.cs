@@ -134,7 +134,9 @@ namespace YachtDice.Views
 
             InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;
-            OnlineCountBadgeTextBlock.Text = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
+            string onlineCountText = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
+            OnlineCountBadgeTextBlock.Text = onlineCountText;
+            OnlineHeaderTextBlock.Text = onlineCountText;
         }
 
         private void PlayNavButton_Click(object sender, RoutedEventArgs e)
