@@ -48,21 +48,21 @@ namespace YachtDice.Server.Logic.Authentication
         /// <summary>
         /// Validates the data and registers the player if everything is correct.
         /// </summary>
-        /// <param name="player">Data of the new player.</param>
+        /// <param name="newPlayer">Data of the new player.</param>
         /// <param name="plainPassword">The player's plain text password.</param>
         /// <returns>Result of the registration attempt.</returns>
-        public RegistrationResult Register(Player player, string plainPassword)
+        public RegistrationResult RegisterPlayer(Player newPlayer, string plainPassword)
         {
-            if (player == null)
+            if (newPlayer == null)
             {
-                throw new ArgumentNullException(nameof(player), NullRequestMessage);
+                throw new ArgumentNullException(nameof(newPlayer), NullRequestMessage);
             }
 
-            RegistrationResult result = ValidateRequest(player, plainPassword);
+            RegistrationResult result = ValidateRequest(newPlayer, plainPassword);
 
             if (result == RegistrationResult.Success)
             {
-                result = SavePlayer(player, plainPassword);
+                result = SavePlayer(newPlayer, plainPassword);
             }
 
             if (result == RegistrationResult.Success)

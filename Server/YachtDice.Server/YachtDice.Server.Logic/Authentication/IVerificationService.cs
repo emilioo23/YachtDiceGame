@@ -14,7 +14,7 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="code">The verification code provided.</param>
         /// <param name="challengeId">The session challenge identifier.</param>
         /// <returns>The result status of the verification process.</returns>
-        TwoFactorValidationStatus VerifyCode(string email, string code, string challengeId);
+        TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId);
 
         /// <summary>
         /// Resends a two-factor verification code.
@@ -23,6 +23,6 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="cultureName">The culture name for email localization.</param>
         /// <param name="challengeId">The session challenge identifier.</param>
         /// <returns>The result status of the resend process.</returns>
-        ResendCodeStatus ResendCode(string email, string cultureName, string challengeId);
+        ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId);
     }
 }

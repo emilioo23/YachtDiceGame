@@ -60,13 +60,23 @@ namespace YachtDice.Server.Logic.TwoFactor
         }
 
         /// <summary>
+        /// Indicates whether verification is locked for the player because of too many failed attempts.
+        /// </summary>
+        /// <param name="email">The player's email address.</param>
+        /// <returns>True if the lockout is still active.</returns>
+        public bool IsLocked(string email)
+        {
+            return _codeService.IsLocked(email);
+        }
+
+        /// <summary>
         /// Processes the code verification required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
         /// <param name="code">The verification code provided.</param>
         /// <param name="challengeId">The session challenge identifier.</param>
         /// <returns>Result status of the verification process.</returns>
-        public TwoFactorValidationStatus VerifyCode(string email, string code, string challengeId)
+        public TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId)
         {
             return _codeService.Validate(email, code, challengeId);
         }
@@ -78,7 +88,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="cultureName">The culture name for email localization.</param>
         /// <param name="challengeId">The session challenge identifier.</param>
         /// <returns>Result status of the resend process.</returns>
-        public ResendCodeStatus ResendCode(string email, string cultureName, string challengeId)
+        public ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId)
         {
             List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
