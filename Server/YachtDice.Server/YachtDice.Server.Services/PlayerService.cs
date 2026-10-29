@@ -61,13 +61,13 @@ namespace YachtDice.Server.Services
 
         private Contracts.PlayerStatistics ProcessGetStatistics(string username)
         {
-            PlayerStatistics statistics = _statisticsService.GetStatisticsAsync(username).Result;
+            PlayerStatistics statistics = _statisticsService.GetStatistics(username);
             return PlayerStatisticsMapper.ToContract(statistics);
         }
 
         private List<Contracts.LeaderboardEntry> ProcessGetLeaderboard()
         {
-            List<LeaderboardEntry> entries = _leaderboardService.GetTopPlayersAsync().Result;
+            List<LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
             return LeaderboardMapper.ToContracts(entries);
         }
     }

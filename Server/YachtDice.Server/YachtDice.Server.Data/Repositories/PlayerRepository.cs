@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -31,7 +29,7 @@ namespace YachtDice.Server.Data.Repositories
             {
                 using (var context = new YachtDiceContext())
                 {
-                    return context.Player.Where(p => p.Email == email).ToList();
+                    return context.Player.Where(player => player.Email == email).ToList();
                 }
             }
             catch (EntityException ex)
@@ -66,31 +64,6 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
-        /// Looks for the player whose display name or username matches the given name asynchronously.
-        /// </summary>
-        /// <param name="name">Display name or username to look for.</param>
-        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
-        public async Task<List<Player>> FindByNameAsync(string name)
-        {
-            ValidateText(name, nameof(name));
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    return await context.Player
-                        .Where(player => player.DisplayName == name || player.Username == name)
-                        .Take(SingleResultCount)
-                        .ToListAsync();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataException("Database error occurred while searching player by name asynchronously.", ex);
-            }
-        }
-
-        /// <summary>
         /// Indicates whether the email is already registered.
         /// </summary>
         /// <param name="email">Email address to check.</param>
@@ -113,28 +86,6 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
-        /// Indicates whether the email is already registered asynchronously.
-        /// </summary>
-        /// <param name="email">Email address to check.</param>
-        /// <returns>True if a player already uses the email.</returns>
-        public async Task<bool> EmailExistsAsync(string email)
-        {
-            ValidateText(email, nameof(email));
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    return await context.Player.AnyAsync(player => player.Email == email);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataException("Database error occurred while verifying email existence asynchronously.", ex);
-            }
-        }
-
-        /// <summary>
         /// Indicates whether the username is already taken.
         /// </summary>
         /// <param name="username">Username to check.</param>
@@ -153,28 +104,6 @@ namespace YachtDice.Server.Data.Repositories
             catch (EntityException ex)
             {
                 throw new DataException("Database error occurred while verifying username existence.", ex);
-            }
-        }
-
-        /// <summary>
-        /// Indicates whether the username is already taken asynchronously.
-        /// </summary>
-        /// <param name="username">Username to check.</param>
-        /// <returns>True if a player already uses the username.</returns>
-        public async Task<bool> UsernameExistsAsync(string username)
-        {
-            ValidateText(username, nameof(username));
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    return await context.Player.AnyAsync(player => player.Username == username);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataException("Database error occurred while verifying username existence asynchronously.", ex);
             }
         }
 
@@ -204,36 +133,6 @@ namespace YachtDice.Server.Data.Repositories
             catch (EntityException ex)
             {
                 throw new DataException("Database connection error while saving player.", ex);
-            }
-        }
-
-        /// <summary>
-        /// Saves a new player in the database asynchronously.
-        /// </summary>
-        /// <param name="player">Player entity to save.</param>
-        /// <returns>A task that completes when the player has been saved.</returns>
-        public async Task AddAsync(Player player)
-        {
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player), NullPlayerMessage);
-            }
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    context.Player.Add(player);
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new DataException("Could not save player asynchronously due to a database update failure.", ex);
-            }
-            catch (EntityException ex)
-            {
-                throw new DataException("Database connection error while saving player asynchronously.", ex);
             }
         }
 

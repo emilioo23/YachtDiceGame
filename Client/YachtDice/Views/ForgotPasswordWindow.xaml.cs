@@ -22,12 +22,12 @@ namespace YachtDice.Views
         {
             if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
             {
-                new CustomDialogWindow(new DialogContentDto { Message = Strings.ForgotPassword_ErrorRequiredEmail }).ShowDialog();
+                new CustomDialogWindow(new DialogContent { Message = Strings.ForgotPassword_ErrorRequiredEmail }).ShowDialog();
                 return;
             }
 
             // The real sending of the recovery email will be connected here later.
-            new CustomDialogWindow(new DialogContentDto { Message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text) }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text) }).ShowDialog();
         }
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -17,15 +15,15 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
         /// <returns>The results of the player, or an empty list if there are none.</returns>
-        public async Task<List<GameHistoryPlayer>> FindByPlayerIdAsync(int playerId)
+        public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
             try
             {
                 using (var context = new YachtDiceContext())
                 {
-                    return await context.GameHistoryPlayer
+                    return context.GameHistoryPlayer
                         .Where(entry => entry.PlayerId == playerId)
-                        .ToListAsync();
+                        .ToList();
                 }
             }
             catch (EntityException ex)
@@ -39,13 +37,13 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="maxEntries">Maximum number of players to return.</param>
         /// <returns>The ranking, or an empty list if there are no games played.</returns>
-        public async Task<List<PlayerRankingRecord>> GetRankingAsync(int maxEntries)
+        public List<PlayerRankingRecord> GetRanking(int maxEntries)
         {
             try
             {
                 using (var context = new YachtDiceContext())
                 {
-                    return await context.GameHistoryPlayer
+                    return context.GameHistoryPlayer
                         .GroupBy(entry => entry.PlayerId)
                         .Select(group => new
                         {
@@ -66,7 +64,7 @@ namespace YachtDice.Server.Data.Repositories
                         .OrderByDescending(record => record.TotalPoints)
                         .ThenBy(record => record.DisplayName)
                         .Take(maxEntries)
-                        .ToListAsync();
+                        .ToList();
                 }
             }
             catch (EntityException ex)

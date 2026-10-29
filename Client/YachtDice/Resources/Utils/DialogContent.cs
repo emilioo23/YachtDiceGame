@@ -5,7 +5,7 @@ namespace YachtDice.Utils
     /// <summary>
     /// Data transfer object that holds the text settings for a dialog.
     /// </summary>
-    public class DialogContentDto
+    public class DialogContent
     {
         /// <summary>
         /// Gets or sets the title of the dialog.

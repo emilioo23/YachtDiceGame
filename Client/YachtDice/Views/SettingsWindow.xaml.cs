@@ -140,7 +140,7 @@ namespace YachtDice.Views
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // The real account deletion flow will be connected here later.
-            new CustomDialogWindow(new DialogContentDto { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
+            new CustomDialogWindow(new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)

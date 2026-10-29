@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -13,13 +12,13 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
         /// <returns>The results of the player, or an empty list if there are none.</returns>
-        Task<List<GameHistoryPlayer>> FindByPlayerIdAsync(int playerId);
+        List<GameHistoryPlayer> FindByPlayerId(int playerId);
 
         /// <summary>
         /// Gets the players with the most accumulated points, from highest to lowest.
         /// </summary>
         /// <param name="maxEntries">Maximum number of players to return.</param>
         /// <returns>The ranking, or an empty list if there are no games played.</returns>
-        Task<List<PlayerRankingRecord>> GetRankingAsync(int maxEntries);
+        List<PlayerRankingRecord> GetRanking(int maxEntries);
     }
 }

@@ -196,7 +196,7 @@ namespace YachtDice.Views
 
         private void ShowDialogMessage(string message)
         {
-            var dialog = new CustomDialogWindow(new DialogContentDto { Message = message })
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
             {
                 Owner = this
             };
