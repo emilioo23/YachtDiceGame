@@ -164,7 +164,7 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            var player = new RegistrationServiceReference.Player
+            var newPlayer = new RegistrationServiceReference.Player
             {
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),
@@ -174,7 +174,7 @@ namespace YachtDice.Views
             };
 
             var registrationGateway = new RegistrationGateway();
-            RegisterResultCode result = await registrationGateway.RegisterAsync(player);
+            RegisterResultCode result = await registrationGateway.RegisterPlayerAsync(newPlayer);
 
             if (result == RegisterResultCode.Success)
             {
