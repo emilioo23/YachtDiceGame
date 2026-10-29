@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows;
+using YachtDice.Gateway;
 using YachtDice.Views;
 
 namespace YachtDice
@@ -39,6 +40,16 @@ namespace YachtDice
 
             var splashWindow = new SplashWindow();
             splashWindow.Show();
+        }
+
+        /// <summary>
+        /// Executes when the application closes: tells the server that the player is no longer online.
+        /// </summary>
+        /// <param name="e">Exit event arguments.</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            PresenceGateway.Current.Disconnect();
+            base.OnExit(e);
         }
 
         /// <summary>

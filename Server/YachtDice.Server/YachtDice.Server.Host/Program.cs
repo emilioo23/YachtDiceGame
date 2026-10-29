@@ -75,6 +75,7 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(new RoomService()));
             serviceHosts.Add(new ServiceHost(new GameService()));
             serviceHosts.Add(new ServiceHost(new ChatService()));
+            serviceHosts.Add(new ServiceHost(new PresenceService()));
 
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
         }

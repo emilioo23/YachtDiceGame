@@ -200,6 +200,7 @@
     </ApplicationDefinition>
     <Compile Include="Callbacks\ChatCallbackHandler.cs" />
     <Compile Include="Callbacks\GameCallbackHandler.cs" />
+    <Compile Include="Callbacks\PresenceCallbackHandler.cs" />
     <Compile Include="Callbacks\RoomCallbackHandler.cs" />
     <Compile Include="Connected Services\AuthenticationServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -236,7 +237,9 @@
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />
     <Compile Include="Gateway\PlayerGateway.cs" />
+    <Compile Include="Gateway\PresenceGateway.cs" />
     <Compile Include="Gateway\RegistrationGateway.cs" />
+    <Compile Include="Gateway\ServerAddress.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
