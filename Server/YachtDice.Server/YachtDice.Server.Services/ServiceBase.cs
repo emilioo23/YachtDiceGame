@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts;
     using DataExceptions = YachtDice.Server.Data.Exceptions;
+    using LogicLogging = YachtDice.Server.Logic.Logging;
 
     /// <summary>
     /// Common behavior of the services: it runs each operation and converts any failure into a
@@ -21,14 +21,14 @@ namespace YachtDice.Server.Services
         private const string InvalidDataLogMessage = "An operation with invalid data was received.";
         private const string UnexpectedLogMessage = "Unexpected error while processing an operation.";
 
-        private readonly AppLogger _logger;
+        private readonly LogicLogging.AppLogger _logger;
 
         /// <summary>
         /// Initializes the logger with the type of the service that inherits from this class.
         /// </summary>
         protected ServiceBase()
         {
-            _logger = new AppLogger(GetType());
+            _logger = new LogicLogging.AppLogger(GetType());
         }
 
         /// <summary>

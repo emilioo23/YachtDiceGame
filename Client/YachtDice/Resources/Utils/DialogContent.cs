@@ -1,9 +1,7 @@
-using System;
-
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Data transfer object that holds the text settings for a dialog.
+    /// Holds the texts that a dialog shows.
     /// </summary>
     public class DialogContent
     {

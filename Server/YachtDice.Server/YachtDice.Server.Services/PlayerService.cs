@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Players;
-using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts;
+    using LogicPlayers = YachtDice.Server.Logic.Players;
 
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
@@ -16,15 +15,17 @@ namespace YachtDice.Server.Services
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
-        private readonly PlayerStatisticsService _statisticsService;
-        private readonly LeaderboardService _leaderboardService;
+        private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
+        private readonly LogicPlayers.LeaderboardService _leaderboardService;
 
         /// <summary>
         /// Initializes the service with the logic it uses.
         /// </summary>
         /// <param name="statisticsService">Logic that calculates the statistics of the players.</param>
         /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
-        public PlayerService(PlayerStatisticsService statisticsService, LeaderboardService leaderboardService)
+        public PlayerService(
+            LogicPlayers.PlayerStatisticsService statisticsService,
+            LogicPlayers.LeaderboardService leaderboardService)
         {
             if (statisticsService == null)
             {
@@ -61,16 +62,16 @@ namespace YachtDice.Server.Services
 
         private Contracts.PlayerStatistics ProcessPlayerStatistics(Contracts.Player player)
         {
-            PlayerStatistics statistics = _statisticsService.GetStatistics(player.Username);
+            LogicPlayers.PlayerStatistics statistics = _statisticsService.GetStatistics(player.Username);
 
-            return PlayerStatisticsMapper.ToContract(statistics);
+            return Mapping.PlayerStatisticsMapper.ToContract(statistics);
         }
 
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
-            List<LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
+            List<LogicPlayers.LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
 
-            return LeaderboardMapper.ToContracts(entries);
+            return Mapping.LeaderboardMapper.ToContracts(entries);
         }
     }
 }

@@ -243,9 +243,9 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Utils\GatewayErrorMessages.cs" />
-    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Resources\Utils\AppLogger.cs" />
     <Compile Include="Resources\Utils\DialogContent.cs" />
+    <Compile Include="Resources\Utils\ResourceKeys.cs" />
     <Compile Include="Views\CustomDialogWindow.xaml.cs">
       <DependentUpon>CustomDialogWindow.xaml</DependentUpon>
     </Compile>

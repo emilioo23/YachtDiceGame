@@ -46,7 +46,9 @@ namespace YachtDice.Server.Logic.Players
         /// Gets the statistics of the player with the given display name or username.
         /// </summary>
         /// <param name="playerName">Display name or username of the player.</param>
-        /// <returns>The statistics; <see cref="PlayerStatistics.IsPlayerFound"/> is false if the player does not exist.</returns>
+        /// <returns>
+        /// The statistics; <see cref="PlayerStatistics.IsPlayerFound"/> is false if the player does not exist.
+        /// </returns>
         public PlayerStatistics GetStatistics(string playerName)
         {
             List<Player> matches = _playerRepository.FindByName(playerName);

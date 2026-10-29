@@ -10,6 +10,9 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Window where the player logs in or creates an account.
+    /// </summary>
     public partial class LoginWindow : Window
     {
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
@@ -17,6 +20,9 @@ namespace YachtDice.Views
         private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
+        /// <summary>
+        /// Initializes the login and registration window.
+        /// </summary>
         public LoginWindow()
         {
             InitializeComponent();
@@ -26,8 +32,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginTabButton.Style = (Style)FindResource("TabButtonActive");
-            RegisterTabButton.Style = (Style)FindResource("TabButtonInactive");
+            LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_LoginButton;
         }
 
@@ -35,8 +41,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Collapsed;
             RegisterPanel.Visibility = Visibility.Visible;
-            RegisterTabButton.Style = (Style)FindResource("TabButtonActive");
-            LoginTabButton.Style = (Style)FindResource("TabButtonInactive");
+            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_CreateAccountButton;
         }
 

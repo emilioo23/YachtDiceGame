@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using YachtDice.Server.Services.Mapping;
 
 namespace YachtDice.Server.Services
 {
@@ -37,11 +36,11 @@ namespace YachtDice.Server.Services
 
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
-            Data.Player logicPlayer = RegistrationMapper.ToLogicModel(newPlayer);
+            Data.Player logicPlayer = Mapping.RegistrationMapper.ToLogicModel(newPlayer);
             LogicAuth.RegistrationResult logicResult =
                 _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 
-            return EnumMapper.Map<LogicAuth.RegistrationResult, Contracts.RegisterResultCode>(logicResult);
+            return Mapping.EnumMapper.Map<LogicAuth.RegistrationResult, Contracts.RegisterResultCode>(logicResult);
         }
     }
 }

@@ -12,6 +12,9 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Window where the match is played: dice, scorecard and chat.
+    /// </summary>
     public partial class GameWindow : Window
     {
         private const int DiceCount = 5;
@@ -59,6 +62,60 @@ namespace YachtDice.Views
         private const string ResourceBrushDanger = "BrushDanger";
         private const string ChatSenderSeparator = ": ";
 
+        private const int DefaultPipFace = 6;
+
+        private static readonly Dictionary<int, (int row, int column)[]> _pipLayouts =
+            new Dictionary<int, (int row, int column)[]>
+            {
+                { DiceFaceOne, new[] { (PipGridIndexOne, PipGridIndexOne) } },
+                {
+                    DiceFaceTwo,
+                    new[] { (PipGridIndexZero, PipGridIndexZero), (PipGridIndexTwo, PipGridIndexTwo) }
+                },
+                {
+                    DiceFaceThree,
+                    new[]
+                    {
+                        (PipGridIndexZero, PipGridIndexZero),
+                        (PipGridIndexOne, PipGridIndexOne),
+                        (PipGridIndexTwo, PipGridIndexTwo)
+                    }
+                },
+                {
+                    DiceFaceFour,
+                    new[]
+                    {
+                        (PipGridIndexZero, PipGridIndexZero),
+                        (PipGridIndexZero, PipGridIndexTwo),
+                        (PipGridIndexTwo, PipGridIndexZero),
+                        (PipGridIndexTwo, PipGridIndexTwo)
+                    }
+                },
+                {
+                    DiceFaceFive,
+                    new[]
+                    {
+                        (PipGridIndexZero, PipGridIndexZero),
+                        (PipGridIndexZero, PipGridIndexTwo),
+                        (PipGridIndexOne, PipGridIndexOne),
+                        (PipGridIndexTwo, PipGridIndexZero),
+                        (PipGridIndexTwo, PipGridIndexTwo)
+                    }
+                },
+                {
+                    DefaultPipFace,
+                    new[]
+                    {
+                        (PipGridIndexZero, PipGridIndexZero),
+                        (PipGridIndexZero, PipGridIndexTwo),
+                        (PipGridIndexOne, PipGridIndexZero),
+                        (PipGridIndexOne, PipGridIndexTwo),
+                        (PipGridIndexTwo, PipGridIndexZero),
+                        (PipGridIndexTwo, PipGridIndexTwo)
+                    }
+                }
+            };
+
         private readonly Random _random = new Random();
         private readonly int[] _diceValues = new int[DiceCount];
         private readonly bool[] _heldDice = new bool[DiceCount];
@@ -78,6 +135,10 @@ namespace YachtDice.Views
         private int _totalScore;
         private TextBlock _totalScoreLabel;
 
+        /// <summary>
+        /// Initializes the game window for the given player.
+        /// </summary>
+        /// <param name="playerName">Name of the player who plays the match.</param>
         public GameWindow(string playerName)
         {
             InitializeComponent();
@@ -98,6 +159,9 @@ namespace YachtDice.Views
             AppendMessageToChat(Strings.Game_Chat_SystemName, Strings.Game_Chat_MatchStartedMessage, true);
         }
 
+        /// <summary>
+        /// Closes the game window and opens the results of the match.
+        /// </summary>
         public void GoToResultsWindow()
         {
             var resultsWindow = new ResultsWindow(_playerName, _totalScore);
@@ -224,48 +288,16 @@ namespace YachtDice.Views
             return border;
         }
 
-        private List<(int row, int column)> GetPipPositions(int value)
+        private static IEnumerable<(int row, int column)> GetPipPositions(int value)
         {
-            var positions = new List<(int row, int column)>();
+            (int row, int column)[] layout;
 
-            switch (value)
+            if (!_pipLayouts.TryGetValue(value, out layout))
             {
-                case DiceFaceOne:
-                    positions.Add((PipGridIndexOne, PipGridIndexOne));
-                    break;
-                case DiceFaceTwo:
-                    positions.Add((PipGridIndexZero, PipGridIndexZero));
-                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
-                    break;
-                case DiceFaceThree:
-                    positions.Add((PipGridIndexZero, PipGridIndexZero));
-                    positions.Add((PipGridIndexOne, PipGridIndexOne));
-                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
-                    break;
-                case DiceFaceFour:
-                    positions.Add((PipGridIndexZero, PipGridIndexZero));
-                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
-                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
-                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
-                    break;
-                case DiceFaceFive:
-                    positions.Add((PipGridIndexZero, PipGridIndexZero));
-                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
-                    positions.Add((PipGridIndexOne, PipGridIndexOne));
-                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
-                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
-                    break;
-                default:
-                    positions.Add((PipGridIndexZero, PipGridIndexZero));
-                    positions.Add((PipGridIndexZero, PipGridIndexTwo));
-                    positions.Add((PipGridIndexOne, PipGridIndexZero));
-                    positions.Add((PipGridIndexOne, PipGridIndexTwo));
-                    positions.Add((PipGridIndexTwo, PipGridIndexZero));
-                    positions.Add((PipGridIndexTwo, PipGridIndexTwo));
-                    break;
+                layout = _pipLayouts[DefaultPipFace];
             }
 
-            return positions;
+            return layout;
         }
 
         private void UpdateDiceFace(int diceIndex)
@@ -347,7 +379,11 @@ namespace YachtDice.Views
 
         private Grid CreateBaseRow(string categoryName, Brush background)
         {
-            var grid = new Grid { Background = background, Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, RowMarginBottom) };
+            var grid = new Grid
+            {
+                Background = background,
+                Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, RowMarginBottom)
+            };
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(CategoryColumnWidth) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -358,7 +394,11 @@ namespace YachtDice.Views
                 FontSize = FontSizeSmall,
                 FontWeight = FontWeights.SemiBold,
                 Foreground = (SolidColorBrush)FindResource(ResourceBrushText),
-                Padding = new Thickness(LabelPaddingHorizontal, LabelPaddingVertical, EmptyLength, LabelPaddingVertical),
+                Padding = new Thickness(
+                    LabelPaddingHorizontal,
+                    LabelPaddingVertical,
+                    EmptyLength,
+                    LabelPaddingVertical),
                 VerticalAlignment = VerticalAlignment.Center
             };
 

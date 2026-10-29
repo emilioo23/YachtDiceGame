@@ -115,13 +115,11 @@ namespace YachtDice.Server.Host
         private static void ReportStatus(AppLogger logger, string message)
         {
             logger.Info(message);
-            Console.WriteLine(message);
         }
 
         private static void ReportFailure(AppLogger logger, Exception exception, string message)
         {
             logger.Error(exception, message);
-            Console.WriteLine(message);
             Console.ReadLine();
         }
 

@@ -26,16 +26,14 @@ namespace YachtDice.Views
 
         private void SplashWindow_ContinueRequested(object sender, RoutedEventArgs e)
         {
-            if (_hasContinued)
+            if (!_hasContinued)
             {
-                return;
+                _hasContinued = true;
+
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                Close();
             }
-
-            _hasContinued = true;
-
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            Close();
         }
     }
 }

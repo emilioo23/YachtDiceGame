@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net.Mail;
+using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Resources;
@@ -48,12 +49,11 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <summary>
         /// Generates a new code and sends it to the given email synchronously.
         /// </summary>
-        /// <param name="email">Player's email address (recipient).</param>
-        /// <param name="playerDisplayName">Player's name, used in the greeting.</param>
+        /// <param name="player">Player who receives the code. Its email is the recipient.</param>
         /// <param name="culture">Language in which the email is written.</param>
         /// <param name="challengeId">Unique session challenge identifier.</param>
         /// <returns>True if the email was sent successfully.</returns>
-        public bool SendCode(string email, string playerDisplayName, CultureInfo culture, string challengeId)
+        public bool SendCode(Player player, CultureInfo culture, string challengeId)
         {
             if (culture == null)
             {
@@ -61,34 +61,39 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             var wasSent = false;
-            string code = _codeService.GenerateCode(email, challengeId);
+            string code = _codeService.GenerateCode(player.Email, challengeId);
             string subject = EmailStrings.ResourceManager.GetString(SubjectResourceKey, culture);
-            string body = BuildBody(playerDisplayName, code, culture);
+            string body = BuildBody(player.DisplayName, code, culture);
 
             try
             {
-                _emailService.Send(email, subject, body);
+                _emailService.Send(player.Email, subject, body);
                 wasSent = true;
                 _logger.Info(SentLogMessage);
             }
             catch (SmtpException ex)
             {
-                _logger.Error(ex, SendFailedLogMessage);
+                LogSendFailure(ex);
             }
             catch (InvalidOperationException ex)
             {
-                _logger.Error(ex, SendFailedLogMessage);
+                LogSendFailure(ex);
             }
             catch (FormatException ex)
             {
-                _logger.Error(ex, SendFailedLogMessage);
+                LogSendFailure(ex);
             }
             catch (ArgumentException ex)
             {
-                _logger.Error(ex, SendFailedLogMessage);
+                LogSendFailure(ex);
             }
 
             return wasSent;
+        }
+
+        private void LogSendFailure(Exception exception)
+        {
+            _logger.Error(exception, SendFailedLogMessage);
         }
 
         private static string BuildBody(string playerDisplayName, string code, CultureInfo culture)

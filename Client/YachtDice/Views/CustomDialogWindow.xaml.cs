@@ -4,13 +4,22 @@ using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
+    /// <summary>
+    /// Dialog window that shows a message to the player with one or two buttons.
+    /// </summary>
     public partial class CustomDialogWindow : Window
     {
+        private const string DefaultTitle = "Yacht Dice";
+
+        /// <summary>
+        /// Initializes the dialog with the given texts.
+        /// </summary>
+        /// <param name="dialogContent">Texts that the dialog shows.</param>
         public CustomDialogWindow(DialogContent dialogContent)
         {
             InitializeComponent();
-            
-            TitleText.Text = string.IsNullOrEmpty(dialogContent.Title) ? "Yacht Dice" : dialogContent.Title;
+
+            TitleText.Text = string.IsNullOrEmpty(dialogContent.Title) ? DefaultTitle : dialogContent.Title;
             MessageText.Text = dialogContent.Message;
         }
 

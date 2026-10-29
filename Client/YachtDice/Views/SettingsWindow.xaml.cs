@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -20,6 +21,7 @@ namespace YachtDice.Views
         private const string SpanishCultureCode = "es-MX";
         private const int SpanishLanguageIndex = 0;
         private const int OtherLanguageIndex = 1;
+        private const int ToggleKnobMargin = 3;
 
         private readonly string _playerName;
         private bool _isInitializing;
@@ -36,8 +38,10 @@ namespace YachtDice.Views
             _isInitializing = true;
 
             AccountUsernameTextBlock.Text = playerName;
-            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode ? SpanishLanguageIndex : OtherLanguageIndex;
-            SetDarkThemeToggleVisual(App.IsDarkTheme);
+            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode
+                ? SpanishLanguageIndex
+                : OtherLanguageIndex;
+            ApplyDarkThemeToggleVisual(App.IsDarkTheme);
 
             ShowSection(initialSection);
             _isInitializing = false;
@@ -45,28 +49,30 @@ namespace YachtDice.Views
 
         private void ShowSection(string sectionName)
         {
-            AccountPanel.Visibility = sectionName == AccountSection ? Visibility.Visible : Visibility.Collapsed;
-            AppearancePanel.Visibility = sectionName == AppearanceSection ? Visibility.Visible : Visibility.Collapsed;
-            SecurityPanel.Visibility = sectionName == SecuritySection ? Visibility.Visible : Visibility.Collapsed;
-            NotificationsPanel.Visibility = sectionName == NotificationsSection ? Visibility.Visible : Visibility.Collapsed;
-            PreferencesPanel.Visibility = sectionName == PreferencesSection ? Visibility.Visible : Visibility.Collapsed;
-            PrivacyPanel.Visibility = sectionName == PrivacySection ? Visibility.Visible : Visibility.Collapsed;
-
-            AccountNavButton.Style = (Style)FindResource(sectionName == AccountSection ? "TabButtonActive" : "BtnOutline");
-            AppearanceNavButton.Style = (Style)FindResource(sectionName == AppearanceSection ? "TabButtonActive" : "BtnOutline");
-            SecurityNavButton.Style = (Style)FindResource(sectionName == SecuritySection ? "TabButtonActive" : "BtnOutline");
-            NotificationsNavButton.Style = (Style)FindResource(sectionName == NotificationsSection ? "TabButtonActive" : "BtnOutline");
-            PreferencesNavButton.Style = (Style)FindResource(sectionName == PreferencesSection ? "TabButtonActive" : "BtnOutline");
-            PrivacyNavButton.Style = (Style)FindResource(sectionName == PrivacySection ? "TabButtonActive" : "BtnOutline");
+            ShowSectionPanel(AccountPanel, AccountNavButton, sectionName == AccountSection);
+            ShowSectionPanel(AppearancePanel, AppearanceNavButton, sectionName == AppearanceSection);
+            ShowSectionPanel(SecurityPanel, SecurityNavButton, sectionName == SecuritySection);
+            ShowSectionPanel(NotificationsPanel, NotificationsNavButton, sectionName == NotificationsSection);
+            ShowSectionPanel(PreferencesPanel, PreferencesNavButton, sectionName == PreferencesSection);
+            ShowSectionPanel(PrivacyPanel, PrivacyNavButton, sectionName == PrivacySection);
         }
 
-        private void SetDarkThemeToggleVisual(bool isDark)
+        private void ShowSectionPanel(UIElement panel, Control navButton, bool isSelected)
+        {
+            panel.Visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
+            navButton.Style = (Style)FindResource(
+                isSelected ? ResourceKeys.ActiveTabStyleKey : ResourceKeys.OutlineButtonStyleKey);
+        }
+
+        private void ApplyDarkThemeToggleVisual(bool isDark)
         {
             DarkThemeToggle.Background = isDark
-                ? (System.Windows.Media.SolidColorBrush)FindResource("BrushFeltLight")
-                : (System.Windows.Media.SolidColorBrush)FindResource("BrushBorder");
+                ? (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey)
+                : (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
             DarkThemeToggleKnob.HorizontalAlignment = isDark ? HorizontalAlignment.Right : HorizontalAlignment.Left;
-            DarkThemeToggleKnob.Margin = isDark ? new Thickness(0, 0, 3, 0) : new Thickness(3, 0, 0, 0);
+            DarkThemeToggleKnob.Margin = isDark
+                ? new Thickness(0, 0, ToggleKnobMargin, 0)
+                : new Thickness(ToggleKnobMargin, 0, 0, 0);
         }
 
         private void ReopenSettingsWindow(string sectionToShow)
@@ -108,20 +114,14 @@ namespace YachtDice.Views
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_isInitializing)
-            {
-                return;
-            }
-
             var selectedItem = LanguageComboBox.SelectedItem as ComboBoxItem;
-            if (selectedItem == null)
-            {
-                return;
-            }
 
-            string cultureCode = selectedItem.Tag.ToString();
-            App.SetCulture(cultureCode);
-            ReopenSettingsWindow(PreferencesSection);
+            if (!_isInitializing && selectedItem != null)
+            {
+                string cultureCode = selectedItem.Tag.ToString();
+                App.SetCulture(cultureCode);
+                ReopenSettingsWindow(PreferencesSection);
+            }
         }
 
         private void DarkThemeToggle_Click(object sender, MouseButtonEventArgs e)
@@ -140,7 +140,8 @@ namespace YachtDice.Views
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // The real account deletion flow will be connected here later.
-            new CustomDialogWindow(new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage }).ShowDialog();
+            var content = new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage };
+            new CustomDialogWindow(content).ShowDialog();
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
