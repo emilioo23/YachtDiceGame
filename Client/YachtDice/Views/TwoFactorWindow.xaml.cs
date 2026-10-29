@@ -22,30 +22,30 @@ namespace YachtDice.Views
         private readonly string _email;
         private readonly string _playerDisplayName;
         private readonly string _challengeId;
+        private readonly bool _isActivation;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
         private readonly TextBox[] _digitBoxes;
 
         /// <summary>
         /// Initializes the verification window for a pending login.
         /// </summary>
-        /// <param name="email">Email where the code was sent.</param>
-        /// <param name="playerDisplayName">Name shown in the menu once the login is verified.</param>
-        /// <param name="challengeId">Identifier of the verification challenge created by the server.</param>
-        public TwoFactorWindow(string email, string playerDisplayName, string challengeId)
+        /// <param name="challenge">Data of the verification code that was sent to the player.</param>
+        public TwoFactorWindow(VerificationChallenge challenge)
         {
             InitializeComponent();
 
-            _email = email;
-            _playerDisplayName = playerDisplayName;
-            _challengeId = challengeId;
+            _email = challenge.Email;
+            _playerDisplayName = challenge.PlayerDisplayName;
+            _challengeId = challenge.ChallengeId;
+            _isActivation = challenge.IsActivation;
             _digitBoxes = new[]
             {
                 Digit1TextBox, Digit2TextBox, Digit3TextBox,
                 Digit4TextBox, Digit5TextBox, Digit6TextBox
             };
 
-            DestinationEmailTextBlock.Text = MaskEmail(email);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(email, playerDisplayName, challengeId);
+            DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
         }
 
@@ -106,7 +106,9 @@ namespace YachtDice.Views
         {
             try
             {
-                ResendResultCode result = await _gateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
+                ResendResultCode result = _isActivation
+                    ? await _gateway.ResendActivationCodeAsync(_playerDisplayName, _challengeId, App.CurrentCultureCode)
+                    : await _gateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
                 HandleResendResult(result);
             }
             catch (GatewayException ex)
@@ -117,9 +119,16 @@ namespace YachtDice.Views
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            this.Close();
+            if (_isActivation)
+            {
+                OpenSettingsWindow();
+            }
+            else
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                this.Close();
+            }
         }
 
         private static string MaskEmail(string email)
@@ -154,7 +163,9 @@ namespace YachtDice.Views
 
             try
             {
-                VerificationResultCode result = await _gateway.VerifyCodeAsync(_email, code, _challengeId);
+                VerificationResultCode result = _isActivation
+                    ? await _gateway.ConfirmActivationAsync(_playerDisplayName, code, _challengeId)
+                    : await _gateway.VerifyCodeAsync(_email, code, _challengeId);
                 HandleVerificationResult(result);
             }
             catch (GatewayException ex)
@@ -168,7 +179,7 @@ namespace YachtDice.Views
             switch (result)
             {
                 case VerificationResultCode.Valid:
-                    OpenMenuWindow();
+                    CompleteVerification();
                     break;
                 case VerificationResultCode.Expired:
                     ShowMessage(Strings.TwoFactor_ErrorCodeExpired);
@@ -203,6 +214,26 @@ namespace YachtDice.Views
                     ShowMessage(Strings.TwoFactor_ErrorSendFailed);
                     break;
             }
+        }
+
+        private void CompleteVerification()
+        {
+            if (_isActivation)
+            {
+                ShowMessage(Strings.Settings_Security_TwoFactorEnabledMessage);
+                OpenSettingsWindow();
+            }
+            else
+            {
+                OpenMenuWindow();
+            }
+        }
+
+        private void OpenSettingsWindow()
+        {
+            var settingsWindow = new SettingsWindow(_playerDisplayName, SettingsWindow.SecuritySection);
+            settingsWindow.Show();
+            this.Close();
         }
 
         private void OpenMenuWindow()

@@ -26,6 +26,10 @@ namespace YachtDice.Server.Contracts
 
         /// <summary>The credentials are correct but the verification code could not be sent.</summary>
         [EnumMember]
-        CodeSendFailed
+        CodeSendFailed,
+
+        /// <summary>The credentials are correct and the player has no two-step verification.</summary>
+        [EnumMember]
+        LoggedIn
     }
 }

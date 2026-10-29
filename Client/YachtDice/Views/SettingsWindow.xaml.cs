@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.AuthenticationServiceReference;
+using YachtDice.Gateway;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -12,9 +15,13 @@ namespace YachtDice.Views
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        /// <summary>
+        /// Name of the section that has the password and the two-step verification.
+        /// </summary>
+        public const string SecuritySection = "Security";
+
         private const string AccountSection = "Account";
         private const string AppearanceSection = "Appearance";
-        private const string SecuritySection = "Security";
         private const string NotificationsSection = "Notifications";
         private const string PreferencesSection = "Preferences";
         private const string PrivacySection = "Privacy";
@@ -24,7 +31,9 @@ namespace YachtDice.Views
         private const int ToggleKnobMargin = 3;
 
         private readonly string _playerName;
+        private readonly AuthenticationGateway _authenticationGateway = new AuthenticationGateway();
         private bool _isInitializing;
+        private bool _isTwoFactorEnabled;
 
         /// <summary>
         /// Initializes the settings window for the given player.
@@ -45,6 +54,8 @@ namespace YachtDice.Views
 
             ShowSection(initialSection);
             _isInitializing = false;
+
+            _ = LoadTwoFactorStateAsync();
         }
 
         private void ShowSection(string sectionName)
@@ -73,6 +84,139 @@ namespace YachtDice.Views
             DarkThemeToggleKnob.Margin = isDark
                 ? new Thickness(0, 0, ToggleKnobMargin, 0)
                 : new Thickness(ToggleKnobMargin, 0, 0, 0);
+        }
+
+        private void ShowMessage(string message)
+        {
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
+            {
+                Owner = this
+            };
+
+            dialog.ShowDialog();
+        }
+
+        private void ShowTwoFactorState(bool isEnabled)
+        {
+            _isTwoFactorEnabled = isEnabled;
+            TwoFactorToggleButton.Content = isEnabled
+                ? Strings.Settings_Security_TwoFactorDisableButton
+                : Strings.Settings_Security_TwoFactorEnableButton;
+            TwoFactorPasswordBox.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
+            TwoFactorToggleButton.IsEnabled = true;
+        }
+
+        private async Task LoadTwoFactorStateAsync()
+        {
+            try
+            {
+                bool isEnabled = await _authenticationGateway.IsTwoFactorEnabledAsync(_playerName);
+                ShowTwoFactorState(isEnabled);
+            }
+            catch (GatewayException ex)
+            {
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private async Task StartTwoFactorActivationAsync()
+        {
+            TwoFactorActivationData data = await _authenticationGateway.StartTwoFactorActivationAsync(
+                _playerName,
+                App.CurrentCultureCode);
+
+            if (data.Code == TwoFactorActivationResultCode.CodeSent)
+            {
+                var challenge = new VerificationChallenge
+                {
+                    Email = data.MaskedEmail,
+                    PlayerDisplayName = _playerName,
+                    ChallengeId = data.ChallengeId,
+                    IsActivation = true
+                };
+
+                var twoFactorWindow = new TwoFactorWindow(challenge);
+                twoFactorWindow.Show();
+                this.Close();
+            }
+            else if (data.Code == TwoFactorActivationResultCode.AlreadyEnabled)
+            {
+                ShowTwoFactorState(true);
+            }
+            else
+            {
+                ShowMessage(GetActivationMessage(data.Code));
+            }
+        }
+
+        private async Task DisableTwoFactorAsync()
+        {
+            TwoFactorChangeResultCode result = await _authenticationGateway.DisableTwoFactorAsync(
+                _playerName,
+                TwoFactorPasswordBox.Password);
+
+            if (result == TwoFactorChangeResultCode.Success)
+            {
+                TwoFactorPasswordBox.Clear();
+                ShowTwoFactorState(false);
+                ShowMessage(Strings.Settings_Security_TwoFactorDisabledMessage);
+            }
+            else if (result == TwoFactorChangeResultCode.InvalidPassword)
+            {
+                ShowMessage(Strings.Dialogs_D13_Login);
+            }
+            else
+            {
+                ShowMessage(Strings.Settings_Security_TwoFactorUnavailableMessage);
+            }
+        }
+
+        private static string GetActivationMessage(TwoFactorActivationResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
+                case TwoFactorActivationResultCode.PlayerNotFound:
+                    message = Strings.Settings_Security_TwoFactorUnavailableMessage;
+                    break;
+                case TwoFactorActivationResultCode.VerificationLocked:
+                    message = Strings.Dialogs_D19_Validation2FA;
+                    break;
+                case TwoFactorActivationResultCode.CodeSendFailed:
+                    message = Strings.TwoFactor_ErrorSendFailed;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
+        }
+
+        private async void TwoFactorToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            TwoFactorToggleButton.IsEnabled = false;
+
+            try
+            {
+                if (_isTwoFactorEnabled)
+                {
+                    await DisableTwoFactorAsync();
+                }
+                else
+                {
+                    await StartTwoFactorActivationAsync();
+                }
+            }
+            catch (GatewayException ex)
+            {
+                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+            finally
+            {
+                TwoFactorToggleButton.IsEnabled = true;
+            }
         }
 
         private void ReopenSettingsWindow(string sectionToShow)

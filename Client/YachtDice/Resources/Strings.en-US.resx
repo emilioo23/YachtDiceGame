@@ -528,6 +528,21 @@
   <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
     <value>Email code at login</value>
   </data>
+  <data name="Settings_Security_TwoFactorEnableButton" xml:space="preserve">
+    <value>Turn on</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisableButton" xml:space="preserve">
+    <value>Turn off</value>
+  </data>
+  <data name="Settings_Security_TwoFactorEnabledMessage" xml:space="preserve">
+    <value>Two-step verification turned on.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisabledMessage" xml:space="preserve">
+    <value>Two-step verification turned off.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorUnavailableMessage" xml:space="preserve">
+    <value>You need a registered account to use this option.</value>
+  </data>
   <data name="Settings_Notifications_NotificationMatch" xml:space="preserve">
     <value>Match notifications</value>
   </data>

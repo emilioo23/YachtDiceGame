@@ -264,20 +264,26 @@
 
                             </StackPanel>
 
-                            <Border Width="46"
-                                    Height="24"
-                                    CornerRadius="12"
-                                    Background="{StaticResource BrushFeltLight}"
-                                    Grid.Column="1">
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
 
-                                <Border Width="18"
-                                        Height="18"
-                                        CornerRadius="9"
-                                        Background="White"
-                                        HorizontalAlignment="Right"
-                                        Margin="0,0,3,0"/>
+                                <PasswordBox x:Name="TwoFactorPasswordBox"
+                                             Style="{StaticResource PasswordBoxRounded}"
+                                             Width="180"
+                                             Margin="0,0,10,0"
+                                             Padding="10,6"
+                                             Visibility="Collapsed"
+                                             ToolTip="{x:Static properties:Strings.Settings_Security_PasswordCurrent}"/>
 
-                            </Border>
+                                <Button x:Name="TwoFactorToggleButton"
+                                        Style="{StaticResource BtnOutline}"
+                                        Padding="14,6"
+                                        FontSize="12"
+                                        IsEnabled="False"
+                                        Click="TwoFactorToggleButton_Click"/>
+
+                            </StackPanel>
                         </Grid>
 
                     </StackPanel>
