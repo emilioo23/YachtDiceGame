@@ -6,7 +6,7 @@ namespace YachtDice.Server.Contracts
     /// Operations that the clients can use to play a turn of a game in progress.
     /// </summary>
     [ServiceContract(Namespace = ServiceNamespaces.Contracts, CallbackContract = typeof(IGameCallback))]
-    public interface IGameManager
+    public interface IGameService
     {
         /// <summary>
         /// Rolls the dice for the current player's turn.

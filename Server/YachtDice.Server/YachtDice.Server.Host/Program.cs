@@ -33,71 +33,96 @@ namespace YachtDice.Server.Host
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
 
-            Console.CancelKeyPress += (sender, e) =>
-            {
-                e.Cancel = true;
-                _quitEvent.Set();
-            };
+            Console.CancelKeyPress += HandleCancelKeyPress;
 
             try
             {
-                serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
-                serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
-                serviceHosts.Add(new ServiceHost(CreatePlayerService()));
-                serviceHosts.Add(new ServiceHost(new GameService()));
-
-                serviceHosts.ForEach(serviceHost => serviceHost.Open());
-
-                logger.Info(StartedLogMessage);
-                Console.WriteLine(StartedLogMessage);
-
-                ThreadPool.QueueUserWorkItem(_ =>
-                {
-                    Console.ReadLine();
-                    _quitEvent.Set();
-                });
-
-                _quitEvent.WaitOne();
-
-                foreach (var serviceHost in serviceHosts)
-                {
-                    if (serviceHost.State == CommunicationState.Opened)
-                    {
-                        serviceHost.Close();
-                    }
-                }
-
-                logger.Info(StoppedLogMessage);
-                Console.WriteLine(StoppedLogMessage);
+                OpenServiceHosts(serviceHosts);
+                ReportStatus(logger, StartedLogMessage);
+                WaitForExit();
+                CloseServiceHosts(serviceHosts);
+                ReportStatus(logger, StoppedLogMessage);
             }
             catch (AddressAlreadyInUseException ex)
             {
-                logger.Error(ex, AddressInUseLogMessage);
-                Console.WriteLine(AddressInUseLogMessage);
-                Console.ReadLine();
+                ReportFailure(logger, ex, AddressInUseLogMessage);
             }
             catch (CommunicationException ex)
             {
-                logger.Error(ex, CommunicationFailedLogMessage);
-                Console.WriteLine(CommunicationFailedLogMessage);
-                Console.ReadLine();
+                ReportFailure(logger, ex, CommunicationFailedLogMessage);
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex, ConfigurationFailedLogMessage);
-                Console.WriteLine(ConfigurationFailedLogMessage);
-                Console.ReadLine();
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
             finally
             {
-                foreach (var serviceHost in serviceHosts)
+                AbortServiceHosts(serviceHosts);
+            }
+        }
+
+        private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            _quitEvent.Set();
+        }
+
+        private static void OpenServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
+            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
+            serviceHosts.Add(new ServiceHost(CreatePlayerService()));
+            serviceHosts.Add(new ServiceHost(new RoomService()));
+            serviceHosts.Add(new ServiceHost(new GameService()));
+            serviceHosts.Add(new ServiceHost(new ChatService()));
+
+            serviceHosts.ForEach(serviceHost => serviceHost.Open());
+        }
+
+        private static void WaitForExit()
+        {
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                Console.ReadLine();
+                _quitEvent.Set();
+            });
+
+            _quitEvent.WaitOne();
+        }
+
+        private static void CloseServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            foreach (ServiceHost serviceHost in serviceHosts)
+            {
+                if (serviceHost.State == CommunicationState.Opened)
                 {
-                    if (serviceHost.State != CommunicationState.Closed)
-                    {
-                        serviceHost.Abort();
-                    }
+                    serviceHost.Close();
                 }
             }
+        }
+
+        private static void AbortServiceHosts(List<ServiceHost> serviceHosts)
+        {
+            foreach (ServiceHost serviceHost in serviceHosts)
+            {
+                if (serviceHost.State != CommunicationState.Closed)
+                {
+                    serviceHost.Abort();
+                }
+            }
+        }
+
+        private static void ReportStatus(AppLogger logger, string message)
+        {
+            logger.Info(message);
+            Console.WriteLine(message);
+        }
+
+        private static void ReportFailure(AppLogger logger, Exception exception, string message)
+        {
+            logger.Error(exception, message);
+            Console.WriteLine(message);
+            Console.ReadLine();
         }
 
         /// <summary>

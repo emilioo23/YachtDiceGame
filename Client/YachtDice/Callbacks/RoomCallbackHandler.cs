@@ -1,12 +1,12 @@
-using System;
-using YachtDice.GameServiceReference;
+﻿using System;
+using YachtDice.RoomServiceReference;
 
 namespace YachtDice.Callbacks
 {
     /// <summary>
     /// Handles room related callbacks from the server.
     /// </summary>
-    public class RoomCallbackHandler : IRoomManagerCallback
+    public class RoomCallbackHandler : IRoomServiceCallback
     {
         /// <summary>
         /// Event triggered when a player's state in the room changes (joined or left).
@@ -18,7 +18,7 @@ namespace YachtDice.Callbacks
         /// </summary>
         /// <param name="player">The profile of the player.</param>
         /// <param name="eventType">The type of event that occurred.</param>
-        void IRoomManagerCallback.PlayerChanged(PlayerProfile player, RoomEventType eventType)
+        void IRoomServiceCallback.PlayerChanged(PlayerProfile player, RoomEventType eventType)
         {
             PlayerChanged?.Invoke(player, eventType);
         }
