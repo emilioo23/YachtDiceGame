@@ -143,18 +143,18 @@ namespace YachtDice.Views
 
         private async Task ProcessLoginAsync()
         {
-            var request = new LoginCredentials
+            var credentials = new LoginCredentials
             {
                 Email = EmailTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginData response = await _gateway.LoginAsync(request);
+            LoginData response = await _gateway.LoginAsync(credentials);
 
             if (response.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(request.Email, response.DisplayName, response.ChallengeId);
+                OpenVerificationWindow(credentials.Email, response.DisplayName, response.ChallengeId);
             }
             else
             {
@@ -164,7 +164,7 @@ namespace YachtDice.Views
 
         private async Task ProcessRegisterAsync()
         {
-            var request = new PlayerRegistrationInfo
+            var player = new RegistrationServiceReference.Player
             {
                 FirstName = FirstNameTextBox.Text.Trim(),
                 LastName = LastNameTextBox.Text.Trim(),
@@ -173,19 +173,8 @@ namespace YachtDice.Views
                 Password = RegisterPasswordBox.Password
             };
 
-            var registrationClient = new PlayerRegistrationManagerClient();
-            RegisterResultCode result;
-
-            try
-            {
-                result = await registrationClient.RegisterAsync(request);
-                registrationClient.Close();
-            }
-            catch
-            {
-                registrationClient.Abort();
-                throw;
-            }
+            var registrationGateway = new RegistrationGateway();
+            RegisterResultCode result = await registrationGateway.RegisterAsync(player);
 
             if (result == RegisterResultCode.Success)
             {

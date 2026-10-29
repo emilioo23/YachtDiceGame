@@ -12,10 +12,14 @@
   <wsdl:message name="IPlayerRegistrationManager_Register_OutputMessage">
     <wsdl:part name="parameters" element="tns:RegisterResponse" />
   </wsdl:message>
+  <wsdl:message name="IPlayerRegistrationManager_Register_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerRegistrationManager">
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationManager/Register" message="tns:IPlayerRegistrationManager_Register_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterResponse" message="tns:IPlayerRegistrationManager_Register_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerRegistrationManager/RegisterServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerRegistrationManager_Register_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

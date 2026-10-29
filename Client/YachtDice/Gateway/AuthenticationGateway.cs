@@ -17,7 +17,7 @@ namespace YachtDice.Gateway
             {
                 { AuthErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
                 { AuthErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { AuthErrorCode.InvalidRequest, GatewayErrorCode.InvalidRequest }
+                { AuthErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
             };
 
         /// <summary>
@@ -31,17 +31,17 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Validates the verification code entered by the player.
         /// </summary>
-        public Task<VerificationResultCode> VerifyCodeAsync(VerificationDetails request)
+        public Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
         {
-            return ExecuteAsync(client => client.VerifyCodeAsync(request));
+            return ExecuteAsync(client => client.VerifyCodeAsync(email, code, challengeId));
         }
 
         /// <summary>
         /// Asks the server to send a new verification code.
         /// </summary>
-        public Task<ResendResultCode> ResendCodeAsync(ResendCodeDetails request)
+        public Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
         {
-            return ExecuteAsync(client => client.ResendCodeAsync(request));
+            return ExecuteAsync(client => client.ResendCodeAsync(email, challengeId, culture));
         }
 
         /// <inheritdoc />

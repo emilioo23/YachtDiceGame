@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,11 +19,18 @@ namespace YachtDice.Server.Data.Repositories
         /// <returns>The results of the player, or an empty list if there are none.</returns>
         public async Task<List<GameHistoryPlayer>> FindByPlayerIdAsync(int playerId)
         {
-            using (var context = new YachtDiceContext())
+            try
             {
-                return await context.GameHistoryPlayer
-                    .Where(entry => entry.PlayerId == playerId)
-                    .ToListAsync();
+                using (var context = new YachtDiceContext())
+                {
+                    return await context.GameHistoryPlayer
+                        .Where(entry => entry.PlayerId == playerId)
+                        .ToListAsync();
+                }
+            }
+            catch (EntityException ex)
+            {
+                throw new DataException("Database error occurred while fetching game history by player ID.", ex);
             }
         }
 
@@ -32,30 +41,37 @@ namespace YachtDice.Server.Data.Repositories
         /// <returns>The ranking, or an empty list if there are no games played.</returns>
         public async Task<List<PlayerRankingRecord>> GetRankingAsync(int maxEntries)
         {
-            using (var context = new YachtDiceContext())
+            try
             {
-                return await context.GameHistoryPlayer
-                    .GroupBy(entry => entry.PlayerId)
-                    .Select(group => new
-                    {
-                        PlayerId = group.Key,
-                        TotalPoints = group.Sum(entry => entry.FinalScore),
-                        Wins = group.Count(entry => entry.IsWinner == true)
-                    })
-                    .Join(
-                        context.Player,
-                        totals => totals.PlayerId,
-                        player => player.Id,
-                        (totals, player) => new PlayerRankingRecord
+                using (var context = new YachtDiceContext())
+                {
+                    return await context.GameHistoryPlayer
+                        .GroupBy(entry => entry.PlayerId)
+                        .Select(group => new
                         {
-                            DisplayName = player.DisplayName,
-                            TotalPoints = totals.TotalPoints,
-                            Wins = totals.Wins
+                            PlayerId = group.Key,
+                            TotalPoints = group.Sum(entry => entry.FinalScore),
+                            Wins = group.Count(entry => entry.IsWinner == true)
                         })
-                    .OrderByDescending(record => record.TotalPoints)
-                    .ThenBy(record => record.DisplayName)
-                    .Take(maxEntries)
-                    .ToListAsync();
+                        .Join(
+                            context.Player,
+                            totals => totals.PlayerId,
+                            player => player.Id,
+                            (totals, player) => new PlayerRankingRecord
+                            {
+                                DisplayName = player.DisplayName,
+                                TotalPoints = totals.TotalPoints,
+                                Wins = totals.Wins
+                            })
+                        .OrderByDescending(record => record.TotalPoints)
+                        .ThenBy(record => record.DisplayName)
+                        .Take(maxEntries)
+                        .ToListAsync();
+                }
+            }
+            catch (EntityException ex)
+            {
+                throw new DataException("Database error occurred while calculating player rankings.", ex);
             }
         }
     }

@@ -367,14 +367,12 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Connected Services\AuthenticationServiceReference\contracts.wsdl" />
     <None Include="Connected Services\AuthenticationServiceReference\contracts.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\AuthenticationServiceReference\service.wsdl" />
     <None Include="Connected Services\AuthenticationServiceReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\AuthenticationServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginData.datasource">

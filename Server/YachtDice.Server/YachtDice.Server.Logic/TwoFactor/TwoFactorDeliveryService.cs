@@ -19,7 +19,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const string NullCodeServiceMessage = "The code service cannot be null.";
         private const string NullEmailServiceMessage = "The email service cannot be null.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(TwoFactorDeliveryService));
+        private readonly AppLogger _logger;
         private readonly TwoFactorCodeService _codeService;
         private readonly IEmailService _emailService;
 
@@ -42,6 +42,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             _codeService = codeService;
             _emailService = emailService;
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>

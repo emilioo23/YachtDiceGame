@@ -151,6 +151,17 @@ namespace YachtDice.GameServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomEventType", Namespace="urn:yachtdice:contracts")]
+    public enum RoomEventType : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerJoined = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerLeft = 1,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ChatMessage", Namespace="urn:yachtdice:contracts")]
@@ -320,11 +331,8 @@ namespace YachtDice.GameServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IRoomManagerCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerJoined")]
-        void OnPlayerJoined(YachtDice.GameServiceReference.PlayerProfile player);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerLeft")]
-        void OnPlayerLeft(string username);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged")]
+        void OnPlayerChanged(YachtDice.GameServiceReference.PlayerProfile player, YachtDice.GameServiceReference.RoomEventType eventType);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

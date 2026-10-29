@@ -12,11 +12,11 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Registers a new player.
         /// </summary>
-        /// <param name="request">Data of the new player.</param>
+        /// <param name="player">Data of the new player.</param>
         /// <returns>Outcome of the registration.</returns>
-        public Task<RegisterResultCode> RegisterAsync(PlayerRegistrationInfo request)
+        public Task<RegisterResultCode> RegisterAsync(Player player)
         {
-            return ExecuteAsync(client => client.RegisterAsync(request));
+            return ExecuteAsync(client => client.RegisterAsync(player));
         }
 
         /// <inheritdoc />

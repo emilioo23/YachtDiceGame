@@ -52,9 +52,7 @@ namespace YachtDice.Views
         {
             try
             {
-                var request = new PlayerStatisticsFilter { PlayerName = playerName };
-                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(request);
-
+                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(playerName);
                 ShowStatistics(statistics);
             }
             catch (GatewayException ex)
@@ -70,7 +68,7 @@ namespace YachtDice.Views
 
         private void ShowStatistics(PlayerStatistics statistics)
         {
-            if (statistics.IsPlayerFound)
+            if (statistics != null)
             {
                 StatGamesTextBlock.Text = statistics.GamesPlayed.ToString();
                 StatWinsTextBlock.Text = statistics.Wins.ToString();

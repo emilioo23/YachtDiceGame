@@ -16,15 +16,15 @@ namespace YachtDice.Gateway
             {
                 { ServiceErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
                 { ServiceErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { ServiceErrorCode.InvalidRequest, GatewayErrorCode.InvalidRequest }
+                { ServiceErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
             };
 
         /// <summary>
         /// Gets the game statistics of a player.
         /// </summary>
-        public Task<PlayerStatistics> GetStatisticsAsync(PlayerStatisticsFilter request)
+        public Task<PlayerStatistics> GetStatisticsAsync(string username)
         {
-            return ExecuteAsync(client => client.GetStatisticsAsync(request));
+            return ExecuteAsync(client => client.GetStatisticsAsync(username));
         }
 
         /// <inheritdoc />

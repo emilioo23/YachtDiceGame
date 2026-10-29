@@ -1,85 +1,81 @@
 ﻿using System;
 using System.ServiceModel;
-using YachtDice.Server.Logic.Authentication;
 
 namespace YachtDice.Server.Services
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using LogicAuth = YachtDice.Server.Logic.Authentication;
+    using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
+
     /// <summary>
     /// Manages the authentication operations for the players.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : ServiceBase, Contracts.IAuthenticationService
     {
-        private readonly ILoginService _loginService;
-        private readonly IVerificationService _verificationService;
+        private readonly LogicAuth.ILoginService _loginService;
+        private readonly LogicAuth.IVerificationService _verificationService;
 
         /// <summary>
         /// Initializes a new instance of the AuthenticationService class.
         /// </summary>
         /// <param name="loginService">The service responsible for login logic.</param>
         /// <param name="verificationService">The service responsible for two-factor verification.</param>
-        public AuthenticationService(ILoginService loginService, IVerificationService verificationService)
+        public AuthenticationService(LogicAuth.ILoginService loginService, LogicAuth.IVerificationService verificationService)
         {
-            _loginService = loginService;
-            _verificationService = verificationService;
+            _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
+            _verificationService = verificationService ?? throw new ArgumentNullException(nameof(verificationService));
         }
 
         /// <summary>
-        /// Checks the credentials and, if they are correct, sends the verification code by email.
+        /// Checks the credentials and, if correct, sends a verification code.
         /// </summary>
-        /// <param name="request">Credentials and language of the player.</param>
-        /// <returns>Outcome of the login attempt.</returns>
-        public Contracts.LoginData Login(Contracts.LoginCredentials request)
+        /// <param name="credentials">Login credentials of the player.</param>
+        /// <returns>Outcome and initial session data of the login attempt.</returns>
+        public Contracts.LoginData Login(Contracts.LoginCredentials credentials)
         {
-            return Execute(request, () => ProcessLogin(request));
+            return Execute(credentials, () => ProcessLogin(credentials));
         }
 
         /// <summary>
         /// Validates the verification code entered by the player.
         /// </summary>
-        /// <param name="request">Email and code entered by the player.</param>
+        /// <param name="email">Email address the code was sent to.</param>
+        /// <param name="code">Verification code entered by the player.</param>
+        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public Contracts.VerificationResultCode VerifyCode(Contracts.VerificationDetails request)
+        public Contracts.VerificationResultCode VerifyCode(string email, string code, string challengeId)
         {
-            if (request == null || string.IsNullOrEmpty(request.Email))
-            {
-                var fault = new Contracts.ServiceFault
-                {
-                    Code = Contracts.ServiceErrorCode.UnexpectedError,
-                    Message = "Invalid verification details."
-                };
-
-                throw new FaultException<Contracts.ServiceFault>(fault, new FaultReason("Invalid verification details."));
-            }
-
-            return Execute(request, () => ProcessVerifyCode(request));
+            return Execute(email, () => ProcessVerifyCode(email, code, challengeId));
         }
 
         /// <summary>
-        /// Resends a verification code to the player's email.
+        /// Resends a verification code to the player's email address.
         /// </summary>
-        /// <param name="request">Details required to resend the code.</param>
+        /// <param name="email">Email address to send the new code to.</param>
+        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendCode(Contracts.ResendCodeDetails request)
+        public Contracts.ResendResultCode ResendCode(string email, string challengeId, string culture)
         {
-            return Execute(request, () => ProcessResendCode(request));
+            return Execute(email, () => ProcessResendCode(email, challengeId, culture));
         }
 
         /// <summary>
         /// Processes the login logic synchronously by mapping contracts to domain models.
         /// </summary>
-        /// <param name="request">The login credentials from the client.</param>
+        /// <param name="credentials">The login credentials from the client.</param>
         /// <returns>The mapped login data result.</returns>
-        private Contracts.LoginData ProcessLogin(Contracts.LoginCredentials request)
+        private Contracts.LoginData ProcessLogin(Contracts.LoginCredentials credentials)
         {
-            var logicCredentials = new Logic.Authentication.LoginCredentials
+            var logicCredentials = new LogicAuth.LoginCredentials
             {
-                Email = request.Email,
-                Password = request.Password,
-                Culture = Mapping.CultureParser.Parse(request.CultureName)
+                Email = credentials.Email,
+                Password = credentials.Password,
+                Culture = Mapping.CultureParser.Parse(credentials.CultureName)
             };
 
-            Logic.Authentication.LoginResult logicResult = _loginService.Login(logicCredentials);
+            LogicAuth.LoginResult logicResult = _loginService.Login(logicCredentials);
 
             return new Contracts.LoginData
             {
@@ -92,18 +88,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Processes the verification code logic synchronously.
         /// </summary>
-        /// <param name="request">The verification details.</param>
+        /// <param name="email">The player's email.</param>
+        /// <param name="code">The verification code.</param>
+        /// <param name="challengeId">The challenge identifier.</param>
         /// <returns>The verification result code.</returns>
-        private Contracts.VerificationResultCode ProcessVerifyCode(Contracts.VerificationDetails request)
+        private Contracts.VerificationResultCode ProcessVerifyCode(string email, string code, string challengeId)
         {
-            var logicDetails = new Logic.Authentication.VerificationDetails
-            {
-                ChallengeId = request.ChallengeId,
-                Code = request.Code,
-                Email = request.Email
-            };
-
-            Logic.Authentication.VerificationResultCode logicResult = _verificationService.VerifyCode(logicDetails);
+            LogicTwoFactor.TwoFactorValidationStatus logicResult = _verificationService.VerifyCode(email, code, challengeId);
 
             return (Contracts.VerificationResultCode)(int)logicResult;
         }
@@ -111,46 +102,15 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Processes the resend code logic synchronously.
         /// </summary>
-        /// <param name="request">The resend code details.</param>
+        /// <param name="email">The player's email.</param>
+        /// <param name="challengeId">The challenge identifier.</param>
+        /// <param name="culture">The culture name.</param>
         /// <returns>The resend result code.</returns>
-        private Contracts.ResendResultCode ProcessResendCode(Contracts.ResendCodeDetails request)
+        private Contracts.ResendResultCode ProcessResendCode(string email, string challengeId, string culture)
         {
-            var logicDetails = new Logic.Authentication.ResendCodeDetails
-            {
-                ChallengeId = request.ChallengeId,
-                Culture = Mapping.CultureParser.Parse(request.CultureName),
-                Email = request.Email
-            };
-
-            Logic.Authentication.ResendResultCode logicResult = _verificationService.ResendCode(logicDetails);
+            LogicTwoFactor.ResendCodeStatus logicResult = _verificationService.ResendCode(email, culture, challengeId);
 
             return (Contracts.ResendResultCode)(int)logicResult;
-        }
-
-        /// <summary>
-        /// Executes a service operation safely by catching exceptions and wrapping them in a FaultException.
-        /// </summary>
-        /// <typeparam name="TRequest">The type of the request.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="request">The request payload.</param>
-        /// <param name="logic">The business logic to execute.</param>
-        /// <returns>The result of the executed logic.</returns>
-        private TResult Execute<TRequest, TResult>(TRequest request, Func<TResult> logic)
-        {
-            try
-            {
-                return logic();
-            }
-            catch (Exception ex)
-            {
-                var fault = new Contracts.ServiceFault
-                {
-                    Code = Contracts.ServiceErrorCode.UnexpectedError,
-                    Message = ex.Message
-                };
-
-                throw new FaultException<Contracts.ServiceFault>(fault, new FaultReason(ex.Message));
-            }
         }
     }
 }

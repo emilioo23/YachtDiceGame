@@ -31,11 +31,8 @@
   <wsdl:message name="IRoomManager_LeaveRoom_OutputMessage">
     <wsdl:part name="parameters" element="tns:LeaveRoomResponse" />
   </wsdl:message>
-  <wsdl:message name="IRoomManager_OnPlayerJoined_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnPlayerJoined" />
-  </wsdl:message>
-  <wsdl:message name="IRoomManager_OnPlayerLeft_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnPlayerLeft" />
+  <wsdl:message name="IRoomManager_OnPlayerChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPlayerChanged" />
   </wsdl:message>
   <wsdl:message name="IChatManager_SendMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendMessage" />
@@ -66,11 +63,8 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoom" message="tns:IRoomManager_LeaveRoom_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/LeaveRoomResponse" message="tns:IRoomManager_LeaveRoom_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnPlayerJoined">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerJoined" message="tns:IRoomManager_OnPlayerJoined_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="OnPlayerLeft">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerLeft" message="tns:IRoomManager_OnPlayerLeft_OutputCallbackMessage" />
+    <wsdl:operation name="OnPlayerChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged" message="tns:IRoomManager_OnPlayerChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IChatManager">

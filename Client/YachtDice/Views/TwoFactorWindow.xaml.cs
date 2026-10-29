@@ -94,16 +94,9 @@ namespace YachtDice.Views
 
         private async void ResendLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var request = new ResendCodeDetails
-            {
-                Email = _email,
-                ChallengeId = _challengeId,
-                CultureName = App.CurrentCultureCode
-            };
-
             try
             {
-                ResendResultCode result = await _gateway.ResendCodeAsync(request);
+                ResendResultCode result = await _gateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
                 HandleResendResult(result);
             }
             catch (GatewayException ex)
@@ -147,16 +140,11 @@ namespace YachtDice.Views
 
         private async Task VerifyCodeAsync()
         {
-            var request = new VerificationDetails
-            {
-                Email = _email,
-                ChallengeId = _challengeId,
-                Code = string.Concat(_digitBoxes.Select(box => box.Text))
-            };
+            string code = string.Concat(_digitBoxes.Select(box => box.Text));
 
             try
             {
-                VerificationResultCode result = await _gateway.VerifyCodeAsync(request);
+                VerificationResultCode result = await _gateway.VerifyCodeAsync(_email, code, _challengeId);
                 HandleVerificationResult(result);
             }
             catch (GatewayException ex)

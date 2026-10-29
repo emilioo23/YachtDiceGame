@@ -83,14 +83,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="OnPlayerJoined">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/OnPlayerJoined" style="document" />
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="OnPlayerLeft">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/OnPlayerLeft" style="document" />
+    <wsdl:operation name="OnPlayerChanged">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomManager/OnPlayerChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
