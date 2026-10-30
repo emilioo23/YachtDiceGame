@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="YachtDice.Server.Data.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="YachtDice.Server.Data.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Avatar">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ImageUrl" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="BackupCode">
           <Key>
@@ -18,15 +18,15 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="30" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Friendship">
           <Key>
@@ -36,7 +36,7 @@
           <Property Name="RequesterId" Type="int" Nullable="false" />
           <Property Name="AddresseeId" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" />
-          <Property Name="Status" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="GameHistory">
           <Key>
@@ -55,7 +55,7 @@
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="FinalScore" Type="int" Nullable="false" />
           <Property Name="IsWinner" Type="bit" />
-          <Property Name="Status" Type="varchar" MaxLength="30" />
+          <Property Name="Status" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="KickLog">
           <Key>
@@ -65,7 +65,7 @@
           <Property Name="HostId" Type="int" Nullable="false" />
           <Property Name="TargetId" Type="int" Nullable="false" />
           <Property Name="RoomId" Type="int" Nullable="false" />
-          <Property Name="Reason" Type="varchar" MaxLength="100" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="100" />
           <Property Name="Date" Type="datetime" />
         </EntityType>
         <EntityType Name="Passkey">
@@ -74,8 +74,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="PublicKey" Type="varchar(max)" Nullable="false" />
-          <Property Name="DeviceName" Type="varchar" MaxLength="100" />
+          <Property Name="PublicKey" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DeviceName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -83,18 +83,18 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AvatarId" Type="int" Nullable="false" />
-          <Property Name="Username" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="PwdHash" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="State" Type="varchar" MaxLength="30" />
+          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PwdHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="State" Type="nvarchar" MaxLength="30" />
           <Property Name="RegDate" Type="datetime" />
           <Property Name="XP" Type="int" />
           <Property Name="Level" Type="int" />
-          <Property Name="FriendCode" Type="varchar" MaxLength="10" />
-          <Property Name="DisplayName" Type="varchar" MaxLength="20" />
+          <Property Name="FriendCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
           <Property Name="LastUserChange" Type="datetime" />
-          <Property Name="FirstName" Type="varchar" MaxLength="50" />
-          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PlayerReport">
           <Key>
@@ -105,8 +105,8 @@
           <Property Name="ReportedId" Type="int" Nullable="false" />
           <Property Name="RoomId" Type="int" />
           <Property Name="GameId" Type="int" />
-          <Property Name="Reason" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Comment" Type="varchar" MaxLength="300" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="300" />
           <Property Name="ReportDate" Type="datetime" />
         </EntityType>
         <EntityType Name="PlayerSettings">
@@ -114,11 +114,11 @@
             <PropertyRef Name="PlayerId" />
           </Key>
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Title" Type="varchar" MaxLength="50" />
-          <Property Name="BgColor" Type="varchar" MaxLength="20" />
-          <Property Name="Bio" Type="varchar" MaxLength="150" />
-          <Property Name="ThemePref" Type="varchar" MaxLength="20" />
-          <Property Name="LangPref" Type="varchar" MaxLength="20" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="BgColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="Bio" Type="nvarchar" MaxLength="150" />
+          <Property Name="ThemePref" Type="nvarchar" MaxLength="20" />
+          <Property Name="LangPref" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -126,7 +126,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Token" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Token" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="ExpireDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Room">
@@ -135,12 +135,12 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HostPlayerId" Type="int" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="6" Nullable="false" />
-          <Property Name="RoomName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="RoomName" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="MaxPlayers" Type="int" />
-          <Property Name="RoomType" Type="varchar" MaxLength="20" />
-          <Property Name="PwdHash" Type="varchar" MaxLength="255" />
-          <Property Name="Status" Type="varchar" MaxLength="20" />
+          <Property Name="RoomType" Type="nvarchar" MaxLength="20" />
+          <Property Name="PwdHash" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
           <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="RoomInvite">
@@ -161,7 +161,7 @@
           <Property Name="RoomId" Type="int" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="JoinDate" Type="datetime" />
-          <Property Name="Status" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Scorecard">
           <Key>
@@ -191,7 +191,7 @@
           <Property Name="GameId" Type="int" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="RollNum" Type="int" />
-          <Property Name="DiceValues" Type="varchar" MaxLength="20" />
+          <Property Name="DiceValues" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -199,11 +199,11 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Method" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="SecretKey" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="30" />
+          <Property Name="Method" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SecretKey" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="30" />
         </EntityType>
-        <Association Name="FK__BACKUP_CO__Playe__0D7A0286">
+        <Association Name="FK__BackupCod__Playe__14270015">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="BackupCode" Type="Self.BackupCode" Multiplicity="*" />
           <ReferentialConstraint>
@@ -215,7 +215,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FRIENDSHI__Addre__489AC854">
+        <Association Name="FK__Friendshi__Addre__151B244E">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
           <ReferentialConstraint>
@@ -227,7 +227,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FRIENDSHI__Reque__498EEC8D">
+        <Association Name="FK__Friendshi__Reque__160F4887">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
           <ReferentialConstraint>
@@ -239,7 +239,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GAME_HIST__GameI__4B7734FF">
+        <Association Name="FK__GameHisto__GameI__17F790F9">
           <End Role="GameHistory" Type="Self.GameHistory" Multiplicity="1" />
           <End Role="GameHistoryPlayer" Type="Self.GameHistoryPlayer" Multiplicity="*" />
           <ReferentialConstraint>
@@ -251,7 +251,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GAME_HIST__Playe__4C6B5938">
+        <Association Name="FK__GameHisto__Playe__18EBB532">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="GameHistoryPlayer" Type="Self.GameHistoryPlayer" Multiplicity="*" />
           <ReferentialConstraint>
@@ -263,7 +263,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GAME_HIST__RoomI__10566F31">
+        <Association Name="FK__GameHisto__RoomI__17036CC0">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="GameHistory" Type="Self.GameHistory" Multiplicity="*" />
           <ReferentialConstraint>
@@ -275,7 +275,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__KICK_LOG__HostId__1332DBDC">
+        <Association Name="FK__KickLog__HostId__19DFD96B">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -287,7 +287,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__KICK_LOG__RoomId__14270015">
+        <Association Name="FK__KickLog__RoomId__1AD3FDA4">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -299,7 +299,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__KICK_LOG__Target__151B244E">
+        <Association Name="FK__KickLog__TargetI__1BC821DD">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
@@ -311,7 +311,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PASSKEY__PlayerI__503BEA1C">
+        <Association Name="FK__Passkey__PlayerI__1CBC4616">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Passkey" Type="Self.Passkey" Multiplicity="*" />
           <ReferentialConstraint>
@@ -323,7 +323,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER__AvatarId__17036CC0">
+        <Association Name="FK__Player__AvatarId__1DB06A4F">
           <End Role="Avatar" Type="Self.Avatar" Multiplicity="1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
@@ -335,7 +335,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER_RE__GameI__5224328E">
+        <Association Name="FK__PlayerRep__GameI__1EA48E88">
           <End Role="GameHistory" Type="Self.GameHistory" Multiplicity="0..1" />
           <End Role="PlayerReport" Type="Self.PlayerReport" Multiplicity="*" />
           <ReferentialConstraint>
@@ -347,7 +347,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER_RE__Repor__531856C7">
+        <Association Name="FK__PlayerRep__Repor__1F98B2C1">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="PlayerReport" Type="Self.PlayerReport" Multiplicity="*" />
           <ReferentialConstraint>
@@ -359,7 +359,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER_RE__Repor__540C7B00">
+        <Association Name="FK__PlayerRep__Repor__208CD6FA">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="PlayerReport" Type="Self.PlayerReport" Multiplicity="*" />
           <ReferentialConstraint>
@@ -371,7 +371,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER_RE__RoomI__55009F39">
+        <Association Name="FK__PlayerRep__RoomI__2180FB33">
           <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="PlayerReport" Type="Self.PlayerReport" Multiplicity="*" />
           <ReferentialConstraint>
@@ -383,7 +383,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PLAYER_SE__Playe__1BC821DD">
+        <Association Name="FK__PlayerSet__Playe__22751F6C">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="PlayerSettings" Type="Self.PlayerSettings" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -395,7 +395,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PWD_RESET__Playe__56E8E7AB">
+        <Association Name="FK__PwdResetT__Playe__236943A5">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="PwdResetToken" Type="Self.PwdResetToken" Multiplicity="*" />
           <ReferentialConstraint>
@@ -407,7 +407,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM__HostPlayer__1DB06A4F">
+        <Association Name="FK__Room__HostPlayer__245D67DE">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Room" Type="Self.Room" Multiplicity="*" />
           <ReferentialConstraint>
@@ -419,7 +419,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM_INVI__Invit__58D1301D">
+        <Association Name="FK__RoomInvit__Invit__25518C17">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="RoomInvite" Type="Self.RoomInvite" Multiplicity="*" />
           <ReferentialConstraint>
@@ -431,7 +431,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM_INVI__Invit__59C55456">
+        <Association Name="FK__RoomInvit__Invit__2645B050">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="RoomInvite" Type="Self.RoomInvite" Multiplicity="*" />
           <ReferentialConstraint>
@@ -443,7 +443,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM_INVI__RoomI__5AB9788F">
+        <Association Name="FK__RoomInvit__RoomI__2739D489">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="RoomInvite" Type="Self.RoomInvite" Multiplicity="*" />
           <ReferentialConstraint>
@@ -455,7 +455,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM_PLAY__Playe__2180FB33">
+        <Association Name="FK__RoomPlaye__Playe__282DF8C2">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="RoomPlayer" Type="Self.RoomPlayer" Multiplicity="*" />
           <ReferentialConstraint>
@@ -467,7 +467,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ROOM_PLAY__RoomI__22751F6C">
+        <Association Name="FK__RoomPlaye__RoomI__29221CFB">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="RoomPlayer" Type="Self.RoomPlayer" Multiplicity="*" />
           <ReferentialConstraint>
@@ -479,7 +479,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SCORECARD__Categ__25518C17">
+        <Association Name="FK__Scorecard__Categ__2BFE89A6">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="ScorecardEntry" Type="Self.ScorecardEntry" Multiplicity="*" />
           <ReferentialConstraint>
@@ -491,7 +491,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SCORECARD__GameI__5D95E53A">
+        <Association Name="FK__Scorecard__GameI__2A164134">
           <End Role="GameHistory" Type="Self.GameHistory" Multiplicity="1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -503,7 +503,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SCORECARD__Playe__5E8A0973">
+        <Association Name="FK__Scorecard__Playe__2B0A656D">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -515,7 +515,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SCORECARD__Score__2645B050">
+        <Association Name="FK__Scorecard__Score__2CF2ADDF">
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="1" />
           <End Role="ScorecardEntry" Type="Self.ScorecardEntry" Multiplicity="*" />
           <ReferentialConstraint>
@@ -527,7 +527,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TURN_STAT__GameI__6166761E">
+        <Association Name="FK__TurnState__GameI__2DE6D218">
           <End Role="GameHistory" Type="Self.GameHistory" Multiplicity="1" />
           <End Role="TurnState" Type="Self.TurnState" Multiplicity="*" />
           <ReferentialConstraint>
@@ -539,7 +539,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TURN_STAT__Playe__625A9A57">
+        <Association Name="FK__TurnState__Playe__2EDAF651">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="TurnState" Type="Self.TurnState" Multiplicity="*" />
           <ReferentialConstraint>
@@ -551,7 +551,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TWO_FACTO__Playe__29221CFB">
+        <Association Name="FK__TwoFactor__Playe__2FCF1A8A">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="TwoFactorAuth" Type="Self.TwoFactorAuth" Multiplicity="*" />
           <ReferentialConstraint>
@@ -563,7 +563,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="YachtDiceModelsStoreContainer">
+        <EntityContainer Name="YachtDiceServerDataStoreContainer">
           <EntitySet Name="Avatar" EntityType="Self.Avatar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BackupCode" EntityType="Self.BackupCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
@@ -583,129 +583,128 @@
           <EntitySet Name="ScorecardEntry" EntityType="Self.ScorecardEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurnState" EntityType="Self.TurnState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TwoFactorAuth" EntityType="Self.TwoFactorAuth" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__BACKUP_CO__Playe__0D7A0286" Association="Self.FK__BACKUP_CO__Playe__0D7A0286">
+          <AssociationSet Name="FK__BackupCod__Playe__14270015" Association="Self.FK__BackupCod__Playe__14270015">
             <End Role="Player" EntitySet="Player" />
             <End Role="BackupCode" EntitySet="BackupCode" />
           </AssociationSet>
-          <AssociationSet Name="FK__FRIENDSHI__Addre__489AC854" Association="Self.FK__FRIENDSHI__Addre__489AC854">
+          <AssociationSet Name="FK__Friendshi__Addre__151B244E" Association="Self.FK__Friendshi__Addre__151B244E">
             <End Role="Player" EntitySet="Player" />
             <End Role="Friendship" EntitySet="Friendship" />
           </AssociationSet>
-          <AssociationSet Name="FK__FRIENDSHI__Reque__498EEC8D" Association="Self.FK__FRIENDSHI__Reque__498EEC8D">
+          <AssociationSet Name="FK__Friendshi__Reque__160F4887" Association="Self.FK__Friendshi__Reque__160F4887">
             <End Role="Player" EntitySet="Player" />
             <End Role="Friendship" EntitySet="Friendship" />
           </AssociationSet>
-          <AssociationSet Name="FK__GAME_HIST__GameI__4B7734FF" Association="Self.FK__GAME_HIST__GameI__4B7734FF">
+          <AssociationSet Name="FK__GameHisto__GameI__17F790F9" Association="Self.FK__GameHisto__GameI__17F790F9">
             <End Role="GameHistory" EntitySet="GameHistory" />
             <End Role="GameHistoryPlayer" EntitySet="GameHistoryPlayer" />
           </AssociationSet>
-          <AssociationSet Name="FK__GAME_HIST__Playe__4C6B5938" Association="Self.FK__GAME_HIST__Playe__4C6B5938">
+          <AssociationSet Name="FK__GameHisto__Playe__18EBB532" Association="Self.FK__GameHisto__Playe__18EBB532">
             <End Role="Player" EntitySet="Player" />
             <End Role="GameHistoryPlayer" EntitySet="GameHistoryPlayer" />
           </AssociationSet>
-          <AssociationSet Name="FK__GAME_HIST__RoomI__10566F31" Association="Self.FK__GAME_HIST__RoomI__10566F31">
+          <AssociationSet Name="FK__GameHisto__RoomI__17036CC0" Association="Self.FK__GameHisto__RoomI__17036CC0">
             <End Role="Room" EntitySet="Room" />
             <End Role="GameHistory" EntitySet="GameHistory" />
           </AssociationSet>
-          <AssociationSet Name="FK__KICK_LOG__HostId__1332DBDC" Association="Self.FK__KICK_LOG__HostId__1332DBDC">
+          <AssociationSet Name="FK__KickLog__HostId__19DFD96B" Association="Self.FK__KickLog__HostId__19DFD96B">
             <End Role="Player" EntitySet="Player" />
             <End Role="KickLog" EntitySet="KickLog" />
           </AssociationSet>
-          <AssociationSet Name="FK__KICK_LOG__RoomId__14270015" Association="Self.FK__KICK_LOG__RoomId__14270015">
+          <AssociationSet Name="FK__KickLog__RoomId__1AD3FDA4" Association="Self.FK__KickLog__RoomId__1AD3FDA4">
             <End Role="Room" EntitySet="Room" />
             <End Role="KickLog" EntitySet="KickLog" />
           </AssociationSet>
-          <AssociationSet Name="FK__KICK_LOG__Target__151B244E" Association="Self.FK__KICK_LOG__Target__151B244E">
+          <AssociationSet Name="FK__KickLog__TargetI__1BC821DD" Association="Self.FK__KickLog__TargetI__1BC821DD">
             <End Role="Player" EntitySet="Player" />
             <End Role="KickLog" EntitySet="KickLog" />
           </AssociationSet>
-          <AssociationSet Name="FK__PASSKEY__PlayerI__503BEA1C" Association="Self.FK__PASSKEY__PlayerI__503BEA1C">
+          <AssociationSet Name="FK__Passkey__PlayerI__1CBC4616" Association="Self.FK__Passkey__PlayerI__1CBC4616">
             <End Role="Player" EntitySet="Player" />
             <End Role="Passkey" EntitySet="Passkey" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER__AvatarId__17036CC0" Association="Self.FK__PLAYER__AvatarId__17036CC0">
+          <AssociationSet Name="FK__Player__AvatarId__1DB06A4F" Association="Self.FK__Player__AvatarId__1DB06A4F">
             <End Role="Avatar" EntitySet="Avatar" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER_RE__GameI__5224328E" Association="Self.FK__PLAYER_RE__GameI__5224328E">
+          <AssociationSet Name="FK__PlayerRep__GameI__1EA48E88" Association="Self.FK__PlayerRep__GameI__1EA48E88">
             <End Role="GameHistory" EntitySet="GameHistory" />
             <End Role="PlayerReport" EntitySet="PlayerReport" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER_RE__Repor__531856C7" Association="Self.FK__PLAYER_RE__Repor__531856C7">
+          <AssociationSet Name="FK__PlayerRep__Repor__1F98B2C1" Association="Self.FK__PlayerRep__Repor__1F98B2C1">
             <End Role="Player" EntitySet="Player" />
             <End Role="PlayerReport" EntitySet="PlayerReport" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER_RE__Repor__540C7B00" Association="Self.FK__PLAYER_RE__Repor__540C7B00">
+          <AssociationSet Name="FK__PlayerRep__Repor__208CD6FA" Association="Self.FK__PlayerRep__Repor__208CD6FA">
             <End Role="Player" EntitySet="Player" />
             <End Role="PlayerReport" EntitySet="PlayerReport" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER_RE__RoomI__55009F39" Association="Self.FK__PLAYER_RE__RoomI__55009F39">
+          <AssociationSet Name="FK__PlayerRep__RoomI__2180FB33" Association="Self.FK__PlayerRep__RoomI__2180FB33">
             <End Role="Room" EntitySet="Room" />
             <End Role="PlayerReport" EntitySet="PlayerReport" />
           </AssociationSet>
-          <AssociationSet Name="FK__PLAYER_SE__Playe__1BC821DD" Association="Self.FK__PLAYER_SE__Playe__1BC821DD">
+          <AssociationSet Name="FK__PlayerSet__Playe__22751F6C" Association="Self.FK__PlayerSet__Playe__22751F6C">
             <End Role="Player" EntitySet="Player" />
             <End Role="PlayerSettings" EntitySet="PlayerSettings" />
           </AssociationSet>
-          <AssociationSet Name="FK__PWD_RESET__Playe__56E8E7AB" Association="Self.FK__PWD_RESET__Playe__56E8E7AB">
+          <AssociationSet Name="FK__PwdResetT__Playe__236943A5" Association="Self.FK__PwdResetT__Playe__236943A5">
             <End Role="Player" EntitySet="Player" />
             <End Role="PwdResetToken" EntitySet="PwdResetToken" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM__HostPlayer__1DB06A4F" Association="Self.FK__ROOM__HostPlayer__1DB06A4F">
+          <AssociationSet Name="FK__Room__HostPlayer__245D67DE" Association="Self.FK__Room__HostPlayer__245D67DE">
             <End Role="Player" EntitySet="Player" />
             <End Role="Room" EntitySet="Room" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM_INVI__Invit__58D1301D" Association="Self.FK__ROOM_INVI__Invit__58D1301D">
+          <AssociationSet Name="FK__RoomInvit__Invit__25518C17" Association="Self.FK__RoomInvit__Invit__25518C17">
             <End Role="Player" EntitySet="Player" />
             <End Role="RoomInvite" EntitySet="RoomInvite" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM_INVI__Invit__59C55456" Association="Self.FK__ROOM_INVI__Invit__59C55456">
+          <AssociationSet Name="FK__RoomInvit__Invit__2645B050" Association="Self.FK__RoomInvit__Invit__2645B050">
             <End Role="Player" EntitySet="Player" />
             <End Role="RoomInvite" EntitySet="RoomInvite" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM_INVI__RoomI__5AB9788F" Association="Self.FK__ROOM_INVI__RoomI__5AB9788F">
+          <AssociationSet Name="FK__RoomInvit__RoomI__2739D489" Association="Self.FK__RoomInvit__RoomI__2739D489">
             <End Role="Room" EntitySet="Room" />
             <End Role="RoomInvite" EntitySet="RoomInvite" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM_PLAY__Playe__2180FB33" Association="Self.FK__ROOM_PLAY__Playe__2180FB33">
+          <AssociationSet Name="FK__RoomPlaye__Playe__282DF8C2" Association="Self.FK__RoomPlaye__Playe__282DF8C2">
             <End Role="Player" EntitySet="Player" />
             <End Role="RoomPlayer" EntitySet="RoomPlayer" />
           </AssociationSet>
-          <AssociationSet Name="FK__ROOM_PLAY__RoomI__22751F6C" Association="Self.FK__ROOM_PLAY__RoomI__22751F6C">
+          <AssociationSet Name="FK__RoomPlaye__RoomI__29221CFB" Association="Self.FK__RoomPlaye__RoomI__29221CFB">
             <End Role="Room" EntitySet="Room" />
             <End Role="RoomPlayer" EntitySet="RoomPlayer" />
           </AssociationSet>
-          <AssociationSet Name="FK__SCORECARD__Categ__25518C17" Association="Self.FK__SCORECARD__Categ__25518C17">
+          <AssociationSet Name="FK__Scorecard__Categ__2BFE89A6" Association="Self.FK__Scorecard__Categ__2BFE89A6">
             <End Role="Category" EntitySet="Category" />
             <End Role="ScorecardEntry" EntitySet="ScorecardEntry" />
           </AssociationSet>
-          <AssociationSet Name="FK__SCORECARD__GameI__5D95E53A" Association="Self.FK__SCORECARD__GameI__5D95E53A">
+          <AssociationSet Name="FK__Scorecard__GameI__2A164134" Association="Self.FK__Scorecard__GameI__2A164134">
             <End Role="GameHistory" EntitySet="GameHistory" />
             <End Role="Scorecard" EntitySet="Scorecard" />
           </AssociationSet>
-          <AssociationSet Name="FK__SCORECARD__Playe__5E8A0973" Association="Self.FK__SCORECARD__Playe__5E8A0973">
+          <AssociationSet Name="FK__Scorecard__Playe__2B0A656D" Association="Self.FK__Scorecard__Playe__2B0A656D">
             <End Role="Player" EntitySet="Player" />
             <End Role="Scorecard" EntitySet="Scorecard" />
           </AssociationSet>
-          <AssociationSet Name="FK__SCORECARD__Score__2645B050" Association="Self.FK__SCORECARD__Score__2645B050">
+          <AssociationSet Name="FK__Scorecard__Score__2CF2ADDF" Association="Self.FK__Scorecard__Score__2CF2ADDF">
             <End Role="Scorecard" EntitySet="Scorecard" />
             <End Role="ScorecardEntry" EntitySet="ScorecardEntry" />
           </AssociationSet>
-          <AssociationSet Name="FK__TURN_STAT__GameI__6166761E" Association="Self.FK__TURN_STAT__GameI__6166761E">
+          <AssociationSet Name="FK__TurnState__GameI__2DE6D218" Association="Self.FK__TurnState__GameI__2DE6D218">
             <End Role="GameHistory" EntitySet="GameHistory" />
             <End Role="TurnState" EntitySet="TurnState" />
           </AssociationSet>
-          <AssociationSet Name="FK__TURN_STAT__Playe__625A9A57" Association="Self.FK__TURN_STAT__Playe__625A9A57">
+          <AssociationSet Name="FK__TurnState__Playe__2EDAF651" Association="Self.FK__TurnState__Playe__2EDAF651">
             <End Role="Player" EntitySet="Player" />
             <End Role="TurnState" EntitySet="TurnState" />
           </AssociationSet>
-          <AssociationSet Name="FK__TWO_FACTO__Playe__29221CFB" Association="Self.FK__TWO_FACTO__Playe__29221CFB">
+          <AssociationSet Name="FK__TwoFactor__Playe__2FCF1A8A" Association="Self.FK__TwoFactor__Playe__2FCF1A8A">
             <End Role="Player" EntitySet="Player" />
             <End Role="TwoFactorAuth" EntitySet="TwoFactorAuth" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="YachtDice.Server.Data" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -714,7 +713,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImageUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER__AvatarId__17036CC0" FromRole="Avatar" ToRole="Player" />
         </EntityType>
         <EntityType Name="BackupCode">
@@ -723,8 +722,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__BACKUP_CO__Playe__0D7A0286" FromRole="BackupCode" ToRole="Player" />
         </EntityType>
         <EntityType Name="Category">
@@ -732,7 +731,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="ScorecardEntry" Relationship="Self.FK__SCORECARD__Categ__25518C17" FromRole="Category" ToRole="ScorecardEntry" />
         </EntityType>
         <EntityType Name="Friendship">
@@ -743,7 +742,7 @@
           <Property Name="RequesterId" Type="Int32" Nullable="false" />
           <Property Name="AddresseeId" Type="Int32" Nullable="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__FRIENDSHI__Addre__489AC854" FromRole="Friendship" ToRole="Player" />
           <NavigationProperty Name="Player1" Relationship="Self.FK__FRIENDSHI__Reque__498EEC8D" FromRole="Friendship" ToRole="Player" />
         </EntityType>
@@ -769,7 +768,7 @@
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="FinalScore" Type="Int32" Nullable="false" />
           <Property Name="IsWinner" Type="Boolean" />
-          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__GAME_HIST__GameI__4B7734FF" FromRole="GameHistoryPlayer" ToRole="GameHistory" />
           <NavigationProperty Name="Player" Relationship="Self.FK__GAME_HIST__Playe__4C6B5938" FromRole="GameHistoryPlayer" ToRole="Player" />
         </EntityType>
@@ -781,7 +780,7 @@
           <Property Name="HostId" Type="Int32" Nullable="false" />
           <Property Name="TargetId" Type="Int32" Nullable="false" />
           <Property Name="RoomId" Type="Int32" Nullable="false" />
-          <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Player" Relationship="Self.FK__KICK_LOG__HostId__1332DBDC" FromRole="KickLog" ToRole="Player" />
           <NavigationProperty Name="Room" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="KickLog" ToRole="Room" />
@@ -793,8 +792,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="PublicKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DeviceName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PublicKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeviceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PASSKEY__PlayerI__503BEA1C" FromRole="Passkey" ToRole="Player" />
         </EntityType>
         <EntityType Name="Player">
@@ -803,18 +802,18 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AvatarId" Type="Int32" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="RegDate" Type="DateTime" Precision="3" />
           <Property Name="XP" Type="Int32" />
           <Property Name="Level" Type="Int32" />
-          <Property Name="FriendCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FriendCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUserChange" Type="DateTime" Precision="3" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Avatar" Relationship="Self.FK__PLAYER__AvatarId__17036CC0" FromRole="Player" ToRole="Avatar" />
           <NavigationProperty Name="BackupCode" Relationship="Self.FK__BACKUP_CO__Playe__0D7A0286" FromRole="Player" ToRole="BackupCode" />
           <NavigationProperty Name="Friendship" Relationship="Self.FK__FRIENDSHI__Addre__489AC854" FromRole="Player" ToRole="Friendship" />
@@ -844,8 +843,8 @@
           <Property Name="ReportedId" Type="Int32" Nullable="false" />
           <Property Name="RoomId" Type="Int32" />
           <Property Name="GameId" Type="Int32" />
-          <Property Name="Reason" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Comment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="ReportDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__PLAYER_RE__GameI__5224328E" FromRole="PlayerReport" ToRole="GameHistory" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER_RE__Repor__531856C7" FromRole="PlayerReport" ToRole="Player" />
@@ -857,11 +856,11 @@
             <PropertyRef Name="PlayerId" />
           </Key>
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BgColor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Bio" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ThemePref" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LangPref" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BgColor" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Bio" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ThemePref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LangPref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER_SE__Playe__1BC821DD" FromRole="PlayerSettings" ToRole="Player" />
         </EntityType>
         <EntityType Name="PwdResetToken">
@@ -870,7 +869,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Token" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ExpireDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PWD_RESET__Playe__56E8E7AB" FromRole="PwdResetToken" ToRole="Player" />
         </EntityType>
@@ -880,12 +879,12 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HostPlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RoomName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoomName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MaxPlayers" Type="Int32" />
-          <Property Name="RoomType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RoomType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__GAME_HIST__RoomI__10566F31" FromRole="Room" ToRole="GameHistory" />
           <NavigationProperty Name="KickLog" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="Room" ToRole="KickLog" />
@@ -915,7 +914,7 @@
           <Property Name="RoomId" Type="Int32" Nullable="false" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="JoinDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__ROOM_PLAY__Playe__2180FB33" FromRole="RoomPlayer" ToRole="Player" />
           <NavigationProperty Name="Room" Relationship="Self.FK__ROOM_PLAY__RoomI__22751F6C" FromRole="RoomPlayer" ToRole="Room" />
         </EntityType>
@@ -952,7 +951,7 @@
           <Property Name="GameId" Type="Int32" Nullable="false" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="RollNum" Type="Int32" />
-          <Property Name="DiceValues" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DiceValues" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__TURN_STAT__GameI__6166761E" FromRole="TurnState" ToRole="GameHistory" />
           <NavigationProperty Name="Player" Relationship="Self.FK__TURN_STAT__Playe__625A9A57" FromRole="TurnState" ToRole="Player" />
         </EntityType>
@@ -962,9 +961,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Method" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SecretKey" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Method" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SecretKey" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__TWO_FACTO__Playe__29221CFB" FromRole="TwoFactorAuth" ToRole="Player" />
         </EntityType>
         <Association Name="FK__PLAYER__AvatarId__17036CC0">
@@ -1473,7 +1472,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="YachtDiceModelsStoreContainer" CdmEntityContainer="YachtDiceContext">
+        <EntityContainerMapping StorageEntityContainer="YachtDiceServerDataStoreContainer" CdmEntityContainer="YachtDiceContext">
           <EntitySetMapping Name="Avatar">
             <EntityTypeMapping TypeName="YachtDice.Server.Data.Avatar">
               <MappingFragment StoreEntitySet="Avatar">
