@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,32 +12,6 @@ using ServerLeaderboardEntry = YachtDice.PlayerServiceReference.LeaderboardEntry
 
 namespace YachtDice.Views
 {
-    /// <summary>
-    /// Row of the ranking as it is shown in the leaderboard window.
-    /// </summary>
-    public class LeaderboardEntry
-    {
-        /// <summary>
-        /// Gets or sets the medal or the position shown next to the player.
-        /// </summary>
-        public string Medal { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the player.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the total points of the player.
-        /// </summary>
-        public int Points { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of games won by the player.
-        /// </summary>
-        public int Wins { get; set; }
-    }
-
     /// <summary>
     /// Window that shows the ranking of the best players.
     /// </summary>
@@ -59,9 +35,10 @@ namespace YachtDice.Views
         private const string SilverMedal = "\U0001F948";
         private const string BronzeMedal = "\U0001F949";
         private const string PointsFormat = "N0";
-        private const string ErrorDialogTitle = "Error";
 
         private readonly string _playerName;
+        private readonly FriendGateway _friendGateway = new FriendGateway();
+        private List<LeaderboardEntry> _ranking = new List<LeaderboardEntry>();
 
         /// <summary>
         /// Initializes the leaderboard window and starts loading the ranking.
@@ -80,12 +57,15 @@ namespace YachtDice.Views
         {
             GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            RenderRanking(_ranking);
         }
 
-        private void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
+        private async void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
         {
             FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+
+            await ShowFriendsRankingAsync();
         }
 
         private void BackLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -133,22 +113,46 @@ namespace YachtDice.Views
                     });
                 }
 
-                RenderRanking(ranking);
+                _ranking = ranking;
+                RenderRanking(_ranking);
             }
             catch (GatewayException)
             {
-                MessageBox.Show(
-                    Strings.Leaderboard_ConnectionError,
-                    ErrorDialogTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
             }
+        }
+
+        private async Task ShowFriendsRankingAsync()
+        {
+            try
+            {
+                List<string> friendNames = await _friendGateway.GetFriendsAsync(_playerName);
+                var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase) { _playerName };
+
+                RenderRanking(_ranking.Where(entry => allowedNames.Contains(entry.Name)).ToList());
+            }
+            catch (GatewayException)
+            {
+                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
+            }
+        }
+
+        private void ShowDialogMessage(string message)
+        {
+            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
+            {
+                Owner = this
+            };
+
+            dialog.ShowDialog();
         }
 
         private void RenderRanking(List<LeaderboardEntry> ranking)
         {
-            int currentRank = 0;
-            int viewerRank = 0;
+            var currentRank = 0;
+            var viewerRank = 0;
+
+            RankingPanel.Children.Clear();
 
             foreach (LeaderboardEntry entry in ranking)
             {

@@ -1,7 +1,7 @@
 ﻿namespace YachtDice.Views
 {
     /// <summary>
-    /// Simple model to show sample data in the friends list.
+    /// Row of the friends list: a friend, or a player who sent a friend request.
     /// </summary>
     public class FriendItem
     {
@@ -19,5 +19,10 @@
         /// Current connection or activity status.
         /// </summary>
         public string Status { get; set; }
+
+        /// <summary>
+        /// Indicates whether the player is connected to the game right now.
+        /// </summary>
+        public bool IsOnline { get; set; }
     }
 }

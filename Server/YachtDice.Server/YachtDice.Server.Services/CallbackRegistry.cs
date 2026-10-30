@@ -77,7 +77,7 @@ namespace YachtDice.Server.Services
 
         private bool TryNotify(TCallback callback, Action<TCallback> notification)
         {
-            bool isDelivered = false;
+            var isDelivered = false;
             var communicationObject = (ICommunicationObject)callback;
 
             if (communicationObject.State == CommunicationState.Opened)

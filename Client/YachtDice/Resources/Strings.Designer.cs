@@ -1798,15 +1798,6 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Buscar usuario....
-        /// </summary>
-        public static string MainMenu_Friends_SearchPlaceholder {
-            get {
-                return ResourceManager.GetString("MainMenu_Friends_SearchPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a En partida · Lobby.
         /// </summary>
         public static string MainMenu_Friends_StatusInLobby {
@@ -3036,6 +3027,96 @@ namespace YachtDice.Resources {
         public static string TwoFactor_VerifyButton {
             get {
                 return ResourceManager.GetString("TwoFactor_VerifyButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código de amigo (FRD-XXXXXX)
+        /// </summary>
+        public static string MainMenu_Friends_FriendCodePlaceholder {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_FriendCodePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu código de amigo
+        /// </summary>
+        public static string MainMenu_Friends_YourCode {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_YourCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Desconectado
+        /// </summary>
+        public static string MainMenu_Friends_StatusOffline {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_StatusOffline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solicitud enviada.
+        /// </summary>
+        public static string Friends_Result_RequestSent {
+            get {
+                return ResourceManager.GetString("Friends_Result_RequestSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Este jugador ya te envió una solicitud. Acéptala en tus solicitudes.
+        /// </summary>
+        public static string Friends_Result_RequestAlreadyReceived {
+            get {
+                return ResourceManager.GetString("Friends_Result_RequestAlreadyReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el código de amigo.
+        /// </summary>
+        public static string Friends_Result_InvalidCode {
+            get {
+                return ResourceManager.GetString("Friends_Result_InvalidCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No existe ningún jugador con ese código.
+        /// </summary>
+        public static string Friends_Result_CodeNotFound {
+            get {
+                return ResourceManager.GetString("Friends_Result_CodeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ese es tu propio código.
+        /// </summary>
+        public static string Friends_Result_SelfRequest {
+            get {
+                return ResourceManager.GetString("Friends_Result_SelfRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya son amigos.
+        /// </summary>
+        public static string Friends_Result_AlreadyFriends {
+            get {
+                return ResourceManager.GetString("Friends_Result_AlreadyFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya le enviaste una solicitud a este jugador.
+        /// </summary>
+        public static string Friends_Result_AlreadyRequested {
+            get {
+                return ResourceManager.GetString("Friends_Result_AlreadyRequested", resourceCulture);
             }
         }
     }

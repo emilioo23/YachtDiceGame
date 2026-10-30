@@ -212,6 +212,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\FriendServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\GameServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -238,6 +243,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Gateway\AuthenticationGateway.cs" />
+    <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />
@@ -267,6 +273,7 @@
     <Compile Include="Views\LanguageSwitcher.xaml.cs">
       <DependentUpon>LanguageSwitcher.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LeaderboardEntry.cs" />
     <Compile Include="Views\LeaderboardWindow.xaml.cs">
       <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>
@@ -417,6 +424,23 @@
     <None Include="Connected Services\ChatServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\FriendServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceReference\contracts.wsdl" />
+    <None Include="Connected Services\FriendServiceReference\contracts.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceReference\service.wsdl" />
+    <None Include="Connected Services\FriendServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendServiceReference\YachtDice.FriendServiceReference.FriendActionResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\FriendServiceReference\YachtDice.FriendServiceReference.FriendRequestResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\GameServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -514,6 +538,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AuthenticationServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\ChatServiceReference\" />
+    <WCFMetadataStorage Include="Connected Services\FriendServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\GameServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\PlayerServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\PresenceServiceReference\" />
@@ -600,6 +625,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\PresenceServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

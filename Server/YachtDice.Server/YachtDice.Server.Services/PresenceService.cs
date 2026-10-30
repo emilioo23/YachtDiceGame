@@ -12,7 +12,7 @@ namespace YachtDice.Server.Services
     /// Keeps track of the players who are online and warns the others when someone comes or goes.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class PresenceService : Contracts.IPresenceService
+    public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
         private const string DeliveryFailedMessage = "A presence notification could not be delivered: ";
         private const string ConnectedLogMessage = "A player is now online.";
@@ -30,7 +30,7 @@ namespace YachtDice.Server.Services
         /// <returns>The names of all the players who are online, including the caller.</returns>
         public string[] Connect(string displayName)
         {
-            string[] onlinePlayers = new string[0];
+            var onlinePlayers = new string[0];
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -62,6 +62,28 @@ namespace YachtDice.Server.Services
             }
         }
 
+        /// <summary>
+        /// Sends the event to the player, if the player is online.
+        /// </summary>
+        /// <param name="recipientName">Name of the player who receives the event.</param>
+        /// <param name="subjectName">Name of the player the event is about.</param>
+        /// <param name="eventType">What happened with the subject.</param>
+        public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
+        {
+            OnlinePlayer recipient;
+            bool isOnline;
+
+            lock (_syncRoot)
+            {
+                isOnline = _players.TryGetValue(recipientName, out recipient);
+            }
+
+            if (isOnline && !TryNotify(recipient.Callback, subjectName, eventType))
+            {
+                Remove(recipientName, recipient.SessionId);
+            }
+        }
+
         private static OnlinePlayer CreateCurrentPlayer()
         {
             return new OnlinePlayer(
@@ -73,13 +95,13 @@ namespace YachtDice.Server.Services
         {
             ICommunicationObject channel = OperationContext.Current.Channel;
 
-            channel.Closed += (sender, args) => Remove(displayName, sessionId);
-            channel.Faulted += (sender, args) => Remove(displayName, sessionId);
+            channel.Closed += (sender, e) => Remove(displayName, sessionId);
+            channel.Faulted += (sender, e) => Remove(displayName, sessionId);
         }
 
         private void Remove(string displayName, string sessionId)
         {
-            bool wasRemoved = false;
+            var isRemoved = false;
             OnlinePlayer player;
 
             lock (_syncRoot)
@@ -87,11 +109,11 @@ namespace YachtDice.Server.Services
                 if (_players.TryGetValue(displayName, out player) && player.SessionId == sessionId)
                 {
                     _players.Remove(displayName);
-                    wasRemoved = true;
+                    isRemoved = true;
                 }
             }
 
-            if (wasRemoved)
+            if (isRemoved)
             {
                 _logger.Info(DisconnectedLogMessage);
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
@@ -123,7 +145,7 @@ namespace YachtDice.Server.Services
             string displayName,
             Contracts.PresenceEventType eventType)
         {
-            bool isDelivered = false;
+            var isDelivered = false;
 
             if (((ICommunicationObject)callback).State == CommunicationState.Opened)
             {

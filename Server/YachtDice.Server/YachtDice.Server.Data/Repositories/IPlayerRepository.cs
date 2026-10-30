@@ -22,6 +22,13 @@ namespace YachtDice.Server.Data.Repositories
         List<Player> FindByName(string name);
 
         /// <summary>
+        /// Looks for the player who owns the friend code.
+        /// </summary>
+        /// <param name="friendCode">Friend code to look for.</param>
+        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
+        List<Player> FindByFriendCode(string friendCode);
+
+        /// <summary>
         /// Indicates whether the email is already registered.
         /// </summary>
         /// <param name="email">Email address to check.</param>
@@ -53,6 +60,6 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
-        void SetTwoFactorEnabled(int playerId, bool isEnabled);
+        void SaveTwoFactorEnabled(int playerId, bool isEnabled);
     }
 }

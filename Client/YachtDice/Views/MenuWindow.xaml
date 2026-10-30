@@ -373,26 +373,108 @@
                         </Border>
                     </Grid>
 
+                    <StackPanel Margin="0,0,0,12">
+
+                        <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_YourCode}"
+                                   FontSize="13"
+                                   Foreground="{StaticResource BrushTextMuted}"
+                                   Margin="0,0,0,4"/>
+
+                        <TextBox x:Name="OwnFriendCodeTextBox"
+                                 Style="{StaticResource TextBoxRounded}"
+                                 IsReadOnly="True"/>
+                    </StackPanel>
+
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Column="0"
+                        <TextBox x:Name="FriendCodeTextBox"
+                                 Grid.Column="0"
                                  Style="{StaticResource TextBoxRounded}"
                                  Margin="0,0,8,0"
-                                 Tag="{x:Static properties:Strings.MainMenu_Friends_SearchPlaceholder}"/>
+                                 Tag="{x:Static properties:Strings.MainMenu_Friends_FriendCodePlaceholder}"/>
 
                         <Button Grid.Column="1"
                                 Content="{x:Static properties:Strings.MainMenu_Friends_AddButton}"
                                 Style="{StaticResource BtnOutline}"
                                 FontSize="16"
-                                Padding="10,8"/>
+                                Padding="10,8"
+                                Click="AddFriendButton_Click"/>
                     </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   MaxHeight="520">
+
+                        <ScrollViewer.Resources>
+                            <DataTemplate x:Key="FriendItemTemplate">
+
+                                <Border Background="{StaticResource BrushCream2}"
+                                        CornerRadius="8"
+                                        Padding="10"
+                                        Margin="0,0,0,8">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0"
+                                                Width="34"
+                                                Height="34"
+                                                CornerRadius="17"
+                                                Background="{StaticResource BrushWood}"
+                                                Margin="0,0,10,0">
+
+                                            <TextBlock Text="{Binding Initial}"
+                                                       Foreground="White"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource BrushText}"/>
+
+                                            <TextBlock Text="{Binding Status}"
+                                                       FontSize="11">
+
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{StaticResource BrushTextMuted}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource BrushFeltLight}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <Button Grid.Column="2"
+                                                Content="✕"
+                                                Tag="{Binding Name}"
+                                                Width="28"
+                                                Height="28"
+                                                Background="{StaticResource BrushCream2}"
+                                                BorderThickness="0"
+                                                VerticalAlignment="Center"
+                                                Click="RemoveFriendButton_Click"/>
+                                    </Grid>
+                                </Border>
+
+                            </DataTemplate>
+                        </ScrollViewer.Resources>
 
                         <StackPanel>
 
@@ -402,126 +484,81 @@
                                        Foreground="{StaticResource BrushTextMuted}"
                                        Margin="0,0,0,8"/>
 
-                            <Border Background="{StaticResource BrushCream2}"
-                                    CornerRadius="8"
-                                    Padding="10"
-                                    Margin="0,0,0,8">
+                            <ItemsControl x:Name="RequestsList"
+                                          Margin="0,0,0,16">
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
 
-                                    <Border Grid.Column="0"
-                                            Width="34"
-                                            CornerRadius="17"
-                                            Background="{StaticResource BrushWood}"
-                                            Margin="0,2,10,0">
+                                        <Border Background="{StaticResource BrushCream2}"
+                                                CornerRadius="8"
+                                                Padding="10"
+                                                Margin="0,0,0,8">
 
-                                        <TextBlock Text="N"
-                                                   Foreground="White"
-                                                   FontWeight="Bold"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="16"/>
-                                    </Border>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                    <StackPanel Grid.Column="1"
-                                                VerticalAlignment="Center">
+                                                <Border Grid.Column="0"
+                                                        Width="34"
+                                                        Height="34"
+                                                        CornerRadius="17"
+                                                        Background="{StaticResource BrushWood}"
+                                                        Margin="0,0,10,0">
 
-                                        <TextBlock Text="NuevoJugador"
-                                                   FontWeight="SemiBold"
-                                                   FontSize="15"
-                                                   Foreground="{StaticResource BrushText}"/>
+                                                    <TextBlock Text="{Binding Initial}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"/>
+                                                </Border>
 
-                                        <TextBlock Text="{x:Static properties:Strings.Friends_Status_WantsFriend}"
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource BrushTextMuted}"/>
-                                    </StackPanel>
+                                                <StackPanel Grid.Column="1"
+                                                            VerticalAlignment="Center">
 
-                                    <StackPanel Grid.Column="2"
-                                                Orientation="Horizontal"
-                                                VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               Foreground="{StaticResource BrushText}"/>
 
-                                        <Button Content="✓"
-                                                Width="28"
-                                                Height="28"
-                                                Margin="0,0,4,0"
-                                                Background="{StaticResource BrushFeltLight}"
-                                                Foreground="White"
-                                                BorderThickness="0"/>
+                                                    <TextBlock Text="{Binding Status}"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource BrushTextMuted}"/>
+                                                </StackPanel>
 
-                                        <Button Content="✕"
-                                                Width="28"
-                                                Height="28"
-                                                Background="{StaticResource BrushCream2}"
-                                                BorderThickness="0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
+                                                <StackPanel Grid.Column="2"
+                                                            Orientation="Horizontal"
+                                                            VerticalAlignment="Center">
 
-                            <Border Background="{StaticResource BrushCream2}"
-                                    CornerRadius="8"
-                                    Padding="10"
-                                    Margin="0,0,0,16">
+                                                    <Button Content="✓"
+                                                            Tag="{Binding Name}"
+                                                            Width="28"
+                                                            Height="28"
+                                                            Margin="0,0,4,0"
+                                                            Background="{StaticResource BrushFeltLight}"
+                                                            Foreground="White"
+                                                            BorderThickness="0"
+                                                            Click="AcceptRequestButton_Click"/>
 
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                                                    <Button Content="✕"
+                                                            Tag="{Binding Name}"
+                                                            Width="28"
+                                                            Height="28"
+                                                            Background="{StaticResource BrushCream2}"
+                                                            BorderThickness="0"
+                                                            Click="RejectRequestButton_Click"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
 
-                                    <Border Grid.Column="0"
-                                            Width="34"
-                                            Height="34"
-                                            CornerRadius="17"
-                                            Background="{StaticResource BrushWood}"
-                                            Margin="0,0,10,0">
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
 
-                                        <TextBlock Text="G"
-                                                   Foreground="White"
-                                                   FontWeight="Bold"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="16"/>
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1"
-                                                VerticalAlignment="Center">
-
-                                        <TextBlock Text="GamePro2024"
-                                                   FontWeight="SemiBold"
-                                                   FontSize="15"
-                                                   Foreground="{StaticResource BrushText}"/>
-
-                                        <TextBlock Text="{x:Static properties:Strings.Friends_Status_WantsFriend}"
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource BrushTextMuted}"/>
-                                    </StackPanel>
-
-                                    <StackPanel Grid.Column="2"
-                                                Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-
-                                        <Button Content="✓"
-                                                Width="28"
-                                                Height="28"
-                                                Margin="0,0,4,0"
-                                                Background="{StaticResource BrushFeltLight}"
-                                                Foreground="White"
-                                                BorderThickness="0"/>
-
-                                        <Button Content="✕"
-                                                Width="28"
-                                                Height="28"
-                                                Background="{StaticResource BrushCream2}"
-                                                BorderThickness="0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
+                            </ItemsControl>
 
                             <TextBlock Text="{x:Static properties:Strings.Friends_Section_InGame}"
                                        FontSize="15"
@@ -582,50 +619,19 @@
                                        Foreground="{StaticResource BrushTextMuted}"
                                        Margin="0,0,0,8"/>
 
-                            <ItemsControl x:Name="OnlineFriendsList">
+                            <ItemsControl x:Name="OnlineFriendsList"
+                                          Margin="0,0,0,16"
+                                          ItemTemplate="{StaticResource FriendItemTemplate}"/>
 
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
+                            <TextBlock x:Name="OfflineHeaderTextBlock"
+                                       Text="{x:Static properties:Strings.Friends_Section_Offline}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,0,0,8"/>
 
-                                        <Border Background="{StaticResource BrushCream2}"
-                                                CornerRadius="8"
-                                                Padding="10"
-                                                Margin="0,0,0,8">
-
-                                            <StackPanel Orientation="Horizontal">
-
-                                                <Border Width="34"
-                                                        Height="34"
-                                                        CornerRadius="17"
-                                                        Background="{StaticResource BrushWood}"
-                                                        Margin="0,0,10,0">
-
-                                                    <TextBlock Text="{Binding Initial}"
-                                                               Foreground="White"
-                                                               FontWeight="Bold"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"/>
-                                                </Border>
-
-                                                <StackPanel VerticalAlignment="Center">
-
-                                                    <TextBlock Text="{Binding Name}"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="13"
-                                                               Foreground="{StaticResource BrushText}"/>
-
-                                                    <TextBlock Text="{Binding Status}"
-                                                               FontSize="11"
-                                                               Foreground="{StaticResource BrushFeltLight}"/>
-                                                </StackPanel>
-
-                                            </StackPanel>
-                                        </Border>
-
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-
-                            </ItemsControl>
+                            <ItemsControl x:Name="OfflineFriendsList"
+                                          ItemTemplate="{StaticResource FriendItemTemplate}"/>
 
                         </StackPanel>
                     </ScrollViewer>

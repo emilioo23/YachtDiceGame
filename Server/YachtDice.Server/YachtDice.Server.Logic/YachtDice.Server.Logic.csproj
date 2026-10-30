@@ -57,6 +57,11 @@
     <Compile Include="Authentication\RegistrationService.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
+    <Compile Include="Friends\FriendActionStatus.cs" />
+    <Compile Include="Friends\FriendRequestResult.cs" />
+    <Compile Include="Friends\FriendRequestStatus.cs" />
+    <Compile Include="Friends\FriendshipService.cs" />
+    <Compile Include="Friends\IFriendshipService.cs" />
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />
