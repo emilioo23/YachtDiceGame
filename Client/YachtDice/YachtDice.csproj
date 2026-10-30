@@ -242,6 +242,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\TwoFactorManagementServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Gateway\AuthenticationGateway.cs" />
     <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
@@ -251,29 +256,30 @@
     <Compile Include="Gateway\PresenceGateway.cs" />
     <Compile Include="Gateway\RegistrationGateway.cs" />
     <Compile Include="Gateway\ServerAddress.cs" />
+    <Compile Include="Gateway\TwoFactorManagementGateway.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Utils\GatewayErrorMessages.cs" />
-    <Compile Include="Resources\Utils\AppLogger.cs" />
-    <Compile Include="Resources\Utils\DialogContent.cs" />
-    <Compile Include="Resources\Utils\ResourceKeys.cs" />
+    <Compile Include="Utils\GatewayErrorMessages.cs" />
+    <Compile Include="Utils\AppLogger.cs" />
+    <Compile Include="Utils\DialogContent.cs" />
+    <Compile Include="Utils\ResourceKeys.cs" />
     <Compile Include="Views\CustomDialogWindow.xaml.cs">
       <DependentUpon>CustomDialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FriendItem.cs" />
+    <Compile Include="Models\FriendItem.cs" />
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LanguageSwitcher.xaml.cs">
       <DependentUpon>LanguageSwitcher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LeaderboardEntry.cs" />
+    <Compile Include="Models\LeaderboardEntry.cs" />
     <Compile Include="Views\LeaderboardWindow.xaml.cs">
       <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>
@@ -302,7 +308,7 @@
     <Compile Include="Views\SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VerificationChallenge.cs" />
+    <Compile Include="Models\VerificationChallenge.cs" />
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>
@@ -407,12 +413,6 @@
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.ResendResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.TwoFactorActivationData.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.TwoFactorChangeResultCode.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.VerificationResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -496,6 +496,26 @@
     <None Include="Connected Services\RoomServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\contracts.wsdl" />
+    <None Include="Connected Services\TwoFactorManagementServiceReference\contracts.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\service.wsdl" />
+    <None Include="Connected Services\TwoFactorManagementServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\YachtDice.TwoFactorManagementServiceReference.ResendResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\YachtDice.TwoFactorManagementServiceReference.TwoFactorActivationData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\YachtDice.TwoFactorManagementServiceReference.TwoFactorChangeResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\YachtDice.TwoFactorManagementServiceReference.VerificationResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -524,7 +544,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\SplashBackground.png" />
+    <Resource Include="Resources\Images\SplashBackground.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
@@ -544,6 +564,7 @@
     <WCFMetadataStorage Include="Connected Services\PresenceServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\RegistrationServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\RoomServiceReference\" />
+    <WCFMetadataStorage Include="Connected Services\TwoFactorManagementServiceReference\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\PlayerServiceReference\configuration91.svcinfo" />
@@ -637,6 +658,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\FriendServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\TwoFactorManagementServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

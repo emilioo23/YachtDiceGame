@@ -71,6 +71,7 @@ namespace YachtDice.Server.Host
         private static void OpenServiceHosts(List<ServiceHost> serviceHosts)
         {
             serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
+            serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerService()));
             serviceHosts.Add(new ServiceHost(new RoomService()));
@@ -141,7 +142,21 @@ namespace YachtDice.Server.Host
 
             return new AuthenticationService(
                 new LoginService(playerRepository, verificationService, deliveryService),
-                verificationService,
+                verificationService);
+        }
+
+        /// <summary>
+        /// Creates and configures the two-factor management service with its required dependencies.
+        /// </summary>
+        /// <returns>A fully configured instance of TwoFactorManagementService.</returns>
+        private static TwoFactorManagementService CreateTwoFactorManagementService()
+        {
+            var playerRepository = new PlayerRepository();
+            var codeService = new TwoFactorCodeService();
+            var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
+            var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
+
+            return new TwoFactorManagementService(
                 new TwoFactorSettingsService(playerRepository, verificationService, deliveryService));
         }
 
