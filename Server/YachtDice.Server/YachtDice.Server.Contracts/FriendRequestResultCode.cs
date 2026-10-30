@@ -12,9 +12,9 @@ namespace YachtDice.Server.Contracts
         [EnumMember]
         RequestSent,
 
-        /// <summary>The other player had already sent a request, so both players are friends now.</summary>
+        /// <summary>The other player had already sent a request, which the player has to accept.</summary>
         [EnumMember]
-        FriendAdded,
+        RequestAlreadyReceived,
 
         /// <summary>The friend code is empty.</summary>
         [EnumMember]

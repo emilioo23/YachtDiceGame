@@ -105,10 +105,6 @@ namespace YachtDice.Server.Services
             {
                 _notifier.SendEvent(result.FriendName, displayName, Contracts.PresenceEventType.FriendRequestReceived);
             }
-            else if (result.Status == LogicFriends.FriendRequestStatus.FriendAdded)
-            {
-                _notifier.SendEvent(result.FriendName, displayName, Contracts.PresenceEventType.FriendRequestAccepted);
-            }
 
             return Mapping.EnumMapper.Map<LogicFriends.FriendRequestStatus, Contracts.FriendRequestResultCode>(
                 result.Status);

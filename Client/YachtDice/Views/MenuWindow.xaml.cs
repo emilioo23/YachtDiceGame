@@ -94,8 +94,8 @@ namespace YachtDice.Views
                 case FriendRequestResultCode.RequestSent:
                     message = Strings.Friends_Result_RequestSent;
                     break;
-                case FriendRequestResultCode.FriendAdded:
-                    message = Strings.Friends_Result_FriendAdded;
+                case FriendRequestResultCode.RequestAlreadyReceived:
+                    message = Strings.Friends_Result_RequestAlreadyReceived;
                     break;
                 case FriendRequestResultCode.InvalidCode:
                     message = Strings.Friends_Result_InvalidCode;
@@ -283,7 +283,7 @@ namespace YachtDice.Views
 
                 ShowDialogMessage(GetRequestMessage(result));
 
-                if (result == FriendRequestResultCode.RequestSent || result == FriendRequestResultCode.FriendAdded)
+                if (result == FriendRequestResultCode.RequestSent)
                 {
                     FriendCodeTextBox.Clear();
                     await LoadFriendsAsync();

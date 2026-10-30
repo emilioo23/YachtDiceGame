@@ -20,7 +20,7 @@ namespace YachtDice.Server.Contracts
         [EnumMember]
         FriendRequestReceived,
 
-        /// <summary>The player accepted a friend request, or sent one that completes a pending request.</summary>
+        /// <summary>The player accepted the friend request that the receiver of the notification sent.</summary>
         [EnumMember]
         FriendRequestAccepted,
 

@@ -209,8 +209,7 @@ namespace YachtDice.Server.Logic.Friends
             }
             else
             {
-                _friendRepository.UpdateStatus(existing.RequesterId, existing.AddresseeId, FriendshipStatus.Accepted);
-                status = FriendRequestStatus.FriendAdded;
+                status = FriendRequestStatus.RequestAlreadyReceived;
             }
 
             return status;
