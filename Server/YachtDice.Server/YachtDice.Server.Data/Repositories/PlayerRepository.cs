@@ -21,6 +21,8 @@ namespace YachtDice.Server.Data.Repositories
         private const string NullPlayerMessage = "The player cannot be null.";
         private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
         private const string FindByNameFailedMessage = "Database error occurred while searching player by name.";
+        private const string FindByFriendCodeFailedMessage =
+            "Database error occurred while searching player by friend code.";
         private const string EmailExistsFailedMessage = "Database error occurred while verifying email existence.";
         private const string UsernameExistsFailedMessage =
             "Database error occurred while verifying username existence.";
@@ -81,6 +83,35 @@ namespace YachtDice.Server.Data.Repositories
             catch (EntityException ex)
             {
                 throw new DataAccessException(FindByNameFailedMessage, ex);
+            }
+
+            return players;
+        }
+
+        /// <summary>
+        /// Looks for the player who owns the friend code.
+        /// </summary>
+        /// <param name="friendCode">Friend code to look for.</param>
+        /// <returns>A list with the matching player, or an empty list if there is none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<Player> FindByFriendCode(string friendCode)
+        {
+            ValidateText(friendCode, nameof(friendCode));
+            List<Player> players;
+
+            try
+            {
+                using (var context = new YachtDiceContext())
+                {
+                    players = context.Player
+                        .Where(player => player.FriendCode == friendCode)
+                        .Take(SingleResultCount)
+                        .ToList();
+                }
+            }
+            catch (EntityException ex)
+            {
+                throw new DataAccessException(FindByFriendCodeFailedMessage, ex);
             }
 
             return players;

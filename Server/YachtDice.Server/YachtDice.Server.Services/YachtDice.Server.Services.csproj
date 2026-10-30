@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
     <Compile Include="CallbackRegistry.cs" />
+    <Compile Include="FriendService.cs" />
+    <Compile Include="IPlayerNotifier.cs" />
     <Compile Include="ChatService.cs" />
     <Compile Include="GameService.cs" />
     <Compile Include="Mapping\CultureParser.cs" />

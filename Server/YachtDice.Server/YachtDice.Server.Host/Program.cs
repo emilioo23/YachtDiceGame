@@ -5,6 +5,7 @@ using System.Threading;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Email;
+using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.TwoFactor;
@@ -75,7 +76,10 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(new RoomService()));
             serviceHosts.Add(new ServiceHost(new GameService()));
             serviceHosts.Add(new ServiceHost(new ChatService()));
-            serviceHosts.Add(new ServiceHost(new PresenceService()));
+
+            var presenceService = new PresenceService();
+            serviceHosts.Add(new ServiceHost(presenceService));
+            serviceHosts.Add(new ServiceHost(CreateFriendService(presenceService)));
 
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
         }
@@ -150,6 +154,18 @@ namespace YachtDice.Server.Host
             var playerRepository = new PlayerRepository();
 
             return new PlayerRegistrationService(new RegistrationService(playerRepository));
+        }
+
+        /// <summary>
+        /// Creates and configures the friend service with its required dependencies.
+        /// </summary>
+        /// <param name="notifier">Component that warns the players who are online.</param>
+        /// <returns>A fully configured instance of FriendService.</returns>
+        private static FriendService CreateFriendService(IPlayerNotifier notifier)
+        {
+            var friendshipService = new FriendshipService(new PlayerRepository(), new FriendRepository());
+
+            return new FriendService(friendshipService, notifier);
         }
 
         /// <summary>
