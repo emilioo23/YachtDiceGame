@@ -3067,11 +3067,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ¡Ahora son amigos!
+        ///   Busca una cadena traducida similar a Este jugador ya te envió una solicitud. Acéptala en tus solicitudes.
         /// </summary>
-        public static string Friends_Result_FriendAdded {
+        public static string Friends_Result_RequestAlreadyReceived {
             get {
-                return ResourceManager.GetString("Friends_Result_FriendAdded", resourceCulture);
+                return ResourceManager.GetString("Friends_Result_RequestAlreadyReceived", resourceCulture);
             }
         }
         

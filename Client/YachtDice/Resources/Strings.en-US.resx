@@ -1119,8 +1119,8 @@
   <data name="Friends_Result_RequestSent" xml:space="preserve">
     <value>Request sent.</value>
   </data>
-  <data name="Friends_Result_FriendAdded" xml:space="preserve">
-    <value>You are friends now!</value>
+  <data name="Friends_Result_RequestAlreadyReceived" xml:space="preserve">
+    <value>This player already sent you a request. Accept it in your requests.</value>
   </data>
   <data name="Friends_Result_InvalidCode" xml:space="preserve">
     <value>Enter the friend code.</value>

@@ -8,8 +8,8 @@
         /// <summary>The request was sent and the other player has to accept it.</summary>
         RequestSent,
 
-        /// <summary>The other player had already sent a request, so both players are friends now.</summary>
-        FriendAdded,
+        /// <summary>The other player had already sent a request, which the player has to accept.</summary>
+        RequestAlreadyReceived,
 
         /// <summary>The friend code is empty.</summary>
         InvalidCode,
