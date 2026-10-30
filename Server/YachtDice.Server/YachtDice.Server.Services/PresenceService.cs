@@ -12,7 +12,7 @@ namespace YachtDice.Server.Services
     /// Keeps track of the players who are online and warns the others when someone comes or goes.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class PresenceService : Contracts.IPresenceService
+    public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
         private const string DeliveryFailedMessage = "A presence notification could not be delivered: ";
         private const string ConnectedLogMessage = "A player is now online.";
@@ -59,6 +59,28 @@ namespace YachtDice.Server.Services
             if (!string.IsNullOrWhiteSpace(displayName))
             {
                 Remove(displayName, OperationContext.Current.SessionId);
+            }
+        }
+
+        /// <summary>
+        /// Sends the event to the player, if the player is online.
+        /// </summary>
+        /// <param name="recipientName">Name of the player who receives the event.</param>
+        /// <param name="subjectName">Name of the player the event is about.</param>
+        /// <param name="eventType">What happened with the subject.</param>
+        public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
+        {
+            OnlinePlayer recipient;
+            bool isOnline;
+
+            lock (_syncRoot)
+            {
+                isOnline = _players.TryGetValue(recipientName, out recipient);
+            }
+
+            if (isOnline && !TryNotify(recipient.Callback, subjectName, eventType))
+            {
+                Remove(recipientName, recipient.SessionId);
             }
         }
 
