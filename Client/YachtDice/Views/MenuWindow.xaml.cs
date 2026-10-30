@@ -7,6 +7,7 @@ using YachtDice.Gateway;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using FriendRequestResultCode = YachtDice.FriendServiceReference.FriendRequestResultCode;
 
 namespace YachtDice.Views
 {
@@ -21,10 +22,13 @@ namespace YachtDice.Views
         private const string PercentageFormat = "{0}%";
         private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
         private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
+        private const string FriendsFailedLogMessage = "The friends of the player could not be loaded.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(MenuWindow));
         private readonly PlayerGateway _gateway = new PlayerGateway();
+        private readonly FriendGateway _friendGateway = new FriendGateway();
         private readonly string _playerName;
+        private List<string> _friendNames = new List<string>();
 
         /// <summary>
         /// Initializes the main menu for the given player.
@@ -48,25 +52,77 @@ namespace YachtDice.Views
 
             ShowOnlinePlayers();
             PresenceGateway.Current.PlayersChanged += HandlePlayersChanged;
-            Closed += (sender, e) => PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
+            PresenceGateway.Current.FriendsChanged += HandleFriendsChanged;
+            Closed += HandleWindowClosed;
 
             _ = ConnectPresenceAsync(playerName);
             _ = LoadPlayerStatisticsAsync(playerName);
+            _ = LoadFriendsAsync();
         }
+
+        private bool IsGuest => _playerName == Strings.Auth_GuestDisplayName;
 
         private static string GetInitial(string name)
         {
             return name.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper();
         }
 
-        private static FriendItem CreateFriend(string name, string status)
+        private static FriendItem CreateFriend(string name, string status, bool isOnline)
         {
-            return new FriendItem { Name = name, Initial = GetInitial(name), Status = status };
+            return new FriendItem { Name = name, Initial = GetInitial(name), Status = status, IsOnline = isOnline };
+        }
+
+        private static List<FriendItem> CreateFriendItems(IEnumerable<string> names, string status, bool isOnline)
+        {
+            return names
+                .OrderBy(name => name)
+                .Select(name => CreateFriend(name, status, isOnline))
+                .ToList();
+        }
+
+        private static string ReadTag(object sender)
+        {
+            return (string)((FrameworkElement)sender).Tag;
+        }
+
+        private static string GetRequestMessage(FriendRequestResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
+                case FriendRequestResultCode.RequestSent:
+                    message = Strings.Friends_Result_RequestSent;
+                    break;
+                case FriendRequestResultCode.FriendAdded:
+                    message = Strings.Friends_Result_FriendAdded;
+                    break;
+                case FriendRequestResultCode.InvalidCode:
+                    message = Strings.Friends_Result_InvalidCode;
+                    break;
+                case FriendRequestResultCode.CodeNotFound:
+                    message = Strings.Friends_Result_CodeNotFound;
+                    break;
+                case FriendRequestResultCode.SelfRequest:
+                    message = Strings.Friends_Result_SelfRequest;
+                    break;
+                case FriendRequestResultCode.AlreadyFriends:
+                    message = Strings.Friends_Result_AlreadyFriends;
+                    break;
+                case FriendRequestResultCode.AlreadyRequested:
+                    message = Strings.Friends_Result_AlreadyRequested;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
         }
 
         private async Task ConnectPresenceAsync(string playerName)
         {
-            if (playerName != Strings.Auth_GuestDisplayName)
+            if (!IsGuest)
             {
                 try
                 {
@@ -82,6 +138,45 @@ namespace YachtDice.Views
         private void HandlePlayersChanged()
         {
             Dispatcher.BeginInvoke(new Action(ShowOnlinePlayers));
+        }
+
+        private void HandleFriendsChanged()
+        {
+            Dispatcher.BeginInvoke(new Action(RefreshFriends));
+        }
+
+        private void HandleWindowClosed(object sender, EventArgs e)
+        {
+            PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
+            PresenceGateway.Current.FriendsChanged -= HandleFriendsChanged;
+        }
+
+        private void RefreshFriends()
+        {
+            _ = LoadFriendsAsync();
+        }
+
+        private async Task LoadFriendsAsync()
+        {
+            if (!IsGuest)
+            {
+                try
+                {
+                    _friendNames = await _friendGateway.GetFriendsAsync(_playerName);
+                    List<string> requesterNames = await _friendGateway.GetRequestsAsync(_playerName);
+                    OwnFriendCodeTextBox.Text = await _friendGateway.GetFriendCodeAsync(_playerName);
+
+                    RequestsList.ItemsSource = CreateFriendItems(
+                        requesterNames,
+                        Strings.Friends_Status_WantsFriend,
+                        false);
+                    ShowOnlinePlayers();
+                }
+                catch (GatewayException)
+                {
+                    _logger.Warning(FriendsFailedLogMessage);
+                }
+            }
         }
 
         private async Task LoadPlayerStatisticsAsync(string playerName)
@@ -114,29 +209,116 @@ namespace YachtDice.Views
             }
         }
 
-        private void ShowDialogMessage(string message)
+        private CustomDialogWindow CreateDialog(string message)
         {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
+            return new CustomDialogWindow(new DialogContent { Message = message })
             {
                 Owner = this
             };
+        }
 
-            dialog.ShowDialog();
+        private void ShowDialogMessage(string message)
+        {
+            CreateDialog(message).ShowDialog();
+        }
+
+        private bool AskConfirmation(string message)
+        {
+            return CreateDialog(message).ShowDialog() == true;
         }
 
         private void ShowOnlinePlayers()
         {
-            List<FriendItem> onlineFriends = PresenceGateway.Current.OnlinePlayers
-                .Where(name => !string.Equals(name, _playerName, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(name => name)
-                .Select(name => CreateFriend(name, Strings.MainMenu_Friends_StatusOnline))
-                .ToList();
+            var onlineNames = new HashSet<string>(
+                PresenceGateway.Current.OnlinePlayers,
+                StringComparer.OrdinalIgnoreCase);
+            List<FriendItem> onlineFriends = CreateFriendItems(
+                _friendNames.Where(name => onlineNames.Contains(name)),
+                Strings.MainMenu_Friends_StatusOnline,
+                true);
+            List<FriendItem> offlineFriends = CreateFriendItems(
+                _friendNames.Where(name => !onlineNames.Contains(name)),
+                Strings.MainMenu_Friends_StatusOffline,
+                false);
 
             InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;
+            OfflineFriendsList.ItemsSource = offlineFriends;
             string onlineCountText = string.Format(Strings.MainMenu_Friends_OnlineCount, onlineFriends.Count);
             OnlineCountBadgeTextBlock.Text = onlineCountText;
             OnlineHeaderTextBlock.Text = onlineCountText;
+        }
+
+        private async void AddFriendButton_Click(object sender, RoutedEventArgs e)
+        {
+            await SendFriendRequestAsync();
+        }
+
+        private async void AcceptRequestButton_Click(object sender, RoutedEventArgs e)
+        {
+            await RespondToRequestAsync(ReadTag(sender), true);
+        }
+
+        private async void RejectRequestButton_Click(object sender, RoutedEventArgs e)
+        {
+            await RespondToRequestAsync(ReadTag(sender), false);
+        }
+
+        private async void RemoveFriendButton_Click(object sender, RoutedEventArgs e)
+        {
+            string friendName = ReadTag(sender);
+
+            if (AskConfirmation(Strings.Dialogs_D08_DeleteFriend))
+            {
+                await RemoveFriendAsync(friendName);
+            }
+        }
+
+        private async Task SendFriendRequestAsync()
+        {
+            try
+            {
+                FriendRequestResultCode result =
+                    await _friendGateway.SendRequestAsync(_playerName, FriendCodeTextBox.Text);
+
+                ShowDialogMessage(GetRequestMessage(result));
+
+                if (result == FriendRequestResultCode.RequestSent || result == FriendRequestResultCode.FriendAdded)
+                {
+                    FriendCodeTextBox.Clear();
+                    await LoadFriendsAsync();
+                }
+            }
+            catch (GatewayException ex)
+            {
+                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private async Task RespondToRequestAsync(string requesterName, bool isAccepted)
+        {
+            try
+            {
+                await _friendGateway.RespondAsync(_playerName, requesterName, isAccepted);
+                await LoadFriendsAsync();
+            }
+            catch (GatewayException ex)
+            {
+                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private async Task RemoveFriendAsync(string friendName)
+        {
+            try
+            {
+                await _friendGateway.RemoveFriendAsync(_playerName, friendName);
+                await LoadFriendsAsync();
+            }
+            catch (GatewayException ex)
+            {
+                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
         }
 
         private void PlayNavButton_Click(object sender, RoutedEventArgs e)

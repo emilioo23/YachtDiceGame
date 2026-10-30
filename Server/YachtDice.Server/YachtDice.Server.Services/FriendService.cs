@@ -68,6 +68,16 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Gets the friend code that other players use to send a friend request to the player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The friend code of the player, or an empty text if the player does not exist.</returns>
+        public string GetFriendCode(string displayName)
+        {
+            return Execute(displayName, () => _friendshipService.GetFriendCode(displayName));
+        }
+
+        /// <summary>
         /// Gets the names of the friends of the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

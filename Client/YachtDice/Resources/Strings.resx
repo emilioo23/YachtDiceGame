@@ -282,9 +282,6 @@
   <data name="MainMenu_Friends_OnlineHeader" xml:space="preserve">
     <value>3 en línea</value>
   </data>
-  <data name="MainMenu_Friends_SearchPlaceholder" xml:space="preserve">
-    <value>Buscar usuario...</value>
-  </data>
   <data name="MainMenu_Friends_AddButton" xml:space="preserve">
     <value>+ Agregar</value>
   </data>
@@ -1109,5 +1106,35 @@
   </data>
   <data name="Leaderboard_ConnectionError" xml:space="preserve">
     <value>No se pudo conectar con el servidor para obtener el ranking.</value>
+  </data>
+  <data name="MainMenu_Friends_FriendCodePlaceholder" xml:space="preserve">
+    <value>Código de amigo (FRD-XXXXXX)</value>
+  </data>
+  <data name="MainMenu_Friends_YourCode" xml:space="preserve">
+    <value>Tu código de amigo</value>
+  </data>
+  <data name="MainMenu_Friends_StatusOffline" xml:space="preserve">
+    <value>Desconectado</value>
+  </data>
+  <data name="Friends_Result_RequestSent" xml:space="preserve">
+    <value>Solicitud enviada.</value>
+  </data>
+  <data name="Friends_Result_FriendAdded" xml:space="preserve">
+    <value>¡Ahora son amigos!</value>
+  </data>
+  <data name="Friends_Result_InvalidCode" xml:space="preserve">
+    <value>Escribe el código de amigo.</value>
+  </data>
+  <data name="Friends_Result_CodeNotFound" xml:space="preserve">
+    <value>No existe ningún jugador con ese código.</value>
+  </data>
+  <data name="Friends_Result_SelfRequest" xml:space="preserve">
+    <value>Ese es tu propio código.</value>
+  </data>
+  <data name="Friends_Result_AlreadyFriends" xml:space="preserve">
+    <value>Ya son amigos.</value>
+  </data>
+  <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
+    <value>Ya le enviaste una solicitud a este jugador.</value>
   </data>
 </root>

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +37,8 @@ namespace YachtDice.Views
         private const string PointsFormat = "N0";
 
         private readonly string _playerName;
+        private readonly FriendGateway _friendGateway = new FriendGateway();
+        private List<LeaderboardEntry> _ranking = new List<LeaderboardEntry>();
 
         /// <summary>
         /// Initializes the leaderboard window and starts loading the ranking.
@@ -53,12 +57,15 @@ namespace YachtDice.Views
         {
             GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            RenderRanking(_ranking);
         }
 
-        private void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
+        private async void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
         {
             FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+
+            await ShowFriendsRankingAsync();
         }
 
         private void BackLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -106,7 +113,23 @@ namespace YachtDice.Views
                     });
                 }
 
-                RenderRanking(ranking);
+                _ranking = ranking;
+                RenderRanking(_ranking);
+            }
+            catch (GatewayException)
+            {
+                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
+            }
+        }
+
+        private async Task ShowFriendsRankingAsync()
+        {
+            try
+            {
+                List<string> friendNames = await _friendGateway.GetFriendsAsync(_playerName);
+                var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase) { _playerName };
+
+                RenderRanking(_ranking.Where(entry => allowedNames.Contains(entry.Name)).ToList());
             }
             catch (GatewayException)
             {
@@ -128,6 +151,8 @@ namespace YachtDice.Views
         {
             var currentRank = 0;
             var viewerRank = 0;
+
+            RankingPanel.Children.Clear();
 
             foreach (LeaderboardEntry entry in ranking)
             {
