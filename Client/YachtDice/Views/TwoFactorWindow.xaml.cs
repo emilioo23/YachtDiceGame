@@ -4,10 +4,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using YachtDice.AuthenticationServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using AuthResendResult = YachtDice.AuthenticationServiceReference.ResendResultCode;
+using AuthVerificationResult = YachtDice.AuthenticationServiceReference.VerificationResultCode;
+using TwoFactorResendResult = YachtDice.TwoFactorManagementServiceReference.ResendResultCode;
+using TwoFactorVerificationResult = YachtDice.TwoFactorManagementServiceReference.VerificationResultCode;
 
 namespace YachtDice.Views
 {
@@ -23,7 +26,11 @@ namespace YachtDice.Views
         private readonly string _playerDisplayName;
         private readonly string _challengeId;
         private readonly bool _isActivation;
-        private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
+
+        // Se instancian ambos gateways para cubrir los dos casos de uso de la ventana
+        private readonly AuthenticationGateway _authGateway = new AuthenticationGateway();
+        private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
+
         private readonly TextBox[] _digitBoxes;
 
         /// <summary>
@@ -106,10 +113,16 @@ namespace YachtDice.Views
         {
             try
             {
-                ResendResultCode result = _isActivation
-                    ? await _gateway.ResendActivationCodeAsync(_playerDisplayName, _challengeId, App.CurrentCultureCode)
-                    : await _gateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
-                HandleResendResult(result);
+                if (_isActivation)
+                {
+                    TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(_playerDisplayName, _challengeId, App.CurrentCultureCode);
+                    HandleResendResult((AuthResendResult)(int)result);
+                }
+                else
+                {
+                    AuthResendResult result = await _authGateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
+                    HandleResendResult(result);
+                }
             }
             catch (GatewayException ex)
             {
@@ -163,10 +176,16 @@ namespace YachtDice.Views
 
             try
             {
-                VerificationResultCode result = _isActivation
-                    ? await _gateway.ConfirmActivationAsync(_playerDisplayName, code, _challengeId)
-                    : await _gateway.VerifyCodeAsync(_email, code, _challengeId);
-                HandleVerificationResult(result);
+                if (_isActivation)
+                {
+                    TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(_playerDisplayName, code, _challengeId);
+                    HandleVerificationResult((AuthVerificationResult)(int)result);
+                }
+                else
+                {
+                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, code, _challengeId);
+                    HandleVerificationResult(result);
+                }
             }
             catch (GatewayException ex)
             {
@@ -174,18 +193,18 @@ namespace YachtDice.Views
             }
         }
 
-        private void HandleVerificationResult(VerificationResultCode result)
+        private void HandleVerificationResult(AuthVerificationResult result)
         {
             switch (result)
             {
-                case VerificationResultCode.Valid:
+                case AuthVerificationResult.Valid:
                     CompleteVerification();
                     break;
-                case VerificationResultCode.Expired:
+                case AuthVerificationResult.Expired:
                     ShowMessage(Strings.TwoFactor_ErrorCodeExpired);
                     ClearDigits();
                     break;
-                case VerificationResultCode.Locked:
+                case AuthVerificationResult.Locked:
                     ShowMessage(Strings.Dialogs_D19_Validation2FA);
                     ClearDigits();
                     break;
@@ -196,18 +215,18 @@ namespace YachtDice.Views
             }
         }
 
-        private void HandleResendResult(ResendResultCode result)
+        private void HandleResendResult(AuthResendResult result)
         {
             switch (result)
             {
-                case ResendResultCode.CodeSent:
+                case AuthResendResult.CodeSent:
                     ClearDigits();
                     ShowMessage(Strings.TwoFactor_CodeResentMessage);
                     break;
-                case ResendResultCode.ResendTooSoon:
+                case AuthResendResult.ResendTooSoon:
                     ShowMessage(Strings.TwoFactor_ErrorResendTooSoon);
                     break;
-                case ResendResultCode.VerificationLocked:
+                case AuthResendResult.VerificationLocked:
                     ShowMessage(Strings.Dialogs_D19_Validation2FA);
                     break;
                 default:

@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using YachtDice.AuthenticationServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Resources;
+using YachtDice.TwoFactorManagementServiceReference;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -31,7 +31,7 @@ namespace YachtDice.Views
         private const int ToggleKnobMargin = 3;
 
         private readonly string _playerName;
-        private readonly AuthenticationGateway _authenticationGateway = new AuthenticationGateway();
+        private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
         private bool _isInitializing;
         private bool _isTwoFactorEnabled;
 
@@ -110,7 +110,7 @@ namespace YachtDice.Views
         {
             try
             {
-                bool isEnabled = await _authenticationGateway.IsTwoFactorEnabledAsync(_playerName);
+                bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_playerName);
                 ShowTwoFactorState(isEnabled);
             }
             catch (GatewayException ex)
@@ -121,7 +121,7 @@ namespace YachtDice.Views
 
         private async Task StartTwoFactorActivationAsync()
         {
-            TwoFactorActivationData data = await _authenticationGateway.StartTwoFactorActivationAsync(
+            TwoFactorActivationData data = await _twoFactorGateway.StartTwoFactorActivationAsync(
                 _playerName,
                 App.CurrentCultureCode);
 
@@ -151,7 +151,7 @@ namespace YachtDice.Views
 
         private async Task DisableTwoFactorAsync()
         {
-            TwoFactorChangeResultCode result = await _authenticationGateway.DisableTwoFactorAsync(
+            TwoFactorChangeResultCode result = await _twoFactorGateway.DisableTwoFactorAsync(
                 _playerName,
                 TwoFactorPasswordBox.Password);
 
