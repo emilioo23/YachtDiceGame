@@ -238,6 +238,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Gateway\AuthenticationGateway.cs" />
+    <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />

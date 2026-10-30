@@ -34,6 +34,12 @@ namespace YachtDice.Gateway
         public event Action PlayersChanged;
 
         /// <summary>
+        /// Event triggered when a friend request arrives, is accepted or a friend is removed. It can be raised
+        /// from any thread.
+        /// </summary>
+        public event Action FriendsChanged;
+
+        /// <summary>
         /// Gets the connection shared by all the windows.
         /// </summary>
         public static PresenceGateway Current { get; } = new PresenceGateway();
@@ -161,6 +167,19 @@ namespace YachtDice.Gateway
 
         private void HandlePresenceChanged(string displayName, PresenceEventType eventType)
         {
+            if (eventType == PresenceEventType.PlayerConnected || eventType == PresenceEventType.PlayerDisconnected)
+            {
+                UpdateOnlinePlayers(displayName, eventType);
+                PlayersChanged?.Invoke();
+            }
+            else
+            {
+                FriendsChanged?.Invoke();
+            }
+        }
+
+        private void UpdateOnlinePlayers(string displayName, PresenceEventType eventType)
+        {
             lock (_syncRoot)
             {
                 if (eventType == PresenceEventType.PlayerConnected)
@@ -172,8 +191,6 @@ namespace YachtDice.Gateway
                     _onlinePlayers.Remove(displayName);
                 }
             }
-
-            PlayersChanged?.Invoke();
         }
 
         private void HandleConnectionLost(PresenceServiceClient client)
