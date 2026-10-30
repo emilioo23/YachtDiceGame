@@ -19,7 +19,7 @@
         <Grid Width="1024" Height="574">
 
             <Image x:Name="BaseImage"
-                   Source="/Assets/SplashBackground.png"
+                   Source="/Resources/Images/SplashBackground.png"
                    Stretch="Uniform"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
 
