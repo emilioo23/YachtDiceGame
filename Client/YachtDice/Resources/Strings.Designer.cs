@@ -871,6 +871,69 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ya son amigos..
+        /// </summary>
+        public static string Friends_Result_AlreadyFriends {
+            get {
+                return ResourceManager.GetString("Friends_Result_AlreadyFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya le enviaste una solicitud a este jugador..
+        /// </summary>
+        public static string Friends_Result_AlreadyRequested {
+            get {
+                return ResourceManager.GetString("Friends_Result_AlreadyRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No existe ningún jugador con ese código..
+        /// </summary>
+        public static string Friends_Result_CodeNotFound {
+            get {
+                return ResourceManager.GetString("Friends_Result_CodeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el código de amigo..
+        /// </summary>
+        public static string Friends_Result_InvalidCode {
+            get {
+                return ResourceManager.GetString("Friends_Result_InvalidCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Este jugador ya te envió una solicitud. Acéptala en tus solicitudes..
+        /// </summary>
+        public static string Friends_Result_RequestAlreadyReceived {
+            get {
+                return ResourceManager.GetString("Friends_Result_RequestAlreadyReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solicitud enviada..
+        /// </summary>
+        public static string Friends_Result_RequestSent {
+            get {
+                return ResourceManager.GetString("Friends_Result_RequestSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ese es tu propio código..
+        /// </summary>
+        public static string Friends_Result_SelfRequest {
+            get {
+                return ResourceManager.GetString("Friends_Result_SelfRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a En partida.
         /// </summary>
         public static string Friends_Section_InGame {
@@ -1771,6 +1834,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Código de amigo (FRD-XXXXXX).
+        /// </summary>
+        public static string MainMenu_Friends_FriendCodePlaceholder {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_FriendCodePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Invitar a sala por código.
         /// </summary>
         public static string MainMenu_Friends_InviteByCode {
@@ -1816,6 +1888,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Desconectado.
+        /// </summary>
+        public static string MainMenu_Friends_StatusOffline {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_StatusOffline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a En línea.
         /// </summary>
         public static string MainMenu_Friends_StatusOnline {
@@ -1839,6 +1920,15 @@ namespace YachtDice.Resources {
         public static string MainMenu_Friends_Title {
             get {
                 return ResourceManager.GetString("MainMenu_Friends_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu código de amigo.
+        /// </summary>
+        public static string MainMenu_Friends_YourCode {
+            get {
+                return ResourceManager.GetString("MainMenu_Friends_YourCode", resourceCulture);
             }
         }
         
@@ -2815,6 +2905,42 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Desactivar.
+        /// </summary>
+        public static string Settings_Security_TwoFactorDisableButton {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorDisableButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Verificación en dos pasos desactivada..
+        /// </summary>
+        public static string Settings_Security_TwoFactorDisabledMessage {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorDisabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activar.
+        /// </summary>
+        public static string Settings_Security_TwoFactorEnableButton {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorEnableButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Verificación en dos pasos activada..
+        /// </summary>
+        public static string Settings_Security_TwoFactorEnabledMessage {
+            get {
+                return ResourceManager.GetString("Settings_Security_TwoFactorEnabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Código de correo al iniciar sesión.
         /// </summary>
         public static string Settings_Security_TwoFactorSub {
@@ -2824,43 +2950,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Activar
-        /// </summary>
-        public static string Settings_Security_TwoFactorEnableButton {
-            get {
-                return ResourceManager.GetString("Settings_Security_TwoFactorEnableButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Desactivar
-        /// </summary>
-        public static string Settings_Security_TwoFactorDisableButton {
-            get {
-                return ResourceManager.GetString("Settings_Security_TwoFactorDisableButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Verificación en dos pasos activada.
-        /// </summary>
-        public static string Settings_Security_TwoFactorEnabledMessage {
-            get {
-                return ResourceManager.GetString("Settings_Security_TwoFactorEnabledMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Verificación en dos pasos desactivada.
-        /// </summary>
-        public static string Settings_Security_TwoFactorDisabledMessage {
-            get {
-                return ResourceManager.GetString("Settings_Security_TwoFactorDisabledMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Necesitas una cuenta registrada para usar esta opción.
+        ///   Busca una cadena traducida similar a Necesitas una cuenta registrada para usar esta opción..
         /// </summary>
         public static string Settings_Security_TwoFactorUnavailableMessage {
             get {
@@ -3027,96 +3117,6 @@ namespace YachtDice.Resources {
         public static string TwoFactor_VerifyButton {
             get {
                 return ResourceManager.GetString("TwoFactor_VerifyButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Código de amigo (FRD-XXXXXX)
-        /// </summary>
-        public static string MainMenu_Friends_FriendCodePlaceholder {
-            get {
-                return ResourceManager.GetString("MainMenu_Friends_FriendCodePlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Tu código de amigo
-        /// </summary>
-        public static string MainMenu_Friends_YourCode {
-            get {
-                return ResourceManager.GetString("MainMenu_Friends_YourCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Desconectado
-        /// </summary>
-        public static string MainMenu_Friends_StatusOffline {
-            get {
-                return ResourceManager.GetString("MainMenu_Friends_StatusOffline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Solicitud enviada.
-        /// </summary>
-        public static string Friends_Result_RequestSent {
-            get {
-                return ResourceManager.GetString("Friends_Result_RequestSent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Este jugador ya te envió una solicitud. Acéptala en tus solicitudes.
-        /// </summary>
-        public static string Friends_Result_RequestAlreadyReceived {
-            get {
-                return ResourceManager.GetString("Friends_Result_RequestAlreadyReceived", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Escribe el código de amigo.
-        /// </summary>
-        public static string Friends_Result_InvalidCode {
-            get {
-                return ResourceManager.GetString("Friends_Result_InvalidCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a No existe ningún jugador con ese código.
-        /// </summary>
-        public static string Friends_Result_CodeNotFound {
-            get {
-                return ResourceManager.GetString("Friends_Result_CodeNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Ese es tu propio código.
-        /// </summary>
-        public static string Friends_Result_SelfRequest {
-            get {
-                return ResourceManager.GetString("Friends_Result_SelfRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Ya son amigos.
-        /// </summary>
-        public static string Friends_Result_AlreadyFriends {
-            get {
-                return ResourceManager.GetString("Friends_Result_AlreadyFriends", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Ya le enviaste una solicitud a este jugador.
-        /// </summary>
-        public static string Friends_Result_AlreadyRequested {
-            get {
-                return ResourceManager.GetString("Friends_Result_AlreadyRequested", resourceCulture);
             }
         }
     }

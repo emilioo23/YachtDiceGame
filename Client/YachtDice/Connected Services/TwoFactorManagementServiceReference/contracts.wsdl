@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:yachtdice:contracts" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" targetNamespace="urn:yachtdice:contracts" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:yachtdice:contracts/Imports">
+      <xsd:import namespace="urn:yachtdice:contracts" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ITwoFactorManagementService_IsTwoFactorEnabled_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsTwoFactorEnabled" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_IsTwoFactorEnabled_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsTwoFactorEnabledResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_IsTwoFactorEnabled_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_StartTwoFactorActivation_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartTwoFactorActivation" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_StartTwoFactorActivation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartTwoFactorActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_StartTwoFactorActivation_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ConfirmTwoFactorActivation_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmTwoFactorActivation" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ConfirmTwoFactorActivation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmTwoFactorActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ConfirmTwoFactorActivation_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ResendActivationCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResendActivationCode" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ResendActivationCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResendActivationCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_ResendActivationCode_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_DisableTwoFactor_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisableTwoFactor" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_DisableTwoFactor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisableTwoFactorResponse" />
+  </wsdl:message>
+  <wsdl:message name="ITwoFactorManagementService_DisableTwoFactor_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:portType name="ITwoFactorManagementService">
+    <wsdl:operation name="IsTwoFactorEnabled">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabled" message="tns:ITwoFactorManagementService_IsTwoFactorEnabled_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabledResponse" message="tns:ITwoFactorManagementService_IsTwoFactorEnabled_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabledServiceFaultFault" name="ServiceFaultFault" message="tns:ITwoFactorManagementService_IsTwoFactorEnabled_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartTwoFactorActivation">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/StartTwoFactorActivation" message="tns:ITwoFactorManagementService_StartTwoFactorActivation_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/StartTwoFactorActivationResponse" message="tns:ITwoFactorManagementService_StartTwoFactorActivation_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/StartTwoFactorActivationServiceFaultFault" name="ServiceFaultFault" message="tns:ITwoFactorManagementService_StartTwoFactorActivation_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmTwoFactorActivation">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivation" message="tns:ITwoFactorManagementService_ConfirmTwoFactorActivation_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivationResponse" message="tns:ITwoFactorManagementService_ConfirmTwoFactorActivation_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivationServiceFaultFault" name="ServiceFaultFault" message="tns:ITwoFactorManagementService_ConfirmTwoFactorActivation_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResendActivationCode">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCode" message="tns:ITwoFactorManagementService_ResendActivationCode_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeResponse" message="tns:ITwoFactorManagementService_ResendActivationCode_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeServiceFaultFault" name="ServiceFaultFault" message="tns:ITwoFactorManagementService_ResendActivationCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisableTwoFactor">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactor" message="tns:ITwoFactorManagementService_DisableTwoFactor_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorResponse" message="tns:ITwoFactorManagementService_DisableTwoFactor_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorServiceFaultFault" name="ServiceFaultFault" message="tns:ITwoFactorManagementService_DisableTwoFactor_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>
