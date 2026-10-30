@@ -283,7 +283,7 @@ namespace YachtDice.Views
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            // The real account deletion flow will be connected here later.
+            // TODO: Connect the real account deletion flow when the session token exists.
             var content = new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage };
             new CustomDialogWindow(content).ShowDialog();
         }

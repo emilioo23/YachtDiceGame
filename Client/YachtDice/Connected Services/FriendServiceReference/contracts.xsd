@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="SendFriendRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="friendCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendFriendRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SendFriendRequestResult" type="tns:FriendRequestResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="FriendRequestResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RequestSent" />
+      <xs:enumeration value="RequestAlreadyReceived" />
+      <xs:enumeration value="InvalidCode" />
+      <xs:enumeration value="CodeNotFound" />
+      <xs:enumeration value="SelfRequest" />
+      <xs:enumeration value="AlreadyFriends" />
+      <xs:enumeration value="AlreadyRequested" />
+      <xs:enumeration value="PlayerNotFound" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FriendRequestResultCode" nillable="true" type="tns:FriendRequestResultCode" />
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="ValidationFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
+  <xs:element name="RespondToFriendRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="requesterName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isAccepted" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RespondToFriendRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RespondToFriendRequestResult" type="tns:FriendActionResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="FriendActionResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="RelationNotFound" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FriendActionResultCode" nillable="true" type="tns:FriendActionResultCode" />
+  <xs:element name="RemoveFriend">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="friendName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveFriendResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RemoveFriendResult" type="tns:FriendActionResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendCode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendCodeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetFriendCodeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriends">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetFriendsResult" nillable="true" type="q1:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendRequests">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendRequestsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetFriendRequestsResult" nillable="true" type="q2:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

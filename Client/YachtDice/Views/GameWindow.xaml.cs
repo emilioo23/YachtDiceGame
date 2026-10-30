@@ -226,21 +226,21 @@ namespace YachtDice.Views
 
         private void CreateDiceOnCanvas()
         {
-            for (int i = EmptyLength; i < DiceCount; i++)
+            for (int diceIndex = EmptyLength; diceIndex < DiceCount; diceIndex++)
             {
                 var die = CreateDiceFace(MinDiceValue);
                 die.Cursor = Cursors.Hand;
 
-                var position = _dicePositions[i];
+                var position = _dicePositions[diceIndex];
                 Canvas.SetLeft(die, position.left);
                 Canvas.SetTop(die, position.top);
                 die.RenderTransform = new RotateTransform(position.angle, DiceSize / 2, DiceSize / 2);
 
-                int diceIndex = i;
-                die.MouseLeftButtonUp += (s, e) => ToggleHoldDice(diceIndex);
+                int toggledIndex = diceIndex;
+                die.MouseLeftButtonUp += (sender, e) => ToggleHoldDice(toggledIndex);
 
-                _diceBorders[i] = die;
-                _diceValues[i] = MinDiceValue;
+                _diceBorders[diceIndex] = die;
+                _diceValues[diceIndex] = MinDiceValue;
                 DiceCanvas.Children.Add(die);
             }
         }
@@ -260,7 +260,7 @@ namespace YachtDice.Views
 
             var grid = new Grid { Margin = new Thickness(DiceCornerRadius) };
 
-            for (int i = EmptyLength; i < ScoreGridSize; i++)
+            for (int cellIndex = EmptyLength; cellIndex < ScoreGridSize; cellIndex++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -311,7 +311,7 @@ namespace YachtDice.Views
             newFace.Cursor = Cursors.Hand;
 
             int diceIndexCopy = diceIndex;
-            newFace.MouseLeftButtonUp += (s, e) => ToggleHoldDice(diceIndexCopy);
+            newFace.MouseLeftButtonUp += (sender, e) => ToggleHoldDice(diceIndexCopy);
 
             if (_heldDice[diceIndex])
             {
@@ -337,12 +337,12 @@ namespace YachtDice.Views
         {
             if (_rollsLeft < MaxRolls)
             {
-                for (int i = EmptyLength; i < DiceCount; i++)
+                for (int diceIndex = EmptyLength; diceIndex < DiceCount; diceIndex++)
                 {
-                    if (!_heldDice[i])
+                    if (!_heldDice[diceIndex])
                     {
-                        _diceValues[i] = _random.Next(MinDiceValue, MaxDiceValueExclusive);
-                        UpdateDiceFace(i);
+                        _diceValues[diceIndex] = _random.Next(MinDiceValue, MaxDiceValueExclusive);
+                        UpdateDiceFace(diceIndex);
                     }
                 }
 
@@ -438,7 +438,7 @@ namespace YachtDice.Views
             row.Children.Add(opponentScoreLabel);
 
             row.Cursor = Cursors.Hand;
-            row.MouseLeftButtonUp += (s, e) => ScoreCategory(row, myScoreLabel);
+            row.MouseLeftButtonUp += (sender, e) => ScoreCategory(row, myScoreLabel);
 
             CategoriesPanel.Children.Add(row);
         }
@@ -503,10 +503,10 @@ namespace YachtDice.Views
 
                 _rollsLeft = EmptyLength;
 
-                for (int i = EmptyLength; i < DiceCount; i++)
+                for (int diceIndex = EmptyLength; diceIndex < DiceCount; diceIndex++)
                 {
-                    _heldDice[i] = false;
-                    UpdateDiceFace(i);
+                    _heldDice[diceIndex] = false;
+                    UpdateDiceFace(diceIndex);
                 }
 
                 UpdateRollButton();

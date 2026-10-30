@@ -60,7 +60,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 throw new ArgumentNullException(nameof(culture));
             }
 
-            var wasSent = false;
+            var isSent = false;
             string code = _codeService.GenerateCode(player.Email, challengeId);
             string subject = EmailStrings.ResourceManager.GetString(SubjectResourceKey, culture);
             string body = BuildBody(player.DisplayName, code, culture);
@@ -68,7 +68,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             try
             {
                 _emailService.Send(player.Email, subject, body);
-                wasSent = true;
+                isSent = true;
                 _logger.Info(SentLogMessage);
             }
             catch (SmtpException ex)
@@ -88,7 +88,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 LogSendFailure(ex);
             }
 
-            return wasSent;
+            return isSent;
         }
 
         private void LogSendFailure(Exception exception)

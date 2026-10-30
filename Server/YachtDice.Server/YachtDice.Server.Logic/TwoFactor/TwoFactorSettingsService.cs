@@ -60,7 +60,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>True if the player must enter a code to log in.</returns>
         public bool IsEnabled(string displayName)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
 
             return player != null && _playerRepository.HasTwoFactorEnabled(player.Id);
         }
@@ -73,7 +73,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Outcome of the request and the data of the challenge.</returns>
         public TwoFactorActivationResult StartActivation(string displayName, CultureInfo culture)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorActivationResult result;
 
             if (player == null)
@@ -105,7 +105,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Result of the validation.</returns>
         public TwoFactorValidationStatus ConfirmActivation(string displayName, string code, string challengeId)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
 
             if (player != null)
@@ -114,7 +114,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
                 if (status == TwoFactorValidationStatus.Valid)
                 {
-                    _playerRepository.SetTwoFactorEnabled(player.Id, true);
+                    _playerRepository.SaveTwoFactorEnabled(player.Id, true);
                 }
             }
 
@@ -130,7 +130,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Outcome of the resend attempt.</returns>
         public ResendCodeStatus ResendActivationCode(string displayName, string cultureName, string challengeId)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             ResendCodeStatus status = ResendCodeStatus.PlayerNotFound;
 
             if (player != null)
@@ -149,7 +149,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Outcome of the request.</returns>
         public TwoFactorChangeStatus Disable(string displayName, string password)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorChangeStatus status;
 
             if (player == null)
@@ -162,7 +162,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else
             {
-                _playerRepository.SetTwoFactorEnabled(player.Id, false);
+                _playerRepository.SaveTwoFactorEnabled(player.Id, false);
                 status = TwoFactorChangeStatus.Success;
             }
 
@@ -190,26 +190,25 @@ namespace YachtDice.Server.Logic.TwoFactor
             return maskedEmail;
         }
 
-        private Player FindPlayer(string displayName)
+        private List<Player> FindPlayers(string displayName)
         {
-            Player player = null;
+            var players = new List<Player>();
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
-                List<Player> matches = _playerRepository.FindByName(displayName);
-                player = matches.FirstOrDefault();
+                players = _playerRepository.FindByName(displayName);
             }
 
-            return player;
+            return players;
         }
 
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool wasSent = _deliveryService.SendCode(player, culture, challengeId);
+            var isSent = _deliveryService.SendCode(player, culture, challengeId);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
-            if (wasSent)
+            if (isSent)
             {
                 result = new TwoFactorActivationResult(
                     TwoFactorActivationStatus.CodeSent,

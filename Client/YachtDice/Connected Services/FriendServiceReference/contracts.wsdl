@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:yachtdice:contracts" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" targetNamespace="urn:yachtdice:contracts" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:yachtdice:contracts/Imports">
+      <xsd:import namespace="urn:yachtdice:contracts" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IFriendService_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SendFriendRequest_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RespondToFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:RespondToFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RespondToFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RespondToFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RespondToFriendRequest_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendCode" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendCode_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriends" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendRequests_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendRequests" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendRequests_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendRequestsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriendRequests_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:portType name="IFriendService">
+    <wsdl:operation name="SendFriendRequest">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/SendFriendRequest" message="tns:IFriendService_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/SendFriendRequestResponse" message="tns:IFriendService_SendFriendRequest_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/SendFriendRequestServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_SendFriendRequest_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RespondToFriendRequest">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest" message="tns:IFriendService_RespondToFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse" message="tns:IFriendService_RespondToFriendRequest_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_RespondToFriendRequest_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriend" message="tns:IFriendService_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse" message="tns:IFriendService_RemoveFriend_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendCode">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCode" message="tns:IFriendService_GetFriendCode_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCodeResponse" message="tns:IFriendService_GetFriendCode_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_GetFriendCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriends">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendsResponse" message="tns:IFriendService_GetFriends_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendsServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_GetFriends_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendRequests">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendRequests" message="tns:IFriendService_GetFriendRequests_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendRequestsResponse" message="tns:IFriendService_GetFriendRequests_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendRequestsServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_GetFriendRequests_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

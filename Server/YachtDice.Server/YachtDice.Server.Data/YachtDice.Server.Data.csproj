@@ -91,7 +91,10 @@
     <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\FriendRepository.cs" />
+    <Compile Include="Repositories\FriendshipStatus.cs" />
     <Compile Include="Repositories\GameHistoryRepository.cs" />
+    <Compile Include="Repositories\IFriendRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />

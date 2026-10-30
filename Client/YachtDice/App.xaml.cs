@@ -35,8 +35,8 @@ namespace YachtDice
             base.OnStartup(e);
 
             SetCulture(DefaultCultureCode);
-            bool defaultToDarkTheme = false;
-            SetTheme(isDark: defaultToDarkTheme);
+            var isDefaultThemeDark = false;
+            SetTheme(isDark: isDefaultThemeDark);
 
             var splashWindow = new SplashWindow();
             splashWindow.Show();

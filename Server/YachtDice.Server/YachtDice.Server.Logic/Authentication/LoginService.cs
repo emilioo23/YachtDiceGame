@@ -124,8 +124,8 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool wasSent = _deliveryService.SendCode(player, culture, challengeId);
-            LoginStatus status = wasSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
+            var isSent = _deliveryService.SendCode(player, culture, challengeId);
+            LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player.DisplayName, challengeId);
         }

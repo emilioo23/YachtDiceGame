@@ -34,6 +34,12 @@ namespace YachtDice.Gateway
         public event Action PlayersChanged;
 
         /// <summary>
+        /// Event triggered when a friend request arrives, is accepted or a friend is removed. It can be raised
+        /// from any thread.
+        /// </summary>
+        public event Action FriendsChanged;
+
+        /// <summary>
         /// Gets the connection shared by all the windows.
         /// </summary>
         public static PresenceGateway Current { get; } = new PresenceGateway();
@@ -41,12 +47,14 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the names of the players who are online right now.
         /// </summary>
-        /// <returns>A copy of the list of online players.</returns>
-        public List<string> GetOnlinePlayers()
+        public List<string> OnlinePlayers
         {
-            lock (_syncRoot)
+            get
             {
-                return _onlinePlayers.ToList();
+                lock (_syncRoot)
+                {
+                    return _onlinePlayers.ToList();
+                }
             }
         }
 
@@ -127,7 +135,7 @@ namespace YachtDice.Gateway
             {
                 string[] names = await Task.Run(() => client.Connect(displayName));
 
-                client.InnerChannel.Faulted += (sender, args) => HandleConnectionLost(client);
+                client.InnerChannel.Faulted += (sender, e) => HandleConnectionLost(client);
                 SaveConnection(client, displayName, names);
             }
             catch (CommunicationException ex)
@@ -159,6 +167,19 @@ namespace YachtDice.Gateway
 
         private void HandlePresenceChanged(string displayName, PresenceEventType eventType)
         {
+            if (eventType == PresenceEventType.PlayerConnected || eventType == PresenceEventType.PlayerDisconnected)
+            {
+                UpdateOnlinePlayers(displayName, eventType);
+                PlayersChanged?.Invoke();
+            }
+            else
+            {
+                FriendsChanged?.Invoke();
+            }
+        }
+
+        private void UpdateOnlinePlayers(string displayName, PresenceEventType eventType)
+        {
             lock (_syncRoot)
             {
                 if (eventType == PresenceEventType.PlayerConnected)
@@ -170,8 +191,6 @@ namespace YachtDice.Gateway
                     _onlinePlayers.Remove(displayName);
                 }
             }
-
-            PlayersChanged?.Invoke();
         }
 
         private void HandleConnectionLost(PresenceServiceClient client)

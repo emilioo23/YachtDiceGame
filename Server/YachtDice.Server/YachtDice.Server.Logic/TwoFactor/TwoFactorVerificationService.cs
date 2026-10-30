@@ -109,8 +109,8 @@ namespace YachtDice.Server.Logic.TwoFactor
             else
             {
                 var culture = new CultureInfo(cultureName);
-                bool wasSent = _deliveryService.SendCode(player, culture, challengeId);
-                status = wasSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
+                var isSent = _deliveryService.SendCode(player, culture, challengeId);
+                status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 
             return status;

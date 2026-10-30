@@ -250,9 +250,9 @@ namespace YachtDice.Views
 
             ClearDigits();
 
-            for (int index = 0; index < digits.Length; index++)
+            for (int digitIndex = 0; digitIndex < digits.Length; digitIndex++)
             {
-                _digitBoxes[index].Text = digits[index].ToString();
+                _digitBoxes[digitIndex].Text = digits[digitIndex].ToString();
             }
         }
 
