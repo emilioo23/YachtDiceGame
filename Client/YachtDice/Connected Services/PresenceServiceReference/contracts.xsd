@@ -34,6 +34,9 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="PlayerConnected" />
       <xs:enumeration value="PlayerDisconnected" />
+      <xs:enumeration value="FriendRequestReceived" />
+      <xs:enumeration value="FriendRequestAccepted" />
+      <xs:enumeration value="FriendRemoved" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PresenceEventType" nillable="true" type="tns:PresenceEventType" />

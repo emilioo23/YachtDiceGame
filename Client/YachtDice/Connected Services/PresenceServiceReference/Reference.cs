@@ -21,6 +21,15 @@ namespace YachtDice.PresenceServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerDisconnected = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestReceived = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRequestAccepted = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendRemoved = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
