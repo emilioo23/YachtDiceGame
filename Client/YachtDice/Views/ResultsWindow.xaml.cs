@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -42,11 +44,13 @@ namespace YachtDice.Views
             this.Close();
         }
 
-        private void NewGameButton_Click(object sender, RoutedEventArgs e)
+        private async void NewGameButton_Click(object sender, RoutedEventArgs e)
         {
-            var gameWindow = new GameWindow(_playerName);
-            gameWindow.Show();
-            this.Close();
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
+            await LobbyNavigator.CreateRoomAndOpenAsync(this, _playerName);
+            button.IsEnabled = true;
         }
     }
 }

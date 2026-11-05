@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using YachtDice.ChatServiceReference;
+using YachtDice.Gateway;
+using YachtDice.Models;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -36,7 +39,6 @@ namespace YachtDice.Views
         private const int BorderThicknessNormal = 2;
         private const int BorderThicknessSelected = 3;
         private const int RowMarginBottom = 2;
-        private const int ChatMessageMarginBottom = 4;
         private const string DefaultZeroText = "0";
         private const int EmptyLength = 0;
         private const int FirstCharacterIndex = 0;
@@ -59,8 +61,6 @@ namespace YachtDice.Views
         private const string ResourceBrushCream2 = "BrushCream2";
         private const string ResourceBrushFeltLight = "BrushFeltLight";
         private const string ResourceBrushWood = "BrushWood";
-        private const string ResourceBrushDanger = "BrushDanger";
-        private const string ChatSenderSeparator = ": ";
 
         private const int DefaultPipFace = 6;
 
@@ -121,6 +121,9 @@ namespace YachtDice.Views
         private readonly bool[] _heldDice = new bool[DiceCount];
         private readonly Border[] _diceBorders = new Border[DiceCount];
         private readonly string _playerName;
+        private readonly RoomGateway _roomGateway;
+        private readonly ChatGateway _chatGateway;
+        private readonly bool _isChatAvailable;
 
         private readonly (double left, double top, double angle)[] _dicePositions =
         {
@@ -131,32 +134,40 @@ namespace YachtDice.Views
             (250, 230, -12),
         };
 
+        private bool _shouldLeaveOnClose = true;
         private int _rollsLeft;
         private int _totalScore;
         private TextBlock _totalScoreLabel;
 
         /// <summary>
-        /// Initializes the game window for the given player.
+        /// Initializes the game window of a room whose game has just started.
         /// </summary>
-        /// <param name="playerName">Name of the player who plays the match.</param>
-        public GameWindow(string playerName)
+        /// <param name="roomGateway">Connection of the player to the room.</param>
+        /// <param name="chatGateway">Connection of the player to the chat of the room.</param>
+        /// <param name="isChatAvailable">Whether the player could join the chat of the room.</param>
+        public GameWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
         {
             InitializeComponent();
-            _playerName = playerName;
-            PlayerNameTextBlock.Text = playerName;
 
-            PlayerInitialTextBlock.Text = playerName.Length > EmptyLength
-                ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
+            _roomGateway = roomGateway;
+            _chatGateway = chatGateway;
+            _isChatAvailable = isChatAvailable;
+            _playerName = roomGateway.PlayerName;
+            PlayerNameTextBlock.Text = _playerName;
+
+            PlayerInitialTextBlock.Text = _playerName.Length > EmptyLength
+                ? _playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
                 : DefaultPlayerInitial;
 
             RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new GameWindow(playerName);
+            LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
 
             CreateDiceOnCanvas();
             LoadCategories();
             UpdateRollButton();
 
-            AppendMessageToChat(Strings.Game_Chat_SystemName, Strings.Game_Chat_MatchStartedMessage, true);
+            StartChat();
+            Closed += HandleWindowClosed;
         }
 
         /// <summary>
@@ -169,59 +180,80 @@ namespace YachtDice.Views
             this.Close();
         }
 
-        private void SendChatButton_Click(object sender, RoutedEventArgs e)
+        private Window ReopenWindow()
         {
-            SendChatMessage();
+            _shouldLeaveOnClose = false;
+
+            return new GameWindow(_roomGateway, _chatGateway, _isChatAvailable);
         }
 
-        private void ChatInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void StartChat()
         {
-            if (e.Key == Key.Enter)
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                Strings.Game_Chat_MatchStartedMessage,
+                ChatMessageKind.System);
+
+            if (_isChatAvailable)
             {
-                SendChatMessage();
-                e.Handled = true;
+                ChatPanelControl.MessageSubmitted += HandleMessageSubmitted;
+
+                foreach (ChatMessage message in _chatGateway.Subscribe(HandleMessageReceived))
+                {
+                    ShowChatMessage(message);
+                }
+            }
+            else
+            {
+                ChatPanelControl.AddMessage(
+                    Strings.Game_Chat_SystemName,
+                    Strings.Game_Chat_Unavailable,
+                    ChatMessageKind.System);
+                ChatPanelControl.DisableSending();
             }
         }
 
-        private void SendChatMessage()
+        private void ShowChatMessage(ChatMessage message)
         {
-            var messageText = ChatInputTextBox.Text.Trim();
+            ChatMessageKind kind = message.Author == _playerName ? ChatMessageKind.Own : ChatMessageKind.Other;
 
-            if (messageText.Length > EmptyLength)
+            ChatPanelControl.AddMessage(message.Author, message.Content, kind);
+        }
+
+        private void HandleMessageReceived(ChatMessage message)
+        {
+            Dispatcher.BeginInvoke(new Action(() => ShowChatMessage(message)));
+        }
+
+        private void HandleMessageSubmitted(string content)
+        {
+            _ = SendChatMessageAsync(content);
+        }
+
+        private async Task SendChatMessageAsync(string content)
+        {
+            try
             {
-                ChatInputTextBox.Clear();
-                AppendMessageToChat(_playerName, messageText, false);
+                await _chatGateway.SendAsync(content);
+            }
+            catch (GatewayException)
+            {
+                ChatPanelControl.AddMessage(
+                    Strings.Game_Chat_SystemName,
+                    Strings.Game_Chat_SendFailed,
+                    ChatMessageKind.System);
             }
         }
 
-        private void AppendMessageToChat(string sender, string message, bool isSystem)
+        private async void HandleWindowClosed(object sender, EventArgs e)
         {
-            var textBlock = new TextBlock
+            _chatGateway.Unsubscribe(HandleMessageReceived);
+
+            if (_shouldLeaveOnClose)
             {
-                Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, ChatMessageMarginBottom),
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            var textColor = isSystem
-                ? (SolidColorBrush)FindResource(ResourceBrushDanger)
-                : (SolidColorBrush)FindResource(ResourceBrushText);
-
-            var senderRun = new Run(sender + ChatSenderSeparator)
-            {
-                FontWeight = FontWeights.Bold,
-                Foreground = textColor
-            };
-
-            var messageRun = new Run(message)
-            {
-                Foreground = textColor
-            };
-
-            textBlock.Inlines.Add(senderRun);
-            textBlock.Inlines.Add(messageRun);
-
-            ChatMessagesPanel.Children.Add(textBlock);
-            ChatScrollViewer.ScrollToEnd();
+                await _chatGateway.LeaveAsync();
+                await _roomGateway.LeaveRoomAsync();
+            }
         }
 
         private void CreateDiceOnCanvas()

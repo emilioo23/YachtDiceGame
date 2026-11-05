@@ -39,5 +39,10 @@
         /// Cream brush used as background of selected elements.
         /// </summary>
         public const string Cream2BrushKey = "BrushCream2";
+
+        /// <summary>
+        /// Red brush used for warnings and notices of the game.
+        /// </summary>
+        public const string DangerBrushKey = "BrushDanger";
     }
 }

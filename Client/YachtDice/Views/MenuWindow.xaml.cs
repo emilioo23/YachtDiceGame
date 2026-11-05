@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using YachtDice.Gateway;
+using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
@@ -321,19 +323,13 @@ namespace YachtDice.Views
             }
         }
 
-        private void PlayNavButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenLobbyWindow();
-        }
+            var button = (Button)sender;
 
-        private void LobbyNavButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenLobbyWindow();
-        }
-
-        private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenLobbyWindow();
+            button.IsEnabled = false;
+            await LobbyNavigator.CreateRoomAndOpenAsync(this, _playerName);
+            button.IsEnabled = true;
         }
 
         private void LeaderboardNavButton_Click(object sender, RoutedEventArgs e)
@@ -366,23 +362,22 @@ namespace YachtDice.Views
             Close();
         }
 
-        private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
+        private async void JoinRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            string message = Strings.MainMenu_Play_ErrorRequiredRoomCode;
+            string roomCode = JoinRoomCodeTextBox.Text.Trim();
 
-            if (!string.IsNullOrWhiteSpace(JoinRoomCodeTextBox.Text))
+            if (string.IsNullOrEmpty(roomCode))
             {
-                message = string.Format(Strings.MainMenu_Play_JoiningRoomMessage, JoinRoomCodeTextBox.Text);
+                ShowDialogMessage(Strings.MainMenu_Play_ErrorRequiredRoomCode);
             }
+            else
+            {
+                var button = (Button)sender;
 
-            ShowDialogMessage(message);
-        }
-
-        private void OpenLobbyWindow()
-        {
-            var lobbyWindow = new LobbyWindow(PlayerNameTextBlock.Text);
-            lobbyWindow.Show();
-            Close();
+                button.IsEnabled = false;
+                await LobbyNavigator.JoinRoomAndOpenAsync(this, _playerName, roomCode);
+                button.IsEnabled = true;
+            }
         }
     }
 }

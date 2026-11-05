@@ -68,6 +68,16 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Runs a synchronous operation that gives no answer and converts any failure into a fault for the client.
+        /// </summary>
+        /// <param name="data">Data received from the client.</param>
+        /// <param name="operation">Operation to run.</param>
+        protected void Execute(object data, Action operation)
+        {
+            Execute(data, () => RunOperation(operation));
+        }
+
+        /// <summary>
         /// Runs a synchronous operation that needs no data from the client and converts any failure into a fault.
         /// </summary>
         /// <typeparam name="TResponse">Type of the answer of the operation.</typeparam>
@@ -76,6 +86,13 @@ namespace YachtDice.Server.Services
         protected TResponse Execute<TResponse>(Func<TResponse> operation)
         {
             return Execute(new object(), operation);
+        }
+
+        private static bool RunOperation(Action operation)
+        {
+            operation();
+
+            return true;
         }
 
         private static void ValidateData(object data)

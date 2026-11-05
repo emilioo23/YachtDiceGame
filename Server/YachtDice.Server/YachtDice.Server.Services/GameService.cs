@@ -18,6 +18,7 @@ namespace YachtDice.Server.Services
         private readonly CallbackRegistry<Contracts.IGameCallback> _callbacks =
             new CallbackRegistry<Contracts.IGameCallback>();
 
+        private readonly object _syncRoot = new object();
         private readonly Random _random = new Random();
 
         /// <summary>
@@ -29,7 +30,10 @@ namespace YachtDice.Server.Services
         {
             int[] diceValues = CreateDiceValues();
 
-            _callbacks.Register(roomId, OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>());
+            _callbacks.Register(
+                roomId,
+                username,
+                OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>());
             _callbacks.Notify(roomId, callback => callback.DiceRolled(diceValues));
         }
 
@@ -48,7 +52,7 @@ namespace YachtDice.Server.Services
         {
             var diceValues = new int[DiceCount];
 
-            lock (_random)
+            lock (_syncRoot)
             {
                 for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
                 {
