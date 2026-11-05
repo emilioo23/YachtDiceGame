@@ -313,7 +313,7 @@
     <value>Ingresa el código de una sala</value>
   </data>
   <data name="MainMenu_Play_CodeRoomPlaceholder" xml:space="preserve">
-    <value>Código: ej. 4821</value>
+    <value>Código: ej. K7M2QX</value>
   </data>
   <data name="MainMenu_Play_JoinButton" xml:space="preserve">
     <value>Entrar →</value>
@@ -1136,5 +1136,47 @@
   </data>
   <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
     <value>Ya le enviaste una solicitud a este jugador.</value>
+  </data>
+  <data name="Lobby_RoomCodeFormat" xml:space="preserve">
+    <value>Código: {0}</value>
+  </data>
+  <data name="Lobby_PlayerCountFormat" xml:space="preserve">
+    <value>({0}/{1})</value>
+  </data>
+  <data name="Lobby_WaitingForHost" xml:space="preserve">
+    <value>Esperando al anfitrión...</value>
+  </data>
+  <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
+    <value>Se necesitan al menos 2 jugadores para iniciar la partida.</value>
+  </data>
+  <data name="Lobby_Result_NotHost" xml:space="preserve">
+    <value>Solo el anfitrión puede hacer eso.</value>
+  </data>
+  <data name="Lobby_Result_RoomNotFound" xml:space="preserve">
+    <value>No existe una sala con ese código.</value>
+  </data>
+  <data name="Lobby_Result_RoomFull" xml:space="preserve">
+    <value>La sala ya está llena.</value>
+  </data>
+  <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
+    <value>La partida de esa sala ya comenzó.</value>
+  </data>
+  <data name="Lobby_Result_PlayerAlreadyInRoom" xml:space="preserve">
+    <value>Ya hay un jugador con tu nombre en esa sala.</value>
+  </data>
+  <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
+    <value>Esa configuración no es válida para la sala.</value>
+  </data>
+  <data name="Game_Chat_ButtonHide" xml:space="preserve">
+    <value>Ocultar</value>
+  </data>
+  <data name="Game_Chat_ShowTooltip" xml:space="preserve">
+    <value>Mostrar el chat</value>
+  </data>
+  <data name="Game_Chat_SendFailed" xml:space="preserve">
+    <value>No se pudo enviar el mensaje.</value>
+  </data>
+  <data name="Game_Chat_Unavailable" xml:space="preserve">
+    <value>El chat no está disponible en esta partida.</value>
   </data>
 </root>

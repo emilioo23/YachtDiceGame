@@ -313,7 +313,7 @@
     <value>Enter a room code</value>
   </data>
   <data name="MainMenu_Play_CodeRoomPlaceholder" xml:space="preserve">
-    <value>Code: e.g. 4821</value>
+    <value>Code: e.g. K7M2QX</value>
   </data>
   <data name="MainMenu_Play_JoinButton" xml:space="preserve">
     <value>Join →</value>
@@ -1136,5 +1136,47 @@
   </data>
   <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
     <value>You already sent a request to this player.</value>
+  </data>
+  <data name="Lobby_RoomCodeFormat" xml:space="preserve">
+    <value>Code: {0}</value>
+  </data>
+  <data name="Lobby_PlayerCountFormat" xml:space="preserve">
+    <value>({0}/{1})</value>
+  </data>
+  <data name="Lobby_WaitingForHost" xml:space="preserve">
+    <value>Waiting for the host...</value>
+  </data>
+  <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
+    <value>At least 2 players are needed to start the game.</value>
+  </data>
+  <data name="Lobby_Result_NotHost" xml:space="preserve">
+    <value>Only the host can do that.</value>
+  </data>
+  <data name="Lobby_Result_RoomNotFound" xml:space="preserve">
+    <value>There is no room with that code.</value>
+  </data>
+  <data name="Lobby_Result_RoomFull" xml:space="preserve">
+    <value>The room is full.</value>
+  </data>
+  <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
+    <value>The game in that room has already started.</value>
+  </data>
+  <data name="Lobby_Result_PlayerAlreadyInRoom" xml:space="preserve">
+    <value>A player with your name is already in that room.</value>
+  </data>
+  <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
+    <value>That setting is not valid for the room.</value>
+  </data>
+  <data name="Game_Chat_ButtonHide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Game_Chat_ShowTooltip" xml:space="preserve">
+    <value>Show the chat</value>
+  </data>
+  <data name="Game_Chat_SendFailed" xml:space="preserve">
+    <value>The message could not be sent.</value>
+  </data>
+  <data name="Game_Chat_Unavailable" xml:space="preserve">
+    <value>The chat is not available in this game.</value>
   </data>
 </root>

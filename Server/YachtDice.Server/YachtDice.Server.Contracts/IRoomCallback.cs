@@ -9,11 +9,12 @@ namespace YachtDice.Server.Contracts
     public interface IRoomCallback
     {
         /// <summary>
-        /// Called when a player's status in the room changes (for example, joins or leaves).
+        /// Called when something changes in the room. It always carries the whole state of the room, so the
+        /// client only has to show it.
         /// </summary>
-        /// <param name="player">Profile of the player involved. If leaving, it may only contain the username.</param>
-        /// <param name="eventType">The specific action that occurred.</param>
+        /// <param name="room">State of the room after the change.</param>
+        /// <param name="eventType">What happened in the room.</param>
         [OperationContract(IsOneWay = true)]
-        void PlayerChanged(PlayerProfile player, RoomEventType eventType);
+        void RoomChanged(RoomInfo room, RoomEventType eventType);
     }
 }

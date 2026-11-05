@@ -114,14 +114,14 @@
                             Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
                             Style="{StaticResource TabButtonActive}"
                             Margin="0,0,0,8"
-                            Click="PlayNavButton_Click"
                             FontSize="19"/>
 
                     <Button x:Name="LobbyNavButton"
                             Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
-                            Click="LobbyNavButton_Click"
+                            IsEnabled="False"
+                            Opacity="0.5"
                             FontSize="19"/>
 
                     <Button x:Name="LeaderboardNavButton"
@@ -235,6 +235,7 @@
                                     <TextBox x:Name="JoinRoomCodeTextBox"
                                              Grid.Column="0"
                                              Style="{StaticResource TextBoxRounded}"
+                                             CharacterCasing="Upper"
                                              Margin="0,0,8,0"/>
 
                                     <Button Grid.Column="1"

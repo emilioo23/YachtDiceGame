@@ -3119,5 +3119,131 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("TwoFactor_VerifyButton", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código: {0}.
+        /// </summary>
+        public static string Lobby_RoomCodeFormat {
+            get {
+                return ResourceManager.GetString("Lobby_RoomCodeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ({0}/{1}).
+        /// </summary>
+        public static string Lobby_PlayerCountFormat {
+            get {
+                return ResourceManager.GetString("Lobby_PlayerCountFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando al anfitrión....
+        /// </summary>
+        public static string Lobby_WaitingForHost {
+            get {
+                return ResourceManager.GetString("Lobby_WaitingForHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se necesitan al menos 2 jugadores para iniciar la partida..
+        /// </summary>
+        public static string Lobby_Result_NotEnoughPlayers {
+            get {
+                return ResourceManager.GetString("Lobby_Result_NotEnoughPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo el anfitrión puede hacer eso..
+        /// </summary>
+        public static string Lobby_Result_NotHost {
+            get {
+                return ResourceManager.GetString("Lobby_Result_NotHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No existe una sala con ese código..
+        /// </summary>
+        public static string Lobby_Result_RoomNotFound {
+            get {
+                return ResourceManager.GetString("Lobby_Result_RoomNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La sala ya está llena..
+        /// </summary>
+        public static string Lobby_Result_RoomFull {
+            get {
+                return ResourceManager.GetString("Lobby_Result_RoomFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida de esa sala ya comenzó..
+        /// </summary>
+        public static string Lobby_Result_GameAlreadyStarted {
+            get {
+                return ResourceManager.GetString("Lobby_Result_GameAlreadyStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya hay un jugador con tu nombre en esa sala..
+        /// </summary>
+        public static string Lobby_Result_PlayerAlreadyInRoom {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayerAlreadyInRoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa configuración no es válida para la sala..
+        /// </summary>
+        public static string Lobby_Result_InvalidSettings {
+            get {
+                return ResourceManager.GetString("Lobby_Result_InvalidSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ocultar.
+        /// </summary>
+        public static string Game_Chat_ButtonHide {
+            get {
+                return ResourceManager.GetString("Game_Chat_ButtonHide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mostrar el chat.
+        /// </summary>
+        public static string Game_Chat_ShowTooltip {
+            get {
+                return ResourceManager.GetString("Game_Chat_ShowTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo enviar el mensaje..
+        /// </summary>
+        public static string Game_Chat_SendFailed {
+            get {
+                return ResourceManager.GetString("Game_Chat_SendFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El chat no está disponible en esta partida..
+        /// </summary>
+        public static string Game_Chat_Unavailable {
+            get {
+                return ResourceManager.GetString("Game_Chat_Unavailable", resourceCulture);
+            }
+        }
     }
 }

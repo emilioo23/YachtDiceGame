@@ -198,7 +198,7 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="220"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0"
@@ -256,68 +256,8 @@
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Row="1"
-                        Style="{StaticResource CardPanel}"
-                        Padding="12">
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock
-                            Grid.Row="0"
-                            Text="{x:Static properties:Strings.Game_Chat_ButtonChat}"
-                            Foreground="{StaticResource BrushText}"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Margin="0,0,0,6"/>
-
-                        <Border
-                            Grid.Row="1"
-                            Background="{StaticResource BrushCream2}"
-                            CornerRadius="6"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BrushBorder}"
-                            Margin="0,0,0,8"
-                            Padding="6">
-
-                            <ScrollViewer
-                                x:Name="ChatScrollViewer"
-                                VerticalScrollBarVisibility="Auto">
-
-                                <StackPanel x:Name="ChatMessagesPanel"/>
-                            </ScrollViewer>
-                        </Border>
-
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox
-                                x:Name="ChatInputTextBox"
-                                Grid.Column="0"
-                                Padding="6,4"
-                                FontSize="13"
-                                VerticalContentAlignment="Center"
-                                KeyDown="ChatInputTextBox_KeyDown"/>
-
-                            <Button
-                                x:Name="SendChatButton"
-                                Grid.Column="1"
-                                Content="&gt;"
-                                Style="{StaticResource BtnPrimary}"
-                                Margin="6,0,0,0"
-                                Padding="14,4"
-                                FontSize="15"
-                                Click="SendChatButton_Click"/>
-                        </Grid>
-                    </Grid>
-                </Border>
+                <views:ChatPanel x:Name="ChatPanelControl"
+                                 Grid.Row="1"/>
             </Grid>
         </Grid>
     </Viewbox>

@@ -8,6 +8,7 @@ using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
+using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Services;
 
@@ -74,9 +75,11 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerService()));
-            serviceHosts.Add(new ServiceHost(new RoomService()));
+
+            var roomManager = new RoomManager();
+            serviceHosts.Add(new ServiceHost(new RoomService(roomManager)));
             serviceHosts.Add(new ServiceHost(new GameService()));
-            serviceHosts.Add(new ServiceHost(new ChatService()));
+            serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
 
             var presenceService = new PresenceService();
             serviceHosts.Add(new ServiceHost(presenceService));

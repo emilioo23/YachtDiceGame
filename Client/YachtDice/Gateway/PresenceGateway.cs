@@ -51,10 +51,14 @@ namespace YachtDice.Gateway
         {
             get
             {
+                List<string> onlinePlayers;
+
                 lock (_syncRoot)
                 {
-                    return _onlinePlayers.ToList();
+                    onlinePlayers = _onlinePlayers.ToList();
                 }
+
+                return onlinePlayers;
             }
         }
 
@@ -117,10 +121,15 @@ namespace YachtDice.Gateway
 
         private bool IsConnectedAs(string displayName)
         {
+            bool isConnected;
+
             lock (_syncRoot)
             {
-                return _client != null && string.Equals(_displayName, displayName, StringComparison.OrdinalIgnoreCase);
+                isConnected = _client != null
+                    && string.Equals(_displayName, displayName, StringComparison.OrdinalIgnoreCase);
             }
+
+            return isConnected;
         }
 
         private async Task OpenConnectionAsync(string displayName)

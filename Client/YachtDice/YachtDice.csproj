@@ -248,6 +248,8 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Gateway\AuthenticationGateway.cs" />
+    <Compile Include="Gateway\ChatGateway.cs" />
+    <Compile Include="Gateway\DuplexGatewayBase.cs" />
     <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
@@ -255,6 +257,7 @@
     <Compile Include="Gateway\PlayerGateway.cs" />
     <Compile Include="Gateway\PresenceGateway.cs" />
     <Compile Include="Gateway\RegistrationGateway.cs" />
+    <Compile Include="Gateway\RoomGateway.cs" />
     <Compile Include="Gateway\ServerAddress.cs" />
     <Compile Include="Gateway\TwoFactorManagementGateway.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
@@ -266,6 +269,13 @@
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ResourceKeys.cs" />
+    <Compile Include="Utils\RoomResultMessages.cs" />
+    <Compile Include="Navigation\LobbyNavigator.cs" />
+    <Compile Include="Models\ChatMessageKind.cs" />
+    <Compile Include="Models\LobbySlot.cs" />
+    <Compile Include="Views\ChatPanel.xaml.cs">
+      <DependentUpon>ChatPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomDialogWindow.xaml.cs">
       <DependentUpon>CustomDialogWindow.xaml</DependentUpon>
     </Compile>
@@ -317,6 +327,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChatPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
