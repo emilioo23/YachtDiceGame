@@ -1,10 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="JoinChat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinChatResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="ValidationFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
   <xs:element name="SendChatMessage">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="message" nillable="true" type="tns:ChatMessage" />
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -16,6 +44,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
+  <xs:element name="LeaveChat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="MessageReceived">
     <xs:complexType>
       <xs:sequence>

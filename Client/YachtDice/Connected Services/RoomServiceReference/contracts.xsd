@@ -1,31 +1,130 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="JoinRoom">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="CreateRoom">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="hostName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="PlayerProfile">
+  <xs:element name="CreateRoomResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateRoomResult" nillable="true" type="tns:RoomInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="RoomInfo">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
-      <xs:element minOccurs="0" name="Score" type="xs:int" />
-      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HostName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Players" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:RoomSettings" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PlayerProfile" nillable="true" type="tns:PlayerProfile" />
+  <xs:element name="RoomInfo" nillable="true" type="tns:RoomInfo" />
+  <xs:complexType name="RoomSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsPrivate" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Speed" type="tns:GameSpeed" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomSettings" nillable="true" type="tns:RoomSettings" />
+  <xs:simpleType name="GameSpeed">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Fast" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameSpeed" nillable="true" type="tns:GameSpeed" />
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="ValidationFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
+  <xs:element name="JoinRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="JoinRoomResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="JoinRoomResult" nillable="true" type="tns:JoinRoomResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="JoinRoomResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:RoomResultCode" />
+      <xs:element minOccurs="0" name="Room" nillable="true" type="tns:RoomInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JoinRoomResult" nillable="true" type="tns:JoinRoomResult" />
+  <xs:simpleType name="RoomResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="RoomNotFound" />
+      <xs:enumeration value="RoomFull" />
+      <xs:enumeration value="GameAlreadyStarted" />
+      <xs:enumeration value="PlayerAlreadyInRoom" />
+      <xs:enumeration value="NotHost" />
+      <xs:enumeration value="NotEnoughPlayers" />
+      <xs:enumeration value="InvalidSettings" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RoomResultCode" nillable="true" type="tns:RoomResultCode" />
+  <xs:element name="UpdateRoomSettings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="settings" nillable="true" type="tns:RoomSettings" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateRoomSettingsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UpdateRoomSettingsResult" type="tns:RoomResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartGameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="StartGameResult" type="tns:RoomResultCode" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="LeaveRoom">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -34,10 +133,10 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="PlayerChanged">
+  <xs:element name="RoomChanged">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="player" nillable="true" type="tns:PlayerProfile" />
+        <xs:element minOccurs="0" name="room" nillable="true" type="tns:RoomInfo" />
         <xs:element minOccurs="0" name="eventType" type="tns:RoomEventType" />
       </xs:sequence>
     </xs:complexType>
@@ -46,6 +145,8 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="PlayerJoined" />
       <xs:enumeration value="PlayerLeft" />
+      <xs:enumeration value="SettingsChanged" />
+      <xs:enumeration value="GameStarted" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />
