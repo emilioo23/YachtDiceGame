@@ -15,6 +15,81 @@ namespace YachtDice.ChatServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceFault", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class ServiceFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.ChatServiceReference.ServiceErrorCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.ChatServiceReference.ServiceErrorCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceErrorCode", Namespace="urn:yachtdice:contracts")]
+    public enum ServiceErrorCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UnexpectedError = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        DatabaseUnavailable = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ValidationFailed = 2,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ChatMessage", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
     public partial class ChatMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -94,8 +169,15 @@ namespace YachtDice.ChatServiceReference {
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="ChatServiceReference.IChatService", CallbackContract=typeof(YachtDice.ChatServiceReference.IChatServiceCallback))]
     public interface IChatService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IChatService/JoinChat", ReplyAction="urn:yachtdice:contracts/IChatService/JoinChatResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.ChatServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IChatService/JoinChatServiceFaultFault", Name="ServiceFault")]
+        void JoinChat(string playerName, string roomCode);
+        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/SendChatMessage")]
-        void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomId);
+        void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/LeaveChat")]
+        void LeaveChat(string playerName, string roomCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -133,8 +215,16 @@ namespace YachtDice.ChatServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomId) {
-            base.Channel.SendChatMessage(message, roomId);
+        public void JoinChat(string playerName, string roomCode) {
+            base.Channel.JoinChat(playerName, roomCode);
+        }
+        
+        public void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode) {
+            base.Channel.SendChatMessage(message, roomCode);
+        }
+        
+        public void LeaveChat(string playerName, string roomCode) {
+            base.Channel.LeaveChat(playerName, roomCode);
         }
     }
 }

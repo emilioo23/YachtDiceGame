@@ -6,15 +6,35 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IChatService_JoinChat_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinChat" />
+  </wsdl:message>
+  <wsdl:message name="IChatService_JoinChat_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinChatResponse" />
+  </wsdl:message>
+  <wsdl:message name="IChatService_JoinChat_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:message name="IChatService_SendChatMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendChatMessage" />
+  </wsdl:message>
+  <wsdl:message name="IChatService_LeaveChat_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveChat" />
   </wsdl:message>
   <wsdl:message name="IChatService_MessageReceived_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:MessageReceived" />
   </wsdl:message>
   <wsdl:portType name="IChatService">
+    <wsdl:operation name="JoinChat">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IChatService/JoinChat" message="tns:IChatService_JoinChat_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IChatService/JoinChatResponse" message="tns:IChatService_JoinChat_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IChatService/JoinChatServiceFaultFault" name="ServiceFaultFault" message="tns:IChatService_JoinChat_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SendChatMessage">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IChatService/SendChatMessage" message="tns:IChatService_SendChatMessage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeaveChat">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IChatService/LeaveChat" message="tns:IChatService_LeaveChat_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MessageReceived">
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IChatService/MessageReceived" message="tns:IChatService_MessageReceived_OutputCallbackMessage" />

@@ -25,6 +25,7 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="cb2b61b3-3e1c-417f-84c2-62eec10f207c" SourceId="1" SourceUrl="net.tcp://localhost:8736/YachtDice/Room/mex" />
     <MetadataFile FileName="contracts.xsd" MetadataType="Schema" ID="f02a1a32-20fa-4b03-998e-bb56cbe5c9ca" SourceId="1" SourceUrl="net.tcp://localhost:8736/YachtDice/Room/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="9348fa6a-2a33-446b-bdfd-88250e27c364" SourceId="1" SourceUrl="net.tcp://localhost:8736/YachtDice/Room/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="02eafe64-8a31-42da-aca7-b4d2705e3258" SourceId="1" SourceUrl="net.tcp://localhost:8736/YachtDice/Room/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

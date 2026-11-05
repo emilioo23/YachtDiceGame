@@ -16,8 +16,26 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IChatService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="JoinChat">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IChatService/JoinChat" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="SendChatMessage">
       <soap12:operation soapAction="urn:yachtdice:contracts/IChatService/SendChatMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="LeaveChat">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IChatService/LeaveChat" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
