@@ -28,27 +28,17 @@ namespace YachtDice.Server.Logic.Players
             IPlayerRepository playerRepository,
             IGameHistoryRepository gameHistoryRepository)
         {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            }
-
-            if (gameHistoryRepository == null)
-            {
-                throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
-            }
-
-            _playerRepository = playerRepository;
-            _gameHistoryRepository = gameHistoryRepository;
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+            _gameHistoryRepository = gameHistoryRepository
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
         }
 
         /// <summary>
         /// Gets the statistics of the player with the given display name or username.
         /// </summary>
         /// <param name="playerName">Display name or username of the player.</param>
-        /// <returns>
-        /// The statistics; <see cref="PlayerStatistics.IsPlayerFound"/> is false if the player does not exist.
-        /// </returns>
+        /// <returns>The statistics; they are empty if the player does not exist.</returns>
         public PlayerStatistics GetStatistics(string playerName)
         {
             List<Player> matches = _playerRepository.FindByName(playerName);
@@ -75,7 +65,6 @@ namespace YachtDice.Server.Logic.Players
 
             return new PlayerStatistics
             {
-                IsPlayerFound = true,
                 GamesPlayed = gamesPlayed,
                 Wins = wins,
                 BestScore = bestScore,

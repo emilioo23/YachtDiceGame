@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Gateway;
 using YachtDice.Resources;
@@ -31,9 +32,6 @@ namespace YachtDice.Views
         private const int MedalLeftPadding = 14;
         private const int CellFontSize = 13;
         private const int CellVerticalPadding = 10;
-        private const string GoldMedal = "\U0001F947";
-        private const string SilverMedal = "\U0001F948";
-        private const string BronzeMedal = "\U0001F949";
         private const string PointsFormat = "N0";
 
         private readonly string _playerName;
@@ -68,11 +66,11 @@ namespace YachtDice.Views
             await ShowFriendsRankingAsync();
         }
 
-        private void BackLink_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
             var menuWindow = new MenuWindow(_playerName);
             menuWindow.Show();
-            this.Close();
+            Close();
         }
 
         private static string GetMedalForRank(int rank)
@@ -81,15 +79,15 @@ namespace YachtDice.Views
 
             if (rank == TopRankGold)
             {
-                medal = GoldMedal;
+                medal = Strings.Global_SymbolMedalGold;
             }
             else if (rank == TopRankSilver)
             {
-                medal = SilverMedal;
+                medal = Strings.Global_SymbolMedalSilver;
             }
             else if (rank == TopRankBronze)
             {
-                medal = BronzeMedal;
+                medal = Strings.Global_SymbolMedalBronze;
             }
 
             return medal;
@@ -118,7 +116,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException)
             {
-                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
+                CustomDialogWindow.ShowMessage(this, Strings.Leaderboard_ConnectionError);
             }
         }
 
@@ -133,18 +131,8 @@ namespace YachtDice.Views
             }
             catch (GatewayException)
             {
-                ShowDialogMessage(Strings.Leaderboard_ConnectionError);
+                CustomDialogWindow.ShowMessage(this, Strings.Leaderboard_ConnectionError);
             }
-        }
-
-        private void ShowDialogMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
         }
 
         private void RenderRanking(List<LeaderboardEntry> ranking)

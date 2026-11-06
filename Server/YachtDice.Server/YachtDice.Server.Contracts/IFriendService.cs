@@ -10,14 +10,14 @@ namespace YachtDice.Server.Contracts
     public interface IFriendService
     {
         /// <summary>
-        /// Sends a friend request to the player who owns the friend code.
+        /// Sends a friend request to the player who owns the username.
         /// </summary>
         /// <param name="displayName">Name of the player who sends the request.</param>
-        /// <param name="friendCode">Friend code of the player who will receive the request.</param>
+        /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendRequestResultCode SendFriendRequest(string displayName, string friendCode);
+        FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
 
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
@@ -41,13 +41,13 @@ namespace YachtDice.Server.Contracts
         FriendActionResultCode RemoveFriend(string displayName, string friendName);
 
         /// <summary>
-        /// Gets the friend code that other players use to send a friend request to the player.
+        /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The friend code of the player, or an empty text if the player does not exist.</returns>
+        /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        string GetFriendCode(string displayName);
+        string GetUsername(string displayName);
 
         /// <summary>
         /// Gets the names of the friends of the player.

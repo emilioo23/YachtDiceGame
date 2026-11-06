@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Core;
 using System.Linq;
 using YachtDice.Server.Data.Exceptions;
 
@@ -23,23 +22,9 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            List<GameHistoryPlayer> results;
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    results = context.GameHistoryPlayer
-                        .Where(entry => entry.PlayerId == playerId)
-                        .ToList();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(FindByPlayerFailedMessage, ex);
-            }
-
-            return results;
+            return DatabaseOperation.Query(
+                context => context.GameHistoryPlayer.Where(entry => entry.PlayerId == playerId).ToList(),
+                FindByPlayerFailedMessage);
         }
 
         /// <summary>
@@ -50,21 +35,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<PlayerRankingRecord> GetRanking(int maxEntries)
         {
-            List<PlayerRankingRecord> ranking;
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    ranking = QueryRanking(context, maxEntries);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(RankingFailedMessage, ex);
-            }
-
-            return ranking;
+            return DatabaseOperation.Query(context => QueryRanking(context, maxEntries), RankingFailedMessage);
         }
 
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)

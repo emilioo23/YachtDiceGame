@@ -22,11 +22,11 @@ namespace YachtDice.Server.Data.Repositories
         List<Player> FindByName(string name);
 
         /// <summary>
-        /// Looks for the player who owns the friend code.
+        /// Looks for the player who owns exactly the username. The display name is not considered.
         /// </summary>
-        /// <param name="friendCode">Friend code to look for.</param>
+        /// <param name="username">Username to look for.</param>
         /// <returns>A list with the matching player, or an empty list if there is none.</returns>
-        List<Player> FindByFriendCode(string friendCode);
+        List<Player> FindByUsername(string username);
 
         /// <summary>
         /// Indicates whether the email is already registered.

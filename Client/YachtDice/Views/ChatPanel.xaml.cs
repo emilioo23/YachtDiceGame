@@ -5,6 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Models;
+using YachtDice.Resources;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -18,7 +19,6 @@ namespace YachtDice.Views
         private const int NoUnreadMessages = 0;
         private const int EmptyLength = 0;
         private const int MessageMarginBottom = 4;
-        private const string AuthorSeparator = ": ";
 
         private bool _isCollapsed;
         private int _unreadCount;
@@ -72,7 +72,7 @@ namespace YachtDice.Views
                 TextWrapping = TextWrapping.Wrap
             };
 
-            textBlock.Inlines.Add(new Run(author + AuthorSeparator)
+            textBlock.Inlines.Add(new Run(author + Strings.Game_Chat_AuthorSeparator)
             {
                 FontWeight = FontWeights.Bold,
                 Foreground = GetAuthorBrush(kind)
@@ -107,7 +107,7 @@ namespace YachtDice.Views
         {
             UnreadCountTextBlock.Text = _unreadCount.ToString();
             UnreadBadge.Visibility = Visibility.Visible;
-            PreviewTextBlock.Text = author + AuthorSeparator + content;
+            PreviewTextBlock.Text = author + Strings.Game_Chat_AuthorSeparator + content;
         }
 
         private void Expand()

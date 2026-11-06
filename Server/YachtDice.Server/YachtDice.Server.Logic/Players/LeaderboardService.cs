@@ -22,12 +22,8 @@ namespace YachtDice.Server.Logic.Players
         /// <param name="gameHistoryRepository">Repository used to read the game results.</param>
         public LeaderboardService(IGameHistoryRepository gameHistoryRepository)
         {
-            if (gameHistoryRepository == null)
-            {
-                throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
-            }
-
-            _gameHistoryRepository = gameHistoryRepository;
+            _gameHistoryRepository = gameHistoryRepository
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
         }
 
         /// <summary>

@@ -15,6 +15,6 @@ namespace YachtDice.Server.Contracts
         /// <param name="room">State of the room after the change.</param>
         /// <param name="eventType">What happened in the room.</param>
         [OperationContract(IsOneWay = true)]
-        void RoomChanged(RoomInfo room, RoomEventType eventType);
+        void RoomChanged(RoomState room, RoomEventType eventType);
     }
 }

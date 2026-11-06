@@ -252,6 +252,7 @@
     <Compile Include="Gateway\DuplexGatewayBase.cs" />
     <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
+    <Compile Include="Gateway\GatewayErrorCodeParser.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />
     <Compile Include="Gateway\PlayerGateway.cs" />
@@ -269,10 +270,14 @@
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ResourceKeys.cs" />
+    <Compile Include="Utils\FriendRequestMessages.cs" />
+    <Compile Include="Utils\MatchPlayerFactory.cs" />
+    <Compile Include="Utils\PlayerInitials.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
     <Compile Include="Models\LobbySlot.cs" />
+    <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>
@@ -516,7 +521,7 @@
     <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.JoinRoomResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.RoomInfo.datasource">
+    <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.RoomState.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.RoomResultCode.datasource">

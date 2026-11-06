@@ -18,7 +18,7 @@ namespace YachtDice.Server.Services
         private readonly CallbackRegistry<Contracts.IGameCallback> _callbacks =
             new CallbackRegistry<Contracts.IGameCallback>();
 
-        private readonly object _syncRoot = new object();
+        // WCF runs one call at a time on this instance, and only the calls use it, so it needs no lock.
         private readonly Random _random = new Random();
 
         /// <summary>
@@ -52,12 +52,9 @@ namespace YachtDice.Server.Services
         {
             var diceValues = new int[DiceCount];
 
-            lock (_syncRoot)
+            for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
             {
-                for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
-                {
-                    diceValues[diceIndex] = _random.Next(MinDieValue, MaxDieValue + 1);
-                }
+                diceValues[diceIndex] = _random.Next(MinDieValue, MaxDieValue + 1);
             }
 
             return diceValues;

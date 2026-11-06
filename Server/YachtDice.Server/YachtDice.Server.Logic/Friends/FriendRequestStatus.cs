@@ -1,7 +1,7 @@
 ﻿namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
-    /// Outcome of the request to add a friend by its friend code.
+    /// Outcome of the request to add a friend by its username.
     /// </summary>
     public enum FriendRequestStatus
     {
@@ -11,13 +11,13 @@
         /// <summary>The other player had already sent a request, which the player has to accept.</summary>
         RequestAlreadyReceived,
 
-        /// <summary>The friend code is empty.</summary>
-        InvalidCode,
+        /// <summary>The username is empty.</summary>
+        InvalidUsername,
 
-        /// <summary>No player uses the friend code.</summary>
-        CodeNotFound,
+        /// <summary>No player uses the username.</summary>
+        UsernameNotFound,
 
-        /// <summary>The friend code belongs to the player who sends the request.</summary>
+        /// <summary>The username belongs to the player who sends the request.</summary>
         SelfRequest,
 
         /// <summary>The players are already friends.</summary>

@@ -27,6 +27,16 @@ namespace YachtDice
         public static string CurrentCultureCode { get; private set; }
 
         /// <summary>
+        /// Gets or sets the first name of the logged in player, used to greet them. It is empty for a guest.
+        /// </summary>
+        public static string CurrentPlayerFirstName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player entered as a guest, without an account.
+        /// </summary>
+        public static bool IsGuestPlayer { get; set; }
+
+        /// <summary>
         /// Executes when the application starts: sets the language, the theme, and opens the initial window.
         /// </summary>
         /// <param name="e">Startup event arguments.</param>
@@ -35,8 +45,7 @@ namespace YachtDice
             base.OnStartup(e);
 
             SetCulture(DefaultCultureCode);
-            var isDefaultThemeDark = false;
-            SetTheme(isDark: isDefaultThemeDark);
+            SetTheme(isDark: false);
 
             var splashWindow = new SplashWindow();
             splashWindow.Show();

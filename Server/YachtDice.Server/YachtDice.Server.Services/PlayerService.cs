@@ -10,7 +10,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
@@ -27,18 +27,10 @@ namespace YachtDice.Server.Services
             LogicPlayers.PlayerStatisticsService statisticsService,
             LogicPlayers.LeaderboardService leaderboardService)
         {
-            if (statisticsService == null)
-            {
-                throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
-            }
-
-            if (leaderboardService == null)
-            {
-                throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
-            }
-
-            _statisticsService = statisticsService;
-            _leaderboardService = leaderboardService;
+            _statisticsService = statisticsService
+                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
+            _leaderboardService = leaderboardService
+                ?? throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
         }
 
         /// <summary>

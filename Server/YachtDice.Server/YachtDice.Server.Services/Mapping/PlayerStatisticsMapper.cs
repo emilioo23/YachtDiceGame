@@ -15,25 +15,14 @@
         /// <returns>Answer for the client.</returns>
         public static Contracts.PlayerStatistics ToContract(Logic.Players.PlayerStatistics statistics)
         {
-            Contracts.PlayerStatistics result;
-
-            if (statistics == null)
+            return new Contracts.PlayerStatistics
             {
-                result = new Contracts.PlayerStatistics();
-            }
-            else
-            {
-                result = new Contracts.PlayerStatistics
-                {
-                    GamesPlayed = statistics.GamesPlayed,
-                    Wins = statistics.Wins,
-                    BestScore = statistics.BestScore,
-                    WinRatePercentage = statistics.WinRatePercentage,
-                    Level = statistics.Level
-                };
-            }
-
-            return result;
+                GamesPlayed = statistics.GamesPlayed,
+                Wins = statistics.Wins,
+                BestScore = statistics.BestScore,
+                WinRatePercentage = statistics.WinRatePercentage,
+                Level = statistics.Level
+            };
         }
     }
 }

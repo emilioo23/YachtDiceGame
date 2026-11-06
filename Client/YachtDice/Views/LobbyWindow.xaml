@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1280"
         WindowStartupLocation="CenterScreen"
@@ -53,7 +53,6 @@
                                 Padding="12,6">
 
                             <TextBlock x:Name="RoomCodeTextBlock"
-                                       d:Text="Código: K7M2QX"
                                        FontWeight="Bold"
                                        FontSize="23"
                                        Foreground="{StaticResource BrushWoodDark}"/>
@@ -187,7 +186,6 @@
                                    Foreground="{StaticResource BrushTextMuted}"/>
 
                         <TextBlock x:Name="PlayerCountTextBlock"
-                                   d:Text="(1/4)"
                                    FontSize="11"
                                    Foreground="{StaticResource BrushTextMuted}"
                                    HorizontalAlignment="Right"/>

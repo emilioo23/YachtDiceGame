@@ -5,7 +5,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1000"
         WindowStartupLocation="CenterScreen"
@@ -109,7 +109,6 @@
                                            FontSize="17"/>
 
                                 <TextBlock x:Name="AccountUsernameTextBlock"
-                                           d:Text="Jugador"
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
@@ -138,7 +137,7 @@
                                            FontWeight="Bold"
                                            FontSize="17"/>
 
-                                <TextBlock d:Text="usuario@ejemplo.com"
+                                <TextBlock
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
@@ -386,10 +385,10 @@
                                       Padding="10,8"
                                       SelectionChanged="LanguageComboBox_SelectionChanged">
 
-                                <ComboBoxItem Content="Español"
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionSpanish}"
                                               Tag="es-MX"/>
 
-                                <ComboBoxItem Content="English"
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionEnglish}"
                                               Tag="en-US"
                                               FontSize="18"/>
 

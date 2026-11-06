@@ -6,11 +6,6 @@
     public class PlayerStatistics
     {
         /// <summary>
-        /// Indicates whether the player exists; if not, the other values are empty.
-        /// </summary>
-        public bool IsPlayerFound { get; set; }
-
-        /// <summary>
         /// Number of games played.
         /// </summary>
         public int GamesPlayed { get; set; }

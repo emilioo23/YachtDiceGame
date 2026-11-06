@@ -9,7 +9,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Manages the two-factor authentication configuration operations.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
@@ -89,7 +89,9 @@ namespace YachtDice.Server.Services
 
             return new Contracts.TwoFactorActivationData
             {
-                Code = (Contracts.TwoFactorActivationResultCode)(int)logicResult.Status,
+                Code = Mapping.EnumMapper.Map<
+                    LogicTwoFactor.TwoFactorActivationStatus,
+                    Contracts.TwoFactorActivationResultCode>(logicResult.Status),
                 ChallengeId = logicResult.ChallengeId,
                 MaskedEmail = logicResult.MaskedEmail
             };
@@ -103,7 +105,8 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
                 _settingsService.ConfirmActivation(displayName, code, challengeId);
 
-            return (Contracts.VerificationResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorValidationStatus, Contracts.VerificationResultCode>(
+                logicResult);
         }
 
         private Contracts.ResendResultCode ProcessActivationResend(
@@ -114,14 +117,15 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.ResendCodeStatus logicResult =
                 _settingsService.ResendActivationCode(displayName, culture, challengeId);
 
-            return (Contracts.ResendResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }
 
         private Contracts.TwoFactorChangeResultCode ProcessDisable(string displayName, string password)
         {
             LogicTwoFactor.TwoFactorChangeStatus logicResult = _settingsService.Disable(displayName, password);
 
-            return (Contracts.TwoFactorChangeResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorChangeStatus, Contracts.TwoFactorChangeResultCode>(
+                logicResult);
         }
     }
 }

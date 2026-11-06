@@ -45,7 +45,6 @@ namespace YachtDice.Server.Data
         public Nullable<System.DateTime> RegDate { get; set; }
         public Nullable<int> XP { get; set; }
         public Nullable<int> Level { get; set; }
-        public string FriendCode { get; set; }
         public string DisplayName { get; set; }
         public Nullable<System.DateTime> LastUserChange { get; set; }
         public string FirstName { get; set; }

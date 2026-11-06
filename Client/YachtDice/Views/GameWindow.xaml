@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1280"
         WindowStartupLocation="CenterScreen"
@@ -14,7 +14,7 @@
         FontFamily="{StaticResource FontBody}">
 
     <Window.Resources>
-        <RadialGradientBrush x:Key="BrushMesaFieltro"
+        <RadialGradientBrush x:Key="BrushTableFelt"
                              Center="0.5,0.5"
                              RadiusX="0.75"
                              RadiusY="0.75">
@@ -22,7 +22,7 @@
             <GradientStop Color="#1E4A37" Offset="1"/>
         </RadialGradientBrush>
 
-        <LinearGradientBrush x:Key="BrushAroMadera"
+        <LinearGradientBrush x:Key="BrushWoodRing"
                              StartPoint="0,0"
                              EndPoint="1,1">
             <GradientStop Color="#9C6B3E" Offset="0"/>
@@ -71,7 +71,6 @@
 
                         <Grid>
                             <TextBlock
-                                x:Name="TurnStatusTextBlock"
                                 Text="{x:Static properties:Strings.Game_Topbar_YourTurn}"
                                 Foreground="White"
                                 FontWeight="Bold"
@@ -88,73 +87,87 @@
                     </Border>
 
                     <Grid Grid.Row="1"
-                          Margin="0,0,0,8">
+                          Margin="0,0,17,8">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="180"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="1"
-                                    HorizontalAlignment="Center">
+                        <ItemsControl x:Name="MatchPlayersItemsControl"
+                                      Grid.Column="1"
+                                      Focusable="False">
 
-                            <Border Width="36"
-                                    Height="36"
-                                    CornerRadius="18"
-                                    Background="{StaticResource BrushWood}"
-                                    BorderBrush="{StaticResource BrushGold}"
-                                    BorderThickness="2"
-                                    HorizontalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                                <TextBlock
-                                    x:Name="PlayerInitialTextBlock"
-                                    Foreground="White"
-                                    FontWeight="Bold"
-                                    FontSize="14"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
-                            </Border>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="2,0">
 
-                            <TextBlock
-                                x:Name="PlayerNameTextBlock"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource BrushText}"
-                                HorizontalAlignment="Center"
-                                Margin="0,2,0,0"/>
-                        </StackPanel>
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasLeft}"
+                                                                 Value="True">
+                                                        <Setter Property="Opacity"
+                                                                Value="0.45"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
 
-                        <StackPanel Grid.Column="2"
-                                    HorizontalAlignment="Center">
+                                        <Border Width="36"
+                                                Height="36"
+                                                CornerRadius="18"
+                                                BorderThickness="2"
+                                                HorizontalAlignment="Center">
 
-                            <Border Width="36"
-                                    Height="36"
-                                    CornerRadius="18"
-                                    Background="{StaticResource BrushFeltLight}"
-                                    BorderBrush="{StaticResource BrushBorder}"
-                                    BorderThickness="2"
-                                    HorizontalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource BrushFeltLight}"/>
+                                                    <Setter Property="BorderBrush"
+                                                            Value="{StaticResource BrushBorder}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLocalPlayer}"
+                                                                     Value="True">
+                                                            <Setter Property="Background"
+                                                                    Value="{StaticResource BrushWood}"/>
+                                                            <Setter Property="BorderBrush"
+                                                                    Value="{StaticResource BrushGold}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
 
-                                <TextBlock
-                                    Foreground="White"
-                                    FontWeight="Bold"
-                                    FontSize="14"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
-                            </Border>
+                                            <TextBlock Text="{Binding Initial}"
+                                                       Foreground="White"
+                                                       FontWeight="Bold"
+                                                       FontSize="14"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
 
-                            <TextBlock
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource BrushText}"
-                                HorizontalAlignment="Center"
-                                Margin="0,2,0,0"/>
-                        </StackPanel>
+                                        <TextBlock Text="{Binding Name}"
+                                                   ToolTip="{Binding Name}"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource BrushText}"
+                                                   TextAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
 
                     <ScrollViewer Grid.Row="2"
-                                  VerticalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Visible"
                                   Margin="0,0,0,10">
 
                         <StackPanel x:Name="CategoriesPanel"/>
@@ -211,14 +224,14 @@
                         <Border Width="380"
                                 Height="380"
                                 CornerRadius="190"
-                                Background="{StaticResource BrushAroMadera}"
+                                Background="{StaticResource BrushWoodRing}"
                                 Effect="{StaticResource ShadowCard}"
                                 Margin="0,0,0,16">
 
                             <Border Width="330"
                                     Height="330"
                                     CornerRadius="165"
-                                    Background="{StaticResource BrushMesaFieltro}"
+                                    Background="{StaticResource BrushTableFelt}"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
 
@@ -238,7 +251,6 @@
                             Click="RollButton_Click"/>
 
                         <TextBlock
-                            x:Name="HintTextBlock"
                             Text="{x:Static properties:Strings.Game_Dice_HintPress}"
                             FontSize="11"
                             Foreground="{StaticResource BrushCream2}"

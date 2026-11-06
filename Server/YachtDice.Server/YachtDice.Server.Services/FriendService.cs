@@ -10,7 +10,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Manages the friends of the players: requests, answers, removals and lists.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class FriendService : ServiceBase, Contracts.IFriendService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
@@ -31,14 +31,14 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Sends a friend request to the player who owns the friend code.
+        /// Sends a friend request to the player who owns the username.
         /// </summary>
         /// <param name="displayName">Name of the player who sends the request.</param>
-        /// <param name="friendCode">Friend code of the player who will receive the request.</param>
+        /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
-        public Contracts.FriendRequestResultCode SendFriendRequest(string displayName, string friendCode)
+        public Contracts.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername)
         {
-            return Execute(displayName, () => ProcessRequest(displayName, friendCode));
+            return Execute(displayName, () => ProcessRequest(displayName, targetUsername));
         }
 
         /// <summary>
@@ -68,13 +68,13 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Gets the friend code that other players use to send a friend request to the player.
+        /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The friend code of the player, or an empty text if the player does not exist.</returns>
-        public string GetFriendCode(string displayName)
+        /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
+        public string GetUsername(string displayName)
         {
-            return Execute(displayName, () => _friendshipService.GetFriendCode(displayName));
+            return Execute(displayName, () => _friendshipService.GetUsername(displayName));
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace YachtDice.Server.Services
             return Execute(displayName, () => _friendshipService.GetRequesterNames(displayName));
         }
 
-        private Contracts.FriendRequestResultCode ProcessRequest(string displayName, string friendCode)
+        private Contracts.FriendRequestResultCode ProcessRequest(string displayName, string targetUsername)
         {
-            LogicFriends.FriendRequestResult result = _friendshipService.SendRequest(displayName, friendCode);
+            LogicFriends.FriendRequestResult result = _friendshipService.SendRequest(displayName, targetUsername);
 
             if (result.Status == LogicFriends.FriendRequestStatus.RequestSent)
             {

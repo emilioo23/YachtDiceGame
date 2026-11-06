@@ -15,9 +15,9 @@ namespace YachtDice.RoomServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RoomInfo", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomState", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class RoomInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class RoomState : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -282,7 +282,7 @@ namespace YachtDice.RoomServiceReference {
         private YachtDice.RoomServiceReference.RoomResultCode CodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.RoomServiceReference.RoomInfo RoomField;
+        private YachtDice.RoomServiceReference.RoomState RoomField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -308,7 +308,7 @@ namespace YachtDice.RoomServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.RoomServiceReference.RoomInfo Room {
+        public YachtDice.RoomServiceReference.RoomState Room {
             get {
                 return this.RoomField;
             }
@@ -382,7 +382,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/CreateRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/CreateRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/CreateRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.RoomInfo CreateRoom(string hostName);
+        YachtDice.RoomServiceReference.RoomState CreateRoom(string hostName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinRoomServiceFaultFault", Name="ServiceFault")]
@@ -405,7 +405,7 @@ namespace YachtDice.RoomServiceReference {
     public interface IRoomServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IRoomService/RoomChanged")]
-        void RoomChanged(YachtDice.RoomServiceReference.RoomInfo room, YachtDice.RoomServiceReference.RoomEventType eventType);
+        void RoomChanged(YachtDice.RoomServiceReference.RoomState room, YachtDice.RoomServiceReference.RoomEventType eventType);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -436,7 +436,7 @@ namespace YachtDice.RoomServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public YachtDice.RoomServiceReference.RoomInfo CreateRoom(string hostName) {
+        public YachtDice.RoomServiceReference.RoomState CreateRoom(string hostName) {
             return base.Channel.CreateRoom(hostName);
         }
         

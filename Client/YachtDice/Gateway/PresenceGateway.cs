@@ -11,7 +11,9 @@ namespace YachtDice.Gateway
 {
     /// <summary>
     /// Keeps the player connected to the presence service while the game is open and
-    /// knows which players are online. There is only one connection for the whole application.
+    /// knows which players are online. There is only one connection for the whole application. The changes
+    /// arrive in a network thread while the windows read them in the thread of the interface, so the state
+    /// needs the lock.
     /// </summary>
     public class PresenceGateway
     {
@@ -20,12 +22,13 @@ namespace YachtDice.Gateway
 
         private readonly object _syncRoot = new object();
         private readonly HashSet<string> _onlinePlayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private readonly AppLogger _logger = new AppLogger(typeof(PresenceGateway));
+        private readonly AppLogger _logger;
         private PresenceServiceClient _client;
         private string _displayName;
 
         private PresenceGateway()
         {
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>

@@ -86,16 +86,6 @@ namespace YachtDice.Views
                 : new Thickness(ToggleKnobMargin, 0, 0, 0);
         }
 
-        private void ShowMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
-        }
-
         private void ShowTwoFactorState(bool isEnabled)
         {
             _isTwoFactorEnabled = isEnabled;
@@ -115,7 +105,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -137,7 +127,7 @@ namespace YachtDice.Views
 
                 var twoFactorWindow = new TwoFactorWindow(challenge);
                 twoFactorWindow.Show();
-                this.Close();
+                Close();
             }
             else if (data.Code == TwoFactorActivationResultCode.AlreadyEnabled)
             {
@@ -145,7 +135,7 @@ namespace YachtDice.Views
             }
             else
             {
-                ShowMessage(GetActivationMessage(data.Code));
+                CustomDialogWindow.ShowMessage(this, GetActivationMessage(data.Code));
             }
         }
 
@@ -159,15 +149,15 @@ namespace YachtDice.Views
             {
                 TwoFactorPasswordBox.Clear();
                 ShowTwoFactorState(false);
-                ShowMessage(Strings.Settings_Security_TwoFactorDisabledMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_TwoFactorDisabledMessage);
             }
             else if (result == TwoFactorChangeResultCode.InvalidPassword)
             {
-                ShowMessage(Strings.Dialogs_D13_Login);
+                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_D13_Login);
             }
             else
             {
-                ShowMessage(Strings.Settings_Security_TwoFactorUnavailableMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_TwoFactorUnavailableMessage);
             }
         }
 
@@ -211,7 +201,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
             finally
             {
@@ -223,7 +213,7 @@ namespace YachtDice.Views
         {
             var settingsWindow = new SettingsWindow(_playerName, sectionToShow);
             settingsWindow.Show();
-            this.Close();
+            Close();
         }
 
         private void AccountNavButton_Click(object sender, RoutedEventArgs e)
@@ -278,21 +268,20 @@ namespace YachtDice.Views
         {
             var profileWindow = new ProfileWindow(_playerName);
             profileWindow.Show();
-            this.Close();
+            Close();
         }
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Connect the real account deletion flow when the session token exists.
-            var content = new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage };
-            new CustomDialogWindow(content).ShowDialog();
+            CustomDialogWindow.ShowMessage(this, Strings.Settings_FeatureNotImplementedMessage);
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
             var menuWindow = new MenuWindow(_playerName);
             menuWindow.Show();
-            this.Close();
+            Close();
         }
     }
 }

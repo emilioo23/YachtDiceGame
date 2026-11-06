@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.AuthenticationServiceReference;
-using AuthErrorCode = YachtDice.AuthenticationServiceReference.ServiceErrorCode;
 using AuthFault = YachtDice.AuthenticationServiceReference.ServiceFault;
 
 namespace YachtDice.Gateway
@@ -10,16 +8,8 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Single entry point of the client to the authentication operations of the server.
     /// </summary>
-    public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient>
+    public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient, IAuthenticationService>
     {
-        private static readonly Dictionary<AuthErrorCode, GatewayErrorCode> _errorCodes =
-            new Dictionary<AuthErrorCode, GatewayErrorCode>
-            {
-                { AuthErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
-                { AuthErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { AuthErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
-            };
-
         /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
         /// </summary>
@@ -62,14 +52,8 @@ namespace YachtDice.Gateway
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<AuthFault>;
-            GatewayErrorCode errorCode;
 
-            if (typedFault == null || !_errorCodes.TryGetValue(typedFault.Detail.Code, out errorCode))
-            {
-                errorCode = GatewayErrorCode.UnexpectedError;
-            }
-
-            return errorCode;
+            return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
     }
 }

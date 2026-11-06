@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 using System.Threading.Tasks;
 using YachtDice.Utils;
 
@@ -11,14 +10,15 @@ namespace YachtDice.Gateway
     /// and converts the failures into <see cref="GatewayException"/>.
     /// </summary>
     /// <typeparam name="TClient">Type of the generated WCF client that the gateway uses.</typeparam>
-    public abstract class GatewayBase<TClient>
-        where TClient : ICommunicationObject, new()
+    /// <typeparam name="TChannel">Service contract of the generated WCF client.</typeparam>
+    public abstract class GatewayBase<TClient, TChannel>
+        where TClient : ClientBase<TChannel>, new()
+        where TChannel : class
     {
         private const string FaultLogMessage = "The server reported an error.";
         private const string UnavailableLogMessage = "The server could not be reached.";
         private const string FaultMessage = "The server could not complete the request.";
         private const string UnavailableMessage = "The server is not available.";
-        private const string EndpointPropertyName = "Endpoint";
 
         private readonly AppLogger _logger;
 
@@ -40,18 +40,18 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Runs a call to the server in the background and closes the client when it finishes.
         /// </summary>
-        /// <typeparam name="TResponse">Type of the answer of the call.</typeparam>
+        /// <typeparam name="TResult">Type of the answer of the call.</typeparam>
         /// <param name="operation">Call to make with the WCF client.</param>
         /// <returns>The answer of the server.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        protected async Task<TResponse> ExecuteAsync<TResponse>(Func<TClient, TResponse> operation)
+        protected async Task<TResult> ExecuteAsync<TResult>(Func<TClient, TResult> operation)
         {
             TClient client = CreateConfiguredClient();
-            TResponse response;
+            TResult result;
 
             try
             {
-                response = await Task.Run(() => operation(client));
+                result = await Task.Run(() => operation(client));
                 client.Close();
             }
             catch (FaultException ex)
@@ -77,18 +77,14 @@ namespace YachtDice.Gateway
                 }
             }
 
-            return response;
+            return result;
         }
 
-        private TClient CreateConfiguredClient()
+        private static TClient CreateConfiguredClient()
         {
             var client = new TClient();
-            var endpointProperty = client.GetType().GetProperty(EndpointPropertyName);
 
-            if (endpointProperty?.GetValue(client, null) is ServiceEndpoint endpoint)
-            {
-                ServerAddress.Apply(endpoint);
-            }
+            ServerAddress.Apply(client.Endpoint);
 
             return client;
         }

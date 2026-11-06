@@ -21,6 +21,12 @@ namespace YachtDice.Server.Contracts
         public string DisplayName { get; set; }
 
         /// <summary>
+        /// First name of the player, used only to greet them.
+        /// </summary>
+        [DataMember]
+        public string FirstName { get; set; }
+
+        /// <summary>
         /// Unique challenge identifier tied to the login session.
         /// </summary>
         [DataMember]

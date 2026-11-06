@@ -10,6 +10,7 @@ namespace YachtDice.Server.Logic.Security
     public static class PasswordHasher
     {
         private const string HexByteFormat = "x2";
+        private const string EmptyValueMessage = "The value cannot be empty.";
 
         /// <summary>
         /// Computes the SHA-256 hash of a plain-text password.
@@ -20,16 +21,17 @@ namespace YachtDice.Server.Logic.Security
         {
             if (string.IsNullOrWhiteSpace(plainPassword))
             {
-                throw new ArgumentException("The value cannot be empty.", nameof(plainPassword));
+                throw new ArgumentException(EmptyValueMessage, nameof(plainPassword));
             }
 
-            using (var sha256 = SHA256.Create())
+            byte[] hashBytes;
+
+            using (SHA256 sha256 = SHA256.Create())
             {
-                byte[] inputBytes = Encoding.UTF8.GetBytes(plainPassword);
-                byte[] hashBytes = sha256.ComputeHash(inputBytes);
-
-                return ConvertBytesToHex(hashBytes);
+                hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(plainPassword));
             }
+
+            return ConvertBytesToHex(hashBytes);
         }
 
         /// <summary>
@@ -42,12 +44,12 @@ namespace YachtDice.Server.Logic.Security
         {
             if (string.IsNullOrWhiteSpace(plainPassword))
             {
-                throw new ArgumentException("The value cannot be empty.", nameof(plainPassword));
+                throw new ArgumentException(EmptyValueMessage, nameof(plainPassword));
             }
 
             if (string.IsNullOrWhiteSpace(storedHash))
             {
-                throw new ArgumentException("The value cannot be empty.", nameof(storedHash));
+                throw new ArgumentException(EmptyValueMessage, nameof(storedHash));
             }
 
             string computedHash = ComputeHash(plainPassword);

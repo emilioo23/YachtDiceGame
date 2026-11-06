@@ -33,24 +33,12 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorVerificationService verificationService,
             TwoFactorDeliveryService deliveryService)
         {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            }
-
-            if (verificationService == null)
-            {
-                throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            }
-
-            if (deliveryService == null)
-            {
-                throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
-            }
-
-            _playerRepository = playerRepository;
-            _verificationService = verificationService;
-            _deliveryService = deliveryService;
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+            _verificationService = verificationService
+                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+            _deliveryService = deliveryService
+                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
         }
 
         /// <summary>
@@ -205,7 +193,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            var isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
             if (isSent)
