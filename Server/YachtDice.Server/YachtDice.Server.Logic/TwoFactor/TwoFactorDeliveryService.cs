@@ -31,18 +31,9 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="emailService">Service that sends the emails.</param>
         public TwoFactorDeliveryService(TwoFactorCodeService codeService, IEmailService emailService)
         {
-            if (codeService == null)
-            {
-                throw new ArgumentNullException(nameof(codeService), NullCodeServiceMessage);
-            }
-
-            if (emailService == null)
-            {
-                throw new ArgumentNullException(nameof(emailService), NullEmailServiceMessage);
-            }
-
-            _codeService = codeService;
-            _emailService = emailService;
+            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullCodeServiceMessage);
+            _emailService = emailService
+                ?? throw new ArgumentNullException(nameof(emailService), NullEmailServiceMessage);
             _logger = new AppLogger(GetType());
         }
 

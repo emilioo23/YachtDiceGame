@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using YachtDice.Resources;
 
 namespace YachtDice.Views
 {
@@ -13,8 +14,6 @@ namespace YachtDice.Views
     {
         private const string SpanishCultureCode = "es-MX";
         private const string EnglishCultureCode = "en-US";
-        private const string SpanishLanguageLabel = "ES";
-        private const string EnglishLanguageLabel = "EN";
         private const int UsFlagTotalRows = 7;
         private const int UsFlagCantonRowSpan = 4;
         private const double UsFlagCantonWidth = 9.0;
@@ -38,8 +37,6 @@ namespace YachtDice.Views
         /// <summary>
         /// Function that the containing window assigns to indicate how to reopen itself
         /// (with its own constructor parameters, for example the player name).
-        /// If it is not assigned, Activator.CreateInstance is used as a fallback (it only works
-        /// with windows whose constructor has no parameters, such as LoginWindow).
         /// </summary>
         public Func<Window> ReopenWindowFunc { get; set; }
 
@@ -84,11 +81,7 @@ namespace YachtDice.Views
 
             if (currentWindow != null)
             {
-                Window newWindow = ReopenWindowFunc != null
-                    ? ReopenWindowFunc.Invoke()
-                    : (Window)Activator.CreateInstance(currentWindow.GetType());
-
-                newWindow.Show();
+                ReopenWindowFunc.Invoke().Show();
                 currentWindow.Close();
             }
         }
@@ -96,7 +89,9 @@ namespace YachtDice.Views
         private void RefreshCurrentFlagDisplay()
         {
             bool isSpanish = App.CurrentCultureCode == SpanishCultureCode;
-            CurrentLangText.Text = isSpanish ? SpanishLanguageLabel : EnglishLanguageLabel;
+            CurrentLangText.Text = isSpanish
+                ? Strings.Settings_Preferences_OptionSpanishShort
+                : Strings.Settings_Preferences_OptionEnglishShort;
             CurrentFlagGrid.Children.Clear();
             CurrentFlagGrid.Children.Add(isSpanish ? BuildSpanishFlag() : BuildEnglishFlag());
         }
@@ -119,24 +114,23 @@ namespace YachtDice.Views
             grid.Children.Add(topStripe);
             grid.Children.Add(midStripe);
             grid.Children.Add(bottomStripe);
+
             return grid;
         }
 
         private static Grid BuildEnglishFlag()
         {
             var grid = new Grid();
-            for (int rowIndex = 0; rowIndex < UsFlagTotalRows; rowIndex++)
-            {
-                grid.RowDefinitions.Add(new RowDefinition());
-            }
-
             var stripeRed = new SolidColorBrush(_usRedColor);
             var stripeWhite = new SolidColorBrush(Colors.White);
 
-            for (int row = 0; row < UsFlagTotalRows; row++)
+            for (int rowIndex = 0; rowIndex < UsFlagTotalRows; rowIndex++)
             {
-                var stripe = new Rectangle { Fill = row % EvenRowDivisor == ZeroRemainder ? stripeRed : stripeWhite };
-                Grid.SetRow(stripe, row);
+                bool isRedStripe = rowIndex % EvenRowDivisor == ZeroRemainder;
+                var stripe = new Rectangle { Fill = isRedStripe ? stripeRed : stripeWhite };
+
+                grid.RowDefinitions.Add(new RowDefinition());
+                Grid.SetRow(stripe, rowIndex);
                 grid.Children.Add(stripe);
             }
 

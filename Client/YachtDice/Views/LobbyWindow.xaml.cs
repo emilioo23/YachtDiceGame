@@ -22,18 +22,17 @@ namespace YachtDice.Views
     public partial class LobbyWindow : Window
     {
         private const int EmptyLength = 0;
-        private const int FirstCharacterIndex = 0;
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
         private const string ChatJoinFailedLogMessage = "The player could not join the chat of the room.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(LobbyWindow));
+        private readonly AppLogger _logger;
         private readonly RoomGateway _roomGateway;
 
         // The window is created with this flag on because InitializeComponent raises SelectionChanged events
         // for the initial values of the combo boxes, and those events must not be sent to the server.
         private bool _isShowingRoom = true;
-        private bool _shouldLeaveOnClose = true;
+        private bool _isLeavingOnClose = true;
         private bool _isOpeningGame;
         private bool _isClosed;
 
@@ -45,6 +44,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
 
+            _logger = new AppLogger(GetType());
             _roomGateway = roomGateway;
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
@@ -53,7 +53,7 @@ namespace YachtDice.Views
             ShowRoom(_roomGateway.CurrentRoom);
         }
 
-        private static List<LobbySlot> CreateSlots(RoomInfo room)
+        private static List<LobbySlot> CreateSlots(RoomState room)
         {
             var slots = new List<LobbySlot>();
 
@@ -75,7 +75,7 @@ namespace YachtDice.Views
             return new LobbySlot
             {
                 Name = playerName,
-                Initial = char.ToUpperInvariant(playerName[FirstCharacterIndex]).ToString(),
+                Initial = PlayerInitials.GetInitial(playerName),
                 IsHost = isHost,
                 IsEmpty = false
             };
@@ -88,12 +88,12 @@ namespace YachtDice.Views
 
         private Window ReopenWindow()
         {
-            _shouldLeaveOnClose = false;
+            _isLeavingOnClose = false;
 
             return new LobbyWindow(_roomGateway);
         }
 
-        private void ShowRoom(RoomInfo room)
+        private void ShowRoom(RoomState room)
         {
             _isShowingRoom = true;
 
@@ -167,16 +167,6 @@ namespace YachtDice.Views
             };
         }
 
-        private void ShowMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
-        }
-
         private async Task SendSettingsAsync(RoomSettings settings)
         {
             string errorMessage = string.Empty;
@@ -198,7 +188,7 @@ namespace YachtDice.Views
             if (errorMessage.Length > EmptyLength)
             {
                 ShowRoom(_roomGateway.CurrentRoom);
-                ShowMessage(errorMessage);
+                CustomDialogWindow.ShowMessage(this, errorMessage);
             }
         }
 
@@ -223,12 +213,12 @@ namespace YachtDice.Views
             return errorMessage;
         }
 
-        private void HandleRoomChanged(RoomInfo room, RoomEventType eventType)
+        private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
             Dispatcher.BeginInvoke(new Func<Task>(() => ApplyRoomChangeAsync(room, eventType)));
         }
 
-        private async Task ApplyRoomChangeAsync(RoomInfo room, RoomEventType eventType)
+        private async Task ApplyRoomChangeAsync(RoomState room, RoomEventType eventType)
         {
             ShowRoom(room);
 
@@ -276,7 +266,7 @@ namespace YachtDice.Views
             }
             else
             {
-                _shouldLeaveOnClose = false;
+                _isLeavingOnClose = false;
                 new GameWindow(_roomGateway, chatGateway, isChatAvailable).Show();
                 Close();
             }
@@ -287,7 +277,7 @@ namespace YachtDice.Views
             _isClosed = true;
             _roomGateway.RoomChanged -= HandleRoomChanged;
 
-            if (_shouldLeaveOnClose)
+            if (_isLeavingOnClose)
             {
                 await _roomGateway.LeaveRoomAsync();
             }
@@ -333,7 +323,7 @@ namespace YachtDice.Views
                 message = Strings.Dialogs_UnexpectedError;
             }
 
-            ShowMessage(message);
+            CustomDialogWindow.ShowMessage(this, message);
         }
 
         private async void StartGameButton_Click(object sender, RoutedEventArgs e)
@@ -345,7 +335,7 @@ namespace YachtDice.Views
             if (errorMessage.Length > EmptyLength)
             {
                 StartGameButton.IsEnabled = true;
-                ShowMessage(errorMessage);
+                CustomDialogWindow.ShowMessage(this, errorMessage);
             }
         }
     }

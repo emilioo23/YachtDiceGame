@@ -10,7 +10,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Implements the player registration service contract for the server.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
         private readonly LogicAuth.IRegistrationService _registrationLogic;

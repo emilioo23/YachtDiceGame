@@ -27,7 +27,7 @@ namespace YachtDice.Server.Services
         private readonly CallbackRegistry<Contracts.IChatCallback> _callbacks =
             new CallbackRegistry<Contracts.IChatCallback>();
 
-        private readonly LogicLogging.AppLogger _logger = new LogicLogging.AppLogger(typeof(ChatService));
+        private readonly LogicLogging.AppLogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the ChatService class.
@@ -37,6 +37,7 @@ namespace YachtDice.Server.Services
         {
             _roomManager = roomManager
                 ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+            _logger = new LogicLogging.AppLogger(GetType());
         }
 
         /// <summary>
@@ -109,7 +110,8 @@ namespace YachtDice.Server.Services
         {
             if (_roomManager.IsMember(roomCode, playerName))
             {
-                var callback = OperationContext.Current.GetCallbackChannel<Contracts.IChatCallback>();
+                Contracts.IChatCallback callback =
+                    OperationContext.Current.GetCallbackChannel<Contracts.IChatCallback>();
                 ICommunicationObject channel = OperationContext.Current.Channel;
 
                 _callbacks.Register(roomCode, playerName, callback);

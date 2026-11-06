@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -9,7 +10,9 @@ namespace YachtDice.Server.Services
     using LogicLogging = YachtDice.Server.Logic.Logging;
 
     /// <summary>
-    /// Keeps track of the players who are online and warns the others when someone comes or goes.
+    /// Keeps track of the players who are online and warns the others when someone comes or goes. The list is
+    /// also used by the friend service and by the events of the channels, which run outside the calls that WCF
+    /// serializes on this instance, so it is a concurrent collection.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
@@ -18,10 +21,18 @@ namespace YachtDice.Server.Services
         private const string ConnectedLogMessage = "A player is now online.";
         private const string DisconnectedLogMessage = "A player is now offline.";
 
-        private readonly object _syncRoot = new object();
-        private readonly Dictionary<string, OnlinePlayer> _players =
-            new Dictionary<string, OnlinePlayer>(StringComparer.OrdinalIgnoreCase);
-        private readonly LogicLogging.AppLogger _logger = new LogicLogging.AppLogger(typeof(PresenceService));
+        private readonly ConcurrentDictionary<string, OnlinePlayer> _players =
+            new ConcurrentDictionary<string, OnlinePlayer>(StringComparer.OrdinalIgnoreCase);
+
+        private readonly LogicLogging.AppLogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the PresenceService class.
+        /// </summary>
+        public PresenceService()
+        {
+            _logger = new LogicLogging.AppLogger(GetType());
+        }
 
         /// <summary>
         /// Marks the player as online and warns the other players.
@@ -36,11 +47,8 @@ namespace YachtDice.Server.Services
             {
                 OnlinePlayer player = CreateCurrentPlayer();
 
-                lock (_syncRoot)
-                {
-                    _players[displayName] = player;
-                    onlinePlayers = _players.Keys.ToArray();
-                }
+                _players[displayName] = player;
+                onlinePlayers = _players.Keys.ToArray();
 
                 WatchChannel(displayName, player.SessionId);
                 _logger.Info(ConnectedLogMessage);
@@ -70,15 +78,8 @@ namespace YachtDice.Server.Services
         /// <param name="eventType">What happened with the subject.</param>
         public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
         {
-            OnlinePlayer recipient;
-            bool isOnline;
-
-            lock (_syncRoot)
-            {
-                isOnline = _players.TryGetValue(recipientName, out recipient);
-            }
-
-            if (isOnline && !TryNotify(recipient.Callback, subjectName, eventType))
+            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient)
+                && !TryNotify(recipient.Callback, subjectName, eventType))
             {
                 Remove(recipientName, recipient.SessionId);
             }
@@ -101,39 +102,30 @@ namespace YachtDice.Server.Services
 
         private void Remove(string displayName, string sessionId)
         {
-            var isRemoved = false;
-            OnlinePlayer player;
-
-            lock (_syncRoot)
-            {
-                if (_players.TryGetValue(displayName, out player) && player.SessionId == sessionId)
-                {
-                    _players.Remove(displayName);
-                    isRemoved = true;
-                }
-            }
-
-            if (isRemoved)
+            if (_players.TryGetValue(displayName, out OnlinePlayer player)
+                && player.SessionId == sessionId
+                && RemoveEntry(displayName, player))
             {
                 _logger.Info(DisconnectedLogMessage);
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
             }
         }
 
+        // Removing the pair instead of the key keeps a newer session of the same player that connected meanwhile.
+        private bool RemoveEntry(string displayName, OnlinePlayer player)
+        {
+            var entry = new KeyValuePair<string, OnlinePlayer>(displayName, player);
+
+            return ((ICollection<KeyValuePair<string, OnlinePlayer>>)_players).Remove(entry);
+        }
+
         private void Broadcast(string displayName, Contracts.PresenceEventType eventType)
         {
-            List<KeyValuePair<string, OnlinePlayer>> recipients;
-
-            lock (_syncRoot)
+            foreach (KeyValuePair<string, OnlinePlayer> recipient in _players)
             {
-                recipients = _players
-                    .Where(entry => !string.Equals(entry.Key, displayName, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-            }
+                bool isOtherPlayer = !string.Equals(recipient.Key, displayName, StringComparison.OrdinalIgnoreCase);
 
-            foreach (KeyValuePair<string, OnlinePlayer> recipient in recipients)
-            {
-                if (!TryNotify(recipient.Value.Callback, displayName, eventType))
+                if (isOtherPlayer && !TryNotify(recipient.Value.Callback, displayName, eventType))
                 {
                     Remove(recipient.Key, recipient.Value.SessionId);
                 }

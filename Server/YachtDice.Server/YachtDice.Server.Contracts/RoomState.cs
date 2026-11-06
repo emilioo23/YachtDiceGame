@@ -7,7 +7,7 @@ namespace YachtDice.Server.Contracts
     /// Current state of a room, as seen by the clients.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class RoomInfo
+    public class RoomState
     {
         /// <summary>
         /// Code that the players type to enter the room.

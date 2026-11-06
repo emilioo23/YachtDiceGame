@@ -35,7 +35,7 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="hostName">Name of the player who creates the room.</param>
         /// <returns>The state of the new room.</returns>
-        public Contracts.RoomInfo CreateRoom(string hostName)
+        public Contracts.RoomState CreateRoom(string hostName)
         {
             return Execute(hostName, () => ProcessCreation(hostName));
         }
@@ -87,7 +87,7 @@ namespace YachtDice.Server.Services
             Execute(playerName, () => ProcessLeave(playerName, roomCode));
         }
 
-        private Contracts.RoomInfo ProcessCreation(string hostName)
+        private Contracts.RoomState ProcessCreation(string hostName)
         {
             LogicRooms.RoomDetails room = _roomManager.CreateRoom(hostName);
 
@@ -145,7 +145,7 @@ namespace YachtDice.Server.Services
 
         private void Subscribe(string roomCode, string playerName)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<Contracts.IRoomCallback>();
+            Contracts.IRoomCallback callback = OperationContext.Current.GetCallbackChannel<Contracts.IRoomCallback>();
             ICommunicationObject channel = OperationContext.Current.Channel;
 
             _callbacks.Register(roomCode, playerName, callback);
@@ -176,9 +176,9 @@ namespace YachtDice.Server.Services
 
         private void Broadcast(LogicRooms.RoomDetails room, Contracts.RoomEventType eventType)
         {
-            Contracts.RoomInfo info = Mapping.RoomMapper.ToContract(room);
+            Contracts.RoomState roomState = Mapping.RoomMapper.ToContract(room);
 
-            _callbacks.Notify(room.Code, callback => callback.RoomChanged(info, eventType));
+            _callbacks.Notify(room.Code, callback => callback.RoomChanged(roomState, eventType));
         }
     }
 }

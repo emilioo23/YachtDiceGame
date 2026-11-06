@@ -10,7 +10,7 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Manages the authentication operations for the players.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class AuthenticationService : ServiceBase, Contracts.IAuthenticationService
     {
         private readonly LogicAuth.ILoginService _loginService;
@@ -76,9 +76,10 @@ namespace YachtDice.Server.Services
 
             return new Contracts.LoginData
             {
-                ChallengeId = logicResult.ChallengeId.ToString(),
+                ChallengeId = logicResult.ChallengeId,
                 DisplayName = logicResult.DisplayName,
-                Code = (Contracts.LoginResultCode)(int)logicResult.Status
+                FirstName = logicResult.FirstName,
+                Code = Mapping.EnumMapper.Map<LogicAuth.LoginStatus, Contracts.LoginResultCode>(logicResult.Status)
             };
         }
 
@@ -90,7 +91,8 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
                 _verificationService.VerifyPlayerCode(email, code, challengeId);
 
-            return (Contracts.VerificationResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorValidationStatus, Contracts.VerificationResultCode>(
+                logicResult);
         }
 
         private Contracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
@@ -98,7 +100,7 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.ResendCodeStatus logicResult =
                 _verificationService.ResendPlayerCode(email, culture, challengeId);
 
-            return (Contracts.ResendResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }
     }
 }

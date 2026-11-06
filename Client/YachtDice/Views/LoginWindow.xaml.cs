@@ -17,7 +17,7 @@ namespace YachtDice.Views
     {
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
+        private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
@@ -26,9 +26,16 @@ namespace YachtDice.Views
         public LoginWindow()
         {
             InitializeComponent();
+            _logger = new AppLogger(GetType());
+            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowLoginPanel();
+        }
+
+        private void ShowLoginPanel()
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
@@ -65,12 +72,12 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, UnexpectedErrorLogMessage);
-                ShowDialogMessage(Strings.Dialogs_UnexpectedError);
+                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
             }
             finally
             {
@@ -80,16 +87,19 @@ namespace YachtDice.Views
 
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
+            App.CurrentPlayerFirstName = string.Empty;
+            App.IsGuestPlayer = true;
+
             var menuWindow = new MenuWindow(Strings.Auth_GuestDisplayName);
             menuWindow.Show();
-            this.Close();
+            Close();
         }
 
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
             var forgotPasswordWindow = new ForgotPasswordWindow();
             forgotPasswordWindow.Show();
-            this.Close();
+            Close();
         }
 
         private static string GetLoginMessage(LoginResultCode code)
@@ -156,19 +166,22 @@ namespace YachtDice.Views
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginData response = await _gateway.LoginAsync(credentials);
+            LoginData loginData = await _gateway.LoginAsync(credentials);
 
-            if (response.Code == LoginResultCode.VerificationCodeSent)
+            App.CurrentPlayerFirstName = loginData.FirstName;
+            App.IsGuestPlayer = false;
+
+            if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(credentials.Email, response.DisplayName, response.ChallengeId);
+                OpenVerificationWindow(credentials.Email, loginData.DisplayName, loginData.ChallengeId);
             }
-            else if (response.Code == LoginResultCode.LoggedIn)
+            else if (loginData.Code == LoginResultCode.LoggedIn)
             {
-                OpenMenuWindow(response.DisplayName);
+                OpenMenuWindow(loginData.DisplayName);
             }
             else
             {
-                ShowDialogMessage(GetLoginMessage(response.Code));
+                CustomDialogWindow.ShowMessage(this, GetLoginMessage(loginData.Code));
             }
         }
 
@@ -188,12 +201,12 @@ namespace YachtDice.Views
 
             if (result == RegisterResultCode.Success)
             {
-                ShowDialogMessage(Strings.Auth_SuccessRegister);
-                LoginTabButton_Click(this, new RoutedEventArgs());
+                CustomDialogWindow.ShowMessage(this, Strings.Auth_SuccessRegister);
+                ShowLoginPanel();
             }
             else
             {
-                ShowDialogMessage(GetRegisterMessage(result));
+                CustomDialogWindow.ShowMessage(this, GetRegisterMessage(result));
             }
         }
 
@@ -201,7 +214,7 @@ namespace YachtDice.Views
         {
             var menuWindow = new MenuWindow(playerDisplayName);
             menuWindow.Show();
-            this.Close();
+            Close();
         }
 
         private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
@@ -216,17 +229,7 @@ namespace YachtDice.Views
 
             var twoFactorWindow = new TwoFactorWindow(challenge);
             twoFactorWindow.Show();
-            this.Close();
-        }
-
-        private void ShowDialogMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
+            Close();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace YachtDice.Navigation
             }
             catch (GatewayException ex)
             {
-                ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -55,12 +55,12 @@ namespace YachtDice.Navigation
                 }
                 else
                 {
-                    ShowMessage(currentWindow, RoomResultMessages.GetMessage(result));
+                    CustomDialogWindow.ShowMessage(currentWindow, RoomResultMessages.GetMessage(result));
                 }
             }
             catch (GatewayException ex)
             {
-                ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -70,16 +70,6 @@ namespace YachtDice.Navigation
 
             lobbyWindow.Show();
             currentWindow.Close();
-        }
-
-        private static void ShowMessage(Window owner, string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = owner
-            };
-
-            dialog.ShowDialog();
         }
     }
 }

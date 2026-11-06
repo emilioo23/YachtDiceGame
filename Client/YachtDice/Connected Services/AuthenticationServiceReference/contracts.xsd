@@ -27,6 +27,7 @@
       <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Code" type="tns:LoginResultCode" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginData" nillable="true" type="tns:LoginData" />

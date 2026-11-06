@@ -1,25 +1,15 @@
-﻿using System.Collections.Generic;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.TwoFactorManagementServiceReference;
-using AuthErrorCode = YachtDice.TwoFactorManagementServiceReference.ServiceErrorCode;
-using AuthFault = YachtDice.TwoFactorManagementServiceReference.ServiceFault;
+using TwoFactorFault = YachtDice.TwoFactorManagementServiceReference.ServiceFault;
 
 namespace YachtDice.Gateway
 {
     /// <summary>
     /// Single entry point of the client to the two-factor management operations of the server.
     /// </summary>
-    public class TwoFactorManagementGateway : GatewayBase<TwoFactorManagementServiceClient>
+    public class TwoFactorManagementGateway : GatewayBase<TwoFactorManagementServiceClient, ITwoFactorManagementService>
     {
-        private static readonly Dictionary<AuthErrorCode, GatewayErrorCode> _errorCodes =
-            new Dictionary<AuthErrorCode, GatewayErrorCode>
-            {
-                { AuthErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
-                { AuthErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { AuthErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
-            };
-
         /// <summary>
         /// Asks the server whether the player has the two-step verification turned on.
         /// </summary>
@@ -83,15 +73,9 @@ namespace YachtDice.Gateway
         /// <returns>The translated gateway error code.</returns>
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
-            var typedFault = fault as FaultException<AuthFault>;
-            GatewayErrorCode errorCode;
+            var typedFault = fault as FaultException<TwoFactorFault>;
 
-            if (typedFault == null || !_errorCodes.TryGetValue(typedFault.Detail.Code, out errorCode))
-            {
-                errorCode = GatewayErrorCode.UnexpectedError;
-            }
-
-            return errorCode;
+            return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
     }
 }

@@ -7,10 +7,9 @@ namespace YachtDice.Server.Services
     using LogicLogging = YachtDice.Server.Logic.Logging;
 
     /// <summary>
-    /// Keeps the callback channel of each player subscribed to a room and notifies them. Callers come from
-    /// several threads (the WCF operations and the events of the channels), so every access to the
-    /// dictionaries takes the lock. The lock is released before any client is notified, because a slow
-    /// client must not stop the others.
+    /// Keeps the callback channel of each player subscribed to a room and notifies them. The events of the
+    /// channels run outside the calls that WCF serializes, so every access to the dictionaries takes the lock.
+    /// The lock is released before any client is notified, because a slow client must not stop the others.
     /// </summary>
     /// <typeparam name="TCallback">Callback contract the clients implement.</typeparam>
     internal class CallbackRegistry<TCallback> where TCallback : class
@@ -22,8 +21,15 @@ namespace YachtDice.Server.Services
         private readonly Dictionary<string, Dictionary<string, TCallback>> _callbacksByRoom =
             new Dictionary<string, Dictionary<string, TCallback>>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly LogicLogging.AppLogger _logger =
-            new LogicLogging.AppLogger(typeof(CallbackRegistry<TCallback>));
+        private readonly LogicLogging.AppLogger _logger;
+
+        /// <summary>
+        /// Initializes an empty registry.
+        /// </summary>
+        public CallbackRegistry()
+        {
+            _logger = new LogicLogging.AppLogger(GetType());
+        }
 
         /// <summary>
         /// Subscribes the callback channel of a player to a room. If the player was already subscribed, the

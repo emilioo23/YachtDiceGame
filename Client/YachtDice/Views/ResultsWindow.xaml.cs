@@ -41,7 +41,7 @@ namespace YachtDice.Views
         {
             var menuWindow = new MenuWindow(_playerName);
             menuWindow.Show();
-            this.Close();
+            Close();
         }
 
         private async void NewGameButton_Click(object sender, RoutedEventArgs e)

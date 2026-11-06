@@ -4,8 +4,9 @@ using System.Collections.Generic;
 namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
-    /// Keeps the rooms that are alive in the server. Several services and threads use it at the same time, so
-    /// every operation takes the lock before it reads or changes a room.
+    /// Keeps the rooms that are alive in the server. The room service, the chat service and the events of the
+    /// channels use it at the same time. WCF only serializes the calls of each service, not those of different
+    /// services, so every operation takes the lock before it reads or changes a room.
     /// </summary>
     public class RoomManager : IRoomManager
     {
@@ -44,83 +45,26 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult Join(string roomCode, string playerName)
         {
             ValidateName(playerName);
-            RoomResult result;
 
-            lock (_syncRoot)
-            {
-                if (TryGetRoom(roomCode, out GameRoom room))
-                {
-                    result = AddPlayer(room, playerName);
-                }
-                else
-                {
-                    result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
-                }
-            }
-
-            return result;
+            return ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
         }
 
         /// <inheritdoc />
         public RoomResult Leave(string roomCode, string playerName)
         {
-            RoomResult result;
-
-            lock (_syncRoot)
-            {
-                if (TryGetRoom(roomCode, out GameRoom room) && room.HasPlayer(playerName))
-                {
-                    room.RemovePlayer(playerName);
-                    DeleteIfEmpty(room);
-                    result = new RoomResult(RoomStatus.Success, room.ToDetails());
-                }
-                else
-                {
-                    result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
-                }
-            }
-
-            return result;
+            return ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerName));
         }
 
         /// <inheritdoc />
         public RoomResult UpdateSettings(string roomCode, string playerName, RoomSettings settings)
         {
-            RoomResult result;
-
-            lock (_syncRoot)
-            {
-                if (TryGetRoom(roomCode, out GameRoom room))
-                {
-                    result = ChangeSettings(room, playerName, settings);
-                }
-                else
-                {
-                    result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
-                }
-            }
-
-            return result;
+            return ExecuteInRoom(roomCode, room => ChangeSettings(room, playerName, settings));
         }
 
         /// <inheritdoc />
         public RoomResult StartGame(string roomCode, string playerName)
         {
-            RoomResult result;
-
-            lock (_syncRoot)
-            {
-                if (TryGetRoom(roomCode, out GameRoom room))
-                {
-                    result = StartRoomGame(room, playerName);
-                }
-                else
-                {
-                    result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
-                }
-            }
-
-            return result;
+            return ExecuteInRoom(roomCode, room => StartRoomGame(room, playerName));
         }
 
         /// <inheritdoc />
@@ -288,6 +232,36 @@ namespace YachtDice.Server.Logic.Rooms
             return status;
         }
 
+        private RoomResult ExecuteInRoom(string roomCode, Func<GameRoom, RoomResult> operation)
+        {
+            RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
+
+            lock (_syncRoot)
+            {
+                if (TryGetRoom(roomCode, out GameRoom room))
+                {
+                    result = operation(room);
+                }
+            }
+
+            return result;
+        }
+
+        // The caller must hold _syncRoot.
+        private RoomResult TakeOutPlayer(GameRoom room, string playerName)
+        {
+            RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
+
+            if (room.HasPlayer(playerName))
+            {
+                room.RemovePlayer(playerName);
+                DeleteIfEmpty(room);
+                result = new RoomResult(RoomStatus.Success, room.ToDetails());
+            }
+
+            return result;
+        }
+
         // The caller must hold _syncRoot.
         private bool TryGetRoom(string roomCode, out GameRoom room)
         {
@@ -322,9 +296,9 @@ namespace YachtDice.Server.Logic.Rooms
         {
             var characters = new char[CodeLength];
 
-            for (int index = 0; index < CodeLength; index++)
+            for (int characterIndex = 0; characterIndex < CodeLength; characterIndex++)
             {
-                characters[index] = CodeAlphabet[_random.Next(CodeAlphabet.Length)];
+                characters[characterIndex] = CodeAlphabet[_random.Next(CodeAlphabet.Length)];
             }
 
             return new string(characters);

@@ -8,7 +8,8 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Common behavior of the gateways that keep one connection open with the server because the server
     /// also sends notifications to the client (duplex services). It runs each call without blocking the
-    /// interface and converts the failures into <see cref="GatewayException"/>.
+    /// interface and converts the failures into <see cref="GatewayException"/>. Its methods are called from
+    /// the thread of the interface and they continue there after each await, so the client needs no lock.
     /// </summary>
     /// <typeparam name="TClient">Type of the generated WCF client that the gateway uses.</typeparam>
     public abstract class DuplexGatewayBase<TClient>
@@ -20,7 +21,6 @@ namespace YachtDice.Gateway
         private const string UnavailableMessage = "The server is not available.";
         private const string NotConnectedMessage = "There is no connection with the server.";
 
-        private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private TClient _client;
 
@@ -38,7 +38,11 @@ namespace YachtDice.Gateway
         /// <returns>A task that finishes when the connection is closed.</returns>
         public Task CloseAsync()
         {
-            return Task.Run(() => CloseClient());
+            TClient client = _client;
+
+            _client = null;
+
+            return client == null ? Task.CompletedTask : Task.Run(() => CloseGracefully(client));
         }
 
         /// <summary>
@@ -57,19 +61,19 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Opens a new connection and makes the first call on it. If the call fails, the connection is closed.
         /// </summary>
-        /// <typeparam name="TResponse">Type of the answer of the call.</typeparam>
+        /// <typeparam name="TResult">Type of the answer of the call.</typeparam>
         /// <param name="operation">Call to make with the WCF client.</param>
         /// <returns>The answer of the server.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        protected async Task<TResponse> ConnectAndExecuteAsync<TResponse>(Func<TClient, TResponse> operation)
+        protected async Task<TResult> ConnectAndExecuteAsync<TResult>(Func<TClient, TResult> operation)
         {
-            TResponse response;
+            TResult result;
 
-            SaveClient(CreateClient());
+            _client = CreateClient();
 
             try
             {
-                response = await ExecuteAsync(operation);
+                result = await ExecuteAsync(operation);
             }
             catch (GatewayException)
             {
@@ -77,7 +81,7 @@ namespace YachtDice.Gateway
                 throw;
             }
 
-            return response;
+            return result;
         }
 
         /// <summary>
@@ -94,18 +98,18 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Makes a call to the server through the connection that is already open.
         /// </summary>
-        /// <typeparam name="TResponse">Type of the answer of the call.</typeparam>
+        /// <typeparam name="TResult">Type of the answer of the call.</typeparam>
         /// <param name="operation">Call to make with the WCF client.</param>
         /// <returns>The answer of the server.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        protected async Task<TResponse> ExecuteAsync<TResponse>(Func<TClient, TResponse> operation)
+        protected async Task<TResult> ExecuteAsync<TResult>(Func<TClient, TResult> operation)
         {
             TClient client = GetClient();
-            TResponse response;
+            TResult result;
 
             try
             {
-                response = await Task.Run(() => operation(client));
+                result = await Task.Run(() => operation(client));
             }
             catch (FaultException ex)
             {
@@ -125,7 +129,7 @@ namespace YachtDice.Gateway
                 throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
             }
 
-            return response;
+            return result;
         }
 
         /// <summary>
@@ -137,26 +141,6 @@ namespace YachtDice.Gateway
         protected Task ExecuteAsync(Action<TClient> operation)
         {
             return ExecuteAsync(client => RunOperation(client, operation));
-        }
-
-        /// <summary>
-        /// Closes the connection with the server. It blocks while the server answers, so call it from a
-        /// background thread.
-        /// </summary>
-        protected void CloseClient()
-        {
-            TClient client;
-
-            lock (_syncRoot)
-            {
-                client = _client;
-                _client = null;
-            }
-
-            if (client != null)
-            {
-                CloseGracefully(client);
-            }
         }
 
         private static bool RunOperation(TClient client, Action<TClient> operation)
@@ -182,39 +166,21 @@ namespace YachtDice.Gateway
             }
         }
 
-        private void SaveClient(TClient client)
-        {
-            lock (_syncRoot)
-            {
-                _client = client;
-            }
-        }
-
         private TClient GetClient()
         {
-            TClient client;
-
-            lock (_syncRoot)
-            {
-                client = _client;
-            }
-
-            if (client == null)
+            if (_client == null)
             {
                 throw new GatewayException(GatewayErrorCode.ServerUnavailable, NotConnectedMessage, null);
             }
 
-            return client;
+            return _client;
         }
 
         private void DiscardClient(TClient client)
         {
-            lock (_syncRoot)
+            if (ReferenceEquals(_client, client))
             {
-                if (ReferenceEquals(_client, client))
-                {
-                    _client = null;
-                }
+                _client = null;
             }
 
             client.Abort();

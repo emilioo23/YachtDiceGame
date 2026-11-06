@@ -7,7 +7,7 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Single entry point of the client to the registration operations of the server.
     /// </summary>
-    public class RegistrationGateway : GatewayBase<PlayerRegistrationServiceClient>
+    public class RegistrationGateway : GatewayBase<PlayerRegistrationServiceClient, IPlayerRegistrationService>
     {
         /// <summary>
         /// Registers a new player.
@@ -22,7 +22,9 @@ namespace YachtDice.Gateway
         /// <inheritdoc />
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
-            return GatewayErrorCode.UnexpectedError;
+            var typedFault = fault as FaultException<ServiceFault>;
+
+            return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
     }
 }

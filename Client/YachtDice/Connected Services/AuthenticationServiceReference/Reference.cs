@@ -108,6 +108,9 @@ namespace YachtDice.AuthenticationServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DisplayNameField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FirstNameField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -153,6 +156,19 @@ namespace YachtDice.AuthenticationServiceReference {
                 if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
                     this.DisplayNameField = value;
                     this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
                 }
             }
         }

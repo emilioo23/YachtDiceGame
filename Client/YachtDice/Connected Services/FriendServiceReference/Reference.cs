@@ -24,10 +24,10 @@ namespace YachtDice.FriendServiceReference {
         RequestAlreadyReceived = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidCode = 2,
+        InvalidUsername = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeNotFound = 3,
+        UsernameNotFound = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SelfRequest = 4,
@@ -137,10 +137,10 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/SendFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/SendFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/SendFriendRequestServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string friendCode);
+        YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/SendFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/SendFriendRequestResponse")]
-        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string friendCode);
+        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string targetUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestServiceFaultFault", Name="ServiceFault")]
@@ -156,12 +156,12 @@ namespace YachtDice.FriendServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
         System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendCode", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendCodeResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendCodeServiceFaultFault", Name="ServiceFault")]
-        string GetFriendCode(string displayName);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault", Name="ServiceFault")]
+        string GetUsername(string displayName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendCode", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendCodeResponse")]
-        System.Threading.Tasks.Task<string> GetFriendCodeAsync(string displayName);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
+        System.Threading.Tasks.Task<string> GetUsernameAsync(string displayName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriends", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendsServiceFaultFault", Name="ServiceFault")]
@@ -205,12 +205,12 @@ namespace YachtDice.FriendServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string friendCode) {
-            return base.Channel.SendFriendRequest(displayName, friendCode);
+        public YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername) {
+            return base.Channel.SendFriendRequest(displayName, targetUsername);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string friendCode) {
-            return base.Channel.SendFriendRequestAsync(displayName, friendCode);
+        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string targetUsername) {
+            return base.Channel.SendFriendRequestAsync(displayName, targetUsername);
         }
         
         public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted) {
@@ -229,12 +229,12 @@ namespace YachtDice.FriendServiceReference {
             return base.Channel.RemoveFriendAsync(displayName, friendName);
         }
         
-        public string GetFriendCode(string displayName) {
-            return base.Channel.GetFriendCode(displayName);
+        public string GetUsername(string displayName) {
+            return base.Channel.GetUsername(displayName);
         }
         
-        public System.Threading.Tasks.Task<string> GetFriendCodeAsync(string displayName) {
-            return base.Channel.GetFriendCodeAsync(displayName);
+        public System.Threading.Tasks.Task<string> GetUsernameAsync(string displayName) {
+            return base.Channel.GetUsernameAsync(displayName);
         }
         
         public string[] GetFriends(string displayName) {

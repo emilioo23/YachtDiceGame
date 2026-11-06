@@ -889,20 +889,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a No existe ningún jugador con ese código..
+        ///   Busca una cadena traducida similar a No existe ningún jugador con ese nombre de usuario..
         /// </summary>
-        public static string Friends_Result_CodeNotFound {
+        public static string Friends_Result_UsernameNotFound {
             get {
-                return ResourceManager.GetString("Friends_Result_CodeNotFound", resourceCulture);
+                return ResourceManager.GetString("Friends_Result_UsernameNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Escribe el código de amigo..
+        ///   Busca una cadena traducida similar a Escribe el nombre de usuario..
         /// </summary>
-        public static string Friends_Result_InvalidCode {
+        public static string Friends_Result_InvalidUsername {
             get {
-                return ResourceManager.GetString("Friends_Result_InvalidCode", resourceCulture);
+                return ResourceManager.GetString("Friends_Result_InvalidUsername", resourceCulture);
             }
         }
         
@@ -925,7 +925,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Ese es tu propio código..
+        ///   Busca una cadena traducida similar a Ese es tu propio nombre de usuario..
         /// </summary>
         public static string Friends_Result_SelfRequest {
             get {
@@ -1834,11 +1834,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Código de amigo (FRD-XXXXXX).
+        ///   Busca una cadena traducida similar a Nombre de usuario.
         /// </summary>
-        public static string MainMenu_Friends_FriendCodePlaceholder {
+        public static string MainMenu_Friends_UsernamePlaceholder {
             get {
-                return ResourceManager.GetString("MainMenu_Friends_FriendCodePlaceholder", resourceCulture);
+                return ResourceManager.GetString("MainMenu_Friends_UsernamePlaceholder", resourceCulture);
             }
         }
         
@@ -1924,11 +1924,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Tu código de amigo.
+        ///   Busca una cadena traducida similar a Tu nombre de usuario.
         /// </summary>
-        public static string MainMenu_Friends_YourCode {
+        public static string MainMenu_Friends_YourUsername {
             get {
-                return ResourceManager.GetString("MainMenu_Friends_YourCode", resourceCulture);
+                return ResourceManager.GetString("MainMenu_Friends_YourUsername", resourceCulture);
             }
         }
         
@@ -3243,6 +3243,114 @@ namespace YachtDice.Resources {
         public static string Game_Chat_Unavailable {
             get {
                 return ResourceManager.GetString("Game_Chat_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a : .
+        /// </summary>
+        public static string Game_Chat_AuthorSeparator {
+            get {
+                return ResourceManager.GetString("Game_Chat_AuthorSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0}%.
+        /// </summary>
+        public static string Global_FormatPercentage {
+            get {
+                return ResourceManager.GetString("Global_FormatPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a EN.
+        /// </summary>
+        public static string Settings_Preferences_OptionEnglishShort {
+            get {
+                return ResourceManager.GetString("Settings_Preferences_OptionEnglishShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ES.
+        /// </summary>
+        public static string Settings_Preferences_OptionSpanishShort {
+            get {
+                return ResourceManager.GetString("Settings_Preferences_OptionSpanishShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ?.
+        /// </summary>
+        public static string Global_UnknownInitial {
+            get {
+                return ResourceManager.GetString("Global_UnknownInitial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 🥉.
+        /// </summary>
+        public static string Global_SymbolMedalBronze {
+            get {
+                return ResourceManager.GetString("Global_SymbolMedalBronze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ✕.
+        /// </summary>
+        public static string Global_SymbolClose {
+            get {
+                return ResourceManager.GetString("Global_SymbolClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ✓.
+        /// </summary>
+        public static string Global_SymbolConfirm {
+            get {
+                return ResourceManager.GetString("Global_SymbolConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ▾.
+        /// </summary>
+        public static string Global_SymbolDropdown {
+            get {
+                return ResourceManager.GetString("Global_SymbolDropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 🥇.
+        /// </summary>
+        public static string Global_SymbolMedalGold {
+            get {
+                return ResourceManager.GetString("Global_SymbolMedalGold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &gt;.
+        /// </summary>
+        public static string Game_Chat_ButtonSend {
+            get {
+                return ResourceManager.GetString("Game_Chat_ButtonSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 🥈.
+        /// </summary>
+        public static string Global_SymbolMedalSilver {
+            get {
+                return ResourceManager.GetString("Global_SymbolMedalSilver", resourceCulture);
             }
         }
     }

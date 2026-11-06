@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YachtDice.Server.Services.Mapping
+﻿namespace YachtDice.Server.Services.Mapping
 {
     using Contracts = YachtDice.Server.Contracts;
     using Data = YachtDice.Server.Data;
@@ -17,11 +15,6 @@ namespace YachtDice.Server.Services.Mapping
         /// <returns>Player entity for the logic and data layers.</returns>
         public static Data.Player ToLogicModel(Contracts.Player player)
         {
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player), "The contract player cannot be null.");
-            }
-
             return new Data.Player
             {
                 FirstName = player.FirstName,

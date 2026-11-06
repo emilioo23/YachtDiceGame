@@ -18,6 +18,6 @@ namespace YachtDice.Server.Contracts
         /// State of the room after the player entered. It has no players if the player could not enter.
         /// </summary>
         [DataMember]
-        public RoomInfo Room { get; set; }
+        public RoomState Room { get; set; }
     }
 }

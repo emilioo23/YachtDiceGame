@@ -1107,11 +1107,11 @@
   <data name="Leaderboard_ConnectionError" xml:space="preserve">
     <value>No se pudo conectar con el servidor para obtener el ranking.</value>
   </data>
-  <data name="MainMenu_Friends_FriendCodePlaceholder" xml:space="preserve">
-    <value>Código de amigo (FRD-XXXXXX)</value>
+  <data name="MainMenu_Friends_UsernamePlaceholder" xml:space="preserve">
+    <value>Nombre de usuario</value>
   </data>
-  <data name="MainMenu_Friends_YourCode" xml:space="preserve">
-    <value>Tu código de amigo</value>
+  <data name="MainMenu_Friends_YourUsername" xml:space="preserve">
+    <value>Tu nombre de usuario</value>
   </data>
   <data name="MainMenu_Friends_StatusOffline" xml:space="preserve">
     <value>Desconectado</value>
@@ -1122,14 +1122,14 @@
   <data name="Friends_Result_RequestAlreadyReceived" xml:space="preserve">
     <value>Este jugador ya te envió una solicitud. Acéptala en tus solicitudes.</value>
   </data>
-  <data name="Friends_Result_InvalidCode" xml:space="preserve">
-    <value>Escribe el código de amigo.</value>
+  <data name="Friends_Result_InvalidUsername" xml:space="preserve">
+    <value>Escribe el nombre de usuario.</value>
   </data>
-  <data name="Friends_Result_CodeNotFound" xml:space="preserve">
-    <value>No existe ningún jugador con ese código.</value>
+  <data name="Friends_Result_UsernameNotFound" xml:space="preserve">
+    <value>No existe ningún jugador con ese nombre de usuario.</value>
   </data>
   <data name="Friends_Result_SelfRequest" xml:space="preserve">
-    <value>Ese es tu propio código.</value>
+    <value>Ese es tu propio nombre de usuario.</value>
   </data>
   <data name="Friends_Result_AlreadyFriends" xml:space="preserve">
     <value>Ya son amigos.</value>
@@ -1178,5 +1178,41 @@
   </data>
   <data name="Game_Chat_Unavailable" xml:space="preserve">
     <value>El chat no está disponible en esta partida.</value>
+  </data>
+  <data name="Game_Chat_AuthorSeparator" xml:space="preserve">
+    <value>: </value>
+  </data>
+  <data name="Global_FormatPercentage" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Settings_Preferences_OptionEnglishShort" xml:space="preserve">
+    <value>EN</value>
+  </data>
+  <data name="Settings_Preferences_OptionSpanishShort" xml:space="preserve">
+    <value>ES</value>
+  </data>
+  <data name="Global_UnknownInitial" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="Global_SymbolMedalBronze" xml:space="preserve">
+    <value>🥉</value>
+  </data>
+  <data name="Global_SymbolClose" xml:space="preserve">
+    <value>✕</value>
+  </data>
+  <data name="Global_SymbolConfirm" xml:space="preserve">
+    <value>✓</value>
+  </data>
+  <data name="Global_SymbolDropdown" xml:space="preserve">
+    <value>▾</value>
+  </data>
+  <data name="Global_SymbolMedalGold" xml:space="preserve">
+    <value>🥇</value>
+  </data>
+  <data name="Game_Chat_ButtonSend" xml:space="preserve">
+    <value>&gt;</value>
+  </data>
+  <data name="Global_SymbolMedalSilver" xml:space="preserve">
+    <value>🥈</value>
   </data>
 </root>

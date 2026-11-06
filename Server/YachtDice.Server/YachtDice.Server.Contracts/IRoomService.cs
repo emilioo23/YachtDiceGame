@@ -15,7 +15,7 @@ namespace YachtDice.Server.Contracts
         /// <returns>The state of the new room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        RoomInfo CreateRoom(string hostName);
+        RoomState CreateRoom(string hostName);
 
         /// <summary>
         /// Puts the player inside the room that has the code, if it exists and has space.

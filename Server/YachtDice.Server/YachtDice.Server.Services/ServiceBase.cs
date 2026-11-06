@@ -34,37 +34,15 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Runs a synchronous operation and converts any failure into a fault for the client.
         /// </summary>
-        /// <typeparam name="TResponse">Type of the answer of the operation.</typeparam>
+        /// <typeparam name="TResult">Type of the answer of the operation.</typeparam>
         /// <param name="data">Data received from the client.</param>
         /// <param name="operation">Operation to run.</param>
         /// <returns>The answer of the operation.</returns>
-        protected TResponse Execute<TResponse>(object data, Func<TResponse> operation)
+        protected TResult Execute<TResult>(object data, Func<TResult> operation)
         {
             ValidateData(data);
-            TResponse response;
 
-            try
-            {
-                response = operation();
-            }
-            catch (FaultException)
-            {
-                throw;
-            }
-            catch (DataExceptions.DataAccessException ex)
-            {
-                throw CreateDatabaseFault(ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw CreateInvalidDataFault(ex);
-            }
-            catch (Exception ex)
-            {
-                throw CreateUnexpectedFault(ex);
-            }
-
-            return response;
+            return Run(operation);
         }
 
         /// <summary>
@@ -80,12 +58,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Runs a synchronous operation that needs no data from the client and converts any failure into a fault.
         /// </summary>
-        /// <typeparam name="TResponse">Type of the answer of the operation.</typeparam>
+        /// <typeparam name="TResult">Type of the answer of the operation.</typeparam>
         /// <param name="operation">Operation to run.</param>
         /// <returns>The answer of the operation.</returns>
-        protected TResponse Execute<TResponse>(Func<TResponse> operation)
+        protected TResult Execute<TResult>(Func<TResult> operation)
         {
-            return Execute(new object(), operation);
+            return Run(operation);
         }
 
         private static bool RunOperation(Action operation)
@@ -114,6 +92,34 @@ namespace YachtDice.Server.Services
             };
 
             return new FaultException<Contracts.ServiceFault>(fault, new FaultReason(message));
+        }
+
+        private TResult Run<TResult>(Func<TResult> operation)
+        {
+            TResult result;
+
+            try
+            {
+                result = operation();
+            }
+            catch (FaultException)
+            {
+                throw;
+            }
+            catch (DataExceptions.DataAccessException ex)
+            {
+                throw CreateDatabaseFault(ex);
+            }
+            catch (ArgumentException ex)
+            {
+                throw CreateInvalidDataFault(ex);
+            }
+            catch (Exception ex)
+            {
+                throw CreateUnexpectedFault(ex);
+            }
+
+            return result;
         }
 
         private FaultException<Contracts.ServiceFault> CreateDatabaseFault(Exception exception)

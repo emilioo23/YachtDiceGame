@@ -23,35 +23,26 @@ namespace YachtDice.Server.Logic.Friends
         /// <param name="friendRepository">Repository used to read and save the friendships.</param>
         public FriendshipService(IPlayerRepository playerRepository, IFriendRepository friendRepository)
         {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            }
-
-            if (friendRepository == null)
-            {
-                throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
-            }
-
-            _playerRepository = playerRepository;
-            _friendRepository = friendRepository;
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+            _friendRepository = friendRepository
+                ?? throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
         }
 
         /// <summary>
-        /// Sends a friend request to the player who owns the friend code.
+        /// Sends a friend request to the player who owns the username.
         /// </summary>
         /// <param name="displayName">Name of the player who sends the request.</param>
-        /// <param name="friendCode">Friend code of the player who will receive the request.</param>
-        /// <returns>Outcome of the request and the name of the player who owns the code.</returns>
-        public FriendRequestResult SendRequest(string displayName, string friendCode)
+        /// <param name="targetUsername">Username of the player who will receive the request.</param>
+        /// <returns>Outcome of the request and the name of the player who owns the username.</returns>
+        public FriendRequestResult SendRequest(string displayName, string targetUsername)
         {
-            var result = new FriendRequestResult(FriendRequestStatus.InvalidCode, string.Empty);
+            var result = new FriendRequestResult(FriendRequestStatus.InvalidUsername, string.Empty);
 
-            if (!string.IsNullOrWhiteSpace(friendCode))
+            if (!string.IsNullOrWhiteSpace(targetUsername))
             {
                 Player requester = _playerRepository.FindByName(displayName).FirstOrDefault();
-                Player target = _playerRepository.FindByFriendCode(friendCode.Trim().ToUpperInvariant())
-                    .FirstOrDefault();
+                Player target = _playerRepository.FindByUsername(targetUsername.Trim()).FirstOrDefault();
                 FriendRequestStatus status = ResolveRequest(requester, target);
 
                 result = new FriendRequestResult(status, target?.DisplayName ?? string.Empty);
@@ -71,15 +62,15 @@ namespace YachtDice.Server.Logic.Friends
         {
             Player addressee = _playerRepository.FindByName(displayName).FirstOrDefault();
             Player requester = _playerRepository.FindByName(requesterName).FirstOrDefault();
-            var status = FriendActionStatus.PlayerNotFound;
+            FriendActionStatus status = FriendActionStatus.PlayerNotFound;
 
             if (addressee != null && requester != null)
             {
-                Friendship request = _friendRepository.FindBetween(requester.Id, addressee.Id)
+                Friendship friendRequest = _friendRepository.FindBetween(requester.Id, addressee.Id)
                     .FirstOrDefault(friendship => friendship.RequesterId == requester.Id
                         && friendship.Status == FriendshipStatus.Pending);
 
-                status = AnswerRequest(request, isAccepted);
+                status = AnswerRequest(friendRequest, isAccepted);
             }
 
             return status;
@@ -95,7 +86,7 @@ namespace YachtDice.Server.Logic.Friends
         {
             Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
             Player friend = _playerRepository.FindByName(friendName).FirstOrDefault();
-            var status = FriendActionStatus.PlayerNotFound;
+            FriendActionStatus status = FriendActionStatus.PlayerNotFound;
 
             if (player != null && friend != null)
             {
@@ -109,15 +100,15 @@ namespace YachtDice.Server.Logic.Friends
         }
 
         /// <summary>
-        /// Gets the friend code that other players use to send a friend request to the player.
+        /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The friend code of the player, or an empty text if the player does not exist.</returns>
-        public string GetFriendCode(string displayName)
+        /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
+        public string GetUsername(string displayName)
         {
             Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
 
-            return player?.FriendCode ?? string.Empty;
+            return player?.Username ?? string.Empty;
         }
 
         /// <summary>
@@ -175,7 +166,7 @@ namespace YachtDice.Server.Logic.Friends
             }
             else if (target == null)
             {
-                status = FriendRequestStatus.CodeNotFound;
+                status = FriendRequestStatus.UsernameNotFound;
             }
             else if (target.Id == requester.Id)
             {
@@ -215,18 +206,21 @@ namespace YachtDice.Server.Logic.Friends
             return status;
         }
 
-        private FriendActionStatus AnswerRequest(Friendship request, bool isAccepted)
+        private FriendActionStatus AnswerRequest(Friendship friendRequest, bool isAccepted)
         {
-            var status = FriendActionStatus.RelationNotFound;
+            FriendActionStatus status = FriendActionStatus.RelationNotFound;
 
-            if (request != null && isAccepted)
+            if (friendRequest != null && isAccepted)
             {
-                _friendRepository.UpdateStatus(request.RequesterId, request.AddresseeId, FriendshipStatus.Accepted);
+                _friendRepository.UpdateStatus(
+                    friendRequest.RequesterId,
+                    friendRequest.AddresseeId,
+                    FriendshipStatus.Accepted);
                 status = FriendActionStatus.Success;
             }
-            else if (request != null)
+            else if (friendRequest != null)
             {
-                _friendRepository.Remove(request.RequesterId, request.AddresseeId);
+                _friendRepository.Remove(friendRequest.RequesterId, friendRequest.AddresseeId);
                 status = FriendActionStatus.Success;
             }
 
@@ -235,7 +229,7 @@ namespace YachtDice.Server.Logic.Friends
 
         private FriendActionStatus DeleteFriendship(Friendship friendship)
         {
-            var status = FriendActionStatus.RelationNotFound;
+            FriendActionStatus status = FriendActionStatus.RelationNotFound;
 
             if (friendship != null)
             {

@@ -74,7 +74,7 @@
 
                     <Button x:Name="SendButton"
                             Grid.Column="1"
-                            Content="&gt;"
+                            Content="{x:Static properties:Strings.Game_Chat_ButtonSend}"
                             Style="{StaticResource BtnPrimary}"
                             Margin="6,0,0,0"
                             Padding="14,4"
@@ -117,7 +117,6 @@
                         VerticalAlignment="Center">
 
                     <TextBlock x:Name="UnreadCountTextBlock"
-                               d:Text="2"
                                Foreground="White"
                                FontSize="12"
                                FontWeight="Bold"

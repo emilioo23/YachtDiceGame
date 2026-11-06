@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using YachtDice.Server.Data.Exceptions;
 
@@ -123,11 +121,11 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectFriends(YachtDiceContext context, int playerId)
         {
-            var requested = context.Friendship
+            IQueryable<int> requested = context.Friendship
                 .Where(friendship => friendship.RequesterId == playerId
                     && friendship.Status == FriendshipStatus.Accepted)
                 .Select(friendship => friendship.AddresseeId);
-            var received = context.Friendship
+            IQueryable<int> received = context.Friendship
                 .Where(friendship => friendship.AddresseeId == playerId
                     && friendship.Status == FriendshipStatus.Accepted)
                 .Select(friendship => friendship.RequesterId);
@@ -139,7 +137,7 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectPendingRequesters(YachtDiceContext context, int playerId)
         {
-            var requesterIds = context.Friendship
+            IQueryable<int> requesterIds = context.Friendship
                 .Where(friendship => friendship.AddresseeId == playerId
                     && friendship.Status == FriendshipStatus.Pending)
                 .Select(friendship => friendship.RequesterId);
@@ -149,41 +147,12 @@ namespace YachtDice.Server.Data.Repositories
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)
         {
-            TResult result;
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    result = query(context);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(QueryFailedMessage, ex);
-            }
-
-            return result;
+            return DatabaseOperation.Query(query, QueryFailedMessage);
         }
 
         private static void Save(Action<YachtDiceContext> change)
         {
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    change(context);
-                    context.SaveChanges();
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new DataAccessException(UpdateFailedMessage, ex);
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(UpdateFailedMessage, ex);
-            }
+            DatabaseOperation.Save(change, UpdateFailedMessage);
         }
 
         private static void ValidateText(string value, string parameterName)

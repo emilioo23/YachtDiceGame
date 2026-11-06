@@ -3,7 +3,7 @@
 namespace YachtDice.Server.Contracts
 {
     /// <summary>
-    /// Outcome of the request to add a friend by its friend code, as seen by the client.
+    /// Outcome of the request to add a friend by its username, as seen by the client.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
     public enum FriendRequestResultCode
@@ -16,15 +16,15 @@ namespace YachtDice.Server.Contracts
         [EnumMember]
         RequestAlreadyReceived,
 
-        /// <summary>The friend code is empty.</summary>
+        /// <summary>The username is empty.</summary>
         [EnumMember]
-        InvalidCode,
+        InvalidUsername,
 
-        /// <summary>No player uses the friend code.</summary>
+        /// <summary>No player uses the username.</summary>
         [EnumMember]
-        CodeNotFound,
+        UsernameNotFound,
 
-        /// <summary>The friend code belongs to the player who sends the request.</summary>
+        /// <summary>The username belongs to the player who sends the request.</summary>
         [EnumMember]
         SelfRequest,
 

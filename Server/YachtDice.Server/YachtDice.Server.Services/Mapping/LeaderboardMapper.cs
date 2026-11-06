@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace YachtDice.Server.Services.Mapping
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using Logic = YachtDice.Server.Logic;
+
     /// <summary>
     /// Converts the ranking of the logic layer into data contracts.
     /// </summary>

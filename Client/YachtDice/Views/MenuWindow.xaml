@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1280"
         WindowStartupLocation="CenterScreen"
@@ -67,7 +67,6 @@
                                         Margin="0,0,10,0">
 
                                     <TextBlock x:Name="PlayerInitialTextBlock"
-                                               Text="-"
                                                FontWeight="Bold"
                                                FontSize="19"
                                                Foreground="{StaticResource BrushText}"
@@ -78,13 +77,11 @@
                                 <StackPanel VerticalAlignment="Center">
 
                                     <TextBlock x:Name="PlayerNameTextBlock"
-                                               Text="..."
                                                FontWeight="Bold"
                                                FontSize="15"
                                                Foreground="{StaticResource BrushText}"/>
 
                                     <TextBlock x:Name="PlayerLevelTextBlock"
-                                               Text="..."
                                                FontSize="13"
                                                Foreground="{StaticResource BrushTextMuted}"/>
                                 </StackPanel>
@@ -110,13 +107,13 @@
                         </StackPanel>
                     </Border>
 
-                    <Button x:Name="PlayNavButton"
+                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
                             Style="{StaticResource TabButtonActive}"
                             Margin="0,0,0,8"
                             FontSize="19"/>
 
-                    <Button x:Name="LobbyNavButton"
+                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
@@ -124,14 +121,14 @@
                             Opacity="0.5"
                             FontSize="19"/>
 
-                    <Button x:Name="LeaderboardNavButton"
+                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Leaderboard}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="LeaderboardNavButton_Click"
                             FontSize="19"/>
 
-                    <Button x:Name="SettingsNavButton"
+                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Settings}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
@@ -161,7 +158,6 @@
                                Foreground="{StaticResource BrushTextMuted}"/>
 
                     <TextBlock x:Name="PlayerNameHeadingTextBlock"
-                               Text="..."
                                FontFamily="{StaticResource FontDisplay}"
                                FontSize="38"
                                Foreground="{StaticResource BrushText}"
@@ -319,7 +315,6 @@
                                         Margin="0,16">
 
                                 <TextBlock x:Name="StatWinRateTextBlock"
-                                           Text="0%"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="32"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -376,12 +371,12 @@
 
                     <StackPanel Margin="0,0,0,12">
 
-                        <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_YourCode}"
+                        <TextBlock Text="{x:Static properties:Strings.MainMenu_Friends_YourUsername}"
                                    FontSize="13"
                                    Foreground="{StaticResource BrushTextMuted}"
                                    Margin="0,0,0,4"/>
 
-                        <TextBox x:Name="OwnFriendCodeTextBox"
+                        <TextBox x:Name="OwnUsernameTextBox"
                                  Style="{StaticResource TextBoxRounded}"
                                  IsReadOnly="True"/>
                     </StackPanel>
@@ -392,11 +387,11 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="FriendCodeTextBox"
+                        <TextBox x:Name="FriendUsernameTextBox"
                                  Grid.Column="0"
                                  Style="{StaticResource TextBoxRounded}"
                                  Margin="0,0,8,0"
-                                 Tag="{x:Static properties:Strings.MainMenu_Friends_FriendCodePlaceholder}"/>
+                                 Tag="{x:Static properties:Strings.MainMenu_Friends_UsernamePlaceholder}"/>
 
                         <Button Grid.Column="1"
                                 Content="{x:Static properties:Strings.MainMenu_Friends_AddButton}"
@@ -463,7 +458,7 @@
                                         </StackPanel>
 
                                         <Button Grid.Column="2"
-                                                Content="✕"
+                                                Content="{x:Static properties:Strings.Global_SymbolClose}"
                                                 Tag="{Binding Name}"
                                                 Width="28"
                                                 Height="28"
@@ -535,7 +530,7 @@
                                                             Orientation="Horizontal"
                                                             VerticalAlignment="Center">
 
-                                                    <Button Content="✓"
+                                                    <Button Content="{x:Static properties:Strings.Global_SymbolConfirm}"
                                                             Tag="{Binding Name}"
                                                             Width="28"
                                                             Height="28"
@@ -545,7 +540,7 @@
                                                             BorderThickness="0"
                                                             Click="AcceptRequestButton_Click"/>
 
-                                                    <Button Content="✕"
+                                                    <Button Content="{x:Static properties:Strings.Global_SymbolClose}"
                                                             Tag="{Binding Name}"
                                                             Width="28"
                                                             Height="28"
@@ -624,7 +619,7 @@
                                           Margin="0,0,0,16"
                                           ItemTemplate="{StaticResource FriendItemTemplate}"/>
 
-                            <TextBlock x:Name="OfflineHeaderTextBlock"
+                            <TextBlock
                                        Text="{x:Static properties:Strings.Friends_Section_Offline}"
                                        FontSize="15"
                                        FontWeight="Bold"

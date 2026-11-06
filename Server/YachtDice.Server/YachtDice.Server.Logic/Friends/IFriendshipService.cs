@@ -8,12 +8,12 @@ namespace YachtDice.Server.Logic.Friends
     public interface IFriendshipService
     {
         /// <summary>
-        /// Sends a friend request to the player who owns the friend code.
+        /// Sends a friend request to the player who owns the username.
         /// </summary>
         /// <param name="displayName">Name of the player who sends the request.</param>
-        /// <param name="friendCode">Friend code of the player who will receive the request.</param>
-        /// <returns>Outcome of the request and the name of the player who owns the code.</returns>
-        FriendRequestResult SendRequest(string displayName, string friendCode);
+        /// <param name="targetUsername">Username of the player who will receive the request.</param>
+        /// <returns>Outcome of the request and the name of the player who owns the username.</returns>
+        FriendRequestResult SendRequest(string displayName, string targetUsername);
 
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
@@ -33,11 +33,11 @@ namespace YachtDice.Server.Logic.Friends
         FriendActionStatus RemoveFriend(string displayName, string friendName);
 
         /// <summary>
-        /// Gets the friend code that other players use to send a friend request to the player.
+        /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The friend code of the player, or an empty text if the player does not exist.</returns>
-        string GetFriendCode(string displayName);
+        /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
+        string GetUsername(string displayName);
 
         /// <summary>
         /// Gets the names of the friends of the player.

@@ -14,14 +14,14 @@ namespace YachtDice.Callbacks
         /// <summary>
         /// Event triggered when something changes in the room. It is raised from a network thread.
         /// </summary>
-        public event Action<RoomInfo, RoomEventType> RoomChanged;
+        public event Action<RoomState, RoomEventType> RoomChanged;
 
         /// <summary>
         /// Raises the room changed event when the server reports a change.
         /// </summary>
         /// <param name="room">State of the room after the change.</param>
         /// <param name="eventType">What happened in the room.</param>
-        void IRoomServiceCallback.RoomChanged(RoomInfo room, RoomEventType eventType)
+        void IRoomServiceCallback.RoomChanged(RoomState room, RoomEventType eventType)
         {
             RoomChanged?.Invoke(room, eventType);
         }

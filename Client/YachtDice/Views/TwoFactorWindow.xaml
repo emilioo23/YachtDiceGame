@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="536" Width="457"
+        Title="{x:Static properties:Strings.Auth_Logo}" Height="536" Width="457"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         ResizeMode="NoResize"
@@ -38,7 +38,6 @@
                            Margin="0,0,0,2"/>
 
                 <TextBlock x:Name="DestinationEmailTextBlock"
-                           d:Text="usuario@ejemplo.com"
                            FontFamily="{StaticResource FontBodySemibold}"
                            FontSize="15" FontWeight="Bold"
                            Foreground="{StaticResource BrushText}"
@@ -96,7 +95,7 @@
                                FontSize="14"/>
                 </StackPanel>
 
-                <Button x:Name="VerifyButton"
+                <Button
                         Content="{x:Static properties:Strings.TwoFactor_VerifyButton}"
                         Style="{StaticResource BtnPrimary}"
                         HorizontalAlignment="Stretch"

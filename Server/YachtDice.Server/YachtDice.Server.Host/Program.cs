@@ -40,10 +40,10 @@ namespace YachtDice.Server.Host
             try
             {
                 OpenServiceHosts(serviceHosts);
-                ReportStatus(logger, StartedLogMessage);
+                logger.Info(StartedLogMessage);
                 WaitForExit();
                 CloseServiceHosts(serviceHosts);
-                ReportStatus(logger, StoppedLogMessage);
+                logger.Info(StoppedLogMessage);
             }
             catch (AddressAlreadyInUseException ex)
             {
@@ -119,11 +119,6 @@ namespace YachtDice.Server.Host
                     serviceHost.Abort();
                 }
             }
-        }
-
-        private static void ReportStatus(AppLogger logger, string message)
-        {
-            logger.Info(message);
         }
 
         private static void ReportFailure(AppLogger logger, Exception exception, string message)

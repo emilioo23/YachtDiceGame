@@ -2,6 +2,9 @@
 
 namespace YachtDice.Server.Services.Mapping
 {
+    using Contracts = YachtDice.Server.Contracts;
+    using Logic = YachtDice.Server.Logic;
+
     /// <summary>
     /// Converts the rooms of the logic layer into data contracts and the other way around.
     /// </summary>
@@ -12,9 +15,9 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="room">State of the room in the logic layer.</param>
         /// <returns>The state of the room for the clients.</returns>
-        public static Contracts.RoomInfo ToContract(Logic.Rooms.RoomDetails room)
+        public static Contracts.RoomState ToContract(Logic.Rooms.RoomDetails room)
         {
-            return new Contracts.RoomInfo
+            return new Contracts.RoomState
             {
                 Code = room.Code,
                 HostName = room.HostName,

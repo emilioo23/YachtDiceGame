@@ -5,27 +5,19 @@ using System.Threading.Tasks;
 using YachtDice.Callbacks;
 using YachtDice.ChatServiceReference;
 using YachtDice.Utils;
-using ChatErrorCode = YachtDice.ChatServiceReference.ServiceErrorCode;
 using ChatFault = YachtDice.ChatServiceReference.ServiceFault;
 
 namespace YachtDice.Gateway
 {
     /// <summary>
     /// Keeps the player connected to the chat of a room while the game is open. It also remembers the messages
-    /// that arrived, so a window that is opened again can show them.
+    /// that arrived, so a window that is opened again can show them. The messages arrive in a network thread
+    /// while the windows read them in the thread of the interface, so the history needs the lock.
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
-        private static readonly Dictionary<ChatErrorCode, GatewayErrorCode> _errorCodes =
-            new Dictionary<ChatErrorCode, GatewayErrorCode>
-            {
-                { ChatErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
-                { ChatErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { ChatErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
-            };
-
         private readonly object _syncRoot = new object();
-        private readonly AppLogger _logger = new AppLogger(typeof(ChatGateway));
+        private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
         private readonly string _playerName;
         private readonly string _roomCode;
@@ -40,6 +32,7 @@ namespace YachtDice.Gateway
         {
             _playerName = playerName;
             _roomCode = roomCode;
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -136,14 +129,8 @@ namespace YachtDice.Gateway
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ChatFault>;
-            GatewayErrorCode errorCode;
 
-            if (typedFault == null || !_errorCodes.TryGetValue(typedFault.Detail.Code, out errorCode))
-            {
-                errorCode = GatewayErrorCode.UnexpectedError;
-            }
-
-            return errorCode;
+            return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
 
         private void HandleMessageReceived(ChatMessage message)
