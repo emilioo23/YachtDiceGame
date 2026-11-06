@@ -37,7 +37,9 @@ namespace YachtDice.Server.Services
         /// <returns>The state of the new room.</returns>
         public Contracts.RoomState CreateRoom(string hostName)
         {
-            return Execute(hostName, () => ProcessCreation(hostName));
+            Contracts.RoomState room = Execute(hostName, () => ProcessCreation(hostName));
+
+            return room;
         }
 
         /// <summary>
@@ -48,7 +50,9 @@ namespace YachtDice.Server.Services
         /// <returns>Whether the player entered and the state of the room.</returns>
         public Contracts.JoinRoomResult JoinRoom(string playerName, string roomCode)
         {
-            return Execute(playerName, () => ProcessJoin(playerName, roomCode));
+            Contracts.JoinRoomResult result = Execute(playerName, () => ProcessJoin(playerName, roomCode));
+
+            return result;
         }
 
         /// <summary>
@@ -63,7 +67,10 @@ namespace YachtDice.Server.Services
             string roomCode,
             Contracts.RoomSettings settings)
         {
-            return Execute(settings, () => ProcessSettings(playerName, roomCode, settings));
+            Contracts.RoomResultCode result =
+                Execute(settings, () => ProcessSettings(playerName, roomCode, settings));
+
+            return result;
         }
 
         /// <summary>
@@ -74,7 +81,9 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the start.</returns>
         public Contracts.RoomResultCode StartGame(string playerName, string roomCode)
         {
-            return Execute(playerName, () => ProcessStart(playerName, roomCode));
+            Contracts.RoomResultCode result = Execute(playerName, () => ProcessStart(playerName, roomCode));
+
+            return result;
         }
 
         /// <summary>

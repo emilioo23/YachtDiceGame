@@ -46,25 +46,33 @@ namespace YachtDice.Server.Logic.Rooms
         {
             ValidateName(playerName);
 
-            return ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
+            RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
+
+            return result;
         }
 
         /// <inheritdoc />
         public RoomResult Leave(string roomCode, string playerName)
         {
-            return ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerName));
+            RoomResult result = ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerName));
+
+            return result;
         }
 
         /// <inheritdoc />
         public RoomResult UpdateSettings(string roomCode, string playerName, RoomSettings settings)
         {
-            return ExecuteInRoom(roomCode, room => ChangeSettings(room, playerName, settings));
+            RoomResult result = ExecuteInRoom(roomCode, room => ChangeSettings(room, playerName, settings));
+
+            return result;
         }
 
         /// <inheritdoc />
         public RoomResult StartGame(string roomCode, string playerName)
         {
-            return ExecuteInRoom(roomCode, room => StartRoomGame(room, playerName));
+            RoomResult result = ExecuteInRoom(roomCode, room => StartRoomGame(room, playerName));
+
+            return result;
         }
 
         /// <inheritdoc />

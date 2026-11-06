@@ -84,11 +84,13 @@ namespace YachtDice.Gateway
         /// <param name="settings">New options of the room.</param>
         /// <returns>Outcome of the change.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public Task<RoomResultCode> UpdateSettingsAsync(RoomSettings settings)
+        public async Task<RoomResultCode> UpdateSettingsAsync(RoomSettings settings)
         {
             string roomCode = CurrentRoom.Code;
+            RoomResultCode result = await ExecuteAsync(
+                client => client.UpdateRoomSettings(PlayerName, roomCode, settings));
 
-            return ExecuteAsync(client => client.UpdateRoomSettings(PlayerName, roomCode, settings));
+            return result;
         }
 
         /// <summary>
@@ -97,11 +99,12 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <returns>Outcome of the start.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public Task<RoomResultCode> StartGameAsync()
+        public async Task<RoomResultCode> StartGameAsync()
         {
             string roomCode = CurrentRoom.Code;
+            RoomResultCode result = await ExecuteAsync(client => client.StartGame(PlayerName, roomCode));
 
-            return ExecuteAsync(client => client.StartGame(PlayerName, roomCode));
+            return result;
         }
 
         /// <summary>

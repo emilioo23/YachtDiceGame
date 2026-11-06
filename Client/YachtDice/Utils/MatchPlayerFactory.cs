@@ -40,16 +40,11 @@ namespace YachtDice.Utils
             IEnumerable<string> roomPlayers)
         {
             var presentNames = new HashSet<string>(roomPlayers, StringComparer.OrdinalIgnoreCase);
-
-            return players
-                .Select(player => new MatchPlayer
-                {
-                    Name = player.Name,
-                    Initial = player.Initial,
-                    IsLocalPlayer = player.IsLocalPlayer,
-                    HasLeft = !presentNames.Contains(player.Name)
-                })
+            List<MatchPlayer> updatedPlayers = players
+                .Select(player => CopyWithPresence(player, presentNames))
                 .ToList();
+
+            return updatedPlayers;
         }
 
         private static MatchPlayer CreatePlayer(string name, bool isLocalPlayer)
@@ -59,6 +54,17 @@ namespace YachtDice.Utils
                 Name = name,
                 Initial = PlayerInitials.GetInitial(name),
                 IsLocalPlayer = isLocalPlayer
+            };
+        }
+
+        private static MatchPlayer CopyWithPresence(MatchPlayer player, HashSet<string> presentNames)
+        {
+            return new MatchPlayer
+            {
+                Name = player.Name,
+                Initial = player.Initial,
+                IsLocalPlayer = player.IsLocalPlayer,
+                HasLeft = !presentNames.Contains(player.Name)
             };
         }
 
