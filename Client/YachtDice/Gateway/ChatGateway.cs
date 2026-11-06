@@ -40,9 +40,9 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <returns>A task that finishes when the player is registered.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public Task JoinAsync()
+        public async Task JoinAsync()
         {
-            return ConnectAndExecuteAsync(client => client.JoinChat(_playerName, _roomCode));
+            await ConnectAndExecuteAsync(client => client.JoinChat(_playerName, _roomCode));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace YachtDice.Gateway
         /// <param name="content">Text of the message.</param>
         /// <returns>A task that finishes when the message is sent.</returns>
         /// <exception cref="GatewayException">The server could not be reached.</exception>
-        public Task SendAsync(string content)
+        public async Task SendAsync(string content)
         {
             var message = new ChatMessage
             {
@@ -60,7 +60,7 @@ namespace YachtDice.Gateway
                 Timestamp = DateTime.UtcNow
             };
 
-            return ExecuteAsync(client => client.SendChatMessage(message, _roomCode));
+            await ExecuteAsync(client => client.SendChatMessage(message, _roomCode));
         }
 
         /// <summary>

@@ -36,13 +36,16 @@ namespace YachtDice.Gateway
         /// Closes the connection with the server, if it is open.
         /// </summary>
         /// <returns>A task that finishes when the connection is closed.</returns>
-        public Task CloseAsync()
+        public async Task CloseAsync()
         {
             TClient client = _client;
 
             _client = null;
 
-            return client == null ? Task.CompletedTask : Task.Run(() => CloseGracefully(client));
+            if (client != null)
+            {
+                await Task.Run(() => CloseGracefully(client));
+            }
         }
 
         /// <summary>
@@ -90,9 +93,9 @@ namespace YachtDice.Gateway
         /// <param name="operation">Call to make with the WCF client.</param>
         /// <returns>A task that finishes when the server answers.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        protected Task ConnectAndExecuteAsync(Action<TClient> operation)
+        protected async Task ConnectAndExecuteAsync(Action<TClient> operation)
         {
-            return ConnectAndExecuteAsync(client => RunOperation(client, operation));
+            await ConnectAndExecuteAsync(client => RunOperation(client, operation));
         }
 
         /// <summary>
@@ -138,9 +141,9 @@ namespace YachtDice.Gateway
         /// <param name="operation">Call to make with the WCF client.</param>
         /// <returns>A task that finishes when the call is done.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        protected Task ExecuteAsync(Action<TClient> operation)
+        protected async Task ExecuteAsync(Action<TClient> operation)
         {
-            return ExecuteAsync(client => RunOperation(client, operation));
+            await ExecuteAsync(client => RunOperation(client, operation));
         }
 
         private static bool RunOperation(TClient client, Action<TClient> operation)
