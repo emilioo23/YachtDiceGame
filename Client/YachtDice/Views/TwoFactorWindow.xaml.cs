@@ -25,6 +25,7 @@ namespace YachtDice.Views
         private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
+        private const int MaxDigitsPerBox = 1;
 
         private readonly string _email;
         private readonly PlayerSession _session;
@@ -54,6 +55,11 @@ namespace YachtDice.Views
                 Digit1TextBox, Digit2TextBox, Digit3TextBox,
                 Digit4TextBox, Digit5TextBox, Digit6TextBox
             };
+
+            foreach (TextBox box in _digitBoxes)
+            {
+                box.MaxLength = MaxDigitsPerBox;
+            }
 
             DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
