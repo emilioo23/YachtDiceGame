@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Chat;
     using LogicLogging = YachtDice.Server.Logic.Logging;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
 
@@ -20,7 +20,7 @@ namespace YachtDice.Server.Services
         private const string IgnoredMessageLogMessage =
             "A chat message was ignored because it is empty or its author is not inside the room.";
 
-        private const string IgnoredJoinLogMessage = "A player who is not inside the room tried to join its chat.";
+        private const string NotInsideRoomMessage = "A player who is not inside the room cannot join its chat.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
 
@@ -91,12 +91,14 @@ namespace YachtDice.Server.Services
                 content = content.Substring(FirstCharacterIndex, MaxMessageLength);
             }
 
-            return new Contracts.ChatMessage
+            var delivered = new Contracts.ChatMessage
             {
                 Author = message.Author,
                 Content = content,
                 Timestamp = DateTime.UtcNow
             };
+
+            return delivered;
         }
 
         private bool CanDeliver(Contracts.ChatMessage message, string roomCode)
@@ -120,7 +122,7 @@ namespace YachtDice.Server.Services
             }
             else
             {
-                _logger.Warning(IgnoredJoinLogMessage);
+                throw new ArgumentException(NotInsideRoomMessage, nameof(playerName));
             }
         }
 

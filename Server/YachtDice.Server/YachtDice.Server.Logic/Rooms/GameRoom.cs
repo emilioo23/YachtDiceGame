@@ -96,7 +96,15 @@ namespace YachtDice.Server.Logic.Rooms
                 Speed = Settings.Speed
             };
 
-            return new RoomDetails(Code, HostName, Players.ToList(), settings);
+            var details = new RoomDetails
+            {
+                Code = Code,
+                HostName = HostName,
+                Players = Players.ToList(),
+                Settings = settings
+            };
+
+            return details;
         }
     }
 }

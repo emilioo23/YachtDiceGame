@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Gateway;
 using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
@@ -72,13 +73,15 @@ namespace YachtDice.Views
 
         private static LobbySlot CreateOccupiedSlot(string playerName, bool isHost)
         {
-            return new LobbySlot
+            var slot = new LobbySlot
             {
                 Name = playerName,
                 Initial = PlayerInitials.GetInitial(playerName),
                 IsHost = isHost,
                 IsEmpty = false
             };
+
+            return slot;
         }
 
         private static int ParseMaxPlayers(ComboBoxItem item)
@@ -159,12 +162,14 @@ namespace YachtDice.Views
 
         private RoomSettings ReadSettings(GameSpeed speed)
         {
-            return new RoomSettings
+            var settings = new RoomSettings
             {
                 IsPrivate = PrivacyComboBox.SelectedItem == PrivateOptionItem,
                 MaxPlayers = ParseMaxPlayers((ComboBoxItem)MaxPlayersComboBox.SelectedItem),
                 Speed = speed
             };
+
+            return settings;
         }
 
         private async Task SendSettingsAsync(RoomSettings settings)
@@ -267,8 +272,7 @@ namespace YachtDice.Views
             else
             {
                 _isLeavingOnClose = false;
-                new GameWindow(_roomGateway, chatGateway, isChatAvailable).Show();
-                Close();
+                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, chatGateway, isChatAvailable));
             }
         }
 
@@ -303,9 +307,7 @@ namespace YachtDice.Views
 
         private void BackToPlayLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var menuWindow = new MenuWindow(_roomGateway.PlayerName);
-            menuWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }
 
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)

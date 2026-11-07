@@ -133,7 +133,7 @@
                                    FontSize="26"
                                    Foreground="{StaticResource BrushText}"/>
 
-                        <Button Content="{x:Static properties:Strings.Profile_ButtonBack}"
+                        <Button Content="{x:Static properties:Strings.Global_ButtonBack}"
                                 Style="{StaticResource BtnOutline}"
                                 HorizontalAlignment="Right"
                                 Padding="14,6"
@@ -253,7 +253,7 @@
                         </Grid>
                     </Border>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_AchievementsHeader}"
+                    <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_Header}"
                                FontSize="18"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushTextMuted}"

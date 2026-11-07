@@ -59,9 +59,9 @@
                 </Border>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="{x:Static properties:Strings.Results_MenuButton}"
+                    <Button Content="{x:Static properties:Strings.Results_ButtonMenu}"
                             Style="{StaticResource BtnOutline}" Padding="26,12" Margin="0,0,10,0" Click="MenuButton_Click"/>
-                    <Button Content="{x:Static properties:Strings.Results_NewGameButton}"
+                    <Button Content="{x:Static properties:Strings.Results_ButtonNewGame}"
                             Style="{StaticResource BtnPrimary}" Padding="26,12" Click="NewGameButton_Click"/>
                 </StackPanel>
 

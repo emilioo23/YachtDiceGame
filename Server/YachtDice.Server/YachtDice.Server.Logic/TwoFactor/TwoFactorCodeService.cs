@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Cryptography;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Generates and validates two-step verification codes, stored in memory. Each instance belongs to one
-    /// WCF service with <c>ConcurrencyMode.Single</c>, which runs one call at a time, so it needs no lock.
+    /// Generates and validates two-step verification codes, stored in memory. Each player only works with the
+    /// entry of its own email, so a concurrent dictionary is enough and the class needs no lock.
     /// </summary>
     public class TwoFactorCodeService
     {
@@ -23,14 +23,15 @@ namespace YachtDice.Server.Logic.TwoFactor
 
         private const int MaxFailedAttempts = 3;
         private const int LockMinutes = 15;
+        private const int NoFailedAttempts = 0;
         private const int ResendCooldownSeconds = 30;
         private const int DecimalBase = 10;
         private const int BufferStartIndex = 0;
         private const char PaddingCharacter = '0';
         private const string GuidFormat = "N";
 
-        private readonly Dictionary<string, TwoFactorCode> _entries =
-            new Dictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
+            new ConcurrentDictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Generates a new code for the given email and stores it with its challenge.
@@ -55,7 +56,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 ChallengeId = challengeId,
                 CreatedAt = now,
                 ExpiresAt = now.AddMinutes(ExpirationMinutes),
-                FailedAttempts = 0,
+                FailedAttempts = NoFailedAttempts,
                 LockedUntil = lockedUntil
             };
 
@@ -88,7 +89,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
                 if (status == TwoFactorValidationStatus.Valid || status == TwoFactorValidationStatus.Expired)
                 {
-                    _entries.Remove(email);
+                    _entries.TryRemove(email, out _);
                 }
             }
 
@@ -166,7 +167,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             if (entry.FailedAttempts >= MaxFailedAttempts)
             {
-                entry.FailedAttempts = 0;
+                entry.FailedAttempts = NoFailedAttempts;
                 entry.LockedUntil = now.AddMinutes(LockMinutes);
                 status = TwoFactorValidationStatus.Locked;
             }

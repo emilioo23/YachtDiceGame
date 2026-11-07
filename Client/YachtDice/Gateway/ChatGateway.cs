@@ -12,7 +12,8 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Keeps the player connected to the chat of a room while the game is open. It also remembers the messages
     /// that arrived, so a window that is opened again can show them. The messages arrive in a network thread
-    /// while the windows read them in the thread of the interface, so the history needs the lock.
+    /// while the windows read them in the thread of the interface. The history and the subscribers change
+    /// together, so they need the lock.
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {

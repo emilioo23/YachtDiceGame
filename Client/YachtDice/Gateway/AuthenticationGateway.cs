@@ -15,9 +15,11 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="credentials">Login credentials of the player.</param>
         /// <returns>Outcome and initial session data of the login attempt.</returns>
-        public Task<LoginData> LoginAsync(LoginCredentials credentials)
+        public async Task<LoginData> LoginAsync(LoginCredentials credentials)
         {
-            return ExecuteAsync(client => client.LoginPlayer(credentials));
+            LoginData loginData = await ExecuteAsync(client => client.LoginPlayer(credentials));
+
+            return loginData;
         }
 
         /// <summary>
@@ -27,9 +29,12 @@ namespace YachtDice.Gateway
         /// <param name="code">Verification code entered by the player.</param>
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
+        public async Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
         {
-            return ExecuteAsync(client => client.VerifyPlayerCode(email, code, challengeId));
+            VerificationResultCode result =
+                await ExecuteAsync(client => client.VerifyPlayerCode(email, code, challengeId));
+
+            return result;
         }
 
         /// <summary>
@@ -39,9 +44,12 @@ namespace YachtDice.Gateway
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
+        public async Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
         {
-            return ExecuteAsync(client => client.ResendPlayerCode(email, challengeId, culture));
+            ResendResultCode result =
+                await ExecuteAsync(client => client.ResendPlayerCode(email, challengeId, culture));
+
+            return result;
         }
 
         /// <summary>

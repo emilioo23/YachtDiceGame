@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Game;
 
     /// <summary>
     /// Runs the turns of the games in progress and notifies the players of each room.

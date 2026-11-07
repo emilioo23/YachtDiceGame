@@ -98,7 +98,7 @@
                                         CornerRadius="3"/>
                             </Border>
 
-                            <Button Content="{x:Static properties:Strings.MainMenu_EditProfileButton}"
+                            <Button Content="{x:Static properties:Strings.MainMenu_ButtonEditProfile}"
                                     Style="{StaticResource BtnOutline}"
                                     FontSize="15"
                                     Padding="0,8"
@@ -139,7 +139,7 @@
                             Background="{StaticResource BrushBorder}"
                             Margin="0,20,0,20"/>
 
-                    <Button Content="{x:Static properties:Strings.MainMenu_LogoutButton}"
+                    <Button Content="{x:Static properties:Strings.MainMenu_ButtonLogout}"
                             Style="{StaticResource BtnOutline}"
                             Foreground="{StaticResource BrushDanger}"
                             Click="LogoutButton_Click"
@@ -235,7 +235,7 @@
                                              Margin="0,0,8,0"/>
 
                                     <Button Grid.Column="1"
-                                            Content="{x:Static properties:Strings.MainMenu_Play_JoinButton}"
+                                            Content="{x:Static properties:Strings.MainMenu_Play_ButtonJoin}"
                                             Style="{StaticResource BtnPrimary}"
                                             Click="JoinRoomButton_Click"
                                             FontSize="17"/>
@@ -394,7 +394,7 @@
                                  Tag="{x:Static properties:Strings.MainMenu_Friends_UsernamePlaceholder}"/>
 
                         <Button Grid.Column="1"
-                                Content="{x:Static properties:Strings.MainMenu_Friends_AddButton}"
+                                Content="{x:Static properties:Strings.MainMenu_Friends_ButtonAdd}"
                                 Style="{StaticResource BtnOutline}"
                                 FontSize="16"
                                 Padding="10,8"
@@ -609,7 +609,6 @@
                             </ItemsControl>
 
                             <TextBlock x:Name="OnlineHeaderTextBlock"
-                                       Text="{x:Static properties:Strings.MainMenu_Friends_OnlineHeader}"
                                        FontSize="15"
                                        FontWeight="Bold"
                                        Foreground="{StaticResource BrushTextMuted}"

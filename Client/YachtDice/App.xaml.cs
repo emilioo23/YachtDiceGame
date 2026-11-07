@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows;
-using YachtDice.Gateway;
 using YachtDice.Views;
 
 namespace YachtDice
@@ -27,16 +26,6 @@ namespace YachtDice
         public static string CurrentCultureCode { get; private set; }
 
         /// <summary>
-        /// Gets or sets the first name of the logged in player, used to greet them. It is empty for a guest.
-        /// </summary>
-        public static string CurrentPlayerFirstName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the player entered as a guest, without an account.
-        /// </summary>
-        public static bool IsGuestPlayer { get; set; }
-
-        /// <summary>
         /// Executes when the application starts: sets the language, the theme, and opens the initial window.
         /// </summary>
         /// <param name="e">Startup event arguments.</param>
@@ -49,16 +38,6 @@ namespace YachtDice
 
             var splashWindow = new SplashWindow();
             splashWindow.Show();
-        }
-
-        /// <summary>
-        /// Executes when the application closes: tells the server that the player is no longer online.
-        /// </summary>
-        /// <param name="e">Exit event arguments.</param>
-        protected override void OnExit(ExitEventArgs e)
-        {
-            PresenceGateway.Current.Disconnect();
-            base.OnExit(e);
         }
 
         /// <summary>

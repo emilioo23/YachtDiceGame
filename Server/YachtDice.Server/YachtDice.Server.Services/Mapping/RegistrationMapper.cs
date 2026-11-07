@@ -1,6 +1,6 @@
 ﻿namespace YachtDice.Server.Services.Mapping
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using Data = YachtDice.Server.Data;
 
     /// <summary>
@@ -15,13 +15,15 @@
         /// <returns>Player entity for the logic and data layers.</returns>
         public static Data.Player ToLogicModel(Contracts.Player player)
         {
-            return new Data.Player
+            var entity = new Data.Player
             {
                 FirstName = player.FirstName,
                 LastName = player.LastName,
                 Username = player.Username,
                 Email = player.Email
             };
+
+            return entity;
         }
     }
 }

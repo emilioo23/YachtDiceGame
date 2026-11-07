@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 using ServerLeaderboardEntry = YachtDice.PlayerServiceReference.LeaderboardEntry;
@@ -32,21 +34,24 @@ namespace YachtDice.Views
         private const int MedalLeftPadding = 14;
         private const int CellFontSize = 13;
         private const int CellVerticalPadding = 10;
+        private const int NameColumnWeight = 1;
+        private const int NoSpacing = 0;
+        private const int NoRank = 0;
         private const string PointsFormat = "N0";
 
-        private readonly string _playerName;
+        private readonly PlayerSession _session;
         private readonly FriendGateway _friendGateway = new FriendGateway();
         private List<LeaderboardEntry> _ranking = new List<LeaderboardEntry>();
 
         /// <summary>
         /// Initializes the leaderboard window and starts loading the ranking.
         /// </summary>
-        /// <param name="playerName">Name of the player who opens the leaderboard.</param>
-        public LeaderboardWindow(string playerName)
+        /// <param name="session">Session of the player who opens the leaderboard.</param>
+        public LeaderboardWindow(PlayerSession session)
         {
             InitializeComponent();
-            _playerName = playerName;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(playerName);
+            _session = session;
+            LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(session);
 
             _ = LoadRankingAsync();
         }
@@ -68,9 +73,7 @@ namespace YachtDice.Views
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var menuWindow = new MenuWindow(_playerName);
-            menuWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
 
         private static string GetMedalForRank(int rank)
@@ -124,8 +127,11 @@ namespace YachtDice.Views
         {
             try
             {
-                List<string> friendNames = await _friendGateway.GetFriendsAsync(_playerName);
-                var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase) { _playerName };
+                List<string> friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
+                var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase)
+                {
+                    _session.DisplayName
+                };
 
                 RenderRanking(_ranking.Where(entry => allowedNames.Contains(entry.Name)).ToList());
             }
@@ -137,8 +143,8 @@ namespace YachtDice.Views
 
         private void RenderRanking(List<LeaderboardEntry> ranking)
         {
-            var currentRank = 0;
-            var viewerRank = 0;
+            int currentRank = NoRank;
+            int viewerRank = NoRank;
 
             RankingPanel.Children.Clear();
 
@@ -148,7 +154,7 @@ namespace YachtDice.Views
                 entry.Medal = GetMedalForRank(currentRank);
                 AddRankingRow(entry);
 
-                if (entry.Name == _playerName)
+                if (entry.Name == _session.DisplayName)
                 {
                     viewerRank = currentRank;
                 }
@@ -159,21 +165,26 @@ namespace YachtDice.Views
 
         private TextBlock CreateCellLabel(string text, Brush textBrush)
         {
-            return new TextBlock
+            var label = new TextBlock
             {
                 Text = text,
                 FontSize = CellFontSize,
                 Foreground = textBrush,
-                Padding = new Thickness(0, CellVerticalPadding, 0, CellVerticalPadding),
+                Padding = new Thickness(NoSpacing, CellVerticalPadding, NoSpacing, CellVerticalPadding),
                 VerticalAlignment = VerticalAlignment.Center
             };
+
+            return label;
         }
 
         private void AddRankingRow(LeaderboardEntry entry)
         {
-            var row = new Grid { Margin = new Thickness(0, 0, 0, RowBottomMargin) };
+            var row = new Grid { Margin = new Thickness(NoSpacing, NoSpacing, NoSpacing, RowBottomMargin) };
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(RankColumnWidth) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            row.ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = new GridLength(NameColumnWeight, GridUnitType.Star)
+            });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
 
@@ -182,7 +193,7 @@ namespace YachtDice.Views
             {
                 Text = entry.Medal,
                 FontSize = MedalFontSize,
-                Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, 0, CellVerticalPadding)
+                Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, NoSpacing, CellVerticalPadding)
             };
             TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
             nameLabel.FontWeight = FontWeights.SemiBold;

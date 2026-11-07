@@ -1,4 +1,4 @@
-﻿namespace YachtDice.Views
+﻿namespace YachtDice.Models
 {
     /// <summary>
     /// Data of a verification code that was sent to the player and must be typed in the verification window.
@@ -11,9 +11,9 @@
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the player.
+        /// Gets or sets the session of the player.
         /// </summary>
-        public string PlayerDisplayName { get; set; }
+        public PlayerSession Session { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier of the challenge created by the server.

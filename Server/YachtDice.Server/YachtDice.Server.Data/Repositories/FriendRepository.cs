@@ -23,11 +23,9 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Friendship> FindBetween(int firstPlayerId, int secondPlayerId)
         {
-            return Query(context => context.Friendship
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
-                .ToList());
+            List<Friendship> friendships = Query(context => SelectBetween(context, firstPlayerId, secondPlayerId));
+
+            return friendships;
         }
 
         /// <summary>
@@ -38,7 +36,9 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Player> FindFriends(int playerId)
         {
-            return Query(context => SelectFriends(context, playerId));
+            List<Player> friends = Query(context => SelectFriends(context, playerId));
+
+            return friends;
         }
 
         /// <summary>
@@ -49,7 +49,9 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Player> FindPendingRequesters(int playerId)
         {
-            return Query(context => SelectPendingRequesters(context, playerId));
+            List<Player> requesters = Query(context => SelectPendingRequesters(context, playerId));
+
+            return requesters;
         }
 
         /// <summary>
@@ -64,17 +66,14 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(status, nameof(status));
 
-            Save(context =>
+            var friendship = new Friendship
             {
-                var friendship = new Friendship
-                {
-                    RequesterId = requesterId,
-                    AddresseeId = addresseeId,
-                    Status = status
-                };
+                RequesterId = requesterId,
+                AddresseeId = addresseeId,
+                Status = status
+            };
 
-                context.Friendship.Add(friendship);
-            });
+            Save(context => context.Friendship.Add(friendship));
         }
 
         /// <summary>
@@ -89,15 +88,14 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(status, nameof(status));
 
-            Save(context =>
+            var changes = new Friendship
             {
-                Friendship friendship = context.Friendship.Find(requesterId, addresseeId);
+                RequesterId = requesterId,
+                AddresseeId = addresseeId,
+                Status = status
+            };
 
-                if (friendship != null)
-                {
-                    friendship.Status = status;
-                }
-            });
+            Save(context => ApplyStatus(context, changes));
         }
 
         /// <summary>
@@ -108,15 +106,38 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The friendship could not be deleted.</exception>
         public void Remove(int requesterId, int addresseeId)
         {
-            Save(context =>
-            {
-                Friendship friendship = context.Friendship.Find(requesterId, addresseeId);
+            Save(context => DeleteFriendship(context, requesterId, addresseeId));
+        }
 
-                if (friendship != null)
-                {
-                    context.Friendship.Remove(friendship);
-                }
-            });
+        private static List<Friendship> SelectBetween(YachtDiceContext context, int firstPlayerId, int secondPlayerId)
+        {
+            List<Friendship> friendships = context.Friendship
+                .Where(friendship =>
+                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
+                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
+                .ToList();
+
+            return friendships;
+        }
+
+        private static void ApplyStatus(YachtDiceContext context, Friendship changes)
+        {
+            Friendship friendship = context.Friendship.Find(changes.RequesterId, changes.AddresseeId);
+
+            if (friendship != null)
+            {
+                friendship.Status = changes.Status;
+            }
+        }
+
+        private static void DeleteFriendship(YachtDiceContext context, int requesterId, int addresseeId)
+        {
+            Friendship friendship = context.Friendship.Find(requesterId, addresseeId);
+
+            if (friendship != null)
+            {
+                context.Friendship.Remove(friendship);
+            }
         }
 
         private static List<Player> SelectFriends(YachtDiceContext context, int playerId)
@@ -130,9 +151,11 @@ namespace YachtDice.Server.Data.Repositories
                     && friendship.Status == FriendshipStatus.Accepted)
                 .Select(friendship => friendship.RequesterId);
 
-            return context.Player
+            List<Player> friends = context.Player
                 .Where(player => requested.Contains(player.Id) || received.Contains(player.Id))
                 .ToList();
+
+            return friends;
         }
 
         private static List<Player> SelectPendingRequesters(YachtDiceContext context, int playerId)
@@ -142,7 +165,9 @@ namespace YachtDice.Server.Data.Repositories
                     && friendship.Status == FriendshipStatus.Pending)
                 .Select(friendship => friendship.RequesterId);
 
-            return context.Player.Where(player => requesterIds.Contains(player.Id)).ToList();
+            List<Player> requesters = context.Player.Where(player => requesterIds.Contains(player.Id)).ToList();
+
+            return requesters;
         }
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)

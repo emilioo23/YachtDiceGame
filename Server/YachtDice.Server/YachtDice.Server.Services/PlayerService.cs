@@ -4,7 +4,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using LogicPlayers = YachtDice.Server.Logic.Players;
 
     /// <summary>
@@ -40,7 +40,9 @@ namespace YachtDice.Server.Services
         /// <returns>The statistics of the player.</returns>
         public Contracts.PlayerStatistics GetPlayerStatistics(Contracts.Player player)
         {
-            return Execute(player, () => ProcessPlayerStatistics(player));
+            Contracts.PlayerStatistics statistics = Execute(player, () => ProcessPlayerStatistics(player));
+
+            return statistics;
         }
 
         /// <summary>

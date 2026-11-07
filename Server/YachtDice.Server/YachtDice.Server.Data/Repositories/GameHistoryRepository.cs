@@ -22,9 +22,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            return DatabaseOperation.Query(
-                context => context.GameHistoryPlayer.Where(entry => entry.PlayerId == playerId).ToList(),
+            List<GameHistoryPlayer> history = DatabaseOperation.Query(
+                context => SelectByPlayerId(context, playerId),
                 FindByPlayerFailedMessage);
+
+            return history;
         }
 
         /// <summary>
@@ -35,12 +37,25 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<PlayerRankingRecord> GetRanking(int maxEntries)
         {
-            return DatabaseOperation.Query(context => QueryRanking(context, maxEntries), RankingFailedMessage);
+            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(
+                context => QueryRanking(context, maxEntries),
+                RankingFailedMessage);
+
+            return ranking;
+        }
+
+        private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
+        {
+            List<GameHistoryPlayer> history = context.GameHistoryPlayer
+                .Where(entry => entry.PlayerId == playerId)
+                .ToList();
+
+            return history;
         }
 
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)
         {
-            return context.GameHistoryPlayer
+            List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
                 .GroupBy(entry => entry.PlayerId)
                 .Select(group => new
                 {
@@ -62,6 +77,8 @@ namespace YachtDice.Server.Data.Repositories
                 .ThenBy(record => record.DisplayName)
                 .Take(maxEntries)
                 .ToList();
+
+            return ranking;
         }
     }
 }

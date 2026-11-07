@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Models;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 using RoomFault = YachtDice.RoomServiceReference.ServiceFault;
@@ -19,10 +20,10 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Initializes the gateway for the player.
         /// </summary>
-        /// <param name="playerName">Name of the player who uses the room.</param>
-        public RoomGateway(string playerName)
+        /// <param name="session">Session of the player who uses the room.</param>
+        public RoomGateway(PlayerSession session)
         {
-            PlayerName = playerName;
+            Session = session;
             _logger = new AppLogger(GetType());
         }
 
@@ -32,9 +33,14 @@ namespace YachtDice.Gateway
         public event Action<RoomState, RoomEventType> RoomChanged;
 
         /// <summary>
+        /// Gets the session of the player who uses the room.
+        /// </summary>
+        public PlayerSession Session { get; }
+
+        /// <summary>
         /// Gets the name of the player who uses the room.
         /// </summary>
-        public string PlayerName { get; }
+        public string PlayerName => Session.DisplayName;
 
         /// <summary>
         /// Gets the last state of the room that the server sent. It has no code if the player is not in a room.
@@ -149,13 +155,15 @@ namespace YachtDice.Gateway
 
         private static RoomState CreateEmptyRoom()
         {
-            return new RoomState
+            var room = new RoomState
             {
                 Code = string.Empty,
                 HostName = string.Empty,
                 Players = new string[] { },
                 Settings = new RoomSettings()
             };
+
+            return room;
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)

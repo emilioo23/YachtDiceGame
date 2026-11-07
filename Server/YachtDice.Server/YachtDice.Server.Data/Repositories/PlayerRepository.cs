@@ -40,9 +40,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(email, nameof(email));
 
-            return DatabaseOperation.Query(
-                context => context.Player.Where(player => player.Email == email).ToList(),
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByEmail(context, email),
                 FindByEmailFailedMessage);
+
+            return players;
         }
 
         /// <summary>
@@ -55,12 +57,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(name, nameof(name));
 
-            return DatabaseOperation.Query(
-                context => context.Player
-                    .Where(player => player.DisplayName == name || player.Username == name)
-                    .Take(SingleResultCount)
-                    .ToList(),
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByName(context, name),
                 FindByNameFailedMessage);
+
+            return players;
         }
 
         /// <summary>
@@ -73,12 +74,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(username, nameof(username));
 
-            return DatabaseOperation.Query(
-                context => context.Player
-                    .Where(player => player.Username == username)
-                    .Take(SingleResultCount)
-                    .ToList(),
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByUsername(context, username),
                 FindByUsernameFailedMessage);
+
+            return players;
         }
 
         /// <summary>
@@ -91,9 +91,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(email, nameof(email));
 
-            return DatabaseOperation.Query(
-                context => context.Player.Any(player => player.Email == email),
+            bool isRegistered = DatabaseOperation.Query(
+                context => IsEmailRegistered(context, email),
                 EmailExistsFailedMessage);
+
+            return isRegistered;
         }
 
         /// <summary>
@@ -106,9 +108,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             ValidateText(username, nameof(username));
 
-            return DatabaseOperation.Query(
-                context => context.Player.Any(player => player.Username == username),
+            bool isTaken = DatabaseOperation.Query(
+                context => IsUsernameTaken(context, username),
                 UsernameExistsFailedMessage);
+
+            return isTaken;
         }
 
         /// <summary>
@@ -134,10 +138,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public bool HasTwoFactorEnabled(int playerId)
         {
-            return DatabaseOperation.Query(
-                context => context.TwoFactorAuth.Any(
-                    auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus),
+            bool isEnabled = DatabaseOperation.Query(
+                context => IsTwoFactorActive(context, playerId),
                 TwoFactorQueryFailedMessage);
+
+            return isEnabled;
         }
 
         /// <summary>
@@ -151,6 +156,55 @@ namespace YachtDice.Server.Data.Repositories
             DatabaseOperation.Save(
                 context => ApplyTwoFactorStatus(context, playerId, isEnabled),
                 TwoFactorUpdateFailedMessage);
+        }
+
+        private static List<Player> SelectByEmail(YachtDiceContext context, string email)
+        {
+            List<Player> players = context.Player.Where(player => player.Email == email).ToList();
+
+            return players;
+        }
+
+        private static List<Player> SelectByName(YachtDiceContext context, string name)
+        {
+            List<Player> players = context.Player
+                .Where(player => player.DisplayName == name || player.Username == name)
+                .Take(SingleResultCount)
+                .ToList();
+
+            return players;
+        }
+
+        private static List<Player> SelectByUsername(YachtDiceContext context, string username)
+        {
+            List<Player> players = context.Player
+                .Where(player => player.Username == username)
+                .Take(SingleResultCount)
+                .ToList();
+
+            return players;
+        }
+
+        private static bool IsEmailRegistered(YachtDiceContext context, string email)
+        {
+            bool isRegistered = context.Player.Any(player => player.Email == email);
+
+            return isRegistered;
+        }
+
+        private static bool IsUsernameTaken(YachtDiceContext context, string username)
+        {
+            bool isTaken = context.Player.Any(player => player.Username == username);
+
+            return isTaken;
+        }
+
+        private static bool IsTwoFactorActive(YachtDiceContext context, int playerId)
+        {
+            bool isActive = context.TwoFactorAuth.Any(
+                auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
+
+            return isActive;
         }
 
         private static void ApplyTwoFactorStatus(YachtDiceContext context, int playerId, bool isEnabled)

@@ -1,4 +1,4 @@
-﻿namespace YachtDice.Views
+﻿namespace YachtDice.Models
 {
     /// <summary>
     /// Row of the friends list: a friend, or a player who sent a friend request.

@@ -15,9 +15,11 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>True if the player must enter a code to log in.</returns>
-        public Task<bool> IsTwoFactorEnabledAsync(string displayName)
+        public async Task<bool> IsTwoFactorEnabledAsync(string displayName)
         {
-            return ExecuteAsync(client => client.IsTwoFactorEnabled(displayName));
+            bool isEnabled = await ExecuteAsync(client => client.IsTwoFactorEnabled(displayName));
+
+            return isEnabled;
         }
 
         /// <summary>
@@ -26,9 +28,12 @@ namespace YachtDice.Gateway
         /// <param name="displayName">Name of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
-        public Task<TwoFactorActivationData> StartTwoFactorActivationAsync(string displayName, string culture)
+        public async Task<TwoFactorActivationData> StartTwoFactorActivationAsync(string displayName, string culture)
         {
-            return ExecuteAsync(client => client.StartTwoFactorActivation(displayName, culture));
+            TwoFactorActivationData activation =
+                await ExecuteAsync(client => client.StartTwoFactorActivation(displayName, culture));
+
+            return activation;
         }
 
         /// <summary>
@@ -38,9 +43,15 @@ namespace YachtDice.Gateway
         /// <param name="code">Verification code entered by the player.</param>
         /// <param name="challengeId">Unique challenge identifier of the activation.</param>
         /// <returns>Result of the validation.</returns>
-        public Task<VerificationResultCode> ConfirmActivationAsync(string displayName, string code, string challengeId)
+        public async Task<VerificationResultCode> ConfirmActivationAsync(
+            string displayName,
+            string code,
+            string challengeId)
         {
-            return ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, code, challengeId));
+            VerificationResultCode result =
+                await ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, code, challengeId));
+
+            return result;
         }
 
         /// <summary>
@@ -50,9 +61,15 @@ namespace YachtDice.Gateway
         /// <param name="challengeId">Unique challenge identifier of the activation.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Task<ResendResultCode> ResendActivationCodeAsync(string displayName, string challengeId, string culture)
+        public async Task<ResendResultCode> ResendActivationCodeAsync(
+            string displayName,
+            string challengeId,
+            string culture)
         {
-            return ExecuteAsync(client => client.ResendActivationCode(displayName, challengeId, culture));
+            ResendResultCode result =
+                await ExecuteAsync(client => client.ResendActivationCode(displayName, challengeId, culture));
+
+            return result;
         }
 
         /// <summary>
@@ -61,9 +78,12 @@ namespace YachtDice.Gateway
         /// <param name="displayName">Name of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
-        public Task<TwoFactorChangeResultCode> DisableTwoFactorAsync(string displayName, string password)
+        public async Task<TwoFactorChangeResultCode> DisableTwoFactorAsync(string displayName, string password)
         {
-            return ExecuteAsync(client => client.DisableTwoFactor(displayName, password));
+            TwoFactorChangeResultCode result =
+                await ExecuteAsync(client => client.DisableTwoFactor(displayName, password));
+
+            return result;
         }
 
         /// <summary>

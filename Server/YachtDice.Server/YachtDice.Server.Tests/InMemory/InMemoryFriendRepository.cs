@@ -20,11 +20,13 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Friendship> FindBetween(int firstPlayerId, int secondPlayerId)
         {
-            return _friendships
+            List<Friendship> matches = _friendships
                 .Where(friendship =>
                     (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
                     || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
                 .ToList();
+
+            return matches;
         }
 
         /// <inheritdoc />

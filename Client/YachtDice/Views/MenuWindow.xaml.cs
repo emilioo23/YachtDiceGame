@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using YachtDice.Gateway;
+using YachtDice.Models;
 using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
@@ -26,59 +27,61 @@ namespace YachtDice.Views
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
         private readonly FriendGateway _friendGateway = new FriendGateway();
-        private readonly string _playerName;
+        private readonly PlayerSession _session;
         private List<string> _friendNames = new List<string>();
 
         /// <summary>
         /// Initializes the main menu for the given player.
         /// </summary>
-        /// <param name="playerName">Name of the player who enters the menu.</param>
-        public MenuWindow(string playerName)
+        /// <param name="session">Session of the player who enters the menu.</param>
+        public MenuWindow(PlayerSession session)
         {
             InitializeComponent();
 
             _logger = new AppLogger(GetType());
-            _playerName = playerName;
-            PlayerNameTextBlock.Text = playerName;
-            PlayerNameHeadingTextBlock.Text = GetGreetingName(playerName);
-            PlayerInitialTextBlock.Text = PlayerInitials.GetInitial(playerName);
+            _session = session;
+            PlayerNameTextBlock.Text = session.DisplayName;
+            PlayerNameHeadingTextBlock.Text = GetGreetingName(session);
+            PlayerInitialTextBlock.Text = PlayerInitials.GetInitial(session.DisplayName);
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(playerName);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(session);
 
             ShowOnlinePlayers();
-            PresenceGateway.Current.PlayersChanged += HandlePlayersChanged;
-            PresenceGateway.Current.FriendsChanged += HandleFriendsChanged;
+            _session.Presence.PlayersChanged += HandlePlayersChanged;
+            _session.Presence.FriendsChanged += HandleFriendsChanged;
             Closed += HandleWindowClosed;
 
-            _ = ConnectPresenceAsync(playerName);
-            _ = LoadPlayerStatisticsAsync(playerName);
+            _ = ConnectPresenceAsync(session.DisplayName);
+            _ = LoadPlayerStatisticsAsync(session.DisplayName);
             _ = LoadFriendsAsync();
         }
 
-        private static string GetGreetingName(string playerName)
+        private static string GetGreetingName(PlayerSession session)
         {
-            string firstName = App.CurrentPlayerFirstName;
-
-            return string.IsNullOrWhiteSpace(firstName) ? playerName : firstName;
+            return string.IsNullOrWhiteSpace(session.FirstName) ? session.DisplayName : session.FirstName;
         }
 
         private static FriendItem CreateFriend(string name, string status, bool isOnline)
         {
-            return new FriendItem
+            var friend = new FriendItem
             {
                 Name = name,
                 Initial = PlayerInitials.GetInitial(name),
                 Status = status,
                 IsOnline = isOnline
             };
+
+            return friend;
         }
 
         private static List<FriendItem> CreateFriendItems(IEnumerable<string> names, string status, bool isOnline)
         {
-            return names
+            List<FriendItem> friendItems = names
                 .OrderBy(name => name)
                 .Select(name => CreateFriend(name, status, isOnline))
                 .ToList();
+
+            return friendItems;
         }
 
         private static string ReadTag(object sender)
@@ -88,11 +91,11 @@ namespace YachtDice.Views
 
         private async Task ConnectPresenceAsync(string playerName)
         {
-            if (!App.IsGuestPlayer)
+            if (!_session.IsGuest)
             {
                 try
                 {
-                    await PresenceGateway.Current.ConnectAsync(playerName);
+                    await _session.Presence.ConnectAsync(playerName);
                 }
                 catch (GatewayException)
                 {
@@ -113,8 +116,8 @@ namespace YachtDice.Views
 
         private void HandleWindowClosed(object sender, EventArgs e)
         {
-            PresenceGateway.Current.PlayersChanged -= HandlePlayersChanged;
-            PresenceGateway.Current.FriendsChanged -= HandleFriendsChanged;
+            _session.Presence.PlayersChanged -= HandlePlayersChanged;
+            _session.Presence.FriendsChanged -= HandleFriendsChanged;
         }
 
         private void RefreshFriends()
@@ -124,13 +127,13 @@ namespace YachtDice.Views
 
         private async Task LoadFriendsAsync()
         {
-            if (!App.IsGuestPlayer)
+            if (!_session.IsGuest)
             {
                 try
                 {
-                    _friendNames = await _friendGateway.GetFriendsAsync(_playerName);
-                    List<string> requesterNames = await _friendGateway.GetRequestsAsync(_playerName);
-                    OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_playerName);
+                    _friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
+                    List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
+                    OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
 
                     RequestsList.ItemsSource = CreateFriendItems(
                         requesterNames,
@@ -190,7 +193,7 @@ namespace YachtDice.Views
         private void ShowOnlinePlayers()
         {
             var onlineNames = new HashSet<string>(
-                PresenceGateway.Current.OnlinePlayers,
+                _session.Presence.OnlinePlayers,
                 StringComparer.OrdinalIgnoreCase);
             List<FriendItem> onlineFriends = CreateFriendItems(
                 _friendNames.Where(name => onlineNames.Contains(name)),
@@ -228,7 +231,7 @@ namespace YachtDice.Views
         {
             string friendName = ReadTag(sender);
 
-            if (AskConfirmation(Strings.Dialogs_D08_DeleteFriend))
+            if (AskConfirmation(Strings.Dialogs_DeleteFriend))
             {
                 await RemoveFriendAsync(friendName);
             }
@@ -239,7 +242,7 @@ namespace YachtDice.Views
             try
             {
                 FriendRequestResultCode result =
-                    await _friendGateway.SendRequestAsync(_playerName, FriendUsernameTextBox.Text);
+                    await _friendGateway.SendRequestAsync(_session.DisplayName, FriendUsernameTextBox.Text);
 
                 CustomDialogWindow.ShowMessage(this, FriendRequestMessages.GetMessage(result));
 
@@ -259,7 +262,7 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.RespondAsync(_playerName, requesterName, isAccepted);
+                await _friendGateway.RespondAsync(_session.DisplayName, requesterName, isAccepted);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)
@@ -272,7 +275,7 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.RemoveFriendAsync(_playerName, friendName);
+                await _friendGateway.RemoveFriendAsync(_session.DisplayName, friendName);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)
@@ -286,38 +289,30 @@ namespace YachtDice.Views
             var button = (Button)sender;
 
             button.IsEnabled = false;
-            await LobbyNavigator.CreateRoomAndOpenAsync(this, _playerName);
+            await LobbyNavigator.CreateRoomAndOpenAsync(this, _session);
             button.IsEnabled = true;
         }
 
         private void LeaderboardNavButton_Click(object sender, RoutedEventArgs e)
         {
-            var leaderboardWindow = new LeaderboardWindow(_playerName);
-            leaderboardWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new LeaderboardWindow(_session));
         }
 
         private void SettingsNavButton_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(_playerName);
-            settingsWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new SettingsWindow(_session));
         }
 
         private void EditProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            var profileWindow = new ProfileWindow(_playerName);
-            profileWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new ProfileWindow(_session));
         }
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => PresenceGateway.Current.Disconnect());
+            await Task.Run(() => _session.Presence.Disconnect());
 
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new LoginWindow());
         }
 
         private async void JoinRoomButton_Click(object sender, RoutedEventArgs e)
@@ -333,7 +328,7 @@ namespace YachtDice.Views
                 var button = (Button)sender;
 
                 button.IsEnabled = false;
-                await LobbyNavigator.JoinRoomAndOpenAsync(this, _playerName, roomCode);
+                await LobbyNavigator.JoinRoomAndOpenAsync(this, _session, roomCode);
                 button.IsEnabled = true;
             }
         }

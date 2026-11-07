@@ -23,34 +23,44 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindByEmail(string email)
         {
-            return _players.Where(player => IsSameText(player.Email, email)).ToList();
+            List<Player> matches = _players.Where(player => IsSameText(player.Email, email)).ToList();
+
+            return matches;
         }
 
         /// <inheritdoc />
         public List<Player> FindByName(string name)
         {
-            return _players
+            List<Player> matches = _players
                 .Where(player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name))
                 .Take(1)
                 .ToList();
+
+            return matches;
         }
 
         /// <inheritdoc />
         public List<Player> FindByUsername(string username)
         {
-            return _players.Where(player => IsSameText(player.Username, username)).Take(1).ToList();
+            List<Player> matches = _players.Where(player => IsSameText(player.Username, username)).Take(1).ToList();
+
+            return matches;
         }
 
         /// <inheritdoc />
         public bool EmailExists(string email)
         {
-            return _players.Any(player => IsSameText(player.Email, email));
+            bool isRegistered = _players.Any(player => IsSameText(player.Email, email));
+
+            return isRegistered;
         }
 
         /// <inheritdoc />
         public bool UsernameExists(string username)
         {
-            return _players.Any(player => IsSameText(player.Username, username));
+            bool isTaken = _players.Any(player => IsSameText(player.Username, username));
+
+            return isTaken;
         }
 
         /// <inheritdoc />

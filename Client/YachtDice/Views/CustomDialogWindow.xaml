@@ -47,7 +47,7 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <Button x:Name="PrimaryButton" Content="{x:Static properties:Strings.Dialogs_OKButton}"
+                <Button x:Name="PrimaryButton" Content="{x:Static properties:Strings.Dialogs_ButtonOK}"
                         Style="{DynamicResource BtnPrimary}" MinWidth="130"
                         Click="PrimaryButton_Click"/>
 
