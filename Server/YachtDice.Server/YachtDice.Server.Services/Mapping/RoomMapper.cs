@@ -29,23 +29,6 @@ namespace YachtDice.Server.Services.Mapping
         }
 
         /// <summary>
-        /// Creates the data contract of the options of a room.
-        /// </summary>
-        /// <param name="settings">Options in the logic layer.</param>
-        /// <returns>The options for the clients.</returns>
-        public static Contracts.RoomSettings ToContract(Logic.Rooms.RoomSettings settings)
-        {
-            var contract = new Contracts.RoomSettings
-            {
-                MaxPlayers = settings.MaxPlayers,
-                IsPrivate = settings.IsPrivate,
-                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed)
-            };
-
-            return contract;
-        }
-
-        /// <summary>
         /// Creates the options of the logic layer from the ones sent by a client.
         /// </summary>
         /// <param name="settings">Options received from the client.</param>
@@ -86,6 +69,23 @@ namespace YachtDice.Server.Services.Mapping
         public static Contracts.RoomResultCode ToResultCode(Logic.Rooms.RoomStatus status)
         {
             return EnumMapper.Map<Logic.Rooms.RoomStatus, Contracts.RoomResultCode>(status);
+        }
+
+        /// <summary>
+        /// Creates the data contract of the options of a room.
+        /// </summary>
+        /// <param name="settings">Options in the logic layer.</param>
+        /// <returns>The options for the clients.</returns>
+        private static Contracts.RoomSettings ToContract(Logic.Rooms.RoomSettings settings)
+        {
+            var contract = new Contracts.RoomSettings
+            {
+                MaxPlayers = settings.MaxPlayers,
+                IsPrivate = settings.IsPrivate,
+                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed)
+            };
+
+            return contract;
         }
     }
 }

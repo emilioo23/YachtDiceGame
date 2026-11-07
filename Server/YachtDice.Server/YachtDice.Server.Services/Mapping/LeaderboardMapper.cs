@@ -18,22 +18,17 @@ namespace YachtDice.Server.Services.Mapping
         /// <returns>Answer for the client, in the same order.</returns>
         public static List<Contracts.LeaderboardEntry> ToContracts(List<Logic.Players.LeaderboardEntry> entries)
         {
-            List<Contracts.LeaderboardEntry> contracts = entries.Select(ToContract).ToList();
+            List<Contracts.LeaderboardEntry> contracts = entries
+                .Select(entry => new Contracts.LeaderboardEntry
+                {
+                    Position = entry.Position,
+                    DisplayName = entry.DisplayName,
+                    TotalPoints = entry.TotalPoints,
+                    Wins = entry.Wins
+                })
+                .ToList();
 
             return contracts;
-        }
-
-        private static Contracts.LeaderboardEntry ToContract(Logic.Players.LeaderboardEntry entry)
-        {
-            var contract = new Contracts.LeaderboardEntry
-            {
-                Position = entry.Position,
-                DisplayName = entry.DisplayName,
-                TotalPoints = entry.TotalPoints,
-                Wins = entry.Wins
-            };
-
-            return contract;
         }
     }
 }
