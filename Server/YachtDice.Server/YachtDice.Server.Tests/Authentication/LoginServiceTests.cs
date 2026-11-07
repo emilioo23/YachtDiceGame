@@ -104,7 +104,14 @@ namespace YachtDice.Server.Tests.Authentication
 
         private static LoginCredentials CreateCredentials(string email, string password)
         {
-            return new LoginCredentials { Email = email, Password = password, Culture = CultureInfo.InvariantCulture };
+            var credentials = new LoginCredentials
+            {
+                Email = email,
+                Password = password,
+                Culture = CultureInfo.InvariantCulture
+            };
+
+            return credentials;
         }
     }
 }

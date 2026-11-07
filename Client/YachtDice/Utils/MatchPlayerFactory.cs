@@ -49,23 +49,27 @@ namespace YachtDice.Utils
 
         private static MatchPlayer CreatePlayer(string name, bool isLocalPlayer)
         {
-            return new MatchPlayer
+            var player = new MatchPlayer
             {
                 Name = name,
                 Initial = PlayerInitials.GetInitial(name),
                 IsLocalPlayer = isLocalPlayer
             };
+
+            return player;
         }
 
         private static MatchPlayer CopyWithPresence(MatchPlayer player, HashSet<string> presentNames)
         {
-            return new MatchPlayer
+            var updatedPlayer = new MatchPlayer
             {
                 Name = player.Name,
                 Initial = player.Initial,
                 IsLocalPlayer = player.IsLocalPlayer,
                 HasLeft = !presentNames.Contains(player.Name)
             };
+
+            return updatedPlayer;
         }
 
         private static bool IsSameName(string firstName, string secondName)

@@ -107,7 +107,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         protected async Task<TResult> ExecuteAsync<TResult>(Func<TClient, TResult> operation)
         {
-            TClient client = GetClient();
+            TClient client = RequireClient();
             TResult result;
 
             try
@@ -169,7 +169,7 @@ namespace YachtDice.Gateway
             }
         }
 
-        private TClient GetClient()
+        private TClient RequireClient()
         {
             if (_client == null)
             {

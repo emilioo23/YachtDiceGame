@@ -91,7 +91,15 @@ namespace YachtDice.Server.Tests.Authentication
 
         private static Player CreatePlayer(string username, string email)
         {
-            return new Player { Username = username, Email = email, FirstName = FirstName, LastName = LastName };
+            var player = new Player
+            {
+                Username = username,
+                Email = email,
+                FirstName = FirstName,
+                LastName = LastName
+            };
+
+            return player;
         }
     }
 }

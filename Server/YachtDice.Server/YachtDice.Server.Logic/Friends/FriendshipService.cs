@@ -149,11 +149,13 @@ namespace YachtDice.Server.Logic.Friends
 
         private static List<string> ToNames(List<Player> players)
         {
-            return players
+            List<string> names = players
                 .Select(player => player.DisplayName)
                 .Where(name => !string.IsNullOrWhiteSpace(name))
                 .OrderBy(name => name)
                 .ToList();
+
+            return names;
         }
 
         private FriendRequestStatus ResolveRequest(Player requester, Player target)

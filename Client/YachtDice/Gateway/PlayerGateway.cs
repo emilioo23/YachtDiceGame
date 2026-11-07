@@ -16,20 +16,24 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="username">Username of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<PlayerStatistics> GetStatisticsAsync(string username)
+        public async Task<PlayerStatistics> GetStatisticsAsync(string username)
         {
             var player = new Player { Username = username };
 
-            return ExecuteAsync(client => client.GetPlayerStatistics(player));
+            PlayerStatistics statistics = await ExecuteAsync(client => client.GetPlayerStatistics(player));
+
+            return statistics;
         }
 
         /// <summary>
         /// Gets the leaderboard ranking entries.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<LeaderboardEntry>> GetLeaderboardAsync()
+        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
         {
-            return ExecuteAsync(client => client.GetLeaderboard().ToList());
+            LeaderboardEntry[] entries = await ExecuteAsync(client => client.GetLeaderboard());
+
+            return entries.ToList();
         }
 
         /// <inheritdoc />

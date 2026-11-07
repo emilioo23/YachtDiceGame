@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using Data = YachtDice.Server.Data;
     using LogicAuth = YachtDice.Server.Logic.Authentication;
 
@@ -31,7 +31,9 @@ namespace YachtDice.Server.Services
         /// <returns>A code indicating the result of the registration attempt.</returns>
         public Contracts.RegisterResultCode RegisterPlayer(Contracts.Player newPlayer)
         {
-            return Execute(newPlayer, () => ProcessRegistration(newPlayer));
+            Contracts.RegisterResultCode result = Execute(newPlayer, () => ProcessRegistration(newPlayer));
+
+            return result;
         }
 
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)

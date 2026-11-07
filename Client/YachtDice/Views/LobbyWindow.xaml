@@ -59,7 +59,7 @@
                         </Border>
                     </Grid>
 
-                    <TextBlock Text="{x:Static properties:Strings.Lobby_BackToPlay}"
+                    <TextBlock Text="{x:Static properties:Strings.Lobby_LinkBackToPlay}"
                                Style="{StaticResource LinkText}"
                                Margin="0,0,0,20"
                                FontSize="15"

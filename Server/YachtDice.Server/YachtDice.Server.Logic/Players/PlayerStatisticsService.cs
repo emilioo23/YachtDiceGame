@@ -63,7 +63,7 @@ namespace YachtDice.Server.Logic.Players
                 ? (int)Math.Round((double)wins * PercentageFactor / gamesPlayed)
                 : EmptyCount;
 
-            return new PlayerStatistics
+            var statistics = new PlayerStatistics
             {
                 GamesPlayed = gamesPlayed,
                 Wins = wins,
@@ -71,6 +71,8 @@ namespace YachtDice.Server.Logic.Players
                 WinRatePercentage = winRate,
                 Level = player.Level ?? DefaultPlayerLevel
             };
+
+            return statistics;
         }
     }
 }

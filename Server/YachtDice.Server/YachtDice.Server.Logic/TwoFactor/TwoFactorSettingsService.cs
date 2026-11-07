@@ -14,6 +14,7 @@ namespace YachtDice.Server.Logic.TwoFactor
     public class TwoFactorSettingsService : ITwoFactorSettingsService
     {
         private const int VisibleLocalPartChars = 2;
+        private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
         private const string NullDependencyMessage = "The dependency cannot be null.";
@@ -169,7 +170,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             if (atIndex > VisibleLocalPartChars)
             {
-                string visiblePart = email.Substring(0, VisibleLocalPartChars);
+                string visiblePart = email.Substring(FirstCharacterIndex, VisibleLocalPartChars);
                 string hiddenPart = new string(MaskCharacter, atIndex - VisibleLocalPartChars);
 
                 maskedEmail = visiblePart + hiddenPart + email.Substring(atIndex);

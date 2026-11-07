@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using YachtDice.ChatServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
@@ -33,6 +34,7 @@ namespace YachtDice.Views
         private const int CurrentRoundMock = 1;
         private const int TotalRoundsMock = 12;
         private const int CategoryColumnWidth = 200;
+        private const int PlayerColumnWeight = 1;
         private const int LabelPaddingHorizontal = 10;
         private const int LabelPaddingVertical = 8;
         private const int FontSizeSmall = 12;
@@ -186,9 +188,7 @@ namespace YachtDice.Views
 
         private void GoToResultsWindow()
         {
-            var resultsWindow = new ResultsWindow(_playerName, _totalScore);
-            resultsWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, _totalScore));
         }
 
         private Window ReopenWindow()
@@ -414,21 +414,21 @@ namespace YachtDice.Views
 
         private void LoadCategories()
         {
-            AddCategoryRow(Strings.Game_CategoryOnes);
+            AddCategoryRow(Strings.Game_Category_Ones);
             AddCategoryRow(Strings.Game_Category_Twos);
             AddCategoryRow(Strings.Game_Category_Threes);
-            AddCategoryRow(Strings.Game_CategoryFours);
-            AddCategoryRow(Strings.Game_CategoryFives);
-            AddCategoryRow(Strings.Game_CategorySixes);
-            AddMetaRow(Strings.Game_CategorySum);
+            AddCategoryRow(Strings.Game_Category_Fours);
+            AddCategoryRow(Strings.Game_Category_Fives);
+            AddCategoryRow(Strings.Game_Category_Sixes);
+            AddMetaRow(Strings.Game_Category_Sum);
             AddMetaRow(Strings.Game_Category_Bonus);
-            AddCategoryRow(Strings.Game_Category_ThreesOfAKind);
+            AddCategoryRow(Strings.Game_Category_ThreeOfAKind);
             AddCategoryRow(Strings.Game_Category_FourOfAKind);
-            AddCategoryRow(Strings.Game_CategoryFullHouse);
+            AddCategoryRow(Strings.Game_Category_FullHouse);
             AddCategoryRow(Strings.Game_Category_SmallStraight);
             AddCategoryRow(Strings.Game_Category_LargeStraight);
-            AddCategoryRow(Strings.Game_CategoryYacht);
-            AddCategoryRow(Strings.Game_CategoryChance);
+            AddCategoryRow(Strings.Game_Category_Yacht);
+            AddCategoryRow(Strings.Game_Category_Chance);
             AddMetaRow(Strings.Game_Scorecard_Total);
         }
 
@@ -443,7 +443,10 @@ namespace YachtDice.Views
 
             for (int playerIndex = EmptyLength; playerIndex < _matchPlayers.Count; playerIndex++)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = new GridLength(PlayerColumnWeight, GridUnitType.Star)
+                });
             }
 
             var label = new TextBlock
@@ -510,7 +513,7 @@ namespace YachtDice.Views
 
         private static TextBlock CreateScoreLabel(string text, Brush foreground, FontWeight fontWeight)
         {
-            return new TextBlock
+            var label = new TextBlock
             {
                 Text = text,
                 FontSize = FontSizeNormal,
@@ -519,6 +522,8 @@ namespace YachtDice.Views
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
+            return label;
         }
 
         private static void AddScoreCell(Grid row, TextBlock label, int column)
@@ -568,16 +573,14 @@ namespace YachtDice.Views
             var dialogContent = new DialogContent
             {
                 Title = Strings.Game_Sidebar_ButtonLeave,
-                Message = Strings.Dialogs_D06_LeaveMatch,
-                PrimaryButtonText = Strings.Dialogs_OKButton,
-                SecondaryButtonText = Strings.Dialogs_IgnoreButton
+                Message = Strings.Dialogs_LeaveMatch,
+                PrimaryButtonText = Strings.Dialogs_ButtonOK,
+                SecondaryButtonText = Strings.Dialogs_ButtonIgnore
             };
 
             if (new CustomDialogWindow(dialogContent).ShowDialog() == true)
             {
-                var menuWindow = new MenuWindow(_playerName);
-                menuWindow.Show();
-                Close();
+                WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
             }
         }
 

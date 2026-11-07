@@ -153,19 +153,16 @@
   <data name="Auth_UsernamePlaceholder" xml:space="preserve">
     <value>MiNick123</value>
   </data>
-  <data name="Auth_PasswordMinPlaceholder" xml:space="preserve">
-    <value>Mínimo 8 caracteres</value>
-  </data>
-  <data name="Auth_LoginButton" xml:space="preserve">
+  <data name="Auth_ButtonLogin" xml:space="preserve">
     <value>Iniciar sesión</value>
   </data>
-  <data name="Auth_CreateAccountButton" xml:space="preserve">
+  <data name="Auth_ButtonCreateAccount" xml:space="preserve">
     <value>Crear cuenta</value>
   </data>
   <data name="Auth_Divider" xml:space="preserve">
     <value>o</value>
   </data>
-  <data name="Auth_GuestButton" xml:space="preserve">
+  <data name="Auth_ButtonGuest" xml:space="preserve">
     <value>Jugar como invitado</value>
   </data>
   <data name="Auth_ErrorRequiredFields" xml:space="preserve">
@@ -180,25 +177,19 @@
   <data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
     <value>Enlace de recuperación enviado a {0}.</value>
   </data>
-  <data name="Leaderboard_BackLink" xml:space="preserve">
+  <data name="Global_ButtonBack" xml:space="preserve">
     <value>← Volver</value>
   </data>
-  <data name="MainMenu_EditProfileButton" xml:space="preserve">
+  <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
     <value>Editar perfil</value>
   </data>
   <data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
     <value>{0} en línea</value>
   </data>
-  <data name="MainMenu_Friends_StatusInLobby" xml:space="preserve">
-    <value>En partida · Lobby</value>
-  </data>
-  <data name="MainMenu_Friends_StatusInMatchRound" xml:space="preserve">
-    <value>En partida · Ronda {0}</value>
-  </data>
   <data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
     <value>En línea</value>
   </data>
-  <data name="MainMenu_LogoutButton" xml:space="preserve">
+  <data name="MainMenu_ButtonLogout" xml:space="preserve">
     <value>Cerrar sesión</value>
   </data>
   <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
@@ -216,9 +207,6 @@
   <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
     <value>Ingresa un código de sala.</value>
   </data>
-  <data name="MainMenu_Play_JoiningRoomMessage" xml:space="preserve">
-    <value>Uniéndose a la sala {0}...</value>
-  </data>
   <data name="MainMenu_PlayerLevel" xml:space="preserve">
     <value>Nivel {0}</value>
   </data>
@@ -234,9 +222,6 @@
   <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
     <value>Código incompleto.</value>
   </data>
-  <data name="TwoFactor_Eyebrow" xml:space="preserve">
-    <value>Verificación en dos pasos</value>
-  </data>
   <data name="TwoFactor_Title" xml:space="preserve">
     <value>Verificación en dos pasos</value>
   </data>
@@ -246,17 +231,11 @@
   <data name="TwoFactor_ResendText" xml:space="preserve">
     <value>¿No llegó el código?</value>
   </data>
-  <data name="TwoFactor_ResendLink" xml:space="preserve">
+  <data name="TwoFactor_LinkResend" xml:space="preserve">
     <value>Reenviar</value>
   </data>
-  <data name="TwoFactor_VerifyButton" xml:space="preserve">
+  <data name="TwoFactor_ButtonVerify" xml:space="preserve">
     <value>Verificar →</value>
-  </data>
-  <data name="TwoFactor_BackLink" xml:space="preserve">
-    <value>← Volver</value>
-  </data>
-  <data name="ForgotPassword_Eyebrow" xml:space="preserve">
-    <value>Recuperar contraseña</value>
   </data>
   <data name="ForgotPassword_Title" xml:space="preserve">
     <value>Recuperar contraseña</value>
@@ -267,10 +246,10 @@
   <data name="ForgotPassword_Email" xml:space="preserve">
     <value>Correo electrónico</value>
   </data>
-  <data name="ForgotPassword_SendLinkButton" xml:space="preserve">
+  <data name="ForgotPassword_ButtonSendLink" xml:space="preserve">
     <value>Enviar enlace de recuperación</value>
   </data>
-  <data name="ForgotPassword_BackToLoginLink" xml:space="preserve">
+  <data name="ForgotPassword_LinkBackToLogin" xml:space="preserve">
     <value>← Volver al inicio de sesión</value>
   </data>
   <data name="MainMenu_Friends_Title" xml:space="preserve">
@@ -279,26 +258,11 @@
   <data name="MainMenu_Friends_Subtitle" xml:space="preserve">
     <value>Lista de jugadores</value>
   </data>
-  <data name="MainMenu_Friends_OnlineHeader" xml:space="preserve">
-    <value>3 en línea</value>
-  </data>
-  <data name="MainMenu_Friends_AddButton" xml:space="preserve">
+  <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
     <value>+ Agregar</value>
-  </data>
-  <data name="MainMenu_Friends_InviteByCode" xml:space="preserve">
-    <value>Invitar a sala por código</value>
-  </data>
-  <data name="MainMenu_Friends_CodePlaceholder" xml:space="preserve">
-    <value>Ej: 4821</value>
-  </data>
-  <data name="MainMenu_Friends_ButtonInvite" xml:space="preserve">
-    <value>Invitar</value>
   </data>
   <data name="MainMenu_Play_Welcome" xml:space="preserve">
     <value>Bienvenido de vuelta,</value>
-  </data>
-  <data name="MainMenu_Play_LevelBadge" xml:space="preserve">
-    <value>Niv 3 · Debutante</value>
   </data>
   <data name="MainMenu_Play_CreateRoomTitle" xml:space="preserve">
     <value>Crear sala</value>
@@ -312,10 +276,7 @@
   <data name="MainMenu_Play_JoinRoomDescription" xml:space="preserve">
     <value>Ingresa el código de una sala</value>
   </data>
-  <data name="MainMenu_Play_CodeRoomPlaceholder" xml:space="preserve">
-    <value>Código: ej. K7M2QX</value>
-  </data>
-  <data name="MainMenu_Play_JoinButton" xml:space="preserve">
+  <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
     <value>Entrar →</value>
   </data>
   <data name="MainMenu_Play_StatGames" xml:space="preserve">
@@ -333,10 +294,7 @@
   <data name="Lobby_Title" xml:space="preserve">
     <value>Sala de espera</value>
   </data>
-  <data name="Lobby_RoomId" xml:space="preserve">
-    <value>ID: ----</value>
-  </data>
-  <data name="Lobby_BackToPlay" xml:space="preserve">
+  <data name="Lobby_LinkBackToPlay" xml:space="preserve">
     <value>← Volver a Jugar</value>
   </data>
   <data name="Lobby_Privacy" xml:space="preserve">
@@ -350,9 +308,6 @@
   </data>
   <data name="Lobby_MaxPlayers" xml:space="preserve">
     <value>Máx. jugadores</value>
-  </data>
-  <data name="Lobby_OptionNPlayers" xml:space="preserve">
-    <value>{n} jugadores</value>
   </data>
   <data name="Lobby_GameMode" xml:space="preserve">
     <value>Modo de juego</value>
@@ -387,45 +342,6 @@
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
     <value>Código copiado: {0}</value>
   </data>
-  <data name="Lobby_NotificationEnterCode" xml:space="preserve">
-    <value>Ingresa un código de sala</value>
-  </data>
-  <data name="Lobby_NotificationJoining" xml:space="preserve">
-    <value>Uniéndose a sala {codigo}...</value>
-  </data>
-  <data name="Friends_Title" xml:space="preserve">
-    <value>Amigos</value>
-  </data>
-  <data name="Friends_Description" xml:space="preserve">
-    <value>Administra tus amigos y solicitudes desde el panel izquierdo.</value>
-  </data>
-  <data name="Friends_TabAll" xml:space="preserve">
-    <value>Todos ({n})</value>
-  </data>
-  <data name="Friends_TabOnline" xml:space="preserve">
-    <value>En línea</value>
-  </data>
-  <data name="Friends_TabRequests" xml:space="preserve">
-    <value>Solicitudes ({n})</value>
-  </data>
-  <data name="Friends_ButtonAccept" xml:space="preserve">
-    <value>Aceptar</value>
-  </data>
-  <data name="Friends_ButtonReject" xml:space="preserve">
-    <value>Rechazar</value>
-  </data>
-  <data name="Friends_ButtonInvite" xml:space="preserve">
-    <value>Invitar</value>
-  </data>
-  <data name="Friends_NotificationRequestAccepted" xml:space="preserve">
-    <value>Solicitud aceptada</value>
-  </data>
-  <data name="Friends_NotificationRequestRejected" xml:space="preserve">
-    <value>Solicitud rechazada</value>
-  </data>
-  <data name="Friends_NotificationInvitationSent" xml:space="preserve">
-    <value>Invitación enviada a {nombre}</value>
-  </data>
   <data name="Leaderboard_Title" xml:space="preserve">
     <value>Marcador Global</value>
   </data>
@@ -441,9 +357,6 @@
   <data name="Leaderboard_ColumnPlayer" xml:space="preserve">
     <value>Jugador</value>
   </data>
-  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
-    <value>Nivel</value>
-  </data>
   <data name="Leaderboard_ColumnPoints" xml:space="preserve">
     <value>Puntos</value>
   </data>
@@ -456,22 +369,22 @@
   <data name="Settings_Title" xml:space="preserve">
     <value>Ajustes</value>
   </data>
-  <data name="Settings_NavAccount" xml:space="preserve">
+  <data name="Settings_Nav_Account" xml:space="preserve">
     <value>Mi cuenta</value>
   </data>
-  <data name="Settings_NavAppearance" xml:space="preserve">
+  <data name="Settings_Nav_Appearance" xml:space="preserve">
     <value>Apariencia</value>
   </data>
-  <data name="Settings_NavSecurity" xml:space="preserve">
+  <data name="Settings_Nav_Security" xml:space="preserve">
     <value>Seguridad</value>
   </data>
-  <data name="Settings_NavNotifications" xml:space="preserve">
+  <data name="Settings_Nav_Notifications" xml:space="preserve">
     <value>Notificaciones</value>
   </data>
-  <data name="Settings_NavPreferences" xml:space="preserve">
+  <data name="Settings_Nav_Preferences" xml:space="preserve">
     <value>Preferencias</value>
   </data>
-  <data name="Settings_NavPrivacy" xml:space="preserve">
+  <data name="Settings_Nav_Privacy" xml:space="preserve">
     <value>Privacidad</value>
   </data>
   <data name="Settings_Account_Username" xml:space="preserve">
@@ -483,41 +396,17 @@
   <data name="Settings_Account_Avatar" xml:space="preserve">
     <value>Avatar y personalización</value>
   </data>
-  <data name="Settings_Account_AvatarSub" xml:space="preserve">
-    <value>Avatar: {avatar} · Toca para editar</value>
-  </data>
-  <data name="Settings_Account_ButtonChange" xml:space="preserve">
+  <data name="Settings_ButtonChange" xml:space="preserve">
     <value>Cambiar</value>
   </data>
   <data name="Settings_Account_ButtonEditProfile" xml:space="preserve">
     <value>Editar perfil</value>
   </data>
-  <data name="Settings_Account_NotificationEmailUpdated" xml:space="preserve">
-    <value>Correo actualizado</value>
-  </data>
   <data name="Settings_Security_Password" xml:space="preserve">
     <value>Contraseña</value>
   </data>
-  <data name="Settings_Security_PasswordSub" xml:space="preserve">
-    <value>Última actualización: hace {n} días</value>
-  </data>
-  <data name="Settings_Security_ChangePasswordTitle" xml:space="preserve">
-    <value>Cambiar contraseña</value>
-  </data>
   <data name="Settings_Security_PasswordCurrent" xml:space="preserve">
     <value>Contraseña actual</value>
-  </data>
-  <data name="Settings_Security_NewPassword" xml:space="preserve">
-    <value>Nueva contraseña</value>
-  </data>
-  <data name="Settings_Security_ConfirmNew" xml:space="preserve">
-    <value>Confirmar nueva</value>
-  </data>
-  <data name="Settings_Security_RepeatNewPlaceholder" xml:space="preserve">
-    <value>Repite la nueva contraseña</value>
-  </data>
-  <data name="Settings_Security_ButtonSave" xml:space="preserve">
-    <value>Guardar nueva contraseña</value>
   </data>
   <data name="Settings_Security_TwoFactor" xml:space="preserve">
     <value>Verificación en 2 pasos</value>
@@ -525,10 +414,10 @@
   <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
     <value>Código de correo al iniciar sesión</value>
   </data>
-  <data name="Settings_Security_TwoFactorEnableButton" xml:space="preserve">
+  <data name="Settings_Security_ButtonTwoFactorEnable" xml:space="preserve">
     <value>Activar</value>
   </data>
-  <data name="Settings_Security_TwoFactorDisableButton" xml:space="preserve">
+  <data name="Settings_Security_ButtonTwoFactorDisable" xml:space="preserve">
     <value>Desactivar</value>
   </data>
   <data name="Settings_Security_TwoFactorEnabledMessage" xml:space="preserve">
@@ -540,17 +429,11 @@
   <data name="Settings_Security_TwoFactorUnavailableMessage" xml:space="preserve">
     <value>Necesitas una cuenta registrada para usar esta opción.</value>
   </data>
-  <data name="Settings_Notifications_NotificationMatch" xml:space="preserve">
+  <data name="Settings_Notifications_Match" xml:space="preserve">
     <value>Notificaciones de partida</value>
   </data>
-  <data name="Settings_Notifications_NotificationMatchSub" xml:space="preserve">
+  <data name="Settings_Notifications_MatchSub" xml:space="preserve">
     <value>Cuando te inviten a jugar</value>
-  </data>
-  <data name="Settings_Notifications_FriendsOnline" xml:space="preserve">
-    <value>Amigos conectados</value>
-  </data>
-  <data name="Settings_Notifications_FriendsOnlineSub" xml:space="preserve">
-    <value>Cuando un amigo se conecte</value>
   </data>
   <data name="Settings_Notifications_SoundsGame" xml:space="preserve">
     <value>Sonidos del juego</value>
@@ -564,12 +447,6 @@
   <data name="Settings_Preferences_ShowPotentialPointsSub" xml:space="preserve">
     <value>Ver puntos antes de anotar</value>
   </data>
-  <data name="Settings_Preferences_ConfirmBeforeScoring" xml:space="preserve">
-    <value>Confirmar al anotar</value>
-  </data>
-  <data name="Settings_Preferences_ConfirmBeforeScoringSub" xml:space="preserve">
-    <value>Pedir confirmación antes de registrar</value>
-  </data>
   <data name="Settings_Preferences_Language" xml:space="preserve">
     <value>Idioma</value>
   </data>
@@ -582,19 +459,13 @@
   <data name="Settings_Appearance_DarkTheme" xml:space="preserve">
     <value>Tema oscuro</value>
   </data>
-  <data name="Settings_Appearance_ThemeDarkSub" xml:space="preserve">
+  <data name="Settings_Appearance_DarkThemeSub" xml:space="preserve">
     <value>Cambia la apariencia de toda la interfaz</value>
-  </data>
-  <data name="Settings_Security_ChangeButton" xml:space="preserve">
-    <value>Cambiar</value>
-  </data>
-  <data name="Settings_BackLink" xml:space="preserve">
-    <value>← Volver</value>
   </data>
   <data name="Settings_Privacy_PublicProfile" xml:space="preserve">
     <value>Perfil público</value>
   </data>
-  <data name="Settings_Privacy_PublicProfileSubtitle" xml:space="preserve">
+  <data name="Settings_Privacy_PublicProfileSub" xml:space="preserve">
     <value>Permitir que otros vean tu perfil</value>
   </data>
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
@@ -606,14 +477,8 @@
   <data name="Profile_CustomizeProfileTitle" xml:space="preserve">
     <value>Personalizar perfil</value>
   </data>
-  <data name="Profile_ButtonBack" xml:space="preserve">
-    <value>← Volver</value>
-  </data>
   <data name="Profile_Username" xml:space="preserve">
     <value>Nombre de usuario</value>
-  </data>
-  <data name="Profile_UsernamePlaceholder" xml:space="preserve">
-    <value>MiNick</value>
   </data>
   <data name="Profile_TitleLabel" xml:space="preserve">
     <value>Título</value>
@@ -651,20 +516,11 @@
   <data name="Profile_TotalXp" xml:space="preserve">
     <value>XP total</value>
   </data>
-  <data name="Profile_AchievementsHeader" xml:space="preserve">
+  <data name="Profile_Achievements_Header" xml:space="preserve">
     <value>Logros</value>
   </data>
   <data name="Profile_ButtonSaveChanges" xml:space="preserve">
     <value>Guardar cambios</value>
-  </data>
-  <data name="Profile_NotificationProfileSaved" xml:space="preserve">
-    <value>Perfil actualizado</value>
-  </data>
-  <data name="Game_Sidebar_Players" xml:space="preserve">
-    <value>Jugadores</value>
-  </data>
-  <data name="Game_Sidebar_LevelXP" xml:space="preserve">
-    <value>Niv {n} · {xp}XP</value>
   </data>
   <data name="Game_Sidebar_ButtonKick" xml:space="preserve">
     <value>Expulsar jugador</value>
@@ -675,17 +531,8 @@
   <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Tu turno</value>
   </data>
-  <data name="Game_Topbar_PlayerTurn" xml:space="preserve">
-    <value>Turno de {nombre}</value>
-  </data>
-  <data name="Game_Topbar_YourTurnBadge" xml:space="preserve">
-    <value>TU TURNO</value>
-  </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
     <value>Ronda {0} / {1}</value>
-  </data>
-  <data name="Game_Scorecard_Title" xml:space="preserve">
-    <value>Tabla de puntaje</value>
   </data>
   <data name="Game_Scorecard_Total" xml:space="preserve">
     <value>TOTAL</value>
@@ -693,34 +540,13 @@
   <data name="Game_Dice_ButtonRoll" xml:space="preserve">
     <value>Tirar ({0}/3)</value>
   </data>
-  <data name="Game_Dice_ButtonRollOpponent" xml:space="preserve">
-    <value>Turno del rival</value>
-  </data>
-  <data name="Game_Dice_ButtonRollChoose" xml:space="preserve">
-    <value>Elige una categoría</value>
-  </data>
-  <data name="Game_Dice_HintWaiting" xml:space="preserve">
-    <value>Esperando al rival...</value>
-  </data>
-  <data name="Game_Dice_HintChoose" xml:space="preserve">
-    <value>Haz clic en una categoría para anotar</value>
-  </data>
-  <data name="Game_Dice_HintKeep" xml:space="preserve">
-    <value>Haz clic en un dado para mantenerlo</value>
-  </data>
   <data name="Game_Dice_HintPress" xml:space="preserve">
     <value>Presiona Tirar para comenzar</value>
-  </data>
-  <data name="Game_Chat_MessagePlaceholder" xml:space="preserve">
-    <value>Mensaje...</value>
   </data>
   <data name="Game_Chat_ButtonChat" xml:space="preserve">
     <value>Chat</value>
   </data>
-  <data name="Game_NotificationYourTurn" xml:space="preserve">
-    <value>Es tu turno</value>
-  </data>
-  <data name="Game_CategoryOnes" xml:space="preserve">
+  <data name="Game_Category_Ones" xml:space="preserve">
     <value>Unos</value>
   </data>
   <data name="Game_Category_Twos" xml:space="preserve">
@@ -729,28 +555,28 @@
   <data name="Game_Category_Threes" xml:space="preserve">
     <value>Tres</value>
   </data>
-  <data name="Game_CategoryFours" xml:space="preserve">
+  <data name="Game_Category_Fours" xml:space="preserve">
     <value>Cuatros</value>
   </data>
-  <data name="Game_CategoryFives" xml:space="preserve">
+  <data name="Game_Category_Fives" xml:space="preserve">
     <value>Cincos</value>
   </data>
-  <data name="Game_CategorySixes" xml:space="preserve">
+  <data name="Game_Category_Sixes" xml:space="preserve">
     <value>Seises</value>
   </data>
-  <data name="Game_CategorySum" xml:space="preserve">
+  <data name="Game_Category_Sum" xml:space="preserve">
     <value>Suma</value>
   </data>
   <data name="Game_Category_Bonus" xml:space="preserve">
     <value>Bono +35</value>
   </data>
-  <data name="Game_Category_ThreesOfAKind" xml:space="preserve">
+  <data name="Game_Category_ThreeOfAKind" xml:space="preserve">
     <value>3 Iguales</value>
   </data>
   <data name="Game_Category_FourOfAKind" xml:space="preserve">
     <value>4 Iguales</value>
   </data>
-  <data name="Game_CategoryFullHouse" xml:space="preserve">
+  <data name="Game_Category_FullHouse" xml:space="preserve">
     <value>Casa llena</value>
   </data>
   <data name="Game_Category_SmallStraight" xml:space="preserve">
@@ -759,10 +585,10 @@
   <data name="Game_Category_LargeStraight" xml:space="preserve">
     <value>Esc.Grande</value>
   </data>
-  <data name="Game_CategoryYacht" xml:space="preserve">
+  <data name="Game_Category_Yacht" xml:space="preserve">
     <value>YACHT</value>
   </data>
-  <data name="Game_CategoryChance" xml:space="preserve">
+  <data name="Game_Category_Chance" xml:space="preserve">
     <value>Chance</value>
   </data>
   <data name="Results_Title" xml:space="preserve">
@@ -771,14 +597,8 @@
   <data name="Results_TitleWinner" xml:space="preserve">
     <value>{0} ganó</value>
   </data>
-  <data name="Results_Subtitle" xml:space="preserve">
-    <value>Resultados finales</value>
-  </data>
   <data name="Results_SubtitleScore" xml:space="preserve">
     <value>Puntaje ganador: {0} pts</value>
-  </data>
-  <data name="Results_ColumnNumber" xml:space="preserve">
-    <value>#</value>
   </data>
   <data name="Results_ColumnPlayer" xml:space="preserve">
     <value>Jugador</value>
@@ -786,203 +606,41 @@
   <data name="Results_ColumnTotal" xml:space="preserve">
     <value>Total</value>
   </data>
-  <data name="Results_ColumnUpper" xml:space="preserve">
-    <value>Superior</value>
-  </data>
-  <data name="Results_ColumnLower" xml:space="preserve">
-    <value>Inferior</value>
-  </data>
   <data name="Results_ColumnXp" xml:space="preserve">
     <value>XP ganada</value>
   </data>
-  <data name="Results_PodiumWin" xml:space="preserve">
-    <value>Victoria</value>
-  </data>
-  <data name="Results_PodiumGoodTry" xml:space="preserve">
-    <value>Buen intento</value>
-  </data>
-  <data name="Results_XpDetail" xml:space="preserve">
-    <value>{xp} / {xpNext} XP para Nivel {nivel}</value>
-  </data>
-  <data name="Results_LevelUp" xml:space="preserve">
-    <value>Subiste a Nivel {n}</value>
-  </data>
-  <data name="Results_MenuButton" xml:space="preserve">
+  <data name="Results_ButtonMenu" xml:space="preserve">
     <value>Menú</value>
   </data>
-  <data name="Results_NewGameButton" xml:space="preserve">
+  <data name="Results_ButtonNewGame" xml:space="preserve">
     <value>Nueva partida</value>
   </data>
-  <data name="Dialogs_D01_KickPlayer" xml:space="preserve">
-    <value>¿Estás seguro de que deseas expulsar a este jugador de la partida?</value>
-  </data>
-  <data name="Dialogs_D02_ReportPlayer" xml:space="preserve">
-    <value>Envía un reporte para que los moderadores revisen la conducta.</value>
-  </data>
-  <data name="Dialogs_D03_IrreversibleAction" xml:space="preserve">
-    <value>Esta acción eliminará tu cuenta y es irreversible. Todos tus datos, estadísticas y configuraciones se perderán de forma permanente en 7 días. ¿Continuar?</value>
-  </data>
-  <data name="Dialogs_D04_AccountInDeletion" xml:space="preserve">
-    <value>Tu cuenta está programada para ser eliminada. Te encuentras dentro del periodo de gracia de 7 días. ¿Deseas cancelar el proceso y recuperar tu cuenta?</value>
-  </data>
-  <data name="Dialogs_D05_CloseSession" xml:space="preserve">
-    <value>¿Deseas cerrar tu sesión actual?</value>
-  </data>
-  <data name="Dialogs_D06_LeaveMatch" xml:space="preserve">
+  <data name="Dialogs_LeaveMatch" xml:space="preserve">
     <value>¿Estás seguro de que deseas salir de la sala? Tu progreso no se guardará.</value>
   </data>
-  <data name="Dialogs_D07_ScorePoints" xml:space="preserve">
-    <value>¿Anotar estos puntos en la categoría seleccionada?</value>
-  </data>
-  <data name="Dialogs_D08_DeleteFriend" xml:space="preserve">
+  <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>¿Estás seguro de eliminar a este amigo?</value>
   </data>
-  <data name="Dialogs_D09_InviteToRoom" xml:space="preserve">
-    <value>{nombre} te ha invitado a unirse a su sala.</value>
-  </data>
-  <data name="Dialogs_D10_SystemWarning" xml:space="preserve">
-    <value>El jugador {nombre} ha cometido 3 infracciones de chat. ¿Deseas expulsarlo de la sala?</value>
-  </data>
-  <data name="Dialogs_D11_InactivityDetected" xml:space="preserve">
-    <value>Tu sesión expirará en 5 minutos por inactividad. ¿Deseas mantenerla activa?</value>
-  </data>
-  <data name="Dialogs_D12_SyncFailure" xml:space="preserve">
-    <value>Falla de sincronización en tiempo real con el servidor.</value>
-  </data>
-  <data name="Dialogs_D13_Login" xml:space="preserve">
+  <data name="Dialogs_InvalidCredentials" xml:space="preserve">
     <value>Credenciales inválidas.</value>
   </data>
-  <data name="Dialogs_D14_Security" xml:space="preserve">
-    <value>Contraseña incorrecta.</value>
-  </data>
-  <data name="Dialogs_D15_Register" xml:space="preserve">
+  <data name="Dialogs_UsernameTaken" xml:space="preserve">
     <value>El nombre de usuario ya está en uso.</value>
   </data>
-  <data name="Dialogs_D16_Register" xml:space="preserve">
+  <data name="Dialogs_EmailRegistered" xml:space="preserve">
     <value>Este correo ya está registrado.</value>
   </data>
-  <data name="Dialogs_D17_Security" xml:space="preserve">
-    <value>La nueva contraseña debe ser diferente a la actual.</value>
-  </data>
-  <data name="Dialogs_D18_Validation2FA" xml:space="preserve">
+  <data name="Dialogs_IncorrectCode" xml:space="preserve">
     <value>Código de verificación incorrecto.</value>
   </data>
-  <data name="Dialogs_D19_Validation2FA" xml:space="preserve">
+  <data name="Dialogs_TooManyAttempts" xml:space="preserve">
     <value>Demasiados intentos fallidos. Factor bloqueado por 15 min.</value>
   </data>
-  <data name="Dialogs_D20_Recovery" xml:space="preserve">
-    <value>Este enlace ya no es válido.</value>
-  </data>
-  <data name="Dialogs_D21_Recovery" xml:space="preserve">
-    <value>El enlace de recuperación ha expirado.</value>
-  </data>
-  <data name="Dialogs_D22_RoomError" xml:space="preserve">
-    <value>Ya perteneces a una sala activa.</value>
-  </data>
-  <data name="Dialogs_D23_Join" xml:space="preserve">
-    <value>Sala no encontrada.</value>
-  </data>
-  <data name="Dialogs_D24_Join" xml:space="preserve">
-    <value>La sala está llena.</value>
-  </data>
-  <data name="Dialogs_D25_Join" xml:space="preserve">
-    <value>Esta partida ya comenzó.</value>
-  </data>
-  <data name="Dialogs_D26_Privacy" xml:space="preserve">
-    <value>Contraseña de sala incorrecta.</value>
-  </data>
-  <data name="Dialogs_D27_Play" xml:space="preserve">
-    <value>Esta categoría ya fue utilizada.</value>
-  </data>
-  <data name="Dialogs_D28_Connection" xml:space="preserve">
-    <value>No se pudo cargar tu historial.</value>
-  </data>
-  <data name="Dialogs_D29_Connection" xml:space="preserve">
-    <value>No se pudo cargar este perfil.</value>
-  </data>
-  <data name="Dialogs_D30_Profile" xml:space="preserve">
-    <value>Este perfil ya no está disponible.</value>
-  </data>
-  <data name="Dialogs_D31_Friends" xml:space="preserve">
-    <value>No puedes agregarte a ti mismo.</value>
-  </data>
-  <data name="Dialogs_D32_Friends" xml:space="preserve">
-    <value>Ya existe una relación con este jugador.</value>
-  </data>
-  <data name="Dialogs_D33_Friends" xml:space="preserve">
-    <value>No se encontraron jugadores.</value>
-  </data>
-  <data name="Dialogs_D34_Requests" xml:space="preserve">
-    <value>Esta solicitud ya no está disponible.</value>
-  </data>
-  <data name="Dialogs_D35_Invite" xml:space="preserve">
-    <value>Este jugador no está disponible.</value>
-  </data>
-  <data name="Dialogs_D36_Report" xml:space="preserve">
-    <value>Ya reportaste a este jugador en esta partida.</value>
-  </data>
-  <data name="Dialogs_D37_Permissions" xml:space="preserve">
-    <value>Función no disponible para invitados.</value>
-  </data>
-  <data name="Dialogs_D38_Success" xml:space="preserve">
-    <value>Perfil actualizado.</value>
-  </data>
-  <data name="Dialogs_D39_Success" xml:space="preserve">
-    <value>Reporte enviado.</value>
-  </data>
-  <data name="Dialogs_IgnoreButton" xml:space="preserve">
+  <data name="Dialogs_ButtonIgnore" xml:space="preserve">
     <value>Ignorar</value>
   </data>
-  <data name="Dialogs_KeepActiveButton" xml:space="preserve">
-    <value>Mantener activa</value>
-  </data>
-  <data name="Dialogs_UpdateButton" xml:space="preserve">
-    <value>Actualizar</value>
-  </data>
-  <data name="Dialogs_RetryButton" xml:space="preserve">
-    <value>Reintentar</value>
-  </data>
-  <data name="Dialogs_RequestNewButton" xml:space="preserve">
-    <value>Solicitar nuevo</value>
-  </data>
-  <data name="Dialogs_RejectButton" xml:space="preserve">
-    <value>Rechazar</value>
-  </data>
-  <data name="Dialogs_JoinButton" xml:space="preserve">
-    <value>Unirse</value>
-  </data>
-  <data name="Dialogs_SendReportButton" xml:space="preserve">
-    <value>Enviar reporte</value>
-  </data>
-  <data name="Dialogs_DeleteAccountButton" xml:space="preserve">
-    <value>Eliminar cuenta</value>
-  </data>
-  <data name="Dialogs_ContinueDeletionButton" xml:space="preserve">
-    <value>Continuar eliminación</value>
-  </data>
-  <data name="Dialogs_CancelDeletionButton" xml:space="preserve">
-    <value>Cancelar eliminación</value>
-  </data>
-  <data name="Dialogs_OKButton" xml:space="preserve">
+  <data name="Dialogs_ButtonOK" xml:space="preserve">
     <value>OK</value>
-  </data>
-  <data name="Friends_Status_Online" xml:space="preserve">
-    <value>En línea</value>
-  </data>
-  <data name="Friends_Status_InGameRound" xml:space="preserve">
-    <value>En partida · Ronda {n}</value>
-  </data>
-  <data name="Friends_Status_InGameLobby" xml:space="preserve">
-    <value>En partida · Lobby</value>
-  </data>
-  <data name="Friends_Status_HoursAgo" xml:space="preserve">
-    <value>Hace {n} horas</value>
-  </data>
-  <data name="Friends_Status_ADayAgo" xml:space="preserve">
-    <value>Hace 1 día</value>
-  </data>
-  <data name="Friends_Status_DaysAgo" xml:space="preserve">
-    <value>Hace {n} días</value>
   </data>
   <data name="Friends_Status_WantsFriend" xml:space="preserve">
     <value>Quiere ser tu amigo</value>
@@ -1005,80 +663,14 @@
   <data name="Profile_Achievements_SpeedRoller" xml:space="preserve">
     <value>Tirador veloz</value>
   </data>
-  <data name="Profile_Achievements_PerfectPrecision" xml:space="preserve">
-    <value>Precisión perfecta</value>
-  </data>
-  <data name="Profile_Achievements_StreakOf5" xml:space="preserve">
-    <value>Racha de 5</value>
-  </data>
-  <data name="Profile_Achievements_PerfectScore" xml:space="preserve">
-    <value>Puntaje perfecto</value>
-  </data>
   <data name="Game_Chat_SystemName" xml:space="preserve">
     <value>Sistema</value>
   </data>
   <data name="Game_Chat_MatchStartedMessage" xml:space="preserve">
     <value>Partida iniciada. Buena suerte.</value>
   </data>
-  <data name="Game_Dice_HeldLabel" xml:space="preserve">
-    <value>FIJO</value>
-  </data>
-  <data name="Game_QuickChat_NiceRoll" xml:space="preserve">
-    <value>Buena tirada.</value>
-  </data>
-  <data name="Game_QuickChat_Thinking" xml:space="preserve">
-    <value>A ver qué hago yo...</value>
-  </data>
-  <data name="Game_QuickChat_Tough" xml:space="preserve">
-    <value>Difícil decisión.</value>
-  </data>
-  <data name="Game_QuickChat_GoodScore" xml:space="preserve">
-    <value>Buen puntaje.</value>
-  </data>
-  <data name="Game_QuickChat_GoingForYacht" xml:space="preserve">
-    <value>Voy por el Yacht.</value>
-  </data>
-  <data name="Game_QuickChat_Almost" xml:space="preserve">
-    <value>Casi...</value>
-  </data>
-  <data name="Game_QuickChat_NicePlay" xml:space="preserve">
-    <value>Buena jugada.</value>
-  </data>
-  <data name="Game_QuickChat_NeedStraight" xml:space="preserve">
-    <value>Necesito esa escalera.</value>
-  </data>
   <data name="Game_Sidebar_ButtonHowToPlay" xml:space="preserve">
     <value>Cómo jugar</value>
-  </data>
-  <data name="Results_DefaultTitle" xml:space="preserve">
-    <value>Partida terminada</value>
-  </data>
-  <data name="Results_DefaultSubtitle" xml:space="preserve">
-    <value>Resultados finales</value>
-  </data>
-  <data name="Global_FormatDate" xml:space="preserve">
-    <value>dd/MM/yyyy</value>
-  </data>
-  <data name="Global_FormatTime" xml:space="preserve">
-    <value>HH:mm (24h)</value>
-  </data>
-  <data name="Global_FormatNumber" xml:space="preserve">
-    <value>1.234,56 (coma decimal)</value>
-  </data>
-  <data name="Splash_TitleLine1" xml:space="preserve">
-    <value>YACHT</value>
-  </data>
-  <data name="Splash_TitleLine2" xml:space="preserve">
-    <value>DICE GAME</value>
-  </data>
-  <data name="Splash_ContinueHint" xml:space="preserve">
-    <value>PRESIONA CUALQUIER BOTÓN O TECLA PARA CONTINUAR</value>
-  </data>
-  <data name="TwoFactor_EmailSubject" xml:space="preserve">
-    <value>Tu código de verificación de Yacht Dice</value>
-  </data>
-  <data name="TwoFactor_EmailBody" xml:space="preserve">
-    <value>Hola {0}, tu código de verificación es: {1}. Este código vence en {2} minutos. Si no intentaste iniciar sesión, ignora este mensaje.</value>
   </data>
   <data name="TwoFactor_ErrorSendFailed" xml:space="preserve">
     <value>No se pudo enviar el código de verificación. Revisa tu conexión e inténtalo de nuevo.</value>

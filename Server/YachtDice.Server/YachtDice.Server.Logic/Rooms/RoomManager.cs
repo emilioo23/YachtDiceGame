@@ -6,7 +6,8 @@ namespace YachtDice.Server.Logic.Rooms
     /// <summary>
     /// Keeps the rooms that are alive in the server. The room service, the chat service and the events of the
     /// channels use it at the same time. WCF only serializes the calls of each service, not those of different
-    /// services, so every operation takes the lock before it reads or changes a room.
+    /// services, so every operation takes the lock before it reads or changes a room. A concurrent dictionary
+    /// would only protect the list of rooms, not a step such as checking for space and adding the player.
     /// </summary>
     public class RoomManager : IRoomManager
     {
@@ -106,12 +107,14 @@ namespace YachtDice.Server.Logic.Rooms
 
         private static RoomSettings CreateDefaultSettings()
         {
-            return new RoomSettings
+            var settings = new RoomSettings
             {
                 MaxPlayers = MaxCapacity,
                 IsPrivate = true,
                 Speed = GameSpeed.Normal
             };
+
+            return settings;
         }
 
         private static RoomResult CreateResult(RoomStatus status, GameRoom room)

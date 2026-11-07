@@ -31,7 +31,7 @@
                                FontFamily="{StaticResource FontDisplay}" FontSize="33"
                                Foreground="{StaticResource BrushText}"/>
                     </Grid>
-                    <TextBlock Text="{x:Static res:Strings.Leaderboard_BackLink}"
+                    <TextBlock Text="{x:Static res:Strings.Global_ButtonBack}"
                            Style="{StaticResource LinkText}" Margin="0,0,0,20" FontSize="18"
                            MouseLeftButtonUp="BackLink_Click"/>
 

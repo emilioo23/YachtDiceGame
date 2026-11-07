@@ -10,6 +10,7 @@ namespace YachtDice.Server.Services
     /// Keeps the callback channel of each player subscribed to a room and notifies them. The events of the
     /// channels run outside the calls that WCF serializes, so every access to the dictionaries takes the lock.
     /// The lock is released before any client is notified, because a slow client must not stop the others.
+    /// A concurrent dictionary is not enough because the data has two levels and an empty room is deleted.
     /// </summary>
     /// <typeparam name="TCallback">Callback contract the clients implement.</typeparam>
     internal class CallbackRegistry<TCallback> where TCallback : class
@@ -97,7 +98,7 @@ namespace YachtDice.Server.Services
         /// <param name="notification">Call to make on each callback channel.</param>
         public void Notify(string roomCode, Action<TCallback> notification)
         {
-            foreach (KeyValuePair<string, TCallback> recipient in GetRecipients(roomCode))
+            foreach (KeyValuePair<string, TCallback> recipient in CopyRecipients(roomCode))
             {
                 if (!TryNotify(recipient.Value, notification))
                 {
@@ -106,7 +107,7 @@ namespace YachtDice.Server.Services
             }
         }
 
-        private List<KeyValuePair<string, TCallback>> GetRecipients(string roomCode)
+        private List<KeyValuePair<string, TCallback>> CopyRecipients(string roomCode)
         {
             var recipients = new List<KeyValuePair<string, TCallback>>();
 

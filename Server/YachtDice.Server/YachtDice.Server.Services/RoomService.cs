@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Rooms;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
 
     /// <summary>

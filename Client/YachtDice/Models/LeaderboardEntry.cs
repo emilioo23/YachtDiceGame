@@ -1,4 +1,4 @@
-﻿namespace YachtDice.Views
+﻿namespace YachtDice.Models
 {
     /// <summary>
     /// Row of the ranking as it is shown in the leaderboard window.

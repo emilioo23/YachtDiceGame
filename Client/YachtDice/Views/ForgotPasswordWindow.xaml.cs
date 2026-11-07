@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -33,9 +34,7 @@ namespace YachtDice.Views
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new LoginWindow());
         }
     }
 }

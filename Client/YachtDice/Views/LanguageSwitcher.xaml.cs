@@ -19,6 +19,9 @@ namespace YachtDice.Views
         private const double UsFlagCantonWidth = 9.0;
         private const int EvenRowDivisor = 2;
         private const int ZeroRemainder = 0;
+        private const int TopStripeRow = 0;
+        private const int MiddleStripeRow = 1;
+        private const int BottomStripeRow = 2;
 
         private static readonly Color _spanishRedColor = Color.FromRgb(0xAA, 0x15, 0x1B);
         private static readonly Color _spanishYellowColor = Color.FromRgb(0xF1, 0xBF, 0x00);
@@ -107,9 +110,9 @@ namespace YachtDice.Views
             var midStripe = new Rectangle { Fill = new SolidColorBrush(_spanishYellowColor) };
             var bottomStripe = new Rectangle { Fill = new SolidColorBrush(_spanishRedColor) };
 
-            Grid.SetRow(topStripe, 0);
-            Grid.SetRow(midStripe, 1);
-            Grid.SetRow(bottomStripe, 2);
+            Grid.SetRow(topStripe, TopStripeRow);
+            Grid.SetRow(midStripe, MiddleStripeRow);
+            Grid.SetRow(bottomStripe, BottomStripeRow);
 
             grid.Children.Add(topStripe);
             grid.Children.Add(midStripe);

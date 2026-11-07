@@ -275,9 +275,11 @@
     <Compile Include="Utils\PlayerInitials.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
+    <Compile Include="Navigation\WindowNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
+    <Compile Include="Models\PlayerSession.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>

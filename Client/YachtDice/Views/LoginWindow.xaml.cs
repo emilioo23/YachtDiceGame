@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.RegistrationServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
@@ -41,7 +43,7 @@ namespace YachtDice.Views
             RegisterPanel.Visibility = Visibility.Collapsed;
             LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
-            AuthSubmitButton.Content = Strings.Auth_LoginButton;
+            AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
         }
 
         private void RegisterTabButton_Click(object sender, RoutedEventArgs e)
@@ -50,7 +52,7 @@ namespace YachtDice.Views
             RegisterPanel.Visibility = Visibility.Visible;
             RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
-            AuthSubmitButton.Content = Strings.Auth_CreateAccountButton;
+            AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
         }
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)
@@ -87,19 +89,14 @@ namespace YachtDice.Views
 
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            App.CurrentPlayerFirstName = string.Empty;
-            App.IsGuestPlayer = true;
+            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, isGuest: true);
 
-            var menuWindow = new MenuWindow(Strings.Auth_GuestDisplayName);
-            menuWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(session));
         }
 
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var forgotPasswordWindow = new ForgotPasswordWindow();
-            forgotPasswordWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
         }
 
         private static string GetLoginMessage(LoginResultCode code)
@@ -112,10 +109,10 @@ namespace YachtDice.Views
                     message = Strings.Auth_ErrorRequiredFields;
                     break;
                 case LoginResultCode.InvalidCredentials:
-                    message = Strings.Dialogs_D13_Login;
+                    message = Strings.Dialogs_InvalidCredentials;
                     break;
                 case LoginResultCode.VerificationLocked:
-                    message = Strings.Dialogs_D19_Validation2FA;
+                    message = Strings.Dialogs_TooManyAttempts;
                     break;
                 case LoginResultCode.CodeSendFailed:
                     message = Strings.TwoFactor_ErrorSendFailed;
@@ -144,10 +141,10 @@ namespace YachtDice.Views
                     message = Strings.Auth_ErrorInvalidEmail;
                     break;
                 case RegisterResultCode.EmailAlreadyRegistered:
-                    message = Strings.Dialogs_D16_Register;
+                    message = Strings.Dialogs_EmailRegistered;
                     break;
                 case RegisterResultCode.UsernameAlreadyTaken:
-                    message = Strings.Dialogs_D15_Register;
+                    message = Strings.Dialogs_UsernameTaken;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
@@ -167,17 +164,15 @@ namespace YachtDice.Views
             };
 
             LoginData loginData = await _gateway.LoginAsync(credentials);
-
-            App.CurrentPlayerFirstName = loginData.FirstName;
-            App.IsGuestPlayer = false;
+            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false);
 
             if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(credentials.Email, loginData.DisplayName, loginData.ChallengeId);
+                OpenVerificationWindow(credentials.Email, session, loginData.ChallengeId);
             }
             else if (loginData.Code == LoginResultCode.LoggedIn)
             {
-                OpenMenuWindow(loginData.DisplayName);
+                WindowNavigator.SwitchTo(this, new MenuWindow(session));
             }
             else
             {
@@ -210,26 +205,17 @@ namespace YachtDice.Views
             }
         }
 
-        private void OpenMenuWindow(string playerDisplayName)
-        {
-            var menuWindow = new MenuWindow(playerDisplayName);
-            menuWindow.Show();
-            Close();
-        }
-
-        private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
+        private void OpenVerificationWindow(string email, PlayerSession session, string challengeId)
         {
             var challenge = new VerificationChallenge
             {
                 Email = email,
-                PlayerDisplayName = playerDisplayName,
+                Session = session,
                 ChallengeId = challengeId,
                 IsActivation = false
             };
 
-            var twoFactorWindow = new TwoFactorWindow(challenge);
-            twoFactorWindow.Show();
-            Close();
+            WindowNavigator.SwitchTo(this, new TwoFactorWindow(challenge));
         }
     }
 }

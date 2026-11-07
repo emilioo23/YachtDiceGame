@@ -18,9 +18,12 @@ namespace YachtDice.Gateway
         /// <param name="displayName">Name of the player who sends the request.</param>
         /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
-        public Task<FriendRequestResultCode> SendRequestAsync(string displayName, string targetUsername)
+        public async Task<FriendRequestResultCode> SendRequestAsync(string displayName, string targetUsername)
         {
-            return ExecuteAsync(client => client.SendFriendRequest(displayName, targetUsername));
+            FriendRequestResultCode result =
+                await ExecuteAsync(client => client.SendFriendRequest(displayName, targetUsername));
+
+            return result;
         }
 
         /// <summary>
@@ -30,9 +33,15 @@ namespace YachtDice.Gateway
         /// <param name="requesterName">Name of the player who sent the request.</param>
         /// <param name="isAccepted">True to accept the request, false to reject it.</param>
         /// <returns>Outcome of the answer.</returns>
-        public Task<FriendActionResultCode> RespondAsync(string displayName, string requesterName, bool isAccepted)
+        public async Task<FriendActionResultCode> RespondAsync(
+            string displayName,
+            string requesterName,
+            bool isAccepted)
         {
-            return ExecuteAsync(client => client.RespondToFriendRequest(displayName, requesterName, isAccepted));
+            FriendActionResultCode result =
+                await ExecuteAsync(client => client.RespondToFriendRequest(displayName, requesterName, isAccepted));
+
+            return result;
         }
 
         /// <summary>
@@ -41,9 +50,11 @@ namespace YachtDice.Gateway
         /// <param name="displayName">Name of the player who removes the friend.</param>
         /// <param name="friendName">Name of the friend to remove.</param>
         /// <returns>Outcome of the removal.</returns>
-        public Task<FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName)
+        public async Task<FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName)
         {
-            return ExecuteAsync(client => client.RemoveFriend(displayName, friendName));
+            FriendActionResultCode result = await ExecuteAsync(client => client.RemoveFriend(displayName, friendName));
+
+            return result;
         }
 
         /// <summary>
@@ -51,9 +62,11 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The username of the player.</returns>
-        public Task<string> GetUsernameAsync(string displayName)
+        public async Task<string> GetUsernameAsync(string displayName)
         {
-            return ExecuteAsync(client => client.GetUsername(displayName));
+            string username = await ExecuteAsync(client => client.GetUsername(displayName));
+
+            return username;
         }
 
         /// <summary>
@@ -61,9 +74,11 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the friends.</returns>
-        public Task<List<string>> GetFriendsAsync(string displayName)
+        public async Task<List<string>> GetFriendsAsync(string displayName)
         {
-            return ExecuteAsync(client => client.GetFriends(displayName).ToList());
+            string[] friends = await ExecuteAsync(client => client.GetFriends(displayName));
+
+            return friends.ToList();
         }
 
         /// <summary>
@@ -71,9 +86,11 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the players who sent a request.</returns>
-        public Task<List<string>> GetRequestsAsync(string displayName)
+        public async Task<List<string>> GetRequestsAsync(string displayName)
         {
-            return ExecuteAsync(client => client.GetFriendRequests(displayName).ToList());
+            string[] requesters = await ExecuteAsync(client => client.GetFriendRequests(displayName));
+
+            return requesters.ToList();
         }
 
         /// <inheritdoc />
