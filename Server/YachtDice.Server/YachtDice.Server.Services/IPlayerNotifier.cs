@@ -1,6 +1,6 @@
 ﻿namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Presence;
 
     /// <summary>
     /// Lets a service warn a player who is online that something happened with another player.

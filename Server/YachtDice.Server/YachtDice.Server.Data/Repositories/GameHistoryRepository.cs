@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Core;
 using System.Linq;
 using YachtDice.Server.Data.Exceptions;
 
@@ -23,23 +22,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            List<GameHistoryPlayer> results;
+            List<GameHistoryPlayer> history = DatabaseOperation.Query(
+                context => SelectByPlayerId(context, playerId),
+                FindByPlayerFailedMessage);
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    results = context.GameHistoryPlayer
-                        .Where(entry => entry.PlayerId == playerId)
-                        .ToList();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(FindByPlayerFailedMessage, ex);
-            }
-
-            return results;
+            return history;
         }
 
         /// <summary>
@@ -50,26 +37,25 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<PlayerRankingRecord> GetRanking(int maxEntries)
         {
-            List<PlayerRankingRecord> ranking;
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    ranking = QueryRanking(context, maxEntries);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(RankingFailedMessage, ex);
-            }
+            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(
+                context => QueryRanking(context, maxEntries),
+                RankingFailedMessage);
 
             return ranking;
         }
 
+        private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
+        {
+            List<GameHistoryPlayer> history = context.GameHistoryPlayer
+                .Where(entry => entry.PlayerId == playerId)
+                .ToList();
+
+            return history;
+        }
+
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)
         {
-            return context.GameHistoryPlayer
+            List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
                 .GroupBy(entry => entry.PlayerId)
                 .Select(group => new
                 {
@@ -91,6 +77,8 @@ namespace YachtDice.Server.Data.Repositories
                 .ThenBy(record => record.DisplayName)
                 .Take(maxEntries)
                 .ToList();
+
+            return ranking;
         }
     }
 }

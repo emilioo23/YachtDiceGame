@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using YachtDice.Server.Data.Exceptions;
 
@@ -21,13 +19,12 @@ namespace YachtDice.Server.Data.Repositories
         private const string NullPlayerMessage = "The player cannot be null.";
         private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
         private const string FindByNameFailedMessage = "Database error occurred while searching player by name.";
-        private const string FindByFriendCodeFailedMessage =
-            "Database error occurred while searching player by friend code.";
+        private const string FindByUsernameFailedMessage =
+            "Database error occurred while searching player by username.";
         private const string EmailExistsFailedMessage = "Database error occurred while verifying email existence.";
         private const string UsernameExistsFailedMessage =
             "Database error occurred while verifying username existence.";
-        private const string UpdateFailedMessage = "Could not save player due to a database update failure.";
-        private const string ConnectionFailedMessage = "Database connection error while saving player.";
+        private const string SaveFailedMessage = "Could not save the player due to a database failure.";
         private const string TwoFactorQueryFailedMessage =
             "Database error occurred while checking the two-step verification.";
         private const string TwoFactorUpdateFailedMessage =
@@ -42,19 +39,10 @@ namespace YachtDice.Server.Data.Repositories
         public List<Player> FindByEmail(string email)
         {
             ValidateText(email, nameof(email));
-            List<Player> players;
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    players = context.Player.Where(player => player.Email == email).ToList();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(FindByEmailFailedMessage, ex);
-            }
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByEmail(context, email),
+                FindByEmailFailedMessage);
 
             return players;
         }
@@ -68,51 +56,27 @@ namespace YachtDice.Server.Data.Repositories
         public List<Player> FindByName(string name)
         {
             ValidateText(name, nameof(name));
-            List<Player> players;
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    players = context.Player
-                        .Where(player => player.DisplayName == name || player.Username == name)
-                        .Take(SingleResultCount)
-                        .ToList();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(FindByNameFailedMessage, ex);
-            }
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByName(context, name),
+                FindByNameFailedMessage);
 
             return players;
         }
 
         /// <summary>
-        /// Looks for the player who owns the friend code.
+        /// Looks for the player who owns exactly the username. The display name is not considered.
         /// </summary>
-        /// <param name="friendCode">Friend code to look for.</param>
+        /// <param name="username">Username to look for.</param>
         /// <returns>A list with the matching player, or an empty list if there is none.</returns>
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
-        public List<Player> FindByFriendCode(string friendCode)
+        public List<Player> FindByUsername(string username)
         {
-            ValidateText(friendCode, nameof(friendCode));
-            List<Player> players;
+            ValidateText(username, nameof(username));
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    players = context.Player
-                        .Where(player => player.FriendCode == friendCode)
-                        .Take(SingleResultCount)
-                        .ToList();
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(FindByFriendCodeFailedMessage, ex);
-            }
+            List<Player> players = DatabaseOperation.Query(
+                context => SelectByUsername(context, username),
+                FindByUsernameFailedMessage);
 
             return players;
         }
@@ -126,19 +90,10 @@ namespace YachtDice.Server.Data.Repositories
         public bool EmailExists(string email)
         {
             ValidateText(email, nameof(email));
-            bool isRegistered;
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    isRegistered = context.Player.Any(player => player.Email == email);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(EmailExistsFailedMessage, ex);
-            }
+            bool isRegistered = DatabaseOperation.Query(
+                context => IsEmailRegistered(context, email),
+                EmailExistsFailedMessage);
 
             return isRegistered;
         }
@@ -152,19 +107,10 @@ namespace YachtDice.Server.Data.Repositories
         public bool UsernameExists(string username)
         {
             ValidateText(username, nameof(username));
-            bool isTaken;
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    isTaken = context.Player.Any(player => player.Username == username);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(UsernameExistsFailedMessage, ex);
-            }
+            bool isTaken = DatabaseOperation.Query(
+                context => IsUsernameTaken(context, username),
+                UsernameExistsFailedMessage);
 
             return isTaken;
         }
@@ -181,22 +127,7 @@ namespace YachtDice.Server.Data.Repositories
                 throw new ArgumentNullException(nameof(player), NullPlayerMessage);
             }
 
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    context.Player.Add(player);
-                    context.SaveChanges();
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new DataAccessException(UpdateFailedMessage, ex);
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(ConnectionFailedMessage, ex);
-            }
+            DatabaseOperation.Save(context => context.Player.Add(player), SaveFailedMessage);
         }
 
         /// <summary>
@@ -207,20 +138,9 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public bool HasTwoFactorEnabled(int playerId)
         {
-            bool isEnabled;
-
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    isEnabled = context.TwoFactorAuth.Any(
-                        auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
-                }
-            }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(TwoFactorQueryFailedMessage, ex);
-            }
+            bool isEnabled = DatabaseOperation.Query(
+                context => IsTwoFactorActive(context, playerId),
+                TwoFactorQueryFailedMessage);
 
             return isEnabled;
         }
@@ -233,31 +153,72 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The setting could not be saved.</exception>
         public void SaveTwoFactorEnabled(int playerId, bool isEnabled)
         {
-            try
-            {
-                using (var context = new YachtDiceContext())
-                {
-                    TwoFactorAuth auth = context.TwoFactorAuth
-                        .FirstOrDefault(row => row.PlayerId == playerId && row.Method == EmailMethod);
+            DatabaseOperation.Save(
+                context => ApplyTwoFactorStatus(context, playerId, isEnabled),
+                TwoFactorUpdateFailedMessage);
+        }
 
-                    if (auth == null)
-                    {
-                        auth = new TwoFactorAuth { PlayerId = playerId, Method = EmailMethod, SecretKey = NoSecretKey };
-                        context.TwoFactorAuth.Add(auth);
-                    }
+        private static List<Player> SelectByEmail(YachtDiceContext context, string email)
+        {
+            List<Player> players = context.Player.Where(player => player.Email == email).ToList();
 
-                    auth.Status = isEnabled ? ActiveStatus : InactiveStatus;
-                    context.SaveChanges();
-                }
-            }
-            catch (DbUpdateException ex)
+            return players;
+        }
+
+        private static List<Player> SelectByName(YachtDiceContext context, string name)
+        {
+            List<Player> players = context.Player
+                .Where(player => player.DisplayName == name || player.Username == name)
+                .Take(SingleResultCount)
+                .ToList();
+
+            return players;
+        }
+
+        private static List<Player> SelectByUsername(YachtDiceContext context, string username)
+        {
+            List<Player> players = context.Player
+                .Where(player => player.Username == username)
+                .Take(SingleResultCount)
+                .ToList();
+
+            return players;
+        }
+
+        private static bool IsEmailRegistered(YachtDiceContext context, string email)
+        {
+            bool isRegistered = context.Player.Any(player => player.Email == email);
+
+            return isRegistered;
+        }
+
+        private static bool IsUsernameTaken(YachtDiceContext context, string username)
+        {
+            bool isTaken = context.Player.Any(player => player.Username == username);
+
+            return isTaken;
+        }
+
+        private static bool IsTwoFactorActive(YachtDiceContext context, int playerId)
+        {
+            bool isActive = context.TwoFactorAuth.Any(
+                auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
+
+            return isActive;
+        }
+
+        private static void ApplyTwoFactorStatus(YachtDiceContext context, int playerId, bool isEnabled)
+        {
+            TwoFactorAuth auth = context.TwoFactorAuth
+                .FirstOrDefault(row => row.PlayerId == playerId && row.Method == EmailMethod);
+
+            if (auth == null)
             {
-                throw new DataAccessException(TwoFactorUpdateFailedMessage, ex);
+                auth = new TwoFactorAuth { PlayerId = playerId, Method = EmailMethod, SecretKey = NoSecretKey };
+                context.TwoFactorAuth.Add(auth);
             }
-            catch (EntityException ex)
-            {
-                throw new DataAccessException(TwoFactorUpdateFailedMessage, ex);
-            }
+
+            auth.Status = isEnabled ? ActiveStatus : InactiveStatus;
         }
 
         private static void ValidateText(string value, string parameterName)

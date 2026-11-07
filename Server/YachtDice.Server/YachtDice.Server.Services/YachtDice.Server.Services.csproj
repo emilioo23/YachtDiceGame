@@ -54,8 +54,10 @@
     <Compile Include="Mapping\LeaderboardMapper.cs" />
     <Compile Include="Mapping\PlayerStatisticsMapper.cs" />
     <Compile Include="Mapping\RegistrationMapper.cs" />
+    <Compile Include="Mapping\RoomMapper.cs" />
     <Compile Include="PlayerRegistrationService.cs" />
     <Compile Include="PlayerService.cs" />
+    <Compile Include="OnlinePlayer.cs" />
     <Compile Include="PresenceService.cs" />
     <Compile Include="RoomService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

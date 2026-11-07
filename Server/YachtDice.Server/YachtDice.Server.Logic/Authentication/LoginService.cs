@@ -17,10 +17,10 @@ namespace YachtDice.Server.Logic.Authentication
     {
         private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
-        private const string NullRequestMessage = "The login request cannot be null.";
+        private const string NullCredentialsMessage = "The login credentials cannot be null.";
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(LoginService));
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
@@ -36,24 +36,13 @@ namespace YachtDice.Server.Logic.Authentication
             TwoFactorVerificationService verificationService,
             TwoFactorDeliveryService deliveryService)
         {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            }
-
-            if (verificationService == null)
-            {
-                throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            }
-
-            if (deliveryService == null)
-            {
-                throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
-            }
-
-            _playerRepository = playerRepository;
-            _verificationService = verificationService;
-            _deliveryService = deliveryService;
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+            _verificationService = verificationService
+                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+            _deliveryService = deliveryService
+                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -65,7 +54,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (credentials == null)
             {
-                throw new ArgumentNullException(nameof(credentials), NullRequestMessage);
+                throw new ArgumentNullException(nameof(credentials), NullCredentialsMessage);
             }
 
             LoginResult result;
@@ -109,7 +98,7 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else
             {
-                result = new LoginResult(LoginStatus.LoggedIn, player.DisplayName);
+                result = new LoginResult(LoginStatus.LoggedIn, player, string.Empty);
             }
 
             return result;
@@ -124,10 +113,10 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            var isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
-            return new LoginResult(status, player.DisplayName, challengeId);
+            return new LoginResult(status, player, challengeId);
         }
     }
 }

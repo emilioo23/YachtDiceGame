@@ -16,6 +16,18 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IRoomService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CreateRoom">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/CreateRoom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="JoinRoom">
       <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/JoinRoom" style="document" />
       <wsdl:input>
@@ -24,6 +36,33 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRoomSettings">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/StartGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="LeaveRoom">
       <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/LeaveRoom" style="document" />
@@ -33,9 +72,12 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="PlayerChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/PlayerChanged" style="document" />
+    <wsdl:operation name="RoomChanged">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/RoomChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

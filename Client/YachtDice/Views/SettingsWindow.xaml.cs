@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.TwoFactorManagementServiceReference;
 using YachtDice.Utils;
@@ -29,8 +31,9 @@ namespace YachtDice.Views
         private const int SpanishLanguageIndex = 0;
         private const int OtherLanguageIndex = 1;
         private const int ToggleKnobMargin = 3;
+        private const int NoMargin = 0;
 
-        private readonly string _playerName;
+        private readonly PlayerSession _session;
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
         private bool _isInitializing;
         private bool _isTwoFactorEnabled;
@@ -38,15 +41,15 @@ namespace YachtDice.Views
         /// <summary>
         /// Initializes the settings window for the given player.
         /// </summary>
-        /// <param name="playerName">Name of the player who opens the settings.</param>
+        /// <param name="session">Session of the player who opens the settings.</param>
         /// <param name="initialSection">Section that must be shown when the window opens.</param>
-        public SettingsWindow(string playerName, string initialSection = AccountSection)
+        public SettingsWindow(PlayerSession session, string initialSection = AccountSection)
         {
             InitializeComponent();
-            _playerName = playerName;
+            _session = session;
             _isInitializing = true;
 
-            AccountUsernameTextBlock.Text = playerName;
+            AccountUsernameTextBlock.Text = session.DisplayName;
             LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode
                 ? SpanishLanguageIndex
                 : OtherLanguageIndex;
@@ -82,26 +85,16 @@ namespace YachtDice.Views
                 : (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
             DarkThemeToggleKnob.HorizontalAlignment = isDark ? HorizontalAlignment.Right : HorizontalAlignment.Left;
             DarkThemeToggleKnob.Margin = isDark
-                ? new Thickness(0, 0, ToggleKnobMargin, 0)
-                : new Thickness(ToggleKnobMargin, 0, 0, 0);
-        }
-
-        private void ShowMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
+                ? new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin)
+                : new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
         }
 
         private void ShowTwoFactorState(bool isEnabled)
         {
             _isTwoFactorEnabled = isEnabled;
             TwoFactorToggleButton.Content = isEnabled
-                ? Strings.Settings_Security_TwoFactorDisableButton
-                : Strings.Settings_Security_TwoFactorEnableButton;
+                ? Strings.Settings_Security_ButtonTwoFactorDisable
+                : Strings.Settings_Security_ButtonTwoFactorEnable;
             TwoFactorPasswordBox.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
             TwoFactorToggleButton.IsEnabled = true;
         }
@@ -110,19 +103,19 @@ namespace YachtDice.Views
         {
             try
             {
-                bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_playerName);
+                bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_session.DisplayName);
                 ShowTwoFactorState(isEnabled);
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
         private async Task StartTwoFactorActivationAsync()
         {
             TwoFactorActivationData data = await _twoFactorGateway.StartTwoFactorActivationAsync(
-                _playerName,
+                _session.DisplayName,
                 App.CurrentCultureCode);
 
             if (data.Code == TwoFactorActivationResultCode.CodeSent)
@@ -130,14 +123,12 @@ namespace YachtDice.Views
                 var challenge = new VerificationChallenge
                 {
                     Email = data.MaskedEmail,
-                    PlayerDisplayName = _playerName,
+                    Session = _session,
                     ChallengeId = data.ChallengeId,
                     IsActivation = true
                 };
 
-                var twoFactorWindow = new TwoFactorWindow(challenge);
-                twoFactorWindow.Show();
-                this.Close();
+                WindowNavigator.SwitchTo(this, new TwoFactorWindow(challenge));
             }
             else if (data.Code == TwoFactorActivationResultCode.AlreadyEnabled)
             {
@@ -145,29 +136,29 @@ namespace YachtDice.Views
             }
             else
             {
-                ShowMessage(GetActivationMessage(data.Code));
+                CustomDialogWindow.ShowMessage(this, GetActivationMessage(data.Code));
             }
         }
 
         private async Task DisableTwoFactorAsync()
         {
             TwoFactorChangeResultCode result = await _twoFactorGateway.DisableTwoFactorAsync(
-                _playerName,
+                _session.DisplayName,
                 TwoFactorPasswordBox.Password);
 
             if (result == TwoFactorChangeResultCode.Success)
             {
                 TwoFactorPasswordBox.Clear();
                 ShowTwoFactorState(false);
-                ShowMessage(Strings.Settings_Security_TwoFactorDisabledMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_TwoFactorDisabledMessage);
             }
             else if (result == TwoFactorChangeResultCode.InvalidPassword)
             {
-                ShowMessage(Strings.Dialogs_D13_Login);
+                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_InvalidCredentials);
             }
             else
             {
-                ShowMessage(Strings.Settings_Security_TwoFactorUnavailableMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_TwoFactorUnavailableMessage);
             }
         }
 
@@ -181,7 +172,7 @@ namespace YachtDice.Views
                     message = Strings.Settings_Security_TwoFactorUnavailableMessage;
                     break;
                 case TwoFactorActivationResultCode.VerificationLocked:
-                    message = Strings.Dialogs_D19_Validation2FA;
+                    message = Strings.Dialogs_TooManyAttempts;
                     break;
                 case TwoFactorActivationResultCode.CodeSendFailed:
                     message = Strings.TwoFactor_ErrorSendFailed;
@@ -211,7 +202,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
             finally
             {
@@ -221,9 +212,7 @@ namespace YachtDice.Views
 
         private void ReopenSettingsWindow(string sectionToShow)
         {
-            var settingsWindow = new SettingsWindow(_playerName, sectionToShow);
-            settingsWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new SettingsWindow(_session, sectionToShow));
         }
 
         private void AccountNavButton_Click(object sender, RoutedEventArgs e)
@@ -276,23 +265,18 @@ namespace YachtDice.Views
 
         private void EditProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            var profileWindow = new ProfileWindow(_playerName);
-            profileWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new ProfileWindow(_session));
         }
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Connect the real account deletion flow when the session token exists.
-            var content = new DialogContent { Message = Strings.Settings_FeatureNotImplementedMessage };
-            new CustomDialogWindow(content).ShowDialog();
+            CustomDialogWindow.ShowMessage(this, Strings.Settings_FeatureNotImplementedMessage);
         }
 
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var menuWindow = new MenuWindow(_playerName);
-            menuWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
     }
 }

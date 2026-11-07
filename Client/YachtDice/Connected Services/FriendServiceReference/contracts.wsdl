@@ -34,13 +34,13 @@
   <wsdl:message name="IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_GetFriendCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetFriendCode" />
+  <wsdl:message name="IFriendService_GetUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsername" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_GetFriendCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetFriendCodeResponse" />
+  <wsdl:message name="IFriendService_GetUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsernameResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_GetFriendCode_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IFriendService_GetUsername_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">
@@ -77,10 +77,10 @@
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse" message="tns:IFriendService_RemoveFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetFriendCode">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCode" message="tns:IFriendService_GetFriendCode_InputMessage" />
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCodeResponse" message="tns:IFriendService_GetFriendCode_OutputMessage" />
-      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriendCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_GetFriendCode_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="GetUsername">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetUsername" message="tns:IFriendService_GetUsername_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/GetUsernameResponse" message="tns:IFriendService_GetUsername_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_GetUsername_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetFriends">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />

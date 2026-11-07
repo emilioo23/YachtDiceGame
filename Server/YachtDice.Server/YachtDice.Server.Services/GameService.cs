@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Game;
 
     /// <summary>
     /// Runs the turns of the games in progress and notifies the players of each room.
@@ -18,6 +18,7 @@ namespace YachtDice.Server.Services
         private readonly CallbackRegistry<Contracts.IGameCallback> _callbacks =
             new CallbackRegistry<Contracts.IGameCallback>();
 
+        // WCF runs one call at a time on this instance, and only the calls use it, so it needs no lock.
         private readonly Random _random = new Random();
 
         /// <summary>
@@ -29,7 +30,10 @@ namespace YachtDice.Server.Services
         {
             int[] diceValues = CreateDiceValues();
 
-            _callbacks.Register(roomId, OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>());
+            _callbacks.Register(
+                roomId,
+                username,
+                OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>());
             _callbacks.Notify(roomId, callback => callback.DiceRolled(diceValues));
         }
 
@@ -48,12 +52,9 @@ namespace YachtDice.Server.Services
         {
             var diceValues = new int[DiceCount];
 
-            lock (_random)
+            for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
             {
-                for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
-                {
-                    diceValues[diceIndex] = _random.Next(MinDieValue, MaxDieValue + 1);
-                }
+                diceValues[diceIndex] = _random.Next(MinDieValue, MaxDieValue + 1);
             }
 
             return diceValues;

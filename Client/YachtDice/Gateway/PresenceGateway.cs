@@ -10,8 +10,10 @@ using YachtDice.Utils;
 namespace YachtDice.Gateway
 {
     /// <summary>
-    /// Keeps the player connected to the presence service while the game is open and
-    /// knows which players are online. There is only one connection for the whole application.
+    /// Keeps the player connected to the presence service while the game is open and knows which players are
+    /// online. The session of the player holds one instance that all the windows share. The changes arrive in
+    /// a network thread while the windows read them in the thread of the interface. The connection, the name
+    /// and the list of players change together, so they need the lock.
     /// </summary>
     public class PresenceGateway
     {
@@ -20,12 +22,16 @@ namespace YachtDice.Gateway
 
         private readonly object _syncRoot = new object();
         private readonly HashSet<string> _onlinePlayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private readonly AppLogger _logger = new AppLogger(typeof(PresenceGateway));
+        private readonly AppLogger _logger;
         private PresenceServiceClient _client;
         private string _displayName;
 
-        private PresenceGateway()
+        /// <summary>
+        /// Initializes the gateway without a connection.
+        /// </summary>
+        public PresenceGateway()
         {
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -40,21 +46,20 @@ namespace YachtDice.Gateway
         public event Action FriendsChanged;
 
         /// <summary>
-        /// Gets the connection shared by all the windows.
-        /// </summary>
-        public static PresenceGateway Current { get; } = new PresenceGateway();
-
-        /// <summary>
         /// Gets the names of the players who are online right now.
         /// </summary>
         public List<string> OnlinePlayers
         {
             get
             {
+                List<string> onlinePlayers;
+
                 lock (_syncRoot)
                 {
-                    return _onlinePlayers.ToList();
+                    onlinePlayers = _onlinePlayers.ToList();
                 }
+
+                return onlinePlayers;
             }
         }
 
@@ -117,10 +122,15 @@ namespace YachtDice.Gateway
 
         private bool IsConnectedAs(string displayName)
         {
+            bool isConnected;
+
             lock (_syncRoot)
             {
-                return _client != null && string.Equals(_displayName, displayName, StringComparison.OrdinalIgnoreCase);
+                isConnected = _client != null
+                    && string.Equals(_displayName, displayName, StringComparison.OrdinalIgnoreCase);
             }
+
+            return isConnected;
         }
 
         private async Task OpenConnectionAsync(string displayName)

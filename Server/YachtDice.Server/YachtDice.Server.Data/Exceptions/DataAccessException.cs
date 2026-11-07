@@ -8,6 +8,13 @@ namespace YachtDice.Server.Data.Exceptions
     public class DataAccessException : Exception
     {
         /// <summary>
+        /// Initializes a new instance of the DataAccessException class without a message.
+        /// </summary>
+        public DataAccessException()
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the DataAccessException class.
         /// </summary>
         /// <param name="message">Technical description of the failure, only useful for the logs.</param>

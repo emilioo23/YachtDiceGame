@@ -5,7 +5,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="friendCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="targetUsername" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -20,8 +20,8 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="RequestSent" />
       <xs:enumeration value="RequestAlreadyReceived" />
-      <xs:enumeration value="InvalidCode" />
-      <xs:enumeration value="CodeNotFound" />
+      <xs:enumeration value="InvalidUsername" />
+      <xs:enumeration value="UsernameNotFound" />
       <xs:enumeration value="SelfRequest" />
       <xs:enumeration value="AlreadyFriends" />
       <xs:enumeration value="AlreadyRequested" />
@@ -83,17 +83,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFriendCode">
+  <xs:element name="GetUsername">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFriendCodeResponse">
+  <xs:element name="GetUsernameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetFriendCodeResult" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="GetUsernameResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

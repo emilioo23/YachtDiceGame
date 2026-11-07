@@ -1,0 +1,32 @@
+﻿namespace YachtDice.Server.Logic.Rooms
+{
+    /// <summary>
+    /// Outcome of an operation on a room.
+    /// </summary>
+    public enum RoomStatus
+    {
+        /// <summary>The operation was done.</summary>
+        Success,
+
+        /// <summary>No room exists with that code, or the player is not inside it.</summary>
+        RoomNotFound,
+
+        /// <summary>The room already has the maximum number of players.</summary>
+        RoomFull,
+
+        /// <summary>The game of the room already started.</summary>
+        GameAlreadyStarted,
+
+        /// <summary>A player with the same name is already inside the room.</summary>
+        PlayerAlreadyInRoom,
+
+        /// <summary>Only the host of the room can do the operation.</summary>
+        NotHost,
+
+        /// <summary>The room needs more players to start the game.</summary>
+        NotEnoughPlayers,
+
+        /// <summary>The options sent are not valid for the room.</summary>
+        InvalidSettings
+    }
+}
