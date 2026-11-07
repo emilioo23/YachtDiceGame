@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="800" Width="1000"
+        Title="{x:Static res:Strings.Auth_Logo}" Height="800" Width="1000"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
@@ -31,7 +31,7 @@
                                FontFamily="{StaticResource FontDisplay}" FontSize="33"
                                Foreground="{StaticResource BrushText}"/>
                     </Grid>
-                    <TextBlock Text="{x:Static res:Strings.Leaderboard_BackLink}"
+                    <TextBlock Text="{x:Static res:Strings.Global_ButtonBack}"
                            Style="{StaticResource LinkText}" Margin="0,0,0,20" FontSize="18"
                            MouseLeftButtonUp="BackLink_Click"/>
 
@@ -70,7 +70,7 @@
                         </StackPanel>
                     </Border>
 
-                    <TextBlock x:Name="YourPositionTextBlock" d:Text="Tu posición: #0"
+                    <TextBlock x:Name="YourPositionTextBlock"
                            FontSize="16" Foreground="{StaticResource BrushTextMuted}"/>
 
                 </StackPanel>

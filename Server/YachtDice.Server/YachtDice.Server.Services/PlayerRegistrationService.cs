@@ -3,14 +3,14 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using Data = YachtDice.Server.Data;
     using LogicAuth = YachtDice.Server.Logic.Authentication;
 
     /// <summary>
     /// Implements the player registration service contract for the server.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
         private readonly LogicAuth.IRegistrationService _registrationLogic;
@@ -31,7 +31,9 @@ namespace YachtDice.Server.Services
         /// <returns>A code indicating the result of the registration attempt.</returns>
         public Contracts.RegisterResultCode RegisterPlayer(Contracts.Player newPlayer)
         {
-            return Execute(newPlayer, () => ProcessRegistration(newPlayer));
+            Contracts.RegisterResultCode result = Execute(newPlayer, () => ProcessRegistration(newPlayer));
+
+            return result;
         }
 
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)

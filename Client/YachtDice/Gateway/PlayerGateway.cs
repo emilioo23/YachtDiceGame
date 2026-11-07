@@ -9,49 +9,39 @@ namespace YachtDice.Gateway
     /// <summary>
     /// Single entry point of the client to the player operations of the server.
     /// </summary>
-    public class PlayerGateway : GatewayBase<PlayerServiceClient>
+    public class PlayerGateway : GatewayBase<PlayerServiceClient, IPlayerService>
     {
-        private static readonly Dictionary<ServiceErrorCode, GatewayErrorCode> _errorCodes =
-            new Dictionary<ServiceErrorCode, GatewayErrorCode>
-            {
-                { ServiceErrorCode.UnexpectedError, GatewayErrorCode.UnexpectedError },
-                { ServiceErrorCode.DatabaseUnavailable, GatewayErrorCode.DatabaseUnavailable },
-                { ServiceErrorCode.ValidationFailed, GatewayErrorCode.ValidationFailed }
-            };
-
         /// <summary>
         /// Gets the game statistics of a player.
         /// </summary>
         /// <param name="username">Username of the player.</param>
         /// <returns>The statistics of the player.</returns>
-        public Task<PlayerStatistics> GetStatisticsAsync(string username)
+        public async Task<PlayerStatistics> GetStatisticsAsync(string username)
         {
             var player = new Player { Username = username };
 
-            return ExecuteAsync(client => client.GetPlayerStatistics(player));
+            PlayerStatistics statistics = await ExecuteAsync(client => client.GetPlayerStatistics(player));
+
+            return statistics;
         }
 
         /// <summary>
         /// Gets the leaderboard ranking entries.
         /// </summary>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public Task<List<LeaderboardEntry>> GetLeaderboardAsync()
+        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
         {
-            return ExecuteAsync(client => client.GetLeaderboard().ToList());
+            LeaderboardEntry[] entries = await ExecuteAsync(client => client.GetLeaderboard());
+
+            return entries.ToList();
         }
 
         /// <inheritdoc />
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;
-            GatewayErrorCode errorCode;
 
-            if (typedFault == null || !_errorCodes.TryGetValue(typedFault.Detail.Code, out errorCode))
-            {
-                errorCode = GatewayErrorCode.UnexpectedError;
-            }
-
-            return errorCode;
+            return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
     }
 }

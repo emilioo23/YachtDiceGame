@@ -3,13 +3,13 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.TwoFactor;
     using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
 
     /// <summary>
     /// Manages the two-factor authentication configuration operations.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
@@ -30,7 +30,9 @@ namespace YachtDice.Server.Services
         /// <returns>True if the player must enter a code to log in.</returns>
         public bool IsTwoFactorEnabled(string displayName)
         {
-            return Execute(displayName, () => _settingsService.IsEnabled(displayName));
+            bool isEnabled = Execute(displayName, () => _settingsService.IsEnabled(displayName));
+
+            return isEnabled;
         }
 
         /// <summary>
@@ -41,7 +43,10 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the request and the data of the challenge.</returns>
         public Contracts.TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture)
         {
-            return Execute(displayName, () => ProcessActivationStart(displayName, culture));
+            Contracts.TwoFactorActivationData activation =
+                Execute(displayName, () => ProcessActivationStart(displayName, culture));
+
+            return activation;
         }
 
         /// <summary>
@@ -56,7 +61,10 @@ namespace YachtDice.Server.Services
             string code,
             string challengeId)
         {
-            return Execute(displayName, () => ProcessActivationConfirmation(displayName, code, challengeId));
+            Contracts.VerificationResultCode result =
+                Execute(displayName, () => ProcessActivationConfirmation(displayName, code, challengeId));
+
+            return result;
         }
 
         /// <summary>
@@ -68,7 +76,10 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the resend attempt.</returns>
         public Contracts.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture)
         {
-            return Execute(displayName, () => ProcessActivationResend(displayName, challengeId, culture));
+            Contracts.ResendResultCode result =
+                Execute(displayName, () => ProcessActivationResend(displayName, challengeId, culture));
+
+            return result;
         }
 
         /// <summary>
@@ -79,7 +90,10 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the request.</returns>
         public Contracts.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password)
         {
-            return Execute(displayName, () => ProcessDisable(displayName, password));
+            Contracts.TwoFactorChangeResultCode result =
+                Execute(displayName, () => ProcessDisable(displayName, password));
+
+            return result;
         }
 
         private Contracts.TwoFactorActivationData ProcessActivationStart(string displayName, string culture)
@@ -87,12 +101,16 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.TwoFactorActivationResult logicResult =
                 _settingsService.StartActivation(displayName, Mapping.CultureParser.Parse(culture));
 
-            return new Contracts.TwoFactorActivationData
+            var activation = new Contracts.TwoFactorActivationData
             {
-                Code = (Contracts.TwoFactorActivationResultCode)(int)logicResult.Status,
+                Code = Mapping.EnumMapper.Map<
+                    LogicTwoFactor.TwoFactorActivationStatus,
+                    Contracts.TwoFactorActivationResultCode>(logicResult.Status),
                 ChallengeId = logicResult.ChallengeId,
                 MaskedEmail = logicResult.MaskedEmail
             };
+
+            return activation;
         }
 
         private Contracts.VerificationResultCode ProcessActivationConfirmation(
@@ -103,7 +121,8 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
                 _settingsService.ConfirmActivation(displayName, code, challengeId);
 
-            return (Contracts.VerificationResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorValidationStatus, Contracts.VerificationResultCode>(
+                logicResult);
         }
 
         private Contracts.ResendResultCode ProcessActivationResend(
@@ -114,14 +133,15 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.ResendCodeStatus logicResult =
                 _settingsService.ResendActivationCode(displayName, culture, challengeId);
 
-            return (Contracts.ResendResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }
 
         private Contracts.TwoFactorChangeResultCode ProcessDisable(string displayName, string password)
         {
             LogicTwoFactor.TwoFactorChangeStatus logicResult = _settingsService.Disable(displayName, password);
 
-            return (Contracts.TwoFactorChangeResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorChangeStatus, Contracts.TwoFactorChangeResultCode>(
+                logicResult);
         }
     }
 }

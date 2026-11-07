@@ -5,7 +5,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1000"
         WindowStartupLocation="CenterScreen"
@@ -36,42 +36,42 @@
                                Margin="0,0,0,20"/>
 
                     <Button x:Name="AccountNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavAccount}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Account}"
                             Style="{StaticResource TabButtonActive}"
                             Margin="0,0,0,8"
                             Click="AccountNavButton_Click"
                             FontSize="17"/>
 
                     <Button x:Name="AppearanceNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavAppearance}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Appearance}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="AppearanceNavButton_Click"
                             FontSize="17"/>
 
                     <Button x:Name="SecurityNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavSecurity}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Security}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="SecurityNavButton_Click"
                             FontSize="17"/>
 
                     <Button x:Name="NotificationsNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavNotifications}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Notifications}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="NotificationsNavButton_Click"
                             FontSize="17"/>
 
                     <Button x:Name="PreferencesNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavPreferences}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Preferences}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="PreferencesNavButton_Click"
                             FontSize="17"/>
 
                     <Button x:Name="PrivacyNavButton"
-                            Content="{x:Static properties:Strings.Settings_NavPrivacy}"
+                            Content="{x:Static properties:Strings.Settings_Nav_Privacy}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,20"
                             Click="PrivacyNavButton_Click"
@@ -81,7 +81,7 @@
                             Background="{StaticResource BrushBorder}"
                             Margin="0,0,0,20"/>
 
-                    <TextBlock Text="{x:Static properties:Strings.Settings_BackLink}"
+                    <TextBlock Text="{x:Static properties:Strings.Global_ButtonBack}"
                                Style="{StaticResource LinkText}"
                                MouseLeftButtonUp="BackLink_Click"
                                FontSize="15"/>
@@ -109,14 +109,13 @@
                                            FontSize="17"/>
 
                                 <TextBlock x:Name="AccountUsernameTextBlock"
-                                           d:Text="Jugador"
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
 
                             <Button Grid.Column="1"
-                                    Content="{x:Static properties:Strings.Settings_Account_ButtonChange}"
+                                    Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
                                     Padding="14,6"
                                     FontSize="15"/>
@@ -138,14 +137,14 @@
                                            FontWeight="Bold"
                                            FontSize="17"/>
 
-                                <TextBlock d:Text="usuario@ejemplo.com"
+                                <TextBlock
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
 
                             <Button Grid.Column="1"
-                                    Content="{x:Static properties:Strings.Settings_Account_ButtonChange}"
+                                    Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
                                     Padding="14,6"
                                     FontSize="15"/>
@@ -192,7 +191,7 @@
                                            FontWeight="Bold"
                                            FontSize="17"/>
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_ThemeDarkSub}"
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkThemeSub}"
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
@@ -236,7 +235,7 @@
                                        VerticalAlignment="Center"/>
 
                             <Button Grid.Column="1"
-                                    Content="{x:Static properties:Strings.Settings_Security_ChangeButton}"
+                                    Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
                                     Padding="14,6"
                                     FontSize="12"/>
@@ -299,11 +298,11 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_NotificationMatch}"
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_Match}"
                                            FontWeight="Bold"
                                            FontSize="17"/>
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_NotificationMatchSub}"
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_MatchSub}"
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
@@ -386,10 +385,10 @@
                                       Padding="10,8"
                                       SelectionChanged="LanguageComboBox_SelectionChanged">
 
-                                <ComboBoxItem Content="Español"
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionSpanish}"
                                               Tag="es-MX"/>
 
-                                <ComboBoxItem Content="English"
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionEnglish}"
                                               Tag="en-US"
                                               FontSize="18"/>
 
@@ -451,7 +450,7 @@
                                            FontWeight="Bold"
                                            FontSize="17"/>
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfileSubtitle}"
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfileSub}"
                                            FontSize="14"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 

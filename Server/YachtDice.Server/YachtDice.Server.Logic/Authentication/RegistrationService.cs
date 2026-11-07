@@ -19,12 +19,8 @@ namespace YachtDice.Server.Logic.Authentication
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
-        private const int FriendCodeStartIndex = 0;
-        private const int FriendCodeLength = 6;
-        private const string FriendCodePrefix = "FRD-";
-        private const string GuidFormat = "N";
         private const string RegisteredLogMessage = "Player registered successfully.";
-        private const string NullRequestMessage = "The registration request cannot be null.";
+        private const string NullPlayerMessage = "The new player cannot be null.";
         private const string NullRepositoryMessage = "The player repository cannot be null.";
 
         private readonly AppLogger _logger;
@@ -36,12 +32,8 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="playerRepository">Repository used to read and save players.</param>
         public RegistrationService(IPlayerRepository playerRepository)
         {
-            if (playerRepository == null)
-            {
-                throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
-            }
-
-            _playerRepository = playerRepository;
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -55,10 +47,10 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (newPlayer == null)
             {
-                throw new ArgumentNullException(nameof(newPlayer), NullRequestMessage);
+                throw new ArgumentNullException(nameof(newPlayer), NullPlayerMessage);
             }
 
-            RegistrationResult result = ValidateRequest(newPlayer, plainPassword);
+            RegistrationResult result = ValidatePlayer(newPlayer, plainPassword);
 
             if (result == RegistrationResult.Success)
             {
@@ -73,7 +65,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static RegistrationResult ValidateRequest(Player player, string plainPassword)
+        private static RegistrationResult ValidatePlayer(Player player, string plainPassword)
         {
             RegistrationResult result = RegistrationResult.Success;
 
@@ -172,17 +164,6 @@ namespace YachtDice.Server.Logic.Authentication
             player.DisplayName = player.Username;
             player.FirstName = player.FirstName.Trim();
             player.LastName = player.LastName.Trim();
-            player.FriendCode = CreateFriendCode();
-        }
-
-        private static string CreateFriendCode()
-        {
-            string randomPart = Guid.NewGuid()
-                .ToString(GuidFormat)
-                .Substring(FriendCodeStartIndex, FriendCodeLength)
-                .ToUpperInvariant();
-
-            return FriendCodePrefix + randomPart;
         }
     }
 }

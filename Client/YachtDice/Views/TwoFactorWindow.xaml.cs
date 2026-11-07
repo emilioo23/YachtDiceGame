@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 using AuthResendResult = YachtDice.AuthenticationServiceReference.ResendResultCode;
@@ -20,14 +22,16 @@ namespace YachtDice.Views
     public partial class TwoFactorWindow : Window
     {
         private const int VisibleLocalPartChars = 2;
+        private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
+        private const char AtSign = '@';
 
         private readonly string _email;
-        private readonly string _playerDisplayName;
+        private readonly PlayerSession _session;
         private readonly string _challengeId;
         private readonly bool _isActivation;
 
-        // Se instancian ambos gateways para cubrir los dos casos de uso de la ventana
+        // Both gateways are needed because the window serves the login and the activation of the verification.
         private readonly AuthenticationGateway _authGateway = new AuthenticationGateway();
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
 
@@ -42,7 +46,7 @@ namespace YachtDice.Views
             InitializeComponent();
 
             _email = challenge.Email;
-            _playerDisplayName = challenge.PlayerDisplayName;
+            _session = challenge.Session;
             _challengeId = challenge.ChallengeId;
             _isActivation = challenge.IsActivation;
             _digitBoxes = new[]
@@ -87,7 +91,7 @@ namespace YachtDice.Views
             int index = Array.IndexOf(_digitBoxes, box);
             bool hasNextBox = index < _digitBoxes.Length - 1;
 
-            if (box.Text.Length > 0 && hasNextBox)
+            if (!string.IsNullOrEmpty(box.Text) && hasNextBox)
             {
                 _digitBoxes[index + 1].Focus();
             }
@@ -105,7 +109,7 @@ namespace YachtDice.Views
             }
             else
             {
-                ShowMessage(Strings.TwoFactor_ErrorIncompleteCode);
+                CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorIncompleteCode);
             }
         }
 
@@ -115,18 +119,26 @@ namespace YachtDice.Views
             {
                 if (_isActivation)
                 {
-                    TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(_playerDisplayName, _challengeId, App.CurrentCultureCode);
+                    TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(
+                        _session.DisplayName,
+                        _challengeId,
+                        App.CurrentCultureCode);
+
                     HandleResendResult((AuthResendResult)(int)result);
                 }
                 else
                 {
-                    AuthResendResult result = await _authGateway.ResendCodeAsync(_email, _challengeId, App.CurrentCultureCode);
+                    AuthResendResult result = await _authGateway.ResendCodeAsync(
+                        _email,
+                        _challengeId,
+                        App.CurrentCultureCode);
+
                     HandleResendResult(result);
                 }
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -138,20 +150,18 @@ namespace YachtDice.Views
             }
             else
             {
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
-                this.Close();
+                WindowNavigator.SwitchTo(this, new LoginWindow());
             }
         }
 
         private static string MaskEmail(string email)
         {
-            int atIndex = email.IndexOf('@');
+            int atIndex = email.IndexOf(AtSign);
             string maskedEmail = email;
 
             if (atIndex > VisibleLocalPartChars)
             {
-                string visiblePart = email.Substring(0, VisibleLocalPartChars);
+                string visiblePart = email.Substring(FirstCharacterIndex, VisibleLocalPartChars);
                 string hiddenPart = new string(MaskCharacter, atIndex - VisibleLocalPartChars);
 
                 maskedEmail = visiblePart + hiddenPart + email.Substring(atIndex);
@@ -160,14 +170,11 @@ namespace YachtDice.Views
             return maskedEmail;
         }
 
-        private static void ShowMessage(string message)
-        {
-            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
-        }
-
         private bool IsCodeComplete()
         {
-            return _digitBoxes.All(box => box.Text.Length > 0);
+            bool isComplete = _digitBoxes.All(box => !string.IsNullOrEmpty(box.Text));
+
+            return isComplete;
         }
 
         private async Task VerifyCodeAsync()
@@ -178,7 +185,11 @@ namespace YachtDice.Views
             {
                 if (_isActivation)
                 {
-                    TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(_playerDisplayName, code, _challengeId);
+                    TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(
+                        _session.DisplayName,
+                        code,
+                        _challengeId);
+
                     HandleVerificationResult((AuthVerificationResult)(int)result);
                 }
                 else
@@ -189,7 +200,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
@@ -201,15 +212,15 @@ namespace YachtDice.Views
                     CompleteVerification();
                     break;
                 case AuthVerificationResult.Expired:
-                    ShowMessage(Strings.TwoFactor_ErrorCodeExpired);
+                    CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorCodeExpired);
                     ClearDigits();
                     break;
                 case AuthVerificationResult.Locked:
-                    ShowMessage(Strings.Dialogs_D19_Validation2FA);
+                    CustomDialogWindow.ShowMessage(this, Strings.Dialogs_TooManyAttempts);
                     ClearDigits();
                     break;
                 default:
-                    ShowMessage(Strings.Dialogs_D18_Validation2FA);
+                    CustomDialogWindow.ShowMessage(this, Strings.Dialogs_IncorrectCode);
                     ClearDigits();
                     break;
             }
@@ -221,16 +232,16 @@ namespace YachtDice.Views
             {
                 case AuthResendResult.CodeSent:
                     ClearDigits();
-                    ShowMessage(Strings.TwoFactor_CodeResentMessage);
+                    CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_CodeResentMessage);
                     break;
                 case AuthResendResult.ResendTooSoon:
-                    ShowMessage(Strings.TwoFactor_ErrorResendTooSoon);
+                    CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorResendTooSoon);
                     break;
                 case AuthResendResult.VerificationLocked:
-                    ShowMessage(Strings.Dialogs_D19_Validation2FA);
+                    CustomDialogWindow.ShowMessage(this, Strings.Dialogs_TooManyAttempts);
                     break;
                 default:
-                    ShowMessage(Strings.TwoFactor_ErrorSendFailed);
+                    CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorSendFailed);
                     break;
             }
         }
@@ -239,7 +250,7 @@ namespace YachtDice.Views
         {
             if (_isActivation)
             {
-                ShowMessage(Strings.Settings_Security_TwoFactorEnabledMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_TwoFactorEnabledMessage);
                 OpenSettingsWindow();
             }
             else
@@ -250,16 +261,12 @@ namespace YachtDice.Views
 
         private void OpenSettingsWindow()
         {
-            var settingsWindow = new SettingsWindow(_playerDisplayName, SettingsWindow.SecuritySection);
-            settingsWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new SettingsWindow(_session, SettingsWindow.SecuritySection));
         }
 
         private void OpenMenuWindow()
         {
-            var menuWindow = new MenuWindow(_playerDisplayName);
-            menuWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
 
         private void PasteCodeFromClipboard()

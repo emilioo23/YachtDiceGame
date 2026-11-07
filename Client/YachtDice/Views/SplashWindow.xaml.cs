@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using YachtDice.Navigation;
 
 namespace YachtDice.Views
 {
@@ -29,9 +30,7 @@ namespace YachtDice.Views
             {
                 _hasContinued = true;
 
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
-                Close();
+                WindowNavigator.SwitchTo(this, new LoginWindow());
             }
         }
     }

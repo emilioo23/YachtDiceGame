@@ -41,9 +41,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\LoginServiceTests.cs" />
+    <Compile Include="Authentication\RegistrationServiceTests.cs" />
+    <Compile Include="Friends\FriendshipServiceTests.cs" />
+    <Compile Include="InMemory\InMemoryEmailService.cs" />
+    <Compile Include="InMemory\InMemoryFriendRepository.cs" />
+    <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk">
+      <Version>18.10.1</Version>
+    </PackageReference>
+    <PackageReference Include="xunit">
+      <Version>2.9.3</Version>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio">
+      <Version>3.1.5</Version>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">
+      <Project>{273823dc-da56-4ef1-8d9a-fa2fe4ed0542}</Project>
+      <Name>YachtDice.Server.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YachtDice.Server.Logic\YachtDice.Server.Logic.csproj">
       <Project>{3cadccef-83a9-4432-a1df-af32c9c53072}</Project>
       <Name>YachtDice.Server.Logic</Name>

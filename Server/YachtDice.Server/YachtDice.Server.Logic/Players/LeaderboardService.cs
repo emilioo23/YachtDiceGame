@@ -22,12 +22,8 @@ namespace YachtDice.Server.Logic.Players
         /// <param name="gameHistoryRepository">Repository used to read the game results.</param>
         public LeaderboardService(IGameHistoryRepository gameHistoryRepository)
         {
-            if (gameHistoryRepository == null)
-            {
-                throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
-            }
-
-            _gameHistoryRepository = gameHistoryRepository;
+            _gameHistoryRepository = gameHistoryRepository
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
         }
 
         /// <summary>
@@ -38,15 +34,22 @@ namespace YachtDice.Server.Logic.Players
         {
             List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxEntries);
 
-            return records
-                .Select((record, index) => new LeaderboardEntry
-                {
-                    Position = index + FirstPosition,
-                    DisplayName = record.DisplayName,
-                    TotalPoints = record.TotalPoints,
-                    Wins = record.Wins
-                })
-                .ToList();
+            List<LeaderboardEntry> entries = records.Select(CreateEntry).ToList();
+
+            return entries;
+        }
+
+        private static LeaderboardEntry CreateEntry(PlayerRankingRecord record, int index)
+        {
+            var entry = new LeaderboardEntry
+            {
+                Position = index + FirstPosition,
+                DisplayName = record.DisplayName,
+                TotalPoints = record.TotalPoints,
+                Wins = record.Wins
+            };
+
+            return entry;
         }
     }
 }

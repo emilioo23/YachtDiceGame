@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -10,26 +12,19 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ProfileWindow : Window
     {
-        private const int EmptyLength = 0;
-        private const int FirstCharacterIndex = 0;
-        private const int SingleCharacterLength = 1;
-        private const string DefaultPlayerInitial = "J";
-
-        private readonly string _playerName;
+        private readonly PlayerSession _session;
 
         /// <summary>
         /// Initializes the profile window for the given player.
         /// </summary>
-        /// <param name="playerName">Name of the player whose profile is being edited.</param>
-        public ProfileWindow(string playerName)
+        /// <param name="session">Session of the player whose profile is being edited.</param>
+        public ProfileWindow(PlayerSession session)
         {
             InitializeComponent();
-            _playerName = playerName;
-            UsernameTextBox.Text = playerName;
-            AvatarInitialTextBlock.Text = playerName.Length > EmptyLength
-                ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
-                : DefaultPlayerInitial;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(playerName);
+            _session = session;
+            UsernameTextBox.Text = session.DisplayName;
+            AvatarInitialTextBlock.Text = PlayerInitials.GetInitial(session.DisplayName);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
         }
 
         private void ColorSwatch_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -46,14 +41,12 @@ namespace YachtDice.Views
         private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: The real changes will be saved in the backend here later.
-            new CustomDialogWindow(new DialogContent { Message = Strings.Profile_SavedMessage }).ShowDialog();
+            CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(_playerName);
-            menuWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
     }
 }

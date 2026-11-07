@@ -4,13 +4,44 @@
     <xsd:schema targetNamespace="urn:yachtdice:contracts/Imports">
       <xsd:import namespace="urn:yachtdice:contracts" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IRoomService_CreateRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_CreateRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_CreateRoom_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:message name="IRoomService_JoinRoom_InputMessage">
     <wsdl:part name="parameters" element="tns:JoinRoom" />
   </wsdl:message>
   <wsdl:message name="IRoomService_JoinRoom_OutputMessage">
     <wsdl:part name="parameters" element="tns:JoinRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinRoom_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_UpdateRoomSettings_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRoomSettings" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_UpdateRoomSettings_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRoomSettingsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_UpdateRoomSettings_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_StartGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartGame" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_StartGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_StartGame_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IRoomService_LeaveRoom_InputMessage">
     <wsdl:part name="parameters" element="tns:LeaveRoom" />
@@ -18,20 +49,40 @@
   <wsdl:message name="IRoomService_LeaveRoom_OutputMessage">
     <wsdl:part name="parameters" element="tns:LeaveRoomResponse" />
   </wsdl:message>
-  <wsdl:message name="IRoomService_PlayerChanged_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:PlayerChanged" />
+  <wsdl:message name="IRoomService_LeaveRoom_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_RoomChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RoomChanged" />
   </wsdl:message>
   <wsdl:portType name="IRoomService">
+    <wsdl:operation name="CreateRoom">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/CreateRoom" message="tns:IRoomService_CreateRoom_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/CreateRoomResponse" message="tns:IRoomService_CreateRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/CreateRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_CreateRoom_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation name="JoinRoom">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinRoom" message="tns:IRoomService_JoinRoom_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinRoomResponse" message="tns:IRoomService_JoinRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_JoinRoom_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRoomSettings">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings" message="tns:IRoomService_UpdateRoomSettings_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse" message="tns:IRoomService_UpdateRoomSettings_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_UpdateRoomSettings_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGame" message="tns:IRoomService_StartGame_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGameResponse" message="tns:IRoomService_StartGame_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGameServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_StartGame_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="LeaveRoom">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/LeaveRoom" message="tns:IRoomService_LeaveRoom_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/LeaveRoomResponse" message="tns:IRoomService_LeaveRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/LeaveRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_LeaveRoom_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PlayerChanged">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/PlayerChanged" message="tns:IRoomService_PlayerChanged_OutputCallbackMessage" />
+    <wsdl:operation name="RoomChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/RoomChanged" message="tns:IRoomService_RoomChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

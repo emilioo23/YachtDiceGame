@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice" Height="536" Width="457"
+        Title="{x:Static properties:Strings.Auth_Logo}" Height="536" Width="457"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         ResizeMode="NoResize"
@@ -38,7 +38,6 @@
                            Margin="0,0,0,2"/>
 
                 <TextBlock x:Name="DestinationEmailTextBlock"
-                           d:Text="usuario@ejemplo.com"
                            FontFamily="{StaticResource FontBodySemibold}"
                            FontSize="15" FontWeight="Bold"
                            Foreground="{StaticResource BrushText}"
@@ -90,21 +89,21 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <TextBlock Text="{x:Static properties:Strings.TwoFactor_ResendText}"
                                FontSize="14" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,5,0"/>
-                    <TextBlock Text="{x:Static properties:Strings.TwoFactor_ResendLink}"
+                    <TextBlock Text="{x:Static properties:Strings.TwoFactor_LinkResend}"
                                Style="{StaticResource LinkText}"
                                MouseLeftButtonUp="ResendLink_Click"
                                FontSize="14"/>
                 </StackPanel>
 
-                <Button x:Name="VerifyButton"
-                        Content="{x:Static properties:Strings.TwoFactor_VerifyButton}"
+                <Button
+                        Content="{x:Static properties:Strings.TwoFactor_ButtonVerify}"
                         Style="{StaticResource BtnPrimary}"
                         HorizontalAlignment="Stretch"
                         FontSize="16" Padding="0,13"
                         Margin="0,0,0,14"
                         Click="VerifyButton_Click"/>
 
-                <TextBlock Text="{x:Static properties:Strings.TwoFactor_BackLink}"
+                <TextBlock Text="{x:Static properties:Strings.Global_ButtonBack}"
                            Style="{StaticResource LinkText}"
                            HorizontalAlignment="Center"
                            MouseLeftButtonUp="BackLink_Click"

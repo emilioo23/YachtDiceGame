@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using YachtDice.Navigation;
 using YachtDice.Resources;
-using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -16,6 +16,7 @@ namespace YachtDice.Views
         public ForgotPasswordWindow()
         {
             InitializeComponent();
+            LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow();
         }
 
         private void SendLinkButton_Click(object sender, RoutedEventArgs e)
@@ -28,14 +29,12 @@ namespace YachtDice.Views
                 message = string.Format(Strings.ForgotPassword_LinkSentMessage, EmailTextBox.Text);
             }
 
-            new CustomDialogWindow(new DialogContent { Message = message }).ShowDialog();
+            CustomDialogWindow.ShowMessage(this, message);
         }
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new LoginWindow());
         }
     }
 }

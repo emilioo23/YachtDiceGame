@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using YachtDice.ChatServiceReference;
+using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
+using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -29,6 +34,7 @@ namespace YachtDice.Views
         private const int CurrentRoundMock = 1;
         private const int TotalRoundsMock = 12;
         private const int CategoryColumnWidth = 200;
+        private const int PlayerColumnWeight = 1;
         private const int LabelPaddingHorizontal = 10;
         private const int LabelPaddingVertical = 8;
         private const int FontSizeSmall = 12;
@@ -36,12 +42,10 @@ namespace YachtDice.Views
         private const int BorderThicknessNormal = 2;
         private const int BorderThicknessSelected = 3;
         private const int RowMarginBottom = 2;
-        private const int ChatMessageMarginBottom = 4;
-        private const string DefaultZeroText = "0";
+        private const int InitialScore = 0;
         private const int EmptyLength = 0;
-        private const int FirstCharacterIndex = 0;
-        private const int SingleCharacterLength = 1;
-        private const string DefaultPlayerInitial = "U";
+        private const int LocalPlayerColumn = 1;
+        private const int FirstOpponentColumn = 2;
         private const int PipGridIndexZero = 0;
         private const int PipGridIndexOne = 1;
         private const int PipGridIndexTwo = 2;
@@ -59,10 +63,23 @@ namespace YachtDice.Views
         private const string ResourceBrushCream2 = "BrushCream2";
         private const string ResourceBrushFeltLight = "BrushFeltLight";
         private const string ResourceBrushWood = "BrushWood";
-        private const string ResourceBrushDanger = "BrushDanger";
-        private const string ChatSenderSeparator = ": ";
 
         private const int DefaultPipFace = 6;
+        private const double FirstDieLeft = 150;
+        private const double FirstDieTop = 40;
+        private const double FirstDieAngle = -8;
+        private const double SecondDieLeft = 230;
+        private const double SecondDieTop = 90;
+        private const double SecondDieAngle = 10;
+        private const double ThirdDieLeft = 190;
+        private const double ThirdDieTop = 150;
+        private const double ThirdDieAngle = -5;
+        private const double FourthDieLeft = 90;
+        private const double FourthDieTop = 220;
+        private const double FourthDieAngle = 12;
+        private const double FifthDieLeft = 250;
+        private const double FifthDieTop = 230;
+        private const double FifthDieAngle = -12;
 
         private static readonly Dictionary<int, (int row, int column)[]> _pipLayouts =
             new Dictionary<int, (int row, int column)[]>
@@ -121,117 +138,155 @@ namespace YachtDice.Views
         private readonly bool[] _heldDice = new bool[DiceCount];
         private readonly Border[] _diceBorders = new Border[DiceCount];
         private readonly string _playerName;
+        private readonly RoomGateway _roomGateway;
+        private readonly ChatGateway _chatGateway;
+        private readonly bool _isChatAvailable;
 
         private readonly (double left, double top, double angle)[] _dicePositions =
         {
-            (150, 40,  -8),
-            (230, 90,  10),
-            (190, 150, -5),
-            (90,  220, 12),
-            (250, 230, -12),
+            (FirstDieLeft, FirstDieTop, FirstDieAngle),
+            (SecondDieLeft, SecondDieTop, SecondDieAngle),
+            (ThirdDieLeft, ThirdDieTop, ThirdDieAngle),
+            (FourthDieLeft, FourthDieTop, FourthDieAngle),
+            (FifthDieLeft, FifthDieTop, FifthDieAngle)
         };
 
+        private bool _isLeavingOnClose = true;
+        private List<MatchPlayer> _matchPlayers;
         private int _rollsLeft;
         private int _totalScore;
         private TextBlock _totalScoreLabel;
 
         /// <summary>
-        /// Initializes the game window for the given player.
+        /// Initializes the game window of a room whose game has just started.
         /// </summary>
-        /// <param name="playerName">Name of the player who plays the match.</param>
-        public GameWindow(string playerName)
+        /// <param name="roomGateway">Connection of the player to the room.</param>
+        /// <param name="chatGateway">Connection of the player to the chat of the room.</param>
+        /// <param name="isChatAvailable">Whether the player could join the chat of the room.</param>
+        public GameWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
         {
             InitializeComponent();
-            _playerName = playerName;
-            PlayerNameTextBlock.Text = playerName;
 
-            PlayerInitialTextBlock.Text = playerName.Length > EmptyLength
-                ? playerName.Substring(FirstCharacterIndex, SingleCharacterLength).ToUpper()
-                : DefaultPlayerInitial;
+            _roomGateway = roomGateway;
+            _chatGateway = chatGateway;
+            _isChatAvailable = isChatAvailable;
+            _playerName = roomGateway.PlayerName;
+            _matchPlayers = MatchPlayerFactory.Create(roomGateway.CurrentRoom.Players, _playerName);
+            MatchPlayersItemsControl.ItemsSource = _matchPlayers;
 
             RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
-            LanguageSwitcherControl.ReopenWindowFunc = () => new GameWindow(playerName);
+            LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
 
             CreateDiceOnCanvas();
             LoadCategories();
             UpdateRollButton();
 
-            AppendMessageToChat(Strings.Game_Chat_SystemName, Strings.Game_Chat_MatchStartedMessage, true);
+            StartChat();
+            _roomGateway.RoomChanged += HandleRoomChanged;
+            Closed += HandleWindowClosed;
         }
 
-        /// <summary>
-        /// Closes the game window and opens the results of the match.
-        /// </summary>
-        public void GoToResultsWindow()
+        private void GoToResultsWindow()
         {
-            var resultsWindow = new ResultsWindow(_playerName, _totalScore);
-            resultsWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, _totalScore));
         }
 
-        private void SendChatButton_Click(object sender, RoutedEventArgs e)
+        private Window ReopenWindow()
         {
-            SendChatMessage();
+            _isLeavingOnClose = false;
+
+            return new GameWindow(_roomGateway, _chatGateway, _isChatAvailable);
         }
 
-        private void ChatInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void StartChat()
         {
-            if (e.Key == Key.Enter)
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                Strings.Game_Chat_MatchStartedMessage,
+                ChatMessageKind.System);
+
+            if (_isChatAvailable)
             {
-                SendChatMessage();
-                e.Handled = true;
+                ChatPanelControl.MessageSubmitted += HandleMessageSubmitted;
+
+                foreach (ChatMessage message in _chatGateway.Subscribe(HandleMessageReceived))
+                {
+                    ShowChatMessage(message);
+                }
+            }
+            else
+            {
+                ChatPanelControl.AddMessage(
+                    Strings.Game_Chat_SystemName,
+                    Strings.Game_Chat_Unavailable,
+                    ChatMessageKind.System);
+                ChatPanelControl.DisableSending();
             }
         }
 
-        private void SendChatMessage()
+        private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
-            var messageText = ChatInputTextBox.Text.Trim();
+            Dispatcher.BeginInvoke(new Action(() => ShowRoomPlayers(room)));
+        }
 
-            if (messageText.Length > EmptyLength)
+        private void ShowRoomPlayers(RoomState room)
+        {
+            _matchPlayers = MatchPlayerFactory.UpdatePresence(_matchPlayers, room.Players);
+            MatchPlayersItemsControl.ItemsSource = _matchPlayers;
+        }
+
+        private void ShowChatMessage(ChatMessage message)
+        {
+            ChatMessageKind kind = message.Author == _playerName ? ChatMessageKind.Own : ChatMessageKind.Other;
+
+            ChatPanelControl.AddMessage(message.Author, message.Content, kind);
+        }
+
+        private void HandleMessageReceived(ChatMessage message)
+        {
+            Dispatcher.BeginInvoke(new Action(() => ShowChatMessage(message)));
+        }
+
+        private void HandleMessageSubmitted(string content)
+        {
+            _ = SendChatMessageAsync(content);
+        }
+
+        private async Task SendChatMessageAsync(string content)
+        {
+            try
             {
-                ChatInputTextBox.Clear();
-                AppendMessageToChat(_playerName, messageText, false);
+                await _chatGateway.SendAsync(content);
+            }
+            catch (GatewayException)
+            {
+                ChatPanelControl.AddMessage(
+                    Strings.Game_Chat_SystemName,
+                    Strings.Game_Chat_SendFailed,
+                    ChatMessageKind.System);
             }
         }
 
-        private void AppendMessageToChat(string sender, string message, bool isSystem)
+        private async void HandleWindowClosed(object sender, EventArgs e)
         {
-            var textBlock = new TextBlock
+            _chatGateway.Unsubscribe(HandleMessageReceived);
+            _roomGateway.RoomChanged -= HandleRoomChanged;
+
+            if (_isLeavingOnClose)
             {
-                Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, ChatMessageMarginBottom),
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            var textColor = isSystem
-                ? (SolidColorBrush)FindResource(ResourceBrushDanger)
-                : (SolidColorBrush)FindResource(ResourceBrushText);
-
-            var senderRun = new Run(sender + ChatSenderSeparator)
-            {
-                FontWeight = FontWeights.Bold,
-                Foreground = textColor
-            };
-
-            var messageRun = new Run(message)
-            {
-                Foreground = textColor
-            };
-
-            textBlock.Inlines.Add(senderRun);
-            textBlock.Inlines.Add(messageRun);
-
-            ChatMessagesPanel.Children.Add(textBlock);
-            ChatScrollViewer.ScrollToEnd();
+                await _chatGateway.LeaveAsync();
+                await _roomGateway.LeaveRoomAsync();
+            }
         }
 
         private void CreateDiceOnCanvas()
         {
             for (int diceIndex = EmptyLength; diceIndex < DiceCount; diceIndex++)
             {
-                var die = CreateDiceFace(MinDiceValue);
+                Border die = CreateDiceFace(MinDiceValue);
                 die.Cursor = Cursors.Hand;
 
-                var position = _dicePositions[diceIndex];
+                (double left, double top, double angle) position = _dicePositions[diceIndex];
                 Canvas.SetLeft(die, position.left);
                 Canvas.SetTop(die, position.top);
                 die.RenderTransform = new RotateTransform(position.angle, DiceSize / 2, DiceSize / 2);
@@ -266,7 +321,7 @@ namespace YachtDice.Views
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            foreach (var (row, column) in GetPipPositions(value))
+            foreach ((int row, int column) in GetPipPositions(value))
             {
                 var pip = new Ellipse
                 {
@@ -302,8 +357,8 @@ namespace YachtDice.Views
 
         private void UpdateDiceFace(int diceIndex)
         {
-            var newFace = CreateDiceFace(_diceValues[diceIndex]);
-            var previousFace = _diceBorders[diceIndex];
+            Border newFace = CreateDiceFace(_diceValues[diceIndex]);
+            Border previousFace = _diceBorders[diceIndex];
 
             Canvas.SetLeft(newFace, Canvas.GetLeft(previousFace));
             Canvas.SetTop(newFace, Canvas.GetTop(previousFace));
@@ -359,21 +414,21 @@ namespace YachtDice.Views
 
         private void LoadCategories()
         {
-            AddCategoryRow(Strings.Game_CategoryOnes);
+            AddCategoryRow(Strings.Game_Category_Ones);
             AddCategoryRow(Strings.Game_Category_Twos);
             AddCategoryRow(Strings.Game_Category_Threes);
-            AddCategoryRow(Strings.Game_CategoryFours);
-            AddCategoryRow(Strings.Game_CategoryFives);
-            AddCategoryRow(Strings.Game_CategorySixes);
-            AddMetaRow(Strings.Game_CategorySum);
+            AddCategoryRow(Strings.Game_Category_Fours);
+            AddCategoryRow(Strings.Game_Category_Fives);
+            AddCategoryRow(Strings.Game_Category_Sixes);
+            AddMetaRow(Strings.Game_Category_Sum);
             AddMetaRow(Strings.Game_Category_Bonus);
-            AddCategoryRow(Strings.Game_Category_ThreesOfAKind);
+            AddCategoryRow(Strings.Game_Category_ThreeOfAKind);
             AddCategoryRow(Strings.Game_Category_FourOfAKind);
-            AddCategoryRow(Strings.Game_CategoryFullHouse);
+            AddCategoryRow(Strings.Game_Category_FullHouse);
             AddCategoryRow(Strings.Game_Category_SmallStraight);
             AddCategoryRow(Strings.Game_Category_LargeStraight);
-            AddCategoryRow(Strings.Game_CategoryYacht);
-            AddCategoryRow(Strings.Game_CategoryChance);
+            AddCategoryRow(Strings.Game_Category_Yacht);
+            AddCategoryRow(Strings.Game_Category_Chance);
             AddMetaRow(Strings.Game_Scorecard_Total);
         }
 
@@ -385,8 +440,14 @@ namespace YachtDice.Views
                 Margin = new Thickness(EmptyLength, EmptyLength, EmptyLength, RowMarginBottom)
             };
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(CategoryColumnWidth) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            for (int playerIndex = EmptyLength; playerIndex < _matchPlayers.Count; playerIndex++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = new GridLength(PlayerColumnWeight, GridUnitType.Star)
+                });
+            }
 
             var label = new TextBlock
             {
@@ -410,32 +471,17 @@ namespace YachtDice.Views
 
         private void AddCategoryRow(string categoryName)
         {
-            var row = CreateBaseRow(categoryName, (SolidColorBrush)FindResource(ResourceBrushCream2));
+            Grid row = CreateBaseRow(categoryName, (SolidColorBrush)FindResource(ResourceBrushCream2));
+            var felt = (SolidColorBrush)FindResource(ResourceBrushFeltLight);
+            var muted = (SolidColorBrush)FindResource(ResourceBrushTextMuted);
+            TextBlock myScoreLabel = CreateScoreLabel(string.Empty, felt, FontWeights.Bold);
 
-            var myScoreLabel = new TextBlock
+            AddScoreCell(row, myScoreLabel, LocalPlayerColumn);
+
+            for (int column = FirstOpponentColumn; column <= _matchPlayers.Count; column++)
             {
-                Text = string.Empty,
-                FontSize = FontSizeNormal,
-                FontWeight = FontWeights.Bold,
-                Foreground = (SolidColorBrush)FindResource(ResourceBrushFeltLight),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            Grid.SetColumn(myScoreLabel, 1);
-            row.Children.Add(myScoreLabel);
-
-            var opponentScoreLabel = new TextBlock
-            {
-                Text = string.Empty,
-                FontSize = FontSizeNormal,
-                Foreground = (SolidColorBrush)FindResource(ResourceBrushTextMuted),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            Grid.SetColumn(opponentScoreLabel, 2);
-            row.Children.Add(opponentScoreLabel);
+                AddScoreCell(row, CreateScoreLabel(string.Empty, muted, FontWeights.Normal), column);
+            }
 
             row.Cursor = Cursors.Hand;
             row.MouseLeftButtonUp += (sender, e) => ScoreCategory(row, myScoreLabel);
@@ -445,33 +491,17 @@ namespace YachtDice.Views
 
         private void AddMetaRow(string text)
         {
-            var row = CreateBaseRow(text, (SolidColorBrush)FindResource(ResourceBrushWood));
+            Grid row = CreateBaseRow(text, (SolidColorBrush)FindResource(ResourceBrushWood));
+            string initialScoreText = InitialScore.ToString();
+            TextBlock myValueLabel = CreateScoreLabel(initialScoreText, Brushes.White, FontWeights.Bold);
+
             ((TextBlock)row.Children[EmptyLength]).Foreground = Brushes.White;
+            AddScoreCell(row, myValueLabel, LocalPlayerColumn);
 
-            var myValueLabel = new TextBlock
+            for (int column = FirstOpponentColumn; column <= _matchPlayers.Count; column++)
             {
-                Text = DefaultZeroText,
-                FontSize = FontSizeNormal,
-                FontWeight = FontWeights.Bold,
-                Foreground = Brushes.White,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            var opponentValueLabel = new TextBlock
-            {
-                Text = DefaultZeroText,
-                FontSize = FontSizeNormal,
-                FontWeight = FontWeights.Bold,
-                Foreground = Brushes.White,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            Grid.SetColumn(myValueLabel, 1);
-            Grid.SetColumn(opponentValueLabel, 2);
-            row.Children.Add(myValueLabel);
-            row.Children.Add(opponentValueLabel);
+                AddScoreCell(row, CreateScoreLabel(initialScoreText, Brushes.White, FontWeights.Bold), column);
+            }
 
             if (text == Strings.Game_Scorecard_Total)
             {
@@ -481,13 +511,34 @@ namespace YachtDice.Views
             CategoriesPanel.Children.Add(row);
         }
 
+        private static TextBlock CreateScoreLabel(string text, Brush foreground, FontWeight fontWeight)
+        {
+            var label = new TextBlock
+            {
+                Text = text,
+                FontSize = FontSizeNormal,
+                FontWeight = fontWeight,
+                Foreground = foreground,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            return label;
+        }
+
+        private static void AddScoreCell(Grid row, TextBlock label, int column)
+        {
+            Grid.SetColumn(label, column);
+            row.Children.Add(label);
+        }
+
         private void ScoreCategory(Grid row, TextBlock myScoreLabel)
         {
             if (_rollsLeft > EmptyLength && myScoreLabel.Text == string.Empty)
             {
                 int scoreObtained = EmptyLength;
 
-                foreach (var value in _diceValues)
+                foreach (int value in _diceValues)
                 {
                     scoreObtained += value;
                 }
@@ -513,12 +564,7 @@ namespace YachtDice.Views
             }
             else if (_rollsLeft == EmptyLength)
             {
-                var dialogContent = new DialogContent
-                {
-                    Message = Strings.Game_Dice_HintPress
-                };
-
-                new CustomDialogWindow(dialogContent).ShowDialog();
+                CustomDialogWindow.ShowMessage(this, Strings.Game_Dice_HintPress);
             }
         }
 
@@ -527,18 +573,14 @@ namespace YachtDice.Views
             var dialogContent = new DialogContent
             {
                 Title = Strings.Game_Sidebar_ButtonLeave,
-                Message = Strings.Dialogs_D06_LeaveMatch,
-                PrimaryButtonText = Strings.Dialogs_OKButton,
-                SecondaryButtonText = Strings.Dialogs_IgnoreButton
+                Message = Strings.Dialogs_LeaveMatch,
+                PrimaryButtonText = Strings.Dialogs_ButtonOK,
+                SecondaryButtonText = Strings.Dialogs_ButtonIgnore
             };
 
-            var result = new CustomDialogWindow(dialogContent).ShowDialog();
-
-            if (result == true)
+            if (new CustomDialogWindow(dialogContent).ShowDialog() == true)
             {
-                var menuWindow = new MenuWindow(_playerName);
-                menuWindow.Show();
-                this.Close();
+                WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
             }
         }
 

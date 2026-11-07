@@ -3,14 +3,15 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Authentication;
     using LogicAuth = YachtDice.Server.Logic.Authentication;
     using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
+    using TwoFactorContracts = YachtDice.Server.Contracts.TwoFactor;
 
     /// <summary>
     /// Manages the authentication operations for the players.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class AuthenticationService : ServiceBase, Contracts.IAuthenticationService
     {
         private readonly LogicAuth.ILoginService _loginService;
@@ -36,7 +37,9 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome and initial session data of the login attempt.</returns>
         public Contracts.LoginData LoginPlayer(Contracts.LoginCredentials credentials)
         {
-            return Execute(credentials, () => ProcessLogin(credentials));
+            Contracts.LoginData loginData = Execute(credentials, () => ProcessLogin(credentials));
+
+            return loginData;
         }
 
         /// <summary>
@@ -46,9 +49,12 @@ namespace YachtDice.Server.Services
         /// <param name="code">Verification code entered by the player.</param>
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public Contracts.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId)
+        public TwoFactorContracts.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId)
         {
-            return Execute(email, () => ProcessCodeVerification(email, code, challengeId));
+            TwoFactorContracts.VerificationResultCode result =
+                Execute(email, () => ProcessCodeVerification(email, code, challengeId));
+
+            return result;
         }
 
         /// <summary>
@@ -58,9 +64,12 @@ namespace YachtDice.Server.Services
         /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture)
+        public TwoFactorContracts.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture)
         {
-            return Execute(email, () => ProcessCodeResend(email, challengeId, culture));
+            TwoFactorContracts.ResendResultCode result =
+                Execute(email, () => ProcessCodeResend(email, challengeId, culture));
+
+            return result;
         }
 
         private Contracts.LoginData ProcessLogin(Contracts.LoginCredentials credentials)
@@ -74,15 +83,18 @@ namespace YachtDice.Server.Services
 
             LogicAuth.LoginResult logicResult = _loginService.LoginPlayer(logicCredentials);
 
-            return new Contracts.LoginData
+            var loginData = new Contracts.LoginData
             {
-                ChallengeId = logicResult.ChallengeId.ToString(),
+                ChallengeId = logicResult.ChallengeId,
                 DisplayName = logicResult.DisplayName,
-                Code = (Contracts.LoginResultCode)(int)logicResult.Status
+                FirstName = logicResult.FirstName,
+                Code = Mapping.EnumMapper.Map<LogicAuth.LoginStatus, Contracts.LoginResultCode>(logicResult.Status)
             };
+
+            return loginData;
         }
 
-        private Contracts.VerificationResultCode ProcessCodeVerification(
+        private TwoFactorContracts.VerificationResultCode ProcessCodeVerification(
             string email,
             string code,
             string challengeId)
@@ -90,15 +102,19 @@ namespace YachtDice.Server.Services
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
                 _verificationService.VerifyPlayerCode(email, code, challengeId);
 
-            return (Contracts.VerificationResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<
+                LogicTwoFactor.TwoFactorValidationStatus,
+                TwoFactorContracts.VerificationResultCode>(
+                logicResult);
         }
 
-        private Contracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
+        private TwoFactorContracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
         {
             LogicTwoFactor.ResendCodeStatus logicResult =
                 _verificationService.ResendPlayerCode(email, culture, challengeId);
 
-            return (Contracts.ResendResultCode)(int)logicResult;
+            return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, TwoFactorContracts.ResendResultCode>(
+                logicResult);
         }
     }
 }

@@ -8,6 +8,7 @@ using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
+using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Services;
 
@@ -39,10 +40,10 @@ namespace YachtDice.Server.Host
             try
             {
                 OpenServiceHosts(serviceHosts);
-                ReportStatus(logger, StartedLogMessage);
+                logger.Info(StartedLogMessage);
                 WaitForExit();
                 CloseServiceHosts(serviceHosts);
-                ReportStatus(logger, StoppedLogMessage);
+                logger.Info(StoppedLogMessage);
             }
             catch (AddressAlreadyInUseException ex)
             {
@@ -74,9 +75,11 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerService()));
-            serviceHosts.Add(new ServiceHost(new RoomService()));
+
+            var roomManager = new RoomManager();
+            serviceHosts.Add(new ServiceHost(new RoomService(roomManager)));
             serviceHosts.Add(new ServiceHost(new GameService()));
-            serviceHosts.Add(new ServiceHost(new ChatService()));
+            serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
 
             var presenceService = new PresenceService();
             serviceHosts.Add(new ServiceHost(presenceService));
@@ -116,11 +119,6 @@ namespace YachtDice.Server.Host
                     serviceHost.Abort();
                 }
             }
-        }
-
-        private static void ReportStatus(AppLogger logger, string message)
-        {
-            logger.Info(message);
         }
 
         private static void ReportFailure(AppLogger logger, Exception exception, string message)

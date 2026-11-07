@@ -6,12 +6,16 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="Yacht Dice"
+        Title="{x:Static properties:Strings.Auth_Logo}"
         Height="800"
         Width="1280"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
 
     <Viewbox Stretch="Uniform">
         <Grid Margin="24"
@@ -49,14 +53,13 @@
                                 Padding="12,6">
 
                             <TextBlock x:Name="RoomCodeTextBlock"
-                                       d:Text="ID: 4821"
                                        FontWeight="Bold"
                                        FontSize="23"
                                        Foreground="{StaticResource BrushWoodDark}"/>
                         </Border>
                     </Grid>
 
-                    <TextBlock Text="{x:Static properties:Strings.Lobby_BackToPlay}"
+                    <TextBlock Text="{x:Static properties:Strings.Lobby_LinkBackToPlay}"
                                Style="{StaticResource LinkText}"
                                Margin="0,0,0,20"
                                FontSize="15"
@@ -78,10 +81,13 @@
                             <ComboBox x:Name="PrivacyComboBox"
                                       Padding="10,8"
                                       FontSize="17"
-                                      SelectedIndex="0">
+                                      SelectedIndex="0"
+                                      SelectionChanged="SettingsComboBox_SelectionChanged">
 
-                                <ComboBoxItem Content="{x:Static properties:Strings.Lobby_OptionPrivate}"/>
-                                <ComboBoxItem Content="{x:Static properties:Strings.Lobby_OptionPublic}"/>
+                                <ComboBoxItem x:Name="PrivateOptionItem"
+                                              Content="{x:Static properties:Strings.Lobby_OptionPrivate}"/>
+                                <ComboBoxItem x:Name="PublicOptionItem"
+                                              Content="{x:Static properties:Strings.Lobby_OptionPublic}"/>
 
                             </ComboBox>
                         </StackPanel>
@@ -96,7 +102,8 @@
                             <ComboBox x:Name="MaxPlayersComboBox"
                                       Padding="10,8"
                                       FontSize="17"
-                                      SelectedIndex="2">
+                                      SelectedIndex="2"
+                                      SelectionChanged="SettingsComboBox_SelectionChanged">
 
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3"/>
@@ -179,104 +186,79 @@
                                    Foreground="{StaticResource BrushTextMuted}"/>
 
                         <TextBlock x:Name="PlayerCountTextBlock"
-                                   d:Text="(1/4)"
                                    FontSize="11"
                                    Foreground="{StaticResource BrushTextMuted}"
                                    HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,24">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <ItemsControl x:Name="PlayerSlotsItemsControl"
+                                  Margin="-3,0,-3,24">
 
-                        <Border Grid.Column="0"
-                                Background="{StaticResource BrushCream2}"
-                                CornerRadius="8"
-                                Padding="10"
-                                Margin="0,0,6,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                            <StackPanel Orientation="Horizontal">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="3,0">
 
-                                <Border Width="30"
-                                        Height="30"
-                                        CornerRadius="15"
-                                        Background="{StaticResource BrushWood}"
-                                        Margin="0,0,8,0">
+                                    <Border Visibility="{Binding IsOccupied, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Background="{StaticResource BrushCream2}"
+                                            CornerRadius="8"
+                                            Padding="10">
 
-                                    <TextBlock x:Name="PlayerInitialTextBlock"
-                                               d:Text="U"
-                                               Foreground="White"
-                                               FontWeight="Bold"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontSize="15"/>
-                                </Border>
+                                        <StackPanel Orientation="Horizontal">
 
-                                <StackPanel>
+                                            <Border Width="30"
+                                                    Height="30"
+                                                    CornerRadius="15"
+                                                    Background="{StaticResource BrushWood}"
+                                                    Margin="0,0,8,0">
 
-                                    <TextBlock x:Name="PlayerNameTextBlock"
-                                               d:Text="Tú"
-                                               FontWeight="SemiBold"
-                                               FontSize="15"
-                                               Foreground="{StaticResource BrushText}"/>
+                                                <TextBlock Text="{Binding Initial}"
+                                                           Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="15"/>
+                                            </Border>
 
-                                    <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource BrushFeltLight}"/>
-                                </StackPanel>
+                                            <StackPanel>
 
-                            </StackPanel>
-                        </Border>
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="15"
+                                                           Foreground="{StaticResource BrushText}"/>
 
-                        <Border Grid.Column="1"
-                                Background="Transparent"
-                                CornerRadius="8"
-                                BorderBrush="{StaticResource BrushBorder}"
-                                BorderThickness="1"
-                                Padding="10"
-                                Margin="6,0">
+                                                <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
+                                                           Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource BrushFeltLight}"/>
+                                            </StackPanel>
 
-                            <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
-                                       FontSize="13"
-                                       Foreground="{StaticResource BrushTextMuted}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                        </Border>
+                                        </StackPanel>
+                                    </Border>
 
-                        <Border Grid.Column="2"
-                                Background="Transparent"
-                                CornerRadius="8"
-                                BorderBrush="{StaticResource BrushBorder}"
-                                BorderThickness="1"
-                                Padding="10"
-                                Margin="6,0">
+                                    <Border Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Background="Transparent"
+                                            CornerRadius="8"
+                                            BorderBrush="{StaticResource BrushBorder}"
+                                            BorderThickness="1"
+                                            Padding="10">
 
-                            <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
-                                       FontSize="13"
-                                       Foreground="{StaticResource BrushTextMuted}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                        </Border>
+                                        <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
+                                                   FontSize="13"
+                                                   Foreground="{StaticResource BrushTextMuted}"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
 
-                        <Border Grid.Column="3"
-                                Background="Transparent"
-                                CornerRadius="8"
-                                BorderBrush="{StaticResource BrushBorder}"
-                                BorderThickness="1"
-                                Padding="10"
-                                Margin="6,0,0,0">
-
-                            <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
-                                       FontSize="13"
-                                       Foreground="{StaticResource BrushTextMuted}"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -292,7 +274,8 @@
                                 FontSize="17"
                                 Click="CopyCodeButton_Click"/>
 
-                        <Button Grid.Column="1"
+                        <Button x:Name="StartGameButton"
+                                Grid.Column="1"
                                 Content="{x:Static properties:Strings.Lobby_ButtonStartMatch}"
                                 Style="{StaticResource BtnPrimary}"
                                 FontSize="17"

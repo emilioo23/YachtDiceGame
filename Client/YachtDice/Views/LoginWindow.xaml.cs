@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Gateway;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.RegistrationServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
@@ -17,7 +19,7 @@ namespace YachtDice.Views
     {
         private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
 
-        private readonly AppLogger _logger = new AppLogger(typeof(LoginWindow));
+        private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
@@ -26,15 +28,22 @@ namespace YachtDice.Views
         public LoginWindow()
         {
             InitializeComponent();
+            _logger = new AppLogger(GetType());
+            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowLoginPanel();
+        }
+
+        private void ShowLoginPanel()
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
             LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
-            AuthSubmitButton.Content = Strings.Auth_LoginButton;
+            AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
         }
 
         private void RegisterTabButton_Click(object sender, RoutedEventArgs e)
@@ -43,7 +52,7 @@ namespace YachtDice.Views
             RegisterPanel.Visibility = Visibility.Visible;
             RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
             LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
-            AuthSubmitButton.Content = Strings.Auth_CreateAccountButton;
+            AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
         }
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)
@@ -65,12 +74,12 @@ namespace YachtDice.Views
             }
             catch (GatewayException ex)
             {
-                ShowDialogMessage(GatewayErrorMessages.GetMessage(ex.ErrorCode));
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, UnexpectedErrorLogMessage);
-                ShowDialogMessage(Strings.Dialogs_UnexpectedError);
+                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
             }
             finally
             {
@@ -80,16 +89,14 @@ namespace YachtDice.Views
 
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(Strings.Auth_GuestDisplayName);
-            menuWindow.Show();
-            this.Close();
+            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, isGuest: true);
+
+            WindowNavigator.SwitchTo(this, new MenuWindow(session));
         }
 
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
-            var forgotPasswordWindow = new ForgotPasswordWindow();
-            forgotPasswordWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
         }
 
         private static string GetLoginMessage(LoginResultCode code)
@@ -102,10 +109,10 @@ namespace YachtDice.Views
                     message = Strings.Auth_ErrorRequiredFields;
                     break;
                 case LoginResultCode.InvalidCredentials:
-                    message = Strings.Dialogs_D13_Login;
+                    message = Strings.Dialogs_InvalidCredentials;
                     break;
                 case LoginResultCode.VerificationLocked:
-                    message = Strings.Dialogs_D19_Validation2FA;
+                    message = Strings.Dialogs_TooManyAttempts;
                     break;
                 case LoginResultCode.CodeSendFailed:
                     message = Strings.TwoFactor_ErrorSendFailed;
@@ -134,10 +141,10 @@ namespace YachtDice.Views
                     message = Strings.Auth_ErrorInvalidEmail;
                     break;
                 case RegisterResultCode.EmailAlreadyRegistered:
-                    message = Strings.Dialogs_D16_Register;
+                    message = Strings.Dialogs_EmailRegistered;
                     break;
                 case RegisterResultCode.UsernameAlreadyTaken:
-                    message = Strings.Dialogs_D15_Register;
+                    message = Strings.Dialogs_UsernameTaken;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
@@ -156,19 +163,20 @@ namespace YachtDice.Views
                 CultureName = App.CurrentCultureCode
             };
 
-            LoginData response = await _gateway.LoginAsync(credentials);
+            LoginData loginData = await _gateway.LoginAsync(credentials);
+            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false);
 
-            if (response.Code == LoginResultCode.VerificationCodeSent)
+            if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(credentials.Email, response.DisplayName, response.ChallengeId);
+                OpenVerificationWindow(credentials.Email, session, loginData.ChallengeId);
             }
-            else if (response.Code == LoginResultCode.LoggedIn)
+            else if (loginData.Code == LoginResultCode.LoggedIn)
             {
-                OpenMenuWindow(response.DisplayName);
+                WindowNavigator.SwitchTo(this, new MenuWindow(session));
             }
             else
             {
-                ShowDialogMessage(GetLoginMessage(response.Code));
+                CustomDialogWindow.ShowMessage(this, GetLoginMessage(loginData.Code));
             }
         }
 
@@ -188,45 +196,26 @@ namespace YachtDice.Views
 
             if (result == RegisterResultCode.Success)
             {
-                ShowDialogMessage(Strings.Auth_SuccessRegister);
-                LoginTabButton_Click(this, new RoutedEventArgs());
+                CustomDialogWindow.ShowMessage(this, Strings.Auth_SuccessRegister);
+                ShowLoginPanel();
             }
             else
             {
-                ShowDialogMessage(GetRegisterMessage(result));
+                CustomDialogWindow.ShowMessage(this, GetRegisterMessage(result));
             }
         }
 
-        private void OpenMenuWindow(string playerDisplayName)
-        {
-            var menuWindow = new MenuWindow(playerDisplayName);
-            menuWindow.Show();
-            this.Close();
-        }
-
-        private void OpenVerificationWindow(string email, string playerDisplayName, string challengeId)
+        private void OpenVerificationWindow(string email, PlayerSession session, string challengeId)
         {
             var challenge = new VerificationChallenge
             {
                 Email = email,
-                PlayerDisplayName = playerDisplayName,
+                Session = session,
                 ChallengeId = challengeId,
                 IsActivation = false
             };
 
-            var twoFactorWindow = new TwoFactorWindow(challenge);
-            twoFactorWindow.Show();
-            this.Close();
-        }
-
-        private void ShowDialogMessage(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            dialog.ShowDialog();
+            WindowNavigator.SwitchTo(this, new TwoFactorWindow(challenge));
         }
     }
 }

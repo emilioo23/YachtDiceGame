@@ -90,7 +90,6 @@
           <Property Name="RegDate" Type="datetime" />
           <Property Name="XP" Type="int" />
           <Property Name="Level" Type="int" />
-          <Property Name="FriendCode" Type="nvarchar" MaxLength="10" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
           <Property Name="LastUserChange" Type="datetime" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
@@ -809,7 +808,6 @@
           <Property Name="RegDate" Type="DateTime" Precision="3" />
           <Property Name="XP" Type="Int32" />
           <Property Name="Level" Type="Int32" />
-          <Property Name="FriendCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUserChange" Type="DateTime" Precision="3" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1563,7 +1561,6 @@
                 <ScalarProperty Name="RegDate" ColumnName="RegDate" />
                 <ScalarProperty Name="XP" ColumnName="XP" />
                 <ScalarProperty Name="Level" ColumnName="Level" />
-                <ScalarProperty Name="FriendCode" ColumnName="FriendCode" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="LastUserChange" ColumnName="LastUserChange" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />

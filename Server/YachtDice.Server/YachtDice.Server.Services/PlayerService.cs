@@ -4,13 +4,13 @@ using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using LogicPlayers = YachtDice.Server.Logic.Players;
 
     /// <summary>
     /// Implements the players' data operations on top of the logic layer.
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
         private const string NullDependencyMessage = "The dependency cannot be null.";
@@ -27,18 +27,10 @@ namespace YachtDice.Server.Services
             LogicPlayers.PlayerStatisticsService statisticsService,
             LogicPlayers.LeaderboardService leaderboardService)
         {
-            if (statisticsService == null)
-            {
-                throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
-            }
-
-            if (leaderboardService == null)
-            {
-                throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
-            }
-
-            _statisticsService = statisticsService;
-            _leaderboardService = leaderboardService;
+            _statisticsService = statisticsService
+                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
+            _leaderboardService = leaderboardService
+                ?? throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
         }
 
         /// <summary>
@@ -48,7 +40,9 @@ namespace YachtDice.Server.Services
         /// <returns>The statistics of the player.</returns>
         public Contracts.PlayerStatistics GetPlayerStatistics(Contracts.Player player)
         {
-            return Execute(player, () => ProcessPlayerStatistics(player));
+            Contracts.PlayerStatistics statistics = Execute(player, () => ProcessPlayerStatistics(player));
+
+            return statistics;
         }
 
         /// <summary>

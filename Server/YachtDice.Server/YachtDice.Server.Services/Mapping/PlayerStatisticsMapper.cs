@@ -1,6 +1,6 @@
 ﻿namespace YachtDice.Server.Services.Mapping
 {
-    using Contracts = YachtDice.Server.Contracts;
+    using Contracts = YachtDice.Server.Contracts.Players;
     using Logic = YachtDice.Server.Logic;
 
     /// <summary>
@@ -15,25 +15,16 @@
         /// <returns>Answer for the client.</returns>
         public static Contracts.PlayerStatistics ToContract(Logic.Players.PlayerStatistics statistics)
         {
-            Contracts.PlayerStatistics result;
-
-            if (statistics == null)
+            var contract = new Contracts.PlayerStatistics
             {
-                result = new Contracts.PlayerStatistics();
-            }
-            else
-            {
-                result = new Contracts.PlayerStatistics
-                {
-                    GamesPlayed = statistics.GamesPlayed,
-                    Wins = statistics.Wins,
-                    BestScore = statistics.BestScore,
-                    WinRatePercentage = statistics.WinRatePercentage,
-                    Level = statistics.Level
-                };
-            }
+                GamesPlayed = statistics.GamesPlayed,
+                Wins = statistics.Wins,
+                BestScore = statistics.BestScore,
+                WinRatePercentage = statistics.WinRatePercentage,
+                Level = statistics.Level
+            };
 
-            return result;
+            return contract;
         }
     }
 }

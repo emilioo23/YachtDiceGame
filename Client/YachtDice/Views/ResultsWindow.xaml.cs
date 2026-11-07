@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using YachtDice.Models;
+using YachtDice.Navigation;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -13,20 +16,20 @@ namespace YachtDice.Views
         private const int MaxOpponentScoreGapExclusive = 60;
         private const int MinimumPossibleScore = 0;
 
-        private readonly string _playerName;
+        private readonly PlayerSession _session;
 
         /// <summary>
         /// Initializes the results window with the player and the score obtained.
         /// </summary>
-        /// <param name="playerName">Name of the player who played the game.</param>
+        /// <param name="session">Session of the player who played the game.</param>
         /// <param name="playerScore">Final score obtained by the player.</param>
-        public ResultsWindow(string playerName, int playerScore)
+        public ResultsWindow(PlayerSession session, int playerScore)
         {
             InitializeComponent();
-            _playerName = playerName;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(playerName, playerScore);
+            _session = session;
+            LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(session, playerScore);
 
-            WinnerTitleTextBlock.Text = string.Format(Strings.Results_TitleWinner, playerName);
+            WinnerTitleTextBlock.Text = string.Format(Strings.Results_TitleWinner, session.DisplayName);
             ScoreSubtitleTextBlock.Text = string.Format(Strings.Results_SubtitleScore, playerScore);
 
             // TODO: Simulated opponent data; it will come from the backend later.
@@ -37,16 +40,16 @@ namespace YachtDice.Views
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            var menuWindow = new MenuWindow(_playerName);
-            menuWindow.Show();
-            this.Close();
+            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
 
-        private void NewGameButton_Click(object sender, RoutedEventArgs e)
+        private async void NewGameButton_Click(object sender, RoutedEventArgs e)
         {
-            var gameWindow = new GameWindow(_playerName);
-            gameWindow.Show();
-            this.Close();
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
+            await LobbyNavigator.CreateRoomAndOpenAsync(this, _session);
+            button.IsEnabled = true;
         }
     }
 }
