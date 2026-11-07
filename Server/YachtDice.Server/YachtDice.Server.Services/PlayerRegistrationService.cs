@@ -38,7 +38,7 @@ namespace YachtDice.Server.Services
 
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
-            Data.Player logicPlayer = Mapping.RegistrationMapper.ToLogicModel(newPlayer);
+            Data.Player logicPlayer = Mapping.RegistrationMapper.ToEntity(newPlayer);
             LogicAuth.RegistrationResult logicResult =
                 _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 

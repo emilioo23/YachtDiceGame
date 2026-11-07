@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="player">Player entity provided by the client.</param>
         /// <returns>Player entity for the logic and data layers.</returns>
-        public static Data.Player ToLogicModel(Contracts.Player player)
+        public static Data.Player ToEntity(Contracts.Player player)
         {
             var entity = new Data.Player
             {
