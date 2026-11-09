@@ -19,6 +19,7 @@ namespace YachtDice.Views
         private const int NoUnreadMessages = 0;
         private const int EmptyLength = 0;
         private const int MessageMarginBottom = 4;
+        private const int MaxMessageLength = 200;
 
         private bool _isCollapsed;
         private int _unreadCount;
@@ -29,6 +30,7 @@ namespace YachtDice.Views
         public ChatPanel()
         {
             InitializeComponent();
+            MessageTextBox.MaxLength = MaxMessageLength;
         }
 
         /// <summary>
