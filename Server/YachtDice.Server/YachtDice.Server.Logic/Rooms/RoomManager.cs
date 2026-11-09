@@ -105,6 +105,26 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public string FindPendingRoomCode(string playerName)
+        {
+            ValidateName(playerName);
+            string code = string.Empty;
+
+            lock (_syncRoot)
+            {
+                GameRoom pending = _rooms.Values.FirstOrDefault(
+                    room => room.IsStarted && room.HasAbsentPlayer(playerName));
+
+                if (pending != null)
+                {
+                    code = pending.Code;
+                }
+            }
+
+            return code;
+        }
+
+        /// <inheritdoc />
         public RoomResult Leave(string roomCode, string playerId)
         {
             RoomResult result = ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerId));
@@ -204,6 +224,22 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         private static RoomResult AddPlayer(GameRoom room, RoomApplicant applicant)
+        {
+            RoomResult result;
+
+            if (room.TryReturnPlayer(applicant.Name, out RoomPlayer returned))
+            {
+                result = RoomResult.CreateReturned(room.ToDetails(), returned.Id);
+            }
+            else
+            {
+                result = EnterNewPlayer(room, applicant);
+            }
+
+            return result;
+        }
+
+        private static RoomResult EnterNewPlayer(GameRoom room, RoomApplicant applicant)
         {
             RoomStatus status = GetJoinStatus(room);
             RoomResult result;
@@ -356,11 +392,6 @@ namespace YachtDice.Server.Logic.Rooms
         {
             RoomStatus status = GetHostActionStatus(room, playerId, targetPlayerId);
 
-            if (status == RoomStatus.Success && room.IsStarted)
-            {
-                status = RoomStatus.GameAlreadyStarted;
-            }
-
             if (status == RoomStatus.Success)
             {
                 room.RemovePlayer(targetPlayerId);
@@ -379,6 +410,18 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return CreateResult(status, room);
+        }
+
+        private static void RemoveOrMarkAbsent(GameRoom room, string playerId)
+        {
+            if (room.IsStarted)
+            {
+                room.MarkAbsent(playerId);
+            }
+            else
+            {
+                room.RemovePlayer(playerId);
+            }
         }
 
         private RoomApplicant CreateApplicant(string playerName)
@@ -410,7 +453,7 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 bool wasHost = room.IsHost(playerId);
 
-                room.RemovePlayer(playerId);
+                RemoveOrMarkAbsent(room, playerId);
                 DeleteIfEmpty(room);
 
                 RoomDetails details = room.ToDetails();

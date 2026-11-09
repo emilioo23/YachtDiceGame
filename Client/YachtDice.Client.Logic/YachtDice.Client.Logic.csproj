@@ -52,6 +52,8 @@
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
     <Compile Include="Players\InitialLetter.cs" />
+    <Compile Include="Rooms\MatchParticipant.cs" />
+    <Compile Include="Rooms\PresenceComparer.cs" />
     <Compile Include="Rooms\RoomListItem.cs" />
     <Compile Include="Rooms\RoomListItemFilter.cs" />
     <Compile Include="Rooms\RoomListUpdater.cs" />

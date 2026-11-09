@@ -52,12 +52,11 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0"
-                                   Text="{x:Static res:Strings.Global_ButtonBack}"
-                                   Style="{StaticResource LinkText}"
-                                   FontSize="18"
-                                   VerticalAlignment="Center"
-                                   MouseLeftButtonUp="BackLink_Click"/>
+                        <Button Grid.Column="0"
+                                Content="{x:Static res:Strings.Global_ButtonBack}"
+                                Style="{StaticResource BtnBack}"
+                                VerticalAlignment="Center"
+                                Click="BackButton_Click"/>
 
                         <Button x:Name="RefreshButton"
                                 Grid.Column="1"

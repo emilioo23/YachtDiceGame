@@ -205,6 +205,7 @@ namespace YachtDice.Gateway
                 Code = string.Empty,
                 HostId = string.Empty,
                 Players = new RoomPlayer[] { },
+                AbsentPlayers = new RoomPlayer[] { },
                 Settings = new RoomSettings()
             };
 

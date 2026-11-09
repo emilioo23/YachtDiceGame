@@ -595,7 +595,7 @@
     <value>New game</value>
   </data>
   <data name="Dialogs_LeaveMatch" xml:space="preserve">
-    <value>Are you sure you want to leave the room? Your progress won't be saved.</value>
+    <value>Are you sure you want to leave the match? The other players will be told and you can come back while it is still going.</value>
   </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>Are you sure you want to remove this friend?</value>
@@ -1058,5 +1058,29 @@
   </data>
   <data name="HowToPlay_TipsText" xml:space="preserve">
     <value>Keep the dice that repeat the most. If a category is no longer reachable, give it up by scoring 0 in the one that hurts you least.</value>
+  </data>
+  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
+    <value>This email is not registered.</value>
+  </data>
+  <data name="Dialogs_InvalidPassword" xml:space="preserve">
+    <value>The password is incorrect.</value>
+  </data>
+  <data name="Dialogs_ConfirmLogout" xml:space="preserve">
+    <value>Are you sure you want to log out?</value>
+  </data>
+  <data name="Game_Chat_PlayerLeft" xml:space="preserve">
+    <value>{0} left the match or lost the connection.</value>
+  </data>
+  <data name="Game_Chat_PlayerReturned" xml:space="preserve">
+    <value>{0} came back to the match.</value>
+  </data>
+  <data name="Game_Chat_PlayerKicked" xml:space="preserve">
+    <value>{0} was expelled from the match.</value>
+  </data>
+  <data name="Game_KickNoPlayers" xml:space="preserve">
+    <value>There are no other players in the match to expel.</value>
+  </data>
+  <data name="Menu_PendingMatchPrompt" xml:space="preserve">
+    <value>You left a match in progress. Do you want to go back to it?</value>
   </data>
 </root>

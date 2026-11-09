@@ -23,6 +23,8 @@ namespace YachtDice.Server.Services.Mapping
                 Code = room.Code,
                 HostId = room.HostId,
                 Players = room.Players.Select(ToContract).ToList(),
+                AbsentPlayers = room.AbsentPlayers.Select(ToContract).ToList(),
+                IsStarted = room.IsStarted,
                 Settings = ToContract(room.Settings)
             };
 

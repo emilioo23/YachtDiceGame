@@ -337,7 +337,7 @@ namespace YachtDice.Views
             }
         }
 
-        private async void KickLink_Click(object sender, MouseButtonEventArgs e)
+        private async void KickButton_Click(object sender, RoutedEventArgs e)
         {
             string targetPlayerId = ReadTag(sender);
             string question = string.Format(Strings.Lobby_ConfirmKick, FindPlayerName(targetPlayerId));
@@ -348,7 +348,7 @@ namespace YachtDice.Views
             }
         }
 
-        private async void TransferLink_Click(object sender, MouseButtonEventArgs e)
+        private async void TransferButton_Click(object sender, RoutedEventArgs e)
         {
             string newHostId = ReadTag(sender);
 

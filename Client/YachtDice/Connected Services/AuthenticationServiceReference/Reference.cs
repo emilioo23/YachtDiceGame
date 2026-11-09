@@ -197,13 +197,22 @@ namespace YachtDice.AuthenticationServiceReference {
         InvalidCredentials = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        VerificationLocked = 3,
+        InvalidEmail = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendFailed = 4,
+        EmailNotRegistered = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        LoggedIn = 5,
+        InvalidPassword = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationLocked = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoggedIn = 8,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

@@ -96,8 +96,9 @@ namespace YachtDice.Navigation
             }
         }
 
-        // The player joins the chat of the room before the waiting room opens, so the waiting room and the
-        // game share the same chat connection and its messages.
+        // The player joins the chat of the room before the window opens, so the waiting room and the game
+        // share the same chat connection and its messages. A player who comes back to a match in progress
+        // goes straight to the game.
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
             var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);
@@ -105,7 +106,23 @@ namespace YachtDice.Navigation
 
             ConnectionLossHandler.Watch(roomGateway);
             ConnectionLossHandler.Watch(chatGateway);
-            WindowNavigator.SwitchTo(currentWindow, new LobbyWindow(roomGateway, chatGateway, isChatAvailable));
+            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chatGateway, isChatAvailable));
+        }
+
+        private static Window CreateRoomWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
+        {
+            Window roomWindow;
+
+            if (roomGateway.CurrentRoom.IsStarted)
+            {
+                roomWindow = new GameWindow(roomGateway, chatGateway, isChatAvailable);
+            }
+            else
+            {
+                roomWindow = new LobbyWindow(roomGateway, chatGateway, isChatAvailable);
+            }
+
+            return roomWindow;
         }
     }
 }
