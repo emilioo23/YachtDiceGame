@@ -40,4 +40,18 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PresenceEventType" nillable="true" type="tns:PresenceEventType" />
+  <xs:element name="InvitationReceived">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="invitation" nillable="true" type="tns:RoomInvitation" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="RoomInvitation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SenderName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomInvitation" nillable="true" type="tns:RoomInvitation" />
 </xs:schema>
