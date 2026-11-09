@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -46,9 +47,38 @@ namespace YachtDice.Navigation
         {
             var roomGateway = new RoomGateway(session);
 
+            await JoinAndOpenAsync(currentWindow, roomGateway, () => roomGateway.JoinRoomAsync(roomCode));
+        }
+
+        /// <summary>
+        /// Enters a room of the list of rooms and opens its waiting room.
+        /// </summary>
+        /// <param name="currentWindow">Window that is open now; it closes if the player enters the room.</param>
+        /// <param name="session">Session of the player who enters the room.</param>
+        /// <param name="room">Row of the list that the player chose, with the code typed for a private room.</param>
+        /// <returns>A task that finishes when the waiting room is open or the player was told the problem.</returns>
+        public static async Task JoinListedRoomAndOpenAsync(
+            Window currentWindow,
+            PlayerSession session,
+            RoomListItem room)
+        {
+            var roomGateway = new RoomGateway(session);
+            string accessCode = room.AccessCode.Trim();
+
+            await JoinAndOpenAsync(
+                currentWindow,
+                roomGateway,
+                () => roomGateway.JoinListedRoomAsync(room.RoomId, accessCode));
+        }
+
+        private static async Task JoinAndOpenAsync(
+            Window currentWindow,
+            RoomGateway roomGateway,
+            Func<Task<RoomResultCode>> join)
+        {
             try
             {
-                RoomResultCode result = await roomGateway.JoinRoomAsync(roomCode);
+                RoomResultCode result = await join();
 
                 if (result == RoomResultCode.Success)
                 {

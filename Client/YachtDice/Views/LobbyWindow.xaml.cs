@@ -29,6 +29,7 @@ namespace YachtDice.Views
 
         private readonly AppLogger _logger;
         private readonly RoomGateway _roomGateway;
+        private readonly InvitationListener _invitationListener;
 
         // The window is created with this flag on because InitializeComponent raises SelectionChanged events
         // for the initial values of the combo boxes, and those events must not be sent to the server.
@@ -50,6 +51,13 @@ namespace YachtDice.Views
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;
+
+            FriendsPanel.Attach(_roomGateway);
+            _invitationListener = new InvitationListener(this, _roomGateway.Session)
+            {
+                CurrentRoomCode = _roomGateway.CurrentRoom.Code
+            };
+            _invitationListener.Start();
 
             ShowRoom(_roomGateway.CurrentRoom);
         }
@@ -280,6 +288,8 @@ namespace YachtDice.Views
         {
             _isClosed = true;
             _roomGateway.RoomChanged -= HandleRoomChanged;
+            FriendsPanel.Detach();
+            _invitationListener.Stop();
 
             if (_isLeavingOnClose)
             {
@@ -305,7 +315,7 @@ namespace YachtDice.Views
             await SendSettingsAsync(ReadSettings(GameSpeed.Fast));
         }
 
-        private void BackToPlayLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackToMenuButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }

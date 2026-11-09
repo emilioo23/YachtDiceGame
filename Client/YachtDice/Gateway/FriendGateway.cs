@@ -58,6 +58,21 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Invites a friend who is online to join the room where the player is.
+        /// </summary>
+        /// <param name="playerId">Identifier that the room gave to the player who invites.</param>
+        /// <param name="friendName">Name of the friend to invite.</param>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <returns>Whether the invitation reached the friend or why not.</returns>
+        public async Task<InvitationResultCode> InviteToRoomAsync(string playerId, string friendName, string roomCode)
+        {
+            InvitationResultCode result =
+                await ExecuteAsync(client => client.InviteToRoom(playerId, friendName, roomCode));
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the username that other players use to add the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
