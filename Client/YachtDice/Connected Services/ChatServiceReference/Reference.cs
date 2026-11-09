@@ -101,6 +101,9 @@ namespace YachtDice.ChatServiceReference {
         private string AuthorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AuthorIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -125,6 +128,19 @@ namespace YachtDice.ChatServiceReference {
                 if ((object.ReferenceEquals(this.AuthorField, value) != true)) {
                     this.AuthorField = value;
                     this.RaisePropertyChanged("Author");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AuthorId {
+            get {
+                return this.AuthorIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AuthorIdField, value) != true)) {
+                    this.AuthorIdField = value;
+                    this.RaisePropertyChanged("AuthorId");
                 }
             }
         }
@@ -171,13 +187,13 @@ namespace YachtDice.ChatServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IChatService/JoinChat", ReplyAction="urn:yachtdice:contracts/IChatService/JoinChatResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.ChatServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IChatService/JoinChatServiceFaultFault", Name="ServiceFault")]
-        void JoinChat(string playerName, string roomCode);
+        void JoinChat(string playerId, string roomCode);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/SendChatMessage")]
-        void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode);
+        void SendChatMessage(string playerId, string content, string roomCode);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/LeaveChat")]
-        void LeaveChat(string playerName, string roomCode);
+        void LeaveChat(string playerId, string roomCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -215,16 +231,16 @@ namespace YachtDice.ChatServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void JoinChat(string playerName, string roomCode) {
-            base.Channel.JoinChat(playerName, roomCode);
+        public void JoinChat(string playerId, string roomCode) {
+            base.Channel.JoinChat(playerId, roomCode);
         }
         
-        public void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode) {
-            base.Channel.SendChatMessage(message, roomCode);
+        public void SendChatMessage(string playerId, string content, string roomCode) {
+            base.Channel.SendChatMessage(playerId, content, roomCode);
         }
         
-        public void LeaveChat(string playerName, string roomCode) {
-            base.Channel.LeaveChat(playerName, roomCode);
+        public void LeaveChat(string playerId, string roomCode) {
+            base.Channel.LeaveChat(playerId, roomCode);
         }
     }
 }

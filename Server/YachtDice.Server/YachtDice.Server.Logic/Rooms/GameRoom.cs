@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace YachtDice.Server.Logic.Rooms
@@ -10,18 +11,22 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     internal sealed class GameRoom
     {
+        private const string IdFormat = "N";
+        private const string RepeatedNameFormat = "{0} {1}";
+        private const int FirstRepeatedNumber = 2;
+
+        private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
+
         /// <summary>
-        /// Initializes a new room with its host as the only player.
+        /// Initializes a new room without players. The first player who enters becomes the host.
         /// </summary>
         /// <param name="code">Code of the room.</param>
-        /// <param name="hostName">Name of the host.</param>
         /// <param name="settings">Options of the room.</param>
-        public GameRoom(string code, string hostName, RoomSettings settings)
+        public GameRoom(string code, RoomSettings settings)
         {
             Code = code;
-            HostName = hostName;
+            HostId = string.Empty;
             Settings = settings;
-            Players = new List<string> { hostName };
         }
 
         /// <summary>
@@ -30,9 +35,9 @@ namespace YachtDice.Server.Logic.Rooms
         public string Code { get; }
 
         /// <summary>
-        /// Gets or sets the name of the host.
+        /// Gets the identifier of the host.
         /// </summary>
-        public string HostName { get; set; }
+        public string HostId { get; private set; }
 
         /// <summary>
         /// Gets or sets the options of the room.
@@ -45,41 +50,78 @@ namespace YachtDice.Server.Logic.Rooms
         public bool IsStarted { get; set; }
 
         /// <summary>
-        /// Gets the names of the players inside the room.
+        /// Gets the players inside the room, in the order in which they entered.
         /// </summary>
-        public List<string> Players { get; }
+        public IReadOnlyList<RoomPlayer> Players => _players;
+
+        /// <summary>
+        /// Puts a new player inside the room. The server gives the player a new identifier, and if another
+        /// player already uses the name, a number is added to it so that the names stay different.
+        /// </summary>
+        /// <param name="displayName">Name that the player asked for.</param>
+        /// <returns>The player that entered.</returns>
+        public RoomPlayer AddPlayer(string displayName)
+        {
+            var player = new RoomPlayer(
+                Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture),
+                CreateUniqueName(displayName.Trim()));
+
+            _players.Add(player);
+
+            if (string.IsNullOrEmpty(HostId))
+            {
+                HostId = player.Id;
+            }
+
+            return player;
+        }
 
         /// <summary>
         /// Indicates whether the player is inside the room.
         /// </summary>
-        /// <param name="playerName">Name of the player.</param>
-        /// <returns>True if a player with that name is inside.</returns>
-        public bool HasPlayer(string playerName)
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>True if a player with that identifier is inside.</returns>
+        public bool HasPlayer(string playerId)
         {
-            return Players.Contains(playerName, StringComparer.OrdinalIgnoreCase);
+            return _players.Any(player => IsSameId(player.Id, playerId));
+        }
+
+        /// <summary>
+        /// Looks for a player of the room.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="player">The player, or null if nobody inside has that identifier.</param>
+        /// <returns>True if the player is inside the room.</returns>
+        public bool TryGetPlayer(string playerId, out RoomPlayer player)
+        {
+            player = _players.FirstOrDefault(candidate => IsSameId(candidate.Id, playerId));
+
+            return player != null;
         }
 
         /// <summary>
         /// Indicates whether the player is the host of the room.
         /// </summary>
-        /// <param name="playerName">Name of the player.</param>
+        /// <param name="playerId">Identifier of the player.</param>
         /// <returns>True if the player is the host.</returns>
-        public bool IsHost(string playerName)
+        public bool IsHost(string playerId)
         {
-            return string.Equals(HostName, playerName, StringComparison.OrdinalIgnoreCase);
+            return IsSameId(HostId, playerId);
         }
 
         /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host.
         /// </summary>
-        /// <param name="playerName">Name of the player.</param>
-        public void RemovePlayer(string playerName)
+        /// <param name="playerId">Identifier of the player.</param>
+        public void RemovePlayer(string playerId)
         {
-            Players.RemoveAll(name => string.Equals(name, playerName, StringComparison.OrdinalIgnoreCase));
+            bool wasHost = IsHost(playerId);
 
-            if (IsHost(playerName) && Players.Any())
+            _players.RemoveAll(player => IsSameId(player.Id, playerId));
+
+            if (wasHost && _players.Any())
             {
-                HostName = Players.First();
+                HostId = _players.First().Id;
             }
         }
 
@@ -99,12 +141,41 @@ namespace YachtDice.Server.Logic.Rooms
             var details = new RoomDetails
             {
                 Code = Code,
-                HostName = HostName,
-                Players = Players.ToList(),
+                HostId = HostId,
+                Players = _players.ToList(),
                 Settings = settings
             };
 
             return details;
+        }
+
+        private static bool IsSameId(string firstId, string secondId)
+        {
+            return string.Equals(firstId, secondId, StringComparison.Ordinal);
+        }
+
+        private string CreateUniqueName(string displayName)
+        {
+            string uniqueName = displayName;
+            int repeatedNumber = FirstRepeatedNumber;
+
+            while (IsNameTaken(uniqueName))
+            {
+                uniqueName = string.Format(
+                    CultureInfo.InvariantCulture,
+                    RepeatedNameFormat,
+                    displayName,
+                    repeatedNumber);
+                repeatedNumber++;
+            }
+
+            return uniqueName;
+        }
+
+        private bool IsNameTaken(string displayName)
+        {
+            return _players.Any(
+                player => string.Equals(player.DisplayName, displayName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

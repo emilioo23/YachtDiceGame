@@ -753,9 +753,6 @@
   <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
     <value>La partida de esa sala ya comenzó.</value>
   </data>
-  <data name="Lobby_Result_PlayerAlreadyInRoom" xml:space="preserve">
-    <value>Ya hay un jugador con tu nombre en esa sala.</value>
-  </data>
   <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
     <value>Esa configuración no es válida para la sala.</value>
   </data>

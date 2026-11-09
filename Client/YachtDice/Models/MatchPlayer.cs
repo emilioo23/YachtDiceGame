@@ -6,6 +6,12 @@
     public class MatchPlayer
     {
         /// <summary>
+        /// Gets or sets the identifier that the server gave to the player. Two players can show the same name,
+        /// so the identifier is what tells them apart.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the player.
         /// </summary>
         public string Name { get; set; }
