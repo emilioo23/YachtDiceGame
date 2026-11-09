@@ -79,10 +79,33 @@ namespace YachtDice.Server.Services
         public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
         {
             if (_players.TryGetValue(recipientName, out OnlinePlayer recipient)
-                && !TryNotify(recipient.Callback, subjectName, eventType))
+                && !TryNotify(recipient.Callback, callback => callback.PresenceChanged(subjectName, eventType)))
             {
                 Remove(recipientName, recipient.SessionId);
             }
+        }
+
+        /// <summary>
+        /// Sends an invitation to a room to the player, if the player is online.
+        /// </summary>
+        /// <param name="recipientName">Name of the player who receives the invitation.</param>
+        /// <param name="invitation">Who invites and the code of the room.</param>
+        /// <returns>True if the invitation reached the player.</returns>
+        public bool SendInvitation(string recipientName, Contracts.RoomInvitation invitation)
+        {
+            var isDelivered = false;
+
+            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient))
+            {
+                isDelivered = TryNotify(recipient.Callback, callback => callback.InvitationReceived(invitation));
+
+                if (!isDelivered)
+                {
+                    Remove(recipientName, recipient.SessionId);
+                }
+            }
+
+            return isDelivered;
         }
 
         private static OnlinePlayer CreateCurrentPlayer()
@@ -125,17 +148,16 @@ namespace YachtDice.Server.Services
             {
                 bool isOtherPlayer = !string.Equals(recipient.Key, displayName, StringComparison.OrdinalIgnoreCase);
 
-                if (isOtherPlayer && !TryNotify(recipient.Value.Callback, displayName, eventType))
+                if (isOtherPlayer && !TryNotify(
+                    recipient.Value.Callback,
+                    callback => callback.PresenceChanged(displayName, eventType)))
                 {
                     Remove(recipient.Key, recipient.Value.SessionId);
                 }
             }
         }
 
-        private bool TryNotify(
-            Contracts.IPresenceCallback callback,
-            string displayName,
-            Contracts.PresenceEventType eventType)
+        private bool TryNotify(Contracts.IPresenceCallback callback, Action<Contracts.IPresenceCallback> notification)
         {
             var isDelivered = false;
 
@@ -143,7 +165,7 @@ namespace YachtDice.Server.Services
             {
                 try
                 {
-                    callback.PresenceChanged(displayName, eventType);
+                    notification(callback);
                     isDelivered = true;
                 }
                 catch (CommunicationException ex)

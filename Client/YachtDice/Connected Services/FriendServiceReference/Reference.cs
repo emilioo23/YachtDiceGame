@@ -131,6 +131,23 @@ namespace YachtDice.FriendServiceReference {
         RelationNotFound = 2,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InvitationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum InvitationResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotInRoom = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotFriends = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendOffline = 3,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="FriendServiceReference.IFriendService")]
     public interface IFriendService {
@@ -155,6 +172,13 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
         System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault", Name="ServiceFault")]
+        YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(string playerId, string friendName, string roomCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
+        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.InvitationResultCode> InviteToRoomAsync(string playerId, string friendName, string roomCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault", Name="ServiceFault")]
@@ -227,6 +251,14 @@ namespace YachtDice.FriendServiceReference {
         
         public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName) {
             return base.Channel.RemoveFriendAsync(displayName, friendName);
+        }
+        
+        public YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(string playerId, string friendName, string roomCode) {
+            return base.Channel.InviteToRoom(playerId, friendName, roomCode);
+        }
+        
+        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.InvitationResultCode> InviteToRoomAsync(string playerId, string friendName, string roomCode) {
+            return base.Channel.InviteToRoomAsync(playerId, friendName, roomCode);
         }
         
         public string GetUsername(string displayName) {

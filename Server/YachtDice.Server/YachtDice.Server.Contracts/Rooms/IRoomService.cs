@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace YachtDice.Server.Contracts.Rooms
 {
@@ -27,6 +28,26 @@ namespace YachtDice.Server.Contracts.Rooms
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         JoinRoomResult JoinRoom(string displayName, string roomCode);
+
+        /// <summary>
+        /// Gets the rooms that wait for players, public and private. The game of a room that already started
+        /// is not listed. The codes of the rooms are not sent.
+        /// </summary>
+        /// <returns>A short description of each room that waits for players.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<RoomSummary> GetRoomList();
+
+        /// <summary>
+        /// Puts the player inside a room of the list. A private room also needs its code.
+        /// </summary>
+        /// <param name="displayName">Name that the player who enters wants to show.</param>
+        /// <param name="roomId">Identifier of the room inside the list.</param>
+        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode);
 
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
