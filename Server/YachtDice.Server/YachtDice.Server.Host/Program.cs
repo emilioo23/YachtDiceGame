@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
@@ -74,9 +75,11 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
             serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
-            serviceHosts.Add(new ServiceHost(CreatePlayerService()));
 
-            var roomManager = new RoomManager();
+            var avatarService = new AvatarService(new PlayerRepository());
+            serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
+
+            var roomManager = new RoomManager(avatarService);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager)));
             serviceHosts.Add(new ServiceHost(new GameService()));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
@@ -192,13 +195,14 @@ namespace YachtDice.Server.Host
         /// <summary>
         /// Creates and configures the player service with its required dependencies.
         /// </summary>
+        /// <param name="avatarService">Service that handles the avatars of the players.</param>
         /// <returns>A fully configured instance of PlayerService.</returns>
-        private static PlayerService CreatePlayerService()
+        private static PlayerService CreatePlayerService(AvatarService avatarService)
         {
             var gameHistoryRepository = new GameHistoryRepository();
             var statisticsService = new PlayerStatisticsService(new PlayerRepository(), gameHistoryRepository);
 
-            return new PlayerService(statisticsService, new LeaderboardService(gameHistoryRepository));
+            return new PlayerService(statisticsService, new LeaderboardService(gameHistoryRepository), avatarService);
         }
     }
 }

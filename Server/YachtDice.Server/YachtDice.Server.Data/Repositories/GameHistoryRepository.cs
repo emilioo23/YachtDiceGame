@@ -70,6 +70,7 @@ namespace YachtDice.Server.Data.Repositories
                     (totals, player) => new PlayerRankingRecord
                     {
                         DisplayName = player.DisplayName,
+                        AvatarId = player.AvatarId,
                         TotalPoints = totals.TotalPoints,
                         Wins = totals.Wins
                     })

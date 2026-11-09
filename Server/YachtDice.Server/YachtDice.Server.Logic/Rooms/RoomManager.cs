@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Logic.Avatars;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -18,7 +19,9 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
+        private const string NullDependencyMessage = "The dependency cannot be null.";
 
+        private readonly IAvatarLookup _avatarLookup;
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
@@ -26,16 +29,27 @@ namespace YachtDice.Server.Logic.Rooms
         // Only used while _syncRoot is held, so it needs no lock of its own.
         private readonly Random _random = new Random();
 
+        /// <summary>
+        /// Initializes the manager without any room.
+        /// </summary>
+        /// <param name="avatarLookup">Tells the avatar of each player who enters a room.</param>
+        public RoomManager(IAvatarLookup avatarLookup)
+        {
+            _avatarLookup = avatarLookup
+                ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
+        }
+
         /// <inheritdoc />
         public RoomResult CreateRoom(string hostName)
         {
             ValidateName(hostName);
+            RoomApplicant applicant = CreateApplicant(hostName);
             RoomResult result;
 
             lock (_syncRoot)
             {
                 var room = new GameRoom(CreateUniqueCode(), CreateDefaultSettings());
-                RoomPlayer host = room.AddPlayer(hostName);
+                RoomPlayer host = room.AddPlayer(applicant.Name, applicant.AvatarId);
 
                 _rooms[room.Code] = room;
                 result = RoomResult.CreateEntered(room.ToDetails(), host.Id);
@@ -48,8 +62,9 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult Join(string roomCode, string playerName)
         {
             ValidateName(playerName);
+            RoomApplicant applicant = CreateApplicant(playerName);
 
-            RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
+            RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, applicant));
 
             return result;
         }
@@ -58,13 +73,14 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult JoinListed(string roomId, string playerName, string accessCode)
         {
             ValidateName(playerName);
+            RoomApplicant applicant = CreateApplicant(playerName);
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
 
             lock (_syncRoot)
             {
                 if (TryGetRoomById(roomId, out GameRoom room))
                 {
-                    result = JoinWithAccessCode(room, playerName, NormalizeCode(accessCode));
+                    result = JoinWithAccessCode(room, applicant, NormalizeCode(accessCode));
                 }
             }
 
@@ -187,14 +203,14 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private static RoomResult AddPlayer(GameRoom room, string playerName)
+        private static RoomResult AddPlayer(GameRoom room, RoomApplicant applicant)
         {
             RoomStatus status = GetJoinStatus(room);
             RoomResult result;
 
             if (status == RoomStatus.Success)
             {
-                RoomPlayer player = room.AddPlayer(playerName);
+                RoomPlayer player = room.AddPlayer(applicant.Name, applicant.AvatarId);
 
                 result = RoomResult.CreateEntered(room.ToDetails(), player.Id);
             }
@@ -206,7 +222,7 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private static RoomResult JoinWithAccessCode(GameRoom room, string playerName, string accessCode)
+        private static RoomResult JoinWithAccessCode(GameRoom room, RoomApplicant applicant, string accessCode)
         {
             RoomResult result;
 
@@ -216,7 +232,7 @@ namespace YachtDice.Server.Logic.Rooms
             }
             else
             {
-                result = AddPlayer(room, playerName);
+                result = AddPlayer(room, applicant);
             }
 
             return result;
@@ -363,6 +379,11 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return CreateResult(status, room);
+        }
+
+        private RoomApplicant CreateApplicant(string playerName)
+        {
+            return new RoomApplicant(playerName, _avatarLookup.GetAvatarId(playerName.Trim()));
         }
 
         private RoomResult ExecuteInRoom(string roomCode, Func<GameRoom, RoomResult> operation)

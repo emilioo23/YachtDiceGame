@@ -39,6 +39,7 @@ namespace YachtDice.Server.Logic.Players
                 {
                     Position = index + FirstPosition,
                     DisplayName = record.DisplayName,
+                    AvatarId = record.AvatarId,
                     TotalPoints = record.TotalPoints,
                     Wins = record.Wins
                 })

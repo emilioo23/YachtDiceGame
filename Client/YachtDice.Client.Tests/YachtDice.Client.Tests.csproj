@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\ResetPasswordInputValidatorTests.cs" />
+    <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
+    <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

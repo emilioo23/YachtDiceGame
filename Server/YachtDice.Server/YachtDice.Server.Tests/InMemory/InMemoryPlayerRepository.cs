@@ -88,6 +88,13 @@ namespace YachtDice.Server.Tests.InMemory
             }
         }
 
+        public void SaveAvatar(int playerId, int avatarId)
+        {
+            Player player = _players.First(candidate => candidate.Id == playerId);
+
+            player.AvatarId = avatarId;
+        }
+
         private static bool IsSameText(string firstText, string secondText)
         {
             return string.Equals(firstText, secondText, StringComparison.OrdinalIgnoreCase);

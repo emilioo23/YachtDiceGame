@@ -12,10 +12,12 @@
         /// </summary>
         /// <param name="id">Identifier that the server gave to the player.</param>
         /// <param name="displayName">Name that the screens show for the player.</param>
-        public RoomPlayer(string id, string displayName)
+        /// <param name="avatarId">Identifier of the avatar that the player uses.</param>
+        public RoomPlayer(string id, string displayName, int avatarId)
         {
             Id = id;
             DisplayName = displayName;
+            AvatarId = avatarId;
         }
 
         /// <summary>
@@ -27,5 +29,10 @@
         /// Gets the name that the screens show for the player. It is unique only inside its room.
         /// </summary>
         public string DisplayName { get; }
+
+        /// <summary>
+        /// Gets the identifier of the avatar that the player had when entering the room.
+        /// </summary>
+        public int AvatarId { get; }
     }
 }

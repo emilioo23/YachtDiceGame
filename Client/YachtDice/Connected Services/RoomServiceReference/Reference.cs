@@ -254,6 +254,9 @@ namespace YachtDice.RoomServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AvatarIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DisplayNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -266,6 +269,19 @@ namespace YachtDice.RoomServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AvatarId {
+            get {
+                return this.AvatarIdField;
+            }
+            set {
+                if ((this.AvatarIdField.Equals(value) != true)) {
+                    this.AvatarIdField = value;
+                    this.RaisePropertyChanged("AvatarId");
+                }
             }
         }
         

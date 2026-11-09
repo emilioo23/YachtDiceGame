@@ -25,6 +25,8 @@ namespace YachtDice.Views
         private const int EmptyLength = 0;
         private const int MessageMarginBottom = 4;
         private const int MaxMessageLength = 200;
+        private const int AvatarSize = 20;
+        private const int AvatarGap = 6;
 
         private ChatGateway _gateway;
         private string _playerId;
@@ -60,13 +62,29 @@ namespace YachtDice.Views
         /// <param name="kind">Who wrote the message.</param>
         public void AddMessage(string author, string content, ChatMessageKind kind)
         {
-            MessagesPanel.Children.Add(CreateMessageBlock(author, content, kind));
+            AddMessage(new ChatEntry
+            {
+                Author = author,
+                Content = content,
+                Kind = kind,
+                AvatarId = ChatEntry.NoAvatar
+            });
+        }
+
+        /// <summary>
+        /// Adds a message at the end of the chat, with the avatar of its author next to the name. If the chat
+        /// is hidden and the message was written by another player, it counts as unread and the notice shows it.
+        /// </summary>
+        /// <param name="entry">Message to show.</param>
+        public void AddMessage(ChatEntry entry)
+        {
+            MessagesPanel.Children.Add(CreateMessageBlock(entry));
             MessagesScrollViewer.ScrollToEnd();
 
-            if (_isCollapsed && kind == ChatMessageKind.Other)
+            if (_isCollapsed && entry.Kind == ChatMessageKind.Other)
             {
                 _unreadCount++;
-                ShowUnreadNotice(author, content);
+                ShowUnreadNotice(entry.Author, entry.Content);
             }
         }
 
@@ -120,7 +138,13 @@ namespace YachtDice.Views
         {
             ChatMessageKind kind = message.AuthorId == _playerId ? ChatMessageKind.Own : ChatMessageKind.Other;
 
-            AddMessage(message.Author, message.Content, kind);
+            AddMessage(new ChatEntry
+            {
+                Author = message.Author,
+                Content = message.Content,
+                Kind = kind,
+                AvatarId = message.AvatarId
+            });
         }
 
         // The messages arrive in a network thread, and the controls can only be changed in the interface thread.
@@ -141,7 +165,7 @@ namespace YachtDice.Views
             }
         }
 
-        private TextBlock CreateMessageBlock(string author, string content, ChatMessageKind kind)
+        private TextBlock CreateMessageBlock(ChatEntry entry)
         {
             var textBlock = new TextBlock
             {
@@ -149,15 +173,20 @@ namespace YachtDice.Views
                 TextWrapping = TextWrapping.Wrap
             };
 
-            textBlock.Inlines.Add(new Run(author + Strings.Game_Chat_AuthorSeparator)
+            if (entry.AvatarId != ChatEntry.NoAvatar)
+            {
+                textBlock.Inlines.Add(CreateAvatarInline(entry.AvatarId));
+            }
+
+            textBlock.Inlines.Add(new Run(entry.Author + Strings.Game_Chat_AuthorSeparator)
             {
                 FontWeight = FontWeights.Bold,
-                Foreground = GetAuthorBrush(kind)
+                Foreground = GetAuthorBrush(entry.Kind)
             });
 
-            textBlock.Inlines.Add(new Run(content)
+            textBlock.Inlines.Add(new Run(entry.Content)
             {
-                Foreground = GetContentBrush(kind)
+                Foreground = GetContentBrush(entry.Kind)
             });
 
             return textBlock;
@@ -173,6 +202,19 @@ namespace YachtDice.Views
         private Brush GetContentBrush(ChatMessageKind kind)
         {
             return (Brush)FindResource(GetContentBrushKey(kind));
+        }
+
+        private static InlineUIContainer CreateAvatarInline(int avatarId)
+        {
+            var image = new Image
+            {
+                Source = AvatarImages.Get(avatarId),
+                Width = AvatarSize,
+                Height = AvatarSize,
+                Margin = new Thickness(EmptyLength, EmptyLength, AvatarGap, EmptyLength)
+            };
+
+            return new InlineUIContainer(image) { BaselineAlignment = BaselineAlignment.Center };
         }
 
         private static string GetContentBrushKey(ChatMessageKind kind)

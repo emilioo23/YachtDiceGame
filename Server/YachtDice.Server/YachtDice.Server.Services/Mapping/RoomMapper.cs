@@ -146,7 +146,8 @@ namespace YachtDice.Server.Services.Mapping
             var contract = new Contracts.RoomPlayer
             {
                 Id = player.Id,
-                DisplayName = player.DisplayName
+                DisplayName = player.DisplayName,
+                AvatarId = player.AvatarId
             };
 
             return contract;

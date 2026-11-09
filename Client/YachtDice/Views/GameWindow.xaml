@@ -144,12 +144,9 @@
                                                 </Style>
                                             </Border.Style>
 
-                                            <TextBlock Text="{Binding Initial}"
-                                                       Foreground="White"
-                                                       FontWeight="Bold"
-                                                       FontSize="14"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"/>
+                                            <Image Source="{Binding AvatarId, Converter={StaticResource AvatarImageConverter}}"
+                                                   Width="32"
+                                                   Height="32"/>
                                         </Border>
 
                                         <TextBlock Text="{Binding Name}"

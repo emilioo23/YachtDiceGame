@@ -480,9 +480,6 @@
   <data name="Profile_TitleStrategist" xml:space="preserve">
     <value>Estratega</value>
   </data>
-  <data name="Profile_BackgroundColor" xml:space="preserve">
-    <value>Color de fondo</value>
-  </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
     <value>Estadísticas</value>
   </data>
@@ -968,5 +965,17 @@
   </data>
   <data name="Dialogs_ButtonCancel" xml:space="preserve">
     <value>Cancelar</value>
+  </data>
+  <data name="Profile_AvatarLocked" xml:space="preserve">
+    <value>Todavía no desbloqueas ese avatar. Necesitas el nivel {0}.</value>
+  </data>
+  <data name="Profile_AvatarLockedBadge" xml:space="preserve">
+    <value>Nv. {0}</value>
+  </data>
+  <data name="Profile_AvatarSaveError" xml:space="preserve">
+    <value>No se pudo cambiar el avatar. Intenta de nuevo.</value>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>Nivel {0} · {1} XP</value>
   </data>
 </root>

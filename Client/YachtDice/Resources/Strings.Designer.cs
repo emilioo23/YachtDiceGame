@@ -1699,11 +1699,29 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Color de fondo.
+        ///   Busca una cadena traducida similar a Todavía no desbloqueas ese avatar. Necesitas el nivel {0}..
         /// </summary>
-        public static string Profile_BackgroundColor {
+        public static string Profile_AvatarLocked {
             get {
-                return ResourceManager.GetString("Profile_BackgroundColor", resourceCulture);
+                return ResourceManager.GetString("Profile_AvatarLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nv. {0}.
+        /// </summary>
+        public static string Profile_AvatarLockedBadge {
+            get {
+                return ResourceManager.GetString("Profile_AvatarLockedBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
+        /// </summary>
+        public static string Profile_AvatarSaveError {
+            get {
+                return ResourceManager.GetString("Profile_AvatarSaveError", resourceCulture);
             }
         }
         
@@ -1731,6 +1749,15 @@ namespace YachtDice.Resources {
         public static string Profile_CustomizeProfileTitle {
             get {
                 return ResourceManager.GetString("Profile_CustomizeProfileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel {0} · {1} XP.
+        /// </summary>
+        public static string Profile_LevelFormat {
+            get {
+                return ResourceManager.GetString("Profile_LevelFormat", resourceCulture);
             }
         }
         

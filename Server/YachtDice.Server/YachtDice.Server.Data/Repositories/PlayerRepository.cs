@@ -29,6 +29,7 @@ namespace YachtDice.Server.Data.Repositories
             "Database error occurred while checking the two-step verification.";
         private const string TwoFactorUpdateFailedMessage =
             "Could not save the two-step verification setting due to a database failure.";
+        private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
         /// <summary>
         /// Finds a list of players matching the given email address.
@@ -158,6 +159,19 @@ namespace YachtDice.Server.Data.Repositories
                 TwoFactorUpdateFailedMessage);
         }
 
+        /// <summary>
+        /// Saves the avatar that the player chose.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
+        /// <exception cref="DataAccessException">The avatar could not be saved.</exception>
+        public void SaveAvatar(int playerId, int avatarId)
+        {
+            DatabaseOperation.Save(
+                context => ApplyAvatar(context, playerId, avatarId),
+                AvatarUpdateFailedMessage);
+        }
+
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
             List<Player> players = context.Player.Where(player => player.Email == email).ToList();
@@ -219,6 +233,16 @@ namespace YachtDice.Server.Data.Repositories
             }
 
             auth.Status = isEnabled ? ActiveStatus : InactiveStatus;
+        }
+
+        private static void ApplyAvatar(YachtDiceContext context, int playerId, int avatarId)
+        {
+            Player player = context.Player.FirstOrDefault(row => row.Id == playerId);
+
+            if (player != null)
+            {
+                player.AvatarId = avatarId;
+            }
         }
 
         private static void ValidateText(string value, string parameterName)

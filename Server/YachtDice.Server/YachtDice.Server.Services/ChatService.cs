@@ -98,6 +98,7 @@ namespace YachtDice.Server.Services
             {
                 AuthorId = author.Id,
                 Author = author.DisplayName,
+                AvatarId = author.AvatarId,
                 Content = text,
                 Timestamp = DateTime.UtcNow
             };

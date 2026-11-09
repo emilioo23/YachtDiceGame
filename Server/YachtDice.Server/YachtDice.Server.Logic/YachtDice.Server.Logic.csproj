@@ -62,6 +62,12 @@
     <Compile Include="Authentication\PasswordResetStatus.cs" />
     <Compile Include="Authentication\RegistrationResult.cs" />
     <Compile Include="Authentication\RegistrationService.cs" />
+    <Compile Include="Avatars\AvatarCatalog.cs" />
+    <Compile Include="Avatars\AvatarChangeStatus.cs" />
+    <Compile Include="Avatars\AvatarInfo.cs" />
+    <Compile Include="Avatars\AvatarService.cs" />
+    <Compile Include="Avatars\IAvatarLookup.cs" />
+    <Compile Include="Avatars\PlayerProfile.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Friends\FriendActionStatus.cs" />
@@ -88,6 +94,7 @@
     <Compile Include="Rooms\GameRoom.cs" />
     <Compile Include="Rooms\GameSpeed.cs" />
     <Compile Include="Rooms\IRoomManager.cs" />
+    <Compile Include="Rooms\RoomApplicant.cs" />
     <Compile Include="Rooms\RoomDetails.cs" />
     <Compile Include="Rooms\RoomManager.cs" />
     <Compile Include="Rooms\RoomPlayer.cs" />

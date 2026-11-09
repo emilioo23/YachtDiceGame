@@ -268,6 +268,9 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
+    <Compile Include="Utils\AvatarChangeMessages.cs" />
+    <Compile Include="Utils\AvatarImageConverter.cs" />
+    <Compile Include="Utils\AvatarImages.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />
     <Compile Include="Navigation\ConnectionLossHandler.cs" />
@@ -286,6 +289,7 @@
     <Compile Include="Navigation\LobbyNavigator.cs" />
     <Compile Include="Navigation\WindowNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
+    <Compile Include="Models\ChatEntry.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
@@ -352,6 +356,10 @@
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\Avatars.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Theme.Dark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

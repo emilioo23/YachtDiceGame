@@ -18,7 +18,7 @@ namespace YachtDice.Server.Tests.Friends
         private const string UnknownRoomCode = "ZZZZZZ";
         private const string UnknownPlayerId = "not-a-player";
 
-        private readonly RoomManager _roomManager = new RoomManager();
+        private readonly RoomManager _roomManager = new RoomManager(new InMemoryAvatarLookup());
         private readonly InMemoryFriendshipService _friendships = new InMemoryFriendshipService();
         private readonly RoomInvitationService _service;
 

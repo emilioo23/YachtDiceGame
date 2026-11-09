@@ -25,5 +25,32 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         List<LeaderboardEntry> GetLeaderboard();
+
+        /// <summary>
+        /// Gets the avatar, level and experience of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The profile of the player.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PlayerProfile GetProfile(string displayName);
+
+        /// <summary>
+        /// Gets every avatar of the game with the level that each one needs.
+        /// </summary>
+        /// <returns>The avatars, ordered by identifier.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<AvatarInfo> GetAvatarCatalog();
+
+        /// <summary>
+        /// Changes the avatar of a player. The avatar must exist and the player must have unlocked it.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
+        /// <returns>The outcome of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId);
     }
 }

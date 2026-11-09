@@ -53,7 +53,7 @@ namespace YachtDice.Utils
             {
                 Id = roomPlayer.Id,
                 Name = roomPlayer.DisplayName,
-                Initial = PlayerInitials.GetInitial(roomPlayer.DisplayName),
+                AvatarId = roomPlayer.AvatarId,
                 IsLocalPlayer = isLocalPlayer
             };
 
@@ -66,7 +66,7 @@ namespace YachtDice.Utils
             {
                 Id = player.Id,
                 Name = player.Name,
-                Initial = player.Initial,
+                AvatarId = player.AvatarId,
                 IsLocalPlayer = player.IsLocalPlayer,
                 HasLeft = !presentIds.Contains(player.Id)
             };

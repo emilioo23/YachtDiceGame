@@ -36,6 +36,42 @@ namespace YachtDice.Gateway
             return entries.ToList();
         }
 
+        /// <summary>
+        /// Gets the avatar, level and experience of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The profile of the player.</returns>
+        public async Task<PlayerProfile> GetProfileAsync(string displayName)
+        {
+            PlayerProfile profile = await ExecuteAsync(client => client.GetProfile(displayName));
+
+            return profile;
+        }
+
+        /// <summary>
+        /// Gets every avatar of the game with the level that each one needs.
+        /// </summary>
+        /// <returns>The avatars of the catalog.</returns>
+        public async Task<List<AvatarInfo>> GetAvatarCatalogAsync()
+        {
+            AvatarInfo[] avatars = await ExecuteAsync(client => client.GetAvatarCatalog());
+
+            return avatars.ToList();
+        }
+
+        /// <summary>
+        /// Asks the server to change the avatar of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
+        /// <returns>The outcome of the change.</returns>
+        public async Task<AvatarChangeResultCode> ChangeAvatarAsync(string displayName, int avatarId)
+        {
+            AvatarChangeResultCode result = await ExecuteAsync(client => client.ChangeAvatar(displayName, avatarId));
+
+            return result;
+        }
+
         /// <inheritdoc />
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {

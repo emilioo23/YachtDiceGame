@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Rooms;
+using YachtDice.Server.Tests.InMemory;
 
 namespace YachtDice.Server.Tests.Rooms
 {
@@ -25,8 +27,19 @@ namespace YachtDice.Server.Tests.Rooms
         private const int ThreePlayers = 3;
         private const int FourPlayers = 4;
         private const int SingleSlot = 1;
+        private const int HostAvatarId = 3;
+        private const int PlayerAvatarId = 7;
 
-        private readonly RoomManager _manager = new RoomManager();
+        private readonly InMemoryAvatarLookup _avatars = new InMemoryAvatarLookup();
+        private readonly RoomManager _manager;
+
+        /// <summary>
+        /// Prepares a manager without rooms whose players have the avatars set in the test.
+        /// </summary>
+        public RoomManagerTests()
+        {
+            _manager = new RoomManager(_avatars);
+        }
 
         [Fact]
         public void CreateRoom_ValidName_PutsTheHostInsideWithAnIdentifier()
@@ -544,6 +557,43 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, host.PlayerId, host.PlayerId);
 
             Assert.Equal(RoomStatus.InvalidTarget, afterTransfer.Status);
+        }
+
+        [Fact]
+        public void CreateRoom_HostWithAvatar_ShowsTheAvatarOfTheHost()
+        {
+            _avatars.SetAvatar(HostName, HostAvatarId);
+
+            RoomResult result = _manager.CreateRoom(HostName);
+
+            Assert.Equal(HostAvatarId, result.Room.Players.Single().AvatarId);
+        }
+
+        [Fact]
+        public void CreateRoom_HostNotRegistered_ShowsTheDefaultAvatar()
+        {
+            RoomResult result = _manager.CreateRoom(GuestName);
+
+            Assert.Equal(AvatarCatalog.DefaultAvatarId, result.Room.Players.Single().AvatarId);
+        }
+
+        [Fact]
+        public void Join_PlayerWithAvatar_KeepsTheAvatarOfEachPlayer()
+        {
+            _avatars.SetAvatar(HostName, HostAvatarId);
+            _avatars.SetAvatar(PlayerName, PlayerAvatarId);
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(HostAvatarId, player.Room.Players.First().AvatarId);
+            Assert.Equal(PlayerAvatarId, player.Room.Players.Last().AvatarId);
+        }
+
+        [Fact]
+        public void Constructor_NullAvatarLookup_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new RoomManager(null));
         }
 
         private static RoomSettings CreateSettings(int maxPlayers)

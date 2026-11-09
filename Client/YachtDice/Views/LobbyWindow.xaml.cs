@@ -81,7 +81,7 @@ namespace YachtDice.Views
 
             for (int slotIndex = room.Players.Length; slotIndex < room.Settings.MaxPlayers; slotIndex++)
             {
-                slots.Add(new LobbySlot { Name = string.Empty, Initial = string.Empty, IsEmpty = true });
+                slots.Add(new LobbySlot { Name = string.Empty, IsEmpty = true });
             }
 
             return slots;
@@ -93,7 +93,7 @@ namespace YachtDice.Views
             {
                 PlayerId = player.Id,
                 Name = player.DisplayName,
-                Initial = PlayerInitials.GetInitial(player.DisplayName),
+                AvatarId = player.AvatarId,
                 IsHost = isHost,
                 CanManage = canManage,
                 IsEmpty = false

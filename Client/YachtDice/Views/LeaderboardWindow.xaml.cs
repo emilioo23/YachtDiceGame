@@ -37,6 +37,8 @@ namespace YachtDice.Views
         private const int NameColumnWeight = 1;
         private const int NoSpacing = 0;
         private const int NoRank = 0;
+        private const int AvatarSize = 28;
+        private const int AvatarGap = 8;
         private const string PointsFormat = "N0";
 
         private readonly PlayerSession _session;
@@ -96,6 +98,27 @@ namespace YachtDice.Views
             return medal;
         }
 
+        private static StackPanel CreateNameCell(LeaderboardEntry entry, TextBlock nameLabel)
+        {
+            var avatar = new Image
+            {
+                Source = AvatarImages.Get(entry.AvatarId),
+                Width = AvatarSize,
+                Height = AvatarSize,
+                Margin = new Thickness(NoSpacing, NoSpacing, AvatarGap, NoSpacing)
+            };
+            var cell = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            cell.Children.Add(avatar);
+            cell.Children.Add(nameLabel);
+
+            return cell;
+        }
+
         private async Task LoadRankingAsync()
         {
             try
@@ -109,6 +132,7 @@ namespace YachtDice.Views
                     ranking.Add(new LeaderboardEntry
                     {
                         Name = serverEntry.DisplayName,
+                        AvatarId = serverEntry.AvatarId,
                         Points = serverEntry.TotalPoints,
                         Wins = serverEntry.Wins
                     });
@@ -197,16 +221,17 @@ namespace YachtDice.Views
             };
             TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
             nameLabel.FontWeight = FontWeights.SemiBold;
+            StackPanel nameCell = CreateNameCell(entry, nameLabel);
             TextBlock pointsLabel = CreateCellLabel(entry.Points.ToString(PointsFormat), textBrush);
             TextBlock winsLabel = CreateCellLabel(entry.Wins.ToString(), textBrush);
 
             Grid.SetColumn(medalLabel, MedalColumnIndex);
-            Grid.SetColumn(nameLabel, NameColumnIndex);
+            Grid.SetColumn(nameCell, NameColumnIndex);
             Grid.SetColumn(pointsLabel, PointsColumnIndex);
             Grid.SetColumn(winsLabel, WinsColumnIndex);
 
             row.Children.Add(medalLabel);
-            row.Children.Add(nameLabel);
+            row.Children.Add(nameCell);
             row.Children.Add(pointsLabel);
             row.Children.Add(winsLabel);
 

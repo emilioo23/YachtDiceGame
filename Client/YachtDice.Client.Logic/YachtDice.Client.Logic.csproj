@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
+    <Compile Include="Avatars\AvatarOption.cs" />
+    <Compile Include="Avatars\AvatarOptionBuilder.cs" />
+    <Compile Include="Avatars\AvatarRequirement.cs" />
+    <Compile Include="Avatars\AvatarResourceKey.cs" />
     <Compile Include="Connection\ConnectionLossGate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

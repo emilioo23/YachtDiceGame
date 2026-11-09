@@ -234,19 +234,11 @@
 
                                         <StackPanel Orientation="Horizontal">
 
-                                            <Border Width="30"
-                                                    Height="30"
-                                                    CornerRadius="15"
-                                                    Background="{StaticResource BrushWood}"
-                                                    Margin="0,0,8,0">
-
-                                                <TextBlock Text="{Binding Initial}"
-                                                           Foreground="White"
-                                                           FontWeight="Bold"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           FontSize="15"/>
-                                            </Border>
+                                            <Image Source="{Binding AvatarId, Converter={StaticResource AvatarImageConverter}}"
+                                                   Width="36"
+                                                   Height="36"
+                                                   VerticalAlignment="Top"
+                                                   Margin="0,0,8,0"/>
 
                                             <StackPanel>
 
