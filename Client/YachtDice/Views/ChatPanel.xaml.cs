@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.ChatServiceReference;
+using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Resources;
 using YachtDice.Utils;
@@ -11,8 +14,10 @@ using YachtDice.Utils;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// Chat of the match. It can be hidden with a button; while it is hidden, it shows a notice with the number
-    /// of messages that were not read, and a click on the notice shows the chat again.
+    /// Chat of a room, used in the waiting room and in the match. Once it is attached to the chat connection of
+    /// the player, it shows the messages that arrive and sends the ones that the player writes. It can be hidden
+    /// with a button; while it is hidden, it shows a notice with the number of messages that were not read, and
+    /// a click on the notice shows the chat again.
     /// </summary>
     public partial class ChatPanel : UserControl
     {
@@ -21,6 +26,9 @@ namespace YachtDice.Views
         private const int MessageMarginBottom = 4;
         private const int MaxMessageLength = 200;
 
+        private ChatGateway _gateway;
+        private string _playerId;
+        private bool _isSubscribed;
         private bool _isCollapsed;
         private int _unreadCount;
 
@@ -34,9 +42,14 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Event triggered when the player asks to send a message. The argument is the text, already trimmed.
+        /// Gets or sets the height of the chat while it is shown. A parent that gives the chat a fixed place
+        /// uses it to decide how much space the messages have.
         /// </summary>
-        public event Action<string> MessageSubmitted;
+        public double PanelHeight
+        {
+            get { return ExpandedCard.Height; }
+            set { ExpandedCard.Height = value; }
+        }
 
         /// <summary>
         /// Adds a message at the end of the chat. If the chat is hidden and the message was written by another
@@ -58,12 +71,74 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Stops the player from writing, for example when the server does not deliver the messages.
+        /// Connects the chat with the connection of the player. It shows the messages that arrived before and
+        /// the new ones as they come. If the chat is not available, it tells the player and stops the writing.
         /// </summary>
-        public void DisableSending()
+        /// <param name="gateway">Connection of the player to the chat of the room.</param>
+        /// <param name="playerId">Identifier of the player, to know which messages are their own.</param>
+        /// <param name="isAvailable">Whether the player could join the chat of the room.</param>
+        public void Attach(ChatGateway gateway, string playerId, bool isAvailable)
+        {
+            _gateway = gateway;
+            _playerId = playerId;
+
+            if (isAvailable)
+            {
+                _isSubscribed = true;
+
+                foreach (ChatMessage message in gateway.Subscribe(HandleMessageReceived))
+                {
+                    ShowChatMessage(message);
+                }
+            }
+            else
+            {
+                AddMessage(Strings.Game_Chat_SystemName, Strings.Game_Chat_Unavailable, ChatMessageKind.System);
+                DisableSending();
+            }
+        }
+
+        /// <summary>
+        /// Stops showing the messages of the chat connection. The connection stays open for the next window.
+        /// </summary>
+        public void Detach()
+        {
+            if (_isSubscribed)
+            {
+                _isSubscribed = false;
+                _gateway.Unsubscribe(HandleMessageReceived);
+            }
+        }
+
+        private void DisableSending()
         {
             MessageTextBox.IsEnabled = false;
             SendButton.IsEnabled = false;
+        }
+
+        private void ShowChatMessage(ChatMessage message)
+        {
+            ChatMessageKind kind = message.AuthorId == _playerId ? ChatMessageKind.Own : ChatMessageKind.Other;
+
+            AddMessage(message.Author, message.Content, kind);
+        }
+
+        // The messages arrive in a network thread, and the controls can only be changed in the interface thread.
+        private void HandleMessageReceived(ChatMessage message)
+        {
+            Dispatcher.BeginInvoke(new Action(() => ShowChatMessage(message)));
+        }
+
+        private async Task SendMessageAsync(string content)
+        {
+            try
+            {
+                await _gateway.SendAsync(content);
+            }
+            catch (GatewayException)
+            {
+                AddMessage(Strings.Game_Chat_SystemName, Strings.Game_Chat_SendFailed, ChatMessageKind.System);
+            }
         }
 
         private TextBlock CreateMessageBlock(string author, string content, ChatMessageKind kind)
@@ -135,10 +210,10 @@ namespace YachtDice.Views
         {
             string content = MessageTextBox.Text.Trim();
 
-            if (content.Length > EmptyLength)
+            if (content.Length > EmptyLength && _isSubscribed)
             {
                 MessageTextBox.Clear();
-                MessageSubmitted?.Invoke(content);
+                _ = SendMessageAsync(content);
             }
         }
 

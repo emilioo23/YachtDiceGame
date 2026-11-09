@@ -169,6 +169,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ocultar contraseña.
+        /// </summary>
+        public static string Auth_HidePassword {
+            get {
+                return ResourceManager.GetString("Auth_HidePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Apellidos.
         /// </summary>
         public static string Auth_LastName {
@@ -210,6 +219,15 @@ namespace YachtDice.Resources {
         public static string Auth_RegisterTab {
             get {
                 return ResourceManager.GetString("Auth_RegisterTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mostrar contraseña.
+        /// </summary>
+        public static string Auth_ShowPassword {
+            get {
+                return ResourceManager.GetString("Auth_ShowPassword", resourceCulture);
             }
         }
         
@@ -1069,6 +1087,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Aquí puedes platicar con los demás jugadores mientras empieza la partida..
+        /// </summary>
+        public static string Lobby_Chat_WelcomeMessage {
+            get {
+                return ResourceManager.GetString("Lobby_Chat_WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Todavía no tienes amigos agregados..
         /// </summary>
         public static string Lobby_Friends_Empty {
@@ -1425,15 +1452,6 @@ namespace YachtDice.Resources {
         public static string MainMenu_Nav_Leaderboard {
             get {
                 return ResourceManager.GetString("MainMenu_Nav_Leaderboard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Jugar.
-        /// </summary>
-        public static string MainMenu_Nav_Play {
-            get {
-                return ResourceManager.GetString("MainMenu_Nav_Play", resourceCulture);
             }
         }
         
@@ -1866,6 +1884,69 @@ namespace YachtDice.Resources {
         public static string Rooms_Empty {
             get {
                 return ResourceManager.GetString("Rooms_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todas.
+        /// </summary>
+        public static string Rooms_FilterAll {
+            get {
+                return ResourceManager.GetString("Rooms_FilterAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mostrar.
+        /// </summary>
+        public static string Rooms_FilterPrivacyLabel {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPrivacyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Privadas.
+        /// </summary>
+        public static string Rooms_FilterPrivate {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Públicas.
+        /// </summary>
+        public static string Rooms_FilterPublic {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el nombre de quien creó la sala.
+        /// </summary>
+        public static string Rooms_FilterSearchHint {
+            get {
+                return ResourceManager.GetString("Rooms_FilterSearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buscar sala.
+        /// </summary>
+        public static string Rooms_FilterSearchLabel {
+            get {
+                return ResourceManager.GetString("Rooms_FilterSearchLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ninguna sala coincide con tu búsqueda..
+        /// </summary>
+        public static string Rooms_NoResults {
+            get {
+                return ResourceManager.GetString("Rooms_NoResults", resourceCulture);
             }
         }
         

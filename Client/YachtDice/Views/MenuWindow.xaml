@@ -108,12 +108,6 @@
                     </Border>
 
                     <Button
-                            Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
-                            Style="{StaticResource TabButtonActive}"
-                            Margin="0,0,0,8"
-                            FontSize="19"/>
-
-                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Rooms}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"

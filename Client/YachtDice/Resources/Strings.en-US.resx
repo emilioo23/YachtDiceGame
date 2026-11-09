@@ -195,9 +195,6 @@
   <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
     <value>Leaderboard</value>
   </data>
-  <data name="MainMenu_Nav_Play" xml:space="preserve">
-    <value>Play</value>
-  </data>
   <data name="MainMenu_Nav_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -869,5 +866,35 @@
   </data>
   <data name="Invitations_Received_Reject" xml:space="preserve">
     <value>Decline</value>
+  </data>
+  <data name="Auth_ShowPassword" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Auth_HidePassword" xml:space="preserve">
+    <value>Hide password</value>
+  </data>
+  <data name="Rooms_FilterSearchLabel" xml:space="preserve">
+    <value>Search room</value>
+  </data>
+  <data name="Rooms_FilterSearchHint" xml:space="preserve">
+    <value>Type the name of the player who created the room</value>
+  </data>
+  <data name="Rooms_FilterPrivacyLabel" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="Rooms_FilterAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Rooms_FilterPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Rooms_FilterPrivate" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="Rooms_NoResults" xml:space="preserve">
+    <value>No room matches your search.</value>
+  </data>
+  <data name="Lobby_Chat_WelcomeMessage" xml:space="preserve">
+    <value>Chat here with the other players while the match starts.</value>
   </data>
 </root>
