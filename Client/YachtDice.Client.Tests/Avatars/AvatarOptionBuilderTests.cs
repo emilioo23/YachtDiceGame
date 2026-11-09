@@ -58,7 +58,7 @@ namespace YachtDice.Client.Tests.Avatars
         {
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, UnknownAvatarId);
 
-            Assert.False(options.Any(option => option.IsSelected));
+            Assert.DoesNotContain(options, option => option.IsSelected);
         }
 
         [Fact]

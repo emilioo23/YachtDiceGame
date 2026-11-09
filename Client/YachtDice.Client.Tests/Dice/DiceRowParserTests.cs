@@ -21,7 +21,7 @@ namespace YachtDice.Client.Tests.Dice
 
             Assert.Equal(FiveDice, dice.Count);
             Assert.Equal(new[] { 4, 4, 4, 2, 6 }, dice.Select(die => die.Value));
-            Assert.False(dice.Any(die => die.IsDimmed));
+            Assert.DoesNotContain(dice, die => die.IsDimmed);
         }
 
         [Fact]
