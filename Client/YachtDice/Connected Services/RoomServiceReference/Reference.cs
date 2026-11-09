@@ -468,6 +468,131 @@ namespace YachtDice.RoomServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomSummary", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomSummary : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HostNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsPrivateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PlayerCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.RoomServiceReference.GameSpeed SpeedField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string HostName {
+            get {
+                return this.HostNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HostNameField, value) != true)) {
+                    this.HostNameField = value;
+                    this.RaisePropertyChanged("HostName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsPrivate {
+            get {
+                return this.IsPrivateField;
+            }
+            set {
+                if ((this.IsPrivateField.Equals(value) != true)) {
+                    this.IsPrivateField = value;
+                    this.RaisePropertyChanged("IsPrivate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPlayers {
+            get {
+                return this.MaxPlayersField;
+            }
+            set {
+                if ((this.MaxPlayersField.Equals(value) != true)) {
+                    this.MaxPlayersField = value;
+                    this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PlayerCount {
+            get {
+                return this.PlayerCountField;
+            }
+            set {
+                if ((this.PlayerCountField.Equals(value) != true)) {
+                    this.PlayerCountField = value;
+                    this.RaisePropertyChanged("PlayerCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomId {
+            get {
+                return this.RoomIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomIdField, value) != true)) {
+                    this.RoomIdField = value;
+                    this.RaisePropertyChanged("RoomId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.RoomServiceReference.GameSpeed Speed {
+            get {
+                return this.SpeedField;
+            }
+            set {
+                if ((this.SpeedField.Equals(value) != true)) {
+                    this.SpeedField = value;
+                    this.RaisePropertyChanged("Speed");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RoomResultCode", Namespace="urn:yachtdice:contracts")]
     public enum RoomResultCode : int {
@@ -492,6 +617,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidSettings = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidAccessCode = 7,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -522,6 +650,14 @@ namespace YachtDice.RoomServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinRoomServiceFaultFault", Name="ServiceFault")]
         YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string displayName, string roomCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/GetRoomList", ReplyAction="urn:yachtdice:contracts/IRoomService/GetRoomListResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/GetRoomListServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.RoomSummary[] GetRoomList();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinListedRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinListedRoomResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings", ReplyAction="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsServiceFaultFault", Name="ServiceFault")]
@@ -577,6 +713,14 @@ namespace YachtDice.RoomServiceReference {
         
         public YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string displayName, string roomCode) {
             return base.Channel.JoinRoom(displayName, roomCode);
+        }
+        
+        public YachtDice.RoomServiceReference.RoomSummary[] GetRoomList() {
+            return base.Channel.GetRoomList();
+        }
+        
+        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode) {
+            return base.Channel.JoinListedRoom(displayName, roomId, accessCode);
         }
         
         public YachtDice.RoomServiceReference.RoomResultCode UpdateRoomSettings(string playerId, string roomCode, YachtDice.RoomServiceReference.RoomSettings settings) {
