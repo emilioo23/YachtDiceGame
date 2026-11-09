@@ -76,6 +76,7 @@ namespace YachtDice.Views
                 try
                 {
                     await _session.Presence.ConnectAsync(playerName);
+                    ConnectionLossHandler.Watch(_session.Presence);
                 }
                 catch (GatewayException)
                 {

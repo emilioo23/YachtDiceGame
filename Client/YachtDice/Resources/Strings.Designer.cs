@@ -286,6 +286,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. Inicia sesión de nuevo para seguir jugando..
+        /// </summary>
+        public static string Dialogs_ConnectionLost {
+            get {
+                return ResourceManager.GetString("Dialogs_ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
         /// </summary>
         public static string Dialogs_DatabaseConnectionError {

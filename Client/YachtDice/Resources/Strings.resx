@@ -945,4 +945,7 @@
   <data name="ResetPassword_ErrorTooManyAttempts" xml:space="preserve">
     <value>Demasiados intentos fallidos. Pide un código nuevo con «Reenviar».</value>
   </data>
+  <data name="Dialogs_ConnectionLost" xml:space="preserve">
+    <value>Se perdió la conexión con el servidor. Inicia sesión de nuevo para seguir jugando.</value>
+  </data>
 </root>

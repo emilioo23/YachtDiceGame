@@ -102,6 +102,8 @@ namespace YachtDice.Navigation
             var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);
             bool isChatAvailable = await chatGateway.TryJoinAsync();
 
+            ConnectionLossHandler.Watch(roomGateway);
+            ConnectionLossHandler.Watch(chatGateway);
             WindowNavigator.SwitchTo(currentWindow, new LobbyWindow(roomGateway, chatGateway, isChatAvailable));
         }
     }

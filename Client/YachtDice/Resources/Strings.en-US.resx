@@ -945,4 +945,7 @@
   <data name="ResetPassword_ErrorTooManyAttempts" xml:space="preserve">
     <value>Too many failed attempts. Ask for a new code with “Resend”.</value>
   </data>
+  <data name="Dialogs_ConnectionLost" xml:space="preserve">
+    <value>The connection with the server was lost. Log in again to keep playing.</value>
+  </data>
 </root>
