@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -51,6 +52,40 @@ namespace YachtDice.Server.Logic.Rooms
             RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult JoinListed(string roomId, string playerName, string accessCode)
+        {
+            ValidateName(playerName);
+            RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
+
+            lock (_syncRoot)
+            {
+                if (TryGetRoomById(roomId, out GameRoom room))
+                {
+                    result = JoinWithAccessCode(room, playerName, NormalizeCode(accessCode));
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public List<RoomSummary> GetOpenRooms()
+        {
+            List<RoomSummary> rooms;
+
+            lock (_syncRoot)
+            {
+                rooms = _rooms.Values
+                    .Where(room => !room.IsStarted)
+                    .Select(room => room.ToSummary())
+                    .OrderBy(summary => summary.HostName, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+            }
+
+            return rooms;
         }
 
         /// <inheritdoc />
@@ -150,6 +185,22 @@ namespace YachtDice.Server.Logic.Rooms
             else
             {
                 result = RoomResult.CreateFailed(status);
+            }
+
+            return result;
+        }
+
+        private static RoomResult JoinWithAccessCode(GameRoom room, string playerName, string accessCode)
+        {
+            RoomResult result;
+
+            if (room.Settings.IsPrivate && !room.HasCode(accessCode))
+            {
+                result = RoomResult.CreateFailed(RoomStatus.InvalidAccessCode);
+            }
+            else
+            {
+                result = AddPlayer(room, playerName);
             }
 
             return result;
@@ -277,6 +328,15 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return result;
+        }
+
+        // The caller must hold _syncRoot.
+        private bool TryGetRoomById(string roomId, out GameRoom room)
+        {
+            room = _rooms.Values.FirstOrDefault(
+                candidate => string.Equals(candidate.Id, roomId, StringComparison.Ordinal));
+
+            return room != null;
         }
 
         // The caller must hold _syncRoot.

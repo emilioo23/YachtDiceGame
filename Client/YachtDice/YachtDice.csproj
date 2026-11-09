@@ -259,6 +259,7 @@
     <Compile Include="Gateway\PresenceGateway.cs" />
     <Compile Include="Gateway\RegistrationGateway.cs" />
     <Compile Include="Gateway\RoomGateway.cs" />
+    <Compile Include="Gateway\RoomListGateway.cs" />
     <Compile Include="Gateway\ServerAddress.cs" />
     <Compile Include="Gateway\TwoFactorManagementGateway.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
@@ -270,16 +271,21 @@
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ResourceKeys.cs" />
+    <Compile Include="Utils\FriendItemFactory.cs" />
     <Compile Include="Utils\FriendRequestMessages.cs" />
+    <Compile Include="Utils\InvitationResultMessages.cs" />
     <Compile Include="Utils\MatchPlayerFactory.cs" />
     <Compile Include="Utils\PlayerInitials.cs" />
+    <Compile Include="Utils\RoomListItemFactory.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
+    <Compile Include="Navigation\InvitationListener.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
     <Compile Include="Navigation\WindowNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
+    <Compile Include="Models\RoomListItem.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>
@@ -292,6 +298,9 @@
     <Compile Include="Models\FriendItem.cs" />
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InviteFriendsPanel.xaml.cs">
+      <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LanguageSwitcher.xaml.cs">
       <DependentUpon>LanguageSwitcher.xaml</DependentUpon>
@@ -318,6 +327,9 @@
     </Compile>
     <Compile Include="Views\ResultsWindow.xaml.cs">
       <DependentUpon>ResultsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoomsWindow.xaml.cs">
+      <DependentUpon>RoomsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -353,6 +365,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\InviteFriendsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LanguageSwitcher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -378,6 +394,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ResultsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoomsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

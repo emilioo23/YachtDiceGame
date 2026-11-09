@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +27,7 @@ namespace YachtDice.Views
         private readonly PlayerGateway _gateway = new PlayerGateway();
         private readonly FriendGateway _friendGateway = new FriendGateway();
         private readonly PlayerSession _session;
+        private readonly InvitationListener _invitationListener;
         private List<string> _friendNames = new List<string>();
 
         /// <summary>
@@ -46,6 +46,9 @@ namespace YachtDice.Views
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(session);
 
+            _invitationListener = new InvitationListener(this, session);
+            _invitationListener.Start();
+
             ShowOnlinePlayers();
             _session.Presence.PlayersChanged += HandlePlayersChanged;
             _session.Presence.FriendsChanged += HandleFriendsChanged;
@@ -59,29 +62,6 @@ namespace YachtDice.Views
         private static string GetGreetingName(PlayerSession session)
         {
             return string.IsNullOrWhiteSpace(session.FirstName) ? session.DisplayName : session.FirstName;
-        }
-
-        private static FriendItem CreateFriend(string name, string status, bool isOnline)
-        {
-            var friend = new FriendItem
-            {
-                Name = name,
-                Initial = PlayerInitials.GetInitial(name),
-                Status = status,
-                IsOnline = isOnline
-            };
-
-            return friend;
-        }
-
-        private static List<FriendItem> CreateFriendItems(IEnumerable<string> names, string status, bool isOnline)
-        {
-            List<FriendItem> friendItems = names
-                .OrderBy(name => name)
-                .Select(name => CreateFriend(name, status, isOnline))
-                .ToList();
-
-            return friendItems;
         }
 
         private static string ReadTag(object sender)
@@ -118,6 +98,7 @@ namespace YachtDice.Views
         {
             _session.Presence.PlayersChanged -= HandlePlayersChanged;
             _session.Presence.FriendsChanged -= HandleFriendsChanged;
+            _invitationListener.Stop();
         }
 
         private void RefreshFriends()
@@ -135,7 +116,7 @@ namespace YachtDice.Views
                     List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
                     OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
 
-                    RequestsList.ItemsSource = CreateFriendItems(
+                    RequestsList.ItemsSource = FriendItemFactory.Create(
                         requesterNames,
                         Strings.Friends_Status_WantsFriend,
                         false);
@@ -192,17 +173,9 @@ namespace YachtDice.Views
 
         private void ShowOnlinePlayers()
         {
-            var onlineNames = new HashSet<string>(
-                _session.Presence.OnlinePlayers,
-                StringComparer.OrdinalIgnoreCase);
-            List<FriendItem> onlineFriends = CreateFriendItems(
-                _friendNames.Where(name => onlineNames.Contains(name)),
-                Strings.MainMenu_Friends_StatusOnline,
-                true);
-            List<FriendItem> offlineFriends = CreateFriendItems(
-                _friendNames.Where(name => !onlineNames.Contains(name)),
-                Strings.MainMenu_Friends_StatusOffline,
-                false);
+            List<string> onlineNames = _session.Presence.OnlinePlayers;
+            List<FriendItem> onlineFriends = FriendItemFactory.CreateOnline(_friendNames, onlineNames);
+            List<FriendItem> offlineFriends = FriendItemFactory.CreateOffline(_friendNames, onlineNames);
 
             InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;
@@ -291,6 +264,11 @@ namespace YachtDice.Views
             button.IsEnabled = false;
             await LobbyNavigator.CreateRoomAndOpenAsync(this, _session);
             button.IsEnabled = true;
+        }
+
+        private void RoomsNavButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowNavigator.SwitchTo(this, new RoomsWindow(_session));
         }
 
         private void LeaderboardNavButton_Click(object sender, RoutedEventArgs e)

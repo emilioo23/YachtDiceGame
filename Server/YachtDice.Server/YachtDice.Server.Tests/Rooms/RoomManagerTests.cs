@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Rooms;
@@ -22,6 +23,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const string UnknownPlayerId = "not-a-player";
         private const int TwoPlayers = 2;
         private const int ThreePlayers = 3;
+        private const int FourPlayers = 4;
         private const int SingleSlot = 1;
 
         private readonly RoomManager _manager = new RoomManager();
@@ -271,16 +273,156 @@ namespace YachtDice.Server.Tests.Rooms
             Assert.False(isFound);
         }
 
+        [Fact]
+        public void GetOpenRooms_NoRooms_ReturnsAnEmptyList()
+        {
+            List<RoomSummary> rooms = _manager.GetOpenRooms();
+
+            Assert.Empty(rooms);
+        }
+
+        [Fact]
+        public void GetOpenRooms_RoomWithPlayers_ShowsTheHostAndHowManyAreInside()
+        {
+            RoomResult host = CreatePublicRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomSummary summary = _manager.GetOpenRooms().Single();
+
+            Assert.Equal(HostName, summary.HostName);
+            Assert.Equal(TwoPlayers, summary.PlayerCount);
+            Assert.Equal(FourPlayers, summary.MaxPlayers);
+            Assert.False(summary.IsPrivate);
+        }
+
+        [Fact]
+        public void GetOpenRooms_PrivateRoom_ListsItWithoutRevealingItsCode()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomSummary summary = _manager.GetOpenRooms().Single();
+
+            Assert.True(summary.IsPrivate);
+            Assert.NotEqual(host.Room.Code, summary.RoomId);
+        }
+
+        [Fact]
+        public void GetOpenRooms_GameAlreadyStarted_DoesNotListTheRoom()
+        {
+            CreateStartedRoom();
+            _manager.CreateRoom(PlayerName);
+
+            List<RoomSummary> rooms = _manager.GetOpenRooms();
+
+            Assert.Equal(PlayerName, rooms.Single().HostName);
+        }
+
+        [Fact]
+        public void GetOpenRooms_SeveralRooms_OrdersThemByHostName()
+        {
+            _manager.CreateRoom(PlayerName);
+            _manager.CreateRoom(HostName);
+
+            string[] hosts = _manager.GetOpenRooms().Select(room => room.HostName).ToArray();
+
+            Assert.Equal(new[] { HostName, PlayerName }, hosts);
+        }
+
+        [Fact]
+        public void JoinListed_PublicRoomWithoutCode_PutsThePlayerInside()
+        {
+            CreatePublicRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult player = _manager.JoinListed(roomId, PlayerName, string.Empty);
+
+            Assert.Equal(RoomStatus.Success, player.Status);
+            Assert.False(string.IsNullOrEmpty(player.PlayerId));
+            Assert.Equal(TwoPlayers, player.Room.Players.Count);
+        }
+
+        [Fact]
+        public void JoinListed_PrivateRoomWithTheRightCode_PutsThePlayerInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult player = _manager.JoinListed(roomId, PlayerName, host.Room.Code.ToLowerInvariant());
+
+            Assert.Equal(RoomStatus.Success, player.Status);
+            Assert.Equal(host.Room.Code, player.Room.Code);
+        }
+
+        [Theory]
+        [InlineData(UnknownRoomCode)]
+        [InlineData("")]
+        [InlineData(null)]
+        public void JoinListed_PrivateRoomWithAWrongCode_ReturnsInvalidAccessCode(string accessCode)
+        {
+            _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult player = _manager.JoinListed(roomId, PlayerName, accessCode);
+
+            Assert.Equal(RoomStatus.InvalidAccessCode, player.Status);
+            Assert.Empty(player.PlayerId);
+            Assert.Equal(SingleSlot, _manager.GetOpenRooms().Single().PlayerCount);
+        }
+
+        [Fact]
+        public void JoinListed_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult player = _manager.JoinListed(UnknownPlayerId, PlayerName, string.Empty);
+
+            Assert.Equal(RoomStatus.RoomNotFound, player.Status);
+        }
+
+        [Fact]
+        public void JoinListed_PublicRoomWithoutSpace_ReturnsRoomFull()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.UpdateSettings(host.Room.Code, host.PlayerId, CreateSettings(TwoPlayers, false));
+            _manager.Join(host.Room.Code, PlayerName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult player = _manager.JoinListed(roomId, GuestName, string.Empty);
+
+            Assert.Equal(RoomStatus.RoomFull, player.Status);
+        }
+
+        [Fact]
+        public void JoinListed_BlankName_ThrowsArgumentException()
+        {
+            CreatePublicRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            Assert.Throws<ArgumentException>(() => _manager.JoinListed(roomId, " ", string.Empty));
+        }
+
         private static RoomSettings CreateSettings(int maxPlayers)
+        {
+            return CreateSettings(maxPlayers, true);
+        }
+
+        private static RoomSettings CreateSettings(int maxPlayers, bool isPrivate)
         {
             var settings = new RoomSettings
             {
                 MaxPlayers = maxPlayers,
-                IsPrivate = true,
+                IsPrivate = isPrivate,
                 Speed = GameSpeed.Normal
             };
 
             return settings;
+        }
+
+        private RoomResult CreatePublicRoom(string hostName)
+        {
+            RoomResult host = _manager.CreateRoom(hostName);
+
+            _manager.UpdateSettings(host.Room.Code, host.PlayerId, CreateSettings(FourPlayers, false));
+
+            return host;
         }
 
         private RoomResult CreateStartedRoom()

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace YachtDice.Server.Services.Mapping
 {
@@ -26,6 +27,16 @@ namespace YachtDice.Server.Services.Mapping
             };
 
             return state;
+        }
+
+        /// <summary>
+        /// Creates the data contracts of the rooms of the list of rooms.
+        /// </summary>
+        /// <param name="rooms">Descriptions of the rooms in the logic layer.</param>
+        /// <returns>The descriptions for the clients.</returns>
+        public static List<Contracts.RoomSummary> ToSummaries(List<Logic.Rooms.RoomSummary> rooms)
+        {
+            return rooms.Select(ToContract).ToList();
         }
 
         /// <summary>
@@ -100,6 +111,26 @@ namespace YachtDice.Server.Services.Mapping
                 MaxPlayers = settings.MaxPlayers,
                 IsPrivate = settings.IsPrivate,
                 Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed)
+            };
+
+            return contract;
+        }
+
+        /// <summary>
+        /// Creates the data contract of a room of the list of rooms.
+        /// </summary>
+        /// <param name="room">Description of the room in the logic layer.</param>
+        /// <returns>The description for the clients.</returns>
+        private static Contracts.RoomSummary ToContract(Logic.Rooms.RoomSummary room)
+        {
+            var contract = new Contracts.RoomSummary
+            {
+                RoomId = room.RoomId,
+                HostName = room.HostName,
+                PlayerCount = room.PlayerCount,
+                MaxPlayers = room.MaxPlayers,
+                IsPrivate = room.IsPrivate,
+                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(room.Speed)
             };
 
             return contract;

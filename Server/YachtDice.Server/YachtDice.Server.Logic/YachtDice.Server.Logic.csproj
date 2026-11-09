@@ -62,6 +62,10 @@
     <Compile Include="Friends\FriendRequestStatus.cs" />
     <Compile Include="Friends\FriendshipService.cs" />
     <Compile Include="Friends\IFriendshipService.cs" />
+    <Compile Include="Friends\IRoomInvitationService.cs" />
+    <Compile Include="Friends\InvitationResult.cs" />
+    <Compile Include="Friends\InvitationStatus.cs" />
+    <Compile Include="Friends\RoomInvitationService.cs" />
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="Rooms\RoomResult.cs" />
     <Compile Include="Rooms\RoomSettings.cs" />
     <Compile Include="Rooms\RoomStatus.cs" />
+    <Compile Include="Rooms\RoomSummary.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />
