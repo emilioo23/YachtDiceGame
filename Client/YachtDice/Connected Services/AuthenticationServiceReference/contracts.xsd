@@ -36,6 +36,9 @@
       <xs:enumeration value="VerificationCodeSent" />
       <xs:enumeration value="MissingRequiredField" />
       <xs:enumeration value="InvalidCredentials" />
+      <xs:enumeration value="InvalidEmail" />
+      <xs:enumeration value="EmailNotRegistered" />
+      <xs:enumeration value="InvalidPassword" />
       <xs:enumeration value="VerificationLocked" />
       <xs:enumeration value="CodeSendFailed" />
       <xs:enumeration value="LoggedIn" />

@@ -23,8 +23,10 @@
   <xs:element name="CreateRoomResult" nillable="true" type="tns:CreateRoomResult" />
   <xs:complexType name="RoomState">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AbsentPlayers" nillable="true" type="tns:ArrayOfRoomPlayer" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="HostId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsStarted" type="xs:boolean" />
       <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfRoomPlayer" />
       <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:RoomSettings" />
     </xs:sequence>
@@ -220,6 +222,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="FindPendingRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindPendingRoomResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="FindPendingRoomResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LeaveRoom">
     <xs:complexType>
       <xs:sequence>
@@ -249,6 +265,8 @@
       <xs:enumeration value="GameStarted" />
       <xs:enumeration value="PlayerKicked" />
       <xs:enumeration value="HostChanged" />
+      <xs:enumeration value="PlayerDisconnected" />
+      <xs:enumeration value="PlayerReturned" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />

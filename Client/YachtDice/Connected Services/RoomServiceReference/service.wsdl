@@ -112,6 +112,18 @@
         <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="FindPendingRoom">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/FindPendingRoom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="LeaveRoom">
       <soap12:operation soapAction="urn:yachtdice:contracts/IRoomService/LeaveRoom" style="document" />
       <wsdl:input>
