@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
+using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 
@@ -29,7 +30,8 @@ namespace YachtDice.Views
         private readonly PlayerSession _session;
         private readonly InvitationListener _invitationListener;
         private readonly DispatcherTimer _refreshTimer;
-        private List<RoomListItem> _rooms = new List<RoomListItem>();
+        private List<RoomListItem> _allRooms = new List<RoomListItem>();
+        private List<RoomListItem> _visibleRooms = new List<RoomListItem>();
         private bool _isRefreshing;
         private bool _isClosed;
 
@@ -53,6 +55,9 @@ namespace YachtDice.Views
             _refreshTimer.Start();
 
             Closed += HandleWindowClosed;
+
+            SearchTextBox.TextChanged += HandleFiltersChanged;
+            PrivacyFilterComboBox.SelectionChanged += HandleFiltersChanged;
 
             _ = RefreshAsync(true);
         }
@@ -113,18 +118,54 @@ namespace YachtDice.Views
             }
         }
 
+        private RoomPrivacyFilter GetSelectedPrivacyFilter()
+        {
+            RoomPrivacyFilter filter = RoomPrivacyFilter.All;
+
+            if (PrivacyFilterComboBox.SelectedItem == PublicFilterItem)
+            {
+                filter = RoomPrivacyFilter.Public;
+            }
+            else if (PrivacyFilterComboBox.SelectedItem == PrivateFilterItem)
+            {
+                filter = RoomPrivacyFilter.Private;
+            }
+
+            return filter;
+        }
+
         // The automatic update leaves the list as it is when nothing changed, so the code that the player is
         // typing in a row does not lose the focus.
         private void ShowRooms(List<RoomListItem> newRooms)
         {
-            if (!_isClosed && !HasSameContent(_rooms, newRooms))
+            if (!_isClosed && !HasSameContent(_allRooms, newRooms))
             {
-                KeepTypedCodes(_rooms, newRooms);
-                _rooms = newRooms;
-                RoomsItemsControl.ItemsSource = _rooms;
+                KeepTypedCodes(_allRooms, newRooms);
+                _allRooms = newRooms;
+                ApplyFilters();
             }
 
-            EmptyTextBlock.Visibility = _rooms.Any() ? Visibility.Collapsed : Visibility.Visible;
+            UpdateEmptyNotice();
+        }
+
+        private void ApplyFilters()
+        {
+            _visibleRooms = RoomListItemFilter.Apply(_allRooms, GetSelectedPrivacyFilter(), SearchTextBox.Text);
+            RoomsItemsControl.ItemsSource = _visibleRooms;
+        }
+
+        // When there are rooms but the filters hide all of them, the notice says so instead of saying that
+        // there are no rooms.
+        private void UpdateEmptyNotice()
+        {
+            EmptyTextBlock.Text = _allRooms.Any() ? Strings.Rooms_NoResults : Strings.Rooms_Empty;
+            EmptyTextBlock.Visibility = _visibleRooms.Any() ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void HandleFiltersChanged(object sender, EventArgs e)
+        {
+            ApplyFilters();
+            UpdateEmptyNotice();
         }
 
         private void HandleWindowClosed(object sender, EventArgs e)
