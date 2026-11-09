@@ -68,7 +68,6 @@
                              Grid.Column="0"
                              Padding="6,4"
                              FontSize="13"
-                             MaxLength="200"
                              VerticalContentAlignment="Center"
                              KeyDown="MessageTextBox_KeyDown"/>
 

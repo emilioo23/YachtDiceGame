@@ -24,10 +24,6 @@ namespace YachtDice.Server.Contracts.Rooms
         [EnumMember]
         GameAlreadyStarted,
 
-        /// <summary>A player with the same name is already inside the room.</summary>
-        [EnumMember]
-        PlayerAlreadyInRoom,
-
         /// <summary>Only the host of the room can do the operation.</summary>
         [EnumMember]
         NotHost,

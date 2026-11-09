@@ -15,6 +15,12 @@ namespace YachtDice.Server.Contracts.Rooms
         public RoomResultCode Code { get; set; }
 
         /// <summary>
+        /// Identifier that the server gave to the player. It is empty if the player could not enter.
+        /// </summary>
+        [DataMember]
+        public string PlayerId { get; set; }
+
+        /// <summary>
         /// State of the room after the player entered. It has no players if the player could not enter.
         /// </summary>
         [DataMember]

@@ -37,19 +37,19 @@ namespace YachtDice.Server.Services
         /// new channel replaces the old one.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerName">Name of the player.</param>
+        /// <param name="playerId">Identifier of the player.</param>
         /// <param name="callback">Callback channel of the player.</param>
-        public void Register(string roomCode, string playerName, TCallback callback)
+        public void Register(string roomCode, string playerId, TCallback callback)
         {
             lock (_syncRoot)
             {
                 if (!_callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks))
                 {
-                    callbacks = new Dictionary<string, TCallback>(StringComparer.OrdinalIgnoreCase);
+                    callbacks = new Dictionary<string, TCallback>(StringComparer.Ordinal);
                     _callbacksByRoom[roomCode] = callbacks;
                 }
 
-                callbacks[playerName] = callback;
+                callbacks[playerId] = callback;
             }
         }
 
@@ -57,12 +57,12 @@ namespace YachtDice.Server.Services
         /// Unsubscribes a player from a room, whatever channel the player used.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerName">Name of the player.</param>
-        public void Remove(string roomCode, string playerName)
+        /// <param name="playerId">Identifier of the player.</param>
+        public void Remove(string roomCode, string playerId)
         {
             lock (_syncRoot)
             {
-                DeleteCallback(roomCode, playerName);
+                DeleteCallback(roomCode, playerId);
             }
         }
 
@@ -71,18 +71,18 @@ namespace YachtDice.Server.Services
         /// channel that is already closed removes the new channel of the same player.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerName">Name of the player.</param>
+        /// <param name="playerId">Identifier of the player.</param>
         /// <param name="callback">Callback channel that should be the registered one.</param>
         /// <returns>True if the player was unsubscribed.</returns>
-        public bool RemoveIfCurrent(string roomCode, string playerName, TCallback callback)
+        public bool RemoveIfCurrent(string roomCode, string playerId, TCallback callback)
         {
             var isRemoved = false;
 
             lock (_syncRoot)
             {
-                if (TryGetCallback(roomCode, playerName, out TCallback current) && ReferenceEquals(current, callback))
+                if (TryGetCallback(roomCode, playerId, out TCallback current) && ReferenceEquals(current, callback))
                 {
-                    DeleteCallback(roomCode, playerName);
+                    DeleteCallback(roomCode, playerId);
                     isRemoved = true;
                 }
             }
@@ -123,20 +123,20 @@ namespace YachtDice.Server.Services
         }
 
         // The caller must hold _syncRoot.
-        private bool TryGetCallback(string roomCode, string playerName, out TCallback callback)
+        private bool TryGetCallback(string roomCode, string playerId, out TCallback callback)
         {
             callback = null;
 
             return _callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks)
-                && callbacks.TryGetValue(playerName, out callback);
+                && callbacks.TryGetValue(playerId, out callback);
         }
 
         // The caller must hold _syncRoot.
-        private void DeleteCallback(string roomCode, string playerName)
+        private void DeleteCallback(string roomCode, string playerId)
         {
             if (_callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks))
             {
-                callbacks.Remove(playerName);
+                callbacks.Remove(playerId);
 
                 if (callbacks.Count == 0)
                 {

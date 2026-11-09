@@ -43,23 +43,26 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Subscribes the player to the messages of the room. The player must already be inside the room.
         /// </summary>
-        /// <param name="playerName">Name of the player who joins the chat.</param>
+        /// <param name="playerId">Identifier of the player who joins the chat.</param>
         /// <param name="roomCode">Code of the room.</param>
-        public void JoinChat(string playerName, string roomCode)
+        public void JoinChat(string playerId, string roomCode)
         {
-            Execute(playerName, () => ProcessJoin(playerName, roomCode));
+            Execute(playerId, () => ProcessJoin(playerId, roomCode));
         }
 
         /// <summary>
-        /// Sends a chat message to every player subscribed to the room, including the sender.
+        /// Sends a chat message to every player subscribed to the room, including the sender. The author is
+        /// the player that has the identifier, so a player cannot write in the name of another one.
         /// </summary>
-        /// <param name="message">Message to send.</param>
+        /// <param name="playerId">Identifier of the player who writes the message.</param>
+        /// <param name="content">Text of the message.</param>
         /// <param name="roomCode">Code of the room.</param>
-        public void SendChatMessage(Contracts.ChatMessage message, string roomCode)
+        public void SendChatMessage(string playerId, string content, string roomCode)
         {
-            if (CanDeliver(message, roomCode))
+            if (!string.IsNullOrWhiteSpace(content)
+                && _roomManager.TryGetPlayer(roomCode, playerId, out LogicRooms.RoomPlayer author))
             {
-                Contracts.ChatMessage delivered = CreateDeliveredMessage(message);
+                Contracts.ChatMessage delivered = CreateDeliveredMessage(author, content);
 
                 _callbacks.Notify(roomCode, callback => callback.MessageReceived(delivered));
             }
@@ -72,63 +75,57 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Stops sending the messages of the room to the player.
         /// </summary>
-        /// <param name="playerName">Name of the player who leaves the chat.</param>
+        /// <param name="playerId">Identifier of the player who leaves the chat.</param>
         /// <param name="roomCode">Code of the room.</param>
-        public void LeaveChat(string playerName, string roomCode)
+        public void LeaveChat(string playerId, string roomCode)
         {
-            if (!string.IsNullOrWhiteSpace(playerName) && !string.IsNullOrWhiteSpace(roomCode))
+            if (!string.IsNullOrWhiteSpace(playerId) && !string.IsNullOrWhiteSpace(roomCode))
             {
-                _callbacks.Remove(roomCode, playerName);
+                _callbacks.Remove(roomCode, playerId);
             }
         }
 
-        private static Contracts.ChatMessage CreateDeliveredMessage(Contracts.ChatMessage message)
+        private static Contracts.ChatMessage CreateDeliveredMessage(LogicRooms.RoomPlayer author, string content)
         {
-            string content = message.Content.Trim();
+            string text = content.Trim();
 
-            if (content.Length > MaxMessageLength)
+            if (text.Length > MaxMessageLength)
             {
-                content = content.Substring(FirstCharacterIndex, MaxMessageLength);
+                text = text.Substring(FirstCharacterIndex, MaxMessageLength);
             }
 
             var delivered = new Contracts.ChatMessage
             {
-                Author = message.Author,
-                Content = content,
+                AuthorId = author.Id,
+                Author = author.DisplayName,
+                Content = text,
                 Timestamp = DateTime.UtcNow
             };
 
             return delivered;
         }
 
-        private bool CanDeliver(Contracts.ChatMessage message, string roomCode)
+        private void ProcessJoin(string playerId, string roomCode)
         {
-            return message != null
-                && !string.IsNullOrWhiteSpace(message.Content)
-                && _roomManager.IsMember(roomCode, message.Author);
-        }
-
-        private void ProcessJoin(string playerName, string roomCode)
-        {
-            if (_roomManager.IsMember(roomCode, playerName))
+            if (_roomManager.TryGetPlayer(roomCode, playerId, out _))
             {
                 Contracts.IChatCallback callback =
                     OperationContext.Current.GetCallbackChannel<Contracts.IChatCallback>();
                 ICommunicationObject channel = OperationContext.Current.Channel;
 
-                _callbacks.Register(roomCode, playerName, callback);
-                channel.Closed += (sender, e) => HandleChannelEnded(roomCode, playerName, callback);
-                channel.Faulted += (sender, e) => HandleChannelEnded(roomCode, playerName, callback);
+                _callbacks.Register(roomCode, playerId, callback);
+                channel.Closed += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
+                channel.Faulted += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
             }
             else
             {
-                throw new ArgumentException(NotInsideRoomMessage, nameof(playerName));
+                throw new ArgumentException(NotInsideRoomMessage, nameof(playerId));
             }
         }
 
-        private void HandleChannelEnded(string roomCode, string playerName, Contracts.IChatCallback callback)
+        private void HandleChannelEnded(string roomCode, string playerId, Contracts.IChatCallback callback)
         {
-            _callbacks.RemoveIfCurrent(roomCode, playerName, callback);
+            _callbacks.RemoveIfCurrent(roomCode, playerId, callback);
         }
     }
 }
