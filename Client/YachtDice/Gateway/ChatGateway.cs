@@ -20,7 +20,7 @@ namespace YachtDice.Gateway
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
-        private readonly string _playerName;
+        private readonly string _playerId;
         private readonly string _roomCode;
         private Action<ChatMessage> _messageReceived;
 
@@ -29,9 +29,9 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <param name="playerName">Name of the player who writes in the chat.</param>
         /// <param name="roomCode">Code of the room whose chat is used.</param>
-        public ChatGateway(string playerName, string roomCode)
+        public ChatGateway(string playerId, string roomCode)
         {
-            _playerName = playerName;
+            _playerId = playerId;
             _roomCode = roomCode;
             _logger = new AppLogger(GetType());
         }
@@ -43,7 +43,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task JoinAsync()
         {
-            await ConnectAndExecuteAsync(client => client.JoinChat(_playerName, _roomCode));
+            await ConnectAndExecuteAsync(client => client.JoinChat(_playerId, _roomCode));
         }
 
         /// <summary>
@@ -54,14 +54,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server could not be reached.</exception>
         public async Task SendAsync(string content)
         {
-            var message = new ChatMessage
-            {
-                Author = _playerName,
-                Content = content,
-                Timestamp = DateTime.UtcNow
-            };
-
-            await ExecuteAsync(client => client.SendChatMessage(message, _roomCode));
+            await ExecuteAsync(client => client.SendChatMessage(_playerId, content, _roomCode));
         }
 
         /// <summary>
@@ -104,7 +97,7 @@ namespace YachtDice.Gateway
         {
             try
             {
-                await ExecuteAsync(client => client.LeaveChat(_playerName, _roomCode));
+                await ExecuteAsync(client => client.LeaveChat(_playerId, _roomCode));
             }
             catch (GatewayException ex)
             {

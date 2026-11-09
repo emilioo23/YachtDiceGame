@@ -1141,15 +1141,6 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Ya hay un jugador con tu nombre en esa sala..
-        /// </summary>
-        public static string Lobby_Result_PlayerAlreadyInRoom {
-            get {
-                return ResourceManager.GetString("Lobby_Result_PlayerAlreadyInRoom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a La sala ya está llena..
         /// </summary>
         public static string Lobby_Result_RoomFull {

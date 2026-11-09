@@ -137,7 +137,7 @@ namespace YachtDice.Views
         private readonly int[] _diceValues = new int[DiceCount];
         private readonly bool[] _heldDice = new bool[DiceCount];
         private readonly Border[] _diceBorders = new Border[DiceCount];
-        private readonly string _playerName;
+        private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chatGateway;
         private readonly bool _isChatAvailable;
@@ -170,8 +170,8 @@ namespace YachtDice.Views
             _roomGateway = roomGateway;
             _chatGateway = chatGateway;
             _isChatAvailable = isChatAvailable;
-            _playerName = roomGateway.PlayerName;
-            _matchPlayers = MatchPlayerFactory.Create(roomGateway.CurrentRoom.Players, _playerName);
+            _playerId = roomGateway.PlayerId;
+            _matchPlayers = MatchPlayerFactory.Create(roomGateway.CurrentRoom.Players, _playerId);
             MatchPlayersItemsControl.ItemsSource = _matchPlayers;
 
             RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
@@ -237,7 +237,7 @@ namespace YachtDice.Views
 
         private void ShowChatMessage(ChatMessage message)
         {
-            ChatMessageKind kind = message.Author == _playerName ? ChatMessageKind.Own : ChatMessageKind.Other;
+            ChatMessageKind kind = message.AuthorId == _playerId ? ChatMessageKind.Own : ChatMessageKind.Other;
 
             ChatPanelControl.AddMessage(message.Author, message.Content, kind);
         }

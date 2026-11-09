@@ -58,9 +58,9 @@ namespace YachtDice.Views
         {
             var slots = new List<LobbySlot>();
 
-            foreach (string playerName in room.Players)
+            foreach (RoomPlayer player in room.Players)
             {
-                slots.Add(CreateOccupiedSlot(playerName, playerName == room.HostName));
+                slots.Add(CreateOccupiedSlot(player.DisplayName, player.Id == room.HostId));
             }
 
             for (int slotIndex = room.Players.Length; slotIndex < room.Settings.MaxPlayers; slotIndex++)
@@ -108,7 +108,7 @@ namespace YachtDice.Views
             PlayerSlotsItemsControl.ItemsSource = CreateSlots(room);
 
             ShowSettings(room.Settings);
-            ApplyHostPermissions(room.HostName == _roomGateway.PlayerName);
+            ApplyHostPermissions(room.HostId == _roomGateway.PlayerId);
 
             _isShowingRoom = false;
         }
@@ -239,7 +239,7 @@ namespace YachtDice.Views
             {
                 _isOpeningGame = true;
 
-                var chatGateway = new ChatGateway(_roomGateway.PlayerName, _roomGateway.CurrentRoom.Code);
+                var chatGateway = new ChatGateway(_roomGateway.PlayerId, _roomGateway.CurrentRoom.Code);
                 bool isChatAvailable = await TryJoinChatAsync(chatGateway);
 
                 await ShowGameWindowAsync(chatGateway, isChatAvailable);
