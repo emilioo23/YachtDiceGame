@@ -10,8 +10,9 @@ using YachtDice.Utils;
 namespace YachtDice.Gateway
 {
     /// <summary>
-    /// Keeps the player connected to the presence service while the game is open and knows which players are
-    /// online. The session of the player holds one instance that all the windows share. The changes arrive in
+    /// Keeps the player connected to the presence service while the game is open, knows which players are
+    /// online and passes on the invitations to a room. The session of the player holds one instance that all
+    /// the windows share. The changes arrive in
     /// a network thread while the windows read them in the thread of the interface. The connection, the name
     /// and the list of players change together, so they need the lock.
     /// </summary>
@@ -44,6 +45,11 @@ namespace YachtDice.Gateway
         /// from any thread.
         /// </summary>
         public event Action FriendsChanged;
+
+        /// <summary>
+        /// Event triggered when a friend invites the player to join a room. It can be raised from any thread.
+        /// </summary>
+        public event Action<RoomInvitation> InvitationReceived;
 
         /// <summary>
         /// Gets the names of the players who are online right now.
@@ -137,6 +143,7 @@ namespace YachtDice.Gateway
         {
             var handler = new PresenceCallbackHandler();
             handler.PresenceChanged += HandlePresenceChanged;
+            handler.InvitationReceived += HandleInvitationReceived;
 
             var client = new PresenceServiceClient(new InstanceContext(handler));
             ServerAddress.Apply(client.Endpoint);
@@ -186,6 +193,11 @@ namespace YachtDice.Gateway
             {
                 FriendsChanged?.Invoke();
             }
+        }
+
+        private void HandleInvitationReceived(RoomInvitation invitation)
+        {
+            InvitationReceived?.Invoke(invitation);
         }
 
         private void UpdateOnlinePlayers(string displayName, PresenceEventType eventType)

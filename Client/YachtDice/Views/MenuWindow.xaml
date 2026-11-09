@@ -114,11 +114,10 @@
                             FontSize="19"/>
 
                     <Button
-                            Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Rooms}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
-                            IsEnabled="False"
-                            Opacity="0.5"
+                            Click="RoomsNavButton_Click"
                             FontSize="19"/>
 
                     <Button

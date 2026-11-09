@@ -73,17 +73,23 @@ namespace YachtDice.Gateway
             JoinRoomResult result = await ConnectAndExecuteAsync(
                 client => client.JoinRoom(Session.DisplayName, roomCode));
 
-            if (result.Code == RoomResultCode.Success)
-            {
-                PlayerId = result.PlayerId;
-                CurrentRoom = result.Room;
-            }
-            else
-            {
-                await CloseAsync();
-            }
+            return await ApplyJoinResultAsync(result);
+        }
 
-            return result.Code;
+        /// <summary>
+        /// Puts the player inside a room of the list of rooms. A private room also needs its code. If the
+        /// player cannot enter, the connection is closed.
+        /// </summary>
+        /// <param name="roomId">Identifier of the room inside the list.</param>
+        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <returns>Whether the player entered or why not.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> JoinListedRoomAsync(string roomId, string accessCode)
+        {
+            JoinRoomResult result = await ConnectAndExecuteAsync(
+                client => client.JoinListedRoom(Session.DisplayName, roomId, accessCode));
+
+            return await ApplyJoinResultAsync(result);
         }
 
         /// <summary>
@@ -169,6 +175,21 @@ namespace YachtDice.Gateway
             };
 
             return room;
+        }
+
+        private async Task<RoomResultCode> ApplyJoinResultAsync(JoinRoomResult result)
+        {
+            if (result.Code == RoomResultCode.Success)
+            {
+                PlayerId = result.PlayerId;
+                CurrentRoom = result.Room;
+            }
+            else
+            {
+                await CloseAsync();
+            }
+
+            return result.Code;
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)

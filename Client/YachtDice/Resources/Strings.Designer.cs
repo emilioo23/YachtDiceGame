@@ -880,6 +880,87 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Invitations_Received_Join {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si te unes, saldrás de la sala en la que estás..
+        /// </summary>
+        public static string Invitations_Received_LeaveNotice {
+            get {
+                return ResourceManager.GetString("Invitations_Received_LeaveNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} te invitó a unirse a su sala..
+        /// </summary>
+        public static string Invitations_Received_Message {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Rechazar.
+        /// </summary>
+        public static string Invitations_Received_Reject {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Reject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitación a una sala.
+        /// </summary>
+        public static string Invitations_Received_Title {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} no está en línea..
+        /// </summary>
+        public static string Invitations_Result_FriendOffline {
+            get {
+                return ResourceManager.GetString("Invitations_Result_FriendOffline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes invitar a tus amigos..
+        /// </summary>
+        public static string Invitations_Result_NotFriends {
+            get {
+                return ResourceManager.GetString("Invitations_Result_NotFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no estás en esa sala..
+        /// </summary>
+        public static string Invitations_Result_NotInRoom {
+            get {
+                return ResourceManager.GetString("Invitations_Result_NotInRoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitación enviada a {0}..
+        /// </summary>
+        public static string Invitations_Result_Sent {
+            get {
+                return ResourceManager.GetString("Invitations_Result_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Jugador.
         /// </summary>
         public static string Leaderboard_ColumnPlayer {
@@ -961,6 +1042,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ← Regresar al menú.
+        /// </summary>
+        public static string Lobby_ButtonBackToMenu {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonBackToMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Copiar código.
         /// </summary>
         public static string Lobby_ButtonCopyCode {
@@ -979,6 +1069,51 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no tienes amigos agregados..
+        /// </summary>
+        public static string Lobby_Friends_Empty {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Inicia sesión con una cuenta para ver tus amigos e invitarlos a la sala..
+        /// </summary>
+        public static string Lobby_Friends_GuestNotice {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_GuestNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Da clic derecho a un amigo en línea para invitarlo a la sala..
+        /// </summary>
+        public static string Lobby_Friends_Hint {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitar al jugador a la sala.
+        /// </summary>
+        public static string Lobby_Friends_MenuInvite {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_MenuInvite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Amigos.
+        /// </summary>
+        public static string Lobby_Friends_Title {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Modo de juego.
         /// </summary>
         public static string Lobby_GameMode {
@@ -993,15 +1128,6 @@ namespace YachtDice.Resources {
         public static string Lobby_Host {
             get {
                 return ResourceManager.GetString("Lobby_Host", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a ← Volver a Jugar.
-        /// </summary>
-        public static string Lobby_LinkBackToPlay {
-            get {
-                return ResourceManager.GetString("Lobby_LinkBackToPlay", resourceCulture);
             }
         }
         
@@ -1110,6 +1236,15 @@ namespace YachtDice.Resources {
         public static string Lobby_Result_GameAlreadyStarted {
             get {
                 return ResourceManager.GetString("Lobby_Result_GameAlreadyStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código de la sala no es correcto..
+        /// </summary>
+        public static string Lobby_Result_InvalidAccessCode {
+            get {
+                return ResourceManager.GetString("Lobby_Result_InvalidAccessCode", resourceCulture);
             }
         }
         
@@ -1294,20 +1429,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Lobby.
-        /// </summary>
-        public static string MainMenu_Nav_Lobby {
-            get {
-                return ResourceManager.GetString("MainMenu_Nav_Lobby", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Jugar.
         /// </summary>
         public static string MainMenu_Nav_Play {
             get {
                 return ResourceManager.GetString("MainMenu_Nav_Play", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Salas.
+        /// </summary>
+        public static string MainMenu_Nav_Rooms {
+            get {
+                return ResourceManager.GetString("MainMenu_Nav_Rooms", resourceCulture);
             }
         }
         
@@ -1686,6 +1821,69 @@ namespace YachtDice.Resources {
         public static string Results_TitleWinner {
             get {
                 return ResourceManager.GetString("Results_TitleWinner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Rooms_ButtonJoin {
+            get {
+                return ResourceManager.GetString("Rooms_ButtonJoin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Actualizar.
+        /// </summary>
+        public static string Rooms_ButtonRefresh {
+            get {
+                return ResourceManager.GetString("Rooms_ButtonRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código de la sala (solo salas privadas).
+        /// </summary>
+        public static string Rooms_CodeHint {
+            get {
+                return ResourceManager.GetString("Rooms_CodeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0}/{1} jugadores · {2}.
+        /// </summary>
+        public static string Rooms_DetailsFormat {
+            get {
+                return ResourceManager.GetString("Rooms_DetailsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No hay salas disponibles por ahora. Crea una desde el menú..
+        /// </summary>
+        public static string Rooms_Empty {
+            get {
+                return ResourceManager.GetString("Rooms_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Salas disponibles.
+        /// </summary>
+        public static string Rooms_Title {
+            get {
+                return ResourceManager.GetString("Rooms_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala de {0}.
+        /// </summary>
+        public static string Rooms_TitleFormat {
+            get {
+                return ResourceManager.GetString("Rooms_TitleFormat", resourceCulture);
             }
         }
         

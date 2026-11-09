@@ -37,6 +37,9 @@ namespace YachtDice.Utils
                 case RoomResultCode.InvalidSettings:
                     message = Strings.Lobby_Result_InvalidSettings;
                     break;
+                case RoomResultCode.InvalidAccessCode:
+                    message = Strings.Lobby_Result_InvalidAccessCode;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

@@ -195,9 +195,6 @@
   <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
     <value>Marcador</value>
   </data>
-  <data name="MainMenu_Nav_Lobby" xml:space="preserve">
-    <value>Lobby</value>
-  </data>
   <data name="MainMenu_Nav_Play" xml:space="preserve">
     <value>Jugar</value>
   </data>
@@ -293,9 +290,6 @@
   </data>
   <data name="Lobby_Title" xml:space="preserve">
     <value>Sala de espera</value>
-  </data>
-  <data name="Lobby_LinkBackToPlay" xml:space="preserve">
-    <value>← Volver a Jugar</value>
   </data>
   <data name="Lobby_Privacy" xml:space="preserve">
     <value>Privacidad</value>
@@ -803,5 +797,77 @@
   </data>
   <data name="Global_SymbolMedalSilver" xml:space="preserve">
     <value>🥈</value>
+  </data>
+  <data name="MainMenu_Nav_Rooms" xml:space="preserve">
+    <value>Salas</value>
+  </data>
+  <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
+    <value>← Regresar al menú</value>
+  </data>
+  <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
+    <value>El código de la sala no es correcto.</value>
+  </data>
+  <data name="Lobby_Friends_Title" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="Lobby_Friends_Hint" xml:space="preserve">
+    <value>Da clic derecho a un amigo en línea para invitarlo a la sala.</value>
+  </data>
+  <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
+    <value>Invitar al jugador a la sala</value>
+  </data>
+  <data name="Lobby_Friends_GuestNotice" xml:space="preserve">
+    <value>Inicia sesión con una cuenta para ver tus amigos e invitarlos a la sala.</value>
+  </data>
+  <data name="Lobby_Friends_Empty" xml:space="preserve">
+    <value>Todavía no tienes amigos agregados.</value>
+  </data>
+  <data name="Rooms_Title" xml:space="preserve">
+    <value>Salas disponibles</value>
+  </data>
+  <data name="Rooms_ButtonRefresh" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="Rooms_ButtonJoin" xml:space="preserve">
+    <value>Unirse</value>
+  </data>
+  <data name="Rooms_Empty" xml:space="preserve">
+    <value>No hay salas disponibles por ahora. Crea una desde el menú.</value>
+  </data>
+  <data name="Rooms_TitleFormat" xml:space="preserve">
+    <value>Sala de {0}</value>
+  </data>
+  <data name="Rooms_DetailsFormat" xml:space="preserve">
+    <value>{0}/{1} jugadores · {2}</value>
+  </data>
+  <data name="Rooms_CodeHint" xml:space="preserve">
+    <value>Código de la sala (solo salas privadas)</value>
+  </data>
+  <data name="Invitations_Result_Sent" xml:space="preserve">
+    <value>Invitación enviada a {0}.</value>
+  </data>
+  <data name="Invitations_Result_NotInRoom" xml:space="preserve">
+    <value>Ya no estás en esa sala.</value>
+  </data>
+  <data name="Invitations_Result_NotFriends" xml:space="preserve">
+    <value>Solo puedes invitar a tus amigos.</value>
+  </data>
+  <data name="Invitations_Result_FriendOffline" xml:space="preserve">
+    <value>{0} no está en línea.</value>
+  </data>
+  <data name="Invitations_Received_Title" xml:space="preserve">
+    <value>Invitación a una sala</value>
+  </data>
+  <data name="Invitations_Received_Message" xml:space="preserve">
+    <value>{0} te invitó a unirse a su sala.</value>
+  </data>
+  <data name="Invitations_Received_LeaveNotice" xml:space="preserve">
+    <value>Si te unes, saldrás de la sala en la que estás.</value>
+  </data>
+  <data name="Invitations_Received_Join" xml:space="preserve">
+    <value>Unirse</value>
+  </data>
+  <data name="Invitations_Received_Reject" xml:space="preserve">
+    <value>Rechazar</value>
   </data>
 </root>

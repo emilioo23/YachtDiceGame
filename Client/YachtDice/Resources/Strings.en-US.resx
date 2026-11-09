@@ -195,9 +195,6 @@
   <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
     <value>Leaderboard</value>
   </data>
-  <data name="MainMenu_Nav_Lobby" xml:space="preserve">
-    <value>Lobby</value>
-  </data>
   <data name="MainMenu_Nav_Play" xml:space="preserve">
     <value>Play</value>
   </data>
@@ -293,9 +290,6 @@
   </data>
   <data name="Lobby_Title" xml:space="preserve">
     <value>Waiting room</value>
-  </data>
-  <data name="Lobby_LinkBackToPlay" xml:space="preserve">
-    <value>← Back to Play</value>
   </data>
   <data name="Lobby_Privacy" xml:space="preserve">
     <value>Privacy</value>
@@ -803,5 +797,77 @@
   </data>
   <data name="Global_SymbolMedalSilver" xml:space="preserve">
     <value>🥈</value>
+  </data>
+  <data name="MainMenu_Nav_Rooms" xml:space="preserve">
+    <value>Rooms</value>
+  </data>
+  <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
+    <value>← Back to menu</value>
+  </data>
+  <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
+    <value>The room code is not correct.</value>
+  </data>
+  <data name="Lobby_Friends_Title" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Lobby_Friends_Hint" xml:space="preserve">
+    <value>Right-click an online friend to invite them to the room.</value>
+  </data>
+  <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
+    <value>Invite player to the room</value>
+  </data>
+  <data name="Lobby_Friends_GuestNotice" xml:space="preserve">
+    <value>Log in with an account to see your friends and invite them to the room.</value>
+  </data>
+  <data name="Lobby_Friends_Empty" xml:space="preserve">
+    <value>You have not added any friends yet.</value>
+  </data>
+  <data name="Rooms_Title" xml:space="preserve">
+    <value>Available rooms</value>
+  </data>
+  <data name="Rooms_ButtonRefresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Rooms_ButtonJoin" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="Rooms_Empty" xml:space="preserve">
+    <value>There are no rooms available right now. Create one from the menu.</value>
+  </data>
+  <data name="Rooms_TitleFormat" xml:space="preserve">
+    <value>{0}'s room</value>
+  </data>
+  <data name="Rooms_DetailsFormat" xml:space="preserve">
+    <value>{0}/{1} players · {2}</value>
+  </data>
+  <data name="Rooms_CodeHint" xml:space="preserve">
+    <value>Room code (private rooms only)</value>
+  </data>
+  <data name="Invitations_Result_Sent" xml:space="preserve">
+    <value>Invitation sent to {0}.</value>
+  </data>
+  <data name="Invitations_Result_NotInRoom" xml:space="preserve">
+    <value>You are no longer in that room.</value>
+  </data>
+  <data name="Invitations_Result_NotFriends" xml:space="preserve">
+    <value>You can only invite your friends.</value>
+  </data>
+  <data name="Invitations_Result_FriendOffline" xml:space="preserve">
+    <value>{0} is not online.</value>
+  </data>
+  <data name="Invitations_Received_Title" xml:space="preserve">
+    <value>Room invitation</value>
+  </data>
+  <data name="Invitations_Received_Message" xml:space="preserve">
+    <value>{0} invited you to join their room.</value>
+  </data>
+  <data name="Invitations_Received_LeaveNotice" xml:space="preserve">
+    <value>If you join, you will leave the room you are in.</value>
+  </data>
+  <data name="Invitations_Received_Join" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="Invitations_Received_Reject" xml:space="preserve">
+    <value>Decline</value>
   </data>
 </root>
