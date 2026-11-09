@@ -753,9 +753,6 @@
   <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
     <value>The game in that room has already started.</value>
   </data>
-  <data name="Lobby_Result_PlayerAlreadyInRoom" xml:space="preserve">
-    <value>A player with your name is already in that room.</value>
-  </data>
   <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
     <value>That setting is not valid for the room.</value>
   </data>
