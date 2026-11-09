@@ -26,6 +26,7 @@ namespace YachtDice.Utils
             var item = new RoomListItem
             {
                 RoomId = room.RoomId,
+                HostName = room.HostName,
                 Initial = PlayerInitials.GetInitial(room.HostName),
                 Title = string.Format(Strings.Rooms_TitleFormat, room.HostName),
                 Details = string.Format(

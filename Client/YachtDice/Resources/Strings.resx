@@ -195,9 +195,6 @@
   <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
     <value>Marcador</value>
   </data>
-  <data name="MainMenu_Nav_Play" xml:space="preserve">
-    <value>Jugar</value>
-  </data>
   <data name="MainMenu_Nav_Settings" xml:space="preserve">
     <value>Ajustes</value>
   </data>
@@ -869,5 +866,35 @@
   </data>
   <data name="Invitations_Received_Reject" xml:space="preserve">
     <value>Rechazar</value>
+  </data>
+  <data name="Auth_ShowPassword" xml:space="preserve">
+    <value>Mostrar contraseña</value>
+  </data>
+  <data name="Auth_HidePassword" xml:space="preserve">
+    <value>Ocultar contraseña</value>
+  </data>
+  <data name="Rooms_FilterSearchLabel" xml:space="preserve">
+    <value>Buscar sala</value>
+  </data>
+  <data name="Rooms_FilterSearchHint" xml:space="preserve">
+    <value>Escribe el nombre de quien creó la sala</value>
+  </data>
+  <data name="Rooms_FilterPrivacyLabel" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
+  <data name="Rooms_FilterAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="Rooms_FilterPublic" xml:space="preserve">
+    <value>Públicas</value>
+  </data>
+  <data name="Rooms_FilterPrivate" xml:space="preserve">
+    <value>Privadas</value>
+  </data>
+  <data name="Rooms_NoResults" xml:space="preserve">
+    <value>Ninguna sala coincide con tu búsqueda.</value>
+  </data>
+  <data name="Lobby_Chat_WelcomeMessage" xml:space="preserve">
+    <value>Aquí puedes platicar con los demás jugadores mientras empieza la partida.</value>
   </data>
 </root>

@@ -25,10 +25,10 @@ namespace YachtDice.Views
         private const int EmptyLength = 0;
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
-        private const string ChatJoinFailedLogMessage = "The player could not join the chat of the room.";
 
-        private readonly AppLogger _logger;
         private readonly RoomGateway _roomGateway;
+        private readonly ChatGateway _chatGateway;
+        private readonly bool _isChatAvailable;
         private readonly InvitationListener _invitationListener;
 
         // The window is created with this flag on because InitializeComponent raises SelectionChanged events
@@ -42,12 +42,15 @@ namespace YachtDice.Views
         /// Initializes the waiting room window of a room where the player already is.
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room, already inside it.</param>
-        public LobbyWindow(RoomGateway roomGateway)
+        /// <param name="chatGateway">Connection of the player to the chat of the room.</param>
+        /// <param name="isChatAvailable">Whether the player could join the chat of the room.</param>
+        public LobbyWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
         {
             InitializeComponent();
 
-            _logger = new AppLogger(GetType());
             _roomGateway = roomGateway;
+            _chatGateway = chatGateway;
+            _isChatAvailable = isChatAvailable;
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;
@@ -59,6 +62,7 @@ namespace YachtDice.Views
             };
             _invitationListener.Start();
 
+            StartChat();
             ShowRoom(_roomGateway.CurrentRoom);
         }
 
@@ -101,7 +105,16 @@ namespace YachtDice.Views
         {
             _isLeavingOnClose = false;
 
-            return new LobbyWindow(_roomGateway);
+            return new LobbyWindow(_roomGateway, _chatGateway, _isChatAvailable);
+        }
+
+        private void StartChat()
+        {
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                Strings.Lobby_Chat_WelcomeMessage,
+                ChatMessageKind.System);
+            ChatPanelControl.Attach(_chatGateway, _roomGateway.PlayerId, _isChatAvailable);
         }
 
         private void ShowRoom(RoomState room)
@@ -228,59 +241,26 @@ namespace YachtDice.Views
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
-            Dispatcher.BeginInvoke(new Func<Task>(() => ApplyRoomChangeAsync(room, eventType)));
+            Dispatcher.BeginInvoke(new Action(() => ApplyRoomChange(room, eventType)));
         }
 
-        private async Task ApplyRoomChangeAsync(RoomState room, RoomEventType eventType)
+        private void ApplyRoomChange(RoomState room, RoomEventType eventType)
         {
             ShowRoom(room);
 
             if (eventType == RoomEventType.GameStarted)
             {
-                await OpenGameWindowAsync();
+                OpenGameWindow();
             }
         }
 
-        private async Task OpenGameWindowAsync()
+        private void OpenGameWindow()
         {
-            if (!_isOpeningGame)
+            if (!_isOpeningGame && !_isClosed)
             {
                 _isOpeningGame = true;
-
-                var chatGateway = new ChatGateway(_roomGateway.PlayerId, _roomGateway.CurrentRoom.Code);
-                bool isChatAvailable = await TryJoinChatAsync(chatGateway);
-
-                await ShowGameWindowAsync(chatGateway, isChatAvailable);
-            }
-        }
-
-        private async Task<bool> TryJoinChatAsync(ChatGateway chatGateway)
-        {
-            bool isJoined = true;
-
-            try
-            {
-                await chatGateway.JoinAsync();
-            }
-            catch (GatewayException)
-            {
-                _logger.Warning(ChatJoinFailedLogMessage);
-                isJoined = false;
-            }
-
-            return isJoined;
-        }
-
-        private async Task ShowGameWindowAsync(ChatGateway chatGateway, bool isChatAvailable)
-        {
-            if (_isClosed)
-            {
-                await chatGateway.LeaveAsync();
-            }
-            else
-            {
                 _isLeavingOnClose = false;
-                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, chatGateway, isChatAvailable));
+                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, _chatGateway, _isChatAvailable));
             }
         }
 
@@ -288,11 +268,13 @@ namespace YachtDice.Views
         {
             _isClosed = true;
             _roomGateway.RoomChanged -= HandleRoomChanged;
+            ChatPanelControl.Detach();
             FriendsPanel.Detach();
             _invitationListener.Stop();
 
             if (_isLeavingOnClose)
             {
+                await _chatGateway.LeaveAsync();
                 await _roomGateway.LeaveRoomAsync();
             }
         }
