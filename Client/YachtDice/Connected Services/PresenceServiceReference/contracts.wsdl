@@ -19,6 +19,9 @@
   <wsdl:message name="IPresenceService_PresenceChanged_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PresenceChanged" />
   </wsdl:message>
+  <wsdl:message name="IPresenceService_InvitationReceived_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:InvitationReceived" />
+  </wsdl:message>
   <wsdl:portType name="IPresenceService">
     <wsdl:operation name="Connect">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPresenceService/Connect" message="tns:IPresenceService_Connect_InputMessage" />
@@ -29,6 +32,9 @@
     </wsdl:operation>
     <wsdl:operation name="PresenceChanged">
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPresenceService/PresenceChanged" message="tns:IPresenceService_PresenceChanged_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InvitationReceived">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPresenceService/InvitationReceived" message="tns:IPresenceService_InvitationReceived_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
