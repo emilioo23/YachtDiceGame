@@ -259,6 +259,20 @@
                                                            Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                            FontSize="12"
                                                            Foreground="{StaticResource BrushFeltLight}"/>
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="0,4,0,0"
+                                                            Visibility="{Binding CanManage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_HostKick}"
+                                                               Style="{StaticResource LinkText}"
+                                                               Tag="{Binding PlayerId}"
+                                                               Margin="0,0,10,0"
+                                                               MouseLeftButtonUp="KickLink_Click"/>
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_HostTransfer}"
+                                                               Style="{StaticResource LinkText}"
+                                                               Tag="{Binding PlayerId}"
+                                                               MouseLeftButtonUp="TransferLink_Click"/>
+                                                </StackPanel>
                                             </StackPanel>
 
                                         </StackPanel>

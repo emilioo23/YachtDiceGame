@@ -43,7 +43,8 @@ namespace YachtDice.Server.Logic.Rooms
         List<RoomSummary> GetOpenRooms();
 
         /// <summary>
-        /// Takes the player out of the room. If nobody stays, the room is deleted.
+        /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
+        /// nobody stays, the room is deleted.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
         /// <param name="playerId">Identifier of the player who leaves.</param>
@@ -66,6 +67,24 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="playerId">Identifier of the player who starts the game.</param>
         /// <returns>Outcome of the start and the state of the room.</returns>
         RoomResult StartGame(string roomCode, string playerId);
+
+        /// <summary>
+        /// Takes another player out of the room. Only the host can do it, and only before the game starts.
+        /// </summary>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="playerId">Identifier of the host who expels the player.</param>
+        /// <param name="targetPlayerId">Identifier of the player to expel.</param>
+        /// <returns>Outcome of the expulsion and the state of the room after it.</returns>
+        RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId);
+
+        /// <summary>
+        /// Makes another player of the room the host. Only the current host can do it.
+        /// </summary>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="playerId">Identifier of the current host.</param>
+        /// <param name="newHostId">Identifier of the player who becomes the host.</param>
+        /// <returns>Outcome of the change and the state of the room after it.</returns>
+        RoomResult TransferHost(string roomCode, string playerId, string newHostId);
 
         /// <summary>
         /// Looks for a player inside a room.

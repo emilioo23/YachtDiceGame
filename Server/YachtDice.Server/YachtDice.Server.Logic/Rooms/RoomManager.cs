@@ -113,6 +113,22 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId)
+        {
+            RoomResult result = ExecuteInRoom(roomCode, room => ExpelPlayer(room, playerId, targetPlayerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult TransferHost(string roomCode, string playerId, string newHostId)
+        {
+            RoomResult result = ExecuteInRoom(roomCode, room => ChangeHost(room, playerId, newHostId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
         public bool TryGetPlayer(string roomCode, string playerId, out RoomPlayer player)
         {
             var isFound = false;
@@ -300,6 +316,55 @@ namespace YachtDice.Server.Logic.Rooms
             return status;
         }
 
+        private static RoomStatus GetHostActionStatus(GameRoom room, string playerId, string targetPlayerId)
+        {
+            RoomStatus status = RoomStatus.Success;
+
+            if (!room.IsHost(playerId))
+            {
+                status = RoomStatus.NotHost;
+            }
+            else if (string.Equals(playerId, targetPlayerId, StringComparison.Ordinal))
+            {
+                status = RoomStatus.InvalidTarget;
+            }
+            else if (!room.HasPlayer(targetPlayerId))
+            {
+                status = RoomStatus.PlayerNotFound;
+            }
+
+            return status;
+        }
+
+        private static RoomResult ExpelPlayer(GameRoom room, string playerId, string targetPlayerId)
+        {
+            RoomStatus status = GetHostActionStatus(room, playerId, targetPlayerId);
+
+            if (status == RoomStatus.Success && room.IsStarted)
+            {
+                status = RoomStatus.GameAlreadyStarted;
+            }
+
+            if (status == RoomStatus.Success)
+            {
+                room.RemovePlayer(targetPlayerId);
+            }
+
+            return CreateResult(status, room);
+        }
+
+        private static RoomResult ChangeHost(GameRoom room, string playerId, string newHostId)
+        {
+            RoomStatus status = GetHostActionStatus(room, playerId, newHostId);
+
+            if (status == RoomStatus.Success)
+            {
+                room.SetHost(newHostId);
+            }
+
+            return CreateResult(status, room);
+        }
+
         private RoomResult ExecuteInRoom(string roomCode, Func<GameRoom, RoomResult> operation)
         {
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
@@ -322,9 +387,14 @@ namespace YachtDice.Server.Logic.Rooms
 
             if (room.HasPlayer(playerId))
             {
+                bool wasHost = room.IsHost(playerId);
+
                 room.RemovePlayer(playerId);
                 DeleteIfEmpty(room);
-                result = RoomResult.CreateSucceeded(room.ToDetails());
+
+                RoomDetails details = room.ToDetails();
+
+                result = RoomResult.CreateLeft(details, wasHost && !details.IsEmpty);
             }
 
             return result;

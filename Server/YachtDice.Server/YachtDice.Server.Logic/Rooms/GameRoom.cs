@@ -143,6 +143,15 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
+        /// Makes another player of the room the host.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who becomes the host. It must be inside the room.</param>
+        public void SetHost(string playerId)
+        {
+            HostId = playerId;
+        }
+
+        /// <summary>
         /// Creates a copy of the current state of the room.
         /// </summary>
         /// <returns>Details that do not change when the room changes.</returns>

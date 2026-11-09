@@ -495,6 +495,12 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidAccessCode = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidTarget = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -637,6 +643,12 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GameStarted = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerKicked = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        HostChanged = 5,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -666,6 +678,14 @@ namespace YachtDice.RoomServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/StartGame", ReplyAction="urn:yachtdice:contracts/IRoomService/StartGameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/StartGameServiceFaultFault", Name="ServiceFault")]
         YachtDice.RoomServiceReference.RoomResultCode StartGame(string playerId, string roomCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/KickPlayer", ReplyAction="urn:yachtdice:contracts/IRoomService/KickPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/KickPlayerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.RoomResultCode KickPlayer(string playerId, string roomCode, string targetPlayerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/TransferHost", ReplyAction="urn:yachtdice:contracts/IRoomService/TransferHostResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/TransferHostServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.RoomResultCode TransferHost(string playerId, string roomCode, string newHostId);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/LeaveRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/LeaveRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/LeaveRoomServiceFaultFault", Name="ServiceFault")]
@@ -729,6 +749,14 @@ namespace YachtDice.RoomServiceReference {
         
         public YachtDice.RoomServiceReference.RoomResultCode StartGame(string playerId, string roomCode) {
             return base.Channel.StartGame(playerId, roomCode);
+        }
+        
+        public YachtDice.RoomServiceReference.RoomResultCode KickPlayer(string playerId, string roomCode, string targetPlayerId) {
+            return base.Channel.KickPlayer(playerId, roomCode, targetPlayerId);
+        }
+        
+        public YachtDice.RoomServiceReference.RoomResultCode TransferHost(string playerId, string roomCode, string newHostId) {
+            return base.Channel.TransferHost(playerId, roomCode, newHostId);
         }
         
         public void LeaveRoom(string playerId, string roomCode) {

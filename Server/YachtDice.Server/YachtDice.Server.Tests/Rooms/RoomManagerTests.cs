@@ -157,6 +157,28 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
+        public void Leave_HostWithOtherPlayersInside_ReportsThatTheHostChanged()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterLeaving = _manager.Leave(host.Room.Code, host.PlayerId);
+
+            Assert.True(afterLeaving.HostChanged);
+        }
+
+        [Fact]
+        public void Leave_PlayerWhoIsNotTheHost_DoesNotReportAHostChange()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterLeaving = _manager.Leave(host.Room.Code, player.PlayerId);
+
+            Assert.False(afterLeaving.HostChanged);
+        }
+
+        [Fact]
         public void Leave_LastPlayer_DeletesTheRoom()
         {
             RoomResult host = _manager.CreateRoom(HostName);
@@ -397,6 +419,131 @@ namespace YachtDice.Server.Tests.Rooms
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
             Assert.Throws<ArgumentException>(() => _manager.JoinListed(roomId, " ", string.Empty));
+        }
+
+        [Fact]
+        public void KickPlayer_HostExpelsAnotherPlayer_RemovesOnlyThatPlayer()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, player.PlayerId);
+
+            Assert.Equal(RoomStatus.Success, afterKicking.Status);
+            Assert.Equal(host.PlayerId, afterKicking.Room.Players.Single().Id);
+            Assert.False(_manager.TryGetPlayer(host.Room.Code, player.PlayerId, out _));
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerWhoIsNotTheHost_ReturnsNotHostAndKeepsEveryone()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, player.PlayerId, host.PlayerId);
+
+            Assert.Equal(RoomStatus.NotHost, afterKicking.Status);
+            Assert.True(_manager.TryGetPlayer(host.Room.Code, host.PlayerId, out _));
+        }
+
+        [Fact]
+        public void KickPlayer_HostChoosesThemselves_ReturnsInvalidTarget()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, host.PlayerId);
+
+            Assert.Equal(RoomStatus.InvalidTarget, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerNotInTheRoom_ReturnsPlayerNotFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.PlayerNotFound, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_GameAlreadyStarted_ReturnsGameAlreadyStarted()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.StartGame(host.Room.Code, host.PlayerId);
+
+            RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, player.PlayerId);
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult afterKicking = _manager.KickPlayer(UnknownRoomCode, UnknownPlayerId, UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.RoomNotFound, afterKicking.Status);
+        }
+
+        [Fact]
+        public void TransferHost_HostChoosesAnotherPlayer_MakesThatPlayerTheHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, host.PlayerId, player.PlayerId);
+
+            Assert.Equal(RoomStatus.Success, afterTransfer.Status);
+            Assert.Equal(player.PlayerId, afterTransfer.Room.HostId);
+            Assert.Equal(TwoPlayers, afterTransfer.Room.Players.Count);
+        }
+
+        [Fact]
+        public void TransferHost_FormerHost_CannotChangeTheSettingsAnymore()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.TransferHost(host.Room.Code, host.PlayerId, player.PlayerId);
+
+            RoomResult afterChange = _manager.UpdateSettings(
+                host.Room.Code,
+                host.PlayerId,
+                CreateSettings(FourPlayers));
+
+            Assert.Equal(RoomStatus.NotHost, afterChange.Status);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerWhoIsNotTheHost_ReturnsNotHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, player.PlayerId, player.PlayerId);
+
+            Assert.Equal(RoomStatus.NotHost, afterTransfer.Status);
+            Assert.Equal(host.PlayerId, _manager.Join(host.Room.Code, GuestName).Room.HostId);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerNotInTheRoom_ReturnsPlayerNotFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, host.PlayerId, UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.PlayerNotFound, afterTransfer.Status);
+        }
+
+        [Fact]
+        public void TransferHost_HostChoosesThemselves_ReturnsInvalidTarget()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, host.PlayerId, host.PlayerId);
+
+            Assert.Equal(RoomStatus.InvalidTarget, afterTransfer.Status);
         }
 
         private static RoomSettings CreateSettings(int maxPlayers)

@@ -66,6 +66,15 @@ namespace YachtDice.Server.Services
             return Run(operation);
         }
 
+        /// <summary>
+        /// Writes an informative line in the log of the server.
+        /// </summary>
+        /// <param name="message">Text to write. It must not include passwords or codes.</param>
+        protected void LogInfo(string message)
+        {
+            _logger.Info(message);
+        }
+
         private static bool RunOperation(Action operation)
         {
             operation();

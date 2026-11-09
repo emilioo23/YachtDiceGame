@@ -38,6 +38,29 @@ namespace YachtDice.Views
             dialog.ShowDialog();
         }
 
+        /// <summary>
+        /// Asks the player to confirm an action and waits for the answer. The dialog has an accept button and
+        /// a cancel button.
+        /// </summary>
+        /// <param name="owner">Window over which the dialog is shown.</param>
+        /// <param name="message">Question that the player must answer.</param>
+        /// <returns>True if the player accepted; false if the player cancelled.</returns>
+        public static bool Confirm(Window owner, string message)
+        {
+            var content = new DialogContent
+            {
+                Message = message,
+                PrimaryButtonText = Strings.Dialogs_ButtonOK,
+                SecondaryButtonText = Strings.Dialogs_ButtonCancel
+            };
+            var dialog = new CustomDialogWindow(content)
+            {
+                Owner = owner
+            };
+
+            return dialog.ShowDialog() == true;
+        }
+
         private void ShowButtonTexts(DialogContent dialogContent)
         {
             if (!string.IsNullOrEmpty(dialogContent.PrimaryButtonText))

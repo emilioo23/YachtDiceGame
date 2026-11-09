@@ -162,16 +162,6 @@ namespace YachtDice.Views
             }
         }
 
-        private bool AskConfirmation(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            return dialog.ShowDialog() == true;
-        }
-
         private void ShowOnlinePlayers()
         {
             List<string> onlineNames = _session.Presence.OnlinePlayers;
@@ -205,7 +195,7 @@ namespace YachtDice.Views
         {
             string friendName = ReadTag(sender);
 
-            if (AskConfirmation(Strings.Dialogs_DeleteFriend))
+            if (CustomDialogWindow.Confirm(this, Strings.Dialogs_DeleteFriend))
             {
                 await RemoveFriendAsync(friendName);
             }

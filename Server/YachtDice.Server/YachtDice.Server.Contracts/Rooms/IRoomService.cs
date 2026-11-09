@@ -71,7 +71,31 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode StartGame(string playerId, string roomCode);
 
         /// <summary>
-        /// Takes the player out of the room. If the room stays empty it disappears.
+        /// Takes another player out of the room and tells everyone. Only the host can do it, and only before
+        /// the game starts. The expulsion is written in the log of the server.
+        /// </summary>
+        /// <param name="playerId">Identifier of the host who expels the player.</param>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="targetPlayerId">Identifier of the player to expel.</param>
+        /// <returns>Outcome of the expulsion.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        RoomResultCode KickPlayer(string playerId, string roomCode, string targetPlayerId);
+
+        /// <summary>
+        /// Makes another player of the room the host and tells everyone. Only the current host can do it.
+        /// </summary>
+        /// <param name="playerId">Identifier of the current host.</param>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="newHostId">Identifier of the player who becomes the host.</param>
+        /// <returns>Outcome of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        RoomResultCode TransferHost(string playerId, string roomCode, string newHostId);
+
+        /// <summary>
+        /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
+        /// the room stays empty it disappears.
         /// </summary>
         /// <param name="playerId">Identifier of the player who leaves.</param>
         /// <param name="roomCode">Code of the room.</param>

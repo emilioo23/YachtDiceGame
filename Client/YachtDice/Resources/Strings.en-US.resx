@@ -948,4 +948,25 @@
   <data name="Dialogs_ConnectionLost" xml:space="preserve">
     <value>The connection with the server was lost. Log in again to keep playing.</value>
   </data>
+  <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
+    <value>That player is no longer in the room.</value>
+  </data>
+  <data name="Lobby_HostKick" xml:space="preserve">
+    <value>Kick</value>
+  </data>
+  <data name="Lobby_HostTransfer" xml:space="preserve">
+    <value>Make host</value>
+  </data>
+  <data name="Lobby_KickedMessage" xml:space="preserve">
+    <value>The host kicked you out of the room.</value>
+  </data>
+  <data name="Lobby_Chat_NewHost" xml:space="preserve">
+    <value>{0} is now the host of the room.</value>
+  </data>
+  <data name="Lobby_ConfirmKick" xml:space="preserve">
+    <value>Are you sure you want to kick {0} out of the room?</value>
+  </data>
+  <data name="Dialogs_ButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

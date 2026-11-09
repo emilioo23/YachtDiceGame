@@ -23,6 +23,11 @@
         public RoomDetails Room { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the host of the room changed because the host left it.
+        /// </summary>
+        public bool HostChanged { get; private set; }
+
+        /// <summary>
         /// Gets the identifier that the server gave to the player who entered the room. It is empty if the
         /// operation did not put a player inside a room.
         /// </summary>
@@ -46,6 +51,17 @@
         public static RoomResult CreateSucceeded(RoomDetails room)
         {
             return new RoomResult(RoomStatus.Success, room, string.Empty);
+        }
+
+        /// <summary>
+        /// Creates the result of a player who left a room.
+        /// </summary>
+        /// <param name="room">State of the room after the player left.</param>
+        /// <param name="hostChanged">True if the player was the host and another player is the host now.</param>
+        /// <returns>A successful result that tells whether the host changed.</returns>
+        public static RoomResult CreateLeft(RoomDetails room, bool hostChanged)
+        {
+            return new RoomResult(RoomStatus.Success, room, string.Empty) { HostChanged = hostChanged };
         }
 
         /// <summary>

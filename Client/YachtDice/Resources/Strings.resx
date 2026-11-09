@@ -948,4 +948,25 @@
   <data name="Dialogs_ConnectionLost" xml:space="preserve">
     <value>Se perdió la conexión con el servidor. Inicia sesión de nuevo para seguir jugando.</value>
   </data>
+  <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
+    <value>Ese jugador ya no está en la sala.</value>
+  </data>
+  <data name="Lobby_HostKick" xml:space="preserve">
+    <value>Expulsar</value>
+  </data>
+  <data name="Lobby_HostTransfer" xml:space="preserve">
+    <value>Dar anfitrión</value>
+  </data>
+  <data name="Lobby_KickedMessage" xml:space="preserve">
+    <value>El anfitrión te expulsó de la sala.</value>
+  </data>
+  <data name="Lobby_Chat_NewHost" xml:space="preserve">
+    <value>{0} es ahora el anfitrión de la sala.</value>
+  </data>
+  <data name="Lobby_ConfirmKick" xml:space="preserve">
+    <value>¿Seguro que quieres expulsar a {0} de la sala?</value>
+  </data>
+  <data name="Dialogs_ButtonCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>

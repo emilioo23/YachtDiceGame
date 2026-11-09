@@ -124,6 +124,40 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to expel another player from the room. Only the host can do it, and only before the
+        /// game starts. When it is done, the server tells every player of the room.
+        /// </summary>
+        /// <param name="targetPlayerId">Identifier of the player to expel.</param>
+        /// <returns>Outcome of the expulsion.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> KickPlayerAsync(string targetPlayerId)
+        {
+            string playerId = PlayerId;
+            string roomCode = CurrentRoom.Code;
+            RoomResultCode result = await ExecuteAsync(
+                client => client.KickPlayer(playerId, roomCode, targetPlayerId));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server to make another player the host of the room. Only the current host can do it. When
+        /// it is done, the server tells every player of the room.
+        /// </summary>
+        /// <param name="newHostId">Identifier of the player who becomes the host.</param>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> TransferHostAsync(string newHostId)
+        {
+            string playerId = PlayerId;
+            string roomCode = CurrentRoom.Code;
+            RoomResultCode result = await ExecuteAsync(
+                client => client.TransferHost(playerId, roomCode, newHostId));
+
+            return result;
+        }
+
+        /// <summary>
         /// Takes the player out of the room and closes the connection.
         /// </summary>
         /// <returns>A task that finishes when the player left.</returns>

@@ -268,6 +268,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Cancelar.
+        /// </summary>
+        public static string Dialogs_ButtonCancel {
+            get {
+                return ResourceManager.GetString("Dialogs_ButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ignorar.
         /// </summary>
         public static string Dialogs_ButtonIgnore {
@@ -1105,11 +1114,29 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} es ahora el anfitrión de la sala..
+        /// </summary>
+        public static string Lobby_Chat_NewHost {
+            get {
+                return ResourceManager.GetString("Lobby_Chat_NewHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Aquí puedes platicar con los demás jugadores mientras empieza la partida..
         /// </summary>
         public static string Lobby_Chat_WelcomeMessage {
             get {
                 return ResourceManager.GetString("Lobby_Chat_WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres expulsar a {0} de la sala?.
+        /// </summary>
+        public static string Lobby_ConfirmKick {
+            get {
+                return ResourceManager.GetString("Lobby_ConfirmKick", resourceCulture);
             }
         }
         
@@ -1173,6 +1200,33 @@ namespace YachtDice.Resources {
         public static string Lobby_Host {
             get {
                 return ResourceManager.GetString("Lobby_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Expulsar.
+        /// </summary>
+        public static string Lobby_HostKick {
+            get {
+                return ResourceManager.GetString("Lobby_HostKick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Dar anfitrión.
+        /// </summary>
+        public static string Lobby_HostTransfer {
+            get {
+                return ResourceManager.GetString("Lobby_HostTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El anfitrión te expulsó de la sala..
+        /// </summary>
+        public static string Lobby_KickedMessage {
+            get {
+                return ResourceManager.GetString("Lobby_KickedMessage", resourceCulture);
             }
         }
         
@@ -1317,6 +1371,15 @@ namespace YachtDice.Resources {
         public static string Lobby_Result_NotHost {
             get {
                 return ResourceManager.GetString("Lobby_Result_NotHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ese jugador ya no está en la sala..
+        /// </summary>
+        public static string Lobby_Result_PlayerNotFound {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayerNotFound", resourceCulture);
             }
         }
         
