@@ -141,7 +141,8 @@
                                                 </Style>
                                             </Border.Style>
 
-                                            <TextBlock Text="{Binding RequiredLevel, StringFormat={x:Static properties:Strings.Profile_AvatarLockedBadge}}"
+                                            <TextBlock Text="{Binding RequiredLevel,
+                                                StringFormat={x:Static properties:Strings.Profile_AvatarLockedBadge}}"
                                                        FontSize="11"
                                                        FontWeight="Bold"
                                                        Foreground="White"/>

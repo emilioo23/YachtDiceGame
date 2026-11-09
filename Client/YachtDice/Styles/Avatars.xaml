@@ -25,7 +25,9 @@
         <GeometryDrawing Brush="#8D5A3B" Geometry="M 29,46 Q 28,53 31,58 L 33,48 Z"/>
         <GeometryDrawing Brush="#8D5A3B" Geometry="M 71,46 Q 72,53 69,58 L 67,48 Z"/>
         <GeometryDrawing Brush="#FFFFFF" Geometry="M 28,42 Q 28,20 50,20 Q 72,20 72,42 Z"/>
-        <GeometryDrawing Brush="#1F3A66" Geometry="M 29,38 H 71 A 2,2 0 0 1 73,40 V 43 A 2,2 0 0 1 71,45 H 29 A 2,2 0 0 1 27,43 V 40 A 2,2 0 0 1 29,38 Z"/>
+        <GeometryDrawing Brush="#1F3A66"
+            Geometry="M 29,38 H 71 A 2,2 0 0 1 73,40 V 43 A 2,2 0 0 1 71,45 H 29 A 2,2 0 0 1 27,43 V 40 A 2,2 0 0 1
+                      29,38 Z"/>
         <GeometryDrawing Brush="#C0392B" Geometry="M 46.4,18 A 3.6,3.6 0 1 0 53.6,18 A 3.6,3.6 0 1 0 46.4,18 Z"/>
       </DrawingGroup>
     </DrawingImage.Drawing>
@@ -48,7 +50,9 @@
         <GeometryDrawing Brush="#EDEDED" Geometry="M 30,56 Q 32,82 50,84 Q 68,82 70,56 Q 62,68 50,68 Q 38,68 30,56 Z"/>
         <GeometryDrawing Brush="#FFFFFF" Geometry="M 42,64 Q 50,60 58,64 Q 50,68 42,64 Z"/>
         <GeometryDrawing Brush="#FFFFFF" Geometry="M 28,40 Q 30,20 50,20 Q 70,20 72,40 Z"/>
-        <GeometryDrawing Brush="#14213D" Geometry="M 29,36 H 71 A 3,3 0 0 1 74,39 V 42 A 3,3 0 0 1 71,45 H 29 A 3,3 0 0 1 26,42 V 39 A 3,3 0 0 1 29,36 Z"/>
+        <GeometryDrawing Brush="#14213D"
+            Geometry="M 29,36 H 71 A 3,3 0 0 1 74,39 V 42 A 3,3 0 0 1 71,45 H 29 A 3,3 0 0 1 26,42 V 39 A 3,3 0 0 1
+                      29,36 Z"/>
         <GeometryDrawing Brush="#F5C542" Geometry="M 45.4,29 A 4.6,4.6 0 1 0 54.6,29 A 4.6,4.6 0 1 0 45.4,29 Z"/>
         <GeometryDrawing Brush="#1F3A66" Geometry="M 48,29 A 2,2 0 1 0 52,29 A 2,2 0 1 0 48,29 Z"/>
       </DrawingGroup>
@@ -61,7 +65,9 @@
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
         <GeometryDrawing Brush="#2E8B6A" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
         <GeometryDrawing Brush="#38000000" Geometry="M 23,84 A 27,4.5 0 1 0 77,84 A 27,4.5 0 1 0 23,84 Z"/>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 33,22 H 67 A 11,11 0 0 1 78,33 V 67 A 11,11 0 0 1 67,78 H 33 A 11,11 0 0 1 22,67 V 33 A 11,11 0 0 1 33,22 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 33,22 H 67 A 11,11 0 0 1 78,33 V 67 A 11,11 0 0 1 67,78 H 33 A 11,11 0 0 1 22,67 V 33 A 11,11 0
+                      0 1 33,22 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#D8D8D8" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -143,18 +149,30 @@
         <GeometryDrawing Brush="#546E7A" Geometry="M 64,88 A 2,2 0 1 0 68,88 A 2,2 0 1 0 64,88 Z"/>
         <GeometryDrawing Brush="#78909C" Geometry="M 48,15 H 52 V 29 H 48 Z"/>
         <GeometryDrawing Brush="#E74C3C" Geometry="M 45.6,14 A 4.4,4.4 0 1 0 54.4,14 A 4.4,4.4 0 1 0 45.6,14 Z"/>
-        <GeometryDrawing Brush="#78909C" Geometry="M 20,44 H 22 A 3,3 0 0 1 25,47 V 57 A 3,3 0 0 1 22,60 H 20 A 3,3 0 0 1 17,57 V 47 A 3,3 0 0 1 20,44 Z"/>
-        <GeometryDrawing Brush="#78909C" Geometry="M 78,44 H 80 A 3,3 0 0 1 83,47 V 57 A 3,3 0 0 1 80,60 H 78 A 3,3 0 0 1 75,57 V 47 A 3,3 0 0 1 78,44 Z"/>
-        <GeometryDrawing Brush="#B0BEC5" Geometry="M 35,28 H 65 A 11,11 0 0 1 76,39 V 63 A 11,11 0 0 1 65,74 H 35 A 11,11 0 0 1 24,63 V 39 A 11,11 0 0 1 35,28 Z">
+        <GeometryDrawing Brush="#78909C"
+            Geometry="M 20,44 H 22 A 3,3 0 0 1 25,47 V 57 A 3,3 0 0 1 22,60 H 20 A 3,3 0 0 1 17,57 V 47 A 3,3 0 0 1
+                      20,44 Z"/>
+        <GeometryDrawing Brush="#78909C"
+            Geometry="M 78,44 H 80 A 3,3 0 0 1 83,47 V 57 A 3,3 0 0 1 80,60 H 78 A 3,3 0 0 1 75,57 V 47 A 3,3 0 0 1
+                      78,44 Z"/>
+        <GeometryDrawing Brush="#B0BEC5"
+            Geometry="M 35,28 H 65 A 11,11 0 0 1 76,39 V 63 A 11,11 0 0 1 65,74 H 35 A 11,11 0 0 1 24,63 V 39 A 11,11 0
+                      0 1 35,28 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#78909C" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
           </GeometryDrawing.Pen>
         </GeometryDrawing>
-        <GeometryDrawing Brush="#263238" Geometry="M 36,40 H 44 A 4,4 0 0 1 48,44 V 48 A 4,4 0 0 1 44,52 H 36 A 4,4 0 0 1 32,48 V 44 A 4,4 0 0 1 36,40 Z"/>
-        <GeometryDrawing Brush="#263238" Geometry="M 56,40 H 64 A 4,4 0 0 1 68,44 V 48 A 4,4 0 0 1 64,52 H 56 A 4,4 0 0 1 52,48 V 44 A 4,4 0 0 1 56,40 Z"/>
+        <GeometryDrawing Brush="#263238"
+            Geometry="M 36,40 H 44 A 4,4 0 0 1 48,44 V 48 A 4,4 0 0 1 44,52 H 36 A 4,4 0 0 1 32,48 V 44 A 4,4 0 0 1
+                      36,40 Z"/>
+        <GeometryDrawing Brush="#263238"
+            Geometry="M 56,40 H 64 A 4,4 0 0 1 68,44 V 48 A 4,4 0 0 1 64,52 H 56 A 4,4 0 0 1 52,48 V 44 A 4,4 0 0 1
+                      56,40 Z"/>
         <GeometryDrawing Brush="#26C6DA" Geometry="M 36.4,46 A 3.6,3.6 0 1 0 43.6,46 A 3.6,3.6 0 1 0 36.4,46 Z"/>
         <GeometryDrawing Brush="#26C6DA" Geometry="M 56.4,46 A 3.6,3.6 0 1 0 63.6,46 A 3.6,3.6 0 1 0 56.4,46 Z"/>
-        <GeometryDrawing Brush="#263238" Geometry="M 40,60 H 60 A 3,3 0 0 1 63,63 V 65 A 3,3 0 0 1 60,68 H 40 A 3,3 0 0 1 37,65 V 63 A 3,3 0 0 1 40,60 Z"/>
+        <GeometryDrawing Brush="#263238"
+            Geometry="M 40,60 H 60 A 3,3 0 0 1 63,63 V 65 A 3,3 0 0 1 60,68 H 40 A 3,3 0 0 1 37,65 V 63 A 3,3 0 0 1
+                      40,60 Z"/>
         <GeometryDrawing Geometry="M 43,60 L 43,68">
           <GeometryDrawing.Pen>
             <Pen Brush="#B0BEC5" Thickness="1.4" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
@@ -252,7 +270,9 @@
         <GeometryDrawing Brush="#FFFFFF" Geometry="M 89.5,58 A 1.5,1.5 0 1 0 92.5,58 A 1.5,1.5 0 1 0 89.5,58 Z"/>
         <GeometryDrawing Brush="#FFFFFF" Geometry="M 6.3,72 A 1.7,1.7 0 1 0 9.7,72 A 1.7,1.7 0 1 0 6.3,72 Z"/>
         <GeometryDrawing Brush="#ECEFF1" Geometry="M 14,100 Q 16,82 50,80 Q 84,82 86,100 Z"/>
-        <GeometryDrawing Brush="#FF7043" Geometry="M 42,87 H 58 A 2,2 0 0 1 60,89 V 95 A 2,2 0 0 1 58,97 H 42 A 2,2 0 0 1 40,95 V 89 A 2,2 0 0 1 42,87 Z"/>
+        <GeometryDrawing Brush="#FF7043"
+            Geometry="M 42,87 H 58 A 2,2 0 0 1 60,89 V 95 A 2,2 0 0 1 58,97 H 42 A 2,2 0 0 1 40,95 V 89 A 2,2 0 0 1
+                      42,87 Z"/>
         <GeometryDrawing Brush="#ECEFF1" Geometry="M 19,48 A 31,31 0 1 0 81,48 A 31,31 0 1 0 19,48 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B0BEC5" Thickness="3" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
@@ -290,7 +310,9 @@
         <GeometryDrawing Brush="#5E35B1" Geometry="M 24,46 L 54,6 L 76,46 Z"/>
         <GeometryDrawing Brush="#4527A0" Geometry="M 17,46 A 33,7 0 1 0 83,46 A 33,7 0 1 0 17,46 Z"/>
         <GeometryDrawing Brush="#F5C542" Geometry="M 31,43 Q 50,50 70,43 L 69,38 Q 50,45 32,38 Z"/>
-        <GeometryDrawing Brush="#F5C542" Geometry="M 54.0,20.5 L 55.6,24.7 L 60.2,25.0 L 56.7,27.9 L 57.8,32.3 L 54.0,29.8 L 50.2,32.3 L 51.3,27.9 L 47.8,25.0 L 52.4,24.7 Z"/>
+        <GeometryDrawing Brush="#F5C542"
+            Geometry="M 54.0,20.5 L 55.6,24.7 L 60.2,25.0 L 56.7,27.9 L 57.8,32.3 L 54.0,29.8 L 50.2,32.3 L 51.3,27.9 L
+                      47.8,25.0 L 52.4,24.7 Z"/>
       </DrawingGroup>
     </DrawingImage.Drawing>
   </DrawingImage>
@@ -317,7 +339,9 @@
             <Pen Brush="#C99A1E" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
           </GeometryDrawing.Pen>
         </GeometryDrawing>
-        <GeometryDrawing Brush="#F5C542" Geometry="M 29,37 H 71 A 2,2 0 0 1 73,39 V 43 A 2,2 0 0 1 71,45 H 29 A 2,2 0 0 1 27,43 V 39 A 2,2 0 0 1 29,37 Z">
+        <GeometryDrawing Brush="#F5C542"
+            Geometry="M 29,37 H 71 A 2,2 0 0 1 73,39 V 43 A 2,2 0 0 1 71,45 H 29 A 2,2 0 0 1 27,43 V 39 A 2,2 0 0 1
+                      29,37 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#C99A1E" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
           </GeometryDrawing.Pen>

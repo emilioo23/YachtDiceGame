@@ -234,7 +234,8 @@
 
                                         <StackPanel Orientation="Horizontal">
 
-                                            <Image Source="{Binding AvatarId, Converter={StaticResource AvatarImageConverter}}"
+                                            <Image Source="{Binding AvatarId,
+                                                           Converter={StaticResource AvatarImageConverter}}"
                                                    Width="36"
                                                    Height="36"
                                                    VerticalAlignment="Top"
@@ -254,7 +255,8 @@
 
                                                 <StackPanel Orientation="Horizontal"
                                                             Margin="0,4,0,0"
-                                                            Visibility="{Binding CanManage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                            Visibility="{Binding CanManage,
+                                                            Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <TextBlock Text="{x:Static properties:Strings.Lobby_HostKick}"
                                                                Style="{StaticResource LinkText}"
                                                                Tag="{Binding PlayerId}"

@@ -144,7 +144,8 @@
                                                 </Style>
                                             </Border.Style>
 
-                                            <Image Source="{Binding AvatarId, Converter={StaticResource AvatarImageConverter}}"
+                                            <Image Source="{Binding AvatarId,
+                                                           Converter={StaticResource AvatarImageConverter}}"
                                                    Width="32"
                                                    Height="32"/>
                                         </Border>

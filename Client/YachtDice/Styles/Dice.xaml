@@ -6,7 +6,9 @@
   <DrawingImage x:Key="Die_1">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -19,7 +21,9 @@
   <DrawingImage x:Key="Die_2">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -33,7 +37,9 @@
   <DrawingImage x:Key="Die_3">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -48,7 +54,9 @@
   <DrawingImage x:Key="Die_4">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -64,7 +72,9 @@
   <DrawingImage x:Key="Die_5">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
@@ -81,7 +91,9 @@
   <DrawingImage x:Key="Die_6">
     <DrawingImage.Drawing>
       <DrawingGroup>
-        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+        <GeometryDrawing Brush="#FFFFFF"
+            Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0
+                      1 22,4 Z">
           <GeometryDrawing.Pen>
             <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
           </GeometryDrawing.Pen>
