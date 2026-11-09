@@ -28,7 +28,7 @@ namespace YachtDice.Navigation
             try
             {
                 await roomGateway.CreateRoomAsync();
-                OpenLobby(currentWindow, roomGateway);
+                await OpenLobbyAsync(currentWindow, roomGateway);
             }
             catch (GatewayException ex)
             {
@@ -82,7 +82,7 @@ namespace YachtDice.Navigation
 
                 if (result == RoomResultCode.Success)
                 {
-                    OpenLobby(currentWindow, roomGateway);
+                    await OpenLobbyAsync(currentWindow, roomGateway);
                 }
                 else
                 {
@@ -95,9 +95,14 @@ namespace YachtDice.Navigation
             }
         }
 
-        private static void OpenLobby(Window currentWindow, RoomGateway roomGateway)
+        // The player joins the chat of the room before the waiting room opens, so the waiting room and the
+        // game share the same chat connection and its messages.
+        private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
-            WindowNavigator.SwitchTo(currentWindow, new LobbyWindow(roomGateway));
+            var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);
+            bool isChatAvailable = await chatGateway.TryJoinAsync();
+
+            WindowNavigator.SwitchTo(currentWindow, new LobbyWindow(roomGateway, chatGateway, isChatAvailable));
         }
     }
 }

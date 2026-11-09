@@ -277,6 +277,7 @@
     <Compile Include="Utils\MatchPlayerFactory.cs" />
     <Compile Include="Utils\PlayerInitials.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
+    <Compile Include="Utils\RoomListItemFilter.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Navigation\InvitationListener.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
     <Compile Include="Models\RoomListItem.cs" />
+    <Compile Include="Models\RoomPrivacyFilter.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>
@@ -301,6 +303,9 @@
     </Compile>
     <Compile Include="Views\InviteFriendsPanel.xaml.cs">
       <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordRevealBox.xaml.cs">
+      <DependentUpon>PasswordRevealBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LanguageSwitcher.xaml.cs">
       <DependentUpon>LanguageSwitcher.xaml</DependentUpon>
@@ -366,6 +371,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InviteFriendsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PasswordRevealBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

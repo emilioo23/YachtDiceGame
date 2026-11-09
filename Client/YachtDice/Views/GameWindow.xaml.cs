@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-using YachtDice.ChatServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -205,23 +203,7 @@ namespace YachtDice.Views
                 Strings.Game_Chat_MatchStartedMessage,
                 ChatMessageKind.System);
 
-            if (_isChatAvailable)
-            {
-                ChatPanelControl.MessageSubmitted += HandleMessageSubmitted;
-
-                foreach (ChatMessage message in _chatGateway.Subscribe(HandleMessageReceived))
-                {
-                    ShowChatMessage(message);
-                }
-            }
-            else
-            {
-                ChatPanelControl.AddMessage(
-                    Strings.Game_Chat_SystemName,
-                    Strings.Game_Chat_Unavailable,
-                    ChatMessageKind.System);
-                ChatPanelControl.DisableSending();
-            }
+            ChatPanelControl.Attach(_chatGateway, _playerId, _isChatAvailable);
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
@@ -235,41 +217,9 @@ namespace YachtDice.Views
             MatchPlayersItemsControl.ItemsSource = _matchPlayers;
         }
 
-        private void ShowChatMessage(ChatMessage message)
-        {
-            ChatMessageKind kind = message.AuthorId == _playerId ? ChatMessageKind.Own : ChatMessageKind.Other;
-
-            ChatPanelControl.AddMessage(message.Author, message.Content, kind);
-        }
-
-        private void HandleMessageReceived(ChatMessage message)
-        {
-            Dispatcher.BeginInvoke(new Action(() => ShowChatMessage(message)));
-        }
-
-        private void HandleMessageSubmitted(string content)
-        {
-            _ = SendChatMessageAsync(content);
-        }
-
-        private async Task SendChatMessageAsync(string content)
-        {
-            try
-            {
-                await _chatGateway.SendAsync(content);
-            }
-            catch (GatewayException)
-            {
-                ChatPanelControl.AddMessage(
-                    Strings.Game_Chat_SystemName,
-                    Strings.Game_Chat_SendFailed,
-                    ChatMessageKind.System);
-            }
-        }
-
         private async void HandleWindowClosed(object sender, EventArgs e)
         {
-            _chatGateway.Unsubscribe(HandleMessageReceived);
+            ChatPanelControl.Detach();
             _roomGateway.RoomChanged -= HandleRoomChanged;
 
             if (_isLeavingOnClose)
