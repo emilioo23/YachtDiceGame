@@ -11,6 +11,11 @@
         public string RoomId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the host of the room, which the player can search.
+        /// </summary>
+        public string HostName { get; set; }
+
+        /// <summary>
         /// Gets or sets the initial of the name of the host, used for the avatar.
         /// </summary>
         public string Initial { get; set; }

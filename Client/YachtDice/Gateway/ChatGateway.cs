@@ -17,6 +17,8 @@ namespace YachtDice.Gateway
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
+        private const string JoinFailedLogMessage = "The player could not join the chat of the room.";
+
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
@@ -27,7 +29,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Initializes the gateway for the player in a room.
         /// </summary>
-        /// <param name="playerName">Name of the player who writes in the chat.</param>
+        /// <param name="playerId">Identifier that the server gave to the player who writes in the chat.</param>
         /// <param name="roomCode">Code of the room whose chat is used.</param>
         public ChatGateway(string playerId, string roomCode)
         {
@@ -37,13 +39,25 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Registers the player in the chat of the room so the server sends the messages to this computer.
+        /// Tries to register the player in the chat of the room so the server sends the messages to this
+        /// computer. The game can be played without chat, so a failure is only written in the log.
         /// </summary>
-        /// <returns>A task that finishes when the player is registered.</returns>
-        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task JoinAsync()
+        /// <returns>True if the player is registered in the chat; false if the chat is not available.</returns>
+        public async Task<bool> TryJoinAsync()
         {
-            await ConnectAndExecuteAsync(client => client.JoinChat(_playerId, _roomCode));
+            bool isJoined = true;
+
+            try
+            {
+                await ConnectAndExecuteAsync(client => client.JoinChat(_playerId, _roomCode));
+            }
+            catch (GatewayException)
+            {
+                _logger.Warning(JoinFailedLogMessage);
+                isJoined = false;
+            }
+
+            return isJoined;
         }
 
         /// <summary>
