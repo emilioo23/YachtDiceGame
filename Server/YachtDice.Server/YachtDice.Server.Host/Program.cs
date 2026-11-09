@@ -83,7 +83,7 @@ namespace YachtDice.Server.Host
 
             var presenceService = new PresenceService();
             serviceHosts.Add(new ServiceHost(presenceService));
-            serviceHosts.Add(new ServiceHost(CreateFriendService(presenceService)));
+            serviceHosts.Add(new ServiceHost(CreateFriendService(presenceService, roomManager)));
 
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
         }
@@ -173,12 +173,14 @@ namespace YachtDice.Server.Host
         /// Creates and configures the friend service with its required dependencies.
         /// </summary>
         /// <param name="notifier">Component that warns the players who are online.</param>
+        /// <param name="roomManager">The rooms, to know who is inside each one.</param>
         /// <returns>A fully configured instance of FriendService.</returns>
-        private static FriendService CreateFriendService(IPlayerNotifier notifier)
+        private static FriendService CreateFriendService(IPlayerNotifier notifier, IRoomManager roomManager)
         {
             var friendshipService = new FriendshipService(new PlayerRepository(), new FriendRepository());
+            var invitationService = new RoomInvitationService(roomManager, friendshipService);
 
-            return new FriendService(friendshipService, notifier);
+            return new FriendService(friendshipService, invitationService, notifier);
         }
 
         /// <summary>

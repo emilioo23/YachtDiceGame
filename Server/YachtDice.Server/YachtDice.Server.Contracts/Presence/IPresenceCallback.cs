@@ -15,5 +15,12 @@ namespace YachtDice.Server.Contracts.Presence
         /// <param name="eventType">What happened to the player.</param>
         [OperationContract(IsOneWay = true)]
         void PresenceChanged(string displayName, PresenceEventType eventType);
+
+        /// <summary>
+        /// Called when a friend invites the player to join a room.
+        /// </summary>
+        /// <param name="invitation">Who invites and the code of the room.</param>
+        [OperationContract(IsOneWay = true)]
+        void InvitationReceived(RoomInvitation invitation);
     }
 }
