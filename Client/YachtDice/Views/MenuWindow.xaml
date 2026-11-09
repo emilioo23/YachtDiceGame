@@ -122,6 +122,13 @@
                             FontSize="19"/>
 
                     <Button
+                            Content="{x:Static properties:Strings.MainMenu_Nav_HowToPlay}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="HowToPlayNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button
                             Content="{x:Static properties:Strings.MainMenu_Nav_Settings}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"

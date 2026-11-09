@@ -978,4 +978,85 @@
   <data name="Profile_LevelFormat" xml:space="preserve">
     <value>Level {0} · {1} XP</value>
   </data>
+  <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
+    <value>How to play</value>
+  </data>
+  <data name="HowToPlay_Title" xml:space="preserve">
+    <value>How to play</value>
+  </data>
+  <data name="HowToPlay_Subtitle" xml:space="preserve">
+    <value>The rules of Yacht Dice in one minute.</value>
+  </data>
+  <data name="HowToPlay_GoalTitle" xml:space="preserve">
+    <value>The goal</value>
+  </data>
+  <data name="HowToPlay_GoalText" xml:space="preserve">
+    <value>You play one round for each category of your scorecard, scoring points with five dice. When every category is filled, the player with the most points wins.</value>
+  </data>
+  <data name="HowToPlay_TurnTitle" xml:space="preserve">
+    <value>Your turn</value>
+  </data>
+  <data name="HowToPlay_Step1" xml:space="preserve">
+    <value>Roll the five dice.</value>
+  </data>
+  <data name="HowToPlay_Step2" xml:space="preserve">
+    <value>Choose the dice you want to keep and roll the rest again. You can roll up to three times in total.</value>
+  </data>
+  <data name="HowToPlay_Step3" xml:space="preserve">
+    <value>When you are ready, pick a free category on your scorecard and score the points. If the dice do not make the combination, you score 0. Each category can be used only once.</value>
+  </data>
+  <data name="HowToPlay_UpperTitle" xml:space="preserve">
+    <value>Upper section</value>
+  </data>
+  <data name="HowToPlay_UpperRuleTitle" xml:space="preserve">
+    <value>Ones to Sixes</value>
+  </data>
+  <data name="HowToPlay_UpperRuleText" xml:space="preserve">
+    <value>You add up only the dice that show the number of the category. With 3, 3, 3, 5 and 6 in Threes you score 9, because only the three 3s count.</value>
+  </data>
+  <data name="HowToPlay_BonusText" xml:space="preserve">
+    <value>If your Ones to Sixes add up to 63 points or more (for example, three dice of each number), you get 35 extra points.</value>
+  </data>
+  <data name="HowToPlay_LowerTitle" xml:space="preserve">
+    <value>Lower section</value>
+  </data>
+  <data name="HowToPlay_ThreeOfAKindText" xml:space="preserve">
+    <value>At least three dice that are the same. You score the sum of all five dice. Example: 4+4+4+2+6 = 20 points.</value>
+  </data>
+  <data name="HowToPlay_FourOfAKindText" xml:space="preserve">
+    <value>At least four dice that are the same. You score the sum of all five dice. Example: 5+5+5+5+1 = 21 points.</value>
+  </data>
+  <data name="HowToPlay_FullHouseText" xml:space="preserve">
+    <value>Three dice that are the same plus two other dice that are the same as each other. You score 25 points.</value>
+  </data>
+  <data name="HowToPlay_SmallStraightTitle" xml:space="preserve">
+    <value>Small straight</value>
+  </data>
+  <data name="HowToPlay_SmallStraightText" xml:space="preserve">
+    <value>Four numbers in a row, such as 1-2-3-4 or 3-4-5-6. The fifth die does not matter. You score 30 points.</value>
+  </data>
+  <data name="HowToPlay_LargeStraightTitle" xml:space="preserve">
+    <value>Large straight</value>
+  </data>
+  <data name="HowToPlay_LargeStraightText" xml:space="preserve">
+    <value>Five numbers in a row: 1-2-3-4-5 or 2-3-4-5-6. You score 40 points.</value>
+  </data>
+  <data name="HowToPlay_YachtText" xml:space="preserve">
+    <value>All five dice the same. You score 50 points.</value>
+  </data>
+  <data name="HowToPlay_ChanceText" xml:space="preserve">
+    <value>Works with any combination. You score the sum of all five dice. Example: 1+3+4+5+6 = 19 points.</value>
+  </data>
+  <data name="HowToPlay_WinTitle" xml:space="preserve">
+    <value>Who wins?</value>
+  </data>
+  <data name="HowToPlay_WinText" xml:space="preserve">
+    <value>At the end, all your categories and the bonus are added up. The player with the most points wins, and the points of each game count for the ranking.</value>
+  </data>
+  <data name="HowToPlay_TipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="HowToPlay_TipsText" xml:space="preserve">
+    <value>Keep the dice that repeat the most. If a category is no longer reachable, give it up by scoring 0 in the one that hurts you least.</value>
+  </data>
 </root>

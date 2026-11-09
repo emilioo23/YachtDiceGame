@@ -271,6 +271,9 @@
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />
     <Compile Include="Utils\AvatarImages.cs" />
+    <Compile Include="Utils\DiceImages.cs" />
+    <Compile Include="Utils\DrawingCatalog.cs" />
+    <Compile Include="Utils\HowToPlayContent.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />
     <Compile Include="Navigation\ConnectionLossHandler.cs" />
@@ -290,9 +293,11 @@
     <Compile Include="Navigation\WindowNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
     <Compile Include="Models\ChatEntry.cs" />
+    <Compile Include="Models\CategoryRule.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
+    <Compile Include="Models\RuleStep.cs" />
     <Compile Include="Models\RoomListItem.cs" />
     <Compile Include="Models\RoomPrivacyFilter.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
@@ -311,6 +316,10 @@
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HowToPlayWindow.xaml.cs">
+      <DependentUpon>HowToPlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiceRow.cs" />
     <Compile Include="Views\InviteFriendsPanel.xaml.cs">
       <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>
     </Compile>
@@ -360,6 +369,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\Dice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Theme.Dark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -385,6 +398,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HowToPlayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

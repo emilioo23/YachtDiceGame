@@ -267,6 +267,11 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new LeaderboardWindow(_session));
         }
 
+        private void HowToPlayNavButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowNavigator.SwitchTo(this, new HowToPlayWindow(_session));
+        }
+
         private void SettingsNavButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new SettingsWindow(_session));

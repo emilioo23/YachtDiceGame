@@ -1,0 +1,99 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Faces of a die, used by the "How to play" window. Each one is drawn in a 100 x 100 square. -->
+
+  <DrawingImage x:Key="Die_1">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#C0392B" Geometry="M 41,50 A 9,9 0 1 0 59,50 A 9,9 0 1 0 41,50 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Die_2">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,28 A 7.5,7.5 0 1 0 35.5,28 A 7.5,7.5 0 1 0 20.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,72 A 7.5,7.5 0 1 0 79.5,72 A 7.5,7.5 0 1 0 64.5,72 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Die_3">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,28 A 7.5,7.5 0 1 0 35.5,28 A 7.5,7.5 0 1 0 20.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 42.5,50 A 7.5,7.5 0 1 0 57.5,50 A 7.5,7.5 0 1 0 42.5,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,72 A 7.5,7.5 0 1 0 79.5,72 A 7.5,7.5 0 1 0 64.5,72 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Die_4">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,28 A 7.5,7.5 0 1 0 35.5,28 A 7.5,7.5 0 1 0 20.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,28 A 7.5,7.5 0 1 0 79.5,28 A 7.5,7.5 0 1 0 64.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,72 A 7.5,7.5 0 1 0 35.5,72 A 7.5,7.5 0 1 0 20.5,72 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,72 A 7.5,7.5 0 1 0 79.5,72 A 7.5,7.5 0 1 0 64.5,72 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Die_5">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,28 A 7.5,7.5 0 1 0 35.5,28 A 7.5,7.5 0 1 0 20.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,28 A 7.5,7.5 0 1 0 79.5,28 A 7.5,7.5 0 1 0 64.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 42.5,50 A 7.5,7.5 0 1 0 57.5,50 A 7.5,7.5 0 1 0 42.5,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,72 A 7.5,7.5 0 1 0 35.5,72 A 7.5,7.5 0 1 0 20.5,72 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,72 A 7.5,7.5 0 1 0 79.5,72 A 7.5,7.5 0 1 0 64.5,72 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Die_6">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 22,4 H 78 A 18,18 0 0 1 96,22 V 78 A 18,18 0 0 1 78,96 H 22 A 18,18 0 0 1 4,78 V 22 A 18,18 0 0 1 22,4 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#B9B2A3" Thickness="3" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,28 A 7.5,7.5 0 1 0 35.5,28 A 7.5,7.5 0 1 0 20.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,50 A 7.5,7.5 0 1 0 35.5,50 A 7.5,7.5 0 1 0 20.5,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 20.5,72 A 7.5,7.5 0 1 0 35.5,72 A 7.5,7.5 0 1 0 20.5,72 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,28 A 7.5,7.5 0 1 0 79.5,28 A 7.5,7.5 0 1 0 64.5,28 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,50 A 7.5,7.5 0 1 0 79.5,50 A 7.5,7.5 0 1 0 64.5,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 64.5,72 A 7.5,7.5 0 1 0 79.5,72 A 7.5,7.5 0 1 0 64.5,72 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+</ResourceDictionary>

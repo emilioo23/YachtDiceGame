@@ -925,6 +925,240 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Si la suma de Unos a Seises llega a 63 puntos o más (por ejemplo, tres dados de cada número), ganas 35 puntos extra..
+        /// </summary>
+        public static string HowToPlay_BonusText {
+            get {
+                return ResourceManager.GetString("HowToPlay_BonusText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sirve para cualquier combinación. Anotas la suma de los cinco dados. Ejemplo: 1+3+4+5+6 = 19 puntos..
+        /// </summary>
+        public static string HowToPlay_ChanceText {
+            get {
+                return ResourceManager.GetString("HowToPlay_ChanceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Al menos cuatro dados iguales. Anotas la suma de los cinco dados. Ejemplo: 5+5+5+5+1 = 21 puntos..
+        /// </summary>
+        public static string HowToPlay_FourOfAKindText {
+            get {
+                return ResourceManager.GetString("HowToPlay_FourOfAKindText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tres dados iguales y, además, otros dos iguales entre sí. Anotas 25 puntos..
+        /// </summary>
+        public static string HowToPlay_FullHouseText {
+            get {
+                return ResourceManager.GetString("HowToPlay_FullHouseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Juegas una ronda por cada categoría de tu tabla de puntos y en cada una anotas puntos con cinco dados. Cuando todas las categorías están llenas, gana quien tenga más puntos..
+        /// </summary>
+        public static string HowToPlay_GoalText {
+            get {
+                return ResourceManager.GetString("HowToPlay_GoalText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El objetivo.
+        /// </summary>
+        public static string HowToPlay_GoalTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_GoalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cinco números seguidos: 1-2-3-4-5 o 2-3-4-5-6. Anotas 40 puntos..
+        /// </summary>
+        public static string HowToPlay_LargeStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_LargeStraightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escalera grande.
+        /// </summary>
+        public static string HowToPlay_LargeStraightTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_LargeStraightTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sección inferior.
+        /// </summary>
+        public static string HowToPlay_LowerTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_LowerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cuatro números seguidos, como 1-2-3-4 o 3-4-5-6. El quinto dado no importa. Anotas 30 puntos..
+        /// </summary>
+        public static string HowToPlay_SmallStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_SmallStraightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escalera pequeña.
+        /// </summary>
+        public static string HowToPlay_SmallStraightTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_SmallStraightTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tira los cinco dados..
+        /// </summary>
+        public static string HowToPlay_Step1 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Elige los dados que quieres conservar y vuelve a tirar los demás. Puedes tirar hasta tres veces en total..
+        /// </summary>
+        public static string HowToPlay_Step2 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cuando estés listo, elige una categoría libre de tu tabla y anota los puntos. Si los dados no cumplen la combinación, anotas 0. Cada categoría se usa una sola vez..
+        /// </summary>
+        public static string HowToPlay_Step3 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Las reglas de Yacht Dice en un minuto..
+        /// </summary>
+        public static string HowToPlay_Subtitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Al menos tres dados iguales. Anotas la suma de los cinco dados. Ejemplo: 4+4+4+2+6 = 20 puntos..
+        /// </summary>
+        public static string HowToPlay_ThreeOfAKindText {
+            get {
+                return ResourceManager.GetString("HowToPlay_ThreeOfAKindText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Conserva los dados que más se repiten. Si una categoría ya no se ve posible, sacrifícala anotando 0 en la que menos te convenga..
+        /// </summary>
+        public static string HowToPlay_TipsText {
+            get {
+                return ResourceManager.GetString("HowToPlay_TipsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Consejos.
+        /// </summary>
+        public static string HowToPlay_TipsTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_TipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cómo jugar.
+        /// </summary>
+        public static string HowToPlay_Title {
+            get {
+                return ResourceManager.GetString("HowToPlay_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu turno.
+        /// </summary>
+        public static string HowToPlay_TurnTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_TurnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sumas solo los dados que muestran el número de la categoría. Con 3, 3, 3, 5 y 6 en Tres anotas 9, porque solo cuentan los tres 3..
+        /// </summary>
+        public static string HowToPlay_UpperRuleText {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperRuleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unos a Seises.
+        /// </summary>
+        public static string HowToPlay_UpperRuleTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperRuleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sección superior.
+        /// </summary>
+        public static string HowToPlay_UpperTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Al final se suman todas tus categorías más el bono. Gana el jugador con más puntos, y los puntos de cada partida cuentan para el ranking..
+        /// </summary>
+        public static string HowToPlay_WinText {
+            get {
+                return ResourceManager.GetString("HowToPlay_WinText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Quién gana?.
+        /// </summary>
+        public static string HowToPlay_WinTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_WinTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los cinco dados iguales. Anotas 50 puntos..
+        /// </summary>
+        public static string HowToPlay_YachtText {
+            get {
+                return ResourceManager.GetString("HowToPlay_YachtText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Unirse.
         /// </summary>
         public static string Invitations_Received_Join {
@@ -1524,6 +1758,15 @@ namespace YachtDice.Resources {
         public static string MainMenu_Friends_YourUsername {
             get {
                 return ResourceManager.GetString("MainMenu_Friends_YourUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cómo jugar.
+        /// </summary>
+        public static string MainMenu_Nav_HowToPlay {
+            get {
+                return ResourceManager.GetString("MainMenu_Nav_HowToPlay", resourceCulture);
             }
         }
         
