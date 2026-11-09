@@ -10,7 +10,14 @@ namespace YachtDice.Server.Contracts.Chat
     public class ChatMessage
     {
         /// <summary>
-        /// Display name or username of the player who sent the message.
+        /// Identifier that the server gave to the player who sent the message. The clients compare it with
+        /// their own to know which messages are theirs.
+        /// </summary>
+        [DataMember]
+        public string AuthorId { get; set; }
+
+        /// <summary>
+        /// Name that the screens show for the player who sent the message.
         /// </summary>
         [DataMember]
         public string Author { get; set; }

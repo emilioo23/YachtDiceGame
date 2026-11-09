@@ -79,6 +79,7 @@
     <Compile Include="Rooms\IRoomManager.cs" />
     <Compile Include="Rooms\RoomDetails.cs" />
     <Compile Include="Rooms\RoomManager.cs" />
+    <Compile Include="Rooms\RoomPlayer.cs" />
     <Compile Include="Rooms\RoomResult.cs" />
     <Compile Include="Rooms\RoomSettings.cs" />
     <Compile Include="Rooms\RoomStatus.cs" />
