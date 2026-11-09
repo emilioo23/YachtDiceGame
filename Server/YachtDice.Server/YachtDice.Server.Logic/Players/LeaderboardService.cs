@@ -34,22 +34,17 @@ namespace YachtDice.Server.Logic.Players
         {
             List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxEntries);
 
-            List<LeaderboardEntry> entries = records.Select(CreateEntry).ToList();
+            List<LeaderboardEntry> entries = records
+                .Select((record, index) => new LeaderboardEntry
+                {
+                    Position = index + FirstPosition,
+                    DisplayName = record.DisplayName,
+                    TotalPoints = record.TotalPoints,
+                    Wins = record.Wins
+                })
+                .ToList();
 
             return entries;
-        }
-
-        private static LeaderboardEntry CreateEntry(PlayerRankingRecord record, int index)
-        {
-            var entry = new LeaderboardEntry
-            {
-                Position = index + FirstPosition,
-                DisplayName = record.DisplayName,
-                TotalPoints = record.TotalPoints,
-                Wins = record.Wins
-            };
-
-            return entry;
         }
     }
 }
