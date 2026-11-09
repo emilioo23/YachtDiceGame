@@ -274,7 +274,7 @@ namespace YachtDice.Views
             CustomDialogWindow.ShowMessage(this, Strings.Settings_FeatureNotImplementedMessage);
         }
 
-        private void BackLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }

@@ -595,7 +595,7 @@
     <value>Nueva partida</value>
   </data>
   <data name="Dialogs_LeaveMatch" xml:space="preserve">
-    <value>¿Estás seguro de que deseas salir de la sala? Tu progreso no se guardará.</value>
+    <value>¿Seguro que quieres salir de la partida? Se avisará a los demás jugadores y podrás volver mientras siga en curso.</value>
   </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>¿Estás seguro de eliminar a este amigo?</value>
@@ -1058,5 +1058,29 @@
   </data>
   <data name="HowToPlay_TipsText" xml:space="preserve">
     <value>Conserva los dados que más se repiten. Si una categoría ya no se ve posible, sacrifícala anotando 0 en la que menos te convenga.</value>
+  </data>
+  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
+    <value>Este correo no está registrado.</value>
+  </data>
+  <data name="Dialogs_InvalidPassword" xml:space="preserve">
+    <value>La contraseña es incorrecta.</value>
+  </data>
+  <data name="Dialogs_ConfirmLogout" xml:space="preserve">
+    <value>¿Seguro que quieres cerrar sesión?</value>
+  </data>
+  <data name="Game_Chat_PlayerLeft" xml:space="preserve">
+    <value>{0} abandonó la partida o perdió la conexión.</value>
+  </data>
+  <data name="Game_Chat_PlayerReturned" xml:space="preserve">
+    <value>{0} volvió a la partida.</value>
+  </data>
+  <data name="Game_Chat_PlayerKicked" xml:space="preserve">
+    <value>{0} fue expulsado de la partida.</value>
+  </data>
+  <data name="Game_KickNoPlayers" xml:space="preserve">
+    <value>No hay otros jugadores en la partida para expulsar.</value>
+  </data>
+  <data name="Menu_PendingMatchPrompt" xml:space="preserve">
+    <value>Dejaste una partida en curso. ¿Quieres volver a ella?</value>
   </data>
 </root>

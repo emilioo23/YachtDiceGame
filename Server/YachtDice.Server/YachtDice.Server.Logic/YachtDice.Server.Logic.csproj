@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\EmailAddressValidator.cs" />
     <Compile Include="Authentication\ILoginService.cs" />
     <Compile Include="Authentication\IPasswordRecoveryService.cs" />
     <Compile Include="Authentication\IRegistrationService.cs" />

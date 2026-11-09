@@ -295,6 +295,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres cerrar sesión?.
+        /// </summary>
+        public static string Dialogs_ConfirmLogout {
+            get {
+                return ResourceManager.GetString("Dialogs_ConfirmLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. Inicia sesión de nuevo para seguir jugando..
         /// </summary>
         public static string Dialogs_ConnectionLost {
@@ -318,6 +327,15 @@ namespace YachtDice.Resources {
         public static string Dialogs_DeleteFriend {
             get {
                 return ResourceManager.GetString("Dialogs_DeleteFriend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Este correo no está registrado..
+        /// </summary>
+        public static string Dialogs_EmailNotRegistered {
+            get {
+                return ResourceManager.GetString("Dialogs_EmailNotRegistered", resourceCulture);
             }
         }
         
@@ -349,7 +367,16 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ¿Estás seguro de que deseas salir de la sala? Tu progreso no se guardará..
+        ///   Busca una cadena traducida similar a La contraseña es incorrecta..
+        /// </summary>
+        public static string Dialogs_InvalidPassword {
+            get {
+                return ResourceManager.GetString("Dialogs_InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres salir de la partida? Se avisará a los demás jugadores y podrás volver mientras siga en curso..
         /// </summary>
         public static string Dialogs_LeaveMatch {
             get {
@@ -736,6 +763,33 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} fue expulsado de la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerKicked {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerKicked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} abandonó la partida o perdió la conexión..
+        /// </summary>
+        public static string Game_Chat_PlayerLeft {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} volvió a la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerReturned {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerReturned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo enviar el mensaje..
         /// </summary>
         public static string Game_Chat_SendFailed {
@@ -786,6 +840,15 @@ namespace YachtDice.Resources {
         public static string Game_Dice_HintPress {
             get {
                 return ResourceManager.GetString("Game_Dice_HintPress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No hay otros jugadores en la partida para expulsar..
+        /// </summary>
+        public static string Game_KickNoPlayers {
+            get {
+                return ResourceManager.GetString("Game_KickNoPlayers", resourceCulture);
             }
         }
         
@@ -1902,6 +1965,15 @@ namespace YachtDice.Resources {
         public static string MainMenu_PlayerLevel {
             get {
                 return ResourceManager.GetString("MainMenu_PlayerLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Dejaste una partida en curso. ¿Quieres volver a ella?.
+        /// </summary>
+        public static string Menu_PendingMatchPrompt {
+            get {
+                return ResourceManager.GetString("Menu_PendingMatchPrompt", resourceCulture);
             }
         }
         

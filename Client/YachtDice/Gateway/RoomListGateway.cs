@@ -28,6 +28,21 @@ namespace YachtDice.Gateway
             return rooms.ToList();
         }
 
+        /// <summary>
+        /// Looks for a match in progress that the player left and can still join again.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The code of the room, or an empty string if there is no pending match.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<string> FindPendingRoomAsync(string displayName)
+        {
+            string roomCode = await ConnectAndExecuteAsync(client => client.FindPendingRoom(displayName));
+
+            await CloseAsync();
+
+            return roomCode;
+        }
+
         /// <inheritdoc />
         protected override RoomServiceClient CreateClient()
         {

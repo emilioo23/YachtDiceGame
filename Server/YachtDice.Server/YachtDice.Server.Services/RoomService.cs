@@ -119,8 +119,8 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Takes another player out of the room and tells everyone. Only the host can do it, and only before
-        /// the game starts. The expulsion is written in the log of the server.
+        /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
+        /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
         /// <param name="playerId">Identifier of the host who expels the player.</param>
         /// <param name="roomCode">Code of the room.</param>
@@ -150,8 +150,21 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Looks for a game in progress that the player left and can still join again, by using the name of
+        /// the player.
+        /// </summary>
+        /// <param name="displayName">Name that the player shows.</param>
+        /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
+        public string FindPendingRoom(string displayName)
+        {
+            string roomCode = Execute(displayName, () => _roomManager.FindPendingRoomCode(displayName));
+
+            return roomCode;
+        }
+
+        /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
-        /// the room stays empty it disappears.
+        /// the game already started, the player can come back later. If the room stays empty it disappears.
         /// </summary>
         /// <param name="playerId">Identifier of the player who leaves.</param>
         /// <param name="roomCode">Code of the room.</param>
@@ -160,11 +173,27 @@ namespace YachtDice.Server.Services
             Execute(playerId, () => ProcessLeave(playerId, roomCode));
         }
 
+        private static Contracts.RoomEventType GetJoinEventType(LogicRooms.RoomResult result)
+        {
+            Contracts.RoomEventType eventType = Contracts.RoomEventType.PlayerJoined;
+
+            if (result.HasReturned)
+            {
+                eventType = Contracts.RoomEventType.PlayerReturned;
+            }
+
+            return eventType;
+        }
+
         private static Contracts.RoomEventType GetLeaveEventType(LogicRooms.RoomResult result)
         {
             Contracts.RoomEventType eventType = Contracts.RoomEventType.PlayerLeft;
 
-            if (result.HostChanged)
+            if (result.Room.IsStarted)
+            {
+                eventType = Contracts.RoomEventType.PlayerDisconnected;
+            }
+            else if (result.HostChanged)
             {
                 eventType = Contracts.RoomEventType.HostChanged;
             }
@@ -186,7 +215,7 @@ namespace YachtDice.Server.Services
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
                 Subscribe(result.Room.Code, result.PlayerId);
-                Broadcast(result.Room, Contracts.RoomEventType.PlayerJoined);
+                Broadcast(result.Room, GetJoinEventType(result));
             }
 
             return Mapping.RoomMapper.ToJoinResult(result);

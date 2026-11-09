@@ -20,7 +20,8 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>
         /// Puts the player inside the room that has the code, if it exists and has space. If another player of
-        /// the room already shows the name, the server adds a number to it.
+        /// the room already shows the name, the server adds a number to it. If the game of the room already
+        /// started, only a player who left it can enter again.
         /// </summary>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomCode">Code of the room.</param>
@@ -71,8 +72,8 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode StartGame(string playerId, string roomCode);
 
         /// <summary>
-        /// Takes another player out of the room and tells everyone. Only the host can do it, and only before
-        /// the game starts. The expulsion is written in the log of the server.
+        /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
+        /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
         /// <param name="playerId">Identifier of the host who expels the player.</param>
         /// <param name="roomCode">Code of the room.</param>
@@ -94,8 +95,18 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode TransferHost(string playerId, string roomCode, string newHostId);
 
         /// <summary>
+        /// Looks for a game in progress that the player left and can still join again, by using the name of
+        /// the player.
+        /// </summary>
+        /// <param name="displayName">Name that the player shows.</param>
+        /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        string FindPendingRoom(string displayName);
+
+        /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
-        /// the room stays empty it disappears.
+        /// the game already started, the player can come back later. If the room stays empty it disappears.
         /// </summary>
         /// <param name="playerId">Identifier of the player who leaves.</param>
         /// <param name="roomCode">Code of the room.</param>

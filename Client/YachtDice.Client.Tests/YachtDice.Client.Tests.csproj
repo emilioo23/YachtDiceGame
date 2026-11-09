@@ -48,6 +48,7 @@
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
     <Compile Include="Players\InitialLetterTests.cs" />
+    <Compile Include="Rooms\PresenceComparerTests.cs" />
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />

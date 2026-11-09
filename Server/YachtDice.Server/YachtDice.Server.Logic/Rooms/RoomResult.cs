@@ -28,6 +28,11 @@
         public bool HostChanged { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the player came back to a game in progress after leaving it.
+        /// </summary>
+        public bool HasReturned { get; private set; }
+
+        /// <summary>
         /// Gets the identifier that the server gave to the player who entered the room. It is empty if the
         /// operation did not put a player inside a room.
         /// </summary>
@@ -73,6 +78,17 @@
         public static RoomResult CreateEntered(RoomDetails room, string playerId)
         {
             return new RoomResult(RoomStatus.Success, room, playerId);
+        }
+
+        /// <summary>
+        /// Creates the result of a player who came back to a game in progress.
+        /// </summary>
+        /// <param name="room">State of the room after the player came back.</param>
+        /// <param name="playerId">Identifier that the player had before leaving.</param>
+        /// <returns>A successful result that carries the identifier of the player.</returns>
+        public static RoomResult CreateReturned(RoomDetails room, string playerId)
+        {
+            return new RoomResult(RoomStatus.Success, room, playerId) { HasReturned = true };
         }
     }
 }

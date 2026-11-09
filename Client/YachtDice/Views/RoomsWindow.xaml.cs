@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Threading;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
@@ -180,7 +179,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void BackLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }

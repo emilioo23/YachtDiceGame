@@ -66,12 +66,20 @@
                                         BorderThickness="1.5"
                                         Margin="0,0,10,0">
 
-                                    <TextBlock x:Name="PlayerInitialTextBlock"
-                                               FontWeight="Bold"
-                                               FontSize="19"
-                                               Foreground="{StaticResource BrushText}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                    <Grid>
+
+                                        <TextBlock x:Name="PlayerInitialTextBlock"
+                                                   FontWeight="Bold"
+                                                   FontSize="19"
+                                                   Foreground="{StaticResource BrushText}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+
+                                        <Image x:Name="PlayerAvatarImage"
+                                               Margin="2"
+                                               Visibility="Collapsed"/>
+
+                                    </Grid>
                                 </Border>
 
                                 <StackPanel VerticalAlignment="Center">

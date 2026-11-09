@@ -18,7 +18,8 @@ namespace YachtDice.Server.Logic.Rooms
 
         /// <summary>
         /// Puts the player inside the room that has the code. If another player of the room already uses the
-        /// name, a number is added to it.
+        /// name, a number is added to it. If the game already started, only a player who left it can enter,
+        /// and gets the identifier and the avatar from before.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
         /// <param name="playerName">Name that the player who enters wants to show.</param>
@@ -43,8 +44,17 @@ namespace YachtDice.Server.Logic.Rooms
         List<RoomSummary> GetOpenRooms();
 
         /// <summary>
+        /// Looks for a game in progress that the player left and can still join again.
+        /// </summary>
+        /// <param name="playerName">Name that the player shows.</param>
+        /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
+        /// <exception cref="System.ArgumentException">The name is empty.</exception>
+        string FindPendingRoomCode(string playerName);
+
+        /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
-        /// nobody stays, the room is deleted.
+        /// the game already started, the player stays as an absent player and can come back. If nobody stays
+        /// inside, the room is deleted.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
         /// <param name="playerId">Identifier of the player who leaves.</param>
@@ -69,7 +79,8 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult StartGame(string roomCode, string playerId);
 
         /// <summary>
-        /// Takes another player out of the room. Only the host can do it, and only before the game starts.
+        /// Takes another player out of the room for good, also during the game. Only the host can do it. The
+        /// expelled player cannot come back to a game in progress.
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
         /// <param name="playerId">Identifier of the host who expels the player.</param>

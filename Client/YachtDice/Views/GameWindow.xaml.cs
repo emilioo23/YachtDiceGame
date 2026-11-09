@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -150,6 +154,9 @@ namespace YachtDice.Views
         };
 
         private bool _isLeavingOnClose = true;
+        private bool _isClosed;
+        private string _hostId;
+        private List<MatchParticipant> _presentPlayers;
         private List<MatchPlayer> _matchPlayers;
         private int _rollsLeft;
         private int _totalScore;
@@ -169,8 +176,11 @@ namespace YachtDice.Views
             _chatGateway = chatGateway;
             _isChatAvailable = isChatAvailable;
             _playerId = roomGateway.PlayerId;
-            _matchPlayers = MatchPlayerFactory.Create(roomGateway.CurrentRoom.Players, _playerId);
+            _matchPlayers = MatchPlayerFactory.CreateForRoom(roomGateway.CurrentRoom, _playerId);
             MatchPlayersItemsControl.ItemsSource = _matchPlayers;
+            _presentPlayers = ToParticipants(roomGateway.CurrentRoom);
+            _hostId = roomGateway.CurrentRoom.HostId;
+            ApplyHostControls(roomGateway.CurrentRoom);
 
             RoundInfoTextBlock.Text = string.Format(Strings.Game_Topbar_RoundInfo, CurrentRoundMock, TotalRoundsMock);
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
@@ -184,8 +194,16 @@ namespace YachtDice.Views
             Closed += HandleWindowClosed;
         }
 
+        // The player left on purpose, so the menu does not offer the same match again in this session. The player
+        // can still go back by typing the code of the room.
+        private void RememberLeftMatch()
+        {
+            _roomGateway.Session.LastOfferedMatchCode = _roomGateway.CurrentRoom.Code;
+        }
+
         private void GoToResultsWindow()
         {
+            RememberLeftMatch();
             WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, _totalScore));
         }
 
@@ -206,9 +224,82 @@ namespace YachtDice.Views
             ChatPanelControl.Attach(_chatGateway, _playerId, _isChatAvailable);
         }
 
+        private static List<MatchParticipant> ToParticipants(RoomState room)
+        {
+            return room.Players.Select(player => new MatchParticipant(player.Id, player.DisplayName)).ToList();
+        }
+
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
-            Dispatcher.BeginInvoke(new Action(() => ShowRoomPlayers(room)));
+            Dispatcher.BeginInvoke(new Action(() => ApplyRoomChange(room, eventType)));
+        }
+
+        private void ApplyRoomChange(RoomState room, RoomEventType eventType)
+        {
+            if (!_isClosed)
+            {
+                ShowRoomChange(room, eventType);
+            }
+        }
+
+        private void ShowRoomChange(RoomState room, RoomEventType eventType)
+        {
+            if (eventType == RoomEventType.PlayerKicked && room.Players.All(player => player.Id != _playerId))
+            {
+                LeaveBecauseKicked();
+            }
+            else
+            {
+                AnnouncePresence(room, eventType);
+                ShowRoomPlayers(room);
+                ApplyHostControls(room);
+            }
+        }
+
+        private void LeaveBecauseKicked()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_KickedMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private void AnnouncePresence(RoomState room, RoomEventType eventType)
+        {
+            List<MatchParticipant> currentPlayers = ToParticipants(room);
+
+            foreach (MatchParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
+            {
+                AddNotice(PresenceMessages.GetDepartureMessage(eventType, departed.Name));
+            }
+
+            foreach (MatchParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
+            {
+                AddNotice(PresenceMessages.GetReturnMessage(arrived.Name));
+            }
+
+            _presentPlayers = currentPlayers;
+            AnnounceNewHost(room);
+        }
+
+        private void AnnounceNewHost(RoomState room)
+        {
+            RoomPlayer host = room.Players.FirstOrDefault(player => player.Id == room.HostId);
+
+            if (host != null && room.HostId != _hostId)
+            {
+                AddNotice(string.Format(Strings.Lobby_Chat_NewHost, host.DisplayName));
+            }
+
+            _hostId = room.HostId;
+        }
+
+        private void AddNotice(string text)
+        {
+            ChatPanelControl.AddMessage(Strings.Game_Chat_SystemName, text, ChatMessageKind.System);
+        }
+
+        private void ApplyHostControls(RoomState room)
+        {
+            KickPlayerButton.Visibility = room.HostId == _playerId ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void ShowRoomPlayers(RoomState room)
@@ -219,6 +310,7 @@ namespace YachtDice.Views
 
         private async void HandleWindowClosed(object sender, EventArgs e)
         {
+            _isClosed = true;
             ChatPanelControl.Detach();
             _roomGateway.RoomChanged -= HandleRoomChanged;
 
@@ -530,7 +622,78 @@ namespace YachtDice.Views
 
             if (new CustomDialogWindow(dialogContent).ShowDialog() == true)
             {
+                RememberLeftMatch();
                 WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+            }
+        }
+
+        private void HowToPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            new HowToPlayWindow(this).ShowDialog();
+        }
+
+        private void KickPlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<MatchPlayer> candidates = _matchPlayers
+                .Where(player => !player.IsLocalPlayer && !player.HasLeft)
+                .ToList();
+
+            if (candidates.Count == EmptyLength)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Game_KickNoPlayers);
+            }
+            else
+            {
+                ShowKickMenu(candidates);
+            }
+        }
+
+        private void ShowKickMenu(IEnumerable<MatchPlayer> candidates)
+        {
+            var menu = new ContextMenu { PlacementTarget = KickPlayerButton, Placement = PlacementMode.Top };
+
+            foreach (MatchPlayer candidate in candidates)
+            {
+                var item = new MenuItem { Header = candidate.Name, Tag = candidate.Id };
+                item.Click += KickMenuItem_Click;
+                menu.Items.Add(item);
+            }
+
+            menu.IsOpen = true;
+        }
+
+        private async void KickMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (MenuItem)sender;
+            string question = string.Format(Strings.Lobby_ConfirmKick, item.Header);
+
+            if (CustomDialogWindow.Confirm(this, question))
+            {
+                await KickAsync((string)item.Tag);
+            }
+        }
+
+        private async Task KickAsync(string targetPlayerId)
+        {
+            string errorMessage = string.Empty;
+
+            try
+            {
+                RoomResultCode result = await _roomGateway.KickPlayerAsync(targetPlayerId);
+
+                if (result != RoomResultCode.Success)
+                {
+                    errorMessage = RoomResultMessages.GetMessage(result);
+                }
+            }
+            catch (GatewayException ex)
+            {
+                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
+            }
+
+            if (errorMessage.Length > EmptyLength)
+            {
+                CustomDialogWindow.ShowMessage(this, errorMessage);
             }
         }
 
