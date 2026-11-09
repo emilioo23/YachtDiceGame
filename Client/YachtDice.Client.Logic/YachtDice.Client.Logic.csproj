@@ -51,6 +51,11 @@
     <Compile Include="Dice\DiceRowParser.cs" />
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
+    <Compile Include="Players\InitialLetter.cs" />
+    <Compile Include="Rooms\RoomListItem.cs" />
+    <Compile Include="Rooms\RoomListItemFilter.cs" />
+    <Compile Include="Rooms\RoomListUpdater.cs" />
+    <Compile Include="Rooms\RoomPrivacyFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

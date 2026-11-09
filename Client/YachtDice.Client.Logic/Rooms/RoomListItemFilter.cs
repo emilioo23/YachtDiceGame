@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using YachtDice.Models;
 
-namespace YachtDice.Utils
+namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
     /// Chooses which rows of the list of rooms the player sees, according to the kind of room and to the text

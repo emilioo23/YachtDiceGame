@@ -1,4 +1,4 @@
-﻿namespace YachtDice.Models
+﻿namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
     /// Row of the list of rooms: a room that waits for players.

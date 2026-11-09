@@ -47,6 +47,10 @@
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
+    <Compile Include="Players\InitialLetterTests.cs" />
+    <Compile Include="Rooms\RoomListItemFilterTests.cs" />
+    <Compile Include="Rooms\RoomListItemTests.cs" />
+    <Compile Include="Rooms\RoomListUpdaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

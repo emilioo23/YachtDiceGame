@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.RoomServiceReference;

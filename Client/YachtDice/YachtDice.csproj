@@ -286,7 +286,6 @@
     <Compile Include="Utils\MatchPlayerFactory.cs" />
     <Compile Include="Utils\PlayerInitials.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
-    <Compile Include="Utils\RoomListItemFilter.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Navigation\InvitationListener.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
@@ -298,8 +297,6 @@
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
     <Compile Include="Models\RuleStep.cs" />
-    <Compile Include="Models\RoomListItem.cs" />
-    <Compile Include="Models\RoomPrivacyFilter.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>
