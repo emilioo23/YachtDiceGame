@@ -34,6 +34,10 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The options sent are not valid for the room.</summary>
         [EnumMember]
-        InvalidSettings
+        InvalidSettings,
+
+        /// <summary>The code sent does not open the private room.</summary>
+        [EnumMember]
+        InvalidAccessCode
     }
 }

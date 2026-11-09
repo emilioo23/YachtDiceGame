@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Server.Logic.Rooms
+﻿using System.Collections.Generic;
+
+namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
     /// Rules of the rooms: who is inside each one, who controls it and when its game can start. The players
@@ -23,6 +25,22 @@
         /// <returns>Whether the player entered, the state of the room and the identifier of the player.</returns>
         /// <exception cref="System.ArgumentException">The name is empty.</exception>
         RoomResult Join(string roomCode, string playerName);
+
+        /// <summary>
+        /// Puts the player inside a room of the list of rooms. A private room also needs its code.
+        /// </summary>
+        /// <param name="roomId">Identifier of the room inside the list.</param>
+        /// <param name="playerName">Name that the player who enters wants to show.</param>
+        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <returns>Whether the player entered, the state of the room and the identifier of the player.</returns>
+        /// <exception cref="System.ArgumentException">The name is empty.</exception>
+        RoomResult JoinListed(string roomId, string playerName, string accessCode);
+
+        /// <summary>
+        /// Gets the rooms that wait for players, public and private, ordered by the name of their host.
+        /// </summary>
+        /// <returns>A short description of each room whose game did not start.</returns>
+        List<RoomSummary> GetOpenRooms();
 
         /// <summary>
         /// Takes the player out of the room. If nobody stays, the room is deleted.

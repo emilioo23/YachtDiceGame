@@ -44,8 +44,10 @@
     <Compile Include="Authentication\LoginServiceTests.cs" />
     <Compile Include="Authentication\RegistrationServiceTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
+    <Compile Include="Friends\RoomInvitationServiceTests.cs" />
     <Compile Include="InMemory\InMemoryEmailService.cs" />
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />
+    <Compile Include="InMemory\InMemoryFriendshipService.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rooms\RoomManagerTests.cs" />

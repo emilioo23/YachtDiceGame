@@ -24,10 +24,17 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="settings">Options of the room.</param>
         public GameRoom(string code, RoomSettings settings)
         {
+            Id = Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture);
             Code = code;
             HostId = string.Empty;
             Settings = settings;
         }
+
+        /// <summary>
+        /// Gets the identifier of the room inside the list of rooms. It is not the code of the room, which
+        /// private rooms keep secret.
+        /// </summary>
+        public string Id { get; }
 
         /// <summary>
         /// Gets the code of the room.
@@ -74,6 +81,16 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return player;
+        }
+
+        /// <summary>
+        /// Indicates whether the text is the code of the room. The case does not matter.
+        /// </summary>
+        /// <param name="code">Code to compare, without spaces around it.</param>
+        /// <returns>True if it is the code of the room.</returns>
+        public bool HasCode(string code)
+        {
+            return string.Equals(Code, code, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -147,6 +164,27 @@ namespace YachtDice.Server.Logic.Rooms
             };
 
             return details;
+        }
+
+        /// <summary>
+        /// Creates the short description of the room that is shown in the list of rooms.
+        /// </summary>
+        /// <returns>A description that does not include the code of the room.</returns>
+        public RoomSummary ToSummary()
+        {
+            RoomPlayer host = _players.First(player => IsSameId(player.Id, HostId));
+
+            var summary = new RoomSummary
+            {
+                RoomId = Id,
+                HostName = host.DisplayName,
+                PlayerCount = _players.Count,
+                MaxPlayers = Settings.MaxPlayers,
+                IsPrivate = Settings.IsPrivate,
+                Speed = Settings.Speed
+            };
+
+            return summary;
         }
 
         private static bool IsSameId(string firstId, string secondId)

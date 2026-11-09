@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -51,7 +52,35 @@ namespace YachtDice.Server.Services
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
         public Contracts.JoinRoomResult JoinRoom(string displayName, string roomCode)
         {
-            Contracts.JoinRoomResult result = Execute(displayName, () => ProcessJoin(displayName, roomCode));
+            Contracts.JoinRoomResult result =
+                Execute(displayName, () => FinishJoin(_roomManager.Join(roomCode, displayName)));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the rooms that wait for players, public and private. The codes of the rooms are not sent.
+        /// </summary>
+        /// <returns>A short description of each room that waits for players.</returns>
+        public List<Contracts.RoomSummary> GetRoomList()
+        {
+            List<Contracts.RoomSummary> rooms =
+                Execute(() => Mapping.RoomMapper.ToSummaries(_roomManager.GetOpenRooms()));
+
+            return rooms;
+        }
+
+        /// <summary>
+        /// Puts the player inside a room of the list. A private room also needs its code.
+        /// </summary>
+        /// <param name="displayName">Name that the player who enters wants to show.</param>
+        /// <param name="roomId">Identifier of the room inside the list.</param>
+        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
+        public Contracts.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode)
+        {
+            Contracts.JoinRoomResult result =
+                Execute(displayName, () => FinishJoin(_roomManager.JoinListed(roomId, displayName, accessCode)));
 
             return result;
         }
@@ -106,10 +135,8 @@ namespace YachtDice.Server.Services
             return Mapping.RoomMapper.ToCreateResult(result);
         }
 
-        private Contracts.JoinRoomResult ProcessJoin(string displayName, string roomCode)
+        private Contracts.JoinRoomResult FinishJoin(LogicRooms.RoomResult result)
         {
-            LogicRooms.RoomResult result = _roomManager.Join(roomCode, displayName);
-
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
                 Subscribe(result.Room.Code, result.PlayerId);

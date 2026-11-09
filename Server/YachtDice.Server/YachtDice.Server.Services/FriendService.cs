@@ -17,17 +17,24 @@ namespace YachtDice.Server.Services
         private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly LogicFriends.IFriendshipService _friendshipService;
+        private readonly LogicFriends.IRoomInvitationService _invitationService;
         private readonly IPlayerNotifier _notifier;
 
         /// <summary>
         /// Initializes a new instance of the FriendService class.
         /// </summary>
         /// <param name="friendshipService">The service that applies the rules of the friendships.</param>
+        /// <param name="invitationService">The service that applies the rules of the invitations to a room.</param>
         /// <param name="notifier">The component that warns the players who are online.</param>
-        public FriendService(LogicFriends.IFriendshipService friendshipService, IPlayerNotifier notifier)
+        public FriendService(
+            LogicFriends.IFriendshipService friendshipService,
+            LogicFriends.IRoomInvitationService invitationService,
+            IPlayerNotifier notifier)
         {
             _friendshipService = friendshipService
                 ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
+            _invitationService = invitationService
+                ?? throw new ArgumentNullException(nameof(invitationService), NullDependencyMessage);
             _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier), NullDependencyMessage);
         }
 
@@ -73,6 +80,21 @@ namespace YachtDice.Server.Services
         {
             Contracts.FriendActionResultCode result =
                 Execute(displayName, () => ProcessRemoval(displayName, friendName));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Invites a friend who is online to join the room where the player is.
+        /// </summary>
+        /// <param name="playerId">Identifier that the room gave to the player who invites.</param>
+        /// <param name="friendName">Name of the friend to invite.</param>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <returns>Whether the invitation reached the friend or why not.</returns>
+        public Contracts.InvitationResultCode InviteToRoom(string playerId, string friendName, string roomCode)
+        {
+            Contracts.InvitationResultCode result =
+                Execute(playerId, () => ProcessInvitation(playerId, friendName, roomCode));
 
             return result;
         }
@@ -146,6 +168,37 @@ namespace YachtDice.Server.Services
             }
 
             return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
+        }
+
+        private Contracts.InvitationResultCode ProcessInvitation(string playerId, string friendName, string roomCode)
+        {
+            LogicFriends.InvitationResult result = _invitationService.Validate(playerId, friendName, roomCode);
+            Contracts.InvitationResultCode code;
+
+            if (result.Status == LogicFriends.InvitationStatus.Allowed)
+            {
+                code = Deliver(friendName, result.SenderName, roomCode);
+            }
+            else
+            {
+                code = Mapping.EnumMapper.Map<LogicFriends.InvitationStatus, Contracts.InvitationResultCode>(
+                    result.Status);
+            }
+
+            return code;
+        }
+
+        private Contracts.InvitationResultCode Deliver(string friendName, string senderName, string roomCode)
+        {
+            var invitation = new PresenceContracts.RoomInvitation
+            {
+                SenderName = senderName,
+                RoomCode = roomCode
+            };
+
+            return _notifier.SendInvitation(friendName, invitation)
+                ? Contracts.InvitationResultCode.Sent
+                : Contracts.InvitationResultCode.FriendOffline;
         }
 
         private Contracts.FriendActionResultCode ProcessRemoval(string displayName, string friendName)
