@@ -108,4 +108,59 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ResendResultCode" nillable="true" type="tns:ResendResultCode" />
+  <xs:element name="RequestPasswordReset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="culture" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RequestPasswordResetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RequestPasswordResetResult" type="tns:PasswordResetRequestResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="PasswordResetRequestResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CodeSent" />
+      <xs:enumeration value="MissingRequiredField" />
+      <xs:enumeration value="CodeSendFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PasswordResetRequestResultCode" nillable="true" type="tns:PasswordResetRequestResultCode" />
+  <xs:element name="ConfirmPasswordReset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="data" nillable="true" type="tns:PasswordResetData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PasswordResetData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NewPassword" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PasswordResetData" nillable="true" type="tns:PasswordResetData" />
+  <xs:element name="ConfirmPasswordResetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConfirmPasswordResetResult" type="tns:PasswordResetResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="PasswordResetResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PasswordChanged" />
+      <xs:enumeration value="MissingRequiredField" />
+      <xs:enumeration value="IncorrectCode" />
+      <xs:enumeration value="CodeExpired" />
+      <xs:enumeration value="TooManyAttempts" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PasswordResetResultCode" nillable="true" type="tns:PasswordResetResultCode" />
 </xs:schema>

@@ -318,6 +318,20 @@ namespace YachtDice.AuthenticationServiceReference {
         PlayerNotFound = 4,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetRequestResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasswordResetRequestResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MissingRequiredField = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 2,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetData", Namespace="urn:yachtdice:contracts")]
@@ -396,20 +410,6 @@ namespace YachtDice.AuthenticationServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetRequestResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum PasswordResetRequestResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSent = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        MissingRequiredField = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendFailed = 2,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetResultCode", Namespace="urn:yachtdice:contracts")]
     public enum PasswordResetResultCode : int {
         
@@ -446,11 +446,13 @@ namespace YachtDice.AuthenticationServiceReference {
         YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFault", Name="ServiceFault")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFa" +
+            "ult", Name="ServiceFault")]
         YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode RequestPasswordReset(string email, string culture);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetServiceFaultFault", Name="ServiceFault")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetServiceFaultFa" +
+            "ult", Name="ServiceFault")]
         YachtDice.AuthenticationServiceReference.PasswordResetResultCode ConfirmPasswordReset(YachtDice.AuthenticationServiceReference.PasswordResetData data);
     }
     

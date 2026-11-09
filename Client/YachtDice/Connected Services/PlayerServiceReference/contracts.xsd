@@ -69,6 +69,7 @@
   <xs:element name="ArrayOfLeaderboardEntry" nillable="true" type="tns:ArrayOfLeaderboardEntry" />
   <xs:complexType name="LeaderboardEntry">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Position" type="xs:int" />
       <xs:element minOccurs="0" name="TotalPoints" type="xs:int" />
@@ -76,4 +77,75 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LeaderboardEntry" nillable="true" type="tns:LeaderboardEntry" />
+  <xs:element name="GetProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetProfileResult" nillable="true" type="tns:PlayerProfile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PlayerProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
+      <xs:element minOccurs="0" name="Experience" type="xs:int" />
+      <xs:element minOccurs="0" name="Level" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerProfile" nillable="true" type="tns:PlayerProfile" />
+  <xs:element name="GetAvatarCatalog">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAvatarCatalogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetAvatarCatalogResult" nillable="true" type="tns:ArrayOfAvatarInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfAvatarInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AvatarInfo" nillable="true" type="tns:AvatarInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAvatarInfo" nillable="true" type="tns:ArrayOfAvatarInfo" />
+  <xs:complexType name="AvatarInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="RequiredLevel" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AvatarInfo" nillable="true" type="tns:AvatarInfo" />
+  <xs:element name="ChangeAvatar">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="avatarId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeAvatarResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangeAvatarResult" type="tns:AvatarChangeResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="AvatarChangeResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="AvatarNotFound" />
+      <xs:enumeration value="AvatarLocked" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AvatarChangeResultCode" nillable="true" type="tns:AvatarChangeResultCode" />
 </xs:schema>

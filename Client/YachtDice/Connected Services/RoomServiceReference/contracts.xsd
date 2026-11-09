@@ -38,6 +38,7 @@
   <xs:element name="ArrayOfRoomPlayer" nillable="true" type="tns:ArrayOfRoomPlayer" />
   <xs:complexType name="RoomPlayer">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -106,6 +107,8 @@
       <xs:enumeration value="NotEnoughPlayers" />
       <xs:enumeration value="InvalidSettings" />
       <xs:enumeration value="InvalidAccessCode" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="InvalidTarget" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomResultCode" nillable="true" type="tns:RoomResultCode" />
@@ -185,6 +188,38 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="KickPlayer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="targetPlayerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KickPlayerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="KickPlayerResult" type="tns:RoomResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransferHost">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="newHostId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TransferHostResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TransferHostResult" type="tns:RoomResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LeaveRoom">
     <xs:complexType>
       <xs:sequence>
@@ -212,6 +247,8 @@
       <xs:enumeration value="PlayerLeft" />
       <xs:enumeration value="SettingsChanged" />
       <xs:enumeration value="GameStarted" />
+      <xs:enumeration value="PlayerKicked" />
+      <xs:enumeration value="HostChanged" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />

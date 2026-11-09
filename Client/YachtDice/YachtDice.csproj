@@ -492,6 +492,12 @@
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.PasswordResetResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.ResendResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -545,7 +551,16 @@
     <None Include="Connected Services\PlayerServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarChangeResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntry.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerProfile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatistics.datasource">
