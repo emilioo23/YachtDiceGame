@@ -11,50 +11,51 @@ namespace YachtDice.Server.Contracts.Rooms
         /// <summary>
         /// Creates a room with a new code and puts the player inside as its host.
         /// </summary>
-        /// <param name="hostName">Name of the player who creates the room.</param>
-        /// <returns>The state of the new room.</returns>
+        /// <param name="displayName">Name that the player who creates the room wants to show.</param>
+        /// <returns>The identifier of the player and the state of the new room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        RoomState CreateRoom(string hostName);
+        CreateRoomResult CreateRoom(string displayName);
 
         /// <summary>
-        /// Puts the player inside the room that has the code, if it exists and has space.
+        /// Puts the player inside the room that has the code, if it exists and has space. If another player of
+        /// the room already shows the name, the server adds a number to it.
         /// </summary>
-        /// <param name="playerName">Name of the player who enters.</param>
+        /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomCode">Code of the room.</param>
-        /// <returns>Whether the player entered and the state of the room.</returns>
+        /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        JoinRoomResult JoinRoom(string playerName, string roomCode);
+        JoinRoomResult JoinRoom(string displayName, string roomCode);
 
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
         /// </summary>
-        /// <param name="playerName">Name of the player who asks for the change.</param>
+        /// <param name="playerId">Identifier of the player who asks for the change.</param>
         /// <param name="roomCode">Code of the room.</param>
         /// <param name="settings">New options of the room.</param>
         /// <returns>Outcome of the change.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        RoomResultCode UpdateRoomSettings(string playerName, string roomCode, RoomSettings settings);
+        RoomResultCode UpdateRoomSettings(string playerId, string roomCode, RoomSettings settings);
 
         /// <summary>
         /// Starts the game of the room and tells every player. Only the host can do it.
         /// </summary>
-        /// <param name="playerName">Name of the player who starts the game.</param>
+        /// <param name="playerId">Identifier of the player who starts the game.</param>
         /// <param name="roomCode">Code of the room.</param>
         /// <returns>Outcome of the start.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        RoomResultCode StartGame(string playerName, string roomCode);
+        RoomResultCode StartGame(string playerId, string roomCode);
 
         /// <summary>
         /// Takes the player out of the room. If the room stays empty it disappears.
         /// </summary>
-        /// <param name="playerName">Name of the player who leaves.</param>
+        /// <param name="playerId">Identifier of the player who leaves.</param>
         /// <param name="roomCode">Code of the room.</param>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        void LeaveRoom(string playerName, string roomCode);
+        void LeaveRoom(string playerId, string roomCode);
     }
 }
