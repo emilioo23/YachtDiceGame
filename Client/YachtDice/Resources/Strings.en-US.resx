@@ -174,9 +174,6 @@
   <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>Email is required.</value>
   </data>
-  <data name="ForgotPassword_LinkSentMessage" xml:space="preserve">
-    <value>Recovery link sent to {0}.</value>
-  </data>
   <data name="Global_ButtonBack" xml:space="preserve">
     <value>← Back</value>
   </data>
@@ -234,14 +231,8 @@
   <data name="ForgotPassword_Title" xml:space="preserve">
     <value>Reset password</value>
   </data>
-  <data name="ForgotPassword_Description" xml:space="preserve">
-    <value>We'll send you a link to reset your password.</value>
-  </data>
   <data name="ForgotPassword_Email" xml:space="preserve">
     <value>Email address</value>
-  </data>
-  <data name="ForgotPassword_ButtonSendLink" xml:space="preserve">
-    <value>Send reset link</value>
   </data>
   <data name="ForgotPassword_LinkBackToLogin" xml:space="preserve">
     <value>← Back to login</value>
@@ -896,5 +887,62 @@
   </data>
   <data name="Lobby_Chat_WelcomeMessage" xml:space="preserve">
     <value>Chat here with the other players while the match starts.</value>
+  </data>
+  <data name="ForgotPassword_Description" xml:space="preserve">
+    <value>Type your email and we will send you a 6-digit code to reset your password.</value>
+  </data>
+  <data name="ForgotPassword_ButtonSendCode" xml:space="preserve">
+    <value>Send code</value>
+  </data>
+  <data name="ForgotPassword_CodeSentMessage" xml:space="preserve">
+    <value>If the email is registered, we sent you a 6-digit code.</value>
+  </data>
+  <data name="ForgotPassword_ErrorSendFailed" xml:space="preserve">
+    <value>The code could not be sent. Check your connection and try again.</value>
+  </data>
+  <data name="ResetPassword_Title" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ResetPassword_Subtitle" xml:space="preserve">
+    <value>Type the code we sent to</value>
+  </data>
+  <data name="ResetPassword_Code" xml:space="preserve">
+    <value>6-digit code</value>
+  </data>
+  <data name="ResetPassword_NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="ResetPassword_ButtonChange" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="ResetPassword_ResendText" xml:space="preserve">
+    <value>Did the code not arrive?</value>
+  </data>
+  <data name="ResetPassword_LinkResend" xml:space="preserve">
+    <value>Resend</value>
+  </data>
+  <data name="ResetPassword_SuccessMessage" xml:space="preserve">
+    <value>Your password was changed. You can now log in.</value>
+  </data>
+  <data name="ResetPassword_ErrorIncompleteCode" xml:space="preserve">
+    <value>The code must have 6 digits.</value>
+  </data>
+  <data name="ResetPassword_ErrorEmptyPassword" xml:space="preserve">
+    <value>Type the new password.</value>
+  </data>
+  <data name="ResetPassword_ErrorPasswordsDoNotMatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="ResetPassword_ErrorIncorrectCode" xml:space="preserve">
+    <value>The code is incorrect.</value>
+  </data>
+  <data name="ResetPassword_ErrorCodeExpired" xml:space="preserve">
+    <value>The code expired or is no longer valid. Ask for a new one with “Resend”.</value>
+  </data>
+  <data name="ResetPassword_ErrorTooManyAttempts" xml:space="preserve">
+    <value>Too many failed attempts. Ask for a new code with “Resend”.</value>
   </data>
 </root>

@@ -367,16 +367,25 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Enviar enlace de recuperación.
+        ///   Busca una cadena traducida similar a Enviar código.
         /// </summary>
-        public static string ForgotPassword_ButtonSendLink {
+        public static string ForgotPassword_ButtonSendCode {
             get {
-                return ResourceManager.GetString("ForgotPassword_ButtonSendLink", resourceCulture);
+                return ResourceManager.GetString("ForgotPassword_ButtonSendCode", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Te enviaremos un enlace para restablecer tu contraseña..
+        ///   Busca una cadena traducida similar a Si el correo está registrado, te enviamos un código de 6 dígitos..
+        /// </summary>
+        public static string ForgotPassword_CodeSentMessage {
+            get {
+                return ResourceManager.GetString("ForgotPassword_CodeSentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu correo y te enviaremos un código de 6 dígitos para restablecer tu contraseña..
         /// </summary>
         public static string ForgotPassword_Description {
             get {
@@ -403,20 +412,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo enviar el código. Revisa tu conexión e inténtalo de nuevo..
+        /// </summary>
+        public static string ForgotPassword_ErrorSendFailed {
+            get {
+                return ResourceManager.GetString("ForgotPassword_ErrorSendFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a ← Volver al inicio de sesión.
         /// </summary>
         public static string ForgotPassword_LinkBackToLogin {
             get {
                 return ResourceManager.GetString("ForgotPassword_LinkBackToLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Enlace de recuperación enviado a {0}..
-        /// </summary>
-        public static string ForgotPassword_LinkSentMessage {
-            get {
-                return ResourceManager.GetString("ForgotPassword_LinkSentMessage", resourceCulture);
             }
         }
         
@@ -1767,6 +1776,141 @@ namespace YachtDice.Resources {
         public static string Profile_Username {
             get {
                 return ResourceManager.GetString("Profile_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cambiar contraseña.
+        /// </summary>
+        public static string ResetPassword_ButtonChange {
+            get {
+                return ResourceManager.GetString("ResetPassword_ButtonChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código de 6 dígitos.
+        /// </summary>
+        public static string ResetPassword_Code {
+            get {
+                return ResourceManager.GetString("ResetPassword_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirmar contraseña.
+        /// </summary>
+        public static string ResetPassword_ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código expiró o ya no es válido. Pide uno nuevo con «Reenviar»..
+        /// </summary>
+        public static string ResetPassword_ErrorCodeExpired {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorCodeExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe la nueva contraseña..
+        /// </summary>
+        public static string ResetPassword_ErrorEmptyPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorEmptyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código debe tener 6 dígitos..
+        /// </summary>
+        public static string ResetPassword_ErrorIncompleteCode {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorIncompleteCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código es incorrecto..
+        /// </summary>
+        public static string ResetPassword_ErrorIncorrectCode {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorIncorrectCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Las contraseñas no coinciden..
+        /// </summary>
+        public static string ResetPassword_ErrorPasswordsDoNotMatch {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorPasswordsDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Demasiados intentos fallidos. Pide un código nuevo con «Reenviar»..
+        /// </summary>
+        public static string ResetPassword_ErrorTooManyAttempts {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorTooManyAttempts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reenviar.
+        /// </summary>
+        public static string ResetPassword_LinkResend {
+            get {
+                return ResourceManager.GetString("ResetPassword_LinkResend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string ResetPassword_NewPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿No llegó el código?.
+        /// </summary>
+        public static string ResetPassword_ResendText {
+            get {
+                return ResourceManager.GetString("ResetPassword_ResendText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el código que enviamos a.
+        /// </summary>
+        public static string ResetPassword_Subtitle {
+            get {
+                return ResourceManager.GetString("ResetPassword_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu contraseña se cambió. Ya puedes iniciar sesión..
+        /// </summary>
+        public static string ResetPassword_SuccessMessage {
+            get {
+                return ResourceManager.GetString("ResetPassword_SuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string ResetPassword_Title {
+            get {
+                return ResourceManager.GetString("ResetPassword_Title", resourceCulture);
             }
         }
         

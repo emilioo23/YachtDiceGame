@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Globalization;
-using System.Security.Cryptography;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -25,9 +24,6 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int LockMinutes = 15;
         private const int NoFailedAttempts = 0;
         private const int ResendCooldownSeconds = 30;
-        private const int DecimalBase = 10;
-        private const int BufferStartIndex = 0;
-        private const char PaddingCharacter = '0';
         private const string GuidFormat = "N";
 
         private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
@@ -41,7 +37,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Numeric code of <see cref="CodeLength"/> digits.</returns>
         public string GenerateCode(string email, string challengeId)
         {
-            string code = CreateRandomCode();
+            string code = NumericCodeGenerator.Generate(CodeLength);
             DateTime now = DateTime.UtcNow;
             DateTime lockedUntil = DateTime.MinValue;
 
@@ -173,23 +169,6 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             return status;
-        }
-
-        private static string CreateRandomCode()
-        {
-            var upperBound = (long)Math.Pow(DecimalBase, CodeLength);
-            var buffer = new byte[sizeof(uint)];
-
-            using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
-            {
-                generator.GetBytes(buffer);
-            }
-
-            uint randomValue = BitConverter.ToUInt32(buffer, BufferStartIndex);
-
-            return (randomValue % upperBound)
-                .ToString(CultureInfo.InvariantCulture)
-                .PadLeft(CodeLength, PaddingCharacter);
         }
     }
 }

@@ -138,9 +138,15 @@ namespace YachtDice.Server.Host
             var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
             var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
 
+            var passwordRecoveryService = new PasswordRecoveryService(
+                playerRepository,
+                new PasswordResetRepository(),
+                new PasswordResetEmailSender(new EmailService()));
+
             return new AuthenticationService(
                 new LoginService(playerRepository, verificationService, deliveryService),
-                verificationService);
+                verificationService,
+                passwordRecoveryService);
         }
 
         /// <summary>

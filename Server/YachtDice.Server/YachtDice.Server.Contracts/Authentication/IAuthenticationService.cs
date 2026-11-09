@@ -39,5 +39,24 @@ namespace YachtDice.Server.Contracts.Authentication
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
+
+        /// <summary>
+        /// Sends a password recovery code to the email of the account.
+        /// </summary>
+        /// <param name="email">Email of the account to recover.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the request.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordResetRequestResultCode RequestPasswordReset(string email, string culture);
+
+        /// <summary>
+        /// Checks the recovery code and, if it is correct, changes the password of the account.
+        /// </summary>
+        /// <param name="data">Email, code and new password written by the player.</param>
+        /// <returns>Outcome of the confirmation.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordResetResultCode ConfirmPasswordReset(PasswordResetData data);
     }
 }
