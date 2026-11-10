@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YachtDice.Resources;
+﻿using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
 
 namespace YachtDice.Utils
@@ -10,12 +8,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class PresenceMessages
     {
-        private static readonly Dictionary<RoomEventType, Func<string>> DepartureFormatByEvent =
-            new Dictionary<RoomEventType, Func<string>>
-            {
-                { RoomEventType.PlayerKicked, () => Strings.Game_Chat_PlayerKicked }
-            };
-
         /// <summary>
         /// Gets the notice for a player who is no longer inside the match.
         /// </summary>
@@ -24,14 +16,19 @@ namespace YachtDice.Utils
         /// <returns>The text to show in the chat.</returns>
         public static string GetDepartureMessage(RoomEventType eventType, string playerName)
         {
-            Func<string> getFormat;
+            string format;
 
-            if (!DepartureFormatByEvent.TryGetValue(eventType, out getFormat))
+            switch (eventType)
             {
-                getFormat = () => Strings.Game_Chat_PlayerLeft;
+                case RoomEventType.PlayerKicked:
+                    format = Strings.Game_Chat_PlayerKicked;
+                    break;
+                default:
+                    format = Strings.Game_Chat_PlayerLeft;
+                    break;
             }
 
-            return string.Format(getFormat(), playerName);
+            return string.Format(format, playerName);
         }
 
         /// <summary>

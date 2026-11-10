@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YachtDice.GameServiceReference;
+﻿using YachtDice.GameServiceReference;
 using YachtDice.Resources;
 
 namespace YachtDice.Utils
@@ -10,23 +8,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class CategoryNames
     {
-        private static readonly Dictionary<ScoreCategory, Func<string>> NameByCategory =
-            new Dictionary<ScoreCategory, Func<string>>
-            {
-                { ScoreCategory.Ones, () => Strings.Game_Category_Ones },
-                { ScoreCategory.Twos, () => Strings.Game_Category_Twos },
-                { ScoreCategory.Threes, () => Strings.Game_Category_Threes },
-                { ScoreCategory.Fours, () => Strings.Game_Category_Fours },
-                { ScoreCategory.Fives, () => Strings.Game_Category_Fives },
-                { ScoreCategory.Sixes, () => Strings.Game_Category_Sixes },
-                { ScoreCategory.FullHouse, () => Strings.Game_Category_FullHouse },
-                { ScoreCategory.FourOfAKind, () => Strings.Game_Category_FourOfAKind },
-                { ScoreCategory.LittleStraight, () => Strings.Game_Category_LittleStraight },
-                { ScoreCategory.BigStraight, () => Strings.Game_Category_BigStraight },
-                { ScoreCategory.Choice, () => Strings.Game_Category_Choice },
-                { ScoreCategory.Yacht, () => Strings.Game_Category_Yacht }
-            };
-
         /// <summary>
         /// Gets the localized name of a box.
         /// </summary>
@@ -34,7 +15,52 @@ namespace YachtDice.Utils
         /// <returns>The text to show to the player.</returns>
         public static string GetName(ScoreCategory category)
         {
-            return NameByCategory[category]();
+            string name;
+
+            switch (category)
+            {
+                case ScoreCategory.Ones:
+                    name = Strings.Game_Category_Ones;
+                    break;
+                case ScoreCategory.Twos:
+                    name = Strings.Game_Category_Twos;
+                    break;
+                case ScoreCategory.Threes:
+                    name = Strings.Game_Category_Threes;
+                    break;
+                case ScoreCategory.Fours:
+                    name = Strings.Game_Category_Fours;
+                    break;
+                case ScoreCategory.Fives:
+                    name = Strings.Game_Category_Fives;
+                    break;
+                case ScoreCategory.Sixes:
+                    name = Strings.Game_Category_Sixes;
+                    break;
+                case ScoreCategory.FullHouse:
+                    name = Strings.Game_Category_FullHouse;
+                    break;
+                case ScoreCategory.FourOfAKind:
+                    name = Strings.Game_Category_FourOfAKind;
+                    break;
+                case ScoreCategory.LittleStraight:
+                    name = Strings.Game_Category_LittleStraight;
+                    break;
+                case ScoreCategory.BigStraight:
+                    name = Strings.Game_Category_BigStraight;
+                    break;
+                case ScoreCategory.Choice:
+                    name = Strings.Game_Category_Choice;
+                    break;
+                case ScoreCategory.Yacht:
+                    name = Strings.Game_Category_Yacht;
+                    break;
+                default:
+                    name = category.ToString();
+                    break;
+            }
+
+            return name;
         }
     }
 }

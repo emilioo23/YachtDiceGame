@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YachtDice.GameServiceReference;
+﻿using YachtDice.GameServiceReference;
 using YachtDice.Resources;
 
 namespace YachtDice.Utils
@@ -10,20 +8,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class GameResultMessages
     {
-        private static readonly Dictionary<GameResultCode, Func<string>> MessageByResult =
-            new Dictionary<GameResultCode, Func<string>>
-            {
-                { GameResultCode.GameNotFound, () => Strings.Game_Result_GameNotFound },
-                { GameResultCode.PlayerNotInGame, () => Strings.Game_Result_PlayerNotInGame },
-                { GameResultCode.NotYourTurn, () => Strings.Game_Result_NotYourTurn },
-                { GameResultCode.GameFinished, () => Strings.Game_Result_GameFinished },
-                { GameResultCode.NoRollsLeft, () => Strings.Game_Result_NoRollsLeft },
-                { GameResultCode.MustRollFirst, () => Strings.Game_Dice_HintPress },
-                { GameResultCode.InvalidHeldDice, () => Strings.Dialogs_UnexpectedError },
-                { GameResultCode.CategoryFilled, () => Strings.Game_Result_CategoryFilled },
-                { GameResultCode.CategoryNotAllowed, () => Strings.Game_Result_CategoryNotAllowed }
-            };
-
         /// <summary>
         /// Gets the localized message that matches the outcome of the action.
         /// </summary>
@@ -31,14 +15,40 @@ namespace YachtDice.Utils
         /// <returns>The text to show to the player.</returns>
         public static string GetMessage(GameResultCode resultCode)
         {
-            Func<string> getText;
+            string message;
 
-            if (!MessageByResult.TryGetValue(resultCode, out getText))
+            switch (resultCode)
             {
-                getText = () => Strings.Dialogs_UnexpectedError;
+                case GameResultCode.GameNotFound:
+                    message = Strings.Game_Result_GameNotFound;
+                    break;
+                case GameResultCode.PlayerNotInGame:
+                    message = Strings.Game_Result_PlayerNotInGame;
+                    break;
+                case GameResultCode.NotYourTurn:
+                    message = Strings.Game_Result_NotYourTurn;
+                    break;
+                case GameResultCode.GameFinished:
+                    message = Strings.Game_Result_GameFinished;
+                    break;
+                case GameResultCode.NoRollsLeft:
+                    message = Strings.Game_Result_NoRollsLeft;
+                    break;
+                case GameResultCode.MustRollFirst:
+                    message = Strings.Game_Dice_HintPress;
+                    break;
+                case GameResultCode.CategoryFilled:
+                    message = Strings.Game_Result_CategoryFilled;
+                    break;
+                case GameResultCode.CategoryNotAllowed:
+                    message = Strings.Game_Result_CategoryNotAllowed;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
             }
 
-            return getText();
+            return message;
         }
     }
 }
