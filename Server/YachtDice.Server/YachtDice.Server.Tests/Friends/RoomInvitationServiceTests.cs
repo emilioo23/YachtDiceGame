@@ -48,10 +48,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
+            var expected = new { Status = InvitationStatus.Allowed, SenderName = HostName };
+
             InvitationResult result = _service.Validate(host.PlayerId, FriendName, host.Room.Code);
 
-            Assert.Equal(InvitationStatus.Allowed, result.Status);
-            Assert.Equal(HostName, result.SenderName);
+            var actual = new { result.Status, result.SenderName };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -71,10 +73,12 @@ namespace YachtDice.Server.Tests.Friends
             RoomResult guest = _roomManager.Join(host.Room.Code, StrangerName);
             _friendships.AddFriends(StrangerName, FriendName);
 
+            var expected = new { Status = InvitationStatus.Allowed, SenderName = StrangerName };
+
             InvitationResult result = _service.Validate(guest.PlayerId, FriendName, host.Room.Code);
 
-            Assert.Equal(InvitationStatus.Allowed, result.Status);
-            Assert.Equal(StrangerName, result.SenderName);
+            var actual = new { result.Status, result.SenderName };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -92,10 +96,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
+            var expected = new { Status = InvitationStatus.NotInRoom, SenderName = string.Empty };
+
             InvitationResult result = _service.Validate(UnknownPlayerId, FriendName, host.Room.Code);
 
-            Assert.Equal(InvitationStatus.NotInRoom, result.Status);
-            Assert.Empty(result.SenderName);
+            var actual = new { result.Status, result.SenderName };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
