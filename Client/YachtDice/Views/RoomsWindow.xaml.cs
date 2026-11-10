@@ -23,6 +23,7 @@ namespace YachtDice.Views
     public partial class RoomsWindow : Window
     {
         private const int RefreshIntervalSeconds = 5;
+        private const int MaxSearchLength = 40;
         private const string AutoRefreshFailedLogMessage = "The list of rooms could not be updated.";
 
         private readonly AppLogger _logger;
@@ -45,6 +46,7 @@ namespace YachtDice.Views
 
             _logger = new AppLogger(GetType());
             _session = session;
+            SearchTextBox.MaxLength = MaxSearchLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new RoomsWindow(session);
 
             _invitationListener = new InvitationListener(this, session);

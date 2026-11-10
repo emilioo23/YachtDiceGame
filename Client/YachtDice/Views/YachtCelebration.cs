@@ -49,6 +49,9 @@ namespace YachtDice.Views
         private const int ConfettiCount = 70;
         private const int ElasticOscillations = 2;
         private const int FullCircleDegrees = 360;
+        private const string GoldBrushKey = "BrushGold";
+        private const string CreamBrushKey = "BrushCream";
+        private const string DisplayFontKey = "FontDisplay";
 
         private static readonly string[] ConfettiBrushKeys =
         {
@@ -135,7 +138,7 @@ namespace YachtDice.Views
             {
                 Width = FlashSize,
                 Height = FlashSize,
-                Fill = new RadialGradientBrush(FindColor("BrushGold"), Colors.Transparent),
+                Fill = new RadialGradientBrush(FindColor(GoldBrushKey), Colors.Transparent),
                 Opacity = FlashOpacity,
                 RenderTransform = scale,
                 RenderTransformOrigin = new Point(CenterOrigin, CenterOrigin)
@@ -185,8 +188,8 @@ namespace YachtDice.Views
                 RenderTransformOrigin = new Point(CenterOrigin, CenterOrigin)
             };
 
-            stage.Children.Add(CreateTitleText(Strings.Game_Celebration_YachtTitle, TitleFontSize, "BrushGold"));
-            stage.Children.Add(CreateTitleText(subtitle, SubtitleFontSize, "BrushCream"));
+            stage.Children.Add(CreateTitleText(Strings.Game_Celebration_YachtTitle, TitleFontSize, GoldBrushKey));
+            stage.Children.Add(CreateTitleText(subtitle, SubtitleFontSize, CreamBrushKey));
 
             return stage;
         }
@@ -197,7 +200,7 @@ namespace YachtDice.Views
             {
                 Text = text,
                 FontSize = fontSize,
-                FontFamily = (FontFamily)_resources.FindResource("FontDisplay"),
+                FontFamily = (FontFamily)_resources.FindResource(DisplayFontKey),
                 Foreground = FindBrush(brushKey),
                 TextAlignment = TextAlignment.Center,
                 Effect = new DropShadowEffect

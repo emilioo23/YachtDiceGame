@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using YachtDice.Models;
 using YachtDice.Resources;
 
@@ -24,12 +25,11 @@ namespace YachtDice.Utils
         /// <returns>The steps, in the order in which they happen.</returns>
         public static List<RuleStep> GetTurnSteps()
         {
-            return new List<RuleStep>
-            {
-                new RuleStep { Number = 1, Text = Strings.HowToPlay_Step1 },
-                new RuleStep { Number = 2, Text = Strings.HowToPlay_Step2 },
-                new RuleStep { Number = 3, Text = Strings.HowToPlay_Step3 }
-            };
+            string[] stepTexts = { Strings.HowToPlay_Step1, Strings.HowToPlay_Step2, Strings.HowToPlay_Step3 };
+
+            return stepTexts
+                .Select((text, stepIndex) => new RuleStep { Number = stepIndex + 1, Text = text })
+                .ToList();
         }
 
         /// <summary>
