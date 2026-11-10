@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YachtDice.Client.Logic.Game;
 
@@ -9,52 +10,77 @@ namespace YachtDice.Client.Tests.Game
     /// </summary>
     public class StandingsBuilderTests
     {
+        private const string AnaId = "a";
+        private const string BetoId = "b";
+        private const string CesarId = "c";
+        private const string AnaName = "Ana";
+        private const string BetoName = "Beto";
+        private const string CesarName = "Cesar";
+        private const int LowTotal = 120;
+        private const int MiddleTotal = 150;
+        private const int HighTotal = 200;
+        private const int TiedTotal = 90;
+
         [Fact]
         public void Build_UnsortedPlayers_ReturnsThemFromTheHighestTotal()
         {
-            var entries = new[]
+            StandingEntry[] entries =
             {
-                new StandingEntry("a", "Ana", 120),
-                new StandingEntry("b", "Beto", 200),
-                new StandingEntry("c", "Cesar", 150)
+                new StandingEntry(AnaId, AnaName, LowTotal),
+                new StandingEntry(BetoId, BetoName, HighTotal),
+                new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
+            var expected = new { PlayerIds = new[] { BetoId, CesarId, AnaId }, Ranks = new[] { 1, 2, 3 } };
 
-            var standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equal(new[] { "b", "c", "a" }, standings.Select(standing => standing.PlayerId).ToArray());
-            Assert.Equal(new[] { 1, 2, 3 }, standings.Select(standing => standing.Rank).ToArray());
+            var actual = new
+            {
+                PlayerIds = standings.Select(standing => standing.PlayerId).ToArray(),
+                Ranks = standings.Select(standing => standing.Rank).ToArray()
+            };
+            Assert.Equivalent(expected, actual);
         }
 
         [Fact]
         public void Build_PlayersWithTheSameTotal_ShareThePlaceAndSkipTheNext()
         {
-            var entries = new[]
+            StandingEntry[] entries =
             {
-                new StandingEntry("a", "Ana", 200),
-                new StandingEntry("b", "Beto", 200),
-                new StandingEntry("c", "Cesar", 150)
+                new StandingEntry(AnaId, AnaName, HighTotal),
+                new StandingEntry(BetoId, BetoName, HighTotal),
+                new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
+            var expected = new { Ranks = new[] { 1, 1, 3 }, Winners = new[] { true, true, false } };
 
-            var standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equal(new[] { 1, 1, 3 }, standings.Select(standing => standing.Rank).ToArray());
-            Assert.Equal(new[] { true, true, false }, standings.Select(standing => standing.IsWinner).ToArray());
+            var actual = new
+            {
+                Ranks = standings.Select(standing => standing.Rank).ToArray(),
+                Winners = standings.Select(standing => standing.IsWinner).ToArray()
+            };
+            Assert.Equivalent(expected, actual);
         }
 
         [Fact]
         public void Build_PlayersWithTheSameTotal_KeepTheirOriginalOrder()
         {
-            var entries = new[] { new StandingEntry("a", "Ana", 90), new StandingEntry("b", "Beto", 90) };
+            StandingEntry[] entries =
+            {
+                new StandingEntry(AnaId, AnaName, TiedTotal),
+                new StandingEntry(BetoId, BetoName, TiedTotal)
+            };
 
-            var standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equal(new[] { "a", "b" }, standings.Select(standing => standing.PlayerId).ToArray());
+            Assert.Equal(new[] { AnaId, BetoId }, standings.Select(standing => standing.PlayerId).ToArray());
         }
 
         [Fact]
         public void Build_NoPlayers_ReturnsAnEmptyList()
         {
-            var standings = StandingsBuilder.Build(new StandingEntry[0]);
+            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(new StandingEntry[0]);
 
             Assert.Empty(standings);
         }

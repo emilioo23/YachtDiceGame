@@ -8,61 +8,72 @@ namespace YachtDice.Client.Tests.Game
     /// </summary>
     public class HeldDiceSelectionTests
     {
+        private const int FirstDie = 0;
+        private const int SecondDie = 1;
+        private const int ThirdDie = 2;
+        private const int FourthDie = 3;
+        private const int FifthDie = 4;
+
+        private static readonly bool[] NoHeldDice = { false, false, false, false, false };
+        private static readonly bool[] SecondAndFourthHeld = { false, true, false, true, false };
+
         [Fact]
         public void Toggle_FreeDieWhenHoldingIsAllowed_HoldsTheDie()
         {
             var selection = new HeldDiceSelection();
+            var expected = new { IsChanged = true, IsHeld = true };
 
-            var changed = selection.Toggle(2, true);
+            bool isChanged = selection.Toggle(ThirdDie, true);
 
-            Assert.True(changed);
-            Assert.True(selection.IsHeld(2));
+            var actual = new { IsChanged = isChanged, IsHeld = selection.IsHeld(ThirdDie) };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void Toggle_HeldDie_FreesTheDie()
         {
             var selection = new HeldDiceSelection();
-            selection.Toggle(2, true);
+            selection.Toggle(ThirdDie, true);
 
-            selection.Toggle(2, true);
+            selection.Toggle(ThirdDie, true);
 
-            Assert.False(selection.IsHeld(2));
+            Assert.False(selection.IsHeld(ThirdDie));
         }
 
         [Fact]
         public void Toggle_HoldingNotAllowed_KeepsTheSelection()
         {
             var selection = new HeldDiceSelection();
+            var expected = new { IsChanged = false, IsHeld = false };
 
-            var changed = selection.Toggle(0, false);
+            bool isChanged = selection.Toggle(FirstDie, false);
 
-            Assert.False(changed);
-            Assert.False(selection.IsHeld(0));
+            var actual = new { IsChanged = isChanged, IsHeld = selection.IsHeld(FirstDie) };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void Clear_HeldDice_FreesAllOfThem()
         {
             var selection = new HeldDiceSelection();
-            selection.Toggle(0, true);
-            selection.Toggle(4, true);
+            selection.Toggle(FirstDie, true);
+            selection.Toggle(FifthDie, true);
 
             selection.Clear();
 
-            Assert.Equal(new[] { false, false, false, false, false }, selection.ToArray());
+            Assert.Equal(NoHeldDice, selection.ToArray());
         }
 
         [Fact]
         public void ToArray_TwoHeldDice_ReturnsOneValueForEachDie()
         {
             var selection = new HeldDiceSelection();
-            selection.Toggle(1, true);
-            selection.Toggle(3, true);
+            selection.Toggle(SecondDie, true);
+            selection.Toggle(FourthDie, true);
 
-            var held = selection.ToArray();
+            bool[] held = selection.ToArray();
 
-            Assert.Equal(new[] { false, true, false, true, false }, held);
+            Assert.Equal(SecondAndFourthHeld, held);
         }
 
         [Fact]
@@ -70,9 +81,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var selection = new HeldDiceSelection();
 
-            selection.ToArray()[0] = true;
+            selection.ToArray()[FirstDie] = true;
 
-            Assert.False(selection.IsHeld(0));
+            Assert.False(selection.IsHeld(FirstDie));
         }
     }
 }

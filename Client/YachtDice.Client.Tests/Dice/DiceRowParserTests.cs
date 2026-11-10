@@ -10,28 +10,33 @@ namespace YachtDice.Client.Tests.Dice
     /// </summary>
     public class DiceRowParserTests
     {
-        private const int FiveDice = 5;
-        private const int FirstDie = 0;
-        private const int FourthDie = 3;
+        private const string ThreeFoursRow = "4 4 4 2 6";
+        private const string LastTwoDimmedRow = "3 3 3 5- 6-";
+
+        private static readonly int[] ThreeFoursValues = { 4, 4, 4, 2, 6 };
+        private static readonly bool[] LastTwoDimmed = { false, false, false, true, true };
 
         [Fact]
         public void Parse_NumbersSeparatedBySpaces_ReturnsTheDiceInOrder()
         {
-            List<DieDisplay> dice = DiceRowParser.Parse("4 4 4 2 6");
+            var expected = new { Values = ThreeFoursValues, IsAnyDimmed = false };
 
-            Assert.Equal(FiveDice, dice.Count);
-            Assert.Equal(new[] { 4, 4, 4, 2, 6 }, dice.Select(die => die.Value));
-            Assert.DoesNotContain(dice, die => die.IsDimmed);
+            List<DieDisplay> dice = DiceRowParser.Parse(ThreeFoursRow);
+
+            var actual = new
+            {
+                Values = dice.Select(die => die.Value).ToArray(),
+                IsAnyDimmed = dice.Any(die => die.IsDimmed)
+            };
+            Assert.Equivalent(expected, actual);
         }
 
         [Fact]
         public void Parse_NumberWithMinusSign_MarksTheDieAsDimmed()
         {
-            List<DieDisplay> dice = DiceRowParser.Parse("3 3 3 5- 6-");
+            List<DieDisplay> dice = DiceRowParser.Parse(LastTwoDimmedRow);
 
-            Assert.False(dice[FirstDie].IsDimmed);
-            Assert.True(dice[FourthDie].IsDimmed);
-            Assert.Equal(2, dice.Count(die => die.IsDimmed));
+            Assert.Equal(LastTwoDimmed, dice.Select(die => die.IsDimmed).ToArray());
         }
 
         [Fact]
