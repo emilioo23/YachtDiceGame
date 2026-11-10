@@ -169,6 +169,7 @@
       <xs:enumeration value="IncorrectCode" />
       <xs:enumeration value="CodeExpired" />
       <xs:enumeration value="TooManyAttempts" />
+      <xs:enumeration value="WeakPassword" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PasswordResetResultCode" nillable="true" type="tns:PasswordResetResultCode" />

@@ -18,6 +18,9 @@
         CodeExpired,
 
         /// <summary>Too many wrong codes were entered, so the code was discarded.</summary>
-        TooManyAttempts
+        TooManyAttempts,
+
+        /// <summary>The new password is too short, too long or does not have a letter and a digit.</summary>
+        WeakPassword
     }
 }

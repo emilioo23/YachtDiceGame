@@ -125,6 +125,12 @@ namespace YachtDice.Views
                 case RegisterResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
                     break;
+                case RegisterResultCode.InvalidUsername:
+                    message = Strings.Auth_ErrorInvalidUsername;
+                    break;
+                case RegisterResultCode.WeakPassword:
+                    message = Strings.Auth_ErrorWeakPassword;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

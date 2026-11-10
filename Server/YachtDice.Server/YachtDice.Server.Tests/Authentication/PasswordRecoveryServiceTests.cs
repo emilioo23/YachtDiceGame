@@ -26,8 +26,9 @@ namespace YachtDice.Server.Tests.Authentication
         private const string UnknownEmail = "nobody@example.com";
         private const string BlankEmail = "  ";
         private const string DisplayName = "emilio";
-        private const string OldPassword = "Old123!";
-        private const string NewPassword = "New456!";
+        private const string OldPassword = "OldPass123!";
+        private const string NewPassword = "NewPass456!";
+        private const string WeakPassword = "abc";
         private const string CorrectCode = "123456";
         private const string WrongCode = "654321";
 
@@ -306,6 +307,26 @@ namespace YachtDice.Server.Tests.Authentication
             PasswordResetStatus status = _service.ConfirmReset(confirmation);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
+        }
+
+        [Fact]
+        public void ConfirmReset_WeakNewPassword_ReturnsWeakPassword()
+        {
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+
+            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, WeakPassword));
+
+            Assert.Equal(PasswordResetStatus.WeakPassword, status);
+        }
+
+        [Fact]
+        public void ConfirmReset_WeakNewPassword_KeepsTheOldPassword()
+        {
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+
+            _service.ConfirmReset(CreateConfirmation(CorrectCode, WeakPassword));
+
+            Assert.True(IsCurrentPassword(OldPassword));
         }
 
         [Theory]

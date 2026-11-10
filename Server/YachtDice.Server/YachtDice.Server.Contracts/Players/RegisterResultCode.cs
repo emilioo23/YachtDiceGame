@@ -30,6 +30,14 @@ namespace YachtDice.Server.Contracts.Players
 
         /// <summary>Another player already uses the username.</summary>
         [EnumMember]
-        UsernameAlreadyTaken
+        UsernameAlreadyTaken,
+
+        /// <summary>The username is too short or uses characters that are not allowed.</summary>
+        [EnumMember]
+        InvalidUsername,
+
+        /// <summary>The password is too short, too long or does not have a letter and a digit.</summary>
+        [EnumMember]
+        WeakPassword
     }
 }

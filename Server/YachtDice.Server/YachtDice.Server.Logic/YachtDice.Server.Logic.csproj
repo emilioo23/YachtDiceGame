@@ -127,6 +127,7 @@
     <Compile Include="Rooms\RoomSettings.cs" />
     <Compile Include="Rooms\RoomStatus.cs" />
     <Compile Include="Rooms\RoomSummary.cs" />
+    <Compile Include="Security\CredentialRules.cs" />
     <Compile Include="Security\NumericCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\PasswordResetCodeHasher.cs" />

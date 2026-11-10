@@ -21,6 +21,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const string FirstName = "Gabriel";
         private const string LastName = "Hernandez";
         private const string WhitespaceOnly = "   ";
+        private const string UsernameWithSpaces = "gabriel hm";
+        private const string WeakPassword = "abc";
         private const string EmailDomain = "@example.com";
         private const char FillCharacter = 'a';
         private const int UsernameMaxLength = 20;
@@ -180,6 +182,30 @@ namespace YachtDice.Server.Tests.Authentication
         public void RegisterPlayer_FieldLongerThanTheLimit_SavesNothing()
         {
             _service.RegisterPlayer(CreatePlayer(TooLongUsername, Email), Password);
+
+            Assert.Empty(_players.Players);
+        }
+
+        [Fact]
+        public void RegisterPlayer_UsernameWithSpaces_ReturnsInvalidUsername()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(UsernameWithSpaces, Email), Password);
+
+            Assert.Equal(RegistrationResult.InvalidUsername, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_WeakPassword_ReturnsWeakPassword()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), WeakPassword);
+
+            Assert.Equal(RegistrationResult.WeakPassword, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_WeakPassword_SavesNothing()
+        {
+            _service.RegisterPlayer(CreatePlayer(Username, Email), WeakPassword);
 
             Assert.Empty(_players.Players);
         }

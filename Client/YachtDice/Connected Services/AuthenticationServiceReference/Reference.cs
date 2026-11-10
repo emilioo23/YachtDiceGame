@@ -436,6 +436,9 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TooManyAttempts = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WeakPassword = 5,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

@@ -124,6 +124,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
+        /// </summary>
+        public static string Auth_ErrorInvalidUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña debe tener de 8 a 64 caracteres, con al menos una letra y un número..
+        /// </summary>
+        public static string Auth_ErrorWeakPassword {
+            get {
+                return ResourceManager.GetString("Auth_ErrorWeakPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ingresa un correo electrónico válido..
         /// </summary>
         public static string Auth_ErrorInvalidEmail {

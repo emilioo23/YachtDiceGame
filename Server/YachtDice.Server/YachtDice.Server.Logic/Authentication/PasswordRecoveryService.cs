@@ -97,9 +97,17 @@ namespace YachtDice.Server.Logic.Authentication
                 throw new ArgumentNullException(nameof(confirmation), NullArgumentMessage);
             }
 
-            PasswordResetStatus status = PasswordResetStatus.MissingRequiredField;
+            PasswordResetStatus status;
 
-            if (HasAllFields(confirmation))
+            if (!HasAllFields(confirmation))
+            {
+                status = PasswordResetStatus.MissingRequiredField;
+            }
+            else if (!CredentialRules.IsStrongPassword(confirmation.NewPassword))
+            {
+                status = PasswordResetStatus.WeakPassword;
+            }
+            else
             {
                 status = CheckPlayerCode(confirmation);
             }

@@ -660,6 +660,12 @@
   <data name="Dialogs_UnexpectedError" xml:space="preserve">
     <value>An unexpected error occurred. Please try again.</value>
   </data>
+  <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
+    <value>The username must have 3 to 20 characters and can only use letters without accents, digits, dots and underscores.</value>
+  </data>
+  <data name="Auth_ErrorWeakPassword" xml:space="preserve">
+    <value>The password must have 8 to 64 characters, with at least one letter and one digit.</value>
+  </data>
   <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
     <value>A field is too long. Username: 20 characters max, email: 100, first and last name: 50.</value>
   </data>
