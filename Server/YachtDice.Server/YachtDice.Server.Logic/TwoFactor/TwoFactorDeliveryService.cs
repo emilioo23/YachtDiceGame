@@ -41,10 +41,10 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Generates a new code and sends it to the given email synchronously.
         /// </summary>
         /// <param name="player">Player who receives the code. Its email is the recipient.</param>
-        /// <param name="culture">Language in which the email is written.</param>
         /// <param name="challengeId">Unique session challenge identifier.</param>
+        /// <param name="culture">Language in which the email is written.</param>
         /// <returns>True if the email was sent successfully.</returns>
-        public bool SendCode(Player player, CultureInfo culture, string challengeId)
+        public bool SendCode(Player player, string challengeId, CultureInfo culture)
         {
             if (culture == null)
             {

@@ -62,17 +62,17 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Result status of the verification process.</returns>
         public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            return _codeService.Validate(email, verificationCode);
+            return _codeService.ValidateCode(email, verificationCode);
         }
 
         /// <summary>
         /// Processes the code resend required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="cultureName">The culture name for email localization.</param>
         /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="cultureName">The culture name for email localization.</param>
         /// <returns>Result status of the resend process.</returns>
-        public ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId)
+        public ResendCodeStatus ResendPlayerCode(string email, string challengeId, string cultureName)
         {
             List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
@@ -93,7 +93,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             else
             {
                 var culture = new CultureInfo(cultureName);
-                bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+                bool isSent = _deliveryService.SendCode(player, challengeId, culture);
                 status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

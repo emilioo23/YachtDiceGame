@@ -148,7 +148,7 @@ namespace YachtDice.Server.Services
         private TwoFactorContracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
         {
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _verificationService.ResendPlayerCode(email, culture, challengeId);
+                _verificationService.ResendPlayerCode(email, challengeId, culture);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, TwoFactorContracts.ResendResultCode>(
                 logicResult);

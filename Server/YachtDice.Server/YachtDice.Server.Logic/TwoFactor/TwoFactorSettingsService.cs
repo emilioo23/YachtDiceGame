@@ -112,17 +112,17 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="cultureName">Name of the language in which the email is written.</param>
         /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="cultureName">Name of the language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public ResendCodeStatus ResendActivationCode(string displayName, string cultureName, string challengeId)
+        public ResendCodeStatus ResendActivationCode(string displayName, string challengeId, string cultureName)
         {
             Player player = FindPlayers(displayName).FirstOrDefault();
             ResendCodeStatus status = ResendCodeStatus.PlayerNotFound;
 
             if (player != null)
             {
-                status = _verificationService.ResendPlayerCode(player.Email, cultureName, challengeId);
+                status = _verificationService.ResendPlayerCode(player.Email, challengeId, cultureName);
             }
 
             return status;
@@ -192,7 +192,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
             if (isSent)

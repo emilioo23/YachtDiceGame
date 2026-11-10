@@ -74,7 +74,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="email">Player's email address.</param>
         /// <param name="verificationCode">Code entered by the player and the challenge it answers.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationStatus Validate(string email, VerificationCode verificationCode)
+        public TwoFactorValidationStatus ValidateCode(string email, VerificationCode verificationCode)
         {
             if (verificationCode == null)
             {

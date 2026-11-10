@@ -134,7 +134,7 @@ namespace YachtDice.Server.Services
             string culture)
         {
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _settingsService.ResendActivationCode(displayName, culture, challengeId);
+                _settingsService.ResendActivationCode(displayName, challengeId, culture);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }
