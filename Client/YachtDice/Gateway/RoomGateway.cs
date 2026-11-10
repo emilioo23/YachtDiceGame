@@ -80,14 +80,13 @@ namespace YachtDice.Gateway
         /// Puts the player inside a room of the list of rooms. A private room also needs its code. If the
         /// player cannot enter, the connection is closed.
         /// </summary>
-        /// <param name="roomId">Identifier of the room inside the list.</param>
-        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <param name="access">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered or why not.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task<RoomResultCode> JoinListedRoomAsync(string roomId, string accessCode)
+        public async Task<RoomResultCode> JoinListedRoomAsync(RoomAccess access)
         {
             JoinRoomResult result = await ConnectAndExecuteAsync(
-                client => client.JoinListedRoom(Session.DisplayName, roomId, accessCode));
+                client => client.JoinListedRoom(Session.DisplayName, access));
 
             return await ApplyJoinResultAsync(result);
         }

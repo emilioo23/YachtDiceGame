@@ -80,13 +80,11 @@ namespace YachtDice.Server.Services
         /// Puts the player inside a room of the list. A private room also needs its code.
         /// </summary>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
-        /// <param name="roomId">Identifier of the room inside the list.</param>
-        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <param name="access">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
-        public Contracts.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode)
+        public Contracts.JoinRoomResult JoinListedRoom(string displayName, Contracts.RoomAccess access)
         {
-            Contracts.JoinRoomResult result =
-                Execute(displayName, () => FinishJoin(_roomManager.JoinListed(roomId, displayName, accessCode)));
+            Contracts.JoinRoomResult result = Execute(access, () => ProcessJoinListed(displayName, access));
 
             return result;
         }
@@ -224,6 +222,13 @@ namespace YachtDice.Server.Services
             }
 
             return Mapping.RoomMapper.ToJoinResult(result);
+        }
+
+        private Contracts.JoinRoomResult ProcessJoinListed(string displayName, Contracts.RoomAccess access)
+        {
+            LogicRooms.RoomResult result = _roomManager.JoinListed(displayName, Mapping.RoomMapper.ToLogic(access));
+
+            return FinishJoin(result);
         }
 
         private Contracts.RoomResultCode ProcessSettings(

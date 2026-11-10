@@ -676,6 +676,67 @@ namespace YachtDice.RoomServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomAccess", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomAccess : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccessCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomIdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccessCode {
+            get {
+                return this.AccessCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccessCodeField, value) != true)) {
+                    this.AccessCodeField = value;
+                    this.RaisePropertyChanged("AccessCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomId {
+            get {
+                return this.RoomIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomIdField, value) != true)) {
+                    this.RoomIdField = value;
+                    this.RaisePropertyChanged("RoomId");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RoomEventType", Namespace="urn:yachtdice:contracts")]
     public enum RoomEventType : int {
@@ -723,7 +784,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinListedRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinListedRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode);
+        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess access);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings", ReplyAction="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsServiceFaultFault", Name="ServiceFault")]
@@ -797,8 +858,8 @@ namespace YachtDice.RoomServiceReference {
             return base.Channel.GetRoomList();
         }
         
-        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode) {
-            return base.Channel.JoinListedRoom(displayName, roomId, accessCode);
+        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess access) {
+            return base.Channel.JoinListedRoom(displayName, access);
         }
         
         public YachtDice.RoomServiceReference.RoomResultCode UpdateRoomSettings(string playerId, string roomCode, YachtDice.RoomServiceReference.RoomSettings settings) {
