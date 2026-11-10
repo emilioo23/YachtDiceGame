@@ -95,13 +95,14 @@ namespace YachtDice.Server.Host
 
         private static void WaitForExit()
         {
-            ThreadPool.QueueUserWorkItem(state =>
-            {
-                Console.ReadLine();
-                _quitEvent.Set();
-            });
-
+            ThreadPool.QueueUserWorkItem(WaitForEnterKey);
             _quitEvent.WaitOne();
+        }
+
+        private static void WaitForEnterKey(object state)
+        {
+            Console.ReadLine();
+            _quitEvent.Set();
         }
 
         private static void CloseServiceHosts(List<ServiceHost> serviceHosts)

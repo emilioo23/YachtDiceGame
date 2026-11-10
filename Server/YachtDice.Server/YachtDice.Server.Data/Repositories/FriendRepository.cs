@@ -111,11 +111,12 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Friendship> SelectBetween(YachtDiceContext context, int firstPlayerId, int secondPlayerId)
         {
-            List<Friendship> friendships = context.Friendship
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
-                .ToList();
+            IQueryable<Friendship> requested = context.Friendship
+                .Where(friendship => friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId);
+            IQueryable<Friendship> received = context.Friendship
+                .Where(friendship => friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId);
+
+            List<Friendship> friendships = requested.Concat(received).ToList();
 
             return friendships;
         }

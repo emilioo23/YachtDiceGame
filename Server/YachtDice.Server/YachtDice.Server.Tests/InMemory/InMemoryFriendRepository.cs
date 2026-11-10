@@ -21,9 +21,7 @@ namespace YachtDice.Server.Tests.InMemory
         public List<Friendship> FindBetween(int firstPlayerId, int secondPlayerId)
         {
             List<Friendship> matches = _friendships
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
+                .Where(friendship => IsBetween(friendship, firstPlayerId, secondPlayerId))
                 .ToList();
 
             return matches;
@@ -60,6 +58,14 @@ namespace YachtDice.Server.Tests.InMemory
         public void Remove(int requesterId, int addresseeId)
         {
             _friendships.RemoveAll(row => row.RequesterId == requesterId && row.AddresseeId == addresseeId);
+        }
+
+        private static bool IsBetween(Friendship friendship, int firstPlayerId, int secondPlayerId)
+        {
+            bool isRequested = friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId;
+            bool isReceived = friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId;
+
+            return isRequested || isReceived;
         }
     }
 }

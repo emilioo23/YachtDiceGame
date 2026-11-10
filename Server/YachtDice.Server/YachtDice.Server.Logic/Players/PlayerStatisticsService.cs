@@ -57,21 +57,41 @@ namespace YachtDice.Server.Logic.Players
         {
             int gamesPlayed = history.Count;
             int wins = history.Count(entry => entry.IsWinner == true);
-            int bestScore = history.Any() ? history.Max(entry => entry.FinalScore) : EmptyCount;
-            int winRate = gamesPlayed > EmptyCount
-                ? (int)Math.Round((double)wins * PercentageFactor / gamesPlayed)
-                : EmptyCount;
 
             var statistics = new PlayerStatistics
             {
                 GamesPlayed = gamesPlayed,
                 Wins = wins,
-                BestScore = bestScore,
-                WinRatePercentage = winRate,
+                BestScore = FindBestScore(history),
+                WinRatePercentage = CalculateWinRate(wins, gamesPlayed),
                 Level = player.Level ?? DefaultPlayerLevel
             };
 
             return statistics;
+        }
+
+        private static int FindBestScore(List<GameHistoryPlayer> history)
+        {
+            int bestScore = EmptyCount;
+
+            if (history.Count > EmptyCount)
+            {
+                bestScore = history.Max(entry => entry.FinalScore);
+            }
+
+            return bestScore;
+        }
+
+        private static int CalculateWinRate(int wins, int gamesPlayed)
+        {
+            int winRate = EmptyCount;
+
+            if (gamesPlayed > EmptyCount)
+            {
+                winRate = (int)Math.Round((double)wins * PercentageFactor / gamesPlayed);
+            }
+
+            return winRate;
         }
     }
 }
