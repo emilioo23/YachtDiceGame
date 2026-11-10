@@ -42,6 +42,22 @@ namespace YachtDice.Server.Services.Mapping
         }
 
         /// <summary>
+        /// Creates the access data of the logic layer from the one sent by a client.
+        /// </summary>
+        /// <param name="access">Access data received from the client.</param>
+        /// <returns>The access data for the logic layer.</returns>
+        public static Logic.Rooms.RoomAccess ToLogic(Contracts.RoomAccess access)
+        {
+            var logicAccess = new Logic.Rooms.RoomAccess
+            {
+                RoomId = access.RoomId,
+                AccessCode = access.AccessCode
+            };
+
+            return logicAccess;
+        }
+
+        /// <summary>
         /// Creates the options of the logic layer from the ones sent by a client.
         /// </summary>
         /// <param name="settings">Options received from the client.</param>

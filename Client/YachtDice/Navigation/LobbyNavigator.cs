@@ -64,12 +64,16 @@ namespace YachtDice.Navigation
             RoomListItem room)
         {
             var roomGateway = new RoomGateway(session);
-            string accessCode = room.AccessCode.Trim();
+            var access = new RoomAccess
+            {
+                RoomId = room.RoomId,
+                AccessCode = room.AccessCode.Trim()
+            };
 
             await JoinAndOpenAsync(
                 currentWindow,
                 roomGateway,
-                () => roomGateway.JoinListedRoomAsync(room.RoomId, accessCode));
+                () => roomGateway.JoinListedRoomAsync(access));
         }
 
         private static async Task JoinAndOpenAsync(

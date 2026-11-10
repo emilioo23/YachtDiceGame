@@ -30,12 +30,11 @@ namespace YachtDice.Server.Logic.Rooms
         /// <summary>
         /// Puts the player inside a room of the list of rooms. A private room also needs its code.
         /// </summary>
-        /// <param name="roomId">Identifier of the room inside the list.</param>
         /// <param name="playerName">Name that the player who enters wants to show.</param>
-        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <param name="access">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the state of the room and the identifier of the player.</returns>
         /// <exception cref="System.ArgumentException">The name is empty.</exception>
-        RoomResult JoinListed(string roomId, string playerName, string accessCode);
+        RoomResult JoinListed(string playerName, RoomAccess access);
 
         /// <summary>
         /// Gets the rooms that wait for players, public and private, ordered by the name of their host.
