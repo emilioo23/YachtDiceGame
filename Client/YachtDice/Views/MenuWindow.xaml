@@ -66,12 +66,20 @@
                                         BorderThickness="1.5"
                                         Margin="0,0,10,0">
 
-                                    <TextBlock x:Name="PlayerInitialTextBlock"
-                                               FontWeight="Bold"
-                                               FontSize="19"
-                                               Foreground="{StaticResource BrushText}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                    <Grid>
+
+                                        <TextBlock x:Name="PlayerInitialTextBlock"
+                                                   FontWeight="Bold"
+                                                   FontSize="19"
+                                                   Foreground="{StaticResource BrushText}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+
+                                        <Image x:Name="PlayerAvatarImage"
+                                               Margin="2"
+                                               Visibility="Collapsed"/>
+
+                                    </Grid>
                                 </Border>
 
                                 <StackPanel VerticalAlignment="Center">
@@ -119,6 +127,13 @@
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="LeaderboardNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button
+                            Content="{x:Static properties:Strings.MainMenu_Nav_HowToPlay}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="HowToPlayNavButton_Click"
                             FontSize="19"/>
 
                     <Button

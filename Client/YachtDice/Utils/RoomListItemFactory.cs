@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using YachtDice.Models;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
 

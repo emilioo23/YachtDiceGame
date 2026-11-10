@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Threading;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -60,27 +60,6 @@ namespace YachtDice.Views
             PrivacyFilterComboBox.SelectionChanged += HandleFiltersChanged;
 
             _ = RefreshAsync(true);
-        }
-
-        private static void KeepTypedCodes(IEnumerable<RoomListItem> oldRooms, IEnumerable<RoomListItem> newRooms)
-        {
-            Dictionary<string, string> codes = oldRooms.ToDictionary(room => room.RoomId, room => room.AccessCode);
-
-            foreach (RoomListItem room in newRooms)
-            {
-                if (codes.TryGetValue(room.RoomId, out string code))
-                {
-                    room.AccessCode = code;
-                }
-            }
-        }
-
-        private static bool HasSameContent(List<RoomListItem> oldRooms, List<RoomListItem> newRooms)
-        {
-            return oldRooms.Count == newRooms.Count
-                && oldRooms
-                    .Zip(newRooms, (oldRoom, newRoom) => oldRoom.HasSameContentAs(newRoom))
-                    .All(isSame => isSame);
         }
 
         private async Task RefreshAsync(bool isRequestedByPlayer)
@@ -138,9 +117,9 @@ namespace YachtDice.Views
         // typing in a row does not lose the focus.
         private void ShowRooms(List<RoomListItem> newRooms)
         {
-            if (!_isClosed && !HasSameContent(_allRooms, newRooms))
+            if (!_isClosed && !RoomListUpdater.HasSameContent(_allRooms, newRooms))
             {
-                KeepTypedCodes(_allRooms, newRooms);
+                RoomListUpdater.KeepTypedCodes(_allRooms, newRooms);
                 _allRooms = newRooms;
                 ApplyFilters();
             }
@@ -200,7 +179,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void BackLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }

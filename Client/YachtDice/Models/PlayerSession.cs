@@ -19,6 +19,7 @@ namespace YachtDice.Models
             FirstName = firstName;
             IsGuest = isGuest;
             Presence = new PresenceGateway();
+            LastOfferedMatchCode = string.Empty;
         }
 
         /// <summary>
@@ -40,5 +41,11 @@ namespace YachtDice.Models
         /// Gets the connection of the player to the presence service, shared by all the windows.
         /// </summary>
         public PresenceGateway Presence { get; }
+
+        /// <summary>
+        /// Gets or sets the code of the last match in progress that the menu offered to the player, so the
+        /// offer is not repeated every time the menu opens.
+        /// </summary>
+        public string LastOfferedMatchCode { get; set; }
     }
 }

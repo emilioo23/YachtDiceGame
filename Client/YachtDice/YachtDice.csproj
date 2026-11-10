@@ -268,26 +268,37 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
+    <Compile Include="Utils\AvatarChangeMessages.cs" />
+    <Compile Include="Utils\AvatarImageConverter.cs" />
+    <Compile Include="Utils\AvatarImages.cs" />
+    <Compile Include="Utils\DiceImages.cs" />
+    <Compile Include="Utils\DrawingCatalog.cs" />
+    <Compile Include="Utils\HowToPlayContent.cs" />
+    <Compile Include="Utils\GatewayCallRunner.cs" />
+    <Compile Include="Gateway\IConnectionLossSource.cs" />
+    <Compile Include="Navigation\ConnectionLossHandler.cs" />
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ResourceKeys.cs" />
     <Compile Include="Utils\FriendItemFactory.cs" />
     <Compile Include="Utils\FriendRequestMessages.cs" />
     <Compile Include="Utils\InvitationResultMessages.cs" />
+    <Compile Include="Utils\LoginResultMessages.cs" />
     <Compile Include="Utils\MatchPlayerFactory.cs" />
     <Compile Include="Utils\PlayerInitials.cs" />
+    <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
-    <Compile Include="Utils\RoomListItemFilter.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Navigation\InvitationListener.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
     <Compile Include="Navigation\WindowNavigator.cs" />
     <Compile Include="Models\ChatMessageKind.cs" />
+    <Compile Include="Models\ChatEntry.cs" />
+    <Compile Include="Models\CategoryRule.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\PlayerSession.cs" />
-    <Compile Include="Models\RoomListItem.cs" />
-    <Compile Include="Models\RoomPrivacyFilter.cs" />
+    <Compile Include="Models\RuleStep.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
     </Compile>
@@ -297,10 +308,17 @@
     <Compile Include="Views\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ResetPasswordWindow.xaml.cs">
+      <DependentUpon>ResetPasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\FriendItem.cs" />
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HowToPlayWindow.xaml.cs">
+      <DependentUpon>HowToPlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiceRow.cs" />
     <Compile Include="Views\InviteFriendsPanel.xaml.cs">
       <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>
     </Compile>
@@ -346,6 +364,14 @@
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\Avatars.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Dice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Theme.Dark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -366,7 +392,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ResetPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HowToPlayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -460,6 +494,12 @@
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.LoginData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.PasswordResetResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\AuthenticationServiceReference\YachtDice.AuthenticationServiceReference.ResendResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -513,7 +553,16 @@
     <None Include="Connected Services\PlayerServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarChangeResultCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntry.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerProfile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.PlayerStatistics.datasource">

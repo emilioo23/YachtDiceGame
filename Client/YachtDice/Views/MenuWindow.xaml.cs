@@ -22,6 +22,8 @@ namespace YachtDice.Views
         private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
         private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
         private const string FriendsFailedLogMessage = "The friends of the player could not be loaded.";
+        private const string PendingMatchFailedLogMessage = "The pending match of the player could not be checked.";
+        private const string AvatarFailedLogMessage = "The avatar of the player could not be loaded.";
 
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -56,12 +58,47 @@ namespace YachtDice.Views
 
             _ = ConnectPresenceAsync(session.DisplayName);
             _ = LoadPlayerStatisticsAsync(session.DisplayName);
+            _ = LoadAvatarAsync(session.DisplayName);
             _ = LoadFriendsAsync();
+            _ = OfferPendingMatchAsync();
         }
 
         private static string GetGreetingName(PlayerSession session)
         {
             return string.IsNullOrWhiteSpace(session.FirstName) ? session.DisplayName : session.FirstName;
+        }
+
+        // A player who left a match in progress, or lost the connection, can go back to it while it goes on.
+        private async Task OfferPendingMatchAsync()
+        {
+            if (!_session.IsGuest)
+            {
+                try
+                {
+                    string roomCode = await new RoomListGateway().FindPendingRoomAsync(_session.DisplayName);
+
+                    await AskToReturnAsync(roomCode);
+                }
+                catch (GatewayException)
+                {
+                    _logger.Warning(PendingMatchFailedLogMessage);
+                }
+            }
+        }
+
+        private async Task AskToReturnAsync(string roomCode)
+        {
+            bool isNewOffer = roomCode.Length > 0 && roomCode != _session.LastOfferedMatchCode;
+
+            if (isNewOffer)
+            {
+                _session.LastOfferedMatchCode = roomCode;
+
+                if (CustomDialogWindow.Confirm(this, Strings.Menu_PendingMatchPrompt))
+                {
+                    await LobbyNavigator.JoinRoomAndOpenAsync(this, _session, roomCode);
+                }
+            }
         }
 
         private static string ReadTag(object sender)
@@ -76,6 +113,7 @@ namespace YachtDice.Views
                 try
                 {
                     await _session.Presence.ConnectAsync(playerName);
+                    ConnectionLossHandler.Watch(_session.Presence);
                 }
                 catch (GatewayException)
                 {
@@ -147,6 +185,25 @@ namespace YachtDice.Views
             }
         }
 
+        private async Task LoadAvatarAsync(string playerName)
+        {
+            if (!_session.IsGuest)
+            {
+                try
+                {
+                    PlayerProfile profile = await _gateway.GetProfileAsync(playerName);
+
+                    PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
+                    PlayerAvatarImage.Visibility = Visibility.Visible;
+                    PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
+                }
+                catch (GatewayException)
+                {
+                    _logger.Warning(AvatarFailedLogMessage);
+                }
+            }
+        }
+
         private void ShowStatistics(PlayerStatistics statistics)
         {
             if (statistics != null)
@@ -159,16 +216,6 @@ namespace YachtDice.Views
                     statistics.WinRatePercentage);
                 PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, statistics.Level);
             }
-        }
-
-        private bool AskConfirmation(string message)
-        {
-            var dialog = new CustomDialogWindow(new DialogContent { Message = message })
-            {
-                Owner = this
-            };
-
-            return dialog.ShowDialog() == true;
         }
 
         private void ShowOnlinePlayers()
@@ -204,7 +251,7 @@ namespace YachtDice.Views
         {
             string friendName = ReadTag(sender);
 
-            if (AskConfirmation(Strings.Dialogs_DeleteFriend))
+            if (CustomDialogWindow.Confirm(this, Strings.Dialogs_DeleteFriend))
             {
                 await RemoveFriendAsync(friendName);
             }
@@ -276,6 +323,11 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new LeaderboardWindow(_session));
         }
 
+        private void HowToPlayNavButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowNavigator.SwitchTo(this, new HowToPlayWindow(_session));
+        }
+
         private void SettingsNavButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new SettingsWindow(_session));
@@ -288,9 +340,12 @@ namespace YachtDice.Views
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => _session.Presence.Disconnect());
+            if (CustomDialogWindow.Confirm(this, Strings.Dialogs_ConfirmLogout))
+            {
+                await Task.Run(() => _session.Presence.Disconnect());
 
-            WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow());
+            }
         }
 
         private async void JoinRoomButton_Click(object sender, RoutedEventArgs e)

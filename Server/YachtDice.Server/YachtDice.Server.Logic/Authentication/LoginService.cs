@@ -15,7 +15,9 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginService : ILoginService
     {
-        private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
+        private const string InvalidEmailLogMessage = "Login attempt with a malformed email.";
+        private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
+        private const string WrongPasswordLogMessage = "Login attempt with a wrong password.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
         private const string NullDependencyMessage = "The dependency cannot be null.";
@@ -72,29 +74,60 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
-        /// Authenticates the user synchronously by checking the database and password hash.
+        /// Checks the email first and then the password, so the player knows which of the two failed.
         /// </summary>
         /// <param name="credentials">The login credentials provided by the user.</param>
         /// <returns>The login result status.</returns>
         private LoginResult Authenticate(LoginCredentials credentials)
         {
-            List<Player> matches = _playerRepository.FindByEmail(credentials.Email.Trim());
-            Player player = matches.FirstOrDefault();
+            string email = credentials.Email.Trim();
             LoginResult result;
 
-            if (player == null || !PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            if (EmailAddressValidator.IsValid(email))
             {
-                _logger.Warning(InvalidCredentialsLogMessage);
-                result = new LoginResult(LoginStatus.InvalidCredentials, string.Empty);
+                result = CheckPlayer(email, credentials);
             }
-            else if (_verificationService.IsLocked(player.Email))
+            else
+            {
+                result = Reject(LoginStatus.InvalidEmail, InvalidEmailLogMessage);
+            }
+
+            return result;
+        }
+
+        private LoginResult CheckPlayer(string email, LoginCredentials credentials)
+        {
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            LoginResult result;
+
+            if (player == null)
+            {
+                result = Reject(LoginStatus.EmailNotRegistered, UnknownEmailLogMessage);
+            }
+            else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            {
+                result = Reject(LoginStatus.InvalidPassword, WrongPasswordLogMessage);
+            }
+            else
+            {
+                result = CompleteLogin(player, credentials.Culture);
+            }
+
+            return result;
+        }
+
+        private LoginResult CompleteLogin(Player player, CultureInfo culture)
+        {
+            LoginResult result;
+
+            if (_verificationService.IsLocked(player.Email))
             {
                 _logger.Warning(LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
             else if (_playerRepository.HasTwoFactorEnabled(player.Id))
             {
-                result = SendCode(player, credentials.Culture);
+                result = SendCode(player, culture);
             }
             else
             {
@@ -102,6 +135,13 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             return result;
+        }
+
+        private LoginResult Reject(LoginStatus status, string logMessage)
+        {
+            _logger.Warning(logMessage);
+
+            return new LoginResult(status, string.Empty);
         }
 
         /// <summary>

@@ -104,6 +104,9 @@ namespace YachtDice.ChatServiceReference {
         private string AuthorIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AvatarIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -141,6 +144,19 @@ namespace YachtDice.ChatServiceReference {
                 if ((object.ReferenceEquals(this.AuthorIdField, value) != true)) {
                     this.AuthorIdField = value;
                     this.RaisePropertyChanged("AuthorId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AvatarId {
+            get {
+                return this.AvatarIdField;
+            }
+            set {
+                if ((this.AvatarIdField.Equals(value) != true)) {
+                    this.AvatarIdField = value;
+                    this.RaisePropertyChanged("AvatarId");
                 }
             }
         }

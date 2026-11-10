@@ -23,6 +23,12 @@ namespace YachtDice.Server.Contracts.Chat
         public string Author { get; set; }
 
         /// <summary>
+        /// Identifier of the avatar of the player who sent the message.
+        /// </summary>
+        [DataMember]
+        public int AvatarId { get; set; }
+
+        /// <summary>
         /// Text of the message.
         /// </summary>
         [DataMember]

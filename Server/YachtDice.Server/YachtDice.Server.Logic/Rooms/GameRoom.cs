@@ -16,6 +16,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const int FirstRepeatedNumber = 2;
 
         private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
+        private readonly List<RoomPlayer> _absentPlayers = new List<RoomPlayer>();
 
         /// <summary>
         /// Initializes a new room without players. The first player who enters becomes the host.
@@ -62,16 +63,23 @@ namespace YachtDice.Server.Logic.Rooms
         public IReadOnlyList<RoomPlayer> Players => _players;
 
         /// <summary>
+        /// Gets the players who left a game in progress and can still come back.
+        /// </summary>
+        public IReadOnlyList<RoomPlayer> AbsentPlayers => _absentPlayers;
+
+        /// <summary>
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another
         /// player already uses the name, a number is added to it so that the names stay different.
         /// </summary>
         /// <param name="displayName">Name that the player asked for.</param>
+        /// <param name="avatarId">Identifier of the avatar of the player.</param>
         /// <returns>The player that entered.</returns>
-        public RoomPlayer AddPlayer(string displayName)
+        public RoomPlayer AddPlayer(string displayName, int avatarId)
         {
             var player = new RoomPlayer(
                 Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture),
-                CreateUniqueName(displayName.Trim()));
+                CreateUniqueName(displayName.Trim()),
+                avatarId);
 
             _players.Add(player);
 
@@ -143,6 +151,64 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
+        /// Moves the player out of the room but keeps the place, so the player can return to a game in
+        /// progress. If the player was the host, the next player becomes the host.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who left.</param>
+        public void MarkAbsent(string playerId)
+        {
+            if (TryGetPlayer(playerId, out RoomPlayer player))
+            {
+                RemovePlayer(playerId);
+                _absentPlayers.Add(player);
+            }
+        }
+
+        /// <summary>
+        /// Brings back the absent player who has the name. The player keeps the identifier and the avatar.
+        /// </summary>
+        /// <param name="displayName">Name that the returning player shows.</param>
+        /// <param name="player">The player who returned, if there was an absent one with that name.</param>
+        /// <returns><c>true</c> if an absent player had the name; otherwise, <c>false</c>.</returns>
+        public bool TryReturnPlayer(string displayName, out RoomPlayer player)
+        {
+            string name = displayName.Trim();
+
+            player = _absentPlayers.FirstOrDefault(
+                candidate => string.Equals(candidate.DisplayName, name, StringComparison.OrdinalIgnoreCase));
+
+            if (player != null)
+            {
+                _absentPlayers.Remove(player);
+                _players.Add(player);
+            }
+
+            return player != null;
+        }
+
+        /// <summary>
+        /// Checks whether an absent player has the name.
+        /// </summary>
+        /// <param name="displayName">Name to look for.</param>
+        /// <returns><c>true</c> if the player left the game and can return; otherwise, <c>false</c>.</returns>
+        public bool HasAbsentPlayer(string displayName)
+        {
+            string name = displayName.Trim();
+
+            return _absentPlayers.Any(
+                player => string.Equals(player.DisplayName, name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Makes another player of the room the host.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who becomes the host. It must be inside the room.</param>
+        public void SetHost(string playerId)
+        {
+            HostId = playerId;
+        }
+
+        /// <summary>
         /// Creates a copy of the current state of the room.
         /// </summary>
         /// <returns>Details that do not change when the room changes.</returns>
@@ -160,6 +226,8 @@ namespace YachtDice.Server.Logic.Rooms
                 Code = Code,
                 HostId = HostId,
                 Players = _players.ToList(),
+                AbsentPlayers = _absentPlayers.ToList(),
+                IsStarted = IsStarted,
                 Settings = settings
             };
 

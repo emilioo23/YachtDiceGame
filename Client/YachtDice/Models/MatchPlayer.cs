@@ -17,9 +17,9 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the initial of the name, used for the avatar.
+        /// Gets or sets the identifier of the avatar of the player.
         /// </summary>
-        public string Initial { get; set; }
+        public int AvatarId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is the player who uses the window.

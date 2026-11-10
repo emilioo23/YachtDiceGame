@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Mail;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
@@ -77,7 +76,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RegistrationResult.FieldTooLong;
             }
-            else if (!IsValidEmail(player.Email?.Trim()))
+            else if (!EmailAddressValidator.IsValid(player.Email?.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
             }
@@ -105,26 +104,6 @@ namespace YachtDice.Server.Logic.Authentication
                 && emailLength <= EmailMaxLength
                 && firstNameLength <= NameMaxLength
                 && lastNameLength <= NameMaxLength;
-        }
-
-        private static bool IsValidEmail(string email)
-        {
-            var isValid = false;
-
-            if (!string.IsNullOrWhiteSpace(email))
-            {
-                try
-                {
-                    var address = new MailAddress(email);
-                    isValid = address.Address == email;
-                }
-                catch (FormatException)
-                {
-                    isValid = false;
-                }
-            }
-
-            return isValid;
         }
 
         private RegistrationResult SavePlayer(Player player, string plainPassword)

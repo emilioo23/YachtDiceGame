@@ -1,4 +1,4 @@
-﻿namespace YachtDice.Models
+﻿namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
     /// Kind of rooms that the list of rooms shows.

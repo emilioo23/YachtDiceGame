@@ -23,6 +23,16 @@ namespace YachtDice.Server.Logic.Rooms
         public List<RoomPlayer> Players { get; internal set; }
 
         /// <summary>
+        /// Gets the players who left a game in progress and can still come back.
+        /// </summary>
+        public List<RoomPlayer> AbsentPlayers { get; internal set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the game of the room already started.
+        /// </summary>
+        public bool IsStarted { get; internal set; }
+
+        /// <summary>
         /// Gets the options of the room.
         /// </summary>
         public RoomSettings Settings { get; internal set; }
@@ -43,6 +53,7 @@ namespace YachtDice.Server.Logic.Rooms
                 Code = string.Empty,
                 HostId = string.Empty,
                 Players = new List<RoomPlayer>(),
+                AbsentPlayers = new List<RoomPlayer>(),
                 Settings = new RoomSettings()
             };
 

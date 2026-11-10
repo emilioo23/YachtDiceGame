@@ -29,6 +29,20 @@ namespace YachtDice.Utils
         }
 
         /// <summary>
+        /// Creates the players of a match from the state of the room. The players who left the match and
+        /// can still come back are listed too, marked as absent.
+        /// </summary>
+        /// <param name="room">State of the room.</param>
+        /// <param name="localPlayerId">Identifier of the player who uses the window.</param>
+        /// <returns>The local player followed by the other players.</returns>
+        public static List<MatchPlayer> CreateForRoom(RoomState room, string localPlayerId)
+        {
+            List<MatchPlayer> players = Create(room.Players.Concat(room.AbsentPlayers), localPlayerId);
+
+            return UpdatePresence(players, room.Players);
+        }
+
+        /// <summary>
         /// Marks the players who are no longer inside the room. They stay in the list because the scorecard
         /// keeps their column until the match ends.
         /// </summary>
@@ -53,7 +67,7 @@ namespace YachtDice.Utils
             {
                 Id = roomPlayer.Id,
                 Name = roomPlayer.DisplayName,
-                Initial = PlayerInitials.GetInitial(roomPlayer.DisplayName),
+                AvatarId = roomPlayer.AvatarId,
                 IsLocalPlayer = isLocalPlayer
             };
 
@@ -66,7 +80,7 @@ namespace YachtDice.Utils
             {
                 Id = player.Id,
                 Name = player.Name,
-                Initial = player.Initial,
+                AvatarId = player.AvatarId,
                 IsLocalPlayer = player.IsLocalPlayer,
                 HasLeft = !presentIds.Contains(player.Id)
             };

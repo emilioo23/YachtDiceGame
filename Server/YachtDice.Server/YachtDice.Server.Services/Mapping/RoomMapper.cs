@@ -23,6 +23,8 @@ namespace YachtDice.Server.Services.Mapping
                 Code = room.Code,
                 HostId = room.HostId,
                 Players = room.Players.Select(ToContract).ToList(),
+                AbsentPlayers = room.AbsentPlayers.Select(ToContract).ToList(),
+                IsStarted = room.IsStarted,
                 Settings = ToContract(room.Settings)
             };
 
@@ -146,7 +148,8 @@ namespace YachtDice.Server.Services.Mapping
             var contract = new Contracts.RoomPlayer
             {
                 Id = player.Id,
-                DisplayName = player.DisplayName
+                DisplayName = player.DisplayName,
+                AvatarId = player.AvatarId
             };
 
             return contract;

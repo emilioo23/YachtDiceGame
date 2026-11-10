@@ -1,7 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using YachtDice.Client.Logic.Avatars;
+using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
+using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -12,10 +18,20 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ProfileWindow : Window
     {
+        private const int NoLevelRequired = 0;
+
         private readonly PlayerSession _session;
+        private readonly PlayerGateway _playerGateway = new PlayerGateway();
+        private readonly AppLogger _logger = new AppLogger(typeof(ProfileWindow));
+
+        private List<AvatarRequirement> _catalog = new List<AvatarRequirement>();
+        private List<AvatarOption> _options = new List<AvatarOption>();
+        private int _level = AvatarResourceKey.DefaultAvatarId;
+        private int _savedAvatarId = AvatarResourceKey.DefaultAvatarId;
+        private int _selectedAvatarId = AvatarResourceKey.DefaultAvatarId;
 
         /// <summary>
-        /// Initializes the profile window for the given player.
+        /// Initializes the profile window for the given player and starts loading the avatars.
         /// </summary>
         /// <param name="session">Session of the player whose profile is being edited.</param>
         public ProfileWindow(PlayerSession session)
@@ -23,25 +39,87 @@ namespace YachtDice.Views
             InitializeComponent();
             _session = session;
             UsernameTextBox.Text = session.DisplayName;
-            AvatarInitialTextBlock.Text = PlayerInitials.GetInitial(session.DisplayName);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
+
+            _ = GatewayCallRunner.RunAsync(this, _logger, LoadAvatarsAsync);
         }
 
-        private void ColorSwatch_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static AvatarRequirement ToRequirement(AvatarInfo avatar)
         {
-            var swatch = sender as Border;
+            return new AvatarRequirement { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel };
+        }
 
-            if (swatch != null)
+        private async Task LoadAvatarsAsync()
+        {
+            PlayerProfile profile = await _playerGateway.GetProfileAsync(_session.DisplayName);
+            List<AvatarInfo> catalog = await _playerGateway.GetAvatarCatalogAsync();
+
+            _catalog = catalog.Select(ToRequirement).ToList();
+            _level = profile.Level;
+            _savedAvatarId = profile.AvatarId;
+            _selectedAvatarId = profile.AvatarId;
+
+            LevelTextBlock.Text = string.Format(Strings.Profile_LevelFormat, profile.Level, profile.Experience);
+            ShowSelection();
+        }
+
+        private void ShowSelection()
+        {
+            _options = AvatarOptionBuilder.Build(_catalog, _level, _selectedAvatarId);
+
+            AvatarPreviewImage.Source = AvatarImages.Get(_selectedAvatarId);
+            AvatarOptionsItemsControl.ItemsSource = _options;
+        }
+
+        private async Task SaveAvatarAsync()
+        {
+            AvatarChangeResultCode result =
+                await _playerGateway.ChangeAvatarAsync(_session.DisplayName, _selectedAvatarId);
+
+            if (result == AvatarChangeResultCode.Success)
             {
-                var avatarBorder = (Border)AvatarInitialTextBlock.Parent;
-                avatarBorder.Background = swatch.Background;
+                _savedAvatarId = _selectedAvatarId;
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, AvatarChangeMessages.GetMessage(result, GetRequiredLevel()));
             }
         }
 
-        private void SaveChangesButton_Click(object sender, RoutedEventArgs e)
+        private int GetRequiredLevel()
         {
-            // TODO: The real changes will be saved in the backend here later.
-            CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+            AvatarOption option = _options.FirstOrDefault(candidate => candidate.Id == _selectedAvatarId);
+
+            return option == null ? NoLevelRequired : option.RequiredLevel;
+        }
+
+        private void AvatarOption_Click(object sender, MouseButtonEventArgs e)
+        {
+            int avatarId = (int)((FrameworkElement)sender).Tag;
+            AvatarOption option = _options.First(candidate => candidate.Id == avatarId);
+
+            if (option.IsUnlocked)
+            {
+                _selectedAvatarId = avatarId;
+                ShowSelection();
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, string.Format(Strings.Profile_AvatarLocked, option.RequiredLevel));
+            }
+        }
+
+        private async void SaveChangesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedAvatarId == _savedAvatarId)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+            }
+            else
+            {
+                await GatewayCallRunner.RunAsync(this, _logger, SaveAvatarAsync);
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

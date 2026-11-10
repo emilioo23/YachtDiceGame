@@ -27,6 +27,12 @@
         InvalidSettings,
 
         /// <summary>The code sent does not open the private room.</summary>
-        InvalidAccessCode
+        InvalidAccessCode,
+
+        /// <summary>The player chosen by the host is not inside the room.</summary>
+        PlayerNotFound,
+
+        /// <summary>The host chose themselves, which makes no sense for this operation.</summary>
+        InvalidTarget
     }
 }

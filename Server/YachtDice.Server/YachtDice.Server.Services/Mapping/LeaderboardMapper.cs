@@ -23,6 +23,7 @@ namespace YachtDice.Server.Services.Mapping
                 {
                     Position = entry.Position,
                     DisplayName = entry.DisplayName,
+                    AvatarId = entry.AvatarId,
                     TotalPoints = entry.TotalPoints,
                     Wins = entry.Wins
                 })

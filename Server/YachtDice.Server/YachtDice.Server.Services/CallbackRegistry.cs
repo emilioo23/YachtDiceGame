@@ -107,6 +107,29 @@ namespace YachtDice.Server.Services
             }
         }
 
+        /// <summary>
+        /// Sends a notification only to one player subscribed to the room. If the player cannot be reached, it
+        /// is unsubscribed.
+        /// </summary>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="playerId">Identifier of the player to notify.</param>
+        /// <param name="notification">Call to make on the callback channel.</param>
+        public void NotifyPlayer(string roomCode, string playerId, Action<TCallback> notification)
+        {
+            TCallback callback = null;
+            var isSubscribed = false;
+
+            lock (_syncRoot)
+            {
+                isSubscribed = TryGetCallback(roomCode, playerId, out callback);
+            }
+
+            if (isSubscribed && !TryNotify(callback, notification))
+            {
+                RemoveIfCurrent(roomCode, playerId, callback);
+            }
+        }
+
         private List<KeyValuePair<string, TCallback>> CopyRecipients(string roomCode)
         {
             var recipients = new List<KeyValuePair<string, TCallback>>();

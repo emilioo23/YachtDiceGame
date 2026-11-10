@@ -61,5 +61,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
         void SaveTwoFactorEnabled(int playerId, bool isEnabled);
+
+        /// <summary>
+        /// Saves the avatar that the player chose.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
+        void SaveAvatar(int playerId, int avatarId);
     }
 }

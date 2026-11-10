@@ -16,7 +16,7 @@ namespace YachtDice.Gateway
     /// a network thread while the windows read them in the thread of the interface. The connection, the name
     /// and the list of players change together, so they need the lock.
     /// </summary>
-    public class PresenceGateway
+    public class PresenceGateway : IConnectionLossSource
     {
         private const string UnavailableLogMessage = "The presence service could not be reached.";
         private const string UnavailableMessage = "The server is not available.";
@@ -39,6 +39,12 @@ namespace YachtDice.Gateway
         /// Event triggered when the list of online players changes. It can be raised from any thread.
         /// </summary>
         public event Action PlayersChanged;
+
+        /// <summary>
+        /// Event triggered when the connection with the server is lost without the player leaving. It can be
+        /// raised from any thread.
+        /// </summary>
+        public event Action ConnectionLost;
 
         /// <summary>
         /// Event triggered when a friend request arrives, is accepted or a friend is removed. It can be raised
@@ -153,6 +159,7 @@ namespace YachtDice.Gateway
                 string[] names = await Task.Run(() => client.Connect(displayName));
 
                 client.InnerChannel.Faulted += (sender, e) => HandleConnectionLost(client);
+                client.InnerChannel.Closed += (sender, e) => HandleConnectionLost(client);
                 SaveConnection(client, displayName, names);
             }
             catch (CommunicationException ex)
@@ -217,9 +224,13 @@ namespace YachtDice.Gateway
 
         private void HandleConnectionLost(PresenceServiceClient client)
         {
+            bool wasCurrent;
+
             lock (_syncRoot)
             {
-                if (ReferenceEquals(_client, client))
+                wasCurrent = ReferenceEquals(_client, client);
+
+                if (wasCurrent)
                 {
                     _client = null;
                     _displayName = null;
@@ -228,7 +239,12 @@ namespace YachtDice.Gateway
             }
 
             client.Abort();
-            PlayersChanged?.Invoke();
+
+            if (wasCurrent)
+            {
+                PlayersChanged?.Invoke();
+                ConnectionLost?.Invoke();
+            }
         }
     }
 }

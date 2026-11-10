@@ -50,73 +50,108 @@
                             BorderBrush="{StaticResource BrushGold}"
                             BorderThickness="3"
                             HorizontalAlignment="Center"
-                            Margin="0,0,0,20">
+                            Margin="0,0,0,12">
 
-                        <TextBlock x:Name="AvatarInitialTextBlock"
-                                   FontFamily="{StaticResource FontDisplay}"
-                                   FontSize="48"
-                                   Foreground="{StaticResource BrushWoodDark}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                        <Image x:Name="AvatarPreviewImage"
+                               Margin="3"/>
                     </Border>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_BackgroundColor}"
-                               FontSize="16"
-                               FontWeight="Bold"
+                    <TextBlock x:Name="LevelTextBlock"
+                               FontSize="15"
+                               FontWeight="SemiBold"
                                Foreground="{StaticResource BrushTextMuted}"
-                               Margin="0,0,0,10"/>
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,16"/>
 
-                    <UniformGrid Columns="6"
-                                 Margin="0,0,0,20">
+                    <ItemsControl x:Name="AvatarOptionsItemsControl"
+                                  Margin="0,0,0,20">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#E0E0E0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#F5D368"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="3"
+                                        Padding="3"
+                                        CornerRadius="30"
+                                        BorderThickness="3"
+                                        Background="Transparent"
+                                        Tag="{Binding Id}"
+                                        MouseLeftButtonUp="AvatarOption_Click">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#8FD3B6"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush"
+                                                    Value="Transparent"/>
+                                            <Setter Property="Cursor"
+                                                    Value="Hand"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}"
+                                                             Value="True">
+                                                    <Setter Property="BorderBrush"
+                                                            Value="{StaticResource BrushGold}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsUnlocked}"
+                                                             Value="False">
+                                                    <Setter Property="Cursor"
+                                                            Value="Arrow"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#A9C9F0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                    <Grid>
+                                        <Image Width="46"
+                                               Height="46"
+                                               Source="{Binding Id, Converter={StaticResource AvatarImageConverter}}">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#F0A9C4"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsUnlocked}"
+                                                                     Value="False">
+                                                            <Setter Property="Opacity"
+                                                                    Value="0.35"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#D2A9F0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
-                    </UniformGrid>
+                                        <Border Background="{StaticResource BrushWoodDark}"
+                                                CornerRadius="8"
+                                                Padding="5,1"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom">
+
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsUnlocked}"
+                                                                     Value="False">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <TextBlock Text="{Binding RequiredLevel,
+                                                StringFormat={x:Static properties:Strings.Profile_AvatarLockedBadge}}"
+                                                       FontSize="11"
+                                                       FontWeight="Bold"
+                                                       Foreground="White"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                 </StackPanel>
             </Border>

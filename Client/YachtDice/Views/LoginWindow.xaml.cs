@@ -99,32 +99,6 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
         }
 
-        private static string GetLoginMessage(LoginResultCode code)
-        {
-            string message;
-
-            switch (code)
-            {
-                case LoginResultCode.MissingRequiredField:
-                    message = Strings.Auth_ErrorRequiredFields;
-                    break;
-                case LoginResultCode.InvalidCredentials:
-                    message = Strings.Dialogs_InvalidCredentials;
-                    break;
-                case LoginResultCode.VerificationLocked:
-                    message = Strings.Dialogs_TooManyAttempts;
-                    break;
-                case LoginResultCode.CodeSendFailed:
-                    message = Strings.TwoFactor_ErrorSendFailed;
-                    break;
-                default:
-                    message = Strings.Dialogs_UnexpectedError;
-                    break;
-            }
-
-            return message;
-        }
-
         private static string GetRegisterMessage(RegisterResultCode code)
         {
             string message;
@@ -176,7 +150,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, GetLoginMessage(loginData.Code));
+                CustomDialogWindow.ShowMessage(this, LoginResultMessages.GetMessage(loginData.Code));
             }
         }
 

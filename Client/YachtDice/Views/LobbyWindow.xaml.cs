@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,34 +67,65 @@ namespace YachtDice.Views
             ShowRoom(_roomGateway.CurrentRoom);
         }
 
-        private static List<LobbySlot> CreateSlots(RoomState room)
+        private static List<LobbySlot> CreateSlots(RoomState room, string localPlayerId)
         {
             var slots = new List<LobbySlot>();
+            bool isLocalPlayerHost = room.HostId == localPlayerId;
 
             foreach (RoomPlayer player in room.Players)
             {
-                slots.Add(CreateOccupiedSlot(player.DisplayName, player.Id == room.HostId));
+                bool canManage = isLocalPlayerHost && player.Id != localPlayerId;
+
+                slots.Add(CreateOccupiedSlot(player, player.Id == room.HostId, canManage));
             }
 
             for (int slotIndex = room.Players.Length; slotIndex < room.Settings.MaxPlayers; slotIndex++)
             {
-                slots.Add(new LobbySlot { Name = string.Empty, Initial = string.Empty, IsEmpty = true });
+                slots.Add(new LobbySlot { Name = string.Empty, IsEmpty = true });
             }
 
             return slots;
         }
 
-        private static LobbySlot CreateOccupiedSlot(string playerName, bool isHost)
+        private static LobbySlot CreateOccupiedSlot(RoomPlayer player, bool isHost, bool canManage)
         {
             var slot = new LobbySlot
             {
-                Name = playerName,
-                Initial = PlayerInitials.GetInitial(playerName),
+                PlayerId = player.Id,
+                Name = player.DisplayName,
+                AvatarId = player.AvatarId,
                 IsHost = isHost,
+                CanManage = canManage,
                 IsEmpty = false
             };
 
             return slot;
+        }
+
+        private static string ReadTag(object sender)
+        {
+            return (string)((FrameworkElement)sender).Tag;
+        }
+
+        private static async Task<string> TryRunAsync(Func<Task<RoomResultCode>> operation)
+        {
+            string errorMessage = string.Empty;
+
+            try
+            {
+                RoomResultCode result = await operation();
+
+                if (result != RoomResultCode.Success)
+                {
+                    errorMessage = RoomResultMessages.GetMessage(result);
+                }
+            }
+            catch (GatewayException ex)
+            {
+                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
+            }
+
+            return errorMessage;
         }
 
         private static int ParseMaxPlayers(ComboBoxItem item)
@@ -126,7 +158,7 @@ namespace YachtDice.Views
                 Strings.Lobby_PlayerCountFormat,
                 room.Players.Length,
                 room.Settings.MaxPlayers);
-            PlayerSlotsItemsControl.ItemsSource = CreateSlots(room);
+            PlayerSlotsItemsControl.ItemsSource = CreateSlots(room, _roomGateway.PlayerId);
 
             ShowSettings(room.Settings);
             ApplyHostPermissions(room.HostId == _roomGateway.PlayerId);
@@ -195,21 +227,7 @@ namespace YachtDice.Views
 
         private async Task SendSettingsAsync(RoomSettings settings)
         {
-            string errorMessage = string.Empty;
-
-            try
-            {
-                RoomResultCode result = await _roomGateway.UpdateSettingsAsync(settings);
-
-                if (result != RoomResultCode.Success)
-                {
-                    errorMessage = RoomResultMessages.GetMessage(result);
-                }
-            }
-            catch (GatewayException ex)
-            {
-                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
-            }
+            string errorMessage = await TryRunAsync(() => _roomGateway.UpdateSettingsAsync(settings));
 
             if (errorMessage.Length > EmptyLength)
             {
@@ -218,25 +236,42 @@ namespace YachtDice.Views
             }
         }
 
-        private async Task<string> TryStartGameAsync()
+        private async Task RunHostActionAsync(Func<Task<RoomResultCode>> action)
         {
-            string errorMessage = string.Empty;
+            string errorMessage = await TryRunAsync(action);
 
-            try
+            if (errorMessage.Length > EmptyLength)
             {
-                RoomResultCode result = await _roomGateway.StartGameAsync();
-
-                if (result != RoomResultCode.Success)
-                {
-                    errorMessage = RoomResultMessages.GetMessage(result);
-                }
+                CustomDialogWindow.ShowMessage(this, errorMessage);
             }
-            catch (GatewayException ex)
-            {
-                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
-            }
+        }
 
-            return errorMessage;
+        private string FindPlayerName(string playerId)
+        {
+            RoomPlayer player = _roomGateway.CurrentRoom.Players.FirstOrDefault(candidate => candidate.Id == playerId);
+
+            return player == null ? string.Empty : player.DisplayName;
+        }
+
+        private bool IsInside(RoomState room)
+        {
+            return room.Players.Any(player => player.Id == _roomGateway.PlayerId);
+        }
+
+        private void LeaveBecauseKicked()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_KickedMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private void AnnounceHostChange(RoomState room)
+        {
+            RoomPlayer host = room.Players.First(player => player.Id == room.HostId);
+
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                string.Format(Strings.Lobby_Chat_NewHost, host.DisplayName),
+                ChatMessageKind.System);
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
@@ -246,11 +281,26 @@ namespace YachtDice.Views
 
         private void ApplyRoomChange(RoomState room, RoomEventType eventType)
         {
-            ShowRoom(room);
+            if (eventType == RoomEventType.PlayerKicked && !IsInside(room))
+            {
+                LeaveBecauseKicked();
+            }
+            else
+            {
+                ShowRoom(room);
+                AnnounceChange(room, eventType);
+            }
+        }
 
+        private void AnnounceChange(RoomState room, RoomEventType eventType)
+        {
             if (eventType == RoomEventType.GameStarted)
             {
                 OpenGameWindow();
+            }
+            else if (eventType == RoomEventType.HostChanged)
+            {
+                AnnounceHostChange(room);
             }
         }
 
@@ -285,6 +335,24 @@ namespace YachtDice.Views
             {
                 await SendSettingsAsync(ReadSettings(_roomGateway.CurrentRoom.Settings.Speed));
             }
+        }
+
+        private async void KickButton_Click(object sender, RoutedEventArgs e)
+        {
+            string targetPlayerId = ReadTag(sender);
+            string question = string.Format(Strings.Lobby_ConfirmKick, FindPlayerName(targetPlayerId));
+
+            if (CustomDialogWindow.Confirm(this, question))
+            {
+                await RunHostActionAsync(() => _roomGateway.KickPlayerAsync(targetPlayerId));
+            }
+        }
+
+        private async void TransferButton_Click(object sender, RoutedEventArgs e)
+        {
+            string newHostId = ReadTag(sender);
+
+            await RunHostActionAsync(() => _roomGateway.TransferHostAsync(newHostId));
         }
 
         private async void NormalMode_Click(object sender, MouseButtonEventArgs e)
@@ -324,7 +392,7 @@ namespace YachtDice.Views
         {
             StartGameButton.IsEnabled = false;
 
-            string errorMessage = await TryStartGameAsync();
+            string errorMessage = await TryRunAsync(_roomGateway.StartGameAsync);
 
             if (errorMessage.Length > EmptyLength)
             {

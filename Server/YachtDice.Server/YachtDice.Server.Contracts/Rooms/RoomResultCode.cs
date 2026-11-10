@@ -38,6 +38,14 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The code sent does not open the private room.</summary>
         [EnumMember]
-        InvalidAccessCode
+        InvalidAccessCode,
+
+        /// <summary>The player chosen by the host is not inside the room.</summary>
+        [EnumMember]
+        PlayerNotFound,
+
+        /// <summary>The host chose themselves, which makes no sense for this operation.</summary>
+        [EnumMember]
+        InvalidTarget
     }
 }

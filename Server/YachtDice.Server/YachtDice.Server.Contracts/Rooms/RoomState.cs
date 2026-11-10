@@ -28,6 +28,18 @@ namespace YachtDice.Server.Contracts.Rooms
         public List<RoomPlayer> Players { get; set; }
 
         /// <summary>
+        /// Players who left the game in progress and can still come back.
+        /// </summary>
+        [DataMember]
+        public List<RoomPlayer> AbsentPlayers { get; set; }
+
+        /// <summary>
+        /// Whether the game of the room already started.
+        /// </summary>
+        [DataMember]
+        public bool IsStarted { get; set; }
+
+        /// <summary>
         /// Options chosen by the host.
         /// </summary>
         [DataMember]

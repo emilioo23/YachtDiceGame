@@ -16,6 +16,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier of the avatar of the player.
+        /// </summary>
+        public int AvatarId { get; set; }
+
+        /// <summary>
         /// Gets or sets the total points of the player.
         /// </summary>
         public int Points { get; set; }

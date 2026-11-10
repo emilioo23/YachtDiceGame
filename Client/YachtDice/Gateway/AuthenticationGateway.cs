@@ -53,6 +53,32 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to send a password recovery code to the email of the account.
+        /// </summary>
+        /// <param name="email">Email of the account to recover.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the request.</returns>
+        public async Task<PasswordResetRequestResultCode> RequestPasswordResetAsync(string email, string culture)
+        {
+            PasswordResetRequestResultCode result =
+                await ExecuteAsync(client => client.RequestPasswordReset(email, culture));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends the recovery code and the new password so the server changes the password of the account.
+        /// </summary>
+        /// <param name="data">Email, code and new password written by the player.</param>
+        /// <returns>Outcome of the confirmation.</returns>
+        public async Task<PasswordResetResultCode> ConfirmPasswordResetAsync(PasswordResetData data)
+        {
+            PasswordResetResultCode result = await ExecuteAsync(client => client.ConfirmPasswordReset(data));
+
+            return result;
+        }
+
+        /// <summary>
         /// Translates the WCF fault exception into a specific gateway error code.
         /// </summary>
         /// <param name="fault">The exception thrown by the service.</param>

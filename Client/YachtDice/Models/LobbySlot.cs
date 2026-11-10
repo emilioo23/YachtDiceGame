@@ -11,9 +11,20 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the initial of the name, used for the avatar.
+        /// Gets or sets the identifier of the player in the place. It is empty if the place is free.
         /// </summary>
-        public string Initial { get; set; }
+        public string PlayerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the person who looks at the room can expel this player or
+        /// make them the host, which only the host can do with another player.
+        /// </summary>
+        public bool CanManage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the avatar of the player.
+        /// </summary>
+        public int AvatarId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the player in the place is the host of the room.

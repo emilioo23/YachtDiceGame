@@ -20,5 +20,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// </summary>
         [DataMember]
         public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Identifier of the avatar that the player uses.
+        /// </summary>
+        [DataMember]
+        public int AvatarId { get; set; }
     }
 }

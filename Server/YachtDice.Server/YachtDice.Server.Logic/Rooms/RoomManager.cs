@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Logic.Avatars;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -18,7 +19,9 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
+        private const string NullDependencyMessage = "The dependency cannot be null.";
 
+        private readonly IAvatarLookup _avatarLookup;
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
@@ -26,16 +29,27 @@ namespace YachtDice.Server.Logic.Rooms
         // Only used while _syncRoot is held, so it needs no lock of its own.
         private readonly Random _random = new Random();
 
+        /// <summary>
+        /// Initializes the manager without any room.
+        /// </summary>
+        /// <param name="avatarLookup">Tells the avatar of each player who enters a room.</param>
+        public RoomManager(IAvatarLookup avatarLookup)
+        {
+            _avatarLookup = avatarLookup
+                ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
+        }
+
         /// <inheritdoc />
         public RoomResult CreateRoom(string hostName)
         {
             ValidateName(hostName);
+            RoomApplicant applicant = CreateApplicant(hostName);
             RoomResult result;
 
             lock (_syncRoot)
             {
                 var room = new GameRoom(CreateUniqueCode(), CreateDefaultSettings());
-                RoomPlayer host = room.AddPlayer(hostName);
+                RoomPlayer host = room.AddPlayer(applicant.Name, applicant.AvatarId);
 
                 _rooms[room.Code] = room;
                 result = RoomResult.CreateEntered(room.ToDetails(), host.Id);
@@ -48,8 +62,9 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult Join(string roomCode, string playerName)
         {
             ValidateName(playerName);
+            RoomApplicant applicant = CreateApplicant(playerName);
 
-            RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, playerName));
+            RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, applicant));
 
             return result;
         }
@@ -58,13 +73,14 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult JoinListed(string roomId, string playerName, string accessCode)
         {
             ValidateName(playerName);
+            RoomApplicant applicant = CreateApplicant(playerName);
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
 
             lock (_syncRoot)
             {
                 if (TryGetRoomById(roomId, out GameRoom room))
                 {
-                    result = JoinWithAccessCode(room, playerName, NormalizeCode(accessCode));
+                    result = JoinWithAccessCode(room, applicant, NormalizeCode(accessCode));
                 }
             }
 
@@ -89,6 +105,26 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public string FindPendingRoomCode(string playerName)
+        {
+            ValidateName(playerName);
+            string code = string.Empty;
+
+            lock (_syncRoot)
+            {
+                GameRoom pending = _rooms.Values.FirstOrDefault(
+                    room => room.IsStarted && room.HasAbsentPlayer(playerName));
+
+                if (pending != null)
+                {
+                    code = pending.Code;
+                }
+            }
+
+            return code;
+        }
+
+        /// <inheritdoc />
         public RoomResult Leave(string roomCode, string playerId)
         {
             RoomResult result = ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerId));
@@ -108,6 +144,22 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomResult StartGame(string roomCode, string playerId)
         {
             RoomResult result = ExecuteInRoom(roomCode, room => StartRoomGame(room, playerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId)
+        {
+            RoomResult result = ExecuteInRoom(roomCode, room => ExpelPlayer(room, playerId, targetPlayerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult TransferHost(string roomCode, string playerId, string newHostId)
+        {
+            RoomResult result = ExecuteInRoom(roomCode, room => ChangeHost(room, playerId, newHostId));
 
             return result;
         }
@@ -171,14 +223,30 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private static RoomResult AddPlayer(GameRoom room, string playerName)
+        private static RoomResult AddPlayer(GameRoom room, RoomApplicant applicant)
+        {
+            RoomResult result;
+
+            if (room.TryReturnPlayer(applicant.Name, out RoomPlayer returned))
+            {
+                result = RoomResult.CreateReturned(room.ToDetails(), returned.Id);
+            }
+            else
+            {
+                result = EnterNewPlayer(room, applicant);
+            }
+
+            return result;
+        }
+
+        private static RoomResult EnterNewPlayer(GameRoom room, RoomApplicant applicant)
         {
             RoomStatus status = GetJoinStatus(room);
             RoomResult result;
 
             if (status == RoomStatus.Success)
             {
-                RoomPlayer player = room.AddPlayer(playerName);
+                RoomPlayer player = room.AddPlayer(applicant.Name, applicant.AvatarId);
 
                 result = RoomResult.CreateEntered(room.ToDetails(), player.Id);
             }
@@ -190,7 +258,7 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private static RoomResult JoinWithAccessCode(GameRoom room, string playerName, string accessCode)
+        private static RoomResult JoinWithAccessCode(GameRoom room, RoomApplicant applicant, string accessCode)
         {
             RoomResult result;
 
@@ -200,7 +268,7 @@ namespace YachtDice.Server.Logic.Rooms
             }
             else
             {
-                result = AddPlayer(room, playerName);
+                result = AddPlayer(room, applicant);
             }
 
             return result;
@@ -300,6 +368,67 @@ namespace YachtDice.Server.Logic.Rooms
             return status;
         }
 
+        private static RoomStatus GetHostActionStatus(GameRoom room, string playerId, string targetPlayerId)
+        {
+            RoomStatus status = RoomStatus.Success;
+
+            if (!room.IsHost(playerId))
+            {
+                status = RoomStatus.NotHost;
+            }
+            else if (string.Equals(playerId, targetPlayerId, StringComparison.Ordinal))
+            {
+                status = RoomStatus.InvalidTarget;
+            }
+            else if (!room.HasPlayer(targetPlayerId))
+            {
+                status = RoomStatus.PlayerNotFound;
+            }
+
+            return status;
+        }
+
+        private static RoomResult ExpelPlayer(GameRoom room, string playerId, string targetPlayerId)
+        {
+            RoomStatus status = GetHostActionStatus(room, playerId, targetPlayerId);
+
+            if (status == RoomStatus.Success)
+            {
+                room.RemovePlayer(targetPlayerId);
+            }
+
+            return CreateResult(status, room);
+        }
+
+        private static RoomResult ChangeHost(GameRoom room, string playerId, string newHostId)
+        {
+            RoomStatus status = GetHostActionStatus(room, playerId, newHostId);
+
+            if (status == RoomStatus.Success)
+            {
+                room.SetHost(newHostId);
+            }
+
+            return CreateResult(status, room);
+        }
+
+        private static void RemoveOrMarkAbsent(GameRoom room, string playerId)
+        {
+            if (room.IsStarted)
+            {
+                room.MarkAbsent(playerId);
+            }
+            else
+            {
+                room.RemovePlayer(playerId);
+            }
+        }
+
+        private RoomApplicant CreateApplicant(string playerName)
+        {
+            return new RoomApplicant(playerName, _avatarLookup.GetAvatarId(playerName.Trim()));
+        }
+
         private RoomResult ExecuteInRoom(string roomCode, Func<GameRoom, RoomResult> operation)
         {
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
@@ -322,9 +451,14 @@ namespace YachtDice.Server.Logic.Rooms
 
             if (room.HasPlayer(playerId))
             {
-                room.RemovePlayer(playerId);
+                bool wasHost = room.IsHost(playerId);
+
+                RemoveOrMarkAbsent(room, playerId);
                 DeleteIfEmpty(room);
-                result = RoomResult.CreateSucceeded(room.ToDetails());
+
+                RoomDetails details = room.ToDetails();
+
+                result = RoomResult.CreateLeft(details, wasHost && !details.IsEmpty);
             }
 
             return result;

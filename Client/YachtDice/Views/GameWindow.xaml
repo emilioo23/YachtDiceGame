@@ -144,12 +144,10 @@
                                                 </Style>
                                             </Border.Style>
 
-                                            <TextBlock Text="{Binding Initial}"
-                                                       Foreground="White"
-                                                       FontWeight="Bold"
-                                                       FontSize="14"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"/>
+                                            <Image Source="{Binding AvatarId,
+                                                           Converter={StaticResource AvatarImageConverter}}"
+                                                   Width="32"
+                                                   Height="32"/>
                                         </Border>
 
                                         <TextBlock Text="{Binding Name}"
@@ -186,15 +184,19 @@
                             Style="{StaticResource BtnOutline}"
                             HorizontalAlignment="Left"
                             FontSize="14"
-                            Padding="12,6"/>
+                            Padding="12,6"
+                            Click="HowToPlayButton_Click"/>
 
                         <Button
+                            x:Name="KickPlayerButton"
                             Grid.Column="1"
                             Content="{x:Static properties:Strings.Game_Sidebar_ButtonKick}"
                             Style="{StaticResource BtnOutline}"
                             FontSize="14"
                             Padding="8,6"
-                            Margin="0,0,6,0"/>
+                            Margin="0,0,6,0"
+                            Visibility="Collapsed"
+                            Click="KickPlayerButton_Click"/>
 
                         <Button
                             Grid.Column="2"

@@ -24,6 +24,33 @@
   <wsdl:message name="IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfile" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAvatarCatalog" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAvatarCatalogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -34,6 +61,21 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard" message="tns:IPlayerService_GetLeaderboard_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse" message="tns:IPlayerService_GetLeaderboard_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProfile">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfile" message="tns:IPlayerService_GetProfile_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfileResponse" message="tns:IPlayerService_GetProfile_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfileServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetProfile_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAvatarCatalog">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalog" message="tns:IPlayerService_GetAvatarCatalog_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogResponse" message="tns:IPlayerService_GetAvatarCatalog_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetAvatarCatalog_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeAvatar">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar" message="tns:IPlayerService_ChangeAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse" message="tns:IPlayerService_ChangeAvatar_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

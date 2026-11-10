@@ -59,25 +59,58 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsInvalidCredentialsWithoutNames()
+        public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutNames()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidCredentials, result.Status);
+            Assert.Equal(LoginStatus.InvalidPassword, result.Status);
             Assert.Equal(string.Empty, result.DisplayName);
             Assert.Equal(string.Empty, result.FirstName);
         }
 
         [Fact]
-        public void LoginPlayer_UnknownEmail_ReturnsInvalidCredentials()
+        public void LoginPlayer_UnknownEmail_ReturnsEmailNotRegistered()
         {
             LoginCredentials credentials = CreateCredentials(UnknownEmail, Password);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidCredentials, result.Status);
+            Assert.Equal(LoginStatus.EmailNotRegistered, result.Status);
+        }
+
+        [Theory]
+        [InlineData("gabriel")]
+        [InlineData("gabriel@")]
+        [InlineData("gabriel example.com")]
+        public void LoginPlayer_MalformedEmail_ReturnsInvalidEmail(string email)
+        {
+            LoginCredentials credentials = CreateCredentials(email, Password);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidEmail, result.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_MalformedEmailAndWrongPassword_ReturnsInvalidEmail()
+        {
+            LoginCredentials credentials = CreateCredentials("gabriel", WrongPassword);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidEmail, result.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_EmailWithSpacesAround_StillFindsThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials("  " + Email + "  ", Password);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.LoggedIn, result.Status);
         }
 
         [Fact]
