@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
@@ -17,7 +16,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
 
         private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
@@ -61,29 +59,25 @@ namespace YachtDice.Views
 
             try
             {
-                bool isLogin = LoginPanel.Visibility == Visibility.Visible;
-
-                if (isLogin)
-                {
-                    await ProcessLoginAsync();
-                }
-                else
-                {
-                    await ProcessRegisterAsync();
-                }
-            }
-            catch (GatewayException ex)
-            {
-                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedErrorLogMessage);
-                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
+                await GatewayCallRunner.RunAsync(this, _logger, SubmitAuthFormAsync);
             }
             finally
             {
                 AuthSubmitButton.IsEnabled = true;
+            }
+        }
+
+        private async Task SubmitAuthFormAsync()
+        {
+            bool isLogin = LoginPanel.Visibility == Visibility.Visible;
+
+            if (isLogin)
+            {
+                await ProcessLoginAsync();
+            }
+            else
+            {
+                await ProcessRegisterAsync();
             }
         }
 
