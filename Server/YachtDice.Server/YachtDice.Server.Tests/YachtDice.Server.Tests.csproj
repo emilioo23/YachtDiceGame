@@ -48,6 +48,7 @@
     <Compile Include="Authentication\RegistrationServiceTests.cs" />
     <Compile Include="Avatars\AvatarCatalogTests.cs" />
     <Compile Include="Avatars\AvatarServiceTests.cs" />
+    <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
     <Compile Include="Game\AutoPlayChooserTests.cs" />
