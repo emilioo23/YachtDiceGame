@@ -17,7 +17,6 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
@@ -35,11 +34,11 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(verificationService));
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(deliveryService));
         }
 
         /// <summary>

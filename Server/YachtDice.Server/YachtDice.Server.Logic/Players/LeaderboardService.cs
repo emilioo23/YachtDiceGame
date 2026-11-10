@@ -12,7 +12,6 @@ namespace YachtDice.Server.Logic.Players
     {
         private const int FirstPosition = 1;
         private const int MaxEntries = 100;
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IGameHistoryRepository _gameHistoryRepository;
 
@@ -23,7 +22,7 @@ namespace YachtDice.Server.Logic.Players
         public LeaderboardService(IGameHistoryRepository gameHistoryRepository)
         {
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository));
         }
 
         /// <summary>

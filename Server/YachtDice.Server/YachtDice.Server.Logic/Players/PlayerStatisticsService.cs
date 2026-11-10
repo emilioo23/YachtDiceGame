@@ -14,7 +14,6 @@ namespace YachtDice.Server.Logic.Players
         private const int DefaultPlayerLevel = 1;
         private const int EmptyCount = 0;
         private const int PercentageFactor = 100;
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -29,9 +28,9 @@ namespace YachtDice.Server.Logic.Players
             IGameHistoryRepository gameHistoryRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository));
         }
 
         /// <summary>

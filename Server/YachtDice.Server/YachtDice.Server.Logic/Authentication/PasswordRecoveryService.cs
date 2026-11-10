@@ -28,7 +28,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int ResendCooldownSeconds = 30;
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
-        private const string NullDependencyMessage = "The dependency cannot be null.";
         private const string NullArgumentMessage = "The value cannot be null.";
 
         private readonly AppLogger _logger;
@@ -49,11 +48,11 @@ namespace YachtDice.Server.Logic.Authentication
             PasswordResetEmailSender emailSender)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _resetRepository = resetRepository
-                ?? throw new ArgumentNullException(nameof(resetRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(resetRepository));
             _emailSender = emailSender
-                ?? throw new ArgumentNullException(nameof(emailSender), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(emailSender));
             _logger = new AppLogger(GetType());
         }
 

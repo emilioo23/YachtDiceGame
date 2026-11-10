@@ -9,8 +9,6 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class RoomInvitationService : IRoomInvitationService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
-
         private readonly IRoomManager _roomManager;
         private readonly IFriendshipService _friendshipService;
 
@@ -22,9 +20,9 @@ namespace YachtDice.Server.Logic.Friends
         public RoomInvitationService(IRoomManager roomManager, IFriendshipService friendshipService)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(roomManager));
             _friendshipService = friendshipService
-                ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(friendshipService));
         }
 
         /// <inheritdoc />

@@ -13,8 +13,6 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
-
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -31,10 +29,10 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
+            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService));
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(deliveryService));
         }
 
         /// <summary>
