@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Avatars;
 
@@ -17,19 +18,23 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
         {
+            var expected = new { IsFound = true, IsFree = true };
+
             bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out AvatarInfo avatar);
 
-            Assert.True(found);
-            Assert.True(avatar.RequiredLevel <= NewPlayerLevel);
+            var actual = new { IsFound = found, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void TryFind_UnknownIdentifier_ReturnsFalse()
         {
+            var expected = new { IsFound = false, HasAvatar = false };
+
             bool found = AvatarCatalog.TryFind(UnknownAvatarId, out AvatarInfo avatar);
 
-            Assert.False(found);
-            Assert.Null(avatar);
+            var actual = new { IsFound = found, HasAvatar = avatar != null };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -47,18 +52,25 @@ namespace YachtDice.Server.Tests.Avatars
         }
 
         [Fact]
-        public void GetAll_Always_HasDifferentIdentifiersStartingAtTheDefaultAvatar()
+        public void GetAll_Always_HasDifferentIdentifiers()
         {
-            var identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
+            List<int> identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
 
             Assert.Equal(identifiers.Count, identifiers.Distinct().Count());
+        }
+
+        [Fact]
+        public void GetAll_Always_StartsAtTheDefaultAvatar()
+        {
+            List<int> identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
+
             Assert.Equal(AvatarCatalog.DefaultAvatarId, identifiers[FirstAvatarPosition]);
         }
 
         [Fact]
         public void GetAll_ChangingTheReturnedList_DoesNotChangeTheCatalog()
         {
-            var firstCopy = AvatarCatalog.GetAll();
+            List<AvatarInfo> firstCopy = AvatarCatalog.GetAll();
             int originalCount = firstCopy.Count;
 
             firstCopy.Clear();
