@@ -315,9 +315,18 @@ namespace YachtDice.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
         /// </summary>
-        public static string Dialogs_DatabaseConnectionError {
+        public static string Dialogs_ServerUnavailable {
             get {
-                return ResourceManager.GetString("Dialogs_DatabaseConnectionError", resourceCulture);
+                return ResourceManager.GetString("Dialogs_ServerUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor no puede consultar sus datos en este momento. Inténtalo más tarde..
+        /// </summary>
+        public static string Dialogs_DatabaseUnavailable {
+            get {
+                return ResourceManager.GetString("Dialogs_DatabaseUnavailable", resourceCulture);
             }
         }
         
@@ -363,6 +372,15 @@ namespace YachtDice.Resources {
         public static string Dialogs_InvalidCredentials {
             get {
                 return ResourceManager.GetString("Dialogs_InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor rechazó la información enviada. Revisa los datos e inténtalo de nuevo..
+        /// </summary>
+        public static string Dialogs_InvalidData {
+            get {
+                return ResourceManager.GetString("Dialogs_InvalidData", resourceCulture);
             }
         }
         

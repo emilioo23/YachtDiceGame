@@ -648,8 +648,14 @@
   <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
     <value>Wait a few seconds before requesting another code.</value>
   </data>
-  <data name="Dialogs_DatabaseConnectionError" xml:space="preserve">
+  <data name="Dialogs_ServerUnavailable" xml:space="preserve">
     <value>Could not connect to the server. Check your internet connection and try again.</value>
+  </data>
+  <data name="Dialogs_DatabaseUnavailable" xml:space="preserve">
+    <value>The server cannot reach its data right now. Try again later.</value>
+  </data>
+  <data name="Dialogs_InvalidData" xml:space="preserve">
+    <value>The server rejected the information that was sent. Check the data and try again.</value>
   </data>
   <data name="Dialogs_UnexpectedError" xml:space="preserve">
     <value>An unexpected error occurred. Please try again.</value>
