@@ -383,6 +383,19 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void Roll_AfterEachChange_GivesAHigherVersionToTheSnapshot()
+        {
+            var manager = CreateManager(1, 2, 3, 4, 5);
+            var started = StartTwoPlayerGame(manager);
+
+            var rolled = manager.Roll(RoomCode, FirstId, NoHeldDice).Snapshot;
+            var scored = manager.Score(RoomCode, FirstId, ScoreCategory.Choice).Snapshot;
+
+            Assert.True(rolled.Version > started.Version);
+            Assert.True(scored.Version > rolled.Version);
+        }
+
+        [Fact]
         public void GetState_PlayerOutsideTheGame_ReturnsPlayerNotInGame()
         {
             var manager = CreateManager(1, 2, 3, 4, 5);

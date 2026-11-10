@@ -19,6 +19,7 @@ namespace YachtDice.Server.Services
         private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
+        private readonly GameCoordinator _gameCoordinator;
 
         private readonly CallbackRegistry<Contracts.IRoomCallback> _callbacks =
             new CallbackRegistry<Contracts.IRoomCallback>();
@@ -27,10 +28,13 @@ namespace YachtDice.Server.Services
         /// Initializes a new instance of the RoomService class.
         /// </summary>
         /// <param name="roomManager">The rules and the state of the rooms. It is shared with the chat.</param>
-        public RoomService(LogicRooms.IRoomManager roomManager)
+        /// <param name="gameCoordinator">The games of the rooms. It is shared with the game service.</param>
+        public RoomService(LogicRooms.IRoomManager roomManager, GameCoordinator gameCoordinator)
         {
             _roomManager = roomManager
                 ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+            _gameCoordinator = gameCoordinator
+                ?? throw new ArgumentNullException(nameof(gameCoordinator), NullDependencyMessage);
         }
 
         /// <summary>
@@ -215,6 +219,7 @@ namespace YachtDice.Server.Services
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
                 Subscribe(result.Room.Code, result.PlayerId);
+                ResumeGameIfReturned(result);
                 Broadcast(result.Room, GetJoinEventType(result));
             }
 
@@ -243,6 +248,7 @@ namespace YachtDice.Server.Services
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
+                _gameCoordinator.StartGame(result.Room);
                 Broadcast(result.Room, Contracts.RoomEventType.GameStarted);
             }
 
@@ -257,6 +263,7 @@ namespace YachtDice.Server.Services
             {
                 LogInfo(string.Format(CultureInfo.InvariantCulture, KickLogFormat, targetPlayerId, roomCode, playerId));
                 TellExpelledPlayer(result.Room, targetPlayerId);
+                _gameCoordinator.PlayerRemoved(roomCode, targetPlayerId);
                 Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
             }
 
@@ -319,9 +326,35 @@ namespace YachtDice.Server.Services
         {
             LogicRooms.RoomResult result = _roomManager.Leave(roomCode, playerId);
 
+            if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                UpdateGameAfterLeave(result, playerId);
+            }
+
             if (result.Status == LogicRooms.RoomStatus.Success && !result.Room.IsEmpty)
             {
                 Broadcast(result.Room, GetLeaveEventType(result));
+            }
+        }
+
+        // When the last player leaves, the room disappears and its game has no reason to go on.
+        private void UpdateGameAfterLeave(LogicRooms.RoomResult result, string playerId)
+        {
+            if (result.Room.IsEmpty)
+            {
+                _gameCoordinator.EndGame(result.Room.Code);
+            }
+            else if (result.Room.IsStarted)
+            {
+                _gameCoordinator.PlayerLeft(result.Room.Code, playerId);
+            }
+        }
+
+        private void ResumeGameIfReturned(LogicRooms.RoomResult result)
+        {
+            if (result.HasReturned)
+            {
+                _gameCoordinator.PlayerReturned(result.Room.Code, result.PlayerId);
             }
         }
 

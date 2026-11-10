@@ -11,7 +11,8 @@ namespace YachtDice.Server.Logic.Game
     public sealed class GameManager : IGameManager
     {
         private readonly object _syncRoot = new object();
-        private readonly Dictionary<string, YachtGame> _games = new Dictionary<string, YachtGame>();
+        private readonly Dictionary<string, YachtGame> _games =
+            new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
         private readonly IDieSource _dieSource;
 
         /// <summary>

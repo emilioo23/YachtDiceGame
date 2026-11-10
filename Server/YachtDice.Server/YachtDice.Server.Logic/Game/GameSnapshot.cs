@@ -25,6 +25,12 @@ namespace YachtDice.Server.Logic.Game
         public GameStatus Status { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of the snapshot. It grows every time a snapshot of the same game is made,
+        /// so a client can tell which of two snapshots is the newest.
+        /// </summary>
+        public int Version { get; set; }
+
+        /// <summary>
         /// Gets or sets the identifier of the player whose turn it is. It is empty when nobody can play.
         /// </summary>
         public string CurrentPlayerId { get; set; }

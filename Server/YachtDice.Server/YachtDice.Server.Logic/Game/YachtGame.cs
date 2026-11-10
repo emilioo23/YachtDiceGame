@@ -21,6 +21,7 @@ namespace YachtDice.Server.Logic.Game
         private readonly bool[] _heldDice = new bool[DiceRules.DiceCount];
         private int _turnIndex;
         private int _rollsMade;
+        private int _version;
 
         /// <summary>
         /// Initializes a game where the first participant plays the first turn.
@@ -162,8 +163,11 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The snapshot.</returns>
         public GameSnapshot CreateSnapshot()
         {
+            _version++;
+
             var snapshot = new GameSnapshot
             {
+                Version = _version,
                 Status = Status,
                 CurrentPlayerId = GetCurrentPlayerId(),
                 TurnNumber = TurnNumber,
