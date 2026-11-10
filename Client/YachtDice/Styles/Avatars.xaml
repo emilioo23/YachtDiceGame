@@ -1,10 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-  <!-- Avatars of the players. Each one is drawn in a 100 x 100 square and clipped to a circle. -->
-
-  <!-- Marinero -->
-  <DrawingImage x:Key="Avatar_01">
+<DrawingImage x:Key="Avatar_01">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
         <GeometryDrawing Brush="#5BA4D6" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
@@ -33,7 +30,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Capitán -->
   <DrawingImage x:Key="Avatar_02">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -59,7 +55,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Dado -->
   <DrawingImage x:Key="Avatar_03">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -81,7 +76,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Gaviota -->
   <DrawingImage x:Key="Avatar_04">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -98,7 +92,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Pirata -->
   <DrawingImage x:Key="Avatar_05">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -139,7 +132,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Robot -->
   <DrawingImage x:Key="Avatar_06">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -192,7 +184,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Gato -->
   <DrawingImage x:Key="Avatar_07">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -258,7 +249,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Astronauta -->
   <DrawingImage x:Key="Avatar_08">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -296,7 +286,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Mago -->
   <DrawingImage x:Key="Avatar_09">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
@@ -317,7 +306,6 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
-  <!-- Rey -->
   <DrawingImage x:Key="Avatar_10">
     <DrawingImage.Drawing>
       <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">

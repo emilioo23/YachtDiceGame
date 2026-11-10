@@ -34,7 +34,6 @@ namespace YachtDice.Views
         private readonly string _challengeId;
         private readonly bool _isActivation;
 
-        // Both gateways are needed because the window serves the login and the activation of the verification.
         private readonly AuthenticationGateway _authGateway = new AuthenticationGateway();
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
 

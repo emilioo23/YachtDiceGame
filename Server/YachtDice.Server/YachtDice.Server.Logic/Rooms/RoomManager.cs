@@ -10,6 +10,8 @@ namespace YachtDice.Server.Logic.Rooms
     /// channels use it at the same time. WCF only serializes the calls of each service, not those of different
     /// services, so every operation takes the lock before it reads or changes a room. A concurrent dictionary
     /// would only protect the list of rooms, not a step such as checking for space and adding the player.
+    /// The private steps that receive a room, and the random generator of the codes, only run while the lock
+    /// is held.
     /// </summary>
     public class RoomManager : IRoomManager
     {
@@ -25,7 +27,6 @@ namespace YachtDice.Server.Logic.Rooms
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
 
-        // Only used while _syncRoot is held, so it needs no lock of its own.
         private readonly Random _random = new Random();
 
         /// <summary>
@@ -443,7 +444,6 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        // The caller must hold _syncRoot.
         private RoomResult TakeOutPlayer(GameRoom room, string playerId)
         {
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
@@ -463,7 +463,6 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        // The caller must hold _syncRoot.
         private bool TryGetRoomById(string roomId, out GameRoom room)
         {
             room = _rooms.Values.FirstOrDefault(
@@ -472,13 +471,11 @@ namespace YachtDice.Server.Logic.Rooms
             return room != null;
         }
 
-        // The caller must hold _syncRoot.
         private bool TryGetRoom(string roomCode, out GameRoom room)
         {
             return _rooms.TryGetValue(NormalizeCode(roomCode), out room);
         }
 
-        // The caller must hold _syncRoot.
         private void DeleteIfEmpty(GameRoom room)
         {
             if (room.Players.Count == 0)
@@ -487,7 +484,6 @@ namespace YachtDice.Server.Logic.Rooms
             }
         }
 
-        // The caller must hold _syncRoot.
         private string CreateUniqueCode()
         {
             string code;
@@ -501,7 +497,6 @@ namespace YachtDice.Server.Logic.Rooms
             return code;
         }
 
-        // The caller must hold _syncRoot.
         private string CreateRandomCode()
         {
             var characters = new char[CodeLength];

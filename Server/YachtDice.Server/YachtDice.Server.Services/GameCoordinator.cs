@@ -12,7 +12,9 @@ namespace YachtDice.Server.Services
     /// <summary>
     /// Connects the games with the rest of the server: it applies the actions of the players, tells every
     /// subscribed player what changed, counts the time of each turn and plays the turn of a player who runs
-    /// out of time. The room service and the game service share one coordinator.
+    /// out of time. The room service and the game service share one coordinator. The turn that runs out of
+    /// time is played in a thread of the timer, so any error there only goes to the log, because an unhandled
+    /// error in that thread would close the whole server.
     /// </summary>
     public sealed class GameCoordinator
     {
@@ -225,7 +227,6 @@ namespace YachtDice.Server.Services
             }
         }
 
-        // It runs in a thread of the timer, where an unhandled error would close the whole server.
         private void HandleTurnExpired(string roomCode, int turnNumber)
         {
             try

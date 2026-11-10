@@ -5,7 +5,8 @@ namespace YachtDice.Server.Logic.Avatars
 {
     /// <summary>
     /// List of the avatars of the game and the level that each one needs. The first ones are free for every
-    /// player and the others are unlocked as the player levels up.
+    /// player and the others are unlocked as the player levels up. The identifier of each avatar is its
+    /// position in the list of levels, counting from the first identifier.
     /// </summary>
     public static class AvatarCatalog
     {
@@ -23,7 +24,6 @@ namespace YachtDice.Server.Logic.Avatars
         private const int DiamondLevel = 16;
         private const int LegendLevel = 20;
 
-        // The identifier of each avatar is its position in this list, counting from FirstAvatarId.
         private static readonly int[] RequiredLevels =
         {
             FreeLevel,

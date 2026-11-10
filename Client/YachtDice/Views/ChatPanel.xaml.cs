@@ -147,7 +147,6 @@ namespace YachtDice.Views
             });
         }
 
-        // The messages arrive in a network thread, and the controls can only be changed in the interface thread.
         private void HandleMessageReceived(ChatMessage message)
         {
             Dispatcher.BeginInvoke(new Action(() => ShowChatMessage(message)));

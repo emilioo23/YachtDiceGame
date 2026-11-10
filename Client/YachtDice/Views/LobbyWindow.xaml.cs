@@ -32,8 +32,6 @@ namespace YachtDice.Views
         private readonly bool _isChatAvailable;
         private readonly InvitationListener _invitationListener;
 
-        // The window is created with this flag on because InitializeComponent raises SelectionChanged events
-        // for the initial values of the combo boxes, and those events must not be sent to the server.
         private bool _isShowingRoom = true;
         private bool _isLeavingOnClose = true;
         private bool _isOpeningGame;

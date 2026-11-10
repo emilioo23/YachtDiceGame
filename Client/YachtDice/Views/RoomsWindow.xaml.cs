@@ -113,8 +113,6 @@ namespace YachtDice.Views
             return filter;
         }
 
-        // The automatic update leaves the list as it is when nothing changed, so the code that the player is
-        // typing in a row does not lose the focus.
         private void ShowRooms(List<RoomListItem> newRooms)
         {
             if (!_isClosed && !RoomListUpdater.HasSameContent(_allRooms, newRooms))
@@ -133,8 +131,6 @@ namespace YachtDice.Views
             RoomsItemsControl.ItemsSource = _visibleRooms;
         }
 
-        // When there are rooms but the filters hide all of them, the notice says so instead of saying that
-        // there are no rooms.
         private void UpdateEmptyNotice()
         {
             EmptyTextBlock.Text = _allRooms.Any() ? Strings.Rooms_NoResults : Strings.Rooms_Empty;

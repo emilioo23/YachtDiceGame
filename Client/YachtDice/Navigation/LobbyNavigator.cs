@@ -100,9 +100,6 @@ namespace YachtDice.Navigation
             }
         }
 
-        // The player joins the chat of the room before the window opens, so the waiting room and the game
-        // share the same chat connection and its messages. A player who comes back to a match in progress
-        // goes straight to the game.
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
             var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);

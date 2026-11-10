@@ -111,8 +111,6 @@ namespace YachtDice.Views
             Loaded += HandleWindowLoaded;
         }
 
-        // The player left on purpose, so the menu does not offer the same match again in this session. The player
-        // can still go back by typing the code of the room.
         private void RememberLeftMatch()
         {
             _roomGateway.Session.LastOfferedMatchCode = _roomGateway.CurrentRoom.Code;

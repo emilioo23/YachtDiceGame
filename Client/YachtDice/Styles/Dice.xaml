@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-  <!-- Faces of a die, used by the "How to play" window. Each one is drawn in a 100 x 100 square. -->
-
-  <DrawingImage x:Key="Die_1">
+<DrawingImage x:Key="Die_1">
     <DrawingImage.Drawing>
       <DrawingGroup>
         <GeometryDrawing Brush="#FFFFFF"

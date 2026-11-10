@@ -68,7 +68,6 @@ namespace YachtDice.Views
             return string.IsNullOrWhiteSpace(session.FirstName) ? session.DisplayName : session.FirstName;
         }
 
-        // A player who left a match in progress, or lost the connection, can go back to it while it goes on.
         private async Task OfferPendingMatchAsync()
         {
             if (!_session.IsGuest)

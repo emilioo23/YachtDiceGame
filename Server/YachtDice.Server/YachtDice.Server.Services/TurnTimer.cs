@@ -5,7 +5,7 @@ namespace YachtDice.Server.Services
 {
     /// <summary>
     /// Counts the time of the turn of every game in progress. When the time of a turn is over it tells it to
-    /// the owner, which plays the turn for the player.
+    /// the owner, which plays the turn for the player. The private steps only run while the lock is held.
     /// </summary>
     internal sealed class TurnTimer
     {
@@ -93,7 +93,6 @@ namespace YachtDice.Server.Services
             return secondsLeft;
         }
 
-        // The caller must hold _syncRoot.
         private void DisposeClock(string roomCode)
         {
             if (_clocks.ContainsKey(roomCode))
