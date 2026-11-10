@@ -16,7 +16,6 @@ namespace YachtDice.Server.Services
     {
         private const int MaxMessageLength = 200;
         private const int FirstCharacterIndex = 0;
-        private const string NullDependencyMessage = "The dependency cannot be null.";
         private const string IgnoredMessageLogMessage =
             "A chat message was ignored because it is empty or its author is not inside the room.";
 
@@ -36,7 +35,7 @@ namespace YachtDice.Server.Services
         public ChatService(LogicRooms.IRoomManager roomManager)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(roomManager));
             _logger = new LogicLogging.AppLogger(GetType());
         }
 

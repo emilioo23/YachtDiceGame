@@ -12,8 +12,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class GameService : ServiceBase, Contracts.IGameService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
-
         private readonly GameCoordinator _coordinator;
 
         /// <summary>
@@ -23,7 +21,7 @@ namespace YachtDice.Server.Services
         public GameService(GameCoordinator coordinator)
         {
             _coordinator = coordinator
-                ?? throw new ArgumentNullException(nameof(coordinator), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(coordinator));
         }
 
         /// <summary>

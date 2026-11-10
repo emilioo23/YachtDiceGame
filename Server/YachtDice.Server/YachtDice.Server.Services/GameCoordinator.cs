@@ -16,7 +16,6 @@ namespace YachtDice.Server.Services
     /// </summary>
     public sealed class GameCoordinator
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
         private const string TimeoutFailedLogMessage = "The turn of a game could not be played after its time ran out.";
 
         private readonly LogicGame.IGameManager _gameManager;
@@ -34,7 +33,7 @@ namespace YachtDice.Server.Services
         public GameCoordinator(LogicGame.IGameManager gameManager)
         {
             _gameManager = gameManager
-                ?? throw new ArgumentNullException(nameof(gameManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameManager));
             _timer = new TurnTimer(HandleTurnExpired);
             _logger = new LogicLogging.AppLogger(GetType());
         }
