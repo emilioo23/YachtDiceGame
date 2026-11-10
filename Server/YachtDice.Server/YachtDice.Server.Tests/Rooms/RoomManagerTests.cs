@@ -44,12 +44,24 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void CreateRoom_ValidName_PutsTheHostInsideWithAnIdentifier()
         {
+            var expected = new
+            {
+                Status = RoomStatus.Success,
+                HasIdentifier = true,
+                IsHost = true,
+                DisplayName = HostName
+            };
+
             RoomResult result = _manager.CreateRoom(HostName);
 
-            Assert.Equal(RoomStatus.Success, result.Status);
-            Assert.False(string.IsNullOrEmpty(result.PlayerId));
-            Assert.Equal(result.PlayerId, result.Room.HostId);
-            Assert.Equal(HostName, result.Room.Players.Single().DisplayName);
+            var actual = new
+            {
+                result.Status,
+                HasIdentifier = !string.IsNullOrEmpty(result.PlayerId),
+                IsHost = result.PlayerId == result.Room.HostId,
+                result.Room.Players.Single().DisplayName
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -63,11 +75,17 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
+            var expected = new { Status = RoomStatus.Success, DisplayName = PlayerName, HasNewIdentifier = true };
+
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
 
-            Assert.Equal(RoomStatus.Success, player.Status);
-            Assert.Equal(PlayerName, player.Room.Players.Last().DisplayName);
-            Assert.NotEqual(host.PlayerId, player.PlayerId);
+            var actual = new
+            {
+                player.Status,
+                player.Room.Players.Last().DisplayName,
+                HasNewIdentifier = player.PlayerId != host.PlayerId
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -75,11 +93,17 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(GuestName);
 
+            var expected = new { Status = RoomStatus.Success, DisplayName = SecondGuestName, HasNewIdentifier = true };
+
             RoomResult second = _manager.Join(host.Room.Code, GuestName);
 
-            Assert.Equal(RoomStatus.Success, second.Status);
-            Assert.Equal(SecondGuestName, second.Room.Players.Last().DisplayName);
-            Assert.NotEqual(host.PlayerId, second.PlayerId);
+            var actual = new
+            {
+                second.Status,
+                second.Room.Players.Last().DisplayName,
+                HasNewIdentifier = second.PlayerId != host.PlayerId
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -118,10 +142,12 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void Join_UnknownRoom_ReturnsRoomNotFound()
         {
+            var expected = new { Status = RoomStatus.RoomNotFound, PlayerId = string.Empty };
+
             RoomResult player = _manager.Join(UnknownRoomCode, PlayerName);
 
-            Assert.Equal(RoomStatus.RoomNotFound, player.Status);
-            Assert.Equal(string.Empty, player.PlayerId);
+            var actual = new { player.Status, player.PlayerId };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -153,11 +179,17 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
             _manager.StartGame(host.Room.Code, host.PlayerId);
 
+            var expected = new { IsStarted = true, IsPlaying = false, IsAbsent = true };
+
             RoomResult afterLeaving = _manager.Leave(host.Room.Code, player.PlayerId);
 
-            Assert.True(afterLeaving.Room.IsStarted);
-            Assert.DoesNotContain(afterLeaving.Room.Players, remaining => remaining.Id == player.PlayerId);
-            Assert.Contains(afterLeaving.Room.AbsentPlayers, absent => absent.Id == player.PlayerId);
+            var actual = new
+            {
+                afterLeaving.Room.IsStarted,
+                IsPlaying = afterLeaving.Room.Players.Any(remaining => remaining.Id == player.PlayerId),
+                IsAbsent = afterLeaving.Room.AbsentPlayers.Any(absent => absent.Id == player.PlayerId)
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -194,11 +226,12 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.StartGame(host.Room.Code, host.PlayerId);
             _manager.Leave(host.Room.Code, player.PlayerId);
 
+            var expected = new { Status = RoomStatus.Success, HasReturned = true, player.PlayerId };
+
             RoomResult returned = _manager.Join(host.Room.Code, PlayerName);
 
-            Assert.Equal(RoomStatus.Success, returned.Status);
-            Assert.True(returned.HasReturned);
-            Assert.Equal(player.PlayerId, returned.PlayerId);
+            var actual = new { returned.Status, returned.HasReturned, returned.PlayerId };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -209,10 +242,16 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.StartGame(host.Room.Code, host.PlayerId);
             _manager.Leave(host.Room.Code, player.PlayerId);
 
+            var expected = new { IsPlaying = true, IsAbsent = false };
+
             RoomResult returned = _manager.Join(host.Room.Code, PlayerName.ToUpperInvariant());
 
-            Assert.Contains(returned.Room.Players, back => back.Id == player.PlayerId);
-            Assert.Empty(returned.Room.AbsentPlayers);
+            var actual = new
+            {
+                IsPlaying = returned.Room.Players.Any(back => back.Id == player.PlayerId),
+                IsAbsent = returned.Room.AbsentPlayers.Any(absent => absent.Id == player.PlayerId)
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -220,10 +259,12 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = CreateStartedRoom();
 
+            var expected = new { Status = RoomStatus.GameAlreadyStarted, HasReturned = false };
+
             RoomResult stranger = _manager.Join(host.Room.Code, GuestName);
 
-            Assert.Equal(RoomStatus.GameAlreadyStarted, stranger.Status);
-            Assert.False(stranger.HasReturned);
+            var actual = new { stranger.Status, stranger.HasReturned };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -287,10 +328,12 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult first = _manager.CreateRoom(GuestName);
             RoomResult second = _manager.Join(first.Room.Code, GuestName);
 
+            var expected = new { Status = RoomStatus.Success, RemainingId = first.PlayerId };
+
             RoomResult afterLeaving = _manager.Leave(first.Room.Code, second.PlayerId);
 
-            Assert.Equal(RoomStatus.Success, afterLeaving.Status);
-            Assert.Equal(first.PlayerId, afterLeaving.Room.Players.Single().Id);
+            var actual = new { afterLeaving.Status, RemainingId = afterLeaving.Room.Players.Single().Id };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -327,14 +370,23 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
-        public void Leave_LastPlayer_DeletesTheRoom()
+        public void Leave_LastPlayer_LeavesTheRoomEmpty()
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
             RoomResult afterLeaving = _manager.Leave(host.Room.Code, host.PlayerId);
-            RoomResult afterDeleting = _manager.Join(host.Room.Code, PlayerName);
 
             Assert.True(afterLeaving.Room.IsEmpty);
+        }
+
+        [Fact]
+        public void Leave_LastPlayer_DeletesTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Leave(host.Room.Code, host.PlayerId);
+
+            RoomResult afterDeleting = _manager.Join(host.Room.Code, PlayerName);
+
             Assert.Equal(RoomStatus.RoomNotFound, afterDeleting.Status);
         }
 
@@ -346,7 +398,17 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult afterLeaving = _manager.Leave(host.Room.Code, HostName);
 
             Assert.Equal(RoomStatus.RoomNotFound, afterLeaving.Status);
-            Assert.True(_manager.TryGetPlayer(host.Room.Code, host.PlayerId, out _));
+        }
+
+        [Fact]
+        public void Leave_PlayerNameInsteadOfIdentifier_KeepsTheHostInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Leave(host.Room.Code, HostName);
+
+            bool isFound = _manager.TryGetPlayer(host.Room.Code, host.PlayerId, out _);
+
+            Assert.True(isFound);
         }
 
         [Fact]
@@ -365,10 +427,12 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
+            var expected = new { Status = RoomStatus.Success, MaxPlayers = ThreePlayers };
+
             RoomResult result = _manager.UpdateSettings(host.Room.Code, host.PlayerId, CreateSettings(ThreePlayers));
 
-            Assert.Equal(RoomStatus.Success, result.Status);
-            Assert.Equal(ThreePlayers, result.Room.Settings.MaxPlayers);
+            var actual = new { result.Status, result.Room.Settings.MaxPlayers };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -418,10 +482,12 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
+            var expected = new { IsFound = true, DisplayName = HostName };
+
             bool isFound = _manager.TryGetPlayer(host.Room.Code, host.PlayerId, out RoomPlayer player);
 
-            Assert.True(isFound);
-            Assert.Equal(HostName, player.DisplayName);
+            var actual = new { IsFound = isFound, player.DisplayName };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -429,10 +495,12 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
+            var expected = new { IsFound = false, HasPlayer = false };
+
             bool isFound = _manager.TryGetPlayer(host.Room.Code, UnknownPlayerId, out RoomPlayer player);
 
-            Assert.False(isFound);
-            Assert.Null(player);
+            var actual = new { IsFound = isFound, HasPlayer = player != null };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -457,12 +525,18 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = CreatePublicRoom(HostName);
             _manager.Join(host.Room.Code, PlayerName);
 
+            var expected = new
+            {
+                HostName,
+                PlayerCount = TwoPlayers,
+                MaxPlayers = FourPlayers,
+                IsPrivate = false
+            };
+
             RoomSummary summary = _manager.GetOpenRooms().Single();
 
-            Assert.Equal(HostName, summary.HostName);
-            Assert.Equal(TwoPlayers, summary.PlayerCount);
-            Assert.Equal(FourPlayers, summary.MaxPlayers);
-            Assert.False(summary.IsPrivate);
+            var actual = new { summary.HostName, summary.PlayerCount, summary.MaxPlayers, summary.IsPrivate };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -470,10 +544,12 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
+            var expected = new { IsPrivate = true, RevealsCode = false };
+
             RoomSummary summary = _manager.GetOpenRooms().Single();
 
-            Assert.True(summary.IsPrivate);
-            Assert.NotEqual(host.Room.Code, summary.RoomId);
+            var actual = new { summary.IsPrivate, RevealsCode = summary.RoomId == host.Room.Code };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -504,11 +580,17 @@ namespace YachtDice.Server.Tests.Rooms
             CreatePublicRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
+            var expected = new { Status = RoomStatus.Success, HasIdentifier = true, PlayerCount = TwoPlayers };
+
             RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, string.Empty));
 
-            Assert.Equal(RoomStatus.Success, player.Status);
-            Assert.False(string.IsNullOrEmpty(player.PlayerId));
-            Assert.Equal(TwoPlayers, player.Room.Players.Count);
+            var actual = new
+            {
+                player.Status,
+                HasIdentifier = !string.IsNullOrEmpty(player.PlayerId),
+                PlayerCount = player.Room.Players.Count
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -518,11 +600,12 @@ namespace YachtDice.Server.Tests.Rooms
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
             Room room = CreateListedRoom(roomId, host.Room.Code.ToLowerInvariant());
+            var expected = new { Status = RoomStatus.Success, host.Room.Code };
 
             RoomResult player = _manager.JoinListed(PlayerName, room);
 
-            Assert.Equal(RoomStatus.Success, player.Status);
-            Assert.Equal(host.Room.Code, player.Room.Code);
+            var actual = new { player.Status, player.Room.Code };
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -534,11 +617,27 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.CreateRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
+            var expected = new { Status = RoomStatus.InvalidAccessCode, PlayerId = string.Empty };
+
             RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
 
-            Assert.Equal(RoomStatus.InvalidAccessCode, player.Status);
-            Assert.Empty(player.PlayerId);
-            Assert.Equal(SingleSlot, _manager.GetOpenRooms().Single().PlayerCount);
+            var actual = new { player.Status, player.PlayerId };
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(UnknownRoomCode)]
+        [InlineData("")]
+        [InlineData(null)]
+        public void JoinListed_PrivateRoomWithAWrongCode_DoesNotAddThePlayer(string accessCode)
+        {
+            _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+            _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
+
+            int playerCount = _manager.GetOpenRooms().Single().PlayerCount;
+
+            Assert.Equal(SingleSlot, playerCount);
         }
 
         [Fact]
@@ -577,15 +676,28 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
 
+            var expected = new { Status = RoomStatus.Success, RemainingId = host.PlayerId };
+
             RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, player.PlayerId);
 
-            Assert.Equal(RoomStatus.Success, afterKicking.Status);
-            Assert.Equal(host.PlayerId, afterKicking.Room.Players.Single().Id);
-            Assert.False(_manager.TryGetPlayer(host.Room.Code, player.PlayerId, out _));
+            var actual = new { afterKicking.Status, RemainingId = afterKicking.Room.Players.Single().Id };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void KickPlayer_PlayerWhoIsNotTheHost_ReturnsNotHostAndKeepsEveryone()
+        public void KickPlayer_HostExpelsAnotherPlayer_ThePlayerIsNoLongerFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(host.Room.Code, host.PlayerId, player.PlayerId);
+
+            bool isFound = _manager.TryGetPlayer(host.Room.Code, player.PlayerId, out _);
+
+            Assert.False(isFound);
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerWhoIsNotTheHost_ReturnsNotHost()
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
@@ -593,7 +705,18 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, player.PlayerId, host.PlayerId);
 
             Assert.Equal(RoomStatus.NotHost, afterKicking.Status);
-            Assert.True(_manager.TryGetPlayer(host.Room.Code, host.PlayerId, out _));
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerWhoIsNotTheHost_KeepsTheHostInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(host.Room.Code, player.PlayerId, host.PlayerId);
+
+            bool isFound = _manager.TryGetPlayer(host.Room.Code, host.PlayerId, out _);
+
+            Assert.True(isFound);
         }
 
         [Fact]
@@ -623,10 +746,16 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
             _manager.StartGame(host.Room.Code, host.PlayerId);
 
+            var expected = new { Status = RoomStatus.Success, IsPlaying = false };
+
             RoomResult afterKicking = _manager.KickPlayer(host.Room.Code, host.PlayerId, player.PlayerId);
 
-            Assert.Equal(RoomStatus.Success, afterKicking.Status);
-            Assert.DoesNotContain(afterKicking.Room.Players, remaining => remaining.Id == player.PlayerId);
+            var actual = new
+            {
+                afterKicking.Status,
+                IsPlaying = afterKicking.Room.Players.Any(remaining => remaining.Id == player.PlayerId)
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -656,11 +785,17 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
 
+            var expected = new { Status = RoomStatus.Success, HostId = player.PlayerId, PlayerCount = TwoPlayers };
+
             RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, host.PlayerId, player.PlayerId);
 
-            Assert.Equal(RoomStatus.Success, afterTransfer.Status);
-            Assert.Equal(player.PlayerId, afterTransfer.Room.HostId);
-            Assert.Equal(TwoPlayers, afterTransfer.Room.Players.Count);
+            var actual = new
+            {
+                afterTransfer.Status,
+                afterTransfer.Room.HostId,
+                PlayerCount = afterTransfer.Room.Players.Count
+            };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -687,7 +822,18 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult afterTransfer = _manager.TransferHost(host.Room.Code, player.PlayerId, player.PlayerId);
 
             Assert.Equal(RoomStatus.NotHost, afterTransfer.Status);
-            Assert.Equal(host.PlayerId, _manager.Join(host.Room.Code, GuestName).Room.HostId);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerWhoIsNotTheHost_KeepsTheSameHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.TransferHost(host.Room.Code, player.PlayerId, player.PlayerId);
+
+            RoomResult newcomer = _manager.Join(host.Room.Code, GuestName);
+
+            Assert.Equal(host.PlayerId, newcomer.Room.HostId);
         }
 
         [Fact]
@@ -737,8 +883,8 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
 
-            Assert.Equal(HostAvatarId, player.Room.Players.First().AvatarId);
-            Assert.Equal(PlayerAvatarId, player.Room.Players.Last().AvatarId);
+            int[] avatarIds = player.Room.Players.Select(member => member.AvatarId).ToArray();
+            Assert.Equal(new[] { HostAvatarId, PlayerAvatarId }, avatarIds);
         }
 
         [Fact]
