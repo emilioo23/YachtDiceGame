@@ -134,7 +134,6 @@ namespace YachtDice.Server.Services
             }
         }
 
-        // Removing the pair instead of the key keeps a newer session of the same player that connected meanwhile.
         private bool RemoveEntry(string displayName, OnlinePlayer player)
         {
             var entry = new KeyValuePair<string, OnlinePlayer>(displayName, player);

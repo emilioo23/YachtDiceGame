@@ -282,8 +282,7 @@ namespace YachtDice.Server.Services
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        // The expelled player gets the notification before it is unsubscribed, because afterwards the room
-        // does not send it anything.
+      
         private void TellExpelledPlayer(LogicRooms.RoomDetails room, string targetPlayerId)
         {
             Contracts.RoomState roomState = Mapping.RoomMapper.ToContract(room);
@@ -308,8 +307,7 @@ namespace YachtDice.Server.Services
 
             _callbacks.Register(roomCode, playerId, callback);
 
-            // The channel can end without the client calling LeaveRoom (crash, network failure), and those
-            // events are raised outside the WCF operations. That is why the room state needs its own lock.
+            
             channel.Closed += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
             channel.Faulted += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
         }
@@ -337,7 +335,6 @@ namespace YachtDice.Server.Services
             }
         }
 
-        // When the last player leaves, the room disappears and its game has no reason to go on.
         private void UpdateGameAfterLeave(LogicRooms.RoomResult result, string playerId)
         {
             if (result.Room.IsEmpty)

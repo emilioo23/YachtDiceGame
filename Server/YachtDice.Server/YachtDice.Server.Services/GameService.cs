@@ -85,7 +85,6 @@ namespace YachtDice.Server.Services
             return result;
         }
 
-        // A closed window ends the channel without any call, so the player must stop being notified.
         private void WatchChannel(string roomCode, string playerId, Contracts.IGameCallback callback)
         {
             ICommunicationObject channel = OperationContext.Current.Channel;

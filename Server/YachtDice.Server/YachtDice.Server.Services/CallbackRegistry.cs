@@ -145,7 +145,6 @@ namespace YachtDice.Server.Services
             return recipients;
         }
 
-        // The caller must hold _syncRoot.
         private bool TryGetCallback(string roomCode, string playerId, out TCallback callback)
         {
             callback = null;
@@ -154,7 +153,6 @@ namespace YachtDice.Server.Services
                 && callbacks.TryGetValue(playerId, out callback);
         }
 
-        // The caller must hold _syncRoot.
         private void DeleteCallback(string roomCode, string playerId)
         {
             if (_callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks))
