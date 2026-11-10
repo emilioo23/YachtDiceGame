@@ -88,17 +88,16 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Checks the code entered by the player and, if it is correct, turns the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="verificationCode">Code entered by the player and the activation challenge it answers.</param>
         /// <returns>Result of the validation.</returns>
-        public TwoFactorValidationStatus ConfirmActivation(string displayName, string code, string challengeId)
+        public TwoFactorValidationStatus ConfirmActivation(string displayName, VerificationCode verificationCode)
         {
             Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
 
             if (player != null)
             {
-                status = _verificationService.VerifyPlayerCode(player.Email, code, challengeId);
+                status = _verificationService.VerifyPlayerCode(player.Email, verificationCode);
 
                 if (status == TwoFactorValidationStatus.Valid)
                 {

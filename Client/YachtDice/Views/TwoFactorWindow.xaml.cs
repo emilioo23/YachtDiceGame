@@ -10,8 +10,10 @@ using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 using AuthResendResult = YachtDice.AuthenticationServiceReference.ResendResultCode;
+using AuthVerificationCode = YachtDice.AuthenticationServiceReference.VerificationCode;
 using AuthVerificationResult = YachtDice.AuthenticationServiceReference.VerificationResultCode;
 using TwoFactorResendResult = YachtDice.TwoFactorManagementServiceReference.ResendResultCode;
+using TwoFactorVerificationCode = YachtDice.TwoFactorManagementServiceReference.VerificationCode;
 using TwoFactorVerificationResult = YachtDice.TwoFactorManagementServiceReference.VerificationResultCode;
 
 namespace YachtDice.Views
@@ -191,16 +193,17 @@ namespace YachtDice.Views
             {
                 if (_isActivation)
                 {
+                    var verificationCode = new TwoFactorVerificationCode { Code = code, ChallengeId = _challengeId };
                     TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(
                         _session.DisplayName,
-                        code,
-                        _challengeId);
+                        verificationCode);
 
                     HandleVerificationResult((AuthVerificationResult)(int)result);
                 }
                 else
                 {
-                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, code, _challengeId);
+                    var verificationCode = new AuthVerificationCode { Code = code, ChallengeId = _challengeId };
+                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, verificationCode);
                     HandleVerificationResult(result);
                 }
             }

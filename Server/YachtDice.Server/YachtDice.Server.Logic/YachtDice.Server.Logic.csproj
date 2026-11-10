@@ -140,6 +140,7 @@
     <Compile Include="TwoFactor\TwoFactorDeliveryService.cs" />
     <Compile Include="TwoFactor\TwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\TwoFactorValidationStatus.cs" />
+    <Compile Include="TwoFactor\VerificationCode.cs" />
     <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -51,13 +51,14 @@ namespace YachtDice.Server.Services
         /// Validates the verification code entered by the player.
         /// </summary>
         /// <param name="email">Email address the code was sent to.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public TwoFactorContracts.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId)
+        public TwoFactorContracts.VerificationResultCode VerifyPlayerCode(
+            string email,
+            TwoFactorContracts.VerificationCode verificationCode)
         {
             TwoFactorContracts.VerificationResultCode result =
-                Execute(email, () => ProcessCodeVerification(email, code, challengeId));
+                Execute(verificationCode, () => ProcessCodeVerification(email, verificationCode));
 
             return result;
         }
@@ -127,11 +128,16 @@ namespace YachtDice.Server.Services
 
         private TwoFactorContracts.VerificationResultCode ProcessCodeVerification(
             string email,
-            string code,
-            string challengeId)
+            TwoFactorContracts.VerificationCode verificationCode)
         {
+            var logicCode = new LogicTwoFactor.VerificationCode
+            {
+                Code = verificationCode.Code,
+                ChallengeId = verificationCode.ChallengeId
+            };
+
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
-                _verificationService.VerifyPlayerCode(email, code, challengeId);
+                _verificationService.VerifyPlayerCode(email, logicCode);
 
             return Mapping.EnumMapper.Map<
                 LogicTwoFactor.TwoFactorValidationStatus,

@@ -236,6 +236,67 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         PlayerNotFound = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="TwoFactorManagementServiceReference.ITwoFactorManagementService")]
     public interface ITwoFactorManagementService {
@@ -262,11 +323,11 @@ namespace YachtDice.TwoFactorManagementServiceReference {
             "ponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivationSer" +
             "viceFaultFault", Name="ServiceFault")]
-        YachtDice.TwoFactorManagementServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId);
+        YachtDice.TwoFactorManagementServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, YachtDice.TwoFactorManagementServiceReference.VerificationCode verificationCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivation", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ConfirmTwoFactorActivationRes" +
             "ponse")]
-        System.Threading.Tasks.Task<YachtDice.TwoFactorManagementServiceReference.VerificationResultCode> ConfirmTwoFactorActivationAsync(string displayName, string code, string challengeId);
+        System.Threading.Tasks.Task<YachtDice.TwoFactorManagementServiceReference.VerificationResultCode> ConfirmTwoFactorActivationAsync(string displayName, YachtDice.TwoFactorManagementServiceReference.VerificationCode verificationCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCode", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeServiceFa" +
@@ -328,12 +389,12 @@ namespace YachtDice.TwoFactorManagementServiceReference {
             return base.Channel.StartTwoFactorActivationAsync(displayName, culture);
         }
         
-        public YachtDice.TwoFactorManagementServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId) {
-            return base.Channel.ConfirmTwoFactorActivation(displayName, code, challengeId);
+        public YachtDice.TwoFactorManagementServiceReference.VerificationResultCode ConfirmTwoFactorActivation(string displayName, YachtDice.TwoFactorManagementServiceReference.VerificationCode verificationCode) {
+            return base.Channel.ConfirmTwoFactorActivation(displayName, verificationCode);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.TwoFactorManagementServiceReference.VerificationResultCode> ConfirmTwoFactorActivationAsync(string displayName, string code, string challengeId) {
-            return base.Channel.ConfirmTwoFactorActivationAsync(displayName, code, challengeId);
+        public System.Threading.Tasks.Task<YachtDice.TwoFactorManagementServiceReference.VerificationResultCode> ConfirmTwoFactorActivationAsync(string displayName, YachtDice.TwoFactorManagementServiceReference.VerificationCode verificationCode) {
+            return base.Channel.ConfirmTwoFactorActivationAsync(displayName, verificationCode);
         }
         
         public YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture) {

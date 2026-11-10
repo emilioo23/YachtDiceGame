@@ -438,6 +438,67 @@ namespace YachtDice.AuthenticationServiceReference {
         TooManyAttempts = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
@@ -448,7 +509,7 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, YachtDice.AuthenticationServiceReference.VerificationCode verificationCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
@@ -496,8 +557,8 @@ namespace YachtDice.AuthenticationServiceReference {
             return base.Channel.LoginPlayer(credentials);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId) {
-            return base.Channel.VerifyPlayerCode(email, code, challengeId);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, YachtDice.AuthenticationServiceReference.VerificationCode verificationCode) {
+            return base.Channel.VerifyPlayerCode(email, verificationCode);
         }
         
         public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture) {

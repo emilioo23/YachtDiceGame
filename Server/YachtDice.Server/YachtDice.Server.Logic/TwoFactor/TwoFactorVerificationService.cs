@@ -58,12 +58,11 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Processes the code verification required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="code">The verification code provided.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="verificationCode">The code provided and the session challenge it answers.</param>
         /// <returns>Result status of the verification process.</returns>
-        public TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId)
+        public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            return _codeService.Validate(email, code, challengeId);
+            return _codeService.Validate(email, verificationCode);
         }
 
         /// <summary>

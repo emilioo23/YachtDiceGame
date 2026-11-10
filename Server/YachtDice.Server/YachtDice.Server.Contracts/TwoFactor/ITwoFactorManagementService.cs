@@ -31,12 +31,11 @@ namespace YachtDice.Server.Contracts.TwoFactor
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId);
+        VerificationResultCode ConfirmTwoFactorActivation(string displayName, VerificationCode verificationCode);
 
         /// <summary>
         /// Sends a new code while the player is turning on the two-step verification.
