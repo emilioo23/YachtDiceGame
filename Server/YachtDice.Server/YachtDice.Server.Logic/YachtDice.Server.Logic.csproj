@@ -80,6 +80,7 @@
     <Compile Include="Friends\InvitationResult.cs" />
     <Compile Include="Friends\InvitationStatus.cs" />
     <Compile Include="Friends\RoomInvitationService.cs" />
+    <Compile Include="Game\AutoPlayChooser.cs" />
     <Compile Include="Game\DiceRules.cs" />
     <Compile Include="Game\DiceTally.cs" />
     <Compile Include="Game\GameActionResult.cs" />

@@ -50,6 +50,7 @@
     <Compile Include="Avatars\AvatarServiceTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
+    <Compile Include="Game\AutoPlayChooserTests.cs" />
     <Compile Include="Game\GameManagerTests.cs" />
     <Compile Include="Game\ScoreCalculatorTests.cs" />
     <Compile Include="Game\ScoreCardTests.cs" />

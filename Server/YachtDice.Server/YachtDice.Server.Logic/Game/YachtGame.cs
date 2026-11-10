@@ -105,7 +105,7 @@ namespace YachtDice.Server.Logic.Game
 
         /// <summary>
         /// Plays the turn of the current player when the time is over: rolls if the player did not roll yet
-        /// and writes the points in the box that gives more points.
+        /// and writes the points in the box that gives more points (see <see cref="AutoPlayChooser"/>).
         /// </summary>
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus AutoPlay()
@@ -300,11 +300,7 @@ namespace YachtDice.Server.Logic.Game
 
         private ScoreCategory ChooseBestCategory()
         {
-            return _players[_turnIndex].Card.GetOptions(_dice)
-                .OrderByDescending(option => option.Points)
-                .ThenBy(option => option.Category)
-                .First()
-                .Category;
+            return AutoPlayChooser.Choose(_players[_turnIndex].Card.GetOptions(_dice));
         }
 
         private void RollAll()
