@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
@@ -15,7 +16,9 @@ namespace YachtDice.Server.Logic.Logging
         private const int MaxStackLevels = 3;
         private const string NullOwnerTypeMessage = "The owner type cannot be null when initializing the logger.";
         private const string NullExceptionMessage = "The exception instance cannot be null when logging an error.";
-        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}";
+        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}{5}";
+        private const string CauseFormat = " Cause: {0}: {1}";
+        private const string SqlCauseFormat = " Cause: {0} number {1}";
 
         private readonly ILog _log;
 
@@ -70,8 +73,9 @@ namespace YachtDice.Server.Logic.Logging
         }
 
         /// <summary>
-        /// Logs a failure that prevented an operation from completing,
-        /// with the stack trace limited to 3 levels.
+        /// Logs a failure that prevented an operation from completing, with the stack trace limited to 3 levels.
+        /// It also writes the original cause when the exception wraps another one. For a database error only the
+        /// SQL Server error number is written, because its text can include the name of the database login.
         /// </summary>
         /// <param name="exception">Caught exception.</param>
         /// <param name="message">Context of the operation that failed.</param>
@@ -97,8 +101,34 @@ namespace YachtDice.Server.Logic.Logging
                 message,
                 exception.GetType().Name,
                 exception.Message,
+                DescribeRootCause(exception),
                 Environment.NewLine,
                 limitedStack);
+        }
+
+        private static string DescribeRootCause(Exception exception)
+        {
+            Exception rootCause = exception.GetBaseException();
+            string description = string.Empty;
+
+            if (rootCause is SqlException sqlException)
+            {
+                description = string.Format(
+                    CultureInfo.InvariantCulture,
+                    SqlCauseFormat,
+                    nameof(SqlException),
+                    sqlException.Number);
+            }
+            else if (!ReferenceEquals(rootCause, exception))
+            {
+                description = string.Format(
+                    CultureInfo.InvariantCulture,
+                    CauseFormat,
+                    rootCause.GetType().Name,
+                    rootCause.Message);
+            }
+
+            return description;
         }
     }
 }
