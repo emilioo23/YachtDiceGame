@@ -134,9 +134,19 @@ namespace YachtDice.Server.Services
 
         private void Remove(string displayName, string sessionId)
         {
-            if (_players.TryGetValue(displayName, out OnlinePlayer player)
-                && player.SessionId == sessionId
-                && RemoveEntry(displayName, player))
+            var isRemoved = false;
+
+            if (_players.TryGetValue(displayName, out OnlinePlayer player))
+            {
+                bool isSameSession = player.SessionId == sessionId;
+
+                if (isSameSession)
+                {
+                    isRemoved = RemoveEntry(displayName, player);
+                }
+            }
+
+            if (isRemoved)
             {
                 _logger.Info(DisconnectedLogMessage);
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);

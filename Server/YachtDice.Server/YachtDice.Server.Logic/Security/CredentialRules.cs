@@ -59,7 +59,9 @@ namespace YachtDice.Server.Logic.Security
                 && password.Length >= PasswordMinLength
                 && password.Length <= PasswordMaxLength;
 
-            return hasValidLength && password.Any(char.IsLetter) && password.Any(char.IsDigit);
+            bool hasLetterAndDigit = hasValidLength && password.Any(char.IsLetter) && password.Any(char.IsDigit);
+
+            return hasLetterAndDigit;
         }
     }
 }
