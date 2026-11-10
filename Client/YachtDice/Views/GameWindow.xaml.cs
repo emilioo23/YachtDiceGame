@@ -470,7 +470,7 @@ namespace YachtDice.Views
 
         private void ShowRoomChange(RoomState room, RoomEventType eventType)
         {
-            if (eventType == RoomEventType.PlayerKicked && room.Players.All(player => player.Id != _playerId))
+            if (eventType == RoomEventType.PlayerKicked && !IsInside(room))
             {
                 LeaveBecauseKicked();
             }
@@ -480,6 +480,11 @@ namespace YachtDice.Views
                 ShowRoomPlayers(room);
                 ApplyHostControls(room);
             }
+        }
+
+        private bool IsInside(RoomState room)
+        {
+            return room.Players.Any(player => player.Id == _playerId);
         }
 
         private void LeaveBecauseKicked()

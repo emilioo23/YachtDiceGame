@@ -77,13 +77,17 @@ namespace YachtDice.Server.Services
         /// <param name="eventType">What happened with the subject.</param>
         public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
         {
-            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient)
-                && !CallbackDelivery.TryDeliver(
+            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient))
+            {
+                bool isDelivered = CallbackDelivery.TryDeliver(
                     recipient.Callback,
                     callback => callback.PresenceChanged(subjectName, eventType),
-                    _logger))
-            {
-                Remove(recipientName, recipient.SessionId);
+                    _logger);
+
+                if (!isDelivered)
+                {
+                    Remove(recipientName, recipient.SessionId);
+                }
             }
         }
 
@@ -148,16 +152,13 @@ namespace YachtDice.Server.Services
 
         private void Broadcast(string displayName, Contracts.PresenceEventType eventType)
         {
-            foreach (KeyValuePair<string, OnlinePlayer> recipient in _players)
+            foreach (string recipientName in _players.Keys)
             {
-                bool isOtherPlayer = !string.Equals(recipient.Key, displayName, StringComparison.OrdinalIgnoreCase);
+                bool isOtherPlayer = !string.Equals(recipientName, displayName, StringComparison.OrdinalIgnoreCase);
 
-                if (isOtherPlayer && !CallbackDelivery.TryDeliver(
-                    recipient.Value.Callback,
-                    callback => callback.PresenceChanged(displayName, eventType),
-                    _logger))
+                if (isOtherPlayer)
                 {
-                    Remove(recipient.Key, recipient.Value.SessionId);
+                    SendEvent(recipientName, displayName, eventType);
                 }
             }
         }
