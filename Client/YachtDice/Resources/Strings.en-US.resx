@@ -549,26 +549,14 @@
   <data name="Game_Category_Bonus" xml:space="preserve">
     <value>Bonus +35</value>
   </data>
-  <data name="Game_Category_ThreeOfAKind" xml:space="preserve">
-    <value>3 of a Kind</value>
-  </data>
   <data name="Game_Category_FourOfAKind" xml:space="preserve">
     <value>4 of a Kind</value>
   </data>
   <data name="Game_Category_FullHouse" xml:space="preserve">
     <value>Full House</value>
   </data>
-  <data name="Game_Category_SmallStraight" xml:space="preserve">
-    <value>Sm. Straight</value>
-  </data>
-  <data name="Game_Category_LargeStraight" xml:space="preserve">
-    <value>Lg. Straight</value>
-  </data>
   <data name="Game_Category_Yacht" xml:space="preserve">
     <value>YACHT</value>
-  </data>
-  <data name="Game_Category_Chance" xml:space="preserve">
-    <value>Chance</value>
   </data>
   <data name="Results_Title" xml:space="preserve">
     <value>Match finished</value>
@@ -1020,32 +1008,14 @@
   <data name="HowToPlay_LowerTitle" xml:space="preserve">
     <value>Lower section</value>
   </data>
-  <data name="HowToPlay_ThreeOfAKindText" xml:space="preserve">
-    <value>At least three dice that are the same. You score the sum of all five dice. Example: 4+4+4+2+6 = 20 points.</value>
-  </data>
   <data name="HowToPlay_FourOfAKindText" xml:space="preserve">
-    <value>At least four dice that are the same. You score the sum of all five dice. Example: 5+5+5+5+1 = 21 points.</value>
+    <value>At least four dice that are the same. You score the sum of only four of them. Example: 5+5+5+5 = 20 points; the fifth die does not count.</value>
   </data>
   <data name="HowToPlay_FullHouseText" xml:space="preserve">
-    <value>Three dice that are the same plus two other dice that are the same as each other. You score 25 points.</value>
-  </data>
-  <data name="HowToPlay_SmallStraightTitle" xml:space="preserve">
-    <value>Small straight</value>
-  </data>
-  <data name="HowToPlay_SmallStraightText" xml:space="preserve">
-    <value>Four numbers in a row, such as 1-2-3-4 or 3-4-5-6. The fifth die does not matter. You score 30 points.</value>
-  </data>
-  <data name="HowToPlay_LargeStraightTitle" xml:space="preserve">
-    <value>Large straight</value>
-  </data>
-  <data name="HowToPlay_LargeStraightText" xml:space="preserve">
-    <value>Five numbers in a row: 1-2-3-4-5 or 2-3-4-5-6. You score 40 points.</value>
+    <value>Three dice that are the same plus two other dice that are the same as each other. You score the sum of all five dice. Example: 2+2+3+3+3 = 13 points.</value>
   </data>
   <data name="HowToPlay_YachtText" xml:space="preserve">
     <value>All five dice the same. You score 50 points.</value>
-  </data>
-  <data name="HowToPlay_ChanceText" xml:space="preserve">
-    <value>Works with any combination. You score the sum of all five dice. Example: 1+3+4+5+6 = 19 points.</value>
   </data>
   <data name="HowToPlay_WinTitle" xml:space="preserve">
     <value>Who wins?</value>
@@ -1082,5 +1052,92 @@
   </data>
   <data name="Menu_PendingMatchPrompt" xml:space="preserve">
     <value>You left a match in progress. Do you want to go back to it?</value>
+  </data>
+  <data name="Game_Category_LittleStraight" xml:space="preserve">
+    <value>Little Str.</value>
+  </data>
+  <data name="Game_Category_BigStraight" xml:space="preserve">
+    <value>Big Str.</value>
+  </data>
+  <data name="Game_Category_Choice" xml:space="preserve">
+    <value>Choice</value>
+  </data>
+  <data name="Game_Category_YachtBonus" xml:space="preserve">
+    <value>Yacht Bonus</value>
+  </data>
+  <data name="Game_Topbar_TurnOf" xml:space="preserve">
+    <value>{0}'s turn</value>
+  </data>
+  <data name="Game_Topbar_GameOver" xml:space="preserve">
+    <value>Game over</value>
+  </data>
+  <data name="Game_Topbar_Paused" xml:space="preserve">
+    <value>Waiting for players</value>
+  </data>
+  <data name="Game_Timer_SecondsLeft" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Game_Dice_HintOpponent" xml:space="preserve">
+    <value>Waiting for {0}'s turn...</value>
+  </data>
+  <data name="Game_Dice_HintChoose" xml:space="preserve">
+    <value>Pick a box, or hold dice and roll again.</value>
+  </data>
+  <data name="Game_Dice_HintPickBox" xml:space="preserve">
+    <value>No rolls left. Pick a box.</value>
+  </data>
+  <data name="Game_Result_GameNotFound" xml:space="preserve">
+    <value>The game no longer exists.</value>
+  </data>
+  <data name="Game_Result_PlayerNotInGame" xml:space="preserve">
+    <value>You are no longer in this game.</value>
+  </data>
+  <data name="Game_Result_NotYourTurn" xml:space="preserve">
+    <value>It is not your turn yet.</value>
+  </data>
+  <data name="Game_Result_GameFinished" xml:space="preserve">
+    <value>The game is already over.</value>
+  </data>
+  <data name="Game_Result_NoRollsLeft" xml:space="preserve">
+    <value>You already used the three rolls of this turn.</value>
+  </data>
+  <data name="Game_Result_CategoryFilled" xml:space="preserve">
+    <value>That box already has points.</value>
+  </data>
+  <data name="Game_Result_CategoryNotAllowed" xml:space="preserve">
+    <value>With a repeated Yacht the Joker rule does not allow that box.</value>
+  </data>
+  <data name="Game_Chat_TurnTimedOut" xml:space="preserve">
+    <value>{0} ran out of time, so the server played the turn.</value>
+  </data>
+  <data name="Game_Chat_YachtBonus" xml:space="preserve">
+    <value>{0} rolled another Yacht and earns a 100-point bonus.</value>
+  </data>
+  <data name="Game_Result_JoinFailed" xml:space="preserve">
+    <value>The game could not be joined.</value>
+  </data>
+  <data name="Results_ColumnRank" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="HowToPlay_LittleStraightText" xml:space="preserve">
+    <value>The dice 1-2-3-4-5. You score 30 points.</value>
+  </data>
+  <data name="HowToPlay_BigStraightText" xml:space="preserve">
+    <value>The dice 2-3-4-5-6. You score 30 points.</value>
+  </data>
+  <data name="HowToPlay_ChoiceText" xml:space="preserve">
+    <value>Works with any combination. You score the sum of all five dice. Example: 1+3+4+5+6 = 19 points.</value>
+  </data>
+  <data name="HowToPlay_YachtBonusText" xml:space="preserve">
+    <value>If you already scored 50 points in Yacht and you roll another Yacht, you get 100 extra points. If you scored 0 in Yacht, there is no bonus.</value>
+  </data>
+  <data name="HowToPlay_JokerTitle" xml:space="preserve">
+    <value>Joker</value>
+  </data>
+  <data name="HowToPlay_JokerText" xml:space="preserve">
+    <value>If you roll a Yacht and the Yacht box is already used, you must score it in the box of the same number if it is free. If not, in any free lower box (the full house and the straights score in full). If there is none either, in any free upper box.</value>
+  </data>
+  <data name="Results_TitleTie" xml:space="preserve">
+    <value>Tie</value>
   </data>
 </root>

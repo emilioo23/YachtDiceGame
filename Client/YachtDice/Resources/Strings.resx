@@ -549,26 +549,14 @@
   <data name="Game_Category_Bonus" xml:space="preserve">
     <value>Bono +35</value>
   </data>
-  <data name="Game_Category_ThreeOfAKind" xml:space="preserve">
-    <value>3 Iguales</value>
-  </data>
   <data name="Game_Category_FourOfAKind" xml:space="preserve">
     <value>4 Iguales</value>
   </data>
   <data name="Game_Category_FullHouse" xml:space="preserve">
     <value>Casa llena</value>
   </data>
-  <data name="Game_Category_SmallStraight" xml:space="preserve">
-    <value>Esc.Pequeña</value>
-  </data>
-  <data name="Game_Category_LargeStraight" xml:space="preserve">
-    <value>Esc.Grande</value>
-  </data>
   <data name="Game_Category_Yacht" xml:space="preserve">
     <value>YACHT</value>
-  </data>
-  <data name="Game_Category_Chance" xml:space="preserve">
-    <value>Chance</value>
   </data>
   <data name="Results_Title" xml:space="preserve">
     <value>Partida terminada</value>
@@ -1020,32 +1008,14 @@
   <data name="HowToPlay_LowerTitle" xml:space="preserve">
     <value>Sección inferior</value>
   </data>
-  <data name="HowToPlay_ThreeOfAKindText" xml:space="preserve">
-    <value>Al menos tres dados iguales. Anotas la suma de los cinco dados. Ejemplo: 4+4+4+2+6 = 20 puntos.</value>
-  </data>
   <data name="HowToPlay_FourOfAKindText" xml:space="preserve">
-    <value>Al menos cuatro dados iguales. Anotas la suma de los cinco dados. Ejemplo: 5+5+5+5+1 = 21 puntos.</value>
+    <value>Al menos cuatro dados iguales. Anotas la suma de solo cuatro de ellos. Ejemplo: 5+5+5+5 = 20 puntos; el quinto dado no cuenta.</value>
   </data>
   <data name="HowToPlay_FullHouseText" xml:space="preserve">
-    <value>Tres dados iguales y, además, otros dos iguales entre sí. Anotas 25 puntos.</value>
-  </data>
-  <data name="HowToPlay_SmallStraightTitle" xml:space="preserve">
-    <value>Escalera pequeña</value>
-  </data>
-  <data name="HowToPlay_SmallStraightText" xml:space="preserve">
-    <value>Cuatro números seguidos, como 1-2-3-4 o 3-4-5-6. El quinto dado no importa. Anotas 30 puntos.</value>
-  </data>
-  <data name="HowToPlay_LargeStraightTitle" xml:space="preserve">
-    <value>Escalera grande</value>
-  </data>
-  <data name="HowToPlay_LargeStraightText" xml:space="preserve">
-    <value>Cinco números seguidos: 1-2-3-4-5 o 2-3-4-5-6. Anotas 40 puntos.</value>
+    <value>Tres dados iguales y otros dos iguales entre sí. Anotas la suma de los cinco dados. Ejemplo: 2+2+3+3+3 = 13 puntos.</value>
   </data>
   <data name="HowToPlay_YachtText" xml:space="preserve">
     <value>Los cinco dados iguales. Anotas 50 puntos.</value>
-  </data>
-  <data name="HowToPlay_ChanceText" xml:space="preserve">
-    <value>Sirve para cualquier combinación. Anotas la suma de los cinco dados. Ejemplo: 1+3+4+5+6 = 19 puntos.</value>
   </data>
   <data name="HowToPlay_WinTitle" xml:space="preserve">
     <value>¿Quién gana?</value>
@@ -1082,5 +1052,92 @@
   </data>
   <data name="Menu_PendingMatchPrompt" xml:space="preserve">
     <value>Dejaste una partida en curso. ¿Quieres volver a ella?</value>
+  </data>
+  <data name="Game_Category_LittleStraight" xml:space="preserve">
+    <value>Esc. Pequeña</value>
+  </data>
+  <data name="Game_Category_BigStraight" xml:space="preserve">
+    <value>Esc. Grande</value>
+  </data>
+  <data name="Game_Category_Choice" xml:space="preserve">
+    <value>Libre</value>
+  </data>
+  <data name="Game_Category_YachtBonus" xml:space="preserve">
+    <value>Bono Yacht</value>
+  </data>
+  <data name="Game_Topbar_TurnOf" xml:space="preserve">
+    <value>Turno de {0}</value>
+  </data>
+  <data name="Game_Topbar_GameOver" xml:space="preserve">
+    <value>Partida terminada</value>
+  </data>
+  <data name="Game_Topbar_Paused" xml:space="preserve">
+    <value>Esperando jugadores</value>
+  </data>
+  <data name="Game_Timer_SecondsLeft" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Game_Dice_HintOpponent" xml:space="preserve">
+    <value>Esperando el turno de {0}...</value>
+  </data>
+  <data name="Game_Dice_HintChoose" xml:space="preserve">
+    <value>Elige una categoría o conserva dados y vuelve a tirar.</value>
+  </data>
+  <data name="Game_Dice_HintPickBox" xml:space="preserve">
+    <value>Sin tiradas. Elige una categoría.</value>
+  </data>
+  <data name="Game_Result_GameNotFound" xml:space="preserve">
+    <value>La partida ya no existe.</value>
+  </data>
+  <data name="Game_Result_PlayerNotInGame" xml:space="preserve">
+    <value>Ya no participas en esta partida.</value>
+  </data>
+  <data name="Game_Result_NotYourTurn" xml:space="preserve">
+    <value>Todavía no es tu turno.</value>
+  </data>
+  <data name="Game_Result_GameFinished" xml:space="preserve">
+    <value>La partida ya terminó.</value>
+  </data>
+  <data name="Game_Result_NoRollsLeft" xml:space="preserve">
+    <value>Ya usaste las tres tiradas de este turno.</value>
+  </data>
+  <data name="Game_Result_CategoryFilled" xml:space="preserve">
+    <value>Esa categoría ya tiene puntos.</value>
+  </data>
+  <data name="Game_Result_CategoryNotAllowed" xml:space="preserve">
+    <value>Con un Yacht repetido la regla del comodín no permite esa categoría.</value>
+  </data>
+  <data name="Game_Chat_TurnTimedOut" xml:space="preserve">
+    <value>A {0} se le acabó el tiempo y el servidor jugó su turno.</value>
+  </data>
+  <data name="Game_Chat_YachtBonus" xml:space="preserve">
+    <value>{0} sacó otro Yacht y gana 100 puntos de bono.</value>
+  </data>
+  <data name="Game_Result_JoinFailed" xml:space="preserve">
+    <value>No se pudo entrar a la partida.</value>
+  </data>
+  <data name="Results_ColumnRank" xml:space="preserve">
+    <value>Lugar</value>
+  </data>
+  <data name="HowToPlay_LittleStraightText" xml:space="preserve">
+    <value>Los dados 1-2-3-4-5. Anotas 30 puntos.</value>
+  </data>
+  <data name="HowToPlay_BigStraightText" xml:space="preserve">
+    <value>Los dados 2-3-4-5-6. Anotas 30 puntos.</value>
+  </data>
+  <data name="HowToPlay_ChoiceText" xml:space="preserve">
+    <value>Sirve para cualquier combinación. Anotas la suma de los cinco dados. Ejemplo: 1+3+4+5+6 = 19 puntos.</value>
+  </data>
+  <data name="HowToPlay_YachtBonusText" xml:space="preserve">
+    <value>Si ya anotaste 50 puntos en Yacht y sacas otro Yacht, ganas 100 puntos extra. Si anotaste 0 en Yacht, no hay bono.</value>
+  </data>
+  <data name="HowToPlay_JokerTitle" xml:space="preserve">
+    <value>Comodín</value>
+  </data>
+  <data name="HowToPlay_JokerText" xml:space="preserve">
+    <value>Si sacas un Yacht y la casilla Yacht ya está usada, debes anotarlo en la casilla del mismo número si está libre. Si no, en cualquier casilla inferior libre (la casa llena y las escaleras valen completas). Si tampoco hay, en cualquier casilla superior libre.</value>
+  </data>
+  <data name="Results_TitleTie" xml:space="preserve">
+    <value>Empate</value>
   </data>
 </root>

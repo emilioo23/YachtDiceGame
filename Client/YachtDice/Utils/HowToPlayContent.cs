@@ -11,13 +11,12 @@ namespace YachtDice.Utils
     {
         private const string NoExample = "";
         private const string UpperExample = "3 3 3 5- 6-";
-        private const string ThreeOfAKindExample = "4 4 4 2 6";
-        private const string FourOfAKindExample = "5 5 5 5 1";
+        private const string FourOfAKindExample = "5 5 5 5 1-";
         private const string FullHouseExample = "2 2 3 3 3";
-        private const string SmallStraightExample = "1 2 3 4 6-";
-        private const string LargeStraightExample = "2 3 4 5 6";
+        private const string LittleStraightExample = "1 2 3 4 5";
+        private const string BigStraightExample = "2 3 4 5 6";
         private const string YachtExample = "6 6 6 6 6";
-        private const string ChanceExample = "1 3 4 5 6";
+        private const string ChoiceExample = "1 3 4 5 6";
 
         /// <summary>
         /// Gets the steps of a turn.
@@ -64,10 +63,6 @@ namespace YachtDice.Utils
             return new List<CategoryRule>
             {
                 CreateRule(
-                    Strings.Game_Category_ThreeOfAKind,
-                    Strings.HowToPlay_ThreeOfAKindText,
-                    ThreeOfAKindExample),
-                CreateRule(
                     Strings.Game_Category_FourOfAKind,
                     Strings.HowToPlay_FourOfAKindText,
                     FourOfAKindExample),
@@ -83,15 +78,17 @@ namespace YachtDice.Utils
             return new List<CategoryRule>
             {
                 CreateRule(
-                    Strings.HowToPlay_SmallStraightTitle,
-                    Strings.HowToPlay_SmallStraightText,
-                    SmallStraightExample),
+                    Strings.Game_Category_LittleStraight,
+                    Strings.HowToPlay_LittleStraightText,
+                    LittleStraightExample),
                 CreateRule(
-                    Strings.HowToPlay_LargeStraightTitle,
-                    Strings.HowToPlay_LargeStraightText,
-                    LargeStraightExample),
+                    Strings.Game_Category_BigStraight,
+                    Strings.HowToPlay_BigStraightText,
+                    BigStraightExample),
                 CreateRule(Strings.Game_Category_Yacht, Strings.HowToPlay_YachtText, YachtExample),
-                CreateRule(Strings.Game_Category_Chance, Strings.HowToPlay_ChanceText, ChanceExample)
+                CreateRule(Strings.Game_Category_Choice, Strings.HowToPlay_ChoiceText, ChoiceExample),
+                CreateRule(Strings.Game_Category_YachtBonus, Strings.HowToPlay_YachtBonusText, YachtExample),
+                CreateRule(Strings.HowToPlay_JokerTitle, Strings.HowToPlay_JokerText, NoExample)
             };
         }
 

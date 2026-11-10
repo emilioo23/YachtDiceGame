@@ -47,6 +47,11 @@
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
+    <Compile Include="Game\HeldDiceSelectionTests.cs" />
+    <Compile Include="Game\StandingsBuilderTests.cs" />
+    <Compile Include="Game\StateVersionGateTests.cs" />
+    <Compile Include="Game\TurnCountdownTests.cs" />
+    <Compile Include="Game\TurnPhaseResolverTests.cs" />
     <Compile Include="Players\InitialLetterTests.cs" />
     <Compile Include="Rooms\PresenceComparerTests.cs" />
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
