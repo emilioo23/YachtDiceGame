@@ -15,21 +15,18 @@ namespace YachtDice.GameServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CategoryScore", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="JoinGameResult", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class CategoryScore : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class JoinGameResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.ScoreCategory CategoryField;
+        private YachtDice.GameServiceReference.GameResultCode CodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsFilledField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int PointsField;
+        private YachtDice.GameServiceReference.GameState StateField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -42,40 +39,27 @@ namespace YachtDice.GameServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.ScoreCategory Category {
+        public YachtDice.GameServiceReference.GameResultCode Code {
             get {
-                return this.CategoryField;
+                return this.CodeField;
             }
             set {
-                if ((this.CategoryField.Equals(value) != true)) {
-                    this.CategoryField = value;
-                    this.RaisePropertyChanged("Category");
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsFilled {
+        public YachtDice.GameServiceReference.GameState State {
             get {
-                return this.IsFilledField;
+                return this.StateField;
             }
             set {
-                if ((this.IsFilledField.Equals(value) != true)) {
-                    this.IsFilledField = value;
-                    this.RaisePropertyChanged("IsFilled");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Points {
-            get {
-                return this.PointsField;
-            }
-            set {
-                if ((this.PointsField.Equals(value) != true)) {
-                    this.PointsField = value;
-                    this.RaisePropertyChanged("Points");
+                if ((object.ReferenceEquals(this.StateField, value) != true)) {
+                    this.StateField = value;
+                    this.RaisePropertyChanged("State");
                 }
             }
         }
@@ -88,6 +72,262 @@ namespace YachtDice.GameServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameState", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class GameState : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CurrentPlayerIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int[] DiceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool[] HeldDiceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.GameServiceReference.ScoreChoice[] OptionsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.GameServiceReference.PlayerScorecard[] PlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int RollsLeftField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int RoundField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.GameServiceReference.GameStatus StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TurnNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TurnSecondsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TurnSecondsLeftField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int VersionField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CurrentPlayerId {
+            get {
+                return this.CurrentPlayerIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CurrentPlayerIdField, value) != true)) {
+                    this.CurrentPlayerIdField = value;
+                    this.RaisePropertyChanged("CurrentPlayerId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int[] Dice {
+            get {
+                return this.DiceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DiceField, value) != true)) {
+                    this.DiceField = value;
+                    this.RaisePropertyChanged("Dice");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool[] HeldDice {
+            get {
+                return this.HeldDiceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HeldDiceField, value) != true)) {
+                    this.HeldDiceField = value;
+                    this.RaisePropertyChanged("HeldDice");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.GameServiceReference.ScoreChoice[] Options {
+            get {
+                return this.OptionsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OptionsField, value) != true)) {
+                    this.OptionsField = value;
+                    this.RaisePropertyChanged("Options");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.GameServiceReference.PlayerScorecard[] Players {
+            get {
+                return this.PlayersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayersField, value) != true)) {
+                    this.PlayersField = value;
+                    this.RaisePropertyChanged("Players");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int RollsLeft {
+            get {
+                return this.RollsLeftField;
+            }
+            set {
+                if ((this.RollsLeftField.Equals(value) != true)) {
+                    this.RollsLeftField = value;
+                    this.RaisePropertyChanged("RollsLeft");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Round {
+            get {
+                return this.RoundField;
+            }
+            set {
+                if ((this.RoundField.Equals(value) != true)) {
+                    this.RoundField = value;
+                    this.RaisePropertyChanged("Round");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.GameServiceReference.GameStatus Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((this.StatusField.Equals(value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TurnNumber {
+            get {
+                return this.TurnNumberField;
+            }
+            set {
+                if ((this.TurnNumberField.Equals(value) != true)) {
+                    this.TurnNumberField = value;
+                    this.RaisePropertyChanged("TurnNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TurnSeconds {
+            get {
+                return this.TurnSecondsField;
+            }
+            set {
+                if ((this.TurnSecondsField.Equals(value) != true)) {
+                    this.TurnSecondsField = value;
+                    this.RaisePropertyChanged("TurnSeconds");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TurnSecondsLeft {
+            get {
+                return this.TurnSecondsLeftField;
+            }
+            set {
+                if ((this.TurnSecondsLeftField.Equals(value) != true)) {
+                    this.TurnSecondsLeftField = value;
+                    this.RaisePropertyChanged("TurnSecondsLeft");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Version {
+            get {
+                return this.VersionField;
+            }
+            set {
+                if ((this.VersionField.Equals(value) != true)) {
+                    this.VersionField = value;
+                    this.RaisePropertyChanged("Version");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum GameResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        GameNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotInGame = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotYourTurn = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        GameFinished = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoRollsLeft = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MustRollFirst = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidHeldDice = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CategoryFilled = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CategoryNotAllowed = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -324,241 +564,75 @@ namespace YachtDice.GameServiceReference {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GameState", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class GameState : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameStatus", Namespace="urn:yachtdice:contracts")]
+    public enum GameStatus : int {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InProgress = 0,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CurrentPlayerIdField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Finished = 1,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ScoreCategory", Namespace="urn:yachtdice:contracts")]
+    public enum ScoreCategory : int {
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int[] DiceField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Ones = 0,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool[] HeldDiceField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Twos = 1,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.ScoreChoice[] OptionsField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Threes = 2,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.PlayerScorecard[] PlayersField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Fours = 3,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int RollsLeftField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Fives = 4,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int RoundField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sixes = 5,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.GameStatus StatusField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FullHouse = 6,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int TurnNumberField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FourOfAKind = 7,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int TurnSecondsField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LittleStraight = 8,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int TurnSecondsLeftField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        BigStraight = 9,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int VersionField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Choice = 10,
         
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CurrentPlayerId {
-            get {
-                return this.CurrentPlayerIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CurrentPlayerIdField, value) != true)) {
-                    this.CurrentPlayerIdField = value;
-                    this.RaisePropertyChanged("CurrentPlayerId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int[] Dice {
-            get {
-                return this.DiceField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DiceField, value) != true)) {
-                    this.DiceField = value;
-                    this.RaisePropertyChanged("Dice");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool[] HeldDice {
-            get {
-                return this.HeldDiceField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HeldDiceField, value) != true)) {
-                    this.HeldDiceField = value;
-                    this.RaisePropertyChanged("HeldDice");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.ScoreChoice[] Options {
-            get {
-                return this.OptionsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.OptionsField, value) != true)) {
-                    this.OptionsField = value;
-                    this.RaisePropertyChanged("Options");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.PlayerScorecard[] Players {
-            get {
-                return this.PlayersField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PlayersField, value) != true)) {
-                    this.PlayersField = value;
-                    this.RaisePropertyChanged("Players");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int RollsLeft {
-            get {
-                return this.RollsLeftField;
-            }
-            set {
-                if ((this.RollsLeftField.Equals(value) != true)) {
-                    this.RollsLeftField = value;
-                    this.RaisePropertyChanged("RollsLeft");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Round {
-            get {
-                return this.RoundField;
-            }
-            set {
-                if ((this.RoundField.Equals(value) != true)) {
-                    this.RoundField = value;
-                    this.RaisePropertyChanged("Round");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.GameStatus Status {
-            get {
-                return this.StatusField;
-            }
-            set {
-                if ((this.StatusField.Equals(value) != true)) {
-                    this.StatusField = value;
-                    this.RaisePropertyChanged("Status");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int TurnNumber {
-            get {
-                return this.TurnNumberField;
-            }
-            set {
-                if ((this.TurnNumberField.Equals(value) != true)) {
-                    this.TurnNumberField = value;
-                    this.RaisePropertyChanged("TurnNumber");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int TurnSeconds {
-            get {
-                return this.TurnSecondsField;
-            }
-            set {
-                if ((this.TurnSecondsField.Equals(value) != true)) {
-                    this.TurnSecondsField = value;
-                    this.RaisePropertyChanged("TurnSeconds");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int TurnSecondsLeft {
-            get {
-                return this.TurnSecondsLeftField;
-            }
-            set {
-                if ((this.TurnSecondsLeftField.Equals(value) != true)) {
-                    this.TurnSecondsLeftField = value;
-                    this.RaisePropertyChanged("TurnSecondsLeft");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Version {
-            get {
-                return this.VersionField;
-            }
-            set {
-                if ((this.VersionField.Equals(value) != true)) {
-                    this.VersionField = value;
-                    this.RaisePropertyChanged("Version");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Yacht = 11,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="JoinGameResult", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CategoryScore", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class JoinGameResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CategoryScore : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.GameResultCode CodeField;
+        private YachtDice.GameServiceReference.ScoreCategory CategoryField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private YachtDice.GameServiceReference.GameState StateField;
+        private bool IsFilledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PointsField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -571,27 +645,40 @@ namespace YachtDice.GameServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.GameResultCode Code {
+        public YachtDice.GameServiceReference.ScoreCategory Category {
             get {
-                return this.CodeField;
+                return this.CategoryField;
             }
             set {
-                if ((this.CodeField.Equals(value) != true)) {
-                    this.CodeField = value;
-                    this.RaisePropertyChanged("Code");
+                if ((this.CategoryField.Equals(value) != true)) {
+                    this.CategoryField = value;
+                    this.RaisePropertyChanged("Category");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public YachtDice.GameServiceReference.GameState State {
+        public bool IsFilled {
             get {
-                return this.StateField;
+                return this.IsFilledField;
             }
             set {
-                if ((object.ReferenceEquals(this.StateField, value) != true)) {
-                    this.StateField = value;
-                    this.RaisePropertyChanged("State");
+                if ((this.IsFilledField.Equals(value) != true)) {
+                    this.IsFilledField = value;
+                    this.RaisePropertyChanged("IsFilled");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Points {
+            get {
+                return this.PointsField;
+            }
+            set {
+                if ((this.PointsField.Equals(value) != true)) {
+                    this.PointsField = value;
+                    this.RaisePropertyChanged("Points");
                 }
             }
         }
@@ -668,93 +755,17 @@ namespace YachtDice.GameServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GameStatus", Namespace="urn:yachtdice:contracts")]
-    public enum GameStatus : int {
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceErrorCode", Namespace="urn:yachtdice:contracts")]
+    public enum ServiceErrorCode : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InProgress = 0,
+        UnexpectedError = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Finished = 1,
-
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ScoreCategory", Namespace="urn:yachtdice:contracts")]
-    public enum ScoreCategory : int {
+        DatabaseUnavailable = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Ones = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Twos = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Threes = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Fours = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Fives = 4,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Sixes = 5,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FullHouse = 6,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FourOfAKind = 7,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        LittleStraight = 8,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        BigStraight = 9,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Choice = 10,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Yacht = 11,
-
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GameResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum GameResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        GameNotFound = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotInGame = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        NotYourTurn = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        GameFinished = 4,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        NoRollsLeft = 5,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        MustRollFirst = 6,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidHeldDice = 7,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CategoryFilled = 8,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CategoryNotAllowed = 9,
-
+        ValidationFailed = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -781,22 +792,6 @@ namespace YachtDice.GameServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GameFinished = 6,
-
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceErrorCode", Namespace="urn:yachtdice:contracts")]
-    public enum ServiceErrorCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UnexpectedError = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        DatabaseUnavailable = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ValidationFailed = 2,
-
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
