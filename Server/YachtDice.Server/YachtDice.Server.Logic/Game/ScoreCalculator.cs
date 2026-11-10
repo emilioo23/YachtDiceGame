@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -26,18 +25,6 @@ namespace YachtDice.Server.Logic.Game
         private const int BigStraightLastValue = 6;
         private const string UnknownCategoryMessage = "The box does not exist in the scorecard.";
 
-        private readonly Dictionary<ScoreCategory, Func<DiceTally, int>> _rules;
-        private readonly Dictionary<ScoreCategory, Func<DiceTally, int>> _jokerRules;
-
-        /// <summary>
-        /// Initializes a calculator with the rules of the twelve boxes.
-        /// </summary>
-        public ScoreCalculator()
-        {
-            _rules = CreateRules();
-            _jokerRules = CreateJokerRules();
-        }
-
         /// <summary>
         /// Calculates the points that the dice give in a box.
         /// </summary>
@@ -46,7 +33,35 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The points of the box, or zero if the dice do not fit it.</returns>
         public int Calculate(ScoreCategory category, IReadOnlyList<int> dice)
         {
-            return FindRule(_rules, category)(new DiceTally(dice));
+            var tally = new DiceTally(dice);
+            int points;
+
+            switch (category)
+            {
+                case ScoreCategory.FullHouse:
+                    points = ScoreFullHouse(tally);
+                    break;
+                case ScoreCategory.FourOfAKind:
+                    points = ScoreFourOfAKind(tally);
+                    break;
+                case ScoreCategory.LittleStraight:
+                    points = ScoreLittleStraight(tally);
+                    break;
+                case ScoreCategory.BigStraight:
+                    points = ScoreBigStraight(tally);
+                    break;
+                case ScoreCategory.Choice:
+                    points = tally.Sum;
+                    break;
+                case ScoreCategory.Yacht:
+                    points = ScoreYacht(tally);
+                    break;
+                default:
+                    points = ScoreUpper(tally, category);
+                    break;
+            }
+
+            return points;
         }
 
         /// <summary>
@@ -60,13 +75,18 @@ namespace YachtDice.Server.Logic.Game
         {
             int points;
 
-            if (_jokerRules.ContainsKey(category))
+            switch (category)
             {
-                points = _jokerRules[category](new DiceTally(dice));
-            }
-            else
-            {
-                points = Calculate(category, dice);
+                case ScoreCategory.FullHouse:
+                    points = new DiceTally(dice).Sum;
+                    break;
+                case ScoreCategory.LittleStraight:
+                case ScoreCategory.BigStraight:
+                    points = StraightPoints;
+                    break;
+                default:
+                    points = Calculate(category, dice);
+                    break;
             }
 
             return points;
@@ -82,20 +102,15 @@ namespace YachtDice.Server.Logic.Game
             return new DiceTally(dice).HighestCount == DiceRules.DiceCount;
         }
 
-        private static Func<DiceTally, int> FindRule(
-            Dictionary<ScoreCategory, Func<DiceTally, int>> rules,
-            ScoreCategory category)
+        private static int ScoreUpper(DiceTally tally, ScoreCategory category)
         {
-            if (!rules.ContainsKey(category))
+            if (!ScoreCategories.IsUpper(category))
             {
                 throw new ArgumentOutOfRangeException(nameof(category), UnknownCategoryMessage);
             }
 
-            return rules[category];
-        }
+            int value = ScoreCategories.GetFaceValue(category);
 
-        private static int SumOfValue(DiceTally tally, int value)
-        {
             return tally.CountOf(value) * value;
         }
 
@@ -133,51 +148,5 @@ namespace YachtDice.Server.Logic.Game
             return isYacht ? YachtPoints : NoPoints;
         }
 
-        private static int ScoreSum(DiceTally tally)
-        {
-            return tally.Sum;
-        }
-
-        private static int ScoreStraightJoker(DiceTally tally)
-        {
-            return StraightPoints;
-        }
-
-        private static Func<DiceTally, int> CreateUpperRule(ScoreCategory category)
-        {
-            var value = ScoreCategories.GetFaceValue(category);
-
-            return tally => SumOfValue(tally, value);
-        }
-
-        private static Dictionary<ScoreCategory, Func<DiceTally, int>> CreateRules()
-        {
-            var rules = new Dictionary<ScoreCategory, Func<DiceTally, int>>
-            {
-                { ScoreCategory.FullHouse, ScoreFullHouse },
-                { ScoreCategory.FourOfAKind, ScoreFourOfAKind },
-                { ScoreCategory.LittleStraight, ScoreLittleStraight },
-                { ScoreCategory.BigStraight, ScoreBigStraight },
-                { ScoreCategory.Choice, ScoreSum },
-                { ScoreCategory.Yacht, ScoreYacht }
-            };
-
-            foreach (var category in ScoreCategories.All.Where(ScoreCategories.IsUpper))
-            {
-                rules[category] = CreateUpperRule(category);
-            }
-
-            return rules;
-        }
-
-        private static Dictionary<ScoreCategory, Func<DiceTally, int>> CreateJokerRules()
-        {
-            return new Dictionary<ScoreCategory, Func<DiceTally, int>>
-            {
-                { ScoreCategory.FullHouse, ScoreSum },
-                { ScoreCategory.LittleStraight, ScoreStraightJoker },
-                { ScoreCategory.BigStraight, ScoreStraightJoker }
-            };
-        }
     }
 }
