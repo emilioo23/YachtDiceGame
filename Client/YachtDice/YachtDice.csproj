@@ -255,6 +255,7 @@
     <Compile Include="Gateway\GatewayErrorCodeParser.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />
+    <Compile Include="Gateway\GameGateway.cs" />
     <Compile Include="Gateway\PlayerGateway.cs" />
     <Compile Include="Gateway\PresenceGateway.cs" />
     <Compile Include="Gateway\RegistrationGateway.cs" />
@@ -268,6 +269,8 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
+    <Compile Include="Utils\GameResultMessages.cs" />
+    <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />
     <Compile Include="Utils\AvatarImages.cs" />
@@ -297,6 +300,7 @@
     <Compile Include="Models\CategoryRule.cs" />
     <Compile Include="Models\LobbySlot.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
+    <Compile Include="Models\StandingRow.cs" />
     <Compile Include="Models\PlayerSession.cs" />
     <Compile Include="Models\RuleStep.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
@@ -319,6 +323,9 @@
       <DependentUpon>HowToPlayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DiceRow.cs" />
+    <Compile Include="Views\DiceFaceFactory.cs" />
+    <Compile Include="Views\DiceBoard.cs" />
+    <Compile Include="Views\ScorecardGrid.cs" />
     <Compile Include="Views\InviteFriendsPanel.xaml.cs">
       <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>
     </Compile>
