@@ -3,10 +3,10 @@
 namespace YachtDice.Server.Contracts.Rooms
 {
     /// <summary>
-    /// Data that identifies a room of the list of rooms and opens the door of it.
+    /// Room of the list of rooms that a player wants to enter, with the code that opens its door.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class RoomAccess
+    public class Room
     {
         /// <summary>
         /// Identifier of the room inside the list.

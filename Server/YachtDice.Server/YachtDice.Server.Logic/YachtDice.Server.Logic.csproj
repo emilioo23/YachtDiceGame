@@ -118,7 +118,7 @@
     <Compile Include="Rooms\GameRoom.cs" />
     <Compile Include="Rooms\GameSpeed.cs" />
     <Compile Include="Rooms\IRoomManager.cs" />
-    <Compile Include="Rooms\RoomAccess.cs" />
+    <Compile Include="Rooms\Room.cs" />
     <Compile Include="Rooms\RoomApplicant.cs" />
     <Compile Include="Rooms\RoomDetails.cs" />
     <Compile Include="Rooms\RoomManager.cs" />

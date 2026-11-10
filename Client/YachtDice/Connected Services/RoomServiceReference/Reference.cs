@@ -678,9 +678,9 @@ namespace YachtDice.RoomServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RoomAccess", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Room", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class RoomAccess : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Room : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -784,7 +784,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinListedRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinListedRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess access);
+        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.Room room);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings", ReplyAction="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsServiceFaultFault", Name="ServiceFault")]
@@ -858,8 +858,8 @@ namespace YachtDice.RoomServiceReference {
             return base.Channel.GetRoomList();
         }
         
-        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess access) {
-            return base.Channel.JoinListedRoom(displayName, access);
+        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.Room room) {
+            return base.Channel.JoinListedRoom(displayName, room);
         }
         
         public YachtDice.RoomServiceReference.RoomResultCode UpdateRoomSettings(string playerId, string roomCode, YachtDice.RoomServiceReference.RoomSettings settings) {

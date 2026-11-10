@@ -504,7 +504,7 @@ namespace YachtDice.Server.Tests.Rooms
             CreatePublicRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            RoomResult player = _manager.JoinListed(PlayerName, CreateAccess(roomId, string.Empty));
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, string.Empty));
 
             Assert.Equal(RoomStatus.Success, player.Status);
             Assert.False(string.IsNullOrEmpty(player.PlayerId));
@@ -517,9 +517,9 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            RoomAccess access = CreateAccess(roomId, host.Room.Code.ToLowerInvariant());
+            Room room = CreateListedRoom(roomId, host.Room.Code.ToLowerInvariant());
 
-            RoomResult player = _manager.JoinListed(PlayerName, access);
+            RoomResult player = _manager.JoinListed(PlayerName, room);
 
             Assert.Equal(RoomStatus.Success, player.Status);
             Assert.Equal(host.Room.Code, player.Room.Code);
@@ -534,7 +534,7 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.CreateRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            RoomResult player = _manager.JoinListed(PlayerName, CreateAccess(roomId, accessCode));
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
 
             Assert.Equal(RoomStatus.InvalidAccessCode, player.Status);
             Assert.Empty(player.PlayerId);
@@ -544,7 +544,7 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void JoinListed_UnknownRoom_ReturnsRoomNotFound()
         {
-            RoomResult player = _manager.JoinListed(PlayerName, CreateAccess(UnknownPlayerId, string.Empty));
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(UnknownPlayerId, string.Empty));
 
             Assert.Equal(RoomStatus.RoomNotFound, player.Status);
         }
@@ -557,7 +557,7 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.Join(host.Room.Code, PlayerName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            RoomResult player = _manager.JoinListed(GuestName, CreateAccess(roomId, string.Empty));
+            RoomResult player = _manager.JoinListed(GuestName, CreateListedRoom(roomId, string.Empty));
 
             Assert.Equal(RoomStatus.RoomFull, player.Status);
         }
@@ -568,7 +568,7 @@ namespace YachtDice.Server.Tests.Rooms
             CreatePublicRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            Assert.Throws<ArgumentException>(() => _manager.JoinListed(" ", CreateAccess(roomId, string.Empty)));
+            Assert.Throws<ArgumentException>(() => _manager.JoinListed(" ", CreateListedRoom(roomId, string.Empty)));
         }
 
         [Fact]
@@ -764,15 +764,15 @@ namespace YachtDice.Server.Tests.Rooms
             return settings;
         }
 
-        private static RoomAccess CreateAccess(string roomId, string accessCode)
+        private static Room CreateListedRoom(string roomId, string accessCode)
         {
-            var access = new RoomAccess
+            var room = new Room
             {
                 RoomId = roomId,
                 AccessCode = accessCode
             };
 
-            return access;
+            return room;
         }
 
         private RoomResult CreatePublicRoom(string hostName)
