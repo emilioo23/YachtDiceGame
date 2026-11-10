@@ -84,7 +84,11 @@ namespace YachtDice.Views
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
-        private bool CanHold => IsLocalTurn && !_isBusy && _state.RollsLeft > NoRolls && _state.RollsLeft < MaxRolls;
+        private bool CanAct => IsLocalTurn && !_isBusy;
+
+        private bool CanRoll => CanAct && _state.RollsLeft > NoRolls;
+
+        private bool CanHold => CanRoll && _state.RollsLeft < MaxRolls;
 
         private static List<MatchParticipant> ToParticipants(RoomState room)
         {
@@ -325,7 +329,7 @@ namespace YachtDice.Views
         private void RenderRollButton()
         {
             RollButton.Content = string.Format(Strings.Game_Dice_ButtonRoll, MaxRolls - _state.RollsLeft);
-            RollButton.IsEnabled = IsLocalTurn && !_isBusy && _state.RollsLeft > NoRolls;
+            RollButton.IsEnabled = CanRoll;
         }
 
         private void HandleDieClick(int index)
@@ -399,19 +403,29 @@ namespace YachtDice.Views
 
         private void AnnounceEvent(GameState state, GameEventType eventType)
         {
-            if (_state != null && eventType == GameEventType.TurnTimedOut)
+            bool hasPreviousState = _state != null;
+            bool isTurnTimedOut = hasPreviousState && eventType == GameEventType.TurnTimedOut;
+            bool isCategoryScored = hasPreviousState && eventType == GameEventType.CategoryScored;
+
+            if (isTurnTimedOut)
             {
                 AddNotice(string.Format(Strings.Game_Chat_TurnTimedOut, FindPlayerName(_state.CurrentPlayerId)));
             }
 
-            if (_state != null && eventType == GameEventType.CategoryScored && HasNewYachtBonus(state))
+            if (isCategoryScored)
+            {
+                AnnounceYachtBonus(state);
+                CelebrateYacht(state);
+            }
+        }
+
+        private void AnnounceYachtBonus(GameState state)
+        {
+            bool hasNewBonus = HasNewYachtBonus(state);
+
+            if (hasNewBonus)
             {
                 AddNotice(string.Format(Strings.Game_Chat_YachtBonus, FindPlayerName(_state.CurrentPlayerId)));
-            }
-
-            if (_state != null && eventType == GameEventType.CategoryScored)
-            {
-                CelebrateYacht(state);
             }
         }
 
@@ -420,11 +434,11 @@ namespace YachtDice.Views
             string scorerId = _state.CurrentPlayerId;
             CategoryScore before = FindYachtScore(_state, scorerId);
             CategoryScore after = FindYachtScore(state, scorerId);
+            bool wasFilled = before != null && before.IsFilled;
+            bool isCelebrationDue = after != null
+                && YachtCelebrationRule.IsCelebrationDue(wasFilled, after.IsFilled, after.Points);
 
-            if (after != null && YachtCelebrationRule.IsCelebrationDue(
-                before != null && before.IsFilled,
-                after.IsFilled,
-                after.Points))
+            if (isCelebrationDue)
             {
                 _celebration.Play(FindPlayerName(scorerId), after.Points);
             }

@@ -122,8 +122,10 @@ namespace YachtDice.Views
         {
             string text = GetPoints(FindCard(context.State, player.Id), category);
             ScoreChoice option = context.FindOption(category);
+            bool isLocalPlayerTurn = player.IsLocalPlayer && context.IsLocalTurn;
+            bool canPreviewPoints = text.Length == 0 && isLocalPlayerTurn && option != null;
 
-            if (text.Length == 0 && player.IsLocalPlayer && context.IsLocalTurn && option != null)
+            if (canPreviewPoints)
             {
                 text = option.Points.ToString();
             }
