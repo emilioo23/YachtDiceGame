@@ -36,6 +36,7 @@ namespace YachtDice.Views
         private readonly bool _isChatAvailable;
         private readonly DiceBoard _diceBoard;
         private readonly ScorecardGrid _scorecard;
+        private readonly YachtCelebration _celebration;
         private readonly HeldDiceSelection _heldDice = new HeldDiceSelection();
         private readonly StateVersionGate _versionGate = new StateVersionGate();
         private readonly TurnCountdown _countdown = new TurnCountdown();
@@ -66,6 +67,7 @@ namespace YachtDice.Views
             _gameGateway = new GameGateway(_playerId, roomGateway.CurrentRoom.Code);
             _diceBoard = new DiceBoard(DiceCanvas, this);
             _scorecard = new ScorecardGrid(CategoriesPanel, this);
+            _celebration = new YachtCelebration(CelebrationCanvas, this);
             _diceBoard.DieClicked += HandleDieClick;
 
             ShowRoom(roomGateway.CurrentRoom);
@@ -408,6 +410,33 @@ namespace YachtDice.Views
             {
                 AddNotice(string.Format(Strings.Game_Chat_YachtBonus, FindPlayerName(_state.CurrentPlayerId)));
             }
+
+            if (_state != null && eventType == GameEventType.CategoryScored)
+            {
+                CelebrateYacht(state);
+            }
+        }
+
+        private void CelebrateYacht(GameState state)
+        {
+            string scorerId = _state.CurrentPlayerId;
+            CategoryScore before = FindYachtScore(_state, scorerId);
+            CategoryScore after = FindYachtScore(state, scorerId);
+
+            if (after != null && YachtCelebrationRule.IsCelebrationDue(
+                before != null && before.IsFilled,
+                after.IsFilled,
+                after.Points))
+            {
+                _celebration.Play(FindPlayerName(scorerId), after.Points);
+            }
+        }
+
+        private static CategoryScore FindYachtScore(GameState state, string playerId)
+        {
+            PlayerScorecard card = state.Players.FirstOrDefault(player => player.PlayerId == playerId);
+
+            return card?.Scores.FirstOrDefault(score => score.Category == ScoreCategory.Yacht);
         }
 
         private bool HasNewYachtBonus(GameState state)

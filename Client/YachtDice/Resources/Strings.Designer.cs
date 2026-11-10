@@ -718,6 +718,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} suma {1} puntos.
+        /// </summary>
+        public static string Game_Celebration_YachtPoints {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡YACHT!.
+        /// </summary>
+        public static string Game_Celebration_YachtTitle {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a : .
         /// </summary>
         public static string Game_Chat_AuthorSeparator {

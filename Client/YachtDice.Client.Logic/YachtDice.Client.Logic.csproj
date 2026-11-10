@@ -60,6 +60,7 @@
     <Compile Include="Game\TurnHint.cs" />
     <Compile Include="Game\TurnPhase.cs" />
     <Compile Include="Game\TurnPhaseResolver.cs" />
+    <Compile Include="Game\YachtCelebrationRule.cs" />
     <Compile Include="Players\InitialLetter.cs" />
     <Compile Include="Rooms\MatchParticipant.cs" />
     <Compile Include="Rooms\PresenceComparer.cs" />

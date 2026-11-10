@@ -274,6 +274,11 @@
                 <views:ChatPanel x:Name="ChatPanelControl"
                                  Grid.Row="1"/>
             </Grid>
+
+            <Canvas x:Name="CelebrationCanvas"
+                    Grid.ColumnSpan="2"
+                    IsHitTestVisible="False"
+                    Panel.ZIndex="50"/>
         </Grid>
     </Viewbox>
 </Window>

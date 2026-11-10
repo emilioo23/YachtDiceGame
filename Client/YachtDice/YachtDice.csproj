@@ -325,6 +325,7 @@
     <Compile Include="Views\DiceRow.cs" />
     <Compile Include="Views\DiceFaceFactory.cs" />
     <Compile Include="Views\DiceBoard.cs" />
+    <Compile Include="Views\YachtCelebration.cs" />
     <Compile Include="Views\ScorecardGrid.cs" />
     <Compile Include="Views\InviteFriendsPanel.xaml.cs">
       <DependentUpon>InviteFriendsPanel.xaml</DependentUpon>

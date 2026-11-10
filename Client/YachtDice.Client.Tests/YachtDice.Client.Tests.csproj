@@ -52,6 +52,7 @@
     <Compile Include="Game\StateVersionGateTests.cs" />
     <Compile Include="Game\TurnCountdownTests.cs" />
     <Compile Include="Game\TurnPhaseResolverTests.cs" />
+    <Compile Include="Game\YachtCelebrationRuleTests.cs" />
     <Compile Include="Players\InitialLetterTests.cs" />
     <Compile Include="Rooms\PresenceComparerTests.cs" />
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />

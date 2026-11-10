@@ -1140,4 +1140,10 @@
   <data name="Results_TitleTie" xml:space="preserve">
     <value>Tie</value>
   </data>
+  <data name="Game_Celebration_YachtTitle" xml:space="preserve">
+    <value>YACHT!</value>
+  </data>
+  <data name="Game_Celebration_YachtPoints" xml:space="preserve">
+    <value>{0} scores {1} points</value>
+  </data>
 </root>

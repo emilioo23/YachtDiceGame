@@ -1140,4 +1140,10 @@
   <data name="Results_TitleTie" xml:space="preserve">
     <value>Empate</value>
   </data>
+  <data name="Game_Celebration_YachtTitle" xml:space="preserve">
+    <value>¡YACHT!</value>
+  </data>
+  <data name="Game_Celebration_YachtPoints" xml:space="preserve">
+    <value>{0} suma {1} puntos</value>
+  </data>
 </root>
