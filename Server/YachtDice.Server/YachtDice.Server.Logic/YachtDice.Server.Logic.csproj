@@ -80,6 +80,14 @@
     <Compile Include="Friends\InvitationResult.cs" />
     <Compile Include="Friends\InvitationStatus.cs" />
     <Compile Include="Friends\RoomInvitationService.cs" />
+    <Compile Include="Game\DiceRules.cs" />
+    <Compile Include="Game\DiceTally.cs" />
+    <Compile Include="Game\ScoreCalculator.cs" />
+    <Compile Include="Game\ScoreCard.cs" />
+    <Compile Include="Game\ScoreCategories.cs" />
+    <Compile Include="Game\ScoreCategory.cs" />
+    <Compile Include="Game\ScoreOption.cs" />
+    <Compile Include="Game\ScoreStatus.cs" />
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />
