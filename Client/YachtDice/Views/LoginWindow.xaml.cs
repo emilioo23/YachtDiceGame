@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -28,6 +29,16 @@ namespace YachtDice.Views
             InitializeComponent();
             _logger = new AppLogger(GetType());
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
+            ApplyFieldLimits();
+        }
+
+        private void ApplyFieldLimits()
+        {
+            EmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
+            FirstNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            LastNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            RegisterEmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)

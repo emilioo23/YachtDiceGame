@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\RegistrationLimits.cs" />
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
     <Compile Include="Avatars\AvatarOption.cs" />

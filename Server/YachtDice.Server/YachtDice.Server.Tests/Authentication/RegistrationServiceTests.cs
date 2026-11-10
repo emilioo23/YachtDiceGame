@@ -20,6 +20,18 @@ namespace YachtDice.Server.Tests.Authentication
         private const string Password = "Secret123!";
         private const string FirstName = "Gabriel";
         private const string LastName = "Hernandez";
+        private const string WhitespaceOnly = "   ";
+        private const string EmailDomain = "@example.com";
+        private const char FillCharacter = 'a';
+        private const int UsernameMaxLength = 20;
+        private const int EmailMaxLength = 100;
+        private const int NameMaxLength = 50;
+
+        private static readonly string UsernameAtTheLimit = new string(FillCharacter, UsernameMaxLength);
+        private static readonly string TooLongUsername = new string(FillCharacter, UsernameMaxLength + 1);
+        private static readonly string TooLongName = new string(FillCharacter, NameMaxLength + 1);
+        private static readonly string TooLongEmail =
+            new string(FillCharacter, EmailMaxLength - EmailDomain.Length + 1) + EmailDomain;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly RegistrationService _service;
@@ -127,6 +139,68 @@ namespace YachtDice.Server.Tests.Authentication
             _service.RegisterPlayer(CreatePlayer(username, email), Password);
 
             Assert.Empty(_players.Players);
+        }
+
+        [Fact]
+        public void RegisterPlayer_UsernameAtTheLimit_ReturnsSuccess()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(UsernameAtTheLimit, Email), Password);
+
+            Assert.Equal(RegistrationResult.Success, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_UsernameLongerThanTheLimit_ReturnsFieldTooLong()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(TooLongUsername, Email), Password);
+
+            Assert.Equal(RegistrationResult.FieldTooLong, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_EmailLongerThanTheLimit_ReturnsFieldTooLong()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, TooLongEmail), Password);
+
+            Assert.Equal(RegistrationResult.FieldTooLong, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_FirstNameLongerThanTheLimit_ReturnsFieldTooLong()
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.FirstName = TooLongName;
+
+            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Equal(RegistrationResult.FieldTooLong, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_FieldLongerThanTheLimit_SavesNothing()
+        {
+            _service.RegisterPlayer(CreatePlayer(TooLongUsername, Email), Password);
+
+            Assert.Empty(_players.Players);
+        }
+
+        [Fact]
+        public void RegisterPlayer_LastNameWithOnlySpaces_ReturnsMissingRequiredField()
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.LastName = WhitespaceOnly;
+
+            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Equal(RegistrationResult.MissingRequiredField, result);
+        }
+
+        [Fact]
+        public void RegisterPlayer_PasswordWithOnlySpaces_ReturnsMissingRequiredField()
+        {
+            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), WhitespaceOnly);
+
+            Assert.Equal(RegistrationResult.MissingRequiredField, result);
         }
 
         private static Player CreatePlayer(string username, string email)
