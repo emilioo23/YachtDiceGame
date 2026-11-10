@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
+    <Compile Include="CallbackDelivery.cs" />
     <Compile Include="CallbackRegistry.cs" />
     <Compile Include="FriendService.cs" />
     <Compile Include="IPlayerNotifier.cs" />

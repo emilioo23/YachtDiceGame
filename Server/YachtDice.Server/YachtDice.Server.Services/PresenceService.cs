@@ -17,7 +17,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
-        private const string DeliveryFailedMessage = "A presence notification could not be delivered: ";
         private const string ConnectedLogMessage = "A player is now online.";
         private const string DisconnectedLogMessage = "A player is now offline.";
 
@@ -79,7 +78,10 @@ namespace YachtDice.Server.Services
         public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
         {
             if (_players.TryGetValue(recipientName, out OnlinePlayer recipient)
-                && !TryNotify(recipient.Callback, callback => callback.PresenceChanged(subjectName, eventType)))
+                && !CallbackDelivery.TryDeliver(
+                    recipient.Callback,
+                    callback => callback.PresenceChanged(subjectName, eventType),
+                    _logger))
             {
                 Remove(recipientName, recipient.SessionId);
             }
@@ -97,7 +99,10 @@ namespace YachtDice.Server.Services
 
             if (_players.TryGetValue(recipientName, out OnlinePlayer recipient))
             {
-                isDelivered = TryNotify(recipient.Callback, callback => callback.InvitationReceived(invitation));
+                isDelivered = CallbackDelivery.TryDeliver(
+                    recipient.Callback,
+                    callback => callback.InvitationReceived(invitation),
+                    _logger);
 
                 if (!isDelivered)
                 {
@@ -147,37 +152,14 @@ namespace YachtDice.Server.Services
             {
                 bool isOtherPlayer = !string.Equals(recipient.Key, displayName, StringComparison.OrdinalIgnoreCase);
 
-                if (isOtherPlayer && !TryNotify(
+                if (isOtherPlayer && !CallbackDelivery.TryDeliver(
                     recipient.Value.Callback,
-                    callback => callback.PresenceChanged(displayName, eventType)))
+                    callback => callback.PresenceChanged(displayName, eventType),
+                    _logger))
                 {
                     Remove(recipient.Key, recipient.Value.SessionId);
                 }
             }
-        }
-
-        private bool TryNotify(Contracts.IPresenceCallback callback, Action<Contracts.IPresenceCallback> notification)
-        {
-            var isDelivered = false;
-
-            if (((ICommunicationObject)callback).State == CommunicationState.Opened)
-            {
-                try
-                {
-                    notification(callback);
-                    isDelivered = true;
-                }
-                catch (CommunicationException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-                catch (TimeoutException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-            }
-
-            return isDelivered;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
@@ -15,8 +14,6 @@ namespace YachtDice.Server.Services
     /// <typeparam name="TCallback">Callback contract the clients implement.</typeparam>
     internal class CallbackRegistry<TCallback> where TCallback : class
     {
-        private const string DeliveryFailedMessage = "A notification could not be delivered to a client: ";
-
         private readonly object _syncRoot = new object();
 
         private readonly Dictionary<string, Dictionary<string, TCallback>> _callbacksByRoom =
@@ -100,7 +97,7 @@ namespace YachtDice.Server.Services
         {
             foreach (KeyValuePair<string, TCallback> recipient in CopyRecipients(roomCode))
             {
-                if (!TryNotify(recipient.Value, notification))
+                if (!CallbackDelivery.TryDeliver(recipient.Value, notification, _logger))
                 {
                     RemoveIfCurrent(roomCode, recipient.Key, recipient.Value);
                 }
@@ -124,7 +121,7 @@ namespace YachtDice.Server.Services
                 isSubscribed = TryGetCallback(roomCode, playerId, out callback);
             }
 
-            if (isSubscribed && !TryNotify(callback, notification))
+            if (isSubscribed && !CallbackDelivery.TryDeliver(callback, notification, _logger))
             {
                 RemoveIfCurrent(roomCode, playerId, callback);
             }
@@ -164,31 +161,6 @@ namespace YachtDice.Server.Services
                     _callbacksByRoom.Remove(roomCode);
                 }
             }
-        }
-
-        private bool TryNotify(TCallback callback, Action<TCallback> notification)
-        {
-            var isDelivered = false;
-            var communicationObject = (ICommunicationObject)callback;
-
-            if (communicationObject.State == CommunicationState.Opened)
-            {
-                try
-                {
-                    notification(callback);
-                    isDelivered = true;
-                }
-                catch (CommunicationException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-                catch (TimeoutException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-            }
-
-            return isDelivered;
         }
     }
 }
