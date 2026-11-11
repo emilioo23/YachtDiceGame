@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -17,7 +17,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
 
         private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
@@ -30,6 +29,16 @@ namespace YachtDice.Views
             InitializeComponent();
             _logger = new AppLogger(GetType());
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
+            ApplyFieldLimits();
+        }
+
+        private void ApplyFieldLimits()
+        {
+            EmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
+            FirstNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            LastNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            RegisterEmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
@@ -61,29 +70,25 @@ namespace YachtDice.Views
 
             try
             {
-                bool isLogin = LoginPanel.Visibility == Visibility.Visible;
-
-                if (isLogin)
-                {
-                    await ProcessLoginAsync();
-                }
-                else
-                {
-                    await ProcessRegisterAsync();
-                }
-            }
-            catch (GatewayException ex)
-            {
-                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedErrorLogMessage);
-                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
+                await GatewayCallRunner.RunAsync(this, _logger, SubmitAuthFormAsync);
             }
             finally
             {
                 AuthSubmitButton.IsEnabled = true;
+            }
+        }
+
+        private async Task SubmitAuthFormAsync()
+        {
+            bool isLogin = LoginPanel.Visibility == Visibility.Visible;
+
+            if (isLogin)
+            {
+                await ProcessLoginAsync();
+            }
+            else
+            {
+                await ProcessRegisterAsync();
             }
         }
 
@@ -119,6 +124,12 @@ namespace YachtDice.Views
                     break;
                 case RegisterResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
+                    break;
+                case RegisterResultCode.InvalidUsername:
+                    message = Strings.Auth_ErrorInvalidUsername;
+                    break;
+                case RegisterResultCode.WeakPassword:
+                    message = Strings.Auth_ErrorWeakPassword;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;

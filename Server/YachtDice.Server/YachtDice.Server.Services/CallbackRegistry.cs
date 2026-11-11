@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
     using LogicLogging = YachtDice.Server.Logic.Logging;
+    using LogicRooms = YachtDice.Server.Logic.Rooms;
 
     /// <summary>
     /// Keeps the callback channel of each player subscribed to a room and notifies them. The events of the
@@ -15,8 +15,6 @@ namespace YachtDice.Server.Services
     /// <typeparam name="TCallback">Callback contract the clients implement.</typeparam>
     internal class CallbackRegistry<TCallback> where TCallback : class
     {
-        private const string DeliveryFailedMessage = "A notification could not be delivered to a client: ";
-
         private readonly object _syncRoot = new object();
 
         private readonly Dictionary<string, Dictionary<string, TCallback>> _callbacksByRoom =
@@ -36,33 +34,31 @@ namespace YachtDice.Server.Services
         /// Subscribes the callback channel of a player to a room. If the player was already subscribed, the
         /// new channel replaces the old one.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <param name="callback">Callback channel of the player.</param>
-        public void Register(string roomCode, string playerId, TCallback callback)
+        public void Register(LogicRooms.RoomMember member, TCallback callback)
         {
             lock (_syncRoot)
             {
-                if (!_callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks))
+                if (!_callbacksByRoom.TryGetValue(member.RoomCode, out Dictionary<string, TCallback> callbacks))
                 {
                     callbacks = new Dictionary<string, TCallback>(StringComparer.Ordinal);
-                    _callbacksByRoom[roomCode] = callbacks;
+                    _callbacksByRoom[member.RoomCode] = callbacks;
                 }
 
-                callbacks[playerId] = callback;
+                callbacks[member.PlayerId] = callback;
             }
         }
 
         /// <summary>
         /// Unsubscribes a player from a room, whatever channel the player used.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
-        public void Remove(string roomCode, string playerId)
+        /// <param name="member">Room and identifier of the player.</param>
+        public void Remove(LogicRooms.RoomMember member)
         {
             lock (_syncRoot)
             {
-                DeleteCallback(roomCode, playerId);
+                DeleteCallback(member);
             }
         }
 
@@ -70,19 +66,18 @@ namespace YachtDice.Server.Services
         /// Unsubscribes a player only if the channel that is registered is the given one. It avoids that a
         /// channel that is already closed removes the new channel of the same player.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <param name="callback">Callback channel that should be the registered one.</param>
         /// <returns>True if the player was unsubscribed.</returns>
-        public bool RemoveIfCurrent(string roomCode, string playerId, TCallback callback)
+        public bool RemoveIfCurrent(LogicRooms.RoomMember member, TCallback callback)
         {
             var isRemoved = false;
 
             lock (_syncRoot)
             {
-                if (TryGetCallback(roomCode, playerId, out TCallback current) && ReferenceEquals(current, callback))
+                if (TryGetCallback(member, out TCallback current) && ReferenceEquals(current, callback))
                 {
-                    DeleteCallback(roomCode, playerId);
+                    DeleteCallback(member);
                     isRemoved = true;
                 }
             }
@@ -100,9 +95,9 @@ namespace YachtDice.Server.Services
         {
             foreach (KeyValuePair<string, TCallback> recipient in CopyRecipients(roomCode))
             {
-                if (!TryNotify(recipient.Value, notification))
+                if (!CallbackDelivery.TryDeliver(recipient.Value, notification, _logger))
                 {
-                    RemoveIfCurrent(roomCode, recipient.Key, recipient.Value);
+                    RemoveIfCurrent(new LogicRooms.RoomMember(roomCode, recipient.Key), recipient.Value);
                 }
             }
         }
@@ -111,22 +106,21 @@ namespace YachtDice.Server.Services
         /// Sends a notification only to one player subscribed to the room. If the player cannot be reached, it
         /// is unsubscribed.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player to notify.</param>
+        /// <param name="member">Room and identifier of the player to notify.</param>
         /// <param name="notification">Call to make on the callback channel.</param>
-        public void NotifyPlayer(string roomCode, string playerId, Action<TCallback> notification)
+        public void NotifyPlayer(LogicRooms.RoomMember member, Action<TCallback> notification)
         {
             TCallback callback = null;
             var isSubscribed = false;
 
             lock (_syncRoot)
             {
-                isSubscribed = TryGetCallback(roomCode, playerId, out callback);
+                isSubscribed = TryGetCallback(member, out callback);
             }
 
-            if (isSubscribed && !TryNotify(callback, notification))
+            if (isSubscribed && !CallbackDelivery.TryDeliver(callback, notification, _logger))
             {
-                RemoveIfCurrent(roomCode, playerId, callback);
+                RemoveIfCurrent(member, callback);
             }
         }
 
@@ -145,52 +139,25 @@ namespace YachtDice.Server.Services
             return recipients;
         }
 
-        // The caller must hold _syncRoot.
-        private bool TryGetCallback(string roomCode, string playerId, out TCallback callback)
+        private bool TryGetCallback(LogicRooms.RoomMember member, out TCallback callback)
         {
             callback = null;
 
-            return _callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks)
-                && callbacks.TryGetValue(playerId, out callback);
+            return _callbacksByRoom.TryGetValue(member.RoomCode, out Dictionary<string, TCallback> callbacks)
+                && callbacks.TryGetValue(member.PlayerId, out callback);
         }
 
-        // The caller must hold _syncRoot.
-        private void DeleteCallback(string roomCode, string playerId)
+        private void DeleteCallback(LogicRooms.RoomMember member)
         {
-            if (_callbacksByRoom.TryGetValue(roomCode, out Dictionary<string, TCallback> callbacks))
+            if (_callbacksByRoom.TryGetValue(member.RoomCode, out Dictionary<string, TCallback> callbacks))
             {
-                callbacks.Remove(playerId);
+                callbacks.Remove(member.PlayerId);
 
                 if (callbacks.Count == 0)
                 {
-                    _callbacksByRoom.Remove(roomCode);
+                    _callbacksByRoom.Remove(member.RoomCode);
                 }
             }
-        }
-
-        private bool TryNotify(TCallback callback, Action<TCallback> notification)
-        {
-            var isDelivered = false;
-            var communicationObject = (ICommunicationObject)callback;
-
-            if (communicationObject.State == CommunicationState.Opened)
-            {
-                try
-                {
-                    notification(callback);
-                    isDelivered = true;
-                }
-                catch (CommunicationException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-                catch (TimeoutException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-            }
-
-            return isDelivered;
         }
     }
 }

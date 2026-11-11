@@ -14,7 +14,6 @@ namespace YachtDice.Server.Logic.Players
         private const int DefaultPlayerLevel = 1;
         private const int EmptyCount = 0;
         private const int PercentageFactor = 100;
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -29,9 +28,9 @@ namespace YachtDice.Server.Logic.Players
             IGameHistoryRepository gameHistoryRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository));
         }
 
         /// <summary>
@@ -57,22 +56,43 @@ namespace YachtDice.Server.Logic.Players
         private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
         {
             int gamesPlayed = history.Count;
-            int wins = history.Count(entry => entry.IsWinner == true);
-            int bestScore = history.Any() ? history.Max(entry => entry.FinalScore) : EmptyCount;
-            int winRate = gamesPlayed > EmptyCount
-                ? (int)Math.Round((double)wins * PercentageFactor / gamesPlayed)
-                : EmptyCount;
+            Func<GameHistoryPlayer, bool> isWinner = entry => entry.IsWinner == true;
+            int wins = history.Count(isWinner);
 
             var statistics = new PlayerStatistics
             {
                 GamesPlayed = gamesPlayed,
                 Wins = wins,
-                BestScore = bestScore,
-                WinRatePercentage = winRate,
+                BestScore = FindBestScore(history),
+                WinRatePercentage = CalculateWinRate(wins, gamesPlayed),
                 Level = player.Level ?? DefaultPlayerLevel
             };
 
             return statistics;
+        }
+
+        private static int FindBestScore(List<GameHistoryPlayer> history)
+        {
+            int bestScore = EmptyCount;
+
+            if (history.Count > EmptyCount)
+            {
+                bestScore = history.Max(entry => entry.FinalScore);
+            }
+
+            return bestScore;
+        }
+
+        private static int CalculateWinRate(int wins, int gamesPlayed)
+        {
+            int winRate = EmptyCount;
+
+            if (gamesPlayed > EmptyCount)
+            {
+                winRate = (int)Math.Round((double)wins * PercentageFactor / gamesPlayed);
+            }
+
+            return winRate;
         }
     }
 }

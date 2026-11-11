@@ -34,14 +34,23 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
-        public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
+        public void SendRequest_ExistingUsername_ReturnsRequestSent()
         {
             FriendRequestResult result = _service.SendRequest(RequesterName, TargetUsername);
 
-            Friendship savedRequest = _friends.Friendships.Single();
             Assert.Equal(FriendRequestStatus.RequestSent, result.Status);
-            Assert.Equal(TargetId, savedRequest.AddresseeId);
-            Assert.Equal(FriendshipStatus.Pending, savedRequest.Status);
+        }
+
+        [Fact]
+        public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
+        {
+            var expected = new { AddresseeId = TargetId, Status = FriendshipStatus.Pending };
+
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            Friendship savedRequest = _friends.Friendships.Single();
+            var actual = new { savedRequest.AddresseeId, savedRequest.Status };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -50,7 +59,6 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult result = _service.SendRequest(RequesterName, UnknownUsername);
 
             Assert.Equal(FriendRequestStatus.UsernameNotFound, result.Status);
-            Assert.Empty(_friends.Friendships);
         }
 
         [Fact]
@@ -59,7 +67,6 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult result = _service.SendRequest(RequesterName, TargetDisplayName);
 
             Assert.Equal(FriendRequestStatus.UsernameNotFound, result.Status);
-            Assert.Empty(_friends.Friendships);
         }
 
         [Fact]
@@ -68,7 +75,6 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult result = _service.SendRequest(RequesterName, string.Empty);
 
             Assert.Equal(FriendRequestStatus.InvalidUsername, result.Status);
-            Assert.Empty(_friends.Friendships);
         }
 
         [Fact]
@@ -77,7 +83,6 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult result = _service.SendRequest(RequesterName, RequesterName);
 
             Assert.Equal(FriendRequestStatus.SelfRequest, result.Status);
-            Assert.Empty(_friends.Friendships);
         }
 
         [Fact]
@@ -88,7 +93,28 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult result = _service.SendRequest(RequesterName, TargetUsername);
 
             Assert.Equal(FriendRequestStatus.AlreadyRequested, result.Status);
+        }
+
+        [Fact]
+        public void SendRequest_RequestAlreadySent_KeepsOnlyOneRequest()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            _service.SendRequest(RequesterName, TargetUsername);
+
             Assert.Single(_friends.Friendships);
+        }
+
+        [Theory]
+        [InlineData(UnknownUsername)]
+        [InlineData(TargetDisplayName)]
+        [InlineData("")]
+        [InlineData(RequesterName)]
+        public void SendRequest_RejectedUsername_SavesNothing(string username)
+        {
+            _service.SendRequest(RequesterName, username);
+
+            Assert.Empty(_friends.Friendships);
         }
     }
 }

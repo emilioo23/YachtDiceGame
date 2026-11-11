@@ -48,9 +48,15 @@
     <Compile Include="Authentication\RegistrationServiceTests.cs" />
     <Compile Include="Avatars\AvatarCatalogTests.cs" />
     <Compile Include="Avatars\AvatarServiceTests.cs" />
+    <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
+    <Compile Include="Game\AutoPlayChooserTests.cs" />
+    <Compile Include="Game\GameManagerTests.cs" />
+    <Compile Include="Game\ScoreCalculatorTests.cs" />
+    <Compile Include="Game\ScoreCardTests.cs" />
     <Compile Include="InMemory\InMemoryAvatarLookup.cs" />
+    <Compile Include="InMemory\InMemoryDieSource.cs" />
     <Compile Include="InMemory\InMemoryEmailService.cs" />
     <Compile Include="InMemory\InMemoryFailingEmailService.cs" />
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />
@@ -59,8 +65,10 @@
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rooms\RoomManagerTests.cs" />
+    <Compile Include="Security\CredentialRulesTests.cs" />
     <Compile Include="Security\NumericCodeGeneratorTests.cs" />
     <Compile Include="Security\PasswordResetCodeHasherTests.cs" />
+    <Compile Include="Security\SecureRandomTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk">

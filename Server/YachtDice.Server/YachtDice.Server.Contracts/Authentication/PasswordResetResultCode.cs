@@ -26,6 +26,10 @@ namespace YachtDice.Server.Contracts.Authentication
 
         /// <summary>Too many wrong codes were entered, so the code was discarded.</summary>
         [EnumMember]
-        TooManyAttempts
+        TooManyAttempts,
+
+        /// <summary>The new password is too short, too long or does not have a letter and a digit.</summary>
+        [EnumMember]
+        WeakPassword
     }
 }

@@ -64,12 +64,16 @@ namespace YachtDice.Navigation
             RoomListItem room)
         {
             var roomGateway = new RoomGateway(session);
-            string accessCode = room.AccessCode.Trim();
+            var roomToJoin = new Room
+            {
+                RoomId = room.RoomId,
+                AccessCode = room.AccessCode.Trim()
+            };
 
             await JoinAndOpenAsync(
                 currentWindow,
                 roomGateway,
-                () => roomGateway.JoinListedRoomAsync(room.RoomId, accessCode));
+                () => roomGateway.JoinListedRoomAsync(roomToJoin));
         }
 
         private static async Task JoinAndOpenAsync(
@@ -96,9 +100,6 @@ namespace YachtDice.Navigation
             }
         }
 
-        // The player joins the chat of the room before the window opens, so the waiting room and the game
-        // share the same chat connection and its messages. A player who comes back to a match in progress
-        // goes straight to the game.
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
             var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);

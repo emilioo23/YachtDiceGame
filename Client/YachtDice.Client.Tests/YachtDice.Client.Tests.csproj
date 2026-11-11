@@ -47,11 +47,33 @@
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
+    <Compile Include="Game\HeldDiceSelectionTests.cs" />
+    <Compile Include="Game\StandingsBuilderTests.cs" />
+    <Compile Include="Game\StateVersionGateTests.cs" />
+    <Compile Include="Game\TurnCountdownTests.cs" />
+    <Compile Include="Game\TurnPhaseResolverTests.cs" />
+    <Compile Include="Game\YachtCelebrationRuleTests.cs" />
     <Compile Include="Players\InitialLetterTests.cs" />
     <Compile Include="Rooms\PresenceComparerTests.cs" />
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
+    <Compile Include="Game\RankedStandingTests.cs" />
+    <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
+    <Compile Include="Utils\CategoryNamesTests.cs" />
+    <Compile Include="Utils\FriendItemFactoryTests.cs" />
+    <Compile Include="Utils\FriendRequestMessagesTests.cs" />
+    <Compile Include="Utils\GameResultMessagesTests.cs" />
+    <Compile Include="Utils\GatewayErrorMessagesTests.cs" />
+    <Compile Include="Utils\HowToPlayContentTests.cs" />
+    <Compile Include="Utils\InvitationResultMessagesTests.cs" />
+    <Compile Include="Utils\LoginResultMessagesTests.cs" />
+    <Compile Include="Utils\MatchPlayerFactoryTests.cs" />
+    <Compile Include="Utils\PlayerInitialsTests.cs" />
+    <Compile Include="Utils\PresenceMessagesTests.cs" />
+    <Compile Include="Utils\RoomListItemFactoryTests.cs" />
+    <Compile Include="Utils\RoomResultMessagesTests.cs" />
+    <Compile Include="Utils\SecureRandomTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +92,10 @@
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
       <Project>{661920f3-f041-4e22-8e60-82d4233217a5}</Project>
       <Name>YachtDice.Client.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YachtDice\YachtDice.csproj">
+      <Project>{34361500-4622-4842-BED5-EE1DB51DC434}</Project>
+      <Name>YachtDice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

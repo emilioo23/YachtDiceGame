@@ -13,7 +13,6 @@ namespace YachtDice.Server.Logic.Avatars
     {
         private const int DefaultLevel = 1;
         private const int DefaultExperience = 0;
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
 
@@ -24,7 +23,7 @@ namespace YachtDice.Server.Logic.Avatars
         public AvatarService(IPlayerRepository playerRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace YachtDice.Server.Logic.Avatars
         {
             AvatarChangeStatus status = AvatarChangeStatus.Success;
 
-            if (!AvatarCatalog.TryFind(avatarId, out AvatarInfo avatar))
+            if (!AvatarCatalog.TryFind(avatarId, out UnlockableAvatar avatar))
             {
                 status = AvatarChangeStatus.AvatarNotFound;
             }

@@ -74,19 +74,31 @@ namespace YachtDice.Views
         private void ShowSectionPanel(UIElement panel, Control navButton, bool isSelected)
         {
             panel.Visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
-            navButton.Style = (Style)FindResource(
-                isSelected ? ResourceKeys.ActiveTabStyleKey : ResourceKeys.OutlineButtonStyleKey);
+
+            string styleKey = ResourceKeys.OutlineButtonStyleKey;
+
+            if (isSelected)
+            {
+                styleKey = ResourceKeys.ActiveTabStyleKey;
+            }
+
+            navButton.Style = (Style)FindResource(styleKey);
         }
 
         private void ApplyDarkThemeToggleVisual(bool isDark)
         {
-            DarkThemeToggle.Background = isDark
-                ? (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey)
-                : (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
-            DarkThemeToggleKnob.HorizontalAlignment = isDark ? HorizontalAlignment.Right : HorizontalAlignment.Left;
-            DarkThemeToggleKnob.Margin = isDark
-                ? new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin)
-                : new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
+            if (isDark)
+            {
+                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey);
+                DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Right;
+                DarkThemeToggleKnob.Margin = new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin);
+            }
+            else
+            {
+                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
+                DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Left;
+                DarkThemeToggleKnob.Margin = new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
+            }
         }
 
         private void ShowTwoFactorState(bool isEnabled)
@@ -270,7 +282,6 @@ namespace YachtDice.Views
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Connect the real account deletion flow when the session token exists.
             CustomDialogWindow.ShowMessage(this, Strings.Settings_FeatureNotImplementedMessage);
         }
 

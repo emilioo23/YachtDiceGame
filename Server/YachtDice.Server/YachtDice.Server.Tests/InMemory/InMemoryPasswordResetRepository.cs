@@ -32,7 +32,8 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<PwdResetToken> FindByPlayerId(int playerId)
         {
-            List<PwdResetToken> matches = _tokens.Where(token => token.PlayerId == playerId).ToList();
+            Func<PwdResetToken, bool> isSamePlayerId = token => token.PlayerId == playerId;
+            List<PwdResetToken> matches = _tokens.Where(isSamePlayerId).ToList();
 
             return matches;
         }
@@ -47,13 +48,15 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public void Delete(int playerId)
         {
-            _tokens.RemoveAll(token => token.PlayerId == playerId);
+            Predicate<PwdResetToken> isSamePlayerId = token => token.PlayerId == playerId;
+            _tokens.RemoveAll(isSamePlayerId);
         }
 
         /// <inheritdoc />
         public void CompleteReset(int playerId, string newPasswordHash)
         {
-            Player player = _players.Players.First(row => row.Id == playerId);
+            Func<Player, bool> isSameId = row => row.Id == playerId;
+            Player player = _players.Players.First(isSameId);
 
             player.PwdHash = newPasswordHash;
             Delete(playerId);

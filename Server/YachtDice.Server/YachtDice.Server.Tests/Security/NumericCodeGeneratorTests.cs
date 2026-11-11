@@ -16,13 +16,13 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Generate_SixDigits_ReturnsOnlyDigitsWithTheRequestedLength()
         {
-            for (var repetition = 0; repetition < Repetitions; repetition++)
-            {
-                string code = NumericCodeGenerator.Generate(SixDigits);
+            string[] codes = Enumerable.Range(0, Repetitions)
+                .Select(repetition => NumericCodeGenerator.Generate(SixDigits))
+                .ToArray();
+            Func<string, bool> isNotSixDigitCode = code => !IsSixDigitCode(code);
 
-                Assert.Equal(SixDigits, code.Length);
-                Assert.True(code.All(char.IsDigit));
-            }
+            string[] invalidCodes = codes.Where(isNotSixDigitCode).ToArray();
+            Assert.Empty(invalidCodes);
         }
 
         [Theory]
@@ -31,6 +31,11 @@ namespace YachtDice.Server.Tests.Security
         public void Generate_LengthBelowOne_ThrowsArgumentOutOfRangeException(int length)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => NumericCodeGenerator.Generate(length));
+        }
+
+        private static bool IsSixDigitCode(string code)
+        {
+            return code.Length == SixDigits && code.All(char.IsDigit);
         }
     }
 }

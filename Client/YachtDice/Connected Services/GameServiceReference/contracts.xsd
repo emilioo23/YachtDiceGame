@@ -1,42 +1,200 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="JoinGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
+  <xs:element name="JoinGameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="JoinGameResult" nillable="true" type="tns:JoinGameResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="JoinGameResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:GameResultCode" />
+      <xs:element minOccurs="0" name="State" nillable="true" type="tns:GameState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JoinGameResult" nillable="true" type="tns:JoinGameResult" />
+  <xs:simpleType name="GameResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="GameNotFound" />
+      <xs:enumeration value="PlayerNotInGame" />
+      <xs:enumeration value="NotYourTurn" />
+      <xs:enumeration value="GameFinished" />
+      <xs:enumeration value="NoRollsLeft" />
+      <xs:enumeration value="MustRollFirst" />
+      <xs:enumeration value="InvalidHeldDice" />
+      <xs:enumeration value="CategoryFilled" />
+      <xs:enumeration value="CategoryNotAllowed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameResultCode" nillable="true" type="tns:GameResultCode" />
+  <xs:complexType name="GameState">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CurrentPlayerId" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Dice" nillable="true" type="q1:ArrayOfint" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="HeldDice" nillable="true" type="q2:ArrayOfboolean" />
+      <xs:element minOccurs="0" name="Options" nillable="true" type="tns:ArrayOfScoreChoice" />
+      <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfPlayerScorecard" />
+      <xs:element minOccurs="0" name="RollsLeft" type="xs:int" />
+      <xs:element minOccurs="0" name="Round" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:GameStatus" />
+      <xs:element minOccurs="0" name="TurnNumber" type="xs:int" />
+      <xs:element minOccurs="0" name="TurnSeconds" type="xs:int" />
+      <xs:element minOccurs="0" name="TurnSecondsLeft" type="xs:int" />
+      <xs:element minOccurs="0" name="Version" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameState" nillable="true" type="tns:GameState" />
+  <xs:complexType name="ArrayOfScoreChoice">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreChoice" nillable="true" type="tns:ScoreChoice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfScoreChoice" nillable="true" type="tns:ArrayOfScoreChoice" />
+  <xs:complexType name="ScoreChoice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Category" type="tns:ScoreCategory" />
+      <xs:element minOccurs="0" name="Points" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ScoreChoice" nillable="true" type="tns:ScoreChoice" />
+  <xs:simpleType name="ScoreCategory">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Ones" />
+      <xs:enumeration value="Twos" />
+      <xs:enumeration value="Threes" />
+      <xs:enumeration value="Fours" />
+      <xs:enumeration value="Fives" />
+      <xs:enumeration value="Sixes" />
+      <xs:enumeration value="FullHouse" />
+      <xs:enumeration value="FourOfAKind" />
+      <xs:enumeration value="LittleStraight" />
+      <xs:enumeration value="BigStraight" />
+      <xs:enumeration value="Choice" />
+      <xs:enumeration value="Yacht" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ScoreCategory" nillable="true" type="tns:ScoreCategory" />
+  <xs:complexType name="ArrayOfPlayerScorecard">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PlayerScorecard" nillable="true" type="tns:PlayerScorecard" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPlayerScorecard" nillable="true" type="tns:ArrayOfPlayerScorecard" />
+  <xs:complexType name="PlayerScorecard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsPresent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsWinner" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Scores" nillable="true" type="tns:ArrayOfCategoryScore" />
+      <xs:element minOccurs="0" name="Total" type="xs:int" />
+      <xs:element minOccurs="0" name="UpperBonus" type="xs:int" />
+      <xs:element minOccurs="0" name="UpperSubtotal" type="xs:int" />
+      <xs:element minOccurs="0" name="YachtBonus" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerScorecard" nillable="true" type="tns:PlayerScorecard" />
+  <xs:complexType name="ArrayOfCategoryScore">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CategoryScore" nillable="true" type="tns:CategoryScore" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCategoryScore" nillable="true" type="tns:ArrayOfCategoryScore" />
+  <xs:complexType name="CategoryScore">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Category" type="tns:ScoreCategory" />
+      <xs:element minOccurs="0" name="IsFilled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Points" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CategoryScore" nillable="true" type="tns:CategoryScore" />
+  <xs:simpleType name="GameStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InProgress" />
+      <xs:enumeration value="Finished" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameStatus" nillable="true" type="tns:GameStatus" />
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:ServiceErrorCode" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" nillable="true" type="tns:ServiceFault" />
+  <xs:simpleType name="ServiceErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnexpectedError" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="ValidationFailed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
   <xs:element name="RollDice">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="heldDice" nillable="true" type="q3:ArrayOfboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SelectScoreCategory">
+  <xs:element name="RollDiceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="categoryId" type="xs:int" />
+        <xs:element minOccurs="0" name="RollDiceResult" type="tns:GameResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DiceRolled">
+  <xs:element name="SelectCategory">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="diceValues" nillable="true" type="q1:ArrayOfint" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
+        <xs:element minOccurs="0" name="category" type="tns:ScoreCategory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="TurnChanged">
+  <xs:element name="SelectCategoryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="turnDetails" nillable="true" type="tns:TurnDetails" />
+        <xs:element minOccurs="0" name="SelectCategoryResult" type="tns:GameResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="TurnDetails">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CurrentTurnUsername" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RollsLeft" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="TurnDetails" nillable="true" type="tns:TurnDetails" />
+  <xs:element name="GameChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="state" nillable="true" type="tns:GameState" />
+        <xs:element minOccurs="0" name="eventType" type="tns:GameEventType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="GameEventType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DiceRolled" />
+      <xs:enumeration value="CategoryScored" />
+      <xs:enumeration value="TurnTimedOut" />
+      <xs:enumeration value="PlayerDisconnected" />
+      <xs:enumeration value="PlayerReturned" />
+      <xs:enumeration value="PlayerRemoved" />
+      <xs:enumeration value="GameFinished" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameEventType" nillable="true" type="tns:GameEventType" />
 </xs:schema>

@@ -6,6 +6,11 @@
     public class RoomListItem
     {
         /// <summary>
+        /// Number of characters of the access code of a private room, the same length the server uses.
+        /// </summary>
+        public const int AccessCodeLength = 6;
+
+        /// <summary>
         /// Gets or sets the identifier of the room inside the list. It is not the code of the room.
         /// </summary>
         public string RoomId { get; set; }

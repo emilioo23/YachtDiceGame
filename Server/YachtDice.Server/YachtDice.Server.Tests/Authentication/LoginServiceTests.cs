@@ -17,6 +17,7 @@ namespace YachtDice.Server.Tests.Authentication
         private const int PlayerId = 1;
         private const string Email = "gabriel@example.com";
         private const string UnknownEmail = "nobody@example.com";
+        private const string MalformedEmail = "gabriel";
         private const string Password = "Secret123!";
         private const string WrongPassword = "Wrong123!";
         private const string DisplayName = "gabrielhernandez";
@@ -47,26 +48,62 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithThePlayerNames()
+        public void LoginPlayer_ValidCredentials_ReturnsLoggedIn()
         {
             LoginCredentials credentials = CreateCredentials(Email, Password);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
             Assert.Equal(LoginStatus.LoggedIn, result.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_ValidCredentials_ReturnsTheDisplayNameOfThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials(Email, Password);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
             Assert.Equal(DisplayName, result.DisplayName);
+        }
+
+        [Fact]
+        public void LoginPlayer_ValidCredentials_ReturnsTheFirstNameOfThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials(Email, Password);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
             Assert.Equal(FirstName, result.FirstName);
         }
 
         [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutNames()
+        public void LoginPlayer_WrongPassword_ReturnsInvalidPassword()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
             Assert.Equal(LoginStatus.InvalidPassword, result.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_WrongPassword_ReturnsNoDisplayName()
+        {
+            LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
             Assert.Equal(string.Empty, result.DisplayName);
+        }
+
+        [Fact]
+        public void LoginPlayer_WrongPassword_ReturnsNoFirstName()
+        {
+            LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
+
+            LoginResult result = _service.LoginPlayer(credentials);
+
             Assert.Equal(string.Empty, result.FirstName);
         }
 
@@ -96,7 +133,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_MalformedEmailAndWrongPassword_ReturnsInvalidEmail()
         {
-            LoginCredentials credentials = CreateCredentials("gabriel", WrongPassword);
+            LoginCredentials credentials = CreateCredentials(MalformedEmail, WrongPassword);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
@@ -124,7 +161,7 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_TwoFactorEnabled_SendsTheCodeInsteadOfCompletingTheLogin()
+        public void LoginPlayer_TwoFactorEnabled_ReturnsVerificationCodeSent()
         {
             _players.SaveTwoFactorEnabled(PlayerId, true);
             LoginCredentials credentials = CreateCredentials(Email, Password);
@@ -132,6 +169,16 @@ namespace YachtDice.Server.Tests.Authentication
             LoginResult result = _service.LoginPlayer(credentials);
 
             Assert.Equal(LoginStatus.VerificationCodeSent, result.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_TwoFactorEnabled_SendsTheCodeToTheEmailOfThePlayer()
+        {
+            _players.SaveTwoFactorEnabled(PlayerId, true);
+            LoginCredentials credentials = CreateCredentials(Email, Password);
+
+            _service.LoginPlayer(credentials);
+
             Assert.Equal(Email, _emailService.Recipients.Single());
         }
 

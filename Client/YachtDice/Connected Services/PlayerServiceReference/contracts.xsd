@@ -107,23 +107,23 @@
   <xs:element name="GetAvatarCatalogResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetAvatarCatalogResult" nillable="true" type="tns:ArrayOfAvatarInfo" />
+        <xs:element minOccurs="0" name="GetAvatarCatalogResult" nillable="true" type="tns:ArrayOfUnlockableAvatar" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfAvatarInfo">
+  <xs:complexType name="ArrayOfUnlockableAvatar">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AvatarInfo" nillable="true" type="tns:AvatarInfo" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UnlockableAvatar" nillable="true" type="tns:UnlockableAvatar" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfAvatarInfo" nillable="true" type="tns:ArrayOfAvatarInfo" />
-  <xs:complexType name="AvatarInfo">
+  <xs:element name="ArrayOfUnlockableAvatar" nillable="true" type="tns:ArrayOfUnlockableAvatar" />
+  <xs:complexType name="UnlockableAvatar">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="RequiredLevel" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AvatarInfo" nillable="true" type="tns:AvatarInfo" />
+  <xs:element name="UnlockableAvatar" nillable="true" type="tns:UnlockableAvatar" />
   <xs:element name="ChangeAvatar">
     <xs:complexType>
       <xs:sequence>

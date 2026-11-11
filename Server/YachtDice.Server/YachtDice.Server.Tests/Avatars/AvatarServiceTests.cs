@@ -70,45 +70,68 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetProfile_RegisteredPlayer_ReturnsAvatarLevelAndExperience()
         {
+            var expected = new { AvatarId = CurrentAvatarId, Level = PlayerLevel, Experience = PlayerExperience };
+
             PlayerProfile profile = _service.GetProfile(PlayerName);
 
-            Assert.Equal(CurrentAvatarId, profile.AvatarId);
-            Assert.Equal(PlayerLevel, profile.Level);
-            Assert.Equal(PlayerExperience, profile.Experience);
+            var actual = new { profile.AvatarId, profile.Level, profile.Experience };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void GetProfile_UnknownPlayer_ReturnsTheProfileOfANewPlayer()
         {
+            var expected = new
+            {
+                AvatarId = AvatarCatalog.DefaultAvatarId,
+                Level = NewPlayerLevel,
+                Experience = NoExperience
+            };
+
             PlayerProfile profile = _service.GetProfile(UnknownName);
 
-            Assert.Equal(AvatarCatalog.DefaultAvatarId, profile.AvatarId);
-            Assert.Equal(NewPlayerLevel, profile.Level);
-            Assert.Equal(NoExperience, profile.Experience);
+            var actual = new { profile.AvatarId, profile.Level, profile.Experience };
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ChangeAvatar_UnlockedAvatar_ReturnsSuccess()
+        {
+            AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
+
+            Assert.Equal(AvatarChangeStatus.Success, status);
         }
 
         [Fact]
         public void ChangeAvatar_UnlockedAvatar_SavesTheNewAvatar()
         {
-            AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
+            _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
-            Assert.Equal(AvatarChangeStatus.Success, status);
             Assert.Equal(UnlockedAvatarId, _players.Players.Single().AvatarId);
         }
 
         [Fact]
-        public void ChangeAvatar_LockedAvatar_ReturnsAvatarLockedAndKeepsTheCurrentOne()
+        public void ChangeAvatar_LockedAvatar_ReturnsAvatarLocked()
         {
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, LockedAvatarId);
 
             Assert.Equal(AvatarChangeStatus.AvatarLocked, status);
+        }
+
+        [Theory]
+        [InlineData(LockedAvatarId)]
+        [InlineData(UnknownAvatarId)]
+        public void ChangeAvatar_AvatarThatCannotBeChosen_KeepsTheCurrentOne(int avatarId)
+        {
+            _service.ChangeAvatar(PlayerName, avatarId);
+
             Assert.Equal(CurrentAvatarId, _players.Players.Single().AvatarId);
         }
 
         [Fact]
         public void ChangeAvatar_LevelEqualToTheRequiredOne_UnlocksTheAvatar()
         {
-            AvatarCatalog.TryFind(UnlockedAvatarId, out AvatarInfo avatar);
+            AvatarCatalog.TryFind(UnlockedAvatarId, out UnlockableAvatar avatar);
             _players.Players.Single().Level = avatar.RequiredLevel;
 
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
@@ -132,7 +155,6 @@ namespace YachtDice.Server.Tests.Avatars
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnknownAvatarId);
 
             Assert.Equal(AvatarChangeStatus.AvatarNotFound, status);
-            Assert.Equal(CurrentAvatarId, _players.Players.Single().AvatarId);
         }
 
         [Fact]

@@ -30,12 +30,11 @@ namespace YachtDice.Server.Logic.Rooms
         /// <summary>
         /// Puts the player inside a room of the list of rooms. A private room also needs its code.
         /// </summary>
-        /// <param name="roomId">Identifier of the room inside the list.</param>
         /// <param name="playerName">Name that the player who enters wants to show.</param>
-        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <param name="room">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the state of the room and the identifier of the player.</returns>
         /// <exception cref="System.ArgumentException">The name is empty.</exception>
-        RoomResult JoinListed(string roomId, string playerName, string accessCode);
+        RoomResult JoinListed(string playerName, Room room);
 
         /// <summary>
         /// Gets the rooms that wait for players, public and private, ordered by the name of their host.
@@ -56,54 +55,48 @@ namespace YachtDice.Server.Logic.Rooms
         /// the game already started, the player stays as an absent player and can come back. If nobody stays
         /// inside, the room is deleted.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player who leaves.</param>
+        /// <param name="member">Room and identifier of the player who leaves.</param>
         /// <returns>Whether the player was inside and the state of the room after leaving.</returns>
-        RoomResult Leave(string roomCode, string playerId);
+        RoomResult Leave(RoomMember member);
 
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player who asks for the change.</param>
+        /// <param name="member">Room and identifier of the player who asks for the change.</param>
         /// <param name="settings">New options of the room.</param>
         /// <returns>Outcome of the change and the state of the room.</returns>
-        RoomResult UpdateSettings(string roomCode, string playerId, RoomSettings settings);
+        RoomResult UpdateSettings(RoomMember member, RoomSettings settings);
 
         /// <summary>
         /// Marks the game of the room as started. Only the host can do it and the room needs enough players.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player who starts the game.</param>
+        /// <param name="member">Room and identifier of the player who starts the game.</param>
         /// <returns>Outcome of the start and the state of the room.</returns>
-        RoomResult StartGame(string roomCode, string playerId);
+        RoomResult StartGame(RoomMember member);
 
         /// <summary>
         /// Takes another player out of the room for good, also during the game. Only the host can do it. The
         /// expelled player cannot come back to a game in progress.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the host who expels the player.</param>
+        /// <param name="member">Room and identifier of the host who expels the player.</param>
         /// <param name="targetPlayerId">Identifier of the player to expel.</param>
         /// <returns>Outcome of the expulsion and the state of the room after it.</returns>
-        RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId);
+        RoomResult KickPlayer(RoomMember member, string targetPlayerId);
 
         /// <summary>
         /// Makes another player of the room the host. Only the current host can do it.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the current host.</param>
+        /// <param name="member">Room and identifier of the current host.</param>
         /// <param name="newHostId">Identifier of the player who becomes the host.</param>
         /// <returns>Outcome of the change and the state of the room after it.</returns>
-        RoomResult TransferHost(string roomCode, string playerId, string newHostId);
+        RoomResult TransferHost(RoomMember member, string newHostId);
 
         /// <summary>
         /// Looks for a player inside a room.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <param name="player">The player, or null if the room does not exist or the player is not inside.</param>
         /// <returns>True if the room exists and the player is inside.</returns>
-        bool TryGetPlayer(string roomCode, string playerId, out RoomPlayer player);
+        bool TryGetPlayer(RoomMember member, out RoomPlayer player);
     }
 }

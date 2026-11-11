@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
@@ -46,8 +48,9 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
         {
+            Expression<Func<GameHistoryPlayer, bool>> isSamePlayerId = entry => entry.PlayerId == playerId;
             List<GameHistoryPlayer> history = context.GameHistoryPlayer
-                .Where(entry => entry.PlayerId == playerId)
+                .Where(isSamePlayerId)
                 .ToList();
 
             return history;
@@ -55,29 +58,22 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)
         {
-            List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
-                .GroupBy(entry => entry.PlayerId)
-                .Select(group => new
+            IQueryable<PlayerRankingRecord> records =
+                from entry in context.GameHistoryPlayer
+                group entry by entry.PlayerId into playerGames
+                join player in context.Player on playerGames.Key equals player.Id
+                let totalPoints = (from game in playerGames select game.FinalScore).Sum()
+                let wins = (from game in playerGames where game.IsWinner == true select game).Count()
+                orderby totalPoints descending, player.DisplayName
+                select new PlayerRankingRecord
                 {
-                    PlayerId = group.Key,
-                    TotalPoints = group.Sum(entry => entry.FinalScore),
-                    Wins = group.Count(entry => entry.IsWinner == true)
-                })
-                .Join(
-                    context.Player,
-                    totals => totals.PlayerId,
-                    player => player.Id,
-                    (totals, player) => new PlayerRankingRecord
-                    {
-                        DisplayName = player.DisplayName,
-                        AvatarId = player.AvatarId,
-                        TotalPoints = totals.TotalPoints,
-                        Wins = totals.Wins
-                    })
-                .OrderByDescending(record => record.TotalPoints)
-                .ThenBy(record => record.DisplayName)
-                .Take(maxEntries)
-                .ToList();
+                    DisplayName = player.DisplayName,
+                    AvatarId = player.AvatarId,
+                    TotalPoints = totalPoints,
+                    Wins = wins
+                };
+
+            List<PlayerRankingRecord> ranking = records.Take(maxEntries).ToList();
 
             return ranking;
         }

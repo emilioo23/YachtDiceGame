@@ -11,6 +11,10 @@ namespace YachtDice.Views
     /// </summary>
     public class DiceRow : StackPanel
     {
+        private const int DieSize = 40;
+        private const int DieGap = 3;
+        private const double DimmedOpacity = 0.3;
+
         /// <summary>
         /// Property that holds the text that describes the dice of the row.
         /// </summary>
@@ -19,10 +23,6 @@ namespace YachtDice.Views
             typeof(string),
             typeof(DiceRow),
             new PropertyMetadata(string.Empty, OnDiceChanged));
-
-        private const int DieSize = 40;
-        private const int DieGap = 3;
-        private const double DimmedOpacity = 0.3;
 
         /// <summary>
         /// Initializes an empty row of dice.

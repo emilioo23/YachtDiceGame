@@ -10,8 +10,10 @@ using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 using AuthResendResult = YachtDice.AuthenticationServiceReference.ResendResultCode;
+using AuthVerificationCode = YachtDice.AuthenticationServiceReference.VerificationCode;
 using AuthVerificationResult = YachtDice.AuthenticationServiceReference.VerificationResultCode;
 using TwoFactorResendResult = YachtDice.TwoFactorManagementServiceReference.ResendResultCode;
+using TwoFactorVerificationCode = YachtDice.TwoFactorManagementServiceReference.VerificationCode;
 using TwoFactorVerificationResult = YachtDice.TwoFactorManagementServiceReference.VerificationResultCode;
 
 namespace YachtDice.Views
@@ -32,7 +34,6 @@ namespace YachtDice.Views
         private readonly string _challengeId;
         private readonly bool _isActivation;
 
-        // Both gateways are needed because the window serves the login and the activation of the verification.
         private readonly AuthenticationGateway _authGateway = new AuthenticationGateway();
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
 
@@ -61,7 +62,13 @@ namespace YachtDice.Views
                 box.MaxLength = MaxDigitsPerBox;
             }
 
-            DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
+            DestinationEmailTextBlock.Text = _email;
+
+            if (!_isActivation)
+            {
+                DestinationEmailTextBlock.Text = MaskEmail(_email);
+            }
+
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
         }
@@ -76,7 +83,8 @@ namespace YachtDice.Views
             var box = (TextBox)sender;
             int index = Array.IndexOf(_digitBoxes, box);
             bool isPaste = e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
-            bool isBackOnEmptyBox = e.Key == Key.Back && box.Text.Length == 0 && index > 0;
+            bool isEmptyBoxAfterFirst = box.Text.Length == 0 && index > 0;
+            bool isBackOnEmptyBox = e.Key == Key.Back && isEmptyBoxAfterFirst;
 
             if (isPaste)
             {
@@ -178,7 +186,8 @@ namespace YachtDice.Views
 
         private bool IsCodeComplete()
         {
-            bool isComplete = _digitBoxes.All(box => !string.IsNullOrEmpty(box.Text));
+            Func<TextBox, bool> hasDigit = box => !string.IsNullOrEmpty(box.Text);
+            bool isComplete = _digitBoxes.All(hasDigit);
 
             return isComplete;
         }
@@ -191,16 +200,17 @@ namespace YachtDice.Views
             {
                 if (_isActivation)
                 {
+                    var verificationCode = new TwoFactorVerificationCode { Code = code, ChallengeId = _challengeId };
                     TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(
                         _session.DisplayName,
-                        code,
-                        _challengeId);
+                        verificationCode);
 
                     HandleVerificationResult((AuthVerificationResult)(int)result);
                 }
                 else
                 {
-                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, code, _challengeId);
+                    var verificationCode = new AuthVerificationCode { Code = code, ChallengeId = _challengeId };
+                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, verificationCode);
                     HandleVerificationResult(result);
                 }
             }
@@ -277,7 +287,13 @@ namespace YachtDice.Views
 
         private void PasteCodeFromClipboard()
         {
-            string clipboardText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
+            string clipboardText = string.Empty;
+
+            if (Clipboard.ContainsText())
+            {
+                clipboardText = Clipboard.GetText();
+            }
+
             var digits = new string(clipboardText.Where(char.IsDigit).Take(_digitBoxes.Length).ToArray());
 
             ClearDigits();

@@ -53,16 +53,14 @@ namespace YachtDice.Server.Services
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         public Contracts.VerificationResultCode ConfirmTwoFactorActivation(
             string displayName,
-            string code,
-            string challengeId)
+            Contracts.VerificationCode verificationCode)
         {
             Contracts.VerificationResultCode result =
-                Execute(displayName, () => ProcessActivationConfirmation(displayName, code, challengeId));
+                Execute(verificationCode, () => ProcessActivationConfirmation(displayName, verificationCode));
 
             return result;
         }
@@ -115,11 +113,16 @@ namespace YachtDice.Server.Services
 
         private Contracts.VerificationResultCode ProcessActivationConfirmation(
             string displayName,
-            string code,
-            string challengeId)
+            Contracts.VerificationCode verificationCode)
         {
+            var logicCode = new LogicTwoFactor.VerificationCode
+            {
+                Code = verificationCode.Code,
+                ChallengeId = verificationCode.ChallengeId
+            };
+
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
-                _settingsService.ConfirmActivation(displayName, code, challengeId);
+                _settingsService.ConfirmActivation(displayName, logicCode);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorValidationStatus, Contracts.VerificationResultCode>(
                 logicResult);
@@ -131,7 +134,7 @@ namespace YachtDice.Server.Services
             string culture)
         {
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _settingsService.ResendActivationCode(displayName, culture, challengeId);
+                _settingsService.ResendActivationCode(displayName, challengeId, culture);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }

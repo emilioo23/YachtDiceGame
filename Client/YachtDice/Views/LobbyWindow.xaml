@@ -232,41 +232,45 @@
                                             CornerRadius="8"
                                             Padding="10">
 
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel>
 
-                                            <Image Source="{Binding AvatarId,
-                                                           Converter={StaticResource AvatarImageConverter}}"
-                                                   Width="36"
-                                                   Height="36"
-                                                   VerticalAlignment="Top"
-                                                   Margin="0,0,8,0"/>
+                                            <StackPanel Orientation="Horizontal">
 
-                                            <StackPanel>
+                                                <Image Source="{Binding AvatarId,
+                                                               Converter={StaticResource AvatarImageConverter}}"
+                                                       Width="36"
+                                                       Height="36"
+                                                       VerticalAlignment="Top"
+                                                       Margin="0,0,8,0"/>
 
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           FontSize="15"
-                                                           Foreground="{StaticResource BrushText}"/>
+                                                <StackPanel VerticalAlignment="Center">
 
-                                                <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
-                                                           Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                           FontSize="12"
-                                                           Foreground="{StaticResource BrushFeltLight}"/>
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Foreground="{StaticResource BrushText}"/>
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="0,4,0,0"
-                                                            Visibility="{Binding CanManage,
-                                                            Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <Button Content="{x:Static properties:Strings.Lobby_HostKick}"
-                                                            Style="{StaticResource BtnCompact}"
-                                                            Tag="{Binding PlayerId}"
-                                                            Margin="0,0,8,0"
-                                                            Click="KickButton_Click"/>
-                                                    <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
-                                                            Style="{StaticResource BtnCompact}"
-                                                            Tag="{Binding PlayerId}"
-                                                            Click="TransferButton_Click"/>
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
+                                                               Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
                                                 </StackPanel>
+
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,8,0,0"
+                                                        Visibility="{Binding CanManage,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostKick}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Margin="0,0,0,4"
+                                                        Click="KickButton_Click"/>
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Click="TransferButton_Click"/>
                                             </StackPanel>
 
                                         </StackPanel>

@@ -6,7 +6,7 @@ namespace YachtDice.Server.Contracts.Players
     /// An avatar of the game and the level that a player needs to use it.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class AvatarInfo
+    public class UnlockableAvatar
     {
         /// <summary>
         /// Identifier of the avatar.

@@ -41,7 +41,9 @@ namespace YachtDice.Client.Logic.Authentication
 
         private static bool IsCompleteCode(string code)
         {
-            return code != null && code.Length == CodeLength && code.All(char.IsDigit);
+            bool hasCodeLength = code != null && code.Length == CodeLength;
+
+            return hasCodeLength && code.All(char.IsDigit);
         }
     }
 }

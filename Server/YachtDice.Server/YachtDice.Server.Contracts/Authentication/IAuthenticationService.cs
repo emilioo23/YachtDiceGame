@@ -22,12 +22,11 @@ namespace YachtDice.Server.Contracts.Authentication
         /// Validates the verification code entered by the player.
         /// </summary>
         /// <param name="email">Email address the code was sent to.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the login session.</param>
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
+        VerificationResultCode VerifyPlayerCode(string email, VerificationCode verificationCode);
 
         /// <summary>
         /// Resends a verification code to the player's email address.

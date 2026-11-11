@@ -15,10 +15,10 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class RoomService : ServiceBase, Contracts.IRoomService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
         private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
+        private readonly GameCoordinator _gameCoordinator;
 
         private readonly CallbackRegistry<Contracts.IRoomCallback> _callbacks =
             new CallbackRegistry<Contracts.IRoomCallback>();
@@ -27,10 +27,13 @@ namespace YachtDice.Server.Services
         /// Initializes a new instance of the RoomService class.
         /// </summary>
         /// <param name="roomManager">The rules and the state of the rooms. It is shared with the chat.</param>
-        public RoomService(LogicRooms.IRoomManager roomManager)
+        /// <param name="gameCoordinator">The games of the rooms. It is shared with the game service.</param>
+        public RoomService(LogicRooms.IRoomManager roomManager, GameCoordinator gameCoordinator)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(roomManager));
+            _gameCoordinator = gameCoordinator
+                ?? throw new ArgumentNullException(nameof(gameCoordinator));
         }
 
         /// <summary>
@@ -76,13 +79,11 @@ namespace YachtDice.Server.Services
         /// Puts the player inside a room of the list. A private room also needs its code.
         /// </summary>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
-        /// <param name="roomId">Identifier of the room inside the list.</param>
-        /// <param name="accessCode">Code of the room. It is only checked if the room is private.</param>
+        /// <param name="room">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
-        public Contracts.JoinRoomResult JoinListedRoom(string displayName, string roomId, string accessCode)
+        public Contracts.JoinRoomResult JoinListedRoom(string displayName, Contracts.Room room)
         {
-            Contracts.JoinRoomResult result =
-                Execute(displayName, () => FinishJoin(_roomManager.JoinListed(roomId, displayName, accessCode)));
+            Contracts.JoinRoomResult result = Execute(room, () => ProcessJoinListed(displayName, room));
 
             return result;
         }
@@ -90,17 +91,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who asks for the change.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the player who asks for the change.</param>
         /// <param name="settings">New options of the room.</param>
         /// <returns>Outcome of the change.</returns>
-        public Contracts.RoomResultCode UpdateRoomSettings(
-            string playerId,
-            string roomCode,
-            Contracts.RoomSettings settings)
+        public Contracts.RoomResultCode UpdateRoomSettings(Contracts.RoomMember host, Contracts.RoomSettings settings)
         {
-            Contracts.RoomResultCode result =
-                Execute(settings, () => ProcessSettings(playerId, roomCode, settings));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(settings, () => ProcessSettings(member, settings));
 
             return result;
         }
@@ -108,12 +105,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Starts the game of the room and tells every player. Only the host can do it.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who starts the game.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the player who starts the game.</param>
         /// <returns>Outcome of the start.</returns>
-        public Contracts.RoomResultCode StartGame(string playerId, string roomCode)
+        public Contracts.RoomResultCode StartGame(Contracts.RoomMember host)
         {
-            Contracts.RoomResultCode result = Execute(playerId, () => ProcessStart(playerId, roomCode));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessStart(member));
 
             return result;
         }
@@ -122,14 +119,13 @@ namespace YachtDice.Server.Services
         /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
         /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
-        /// <param name="playerId">Identifier of the host who expels the player.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the host who expels the player.</param>
         /// <param name="targetPlayerId">Identifier of the player to expel.</param>
         /// <returns>Outcome of the expulsion.</returns>
-        public Contracts.RoomResultCode KickPlayer(string playerId, string roomCode, string targetPlayerId)
+        public Contracts.RoomResultCode KickPlayer(Contracts.RoomMember host, string targetPlayerId)
         {
-            Contracts.RoomResultCode result =
-                Execute(playerId, () => ProcessKick(playerId, roomCode, targetPlayerId));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessKick(member, targetPlayerId));
 
             return result;
         }
@@ -137,14 +133,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Makes another player of the room the host and tells everyone. Only the current host can do it.
         /// </summary>
-        /// <param name="playerId">Identifier of the current host.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the current host.</param>
         /// <param name="newHostId">Identifier of the player who becomes the host.</param>
         /// <returns>Outcome of the change.</returns>
-        public Contracts.RoomResultCode TransferHost(string playerId, string roomCode, string newHostId)
+        public Contracts.RoomResultCode TransferHost(Contracts.RoomMember host, string newHostId)
         {
-            Contracts.RoomResultCode result =
-                Execute(playerId, () => ProcessHostTransfer(playerId, roomCode, newHostId));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessHostTransfer(member, newHostId));
 
             return result;
         }
@@ -166,11 +161,12 @@ namespace YachtDice.Server.Services
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
         /// the game already started, the player can come back later. If the room stays empty it disappears.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who leaves.</param>
-        /// <param name="roomCode">Code of the room.</param>
-        public void LeaveRoom(string playerId, string roomCode)
+        /// <param name="member">Room and identifier of the player who leaves.</param>
+        public void LeaveRoom(Contracts.RoomMember member)
         {
-            Execute(playerId, () => ProcessLeave(playerId, roomCode));
+            LogicRooms.RoomMember leaving = Mapping.RoomMapper.ToLogic(member);
+
+            Execute(member, () => ProcessLeave(leaving));
         }
 
         private static Contracts.RoomEventType GetJoinEventType(LogicRooms.RoomResult result)
@@ -205,7 +201,7 @@ namespace YachtDice.Server.Services
         {
             LogicRooms.RoomResult result = _roomManager.CreateRoom(displayName);
 
-            Subscribe(result.Room.Code, result.PlayerId);
+            Subscribe(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
 
             return Mapping.RoomMapper.ToCreateResult(result);
         }
@@ -214,20 +210,24 @@ namespace YachtDice.Server.Services
         {
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                Subscribe(result.Room.Code, result.PlayerId);
+                Subscribe(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
+                ResumeGameIfReturned(result);
                 Broadcast(result.Room, GetJoinEventType(result));
             }
 
             return Mapping.RoomMapper.ToJoinResult(result);
         }
 
-        private Contracts.RoomResultCode ProcessSettings(
-            string playerId,
-            string roomCode,
-            Contracts.RoomSettings settings)
+        private Contracts.JoinRoomResult ProcessJoinListed(string displayName, Contracts.Room room)
         {
-            LogicRooms.RoomResult result =
-                _roomManager.UpdateSettings(roomCode, playerId, Mapping.RoomMapper.ToLogic(settings));
+            LogicRooms.RoomResult result = _roomManager.JoinListed(displayName, Mapping.RoomMapper.ToLogic(room));
+
+            return FinishJoin(result);
+        }
+
+        private Contracts.RoomResultCode ProcessSettings(LogicRooms.RoomMember member, Contracts.RoomSettings settings)
+        {
+            LogicRooms.RoomResult result = _roomManager.UpdateSettings(member, Mapping.RoomMapper.ToLogic(settings));
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
@@ -237,35 +237,44 @@ namespace YachtDice.Server.Services
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        private Contracts.RoomResultCode ProcessStart(string playerId, string roomCode)
+        private Contracts.RoomResultCode ProcessStart(LogicRooms.RoomMember member)
         {
-            LogicRooms.RoomResult result = _roomManager.StartGame(roomCode, playerId);
+            LogicRooms.RoomResult result = _roomManager.StartGame(member);
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
+                _gameCoordinator.StartGame(result.Room);
                 Broadcast(result.Room, Contracts.RoomEventType.GameStarted);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        private Contracts.RoomResultCode ProcessKick(string playerId, string roomCode, string targetPlayerId)
+        private Contracts.RoomResultCode ProcessKick(LogicRooms.RoomMember member, string targetPlayerId)
         {
-            LogicRooms.RoomResult result = _roomManager.KickPlayer(roomCode, playerId, targetPlayerId);
+            LogicRooms.RoomResult result = _roomManager.KickPlayer(member, targetPlayerId);
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                LogInfo(string.Format(CultureInfo.InvariantCulture, KickLogFormat, targetPlayerId, roomCode, playerId));
-                TellExpelledPlayer(result.Room, targetPlayerId);
+                var expelled = new LogicRooms.RoomMember(member.RoomCode, targetPlayerId);
+
+                LogInfo(string.Format(
+                    CultureInfo.InvariantCulture,
+                    KickLogFormat,
+                    targetPlayerId,
+                    member.RoomCode,
+                    member.PlayerId));
+                TellExpelledPlayer(result.Room, expelled);
+                _gameCoordinator.PlayerRemoved(expelled);
                 Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        private Contracts.RoomResultCode ProcessHostTransfer(string playerId, string roomCode, string newHostId)
+        private Contracts.RoomResultCode ProcessHostTransfer(LogicRooms.RoomMember member, string newHostId)
         {
-            LogicRooms.RoomResult result = _roomManager.TransferHost(roomCode, playerId, newHostId);
+            LogicRooms.RoomResult result = _roomManager.TransferHost(member, newHostId);
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
@@ -275,53 +284,72 @@ namespace YachtDice.Server.Services
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        // The expelled player gets the notification before it is unsubscribed, because afterwards the room
-        // does not send it anything.
-        private void TellExpelledPlayer(LogicRooms.RoomDetails room, string targetPlayerId)
+        private void TellExpelledPlayer(LogicRooms.RoomDetails room, LogicRooms.RoomMember expelled)
         {
             Contracts.RoomState roomState = Mapping.RoomMapper.ToContract(room);
 
             _callbacks.NotifyPlayer(
-                room.Code,
-                targetPlayerId,
+                expelled,
                 callback => callback.RoomChanged(roomState, Contracts.RoomEventType.PlayerKicked));
-            _callbacks.Remove(room.Code, targetPlayerId);
+            _callbacks.Remove(expelled);
         }
 
-        private void ProcessLeave(string playerId, string roomCode)
+        private void ProcessLeave(LogicRooms.RoomMember member)
         {
-            _callbacks.Remove(roomCode, playerId);
-            ApplyLeave(roomCode, playerId);
+            _callbacks.Remove(member);
+            ApplyLeave(member);
         }
 
-        private void Subscribe(string roomCode, string playerId)
+        private void Subscribe(LogicRooms.RoomMember member)
         {
             Contracts.IRoomCallback callback = OperationContext.Current.GetCallbackChannel<Contracts.IRoomCallback>();
             ICommunicationObject channel = OperationContext.Current.Channel;
 
-            _callbacks.Register(roomCode, playerId, callback);
-
-            // The channel can end without the client calling LeaveRoom (crash, network failure), and those
-            // events are raised outside the WCF operations. That is why the room state needs its own lock.
-            channel.Closed += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
-            channel.Faulted += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
+            _callbacks.Register(member, callback);
+            channel.Closed += (sender, e) => HandleChannelEnded(member, callback);
+            channel.Faulted += (sender, e) => HandleChannelEnded(member, callback);
         }
 
-        private void HandleChannelEnded(string roomCode, string playerId, Contracts.IRoomCallback callback)
+        private void HandleChannelEnded(LogicRooms.RoomMember member, Contracts.IRoomCallback callback)
         {
-            if (_callbacks.RemoveIfCurrent(roomCode, playerId, callback))
+            if (_callbacks.RemoveIfCurrent(member, callback))
             {
-                ApplyLeave(roomCode, playerId);
+                ApplyLeave(member);
             }
         }
 
-        private void ApplyLeave(string roomCode, string playerId)
+        private void ApplyLeave(LogicRooms.RoomMember member)
         {
-            LogicRooms.RoomResult result = _roomManager.Leave(roomCode, playerId);
+            LogicRooms.RoomResult result = _roomManager.Leave(member);
+
+            if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                UpdateGameAfterLeave(result, member);
+            }
 
             if (result.Status == LogicRooms.RoomStatus.Success && !result.Room.IsEmpty)
             {
                 Broadcast(result.Room, GetLeaveEventType(result));
+            }
+        }
+
+        private void UpdateGameAfterLeave(LogicRooms.RoomResult result, LogicRooms.RoomMember member)
+        {
+            if (result.Room.IsEmpty)
+            {
+                _gameCoordinator.EndGame(result.Room.Code);
+            }
+            else if (result.Room.IsStarted)
+            {
+                _gameCoordinator.PlayerLeft(member);
+            }
+        }
+
+        private void ResumeGameIfReturned(LogicRooms.RoomResult result)
+        {
+            if (result.HasReturned)
+            {
+                _gameCoordinator.PlayerReturned(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
             }
         }
 

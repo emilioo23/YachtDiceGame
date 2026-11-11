@@ -41,7 +41,7 @@ namespace YachtDice.Server.Contracts.Players
         /// <returns>The avatars, ordered by identifier.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<AvatarInfo> GetAvatarCatalog();
+        List<UnlockableAvatar> GetAvatarCatalog();
 
         /// <summary>
         /// Changes the avatar of a player. The avatar must exist and the player must have unlocked it.

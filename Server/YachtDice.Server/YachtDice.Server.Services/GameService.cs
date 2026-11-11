@@ -4,60 +4,90 @@ using System.ServiceModel;
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Game;
+    using LogicRooms = YachtDice.Server.Logic.Rooms;
+    using RoomContracts = YachtDice.Server.Contracts.Rooms;
 
     /// <summary>
-    /// Runs the turns of the games in progress and notifies the players of each room.
+    /// Lets the players of a game in progress roll the dice and choose the boxes of their scorecards. The
+    /// server decides the dice, the turns and the points, and tells every player what changed.
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class GameService : Contracts.IGameService
+    public class GameService : ServiceBase, Contracts.IGameService
     {
-        private const int DiceCount = 5;
-        private const int MinDieValue = 1;
-        private const int MaxDieValue = 6;
-
-        private readonly CallbackRegistry<Contracts.IGameCallback> _callbacks =
-            new CallbackRegistry<Contracts.IGameCallback>();
-
-        // WCF runs one call at a time on this instance, and only the calls use it, so it needs no lock.
-        private readonly Random _random = new Random();
+        private readonly GameCoordinator _coordinator;
 
         /// <summary>
-        /// Rolls the five dice and notifies every client in the room.
+        /// Initializes a new instance of the GameService class.
         /// </summary>
-        /// <param name="roomId">Identifier of the room.</param>
-        /// <param name="username">Username of the player who rolls.</param>
-        public void RollDice(string roomId, string username)
+        /// <param name="coordinator">The games and their notifications. It is shared with the room service.</param>
+        public GameService(GameCoordinator coordinator)
         {
-            int[] diceValues = CreateDiceValues();
-
-            _callbacks.Register(
-                roomId,
-                username,
-                OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>());
-            _callbacks.Notify(roomId, callback => callback.DiceRolled(diceValues));
+            _coordinator = coordinator
+                ?? throw new ArgumentNullException(nameof(coordinator));
         }
 
         /// <summary>
-        /// Scores a category and notifies every client in the room that the turn changed.
+        /// Subscribes the player to the changes of the game of the room and gives the current state.
         /// </summary>
-        /// <param name="roomId">Identifier of the room.</param>
-        /// <param name="username">Username of the player who scores.</param>
-        /// <param name="categoryId">Identifier of the selected category.</param>
-        public void SelectScoreCategory(string roomId, string username, int categoryId)
+        /// <param name="player">Room and identifier of the player who joins the game.</param>
+        /// <returns>Whether the player joined and the state of the game.</returns>
+        public Contracts.JoinGameResult JoinGame(RoomContracts.RoomMember player)
         {
-            _callbacks.Notify(roomId, callback => callback.TurnChanged(new Contracts.TurnDetails()));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.JoinGameResult result = Execute(player, () => ProcessJoin(member));
+
+            return result;
         }
 
-        private int[] CreateDiceValues()
+        /// <summary>
+        /// Rolls the dice of the turn and tells every player.
+        /// </summary>
+        /// <param name="player">Room and identifier of the player who rolls.</param>
+        /// <param name="heldDice">One value for each die: true if the die keeps its value.</param>
+        /// <returns>Outcome of the roll.</returns>
+        public Contracts.GameResultCode RollDice(RoomContracts.RoomMember player, bool[] heldDice)
         {
-            var diceValues = new int[DiceCount];
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.GameResultCode result = Execute(heldDice, () => _coordinator.Roll(member, heldDice));
 
-            for (int diceIndex = 0; diceIndex < DiceCount; diceIndex++)
+            return result;
+        }
+
+        /// <summary>
+        /// Writes the points of the current dice in a box and passes the turn to the next player.
+        /// </summary>
+        /// <param name="player">Room and identifier of the player who chooses the box.</param>
+        /// <param name="category">Box to use.</param>
+        /// <returns>Outcome of the move.</returns>
+        public Contracts.GameResultCode SelectCategory(
+            RoomContracts.RoomMember player,
+            Contracts.ScoreCategory category)
+        {
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.GameResultCode result = Execute(player, () => _coordinator.Score(member, category));
+
+            return result;
+        }
+
+        private Contracts.JoinGameResult ProcessJoin(LogicRooms.RoomMember member)
+        {
+            Contracts.IGameCallback callback = OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>();
+            Contracts.JoinGameResult result = _coordinator.Join(member, callback);
+
+            if (result.Code == Contracts.GameResultCode.Success)
             {
-                diceValues[diceIndex] = _random.Next(MinDieValue, MaxDieValue + 1);
+                WatchChannel(member, callback);
             }
 
-            return diceValues;
+            return result;
+        }
+
+        private void WatchChannel(LogicRooms.RoomMember member, Contracts.IGameCallback callback)
+        {
+            ICommunicationObject channel = OperationContext.Current.Channel;
+
+            channel.Closed += (sender, e) => _coordinator.Unsubscribe(member, callback);
+            channel.Faulted += (sender, e) => _coordinator.Unsubscribe(member, callback);
         }
     }
 }

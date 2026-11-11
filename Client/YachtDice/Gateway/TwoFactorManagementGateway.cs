@@ -40,16 +40,14 @@ namespace YachtDice.Gateway
         /// Sends the code entered by the player to turn on the two-step verification.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         public async Task<VerificationResultCode> ConfirmActivationAsync(
             string displayName,
-            string code,
-            string challengeId)
+            VerificationCode verificationCode)
         {
             VerificationResultCode result =
-                await ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, code, challengeId));
+                await ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, verificationCode));
 
             return result;
         }

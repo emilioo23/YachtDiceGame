@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -21,9 +22,7 @@ namespace YachtDice.Server.Tests.InMemory
         public List<Friendship> FindBetween(int firstPlayerId, int secondPlayerId)
         {
             List<Friendship> matches = _friendships
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
+                .Where(friendship => IsBetween(friendship, firstPlayerId, secondPlayerId))
                 .ToList();
 
             return matches;
@@ -50,8 +49,8 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public void UpdateStatus(int requesterId, int addresseeId, string status)
         {
-            Friendship friendship = _friendships.First(
-                row => row.RequesterId == requesterId && row.AddresseeId == addresseeId);
+            Func<Friendship, bool> isSamePair = row => row.RequesterId == requesterId && row.AddresseeId == addresseeId;
+            Friendship friendship = _friendships.First(isSamePair);
 
             friendship.Status = status;
         }
@@ -59,7 +58,16 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public void Remove(int requesterId, int addresseeId)
         {
-            _friendships.RemoveAll(row => row.RequesterId == requesterId && row.AddresseeId == addresseeId);
+            Predicate<Friendship> isSamePair = row => row.RequesterId == requesterId && row.AddresseeId == addresseeId;
+            _friendships.RemoveAll(isSamePair);
+        }
+
+        private static bool IsBetween(Friendship friendship, int firstPlayerId, int secondPlayerId)
+        {
+            bool isRequested = friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId;
+            bool isReceived = friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId;
+
+            return isRequested || isReceived;
         }
     }
 }

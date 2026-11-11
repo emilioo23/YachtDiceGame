@@ -19,7 +19,6 @@ namespace YachtDice.Views
     public partial class MenuWindow : Window
     {
         private const int DefaultPlayerLevel = 1;
-        private const string UnexpectedErrorLogMessage = "Unexpected exception while loading the player statistics.";
         private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
         private const string FriendsFailedLogMessage = "The friends of the player could not be loaded.";
         private const string PendingMatchFailedLogMessage = "The pending match of the player could not be checked.";
@@ -68,7 +67,6 @@ namespace YachtDice.Views
             return string.IsNullOrWhiteSpace(session.FirstName) ? session.DisplayName : session.FirstName;
         }
 
-        // A player who left a match in progress, or lost the connection, can go back to it while it goes on.
         private async Task OfferPendingMatchAsync()
         {
             if (!_session.IsGuest)
@@ -167,22 +165,16 @@ namespace YachtDice.Views
             }
         }
 
-        private async Task LoadPlayerStatisticsAsync(string playerName)
+        private Task LoadPlayerStatisticsAsync(string playerName)
         {
-            try
-            {
-                PlayerStatistics statistics = await _gateway.GetStatisticsAsync(playerName);
-                ShowStatistics(statistics);
-            }
-            catch (GatewayException ex)
-            {
-                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedErrorLogMessage);
-                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
-            }
+
+            return GatewayCallRunner.RunAsync(this, _logger, () => ShowPlayerStatisticsAsync(playerName));
+        }
+
+        private async Task ShowPlayerStatisticsAsync(string playerName)
+        {
+            PlayerStatistics statistics = await _gateway.GetStatisticsAsync(playerName);
+            ShowStatistics(statistics);
         }
 
         private async Task LoadAvatarAsync(string playerName)

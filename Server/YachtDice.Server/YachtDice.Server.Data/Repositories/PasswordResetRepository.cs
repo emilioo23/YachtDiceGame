@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
@@ -13,8 +14,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string FindFailedMessage = "Database error occurred while searching the recovery code.";
         private const string SaveFailedMessage = "Could not save the recovery code due to a database failure.";
         private const string DeleteFailedMessage = "Could not delete the recovery code due to a database failure.";
-        private const string CompleteFailedMessage =
-            "Could not save the new password due to a database failure.";
+        private const string CompleteFailedMessage = "Could not save the new password due to a database failure.";
         private const string EmptyValueMessage = "The value cannot be empty.";
 
         /// <summary>
@@ -86,14 +86,16 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<PwdResetToken> SelectByPlayer(YachtDiceContext context, int playerId)
         {
-            List<PwdResetToken> tokens = context.PwdResetToken.Where(token => token.PlayerId == playerId).ToList();
+            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
+            List<PwdResetToken> tokens = context.PwdResetToken.Where(isSamePlayerId).ToList();
 
             return tokens;
         }
 
         private static void RemoveTokens(YachtDiceContext context, int playerId)
         {
-            context.PwdResetToken.RemoveRange(context.PwdResetToken.Where(token => token.PlayerId == playerId));
+            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
+            context.PwdResetToken.RemoveRange(context.PwdResetToken.Where(isSamePlayerId));
         }
 
         private static void ReplaceToken(YachtDiceContext context, PwdResetToken token)
@@ -104,7 +106,8 @@ namespace YachtDice.Server.Data.Repositories
 
         private static void ApplyNewPassword(YachtDiceContext context, int playerId, string newPasswordHash)
         {
-            Player player = context.Player.First(row => row.Id == playerId);
+            Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
+            Player player = context.Player.First(isSameId);
 
             player.PwdHash = newPasswordHash;
             RemoveTokens(context, playerId);

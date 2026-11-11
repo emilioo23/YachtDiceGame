@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using YachtDice.Models;
 using YachtDice.Resources;
 
@@ -11,13 +13,12 @@ namespace YachtDice.Utils
     {
         private const string NoExample = "";
         private const string UpperExample = "3 3 3 5- 6-";
-        private const string ThreeOfAKindExample = "4 4 4 2 6";
-        private const string FourOfAKindExample = "5 5 5 5 1";
+        private const string FourOfAKindExample = "5 5 5 5 1-";
         private const string FullHouseExample = "2 2 3 3 3";
-        private const string SmallStraightExample = "1 2 3 4 6-";
-        private const string LargeStraightExample = "2 3 4 5 6";
+        private const string LittleStraightExample = "1 2 3 4 5";
+        private const string BigStraightExample = "2 3 4 5 6";
         private const string YachtExample = "6 6 6 6 6";
-        private const string ChanceExample = "1 3 4 5 6";
+        private const string ChoiceExample = "1 3 4 5 6";
 
         /// <summary>
         /// Gets the steps of a turn.
@@ -25,12 +26,12 @@ namespace YachtDice.Utils
         /// <returns>The steps, in the order in which they happen.</returns>
         public static List<RuleStep> GetTurnSteps()
         {
-            return new List<RuleStep>
-            {
-                new RuleStep { Number = 1, Text = Strings.HowToPlay_Step1 },
-                new RuleStep { Number = 2, Text = Strings.HowToPlay_Step2 },
-                new RuleStep { Number = 3, Text = Strings.HowToPlay_Step3 }
-            };
+            string[] stepTexts = { Strings.HowToPlay_Step1, Strings.HowToPlay_Step2, Strings.HowToPlay_Step3 };
+            Func<string, int, RuleStep> createRuleStep = CreateStep;
+
+            return stepTexts
+                .Select(createRuleStep)
+                .ToList();
         }
 
         /// <summary>
@@ -64,10 +65,6 @@ namespace YachtDice.Utils
             return new List<CategoryRule>
             {
                 CreateRule(
-                    Strings.Game_Category_ThreeOfAKind,
-                    Strings.HowToPlay_ThreeOfAKindText,
-                    ThreeOfAKindExample),
-                CreateRule(
                     Strings.Game_Category_FourOfAKind,
                     Strings.HowToPlay_FourOfAKindText,
                     FourOfAKindExample),
@@ -83,21 +80,34 @@ namespace YachtDice.Utils
             return new List<CategoryRule>
             {
                 CreateRule(
-                    Strings.HowToPlay_SmallStraightTitle,
-                    Strings.HowToPlay_SmallStraightText,
-                    SmallStraightExample),
+                    Strings.Game_Category_LittleStraight,
+                    Strings.HowToPlay_LittleStraightText,
+                    LittleStraightExample),
                 CreateRule(
-                    Strings.HowToPlay_LargeStraightTitle,
-                    Strings.HowToPlay_LargeStraightText,
-                    LargeStraightExample),
+                    Strings.Game_Category_BigStraight,
+                    Strings.HowToPlay_BigStraightText,
+                    BigStraightExample),
                 CreateRule(Strings.Game_Category_Yacht, Strings.HowToPlay_YachtText, YachtExample),
-                CreateRule(Strings.Game_Category_Chance, Strings.HowToPlay_ChanceText, ChanceExample)
+                CreateRule(Strings.Game_Category_Choice, Strings.HowToPlay_ChoiceText, ChoiceExample),
+                CreateRule(Strings.Game_Category_YachtBonus, Strings.HowToPlay_YachtBonusText, YachtExample),
+                CreateRule(Strings.HowToPlay_JokerTitle, Strings.HowToPlay_JokerText, NoExample)
             };
         }
 
         private static CategoryRule CreateRule(string title, string description, string dice)
         {
             return new CategoryRule { Title = title, Description = description, Dice = dice };
+        }
+
+        /// <summary>
+        /// Creates a numbered step of the turn.
+        /// </summary>
+        /// <param name="text">Text of the step.</param>
+        /// <param name="stepIndex">Position of the step in the list, starting at zero.</param>
+        /// <returns>The step with its number, starting at one.</returns>
+        private static RuleStep CreateStep(string text, int stepIndex)
+        {
+            return new RuleStep { Number = stepIndex + 1, Text = text };
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
@@ -20,7 +19,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const string WrongPasswordLogMessage = "Login attempt with a wrong password.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -39,11 +37,11 @@ namespace YachtDice.Server.Logic.Authentication
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(verificationService));
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(deliveryService));
             _logger = new AppLogger(GetType());
         }
 
@@ -153,7 +151,7 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player, challengeId);

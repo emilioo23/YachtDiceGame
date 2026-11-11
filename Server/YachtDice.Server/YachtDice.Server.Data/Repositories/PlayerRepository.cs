@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
@@ -174,15 +175,17 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
-            List<Player> players = context.Player.Where(player => player.Email == email).ToList();
+            Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
+            List<Player> players = context.Player.Where(isSameEmail).ToList();
 
             return players;
         }
 
         private static List<Player> SelectByName(YachtDiceContext context, string name)
         {
+            Expression<Func<Player, bool>> hasName = player => player.DisplayName == name || player.Username == name;
             List<Player> players = context.Player
-                .Where(player => player.DisplayName == name || player.Username == name)
+                .Where(hasName)
                 .Take(SingleResultCount)
                 .ToList();
 
@@ -191,8 +194,9 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectByUsername(YachtDiceContext context, string username)
         {
+            Expression<Func<Player, bool>> isSameUsername = player => player.Username == username;
             List<Player> players = context.Player
-                .Where(player => player.Username == username)
+                .Where(isSameUsername)
                 .Take(SingleResultCount)
                 .ToList();
 
@@ -201,30 +205,39 @@ namespace YachtDice.Server.Data.Repositories
 
         private static bool IsEmailRegistered(YachtDiceContext context, string email)
         {
-            bool isRegistered = context.Player.Any(player => player.Email == email);
+            Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
+            bool isRegistered = context.Player.Any(isSameEmail);
 
             return isRegistered;
         }
 
         private static bool IsUsernameTaken(YachtDiceContext context, string username)
         {
-            bool isTaken = context.Player.Any(player => player.Username == username);
+            Expression<Func<Player, bool>> isSameUsername = player => player.Username == username;
+            bool isTaken = context.Player.Any(isSameUsername);
 
             return isTaken;
         }
 
         private static bool IsTwoFactorActive(YachtDiceContext context, int playerId)
         {
-            bool isActive = context.TwoFactorAuth.Any(
-                auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
+            Expression<Func<TwoFactorAuth, bool>> isOfPlayer = auth => auth.PlayerId == playerId;
+            Expression<Func<TwoFactorAuth, bool>> isEmailMethod = auth => auth.Method == EmailMethod;
+            Expression<Func<TwoFactorAuth, bool>> hasActiveStatus = auth => auth.Status == ActiveStatus;
+            bool isActive = context.TwoFactorAuth
+                .Where(isOfPlayer)
+                .Where(isEmailMethod)
+                .Any(hasActiveStatus);
 
             return isActive;
         }
 
         private static void ApplyTwoFactorStatus(YachtDiceContext context, int playerId, bool isEnabled)
         {
+            Expression<Func<TwoFactorAuth, bool>> isEmailMethodOfPlayer =
+                row => row.PlayerId == playerId && row.Method == EmailMethod;
             TwoFactorAuth auth = context.TwoFactorAuth
-                .FirstOrDefault(row => row.PlayerId == playerId && row.Method == EmailMethod);
+                .FirstOrDefault(isEmailMethodOfPlayer);
 
             if (auth == null)
             {
@@ -237,7 +250,8 @@ namespace YachtDice.Server.Data.Repositories
 
         private static void ApplyAvatar(YachtDiceContext context, int playerId, int avatarId)
         {
-            Player player = context.Player.FirstOrDefault(row => row.Id == playerId);
+            Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
+            Player player = context.Player.FirstOrDefault(isSameId);
 
             if (player != null)
             {

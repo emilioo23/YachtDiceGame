@@ -3,22 +3,21 @@
 namespace YachtDice.Server.Contracts.Game
 {
     /// <summary>
-    /// Information about the current turn of a game, as seen by the client.
+    /// A box that the current player can choose with the current dice.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class TurnDetails
+    public class ScoreChoice
     {
         /// <summary>
-        /// Username of the player whose turn is active.
+        /// The box that can be chosen.
         /// </summary>
         [DataMember]
-        public string CurrentTurnUsername { get; set; }
+        public ScoreCategory Category { get; set; }
 
         /// <summary>
-        /// Number of rolls still available in the current turn.
+        /// Points that the box would receive.
         /// </summary>
         [DataMember]
-        public int RollsLeft { get; set; }
+        public int Points { get; set; }
     }
 }
-

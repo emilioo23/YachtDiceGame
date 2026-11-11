@@ -124,6 +124,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
+        /// </summary>
+        public static string Auth_ErrorInvalidUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña debe tener de 8 a 64 caracteres, con al menos una letra y un número..
+        /// </summary>
+        public static string Auth_ErrorWeakPassword {
+            get {
+                return ResourceManager.GetString("Auth_ErrorWeakPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ingresa un correo electrónico válido..
         /// </summary>
         public static string Auth_ErrorInvalidEmail {
@@ -315,9 +333,18 @@ namespace YachtDice.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
         /// </summary>
-        public static string Dialogs_DatabaseConnectionError {
+        public static string Dialogs_ServerUnavailable {
             get {
-                return ResourceManager.GetString("Dialogs_DatabaseConnectionError", resourceCulture);
+                return ResourceManager.GetString("Dialogs_ServerUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor no puede consultar sus datos en este momento. Inténtalo más tarde..
+        /// </summary>
+        public static string Dialogs_DatabaseUnavailable {
+            get {
+                return ResourceManager.GetString("Dialogs_DatabaseUnavailable", resourceCulture);
             }
         }
         
@@ -363,6 +390,15 @@ namespace YachtDice.Resources {
         public static string Dialogs_InvalidCredentials {
             get {
                 return ResourceManager.GetString("Dialogs_InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor rechazó la información enviada. Revisa los datos e inténtalo de nuevo..
+        /// </summary>
+        public static string Dialogs_InvalidData {
+            get {
+                return ResourceManager.GetString("Dialogs_InvalidData", resourceCulture);
             }
         }
         
@@ -583,6 +619,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Esc. Grande.
+        /// </summary>
+        public static string Game_Category_BigStraight {
+            get {
+                return ResourceManager.GetString("Game_Category_BigStraight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Bono +35.
         /// </summary>
         public static string Game_Category_Bonus {
@@ -592,11 +637,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Chance.
+        ///   Busca una cadena traducida similar a Libre.
         /// </summary>
-        public static string Game_Category_Chance {
+        public static string Game_Category_Choice {
             get {
-                return ResourceManager.GetString("Game_Category_Chance", resourceCulture);
+                return ResourceManager.GetString("Game_Category_Choice", resourceCulture);
             }
         }
         
@@ -637,11 +682,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Esc.Grande.
+        ///   Busca una cadena traducida similar a Esc. Pequeña.
         /// </summary>
-        public static string Game_Category_LargeStraight {
+        public static string Game_Category_LittleStraight {
             get {
-                return ResourceManager.GetString("Game_Category_LargeStraight", resourceCulture);
+                return ResourceManager.GetString("Game_Category_LittleStraight", resourceCulture);
             }
         }
         
@@ -664,29 +709,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Esc.Pequeña.
-        /// </summary>
-        public static string Game_Category_SmallStraight {
-            get {
-                return ResourceManager.GetString("Game_Category_SmallStraight", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Suma.
         /// </summary>
         public static string Game_Category_Sum {
             get {
                 return ResourceManager.GetString("Game_Category_Sum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a 3 Iguales.
-        /// </summary>
-        public static string Game_Category_ThreeOfAKind {
-            get {
-                return ResourceManager.GetString("Game_Category_ThreeOfAKind", resourceCulture);
             }
         }
         
@@ -714,6 +741,33 @@ namespace YachtDice.Resources {
         public static string Game_Category_Yacht {
             get {
                 return ResourceManager.GetString("Game_Category_Yacht", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bono Yacht.
+        /// </summary>
+        public static string Game_Category_YachtBonus {
+            get {
+                return ResourceManager.GetString("Game_Category_YachtBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} suma {1} puntos.
+        /// </summary>
+        public static string Game_Celebration_YachtPoints {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡YACHT!.
+        /// </summary>
+        public static string Game_Celebration_YachtTitle {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtTitle", resourceCulture);
             }
         }
         
@@ -817,6 +871,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a A {0} se le acabó el tiempo y el servidor jugó su turno..
+        /// </summary>
+        public static string Game_Chat_TurnTimedOut {
+            get {
+                return ResourceManager.GetString("Game_Chat_TurnTimedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El chat no está disponible en esta partida..
         /// </summary>
         public static string Game_Chat_Unavailable {
@@ -826,11 +889,47 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} sacó otro Yacht y gana 100 puntos de bono..
+        /// </summary>
+        public static string Game_Chat_YachtBonus {
+            get {
+                return ResourceManager.GetString("Game_Chat_YachtBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {
             get {
                 return ResourceManager.GetString("Game_Dice_ButtonRoll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Elige una categoría o conserva dados y vuelve a tirar..
+        /// </summary>
+        public static string Game_Dice_HintChoose {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintChoose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando el turno de {0}....
+        /// </summary>
+        public static string Game_Dice_HintOpponent {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintOpponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sin tiradas. Elige una categoría..
+        /// </summary>
+        public static string Game_Dice_HintPickBox {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintPickBox", resourceCulture);
             }
         }
         
@@ -849,6 +948,78 @@ namespace YachtDice.Resources {
         public static string Game_KickNoPlayers {
             get {
                 return ResourceManager.GetString("Game_KickNoPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa categoría ya tiene puntos..
+        /// </summary>
+        public static string Game_Result_CategoryFilled {
+            get {
+                return ResourceManager.GetString("Game_Result_CategoryFilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Con un Yacht repetido la regla del comodín no permite esa categoría..
+        /// </summary>
+        public static string Game_Result_CategoryNotAllowed {
+            get {
+                return ResourceManager.GetString("Game_Result_CategoryNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida ya terminó..
+        /// </summary>
+        public static string Game_Result_GameFinished {
+            get {
+                return ResourceManager.GetString("Game_Result_GameFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida ya no existe..
+        /// </summary>
+        public static string Game_Result_GameNotFound {
+            get {
+                return ResourceManager.GetString("Game_Result_GameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo entrar a la partida..
+        /// </summary>
+        public static string Game_Result_JoinFailed {
+            get {
+                return ResourceManager.GetString("Game_Result_JoinFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya usaste las tres tiradas de este turno..
+        /// </summary>
+        public static string Game_Result_NoRollsLeft {
+            get {
+                return ResourceManager.GetString("Game_Result_NoRollsLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no es tu turno..
+        /// </summary>
+        public static string Game_Result_NotYourTurn {
+            get {
+                return ResourceManager.GetString("Game_Result_NotYourTurn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no participas en esta partida..
+        /// </summary>
+        public static string Game_Result_PlayerNotInGame {
+            get {
+                return ResourceManager.GetString("Game_Result_PlayerNotInGame", resourceCulture);
             }
         }
         
@@ -889,11 +1060,47 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} s.
+        /// </summary>
+        public static string Game_Timer_SecondsLeft {
+            get {
+                return ResourceManager.GetString("Game_Timer_SecondsLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Partida terminada.
+        /// </summary>
+        public static string Game_Topbar_GameOver {
+            get {
+                return ResourceManager.GetString("Game_Topbar_GameOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando jugadores.
+        /// </summary>
+        public static string Game_Topbar_Paused {
+            get {
+                return ResourceManager.GetString("Game_Topbar_Paused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ronda {0} / {1}.
         /// </summary>
         public static string Game_Topbar_RoundInfo {
             get {
                 return ResourceManager.GetString("Game_Topbar_RoundInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Turno de {0}.
+        /// </summary>
+        public static string Game_Topbar_TurnOf {
+            get {
+                return ResourceManager.GetString("Game_Topbar_TurnOf", resourceCulture);
             }
         }
         
@@ -988,6 +1195,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Los dados 2-3-4-5-6. Anotas 30 puntos..
+        /// </summary>
+        public static string HowToPlay_BigStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_BigStraightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Si la suma de Unos a Seises llega a 63 puntos o más (por ejemplo, tres dados de cada número), ganas 35 puntos extra..
         /// </summary>
         public static string HowToPlay_BonusText {
@@ -999,9 +1215,9 @@ namespace YachtDice.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a Sirve para cualquier combinación. Anotas la suma de los cinco dados. Ejemplo: 1+3+4+5+6 = 19 puntos..
         /// </summary>
-        public static string HowToPlay_ChanceText {
+        public static string HowToPlay_ChoiceText {
             get {
-                return ResourceManager.GetString("HowToPlay_ChanceText", resourceCulture);
+                return ResourceManager.GetString("HowToPlay_ChoiceText", resourceCulture);
             }
         }
         
@@ -1042,20 +1258,29 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Cinco números seguidos: 1-2-3-4-5 o 2-3-4-5-6. Anotas 40 puntos..
+        ///   Busca una cadena traducida similar a Si sacas un Yacht y la casilla Yacht ya está usada, debes anotarlo en la casilla del mismo número si está libre. Si no, en cualquier casilla inferior libre (la casa llena y las escaleras valen completas). Si tampoco hay, en cualquier casilla superior libre..
         /// </summary>
-        public static string HowToPlay_LargeStraightText {
+        public static string HowToPlay_JokerText {
             get {
-                return ResourceManager.GetString("HowToPlay_LargeStraightText", resourceCulture);
+                return ResourceManager.GetString("HowToPlay_JokerText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Escalera grande.
+        ///   Busca una cadena traducida similar a Comodín.
         /// </summary>
-        public static string HowToPlay_LargeStraightTitle {
+        public static string HowToPlay_JokerTitle {
             get {
-                return ResourceManager.GetString("HowToPlay_LargeStraightTitle", resourceCulture);
+                return ResourceManager.GetString("HowToPlay_JokerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los dados 1-2-3-4-5. Anotas 30 puntos..
+        /// </summary>
+        public static string HowToPlay_LittleStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_LittleStraightText", resourceCulture);
             }
         }
         
@@ -1065,24 +1290,6 @@ namespace YachtDice.Resources {
         public static string HowToPlay_LowerTitle {
             get {
                 return ResourceManager.GetString("HowToPlay_LowerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Cuatro números seguidos, como 1-2-3-4 o 3-4-5-6. El quinto dado no importa. Anotas 30 puntos..
-        /// </summary>
-        public static string HowToPlay_SmallStraightText {
-            get {
-                return ResourceManager.GetString("HowToPlay_SmallStraightText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Escalera pequeña.
-        /// </summary>
-        public static string HowToPlay_SmallStraightTitle {
-            get {
-                return ResourceManager.GetString("HowToPlay_SmallStraightTitle", resourceCulture);
             }
         }
         
@@ -1119,15 +1326,6 @@ namespace YachtDice.Resources {
         public static string HowToPlay_Subtitle {
             get {
                 return ResourceManager.GetString("HowToPlay_Subtitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Al menos tres dados iguales. Anotas la suma de los cinco dados. Ejemplo: 4+4+4+2+6 = 20 puntos..
-        /// </summary>
-        public static string HowToPlay_ThreeOfAKindText {
-            get {
-                return ResourceManager.GetString("HowToPlay_ThreeOfAKindText", resourceCulture);
             }
         }
         
@@ -1209,6 +1407,15 @@ namespace YachtDice.Resources {
         public static string HowToPlay_WinTitle {
             get {
                 return ResourceManager.GetString("HowToPlay_WinTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si ya anotaste 50 puntos en Yacht y sacas otro Yacht, ganas 100 puntos extra. Si anotaste 0 en Yacht, no hay bono..
+        /// </summary>
+        public static string HowToPlay_YachtBonusText {
+            get {
+                return ResourceManager.GetString("HowToPlay_YachtBonusText", resourceCulture);
             }
         }
         
@@ -2356,6 +2563,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Lugar.
+        /// </summary>
+        public static string Results_ColumnRank {
+            get {
+                return ResourceManager.GetString("Results_ColumnRank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Total.
         /// </summary>
         public static string Results_ColumnTotal {
@@ -2388,6 +2604,15 @@ namespace YachtDice.Resources {
         public static string Results_Title {
             get {
                 return ResourceManager.GetString("Results_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Empate.
+        /// </summary>
+        public static string Results_TitleTie {
+            get {
+                return ResourceManager.GetString("Results_TitleTie", resourceCulture);
             }
         }
         

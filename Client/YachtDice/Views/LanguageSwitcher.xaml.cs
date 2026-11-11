@@ -95,8 +95,19 @@ namespace YachtDice.Views
             CurrentLangText.Text = isSpanish
                 ? Strings.Settings_Preferences_OptionSpanishShort
                 : Strings.Settings_Preferences_OptionEnglishShort;
+            Grid flag;
+
+            if (isSpanish)
+            {
+                flag = BuildSpanishFlag();
+            }
+            else
+            {
+                flag = BuildEnglishFlag();
+            }
+
             CurrentFlagGrid.Children.Clear();
-            CurrentFlagGrid.Children.Add(isSpanish ? BuildSpanishFlag() : BuildEnglishFlag());
+            CurrentFlagGrid.Children.Add(flag);
         }
 
         private static Grid BuildSpanishFlag()

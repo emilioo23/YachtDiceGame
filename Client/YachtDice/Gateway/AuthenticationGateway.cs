@@ -26,13 +26,12 @@ namespace YachtDice.Gateway
         /// Validates the verification code entered by the player.
         /// </summary>
         /// <param name="email">Email address the code was sent to.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public async Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
+        public async Task<VerificationResultCode> VerifyCodeAsync(string email, VerificationCode verificationCode)
         {
             VerificationResultCode result =
-                await ExecuteAsync(client => client.VerifyPlayerCode(email, code, challengeId));
+                await ExecuteAsync(client => client.VerifyPlayerCode(email, verificationCode));
 
             return result;
         }

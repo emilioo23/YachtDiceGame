@@ -3,14 +3,14 @@
     /// <summary>
     /// An avatar that the players can use, with the level a player needs to unlock it.
     /// </summary>
-    public class AvatarInfo
+    public class UnlockableAvatar
     {
         /// <summary>
         /// Initializes the description of an avatar.
         /// </summary>
         /// <param name="id">Identifier of the avatar, the same that is saved in the database.</param>
         /// <param name="requiredLevel">Minimum level that a player needs to use the avatar.</param>
-        public AvatarInfo(int id, int requiredLevel)
+        public UnlockableAvatar(int id, int requiredLevel)
         {
             Id = id;
             RequiredLevel = requiredLevel;

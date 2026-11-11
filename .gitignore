@@ -368,3 +368,6 @@ ConnectionStrings.config
 Secrets.config
 
 logs/
+
+# SonarQube local analysis
+.sonarqube/

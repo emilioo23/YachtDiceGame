@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Logic.Avatars
 {
     /// <summary>
     /// List of the avatars of the game and the level that each one needs. The first ones are free for every
-    /// player and the others are unlocked as the player levels up.
+    /// player and the others are unlocked as the player levels up. The identifier of each avatar is its
+    /// position in the list of levels, counting from the first identifier.
     /// </summary>
     public static class AvatarCatalog
     {
@@ -23,7 +25,6 @@ namespace YachtDice.Server.Logic.Avatars
         private const int DiamondLevel = 16;
         private const int LegendLevel = 20;
 
-        // The identifier of each avatar is its position in this list, counting from FirstAvatarId.
         private static readonly int[] RequiredLevels =
         {
             FreeLevel,
@@ -38,17 +39,15 @@ namespace YachtDice.Server.Logic.Avatars
             LegendLevel
         };
 
-        private static readonly List<AvatarInfo> Avatars = RequiredLevels
-            .Select((level, index) => new AvatarInfo(FirstAvatarId + index, level))
-            .ToList();
+        private static readonly List<UnlockableAvatar> Avatars = CreateAvatars();
 
         /// <summary>
         /// Gets every avatar of the game, ordered by identifier.
         /// </summary>
         /// <returns>A copy of the list of avatars.</returns>
-        public static List<AvatarInfo> GetAll()
+        public static List<UnlockableAvatar> GetAll()
         {
-            return new List<AvatarInfo>(Avatars);
+            return new List<UnlockableAvatar>(Avatars);
         }
 
         /// <summary>
@@ -57,11 +56,22 @@ namespace YachtDice.Server.Logic.Avatars
         /// <param name="avatarId">Identifier to look for.</param>
         /// <param name="avatar">The avatar found; only valid when the method returns true.</param>
         /// <returns>True if the avatar exists.</returns>
-        public static bool TryFind(int avatarId, out AvatarInfo avatar)
+        public static bool TryFind(int avatarId, out UnlockableAvatar avatar)
         {
-            avatar = Avatars.FirstOrDefault(candidate => candidate.Id == avatarId);
+            Func<UnlockableAvatar, bool> isSameId = candidate => candidate.Id == avatarId;
+            avatar = Avatars.FirstOrDefault(isSameId);
 
             return avatar != null;
+        }
+
+        /// <summary>
+        /// Creates one avatar for each required level, with consecutive identifiers.
+        /// </summary>
+        /// <returns>The avatars of the game ordered by identifier.</returns>
+        private static List<UnlockableAvatar> CreateAvatars()
+        {
+
+            return RequiredLevels.Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level)).ToList();
         }
     }
 }

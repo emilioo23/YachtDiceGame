@@ -64,11 +64,17 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="challengeId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="verificationCode" nillable="true" type="tns:VerificationCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="VerificationCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerificationCode" nillable="true" type="tns:VerificationCode" />
   <xs:element name="VerifyPlayerCodeResponse">
     <xs:complexType>
       <xs:sequence>
@@ -163,6 +169,7 @@
       <xs:enumeration value="IncorrectCode" />
       <xs:enumeration value="CodeExpired" />
       <xs:enumeration value="TooManyAttempts" />
+      <xs:enumeration value="WeakPassword" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PasswordResetResultCode" nillable="true" type="tns:PasswordResetResultCode" />

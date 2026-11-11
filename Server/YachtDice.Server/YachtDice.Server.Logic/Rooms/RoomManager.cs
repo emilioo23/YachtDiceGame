@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -10,24 +11,23 @@ namespace YachtDice.Server.Logic.Rooms
     /// channels use it at the same time. WCF only serializes the calls of each service, not those of different
     /// services, so every operation takes the lock before it reads or changes a room. A concurrent dictionary
     /// would only protect the list of rooms, not a step such as checking for space and adding the player.
+    /// The private steps that receive a room only run while the lock is held. The codes of the rooms come from a
+    /// secure generator, so a private room cannot be entered by guessing its code.
     /// </summary>
     public class RoomManager : IRoomManager
     {
         private const int CodeLength = 6;
+        private const int FirstAlphabetIndex = 0;
         private const string CodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         private const int MinCapacity = 2;
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
-        private const string NullDependencyMessage = "The dependency cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
-
-        // Only used while _syncRoot is held, so it needs no lock of its own.
-        private readonly Random _random = new Random();
 
         /// <summary>
         /// Initializes the manager without any room.
@@ -36,7 +36,7 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomManager(IAvatarLookup avatarLookup)
         {
             _avatarLookup = avatarLookup
-                ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(avatarLookup));
         }
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
-        public RoomResult JoinListed(string roomId, string playerName, string accessCode)
+        public RoomResult JoinListed(string playerName, Room room)
         {
             ValidateName(playerName);
             RoomApplicant applicant = CreateApplicant(playerName);
@@ -78,9 +78,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                if (TryGetRoomById(roomId, out GameRoom room))
+                if (TryGetRoomById(room.RoomId, out GameRoom gameRoom))
                 {
-                    result = JoinWithAccessCode(room, applicant, NormalizeCode(accessCode));
+                    result = JoinWithAccessCode(gameRoom, applicant, NormalizeCode(room.AccessCode));
                 }
             }
 
@@ -94,8 +94,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
+                Func<GameRoom, bool> isNotStarted = room => !room.IsStarted;
                 rooms = _rooms.Values
-                    .Where(room => !room.IsStarted)
+                    .Where(isNotStarted)
                     .Select(room => room.ToSummary())
                     .OrderBy(summary => summary.HostName, StringComparer.OrdinalIgnoreCase)
                     .ToList();
@@ -112,8 +113,8 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                GameRoom pending = _rooms.Values.FirstOrDefault(
-                    room => room.IsStarted && room.HasAbsentPlayer(playerName));
+                Func<GameRoom, bool> isPendingForPlayer = room => room.IsStarted && room.HasAbsentPlayer(playerName);
+                GameRoom pending = _rooms.Values.FirstOrDefault(isPendingForPlayer);
 
                 if (pending != null)
                 {
@@ -125,47 +126,50 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
-        public RoomResult Leave(string roomCode, string playerId)
+        public RoomResult Leave(RoomMember member)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerId));
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => TakeOutPlayer(room, member.PlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult UpdateSettings(string roomCode, string playerId, RoomSettings settings)
+        public RoomResult UpdateSettings(RoomMember member, RoomSettings settings)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ChangeSettings(room, playerId, settings));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ChangeSettings(room, member.PlayerId, settings));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult StartGame(string roomCode, string playerId)
+        public RoomResult StartGame(RoomMember member)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => StartRoomGame(room, playerId));
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => StartRoomGame(room, member.PlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId)
+        public RoomResult KickPlayer(RoomMember member, string targetPlayerId)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ExpelPlayer(room, playerId, targetPlayerId));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ExpelPlayer(room, member.PlayerId, targetPlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult TransferHost(string roomCode, string playerId, string newHostId)
+        public RoomResult TransferHost(RoomMember member, string newHostId)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ChangeHost(room, playerId, newHostId));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ChangeHost(room, member.PlayerId, newHostId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public bool TryGetPlayer(string roomCode, string playerId, out RoomPlayer player)
+        public bool TryGetPlayer(RoomMember member, out RoomPlayer player)
         {
             var isFound = false;
 
@@ -173,9 +177,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                if (TryGetRoom(roomCode, out GameRoom room))
+                if (TryGetRoom(member.RoomCode, out GameRoom room))
                 {
-                    isFound = room.TryGetPlayer(playerId, out player);
+                    isFound = room.TryGetPlayer(member.PlayerId, out player);
                 }
             }
 
@@ -444,7 +448,6 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        // The caller must hold _syncRoot.
         private RoomResult TakeOutPlayer(GameRoom room, string playerId)
         {
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
@@ -464,7 +467,6 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        // The caller must hold _syncRoot.
         private bool TryGetRoomById(string roomId, out GameRoom room)
         {
             room = _rooms.Values.FirstOrDefault(
@@ -473,13 +475,11 @@ namespace YachtDice.Server.Logic.Rooms
             return room != null;
         }
 
-        // The caller must hold _syncRoot.
         private bool TryGetRoom(string roomCode, out GameRoom room)
         {
             return _rooms.TryGetValue(NormalizeCode(roomCode), out room);
         }
 
-        // The caller must hold _syncRoot.
         private void DeleteIfEmpty(GameRoom room)
         {
             if (room.Players.Count == 0)
@@ -488,7 +488,6 @@ namespace YachtDice.Server.Logic.Rooms
             }
         }
 
-        // The caller must hold _syncRoot.
         private string CreateUniqueCode()
         {
             string code;
@@ -502,14 +501,15 @@ namespace YachtDice.Server.Logic.Rooms
             return code;
         }
 
-        // The caller must hold _syncRoot.
         private string CreateRandomCode()
         {
             var characters = new char[CodeLength];
 
             for (int characterIndex = 0; characterIndex < CodeLength; characterIndex++)
             {
-                characters[characterIndex] = CodeAlphabet[_random.Next(CodeAlphabet.Length)];
+                int alphabetIndex = SecureRandom.Next(FirstAlphabetIndex, CodeAlphabet.Length);
+
+                characters[characterIndex] = CodeAlphabet[alphabetIndex];
             }
 
             return new string(characters);

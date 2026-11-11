@@ -18,14 +18,15 @@ namespace YachtDice.Client.Tests.Avatars
         private const int ThirdAvatarId = 3;
         private const int UnknownAvatarId = 99;
 
+        private static readonly bool[] OnlyFirstUnlocked = { true, false, false };
+        private static readonly bool[] FirstTwoUnlocked = { true, true, false };
+
         [Fact]
         public void Build_PlayerBelowTheRequiredLevel_LocksTheAvatar()
         {
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FreeLevel, FirstAvatarId);
 
-            Assert.True(options.Single(option => option.Id == FirstAvatarId).IsUnlocked);
-            Assert.False(options.Single(option => option.Id == SecondAvatarId).IsUnlocked);
-            Assert.False(options.Single(option => option.Id == ThirdAvatarId).IsUnlocked);
+            Assert.Equal(OnlyFirstUnlocked, options.Select(option => option.IsUnlocked).ToArray());
         }
 
         [Fact]
@@ -33,8 +34,7 @@ namespace YachtDice.Client.Tests.Avatars
         {
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), ThirdLevel, FirstAvatarId);
 
-            Assert.True(options.Single(option => option.Id == SecondAvatarId).IsUnlocked);
-            Assert.False(options.Single(option => option.Id == ThirdAvatarId).IsUnlocked);
+            Assert.Equal(FirstTwoUnlocked, options.Select(option => option.IsUnlocked).ToArray());
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace YachtDice.Client.Tests.Avatars
         [Fact]
         public void Build_CatalogOutOfOrder_ReturnsTheOptionsOrderedByIdentifier()
         {
-            var catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
+            List<AvatarRequirement> catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, FifthLevel, FirstAvatarId);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,7 +45,7 @@ namespace YachtDice.Views
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadAvatarsAsync);
         }
 
-        private static AvatarRequirement ToRequirement(AvatarInfo avatar)
+        private static AvatarRequirement ToRequirement(UnlockableAvatar avatar)
         {
             return new AvatarRequirement { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel };
         }
@@ -52,7 +53,7 @@ namespace YachtDice.Views
         private async Task LoadAvatarsAsync()
         {
             PlayerProfile profile = await _playerGateway.GetProfileAsync(_session.DisplayName);
-            List<AvatarInfo> catalog = await _playerGateway.GetAvatarCatalogAsync();
+            List<UnlockableAvatar> catalog = await _playerGateway.GetAvatarCatalogAsync();
 
             _catalog = catalog.Select(ToRequirement).ToList();
             _level = profile.Level;
@@ -89,7 +90,8 @@ namespace YachtDice.Views
 
         private int GetRequiredLevel()
         {
-            AvatarOption option = _options.FirstOrDefault(candidate => candidate.Id == _selectedAvatarId);
+            Func<AvatarOption, bool> isSameId = candidate => candidate.Id == _selectedAvatarId;
+            AvatarOption option = _options.FirstOrDefault(isSameId);
 
             return option == null ? NoLevelRequired : option.RequiredLevel;
         }
@@ -97,7 +99,8 @@ namespace YachtDice.Views
         private void AvatarOption_Click(object sender, MouseButtonEventArgs e)
         {
             int avatarId = (int)((FrameworkElement)sender).Tag;
-            AvatarOption option = _options.First(candidate => candidate.Id == avatarId);
+            Func<AvatarOption, bool> isSameId = candidate => candidate.Id == avatarId;
+            AvatarOption option = _options.First(isSameId);
 
             if (option.IsUnlocked)
             {

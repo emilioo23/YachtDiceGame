@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
 using YachtDice.Server.Data.Repositories;
-using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
+using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
@@ -80,8 +81,9 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
 
             var roomManager = new RoomManager(avatarService);
-            serviceHosts.Add(new ServiceHost(new RoomService(roomManager)));
-            serviceHosts.Add(new ServiceHost(new GameService()));
+            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()));
+            serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
+            serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
 
             var presenceService = new PresenceService();
@@ -93,13 +95,14 @@ namespace YachtDice.Server.Host
 
         private static void WaitForExit()
         {
-            ThreadPool.QueueUserWorkItem(state =>
-            {
-                Console.ReadLine();
-                _quitEvent.Set();
-            });
-
+            ThreadPool.QueueUserWorkItem(WaitForEnterKey);
             _quitEvent.WaitOne();
+        }
+
+        private static void WaitForEnterKey(object state)
+        {
+            Console.ReadLine();
+            _quitEvent.Set();
         }
 
         private static void CloseServiceHosts(List<ServiceHost> serviceHosts)

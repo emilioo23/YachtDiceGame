@@ -6,7 +6,9 @@ namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Friends;
     using LogicFriends = YachtDice.Server.Logic.Friends;
+    using LogicRooms = YachtDice.Server.Logic.Rooms;
     using PresenceContracts = YachtDice.Server.Contracts.Presence;
+    using RoomContracts = YachtDice.Server.Contracts.Rooms;
 
     /// <summary>
     /// Manages the friends of the players: requests, answers, removals and lists.
@@ -14,8 +16,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class FriendService : ServiceBase, Contracts.IFriendService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
-
         private readonly LogicFriends.IFriendshipService _friendshipService;
         private readonly LogicFriends.IRoomInvitationService _invitationService;
         private readonly IPlayerNotifier _notifier;
@@ -32,10 +32,10 @@ namespace YachtDice.Server.Services
             IPlayerNotifier notifier)
         {
             _friendshipService = friendshipService
-                ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(friendshipService));
             _invitationService = invitationService
-                ?? throw new ArgumentNullException(nameof(invitationService), NullDependencyMessage);
-            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(invitationService));
+            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
         }
 
         /// <summary>
@@ -87,14 +87,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
-        /// <param name="playerId">Identifier that the room gave to the player who invites.</param>
+        /// <param name="sender">Room and identifier of the player who invites.</param>
         /// <param name="friendName">Name of the friend to invite.</param>
-        /// <param name="roomCode">Code of the room.</param>
         /// <returns>Whether the invitation reached the friend or why not.</returns>
-        public Contracts.InvitationResultCode InviteToRoom(string playerId, string friendName, string roomCode)
+        public Contracts.InvitationResultCode InviteToRoom(RoomContracts.RoomMember sender, string friendName)
         {
-            Contracts.InvitationResultCode result =
-                Execute(playerId, () => ProcessInvitation(playerId, friendName, roomCode));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(sender);
+            Contracts.InvitationResultCode result = Execute(sender, () => ProcessInvitation(member, friendName));
 
             return result;
         }
@@ -170,14 +169,20 @@ namespace YachtDice.Server.Services
             return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
         }
 
-        private Contracts.InvitationResultCode ProcessInvitation(string playerId, string friendName, string roomCode)
+        private Contracts.InvitationResultCode ProcessInvitation(LogicRooms.RoomMember sender, string friendName)
         {
-            LogicFriends.InvitationResult result = _invitationService.Validate(playerId, friendName, roomCode);
+            LogicFriends.InvitationResult result = _invitationService.CheckInvitation(sender, friendName);
             Contracts.InvitationResultCode code;
 
             if (result.Status == LogicFriends.InvitationStatus.Allowed)
             {
-                code = Deliver(friendName, result.SenderName, roomCode);
+                var invitation = new PresenceContracts.RoomInvitation
+                {
+                    SenderName = result.SenderName,
+                    RoomCode = sender.RoomCode
+                };
+
+                code = Deliver(friendName, invitation);
             }
             else
             {
@@ -188,17 +193,21 @@ namespace YachtDice.Server.Services
             return code;
         }
 
-        private Contracts.InvitationResultCode Deliver(string friendName, string senderName, string roomCode)
+        private Contracts.InvitationResultCode Deliver(string friendName, PresenceContracts.RoomInvitation invitation)
         {
-            var invitation = new PresenceContracts.RoomInvitation
-            {
-                SenderName = senderName,
-                RoomCode = roomCode
-            };
+            bool isDelivered = _notifier.SendInvitation(friendName, invitation);
+            Contracts.InvitationResultCode code;
 
-            return _notifier.SendInvitation(friendName, invitation)
-                ? Contracts.InvitationResultCode.Sent
-                : Contracts.InvitationResultCode.FriendOffline;
+            if (isDelivered)
+            {
+                code = Contracts.InvitationResultCode.Sent;
+            }
+            else
+            {
+                code = Contracts.InvitationResultCode.FriendOffline;
+            }
+
+            return code;
         }
 
         private Contracts.FriendActionResultCode ProcessRemoval(string displayName, string friendName)

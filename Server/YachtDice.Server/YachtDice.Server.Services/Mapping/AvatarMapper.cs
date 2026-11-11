@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Services.Mapping
@@ -33,10 +34,11 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="avatars">Avatars of the catalog.</param>
         /// <returns>Answer for the client.</returns>
-        public static List<Contracts.AvatarInfo> ToContracts(List<Logic.Avatars.AvatarInfo> avatars)
+        public static List<Contracts.UnlockableAvatar> ToContracts(List<Logic.Avatars.UnlockableAvatar> avatars)
         {
-            List<Contracts.AvatarInfo> contracts = avatars
-                .Select(avatar => new Contracts.AvatarInfo { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel })
+            Func<Logic.Avatars.UnlockableAvatar, Contracts.UnlockableAvatar> createUnlockableAvatar = ToContract;
+            List<Contracts.UnlockableAvatar> contracts = avatars
+                .Select(createUnlockableAvatar)
                 .ToList();
 
             return contracts;
@@ -50,6 +52,22 @@ namespace YachtDice.Server.Services.Mapping
         public static Contracts.AvatarChangeResultCode ToResultCode(Logic.Avatars.AvatarChangeStatus status)
         {
             return EnumMapper.Map<Logic.Avatars.AvatarChangeStatus, Contracts.AvatarChangeResultCode>(status);
+        }
+
+        /// <summary>
+        /// Converts an avatar of the catalog into the version that travels to the clients.
+        /// </summary>
+        /// <param name="avatar">Avatar of the catalog in the logic layer.</param>
+        /// <returns>The avatar for the clients.</returns>
+        private static Contracts.UnlockableAvatar ToContract(Logic.Avatars.UnlockableAvatar avatar)
+        {
+            var contract = new Contracts.UnlockableAvatar
+            {
+                Id = avatar.Id,
+                RequiredLevel = avatar.RequiredLevel
+            };
+
+            return contract;
         }
     }
 }

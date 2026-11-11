@@ -15,7 +15,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int DefaultAvatarId = 1;
         private const int InitialExperience = 0;
         private const int InitialLevel = 1;
-        private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
         private const string RegisteredLogMessage = "Player registered successfully.";
@@ -76,9 +75,17 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RegistrationResult.FieldTooLong;
             }
-            else if (!EmailAddressValidator.IsValid(player.Email?.Trim()))
+            else if (!CredentialRules.IsValidUsername(player.Username.Trim()))
+            {
+                result = RegistrationResult.InvalidUsername;
+            }
+            else if (!EmailAddressValidator.IsValid(player.Email.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
+            }
+            else if (!CredentialRules.IsStrongPassword(plainPassword))
+            {
+                result = RegistrationResult.WeakPassword;
             }
 
             return result;
@@ -100,7 +107,7 @@ namespace YachtDice.Server.Logic.Authentication
             int firstNameLength = player.FirstName?.Trim().Length ?? 0;
             int lastNameLength = player.LastName?.Trim().Length ?? 0;
 
-            return usernameLength <= UsernameMaxLength
+            return usernameLength <= CredentialRules.UsernameMaxLength
                 && emailLength <= EmailMaxLength
                 && firstNameLength <= NameMaxLength
                 && lastNameLength <= NameMaxLength;

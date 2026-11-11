@@ -10,7 +10,6 @@ namespace YachtDice.Server.Tests.Authentication
     {
         private const int FirstPlayerId = 1;
         private const int SecondPlayerId = 2;
-        private const int NoFailures = 0;
         private const int OneFailure = 1;
         private const int TwoFailures = 2;
 
@@ -19,11 +18,13 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RegisterFailure_RepeatedFailures_CountsThemInOrder()
         {
+            var expected = new { First = OneFailure, Second = TwoFailures };
+
             int first = _counter.RegisterFailure(FirstPlayerId);
             int second = _counter.RegisterFailure(FirstPlayerId);
 
-            Assert.Equal(OneFailure, first);
-            Assert.Equal(TwoFailures, second);
+            var actual = new { First = first, Second = second };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -37,13 +38,14 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void Reset_PlayerWithFailures_StartsFromZeroAgain()
+        public void Reset_PlayerWithFailures_CountsTheNextFailureAsTheFirst()
         {
             _counter.RegisterFailure(FirstPlayerId);
-
             _counter.Reset(FirstPlayerId);
 
-            Assert.Equal(NoFailures, _counter.GetFailures(FirstPlayerId));
+            int failures = _counter.RegisterFailure(FirstPlayerId);
+
+            Assert.Equal(OneFailure, failures);
         }
     }
 }

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\RegistrationLimits.cs" />
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
     <Compile Include="Avatars\AvatarOption.cs" />
@@ -51,6 +52,16 @@
     <Compile Include="Dice\DiceRowParser.cs" />
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
+    <Compile Include="Game\HeldDiceSelection.cs" />
+    <Compile Include="Game\RankedStanding.cs" />
+    <Compile Include="Game\StandingEntry.cs" />
+    <Compile Include="Game\StandingsBuilder.cs" />
+    <Compile Include="Game\StateVersionGate.cs" />
+    <Compile Include="Game\TurnCountdown.cs" />
+    <Compile Include="Game\TurnHint.cs" />
+    <Compile Include="Game\TurnPhase.cs" />
+    <Compile Include="Game\TurnPhaseResolver.cs" />
+    <Compile Include="Game\YachtCelebrationRule.cs" />
     <Compile Include="Players\InitialLetter.cs" />
     <Compile Include="Rooms\MatchParticipant.cs" />
     <Compile Include="Rooms\PresenceComparer.cs" />

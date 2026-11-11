@@ -41,8 +41,9 @@ namespace YachtDice.Client.Logic.Rooms
             IEnumerable<MatchParticipant> reference)
         {
             var referenceIds = new HashSet<string>(reference.Select(player => player.Id), StringComparer.Ordinal);
+            Func<MatchParticipant, bool> isMissingFromReference = player => !referenceIds.Contains(player.Id);
 
-            return source.Where(player => !referenceIds.Contains(player.Id)).ToList();
+            return source.Where(isMissingFromReference).ToList();
         }
     }
 }

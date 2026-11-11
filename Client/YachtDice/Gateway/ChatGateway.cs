@@ -22,8 +22,7 @@ namespace YachtDice.Gateway
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
-        private readonly string _playerId;
-        private readonly string _roomCode;
+        private readonly RoomMember _member;
         private Action<ChatMessage> _messageReceived;
 
         /// <summary>
@@ -33,8 +32,11 @@ namespace YachtDice.Gateway
         /// <param name="roomCode">Code of the room whose chat is used.</param>
         public ChatGateway(string playerId, string roomCode)
         {
-            _playerId = playerId;
-            _roomCode = roomCode;
+            _member = new RoomMember
+            {
+                PlayerId = playerId,
+                RoomCode = roomCode
+            };
             _logger = new AppLogger(GetType());
         }
 
@@ -49,7 +51,7 @@ namespace YachtDice.Gateway
 
             try
             {
-                await ConnectAndExecuteAsync(client => client.JoinChat(_playerId, _roomCode));
+                await ConnectAndExecuteAsync(client => client.JoinChat(_member));
             }
             catch (GatewayException)
             {
@@ -68,7 +70,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server could not be reached.</exception>
         public async Task SendAsync(string content)
         {
-            await ExecuteAsync(client => client.SendChatMessage(_playerId, content, _roomCode));
+            await ExecuteAsync(client => client.SendChatMessage(_member, content));
         }
 
         /// <summary>
@@ -111,7 +113,7 @@ namespace YachtDice.Gateway
         {
             try
             {
-                await ExecuteAsync(client => client.LeaveChat(_playerId, _roomCode));
+                await ExecuteAsync(client => client.LeaveChat(_member));
             }
             catch (GatewayException ex)
             {

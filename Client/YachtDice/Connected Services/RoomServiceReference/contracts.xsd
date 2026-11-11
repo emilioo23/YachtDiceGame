@@ -143,12 +143,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RoomSummary" nillable="true" type="tns:RoomSummary" />
+  <xs:complexType name="Room">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccessCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomId" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Room" nillable="true" type="tns:Room" />
   <xs:element name="JoinListedRoom">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="accessCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="room" nillable="true" type="tns:Room" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -162,12 +168,18 @@
   <xs:element name="UpdateRoomSettings">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
         <xs:element minOccurs="0" name="settings" nillable="true" type="tns:RoomSettings" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
   <xs:element name="UpdateRoomSettingsResponse">
     <xs:complexType>
       <xs:sequence>
@@ -178,8 +190,7 @@
   <xs:element name="StartGame">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -193,8 +204,7 @@
   <xs:element name="KickPlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
         <xs:element minOccurs="0" name="targetPlayerId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -209,8 +219,7 @@
   <xs:element name="TransferHost">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
         <xs:element minOccurs="0" name="newHostId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -239,8 +248,7 @@
   <xs:element name="LeaveRoom">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="member" nillable="true" type="tns:RoomMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

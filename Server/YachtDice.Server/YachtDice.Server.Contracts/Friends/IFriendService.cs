@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using YachtDice.Server.Contracts.Rooms;
 
 namespace YachtDice.Server.Contracts.Friends
 {
@@ -43,13 +44,12 @@ namespace YachtDice.Server.Contracts.Friends
         /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
-        /// <param name="playerId">Identifier that the room gave to the player who invites.</param>
+        /// <param name="sender">Room and identifier of the player who invites.</param>
         /// <param name="friendName">Name of the friend to invite.</param>
-        /// <param name="roomCode">Code of the room.</param>
         /// <returns>Whether the invitation reached the friend or why not.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        InvitationResultCode InviteToRoom(string playerId, string friendName, string roomCode);
+        InvitationResultCode InviteToRoom(RoomMember sender, string friendName);
 
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.

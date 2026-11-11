@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Avatars;
 
@@ -17,25 +19,30 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
         {
-            bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out AvatarInfo avatar);
+            var expected = new { IsFound = true, IsFree = true };
 
-            Assert.True(found);
-            Assert.True(avatar.RequiredLevel <= NewPlayerLevel);
+            bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
+
+            var actual = new { IsFound = found, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void TryFind_UnknownIdentifier_ReturnsFalse()
         {
-            bool found = AvatarCatalog.TryFind(UnknownAvatarId, out AvatarInfo avatar);
+            var expected = new { IsFound = false, HasAvatar = false };
 
-            Assert.False(found);
-            Assert.Null(avatar);
+            bool found = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
+
+            var actual = new { IsFound = found, HasAvatar = avatar != null };
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void GetAll_Always_HasSeveralAvatarsThatAreFreeForANewPlayer()
         {
-            int freeAvatars = AvatarCatalog.GetAll().Count(avatar => avatar.RequiredLevel <= NewPlayerLevel);
+            Func<UnlockableAvatar, bool> isAvailableForNewPlayer = avatar => avatar.RequiredLevel <= NewPlayerLevel;
+            int freeAvatars = AvatarCatalog.GetAll().Count(isAvailableForNewPlayer);
 
             Assert.True(freeAvatars >= MinimumFreeAvatars);
         }
@@ -43,22 +50,30 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetAll_Always_HasAvatarsThatNeedALevel()
         {
-            Assert.Contains(AvatarCatalog.GetAll(), avatar => avatar.RequiredLevel > NewPlayerLevel);
+            Predicate<UnlockableAvatar> isLockedForNewPlayer = avatar => avatar.RequiredLevel > NewPlayerLevel;
+            Assert.Contains(AvatarCatalog.GetAll(), isLockedForNewPlayer);
         }
 
         [Fact]
-        public void GetAll_Always_HasDifferentIdentifiersStartingAtTheDefaultAvatar()
+        public void GetAll_Always_HasDifferentIdentifiers()
         {
-            var identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
+            List<int> identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
 
             Assert.Equal(identifiers.Count, identifiers.Distinct().Count());
+        }
+
+        [Fact]
+        public void GetAll_Always_StartsAtTheDefaultAvatar()
+        {
+            List<int> identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
+
             Assert.Equal(AvatarCatalog.DefaultAvatarId, identifiers[FirstAvatarPosition]);
         }
 
         [Fact]
         public void GetAll_ChangingTheReturnedList_DoesNotChangeTheCatalog()
         {
-            var firstCopy = AvatarCatalog.GetAll();
+            List<UnlockableAvatar> firstCopy = AvatarCatalog.GetAll();
             int originalCount = firstCopy.Count;
 
             firstCopy.Clear();
