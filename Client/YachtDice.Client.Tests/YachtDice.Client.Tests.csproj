@@ -59,11 +59,20 @@
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
     <Compile Include="Game\RankedStandingTests.cs" />
+    <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
+    <Compile Include="Utils\CategoryNamesTests.cs" />
     <Compile Include="Utils\FriendItemFactoryTests.cs" />
+    <Compile Include="Utils\FriendRequestMessagesTests.cs" />
+    <Compile Include="Utils\GameResultMessagesTests.cs" />
+    <Compile Include="Utils\GatewayErrorMessagesTests.cs" />
     <Compile Include="Utils\HowToPlayContentTests.cs" />
+    <Compile Include="Utils\InvitationResultMessagesTests.cs" />
+    <Compile Include="Utils\LoginResultMessagesTests.cs" />
     <Compile Include="Utils\MatchPlayerFactoryTests.cs" />
     <Compile Include="Utils\PlayerInitialsTests.cs" />
+    <Compile Include="Utils\PresenceMessagesTests.cs" />
     <Compile Include="Utils\RoomListItemFactoryTests.cs" />
+    <Compile Include="Utils\RoomResultMessagesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
