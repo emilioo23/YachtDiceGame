@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace YachtDice.Server.Logic.Security
@@ -30,8 +31,12 @@ namespace YachtDice.Server.Logic.Security
         public const int PasswordMaxLength = 64;
 
         private const string UsernameCharactersPattern = "^[A-Za-z0-9._]+$";
+        private const int UsernameRegexTimeoutMilliseconds = 100;
 
-        private static readonly Regex UsernameCharacters = new Regex(UsernameCharactersPattern, RegexOptions.Compiled);
+        private static readonly Regex UsernameCharacters = new Regex(
+            UsernameCharactersPattern,
+            RegexOptions.Compiled,
+            TimeSpan.FromMilliseconds(UsernameRegexTimeoutMilliseconds));
 
         /// <summary>
         /// Indicates whether the username has a valid length and only uses letters without accents, digits,

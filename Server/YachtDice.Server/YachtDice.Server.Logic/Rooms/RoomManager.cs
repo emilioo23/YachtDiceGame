@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -10,12 +11,13 @@ namespace YachtDice.Server.Logic.Rooms
     /// channels use it at the same time. WCF only serializes the calls of each service, not those of different
     /// services, so every operation takes the lock before it reads or changes a room. A concurrent dictionary
     /// would only protect the list of rooms, not a step such as checking for space and adding the player.
-    /// The private steps that receive a room, and the random generator of the codes, only run while the lock
-    /// is held.
+    /// The private steps that receive a room only run while the lock is held. The codes of the rooms come from a
+    /// secure generator, so a private room cannot be entered by guessing its code.
     /// </summary>
     public class RoomManager : IRoomManager
     {
         private const int CodeLength = 6;
+        private const int FirstAlphabetIndex = 0;
         private const string CodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         private const int MinCapacity = 2;
         private const int MaxCapacity = 4;
@@ -26,8 +28,6 @@ namespace YachtDice.Server.Logic.Rooms
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
-
-        private readonly Random _random = new Random();
 
         /// <summary>
         /// Initializes the manager without any room.
@@ -506,7 +506,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             for (int characterIndex = 0; characterIndex < CodeLength; characterIndex++)
             {
-                characters[characterIndex] = CodeAlphabet[_random.Next(CodeAlphabet.Length)];
+                int alphabetIndex = SecureRandom.Next(FirstAlphabetIndex, CodeAlphabet.Length);
+
+                characters[characterIndex] = CodeAlphabet[alphabetIndex];
             }
 
             return new string(characters);

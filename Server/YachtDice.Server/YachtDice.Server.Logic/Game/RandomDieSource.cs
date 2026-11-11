@@ -1,27 +1,17 @@
-﻿using System;
+﻿using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
-    /// Rolls dice with a pseudo-random generator. It can be shared by several games because it is
-    /// thread-safe.
+    /// Rolls dice with a cryptographically secure generator, so nobody can predict the next values. It keeps
+    /// no state, so several games can share it at the same time.
     /// </summary>
     public sealed class RandomDieSource : IDieSource
     {
-        private readonly object _syncRoot = new object();
-        private readonly Random _random = new Random();
-
         /// <inheritdoc />
         public int Roll()
         {
-            int value;
-
-            lock (_syncRoot)
-            {
-                value = _random.Next(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue + 1);
-            }
-
-            return value;
+            return SecureRandom.Next(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue + 1);
         }
     }
 }

@@ -132,6 +132,7 @@
     <Compile Include="Security\NumericCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\PasswordResetCodeHasher.cs" />
+    <Compile Include="Security\SecureRandom.cs" />
     <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorActivationResult.cs" />
