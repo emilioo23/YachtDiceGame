@@ -94,8 +94,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
+                Func<GameRoom, bool> isNotStarted = room => !room.IsStarted;
                 rooms = _rooms.Values
-                    .Where(room => !room.IsStarted)
+                    .Where(isNotStarted)
                     .Select(room => room.ToSummary())
                     .OrderBy(summary => summary.HostName, StringComparer.OrdinalIgnoreCase)
                     .ToList();
@@ -112,8 +113,8 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                GameRoom pending = _rooms.Values.FirstOrDefault(
-                    room => room.IsStarted && room.HasAbsentPlayer(playerName));
+                Func<GameRoom, bool> isPendingForPlayer = room => room.IsStarted && room.HasAbsentPlayer(playerName);
+                GameRoom pending = _rooms.Values.FirstOrDefault(isPendingForPlayer);
 
                 if (pending != null)
                 {

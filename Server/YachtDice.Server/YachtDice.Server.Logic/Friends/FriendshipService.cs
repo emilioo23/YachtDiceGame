@@ -64,9 +64,11 @@ namespace YachtDice.Server.Logic.Friends
 
             if (addressee != null && requester != null)
             {
+                Func<Friendship, bool> isPendingFromRequester =
+                    friendship => friendship.RequesterId == requester.Id
+                    && friendship.Status == FriendshipStatus.Pending;
                 Friendship friendRequest = _friendRepository.FindBetween(requester.Id, addressee.Id)
-                    .FirstOrDefault(friendship => friendship.RequesterId == requester.Id
-                        && friendship.Status == FriendshipStatus.Pending);
+                    .FirstOrDefault(isPendingFromRequester);
 
                 status = AnswerRequest(friendRequest, isAccepted);
             }
@@ -88,8 +90,9 @@ namespace YachtDice.Server.Logic.Friends
 
             if (player != null && friend != null)
             {
+                Func<Friendship, bool> isAccepted = row => row.Status == FriendshipStatus.Accepted;
                 Friendship friendship = _friendRepository.FindBetween(player.Id, friend.Id)
-                    .FirstOrDefault(row => row.Status == FriendshipStatus.Accepted);
+                    .FirstOrDefault(isAccepted);
 
                 status = DeleteFriendship(friendship);
             }
@@ -147,10 +150,12 @@ namespace YachtDice.Server.Logic.Friends
 
         private static List<string> ToNames(List<Player> players)
         {
+            Func<string, bool> hasName = name => !string.IsNullOrWhiteSpace(name);
+            Func<string, string> getName = name => name;
             List<string> names = players
                 .Select(player => player.DisplayName)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .OrderBy(name => name)
+                .Where(hasName)
+                .OrderBy(getName)
                 .ToList();
 
             return names;

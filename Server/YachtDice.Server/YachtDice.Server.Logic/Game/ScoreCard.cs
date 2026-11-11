@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Logic.Game
@@ -34,9 +35,14 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Gets the sum of the points of the upper section.
         /// </summary>
-        public int UpperSubtotal => _scores
-            .Where(entry => ScoreCategories.IsUpper(entry.Key))
-            .Sum(entry => entry.Value);
+        public int UpperSubtotal
+        {
+            get
+            {
+
+                return _scores.Where(entry => ScoreCategories.IsUpper(entry.Key)).Sum(entry => entry.Value);
+            }
+        }
 
         /// <summary>
         /// Gets the bonus of the upper section, which is earned with sixty-three points or more.
@@ -90,7 +96,9 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The open boxes, in the order of the scorecard.</returns>
         public IReadOnlyList<ScoreCategory> GetOpenCategories()
         {
-            return ScoreCategories.All.Where(category => !IsFilled(category)).ToList();
+            Func<ScoreCategory, bool> isNotFilled = category => !IsFilled(category);
+
+            return ScoreCategories.All.Where(isNotFilled).ToList();
         }
 
         /// <summary>
@@ -125,7 +133,8 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the operation.</returns>
         public ScoreStatus Score(ScoreCategory category, IReadOnlyList<int> dice)
         {
-            var options = GetOptions(dice).Where(option => option.Category == category).ToList();
+            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+            var options = GetOptions(dice).Where(isSameCategory).ToList();
             ScoreStatus status;
 
             if (IsFilled(category))
@@ -147,7 +156,8 @@ namespace YachtDice.Server.Logic.Game
 
         private static IReadOnlyList<ScoreCategory> ChooseLowerOrAny(IReadOnlyList<ScoreCategory> openCategories)
         {
-            var lowerCategories = openCategories.Where(category => !ScoreCategories.IsUpper(category)).ToList();
+            Func<ScoreCategory, bool> isNotUpper = category => !ScoreCategories.IsUpper(category);
+            var lowerCategories = openCategories.Where(isNotUpper).ToList();
             IReadOnlyList<ScoreCategory> categories;
 
             if (lowerCategories.Any())

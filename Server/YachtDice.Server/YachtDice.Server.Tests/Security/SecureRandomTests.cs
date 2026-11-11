@@ -22,8 +22,9 @@ namespace YachtDice.Server.Tests.Security
             int[] values = Enumerable.Range(0, Repetitions)
                 .Select(repetition => RollDie())
                 .ToArray();
+            Func<int, bool> isNotDieFace = value => !IsDieFace(value);
 
-            int[] outsideValues = values.Where(value => !IsDieFace(value)).ToArray();
+            int[] outsideValues = values.Where(isNotDieFace).ToArray();
             Assert.Empty(outsideValues);
         }
 
@@ -52,8 +53,9 @@ namespace YachtDice.Server.Tests.Security
             int[] values = Enumerable.Range(0, Repetitions)
                 .Select(repetition => SecureRandom.Next(NegativeMinimum, NegativeMaximum))
                 .ToArray();
+            Func<int, bool> isNotInNegativeRange = value => !IsInNegativeRange(value);
 
-            int[] outsideValues = values.Where(value => !IsInNegativeRange(value)).ToArray();
+            int[] outsideValues = values.Where(isNotInNegativeRange).ToArray();
             Assert.Empty(outsideValues);
         }
 

@@ -63,7 +63,9 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if the player is in the game.</returns>
         public bool HasPlayer(string playerId)
         {
-            return _players.Any(player => player.PlayerId == playerId);
+            Func<GamePlayer, bool> isSamePlayerId = player => player.PlayerId == playerId;
+
+            return _players.Any(isSamePlayerId);
         }
 
         /// <summary>
@@ -149,7 +151,8 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="playerId">Player to remove.</param>
         public void Remove(string playerId)
         {
-            var index = _players.FindIndex(player => player.PlayerId == playerId);
+            Predicate<GamePlayer> isSamePlayerId = player => player.PlayerId == playerId;
+            var index = _players.FindIndex(isSamePlayerId);
 
             if (index != NoPlayerIndex)
             {
@@ -362,7 +365,8 @@ namespace YachtDice.Server.Logic.Game
 
         private void SetPresence(string playerId, bool isPresent)
         {
-            var player = _players.FirstOrDefault(candidate => candidate.PlayerId == playerId);
+            Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
+            var player = _players.FirstOrDefault(isSamePlayerId);
 
             if (player != null && Status == GameStatus.InProgress)
             {

@@ -33,6 +33,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The box to use.</returns>
         public static ScoreCategory Choose(IReadOnlyList<ScoreOption> options)
         {
+
             return options
                 .OrderByDescending(option => option.Points)
                 .ThenBy(option => SacrificeOrder.IndexOf(option.Category))

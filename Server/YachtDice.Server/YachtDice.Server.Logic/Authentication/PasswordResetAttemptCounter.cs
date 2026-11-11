@@ -7,10 +7,9 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class PasswordResetAttemptCounter
     {
-        private const int NoFailedAttempts = 0;
         private const int OneAttempt = 1;
 
-        private readonly object _lock = new object();
+        private readonly object _syncRoot = new object();
         private readonly Dictionary<int, int> _failedAttempts = new Dictionary<int, int>();
 
         /// <summary>
@@ -22,7 +21,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             int attempts;
 
-            lock (_lock)
+            lock (_syncRoot)
             {
                 _failedAttempts.TryGetValue(playerId, out attempts);
                 attempts += OneAttempt;
@@ -38,30 +37,10 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="playerId">Identifier of the player.</param>
         public void Reset(int playerId)
         {
-            lock (_lock)
+            lock (_syncRoot)
             {
                 _failedAttempts.Remove(playerId);
             }
-        }
-
-        /// <summary>
-        /// Gets the wrong attempts counted for the player.
-        /// </summary>
-        /// <param name="playerId">Identifier of the player.</param>
-        /// <returns>The number of wrong attempts, zero if there are none.</returns>
-        public int GetFailures(int playerId)
-        {
-            int attempts;
-
-            lock (_lock)
-            {
-                if (!_failedAttempts.TryGetValue(playerId, out attempts))
-                {
-                    attempts = NoFailedAttempts;
-                }
-            }
-
-            return attempts;
         }
     }
 }

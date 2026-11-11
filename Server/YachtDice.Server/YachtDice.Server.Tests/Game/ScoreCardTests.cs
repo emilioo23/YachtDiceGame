@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Game;
@@ -172,11 +173,12 @@ namespace YachtDice.Server.Tests.Game
             var expected = new { OptionCount = OpenCategoriesAfterOneScore, OffersChoice = false };
 
             IReadOnlyList<ScoreOption> options = card.GetOptions(NoCombination);
+            Func<ScoreOption, bool> isSameCategory = option => option.Category == ScoreCategory.Choice;
 
             var actual = new
             {
                 OptionCount = options.Count,
-                OffersChoice = options.Any(option => option.Category == ScoreCategory.Choice)
+                OffersChoice = options.Any(isSameCategory)
             };
             Assert.Equal(expected, actual);
         }
@@ -213,7 +215,8 @@ namespace YachtDice.Server.Tests.Game
 
             var actual = new
             {
-                OffersUpperBox = options.Any(option => ScoreCategories.IsUpper(option.Category)),
+                OffersUpperBox =
+                    options.Any(option => ScoreCategories.IsUpper(option.Category)),
                 OptionCount = options.Count,
                 BigStraightPoints = FindOption(options, ScoreCategory.BigStraight).Points,
                 ChoicePoints = FindOption(options, ScoreCategory.Choice).Points
@@ -230,12 +233,14 @@ namespace YachtDice.Server.Tests.Game
             var expected = new { OptionCount = OpenUpperBoxesWithJoker, AreAllUpper = true, AreAllZero = true };
 
             IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
+            Func<ScoreOption, bool> hasNoPoints = option => option.Points == 0;
 
             var actual = new
             {
                 OptionCount = options.Count,
-                AreAllUpper = options.All(option => ScoreCategories.IsUpper(option.Category)),
-                AreAllZero = options.All(option => option.Points == 0)
+                AreAllUpper =
+                    options.All(option => ScoreCategories.IsUpper(option.Category)),
+                AreAllZero = options.All(hasNoPoints)
             };
             Assert.Equal(expected, actual);
         }
@@ -285,7 +290,9 @@ namespace YachtDice.Server.Tests.Game
 
         private static ScoreOption FindOption(IEnumerable<ScoreOption> options, ScoreCategory category)
         {
-            return options.Single(option => option.Category == category);
+            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+
+            return options.Single(isSameCategory);
         }
 
         private static void ScoreThreeOfEachUpperValue(ScoreCard card)

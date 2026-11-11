@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
@@ -111,12 +112,19 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Friendship> SelectBetween(YachtDiceContext context, int firstPlayerId, int secondPlayerId)
         {
+            Expression<Func<Friendship, bool>> isFromFirstPlayer =
+                friendship => friendship.RequesterId == firstPlayerId;
+            Expression<Func<Friendship, bool>> isToSecondPlayer =
+                friendship => friendship.AddresseeId == secondPlayerId;
             IQueryable<Friendship> requested = context.Friendship
-                .Where(friendship => friendship.RequesterId == firstPlayerId)
-                .Where(friendship => friendship.AddresseeId == secondPlayerId);
+                .Where(isFromFirstPlayer)
+                .Where(isToSecondPlayer);
+            Expression<Func<Friendship, bool>> isFromSecondPlayer =
+                friendship => friendship.RequesterId == secondPlayerId;
+            Expression<Func<Friendship, bool>> isToFirstPlayer = friendship => friendship.AddresseeId == firstPlayerId;
             IQueryable<Friendship> received = context.Friendship
-                .Where(friendship => friendship.RequesterId == secondPlayerId)
-                .Where(friendship => friendship.AddresseeId == firstPlayerId);
+                .Where(isFromSecondPlayer)
+                .Where(isToFirstPlayer);
 
             List<Friendship> friendships = requested.Concat(received).ToList();
 
@@ -145,17 +153,21 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectFriends(YachtDiceContext context, int playerId)
         {
+            Expression<Func<Friendship, bool>> isAcceptedFromPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Accepted;
             IQueryable<int> requested = context.Friendship
-                .Where(friendship => friendship.RequesterId == playerId
-                    && friendship.Status == FriendshipStatus.Accepted)
+                .Where(isAcceptedFromPlayer)
                 .Select(friendship => friendship.AddresseeId);
+            Expression<Func<Friendship, bool>> isAcceptedByPlayer =
+                friendship => friendship.AddresseeId == playerId && friendship.Status == FriendshipStatus.Accepted;
             IQueryable<int> received = context.Friendship
-                .Where(friendship => friendship.AddresseeId == playerId
-                    && friendship.Status == FriendshipStatus.Accepted)
+                .Where(isAcceptedByPlayer)
                 .Select(friendship => friendship.RequesterId);
+            Expression<Func<Player, bool>> isFriend =
+                player => requested.Contains(player.Id) || received.Contains(player.Id);
 
             List<Player> friends = context.Player
-                .Where(player => requested.Contains(player.Id) || received.Contains(player.Id))
+                .Where(isFriend)
                 .ToList();
 
             return friends;
@@ -163,9 +175,10 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectPendingRequesters(YachtDiceContext context, int playerId)
         {
+            Expression<Func<Friendship, bool>> isPendingForPlayer =
+                friendship => friendship.AddresseeId == playerId && friendship.Status == FriendshipStatus.Pending;
             IQueryable<int> requesterIds = context.Friendship
-                .Where(friendship => friendship.AddresseeId == playerId
-                    && friendship.Status == FriendshipStatus.Pending)
+                .Where(isPendingForPlayer)
                 .Select(friendship => friendship.RequesterId);
 
             List<Player> requesters = context.Player.Where(player => requesterIds.Contains(player.Id)).ToList();

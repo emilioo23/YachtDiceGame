@@ -56,7 +56,8 @@ namespace YachtDice.Server.Logic.Players
         private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
         {
             int gamesPlayed = history.Count;
-            int wins = history.Count(entry => entry.IsWinner == true);
+            Func<GameHistoryPlayer, bool> isWinner = entry => entry.IsWinner == true;
+            int wins = history.Count(isWinner);
 
             var statistics = new PlayerStatistics
             {

@@ -44,6 +44,11 @@ namespace YachtDice.Server.Logic.Security
             return (int)(minValue + (long)(candidate % range));
         }
 
+        /// <summary>
+        /// Reads four random bytes from the generator as an unsigned number.
+        /// </summary>
+        /// <param name="generator">Secure generator that is open.</param>
+        /// <returns>A number between zero and the largest unsigned 32-bit value.</returns>
         private static ulong NextUnsigned(RandomNumberGenerator generator)
         {
             var buffer = new byte[sizeof(uint)];

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Rooms;
@@ -312,7 +313,8 @@ namespace YachtDice.Server.Tests.Game
             var actual = new
             {
                 lastResult.Snapshot.Status,
-                AreAllWinners = lastResult.Snapshot.Players.All(player => player.IsWinner)
+                AreAllWinners =
+                    lastResult.Snapshot.Players.All(player => player.IsWinner)
             };
             Assert.Equal(expected, actual);
         }
@@ -538,12 +540,16 @@ namespace YachtDice.Server.Tests.Game
 
         private static PlayerSnapshot FindPlayer(GameSnapshot snapshot, string playerId)
         {
-            return snapshot.Players.Single(player => player.PlayerId == playerId);
+            Func<PlayerSnapshot, bool> isSamePlayerId = player => player.PlayerId == playerId;
+
+            return snapshot.Players.Single(isSamePlayerId);
         }
 
         private static ScoreOption FindOption(GameSnapshot snapshot, ScoreCategory category)
         {
-            return snapshot.Options.Single(option => option.Category == category);
+            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+
+            return snapshot.Options.Single(isSameCategory);
         }
 
         private static GameActionResult PlayTurn(GameManager manager, string playerId, ScoreCategory category)

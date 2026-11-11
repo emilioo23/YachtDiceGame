@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Avatars;
@@ -40,7 +41,8 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetAll_Always_HasSeveralAvatarsThatAreFreeForANewPlayer()
         {
-            int freeAvatars = AvatarCatalog.GetAll().Count(avatar => avatar.RequiredLevel <= NewPlayerLevel);
+            Func<UnlockableAvatar, bool> isAvailableForNewPlayer = avatar => avatar.RequiredLevel <= NewPlayerLevel;
+            int freeAvatars = AvatarCatalog.GetAll().Count(isAvailableForNewPlayer);
 
             Assert.True(freeAvatars >= MinimumFreeAvatars);
         }
@@ -48,7 +50,8 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetAll_Always_HasAvatarsThatNeedALevel()
         {
-            Assert.Contains(AvatarCatalog.GetAll(), avatar => avatar.RequiredLevel > NewPlayerLevel);
+            Predicate<UnlockableAvatar> isLockedForNewPlayer = avatar => avatar.RequiredLevel > NewPlayerLevel;
+            Assert.Contains(AvatarCatalog.GetAll(), isLockedForNewPlayer);
         }
 
         [Fact]

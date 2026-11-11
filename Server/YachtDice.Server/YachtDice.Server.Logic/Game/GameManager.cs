@@ -43,42 +43,49 @@ namespace YachtDice.Server.Logic.Game
         /// <inheritdoc />
         public GameActionResult GetState(RoomMember member)
         {
+
             return Execute(member.RoomCode, game => CheckMember(game, member.PlayerId));
         }
 
         /// <inheritdoc />
         public GameActionResult Roll(RoomMember member, IReadOnlyList<bool> heldDice)
         {
+
             return Execute(member.RoomCode, game => game.Roll(member.PlayerId, heldDice));
         }
 
         /// <inheritdoc />
         public GameActionResult Score(RoomMember member, ScoreCategory category)
         {
+
             return Execute(member.RoomCode, game => game.Score(member.PlayerId, category));
         }
 
         /// <inheritdoc />
         public GameActionResult AutoPlay(string roomCode, int turnNumber)
         {
+
             return Execute(roomCode, game => AutoPlayIfSameTurn(game, turnNumber));
         }
 
         /// <inheritdoc />
         public GameActionResult MarkAbsent(RoomMember member)
         {
+
             return Execute(member.RoomCode, game => ChangePresence(game, member.PlayerId, false));
         }
 
         /// <inheritdoc />
         public GameActionResult MarkPresent(RoomMember member)
         {
+
             return Execute(member.RoomCode, game => ChangePresence(game, member.PlayerId, true));
         }
 
         /// <inheritdoc />
         public GameActionResult Remove(RoomMember member)
         {
+
             return Execute(member.RoomCode, game => RemovePlayer(game, member.PlayerId));
         }
 

@@ -57,8 +57,10 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The highest value that appears enough times, or zero if there is none.</returns>
         public int GetValueRepeatedAtLeast(int minimumCount)
         {
+            Func<int, bool> hasMinimumCount = value => _countsByValue[value] >= minimumCount;
+
             return Enumerable.Range(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue)
-                .Where(value => _countsByValue[value] >= minimumCount)
+                .Where(hasMinimumCount)
                 .DefaultIfEmpty(NoValue)
                 .Max();
         }
@@ -70,7 +72,9 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if at least one value appears exactly that number of times.</returns>
         public bool HasValueExactly(int count)
         {
-            return _countsByValue.Any(valueCount => valueCount == count);
+            Func<int, bool> isSameCount = valueCount => valueCount == count;
+
+            return _countsByValue.Any(isSameCount);
         }
 
         /// <summary>
@@ -81,8 +85,10 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if each value from the first to the last appears exactly once.</returns>
         public bool ShowsEachValueOnce(int firstValue, int lastValue)
         {
+            Func<int, bool> isSingle = value => _countsByValue[value] == 1;
+
             return Enumerable.Range(firstValue, lastValue - firstValue + 1)
-                .All(value => _countsByValue[value] == 1);
+                .All(isSingle);
         }
 
         private static void Validate(IReadOnlyList<int> dice)

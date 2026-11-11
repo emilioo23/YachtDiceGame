@@ -3,13 +3,12 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using log4net.Core;
 
 namespace YachtDice.Server.Logic.Logging
 {
     /// <summary>
     /// Server event logger that uses the log levels of the team standard
-    /// (Trace, Debug, Info, Warning, Error) on top of log4net.
+    /// that the server needs (Info, Warning and Error) on top of log4net.
     /// </summary>
     public class AppLogger
     {
@@ -34,24 +33,6 @@ namespace YachtDice.Server.Logic.Logging
             }
 
             _log = LogManager.GetLogger(ownerType);
-        }
-
-        /// <summary>
-        /// Logs the finest detail of the internal flow; for development only.
-        /// </summary>
-        /// <param name="message">Message to log.</param>
-        public void Trace(string message)
-        {
-            _log.Logger.Log(typeof(AppLogger), Level.Trace, message, null);
-        }
-
-        /// <summary>
-        /// Logs information that is useful for debugging during development and testing.
-        /// </summary>
-        /// <param name="message">Message to log.</param>
-        public void Debug(string message)
-        {
-            _log.Debug(message);
         }
 
         /// <summary>

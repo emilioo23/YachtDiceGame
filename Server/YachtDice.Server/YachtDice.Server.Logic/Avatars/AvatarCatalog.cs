@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Logic.Avatars
@@ -38,9 +39,7 @@ namespace YachtDice.Server.Logic.Avatars
             LegendLevel
         };
 
-        private static readonly List<UnlockableAvatar> Avatars = RequiredLevels
-            .Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level))
-            .ToList();
+        private static readonly List<UnlockableAvatar> Avatars = CreateAvatars();
 
         /// <summary>
         /// Gets every avatar of the game, ordered by identifier.
@@ -59,9 +58,20 @@ namespace YachtDice.Server.Logic.Avatars
         /// <returns>True if the avatar exists.</returns>
         public static bool TryFind(int avatarId, out UnlockableAvatar avatar)
         {
-            avatar = Avatars.FirstOrDefault(candidate => candidate.Id == avatarId);
+            Func<UnlockableAvatar, bool> isSameId = candidate => candidate.Id == avatarId;
+            avatar = Avatars.FirstOrDefault(isSameId);
 
             return avatar != null;
+        }
+
+        /// <summary>
+        /// Creates one avatar for each required level, with consecutive identifiers.
+        /// </summary>
+        /// <returns>The avatars of the game ordered by identifier.</returns>
+        private static List<UnlockableAvatar> CreateAvatars()
+        {
+
+            return RequiredLevels.Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level)).ToList();
         }
     }
 }

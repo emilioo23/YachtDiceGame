@@ -63,11 +63,6 @@ namespace YachtDice.Server.Logic.Rooms
         public IReadOnlyList<RoomPlayer> Players => _players;
 
         /// <summary>
-        /// Gets the players who left a game in progress and can still come back.
-        /// </summary>
-        public IReadOnlyList<RoomPlayer> AbsentPlayers => _absentPlayers;
-
-        /// <summary>
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another
         /// player already uses the name, a number is added to it so that the names stay different.
         /// </summary>
@@ -108,6 +103,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <returns>True if a player with that identifier is inside.</returns>
         public bool HasPlayer(string playerId)
         {
+
             return _players.Any(player => IsSameId(player.Id, playerId));
         }
 

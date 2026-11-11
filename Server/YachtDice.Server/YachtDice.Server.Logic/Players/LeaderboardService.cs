@@ -32,19 +32,33 @@ namespace YachtDice.Server.Logic.Players
         public List<LeaderboardEntry> GetTopPlayers()
         {
             List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxEntries);
+            Func<PlayerRankingRecord, int, LeaderboardEntry> createLeaderboardEntry = CreateEntry;
 
             List<LeaderboardEntry> entries = records
-                .Select((record, index) => new LeaderboardEntry
-                {
-                    Position = index + FirstPosition,
-                    DisplayName = record.DisplayName,
-                    AvatarId = record.AvatarId,
-                    TotalPoints = record.TotalPoints,
-                    Wins = record.Wins
-                })
+                .Select(createLeaderboardEntry)
                 .ToList();
 
             return entries;
+        }
+
+        /// <summary>
+        /// Creates the row of the leaderboard for a player.
+        /// </summary>
+        /// <param name="record">Points and wins of the player.</param>
+        /// <param name="index">Position of the player in the ranking, starting at zero.</param>
+        /// <returns>The row with its position, starting at one.</returns>
+        private static LeaderboardEntry CreateEntry(PlayerRankingRecord record, int index)
+        {
+            var entry = new LeaderboardEntry
+            {
+                Position = index + FirstPosition,
+                DisplayName = record.DisplayName,
+                AvatarId = record.AvatarId,
+                TotalPoints = record.TotalPoints,
+                Wins = record.Wins
+            };
+
+            return entry;
         }
     }
 }

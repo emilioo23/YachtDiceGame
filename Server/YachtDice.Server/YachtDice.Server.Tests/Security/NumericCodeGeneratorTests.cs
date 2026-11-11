@@ -19,8 +19,9 @@ namespace YachtDice.Server.Tests.Security
             string[] codes = Enumerable.Range(0, Repetitions)
                 .Select(repetition => NumericCodeGenerator.Generate(SixDigits))
                 .ToArray();
+            Func<string, bool> isNotSixDigitCode = code => !IsSixDigitCode(code);
 
-            string[] invalidCodes = codes.Where(code => !IsSixDigitCode(code)).ToArray();
+            string[] invalidCodes = codes.Where(isNotSixDigitCode).ToArray();
             Assert.Empty(invalidCodes);
         }
 

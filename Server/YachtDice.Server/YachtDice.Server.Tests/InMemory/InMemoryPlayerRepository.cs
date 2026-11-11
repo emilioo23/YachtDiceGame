@@ -31,8 +31,10 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindByName(string name)
         {
+            Func<Player, bool> hasName =
+                player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name);
             List<Player> matches = _players
-                .Where(player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name))
+                .Where(hasName)
                 .Take(1)
                 .ToList();
 
@@ -90,7 +92,8 @@ namespace YachtDice.Server.Tests.InMemory
 
         public void SaveAvatar(int playerId, int avatarId)
         {
-            Player player = _players.First(candidate => candidate.Id == playerId);
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+            Player player = _players.First(isSameId);
 
             player.AvatarId = avatarId;
         }

@@ -182,12 +182,14 @@ namespace YachtDice.Server.Tests.Rooms
             var expected = new { IsStarted = true, IsPlaying = false, IsAbsent = true };
 
             RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+            Func<RoomPlayer, bool> isSamePlayer = remaining => remaining.Id == player.PlayerId;
+            Func<RoomPlayer, bool> isSameAbsentPlayer = absent => absent.Id == player.PlayerId;
 
             var actual = new
             {
                 afterLeaving.Room.IsStarted,
-                IsPlaying = afterLeaving.Room.Players.Any(remaining => remaining.Id == player.PlayerId),
-                IsAbsent = afterLeaving.Room.AbsentPlayers.Any(absent => absent.Id == player.PlayerId)
+                IsPlaying = afterLeaving.Room.Players.Any(isSamePlayer),
+                IsAbsent = afterLeaving.Room.AbsentPlayers.Any(isSameAbsentPlayer)
             };
             Assert.Equal(expected, actual);
         }
@@ -245,11 +247,13 @@ namespace YachtDice.Server.Tests.Rooms
             var expected = new { IsPlaying = true, IsAbsent = false };
 
             RoomResult returned = _manager.Join(host.Room.Code, PlayerName.ToUpperInvariant());
+            Func<RoomPlayer, bool> isSamePlayer = back => back.Id == player.PlayerId;
+            Func<RoomPlayer, bool> isSameAbsentPlayer = absent => absent.Id == player.PlayerId;
 
             var actual = new
             {
-                IsPlaying = returned.Room.Players.Any(back => back.Id == player.PlayerId),
-                IsAbsent = returned.Room.AbsentPlayers.Any(absent => absent.Id == player.PlayerId)
+                IsPlaying = returned.Room.Players.Any(isSamePlayer),
+                IsAbsent = returned.Room.AbsentPlayers.Any(isSameAbsentPlayer)
             };
             Assert.Equal(expected, actual);
         }
@@ -757,11 +761,12 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult afterKicking =
                 _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+            Func<RoomPlayer, bool> isSamePlayer = remaining => remaining.Id == player.PlayerId;
 
             var actual = new
             {
                 afterKicking.Status,
-                IsPlaying = afterKicking.Room.Players.Any(remaining => remaining.Id == player.PlayerId)
+                IsPlaying = afterKicking.Room.Players.Any(isSamePlayer)
             };
             Assert.Equal(expected, actual);
         }
