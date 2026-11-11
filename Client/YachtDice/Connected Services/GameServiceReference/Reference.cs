@@ -794,21 +794,82 @@ namespace YachtDice.GameServiceReference {
         GameFinished = 6,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomMember", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PlayerIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomCodeField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerIdField, value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomCode {
+            get {
+                return this.RoomCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomCodeField, value) != true)) {
+                    this.RoomCodeField = value;
+                    this.RaisePropertyChanged("RoomCode");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="GameServiceReference.IGameService", CallbackContract=typeof(YachtDice.GameServiceReference.IGameServiceCallback))]
     public interface IGameService {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IGameService/JoinGame", ReplyAction="urn:yachtdice:contracts/IGameService/JoinGameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.GameServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IGameService/JoinGameServiceFaultFault", Name="ServiceFault")]
-        YachtDice.GameServiceReference.JoinGameResult JoinGame(string playerId, string roomCode);
+        YachtDice.GameServiceReference.JoinGameResult JoinGame(YachtDice.GameServiceReference.RoomMember player);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IGameService/RollDice", ReplyAction="urn:yachtdice:contracts/IGameService/RollDiceResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.GameServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IGameService/RollDiceServiceFaultFault", Name="ServiceFault")]
-        YachtDice.GameServiceReference.GameResultCode RollDice(string playerId, string roomCode, bool[] heldDice);
+        YachtDice.GameServiceReference.GameResultCode RollDice(YachtDice.GameServiceReference.RoomMember player, bool[] heldDice);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IGameService/SelectCategory", ReplyAction="urn:yachtdice:contracts/IGameService/SelectCategoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.GameServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IGameService/SelectCategoryServiceFaultFault", Name="ServiceFault")]
-        YachtDice.GameServiceReference.GameResultCode SelectCategory(string playerId, string roomCode, YachtDice.GameServiceReference.ScoreCategory category);
+        YachtDice.GameServiceReference.GameResultCode SelectCategory(YachtDice.GameServiceReference.RoomMember player, YachtDice.GameServiceReference.ScoreCategory category);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -846,16 +907,16 @@ namespace YachtDice.GameServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public YachtDice.GameServiceReference.JoinGameResult JoinGame(string playerId, string roomCode) {
-            return base.Channel.JoinGame(playerId, roomCode);
+        public YachtDice.GameServiceReference.JoinGameResult JoinGame(YachtDice.GameServiceReference.RoomMember player) {
+            return base.Channel.JoinGame(player);
         }
         
-        public YachtDice.GameServiceReference.GameResultCode RollDice(string playerId, string roomCode, bool[] heldDice) {
-            return base.Channel.RollDice(playerId, roomCode, heldDice);
+        public YachtDice.GameServiceReference.GameResultCode RollDice(YachtDice.GameServiceReference.RoomMember player, bool[] heldDice) {
+            return base.Channel.RollDice(player, heldDice);
         }
         
-        public YachtDice.GameServiceReference.GameResultCode SelectCategory(string playerId, string roomCode, YachtDice.GameServiceReference.ScoreCategory category) {
-            return base.Channel.SelectCategory(playerId, roomCode, category);
+        public YachtDice.GameServiceReference.GameResultCode SelectCategory(YachtDice.GameServiceReference.RoomMember player, YachtDice.GameServiceReference.ScoreCategory category) {
+            return base.Channel.SelectCategory(player, category);
         }
     }
 }

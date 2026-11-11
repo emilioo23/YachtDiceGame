@@ -4,11 +4,17 @@
   <xs:element name="JoinGame">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
   <xs:element name="JoinGameResponse">
     <xs:complexType>
       <xs:sequence>
@@ -144,8 +150,7 @@
   <xs:element name="RollDice">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
         <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="heldDice" nillable="true" type="q3:ArrayOfboolean" />
       </xs:sequence>
     </xs:complexType>
@@ -160,8 +165,7 @@
   <xs:element name="SelectCategory">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
         <xs:element minOccurs="0" name="category" type="tns:ScoreCategory" />
       </xs:sequence>
     </xs:complexType>

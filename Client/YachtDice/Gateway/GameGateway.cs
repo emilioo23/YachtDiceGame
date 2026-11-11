@@ -13,8 +13,7 @@ namespace YachtDice.Gateway
     /// </summary>
     public class GameGateway : DuplexGatewayBase<GameServiceClient>
     {
-        private readonly string _playerId;
-        private readonly string _roomCode;
+        private readonly RoomMember _player;
 
         /// <summary>
         /// Initializes the gateway for the player in a room.
@@ -23,8 +22,11 @@ namespace YachtDice.Gateway
         /// <param name="roomCode">Code of the room whose game is played.</param>
         public GameGateway(string playerId, string roomCode)
         {
-            _playerId = playerId;
-            _roomCode = roomCode;
+            _player = new RoomMember
+            {
+                PlayerId = playerId,
+                RoomCode = roomCode
+            };
         }
 
         /// <summary>
@@ -40,8 +42,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<JoinGameResult> JoinAsync()
         {
-            JoinGameResult result = await ConnectAndExecuteAsync(
-                client => client.JoinGame(_playerId, _roomCode));
+            JoinGameResult result = await ConnectAndExecuteAsync(client => client.JoinGame(_player));
 
             if (result.Code != GameResultCode.Success)
             {
@@ -60,8 +61,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<GameResultCode> RollDiceAsync(bool[] heldDice)
         {
-            GameResultCode result = await ExecuteAsync(
-                client => client.RollDice(_playerId, _roomCode, heldDice));
+            GameResultCode result = await ExecuteAsync(client => client.RollDice(_player, heldDice));
 
             return result;
         }
@@ -74,8 +74,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<GameResultCode> SelectCategoryAsync(ScoreCategory category)
         {
-            GameResultCode result = await ExecuteAsync(
-                client => client.SelectCategory(_playerId, _roomCode, category));
+            GameResultCode result = await ExecuteAsync(client => client.SelectCategory(_player, category));
 
             return result;
         }

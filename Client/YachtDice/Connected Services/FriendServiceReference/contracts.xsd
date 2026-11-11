@@ -86,12 +86,18 @@
   <xs:element name="InviteToRoom">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sender" nillable="true" type="tns:RoomMember" />
         <xs:element minOccurs="0" name="friendName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
   <xs:element name="InviteToRoomResponse">
     <xs:complexType>
       <xs:sequence>

@@ -99,10 +99,8 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> UpdateSettingsAsync(RoomSettings settings)
         {
-            string playerId = PlayerId;
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(
-                client => client.UpdateRoomSettings(playerId, roomCode, settings));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.UpdateRoomSettings(host, settings));
 
             return result;
         }
@@ -115,9 +113,8 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> StartGameAsync()
         {
-            string playerId = PlayerId;
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(client => client.StartGame(playerId, roomCode));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.StartGame(host));
 
             return result;
         }
@@ -131,10 +128,8 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> KickPlayerAsync(string targetPlayerId)
         {
-            string playerId = PlayerId;
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(
-                client => client.KickPlayer(playerId, roomCode, targetPlayerId));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.KickPlayer(host, targetPlayerId));
 
             return result;
         }
@@ -148,10 +143,8 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> TransferHostAsync(string newHostId)
         {
-            string playerId = PlayerId;
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(
-                client => client.TransferHost(playerId, roomCode, newHostId));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.TransferHost(host, newHostId));
 
             return result;
         }
@@ -162,12 +155,11 @@ namespace YachtDice.Gateway
         /// <returns>A task that finishes when the player left.</returns>
         public async Task LeaveRoomAsync()
         {
-            string playerId = PlayerId;
-            string roomCode = CurrentRoom.Code;
+            RoomMember member = CreateMember();
 
             try
             {
-                await ExecuteAsync(client => client.LeaveRoom(playerId, roomCode));
+                await ExecuteAsync(client => client.LeaveRoom(member));
             }
             catch (GatewayException ex)
             {
@@ -230,6 +222,21 @@ namespace YachtDice.Gateway
         {
             CurrentRoom = room;
             RoomChanged?.Invoke(room, eventType);
+        }
+
+        /// <summary>
+        /// Creates the identity of the player inside the current room, as the server expects it.
+        /// </summary>
+        /// <returns>The code of the room and the identifier of the player.</returns>
+        private RoomMember CreateMember()
+        {
+            var member = new RoomMember
+            {
+                PlayerId = PlayerId,
+                RoomCode = CurrentRoom.Code
+            };
+
+            return member;
         }
     }
 }

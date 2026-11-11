@@ -120,10 +120,12 @@ namespace YachtDice.Views
 
             try
             {
-                InvitationResultCode result = await _friendGateway.InviteToRoomAsync(
-                    _roomGateway.PlayerId,
-                    friendName,
-                    _roomGateway.CurrentRoom.Code);
+                var sender = new RoomMember
+                {
+                    PlayerId = _roomGateway.PlayerId,
+                    RoomCode = _roomGateway.CurrentRoom.Code
+                };
+                InvitationResultCode result = await _friendGateway.InviteToRoomAsync(sender, friendName);
 
                 message = InvitationResultMessages.GetMessage(result, friendName);
             }
