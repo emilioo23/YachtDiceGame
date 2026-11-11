@@ -125,47 +125,50 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
-        public RoomResult Leave(string roomCode, string playerId)
+        public RoomResult Leave(RoomMember member)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => TakeOutPlayer(room, playerId));
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => TakeOutPlayer(room, member.PlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult UpdateSettings(string roomCode, string playerId, RoomSettings settings)
+        public RoomResult UpdateSettings(RoomMember member, RoomSettings settings)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ChangeSettings(room, playerId, settings));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ChangeSettings(room, member.PlayerId, settings));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult StartGame(string roomCode, string playerId)
+        public RoomResult StartGame(RoomMember member)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => StartRoomGame(room, playerId));
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => StartRoomGame(room, member.PlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult KickPlayer(string roomCode, string playerId, string targetPlayerId)
+        public RoomResult KickPlayer(RoomMember member, string targetPlayerId)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ExpelPlayer(room, playerId, targetPlayerId));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ExpelPlayer(room, member.PlayerId, targetPlayerId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public RoomResult TransferHost(string roomCode, string playerId, string newHostId)
+        public RoomResult TransferHost(RoomMember member, string newHostId)
         {
-            RoomResult result = ExecuteInRoom(roomCode, room => ChangeHost(room, playerId, newHostId));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => ChangeHost(room, member.PlayerId, newHostId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public bool TryGetPlayer(string roomCode, string playerId, out RoomPlayer player)
+        public bool TryGetPlayer(RoomMember member, out RoomPlayer player)
         {
             var isFound = false;
 
@@ -173,9 +176,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                if (TryGetRoom(roomCode, out GameRoom room))
+                if (TryGetRoom(member.RoomCode, out GameRoom room))
                 {
-                    isFound = room.TryGetPlayer(playerId, out player);
+                    isFound = room.TryGetPlayer(member.PlayerId, out player);
                 }
             }
 

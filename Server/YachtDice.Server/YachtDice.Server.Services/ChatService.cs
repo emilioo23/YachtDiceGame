@@ -58,8 +58,10 @@ namespace YachtDice.Server.Services
         /// <param name="roomCode">Code of the room.</param>
         public void SendChatMessage(string playerId, string content, string roomCode)
         {
-            if (!string.IsNullOrWhiteSpace(content)
-                && _roomManager.TryGetPlayer(roomCode, playerId, out LogicRooms.RoomPlayer author))
+            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            var hasContent = !string.IsNullOrWhiteSpace(content);
+
+            if (hasContent && _roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer author))
             {
                 Contracts.ChatMessage delivered = CreateDeliveredMessage(author, content);
 
@@ -80,7 +82,7 @@ namespace YachtDice.Server.Services
         {
             if (!string.IsNullOrWhiteSpace(playerId) && !string.IsNullOrWhiteSpace(roomCode))
             {
-                _callbacks.Remove(roomCode, playerId);
+                _callbacks.Remove(new LogicRooms.RoomMember(roomCode, playerId));
             }
         }
 
@@ -107,15 +109,17 @@ namespace YachtDice.Server.Services
 
         private void ProcessJoin(string playerId, string roomCode)
         {
-            if (_roomManager.TryGetPlayer(roomCode, playerId, out _))
+            var member = new LogicRooms.RoomMember(roomCode, playerId);
+
+            if (_roomManager.TryGetPlayer(member, out _))
             {
                 Contracts.IChatCallback callback =
                     OperationContext.Current.GetCallbackChannel<Contracts.IChatCallback>();
                 ICommunicationObject channel = OperationContext.Current.Channel;
 
-                _callbacks.Register(roomCode, playerId, callback);
-                channel.Closed += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
-                channel.Faulted += (sender, e) => HandleChannelEnded(roomCode, playerId, callback);
+                _callbacks.Register(member, callback);
+                channel.Closed += (sender, e) => HandleChannelEnded(member, callback);
+                channel.Faulted += (sender, e) => HandleChannelEnded(member, callback);
             }
             else
             {
@@ -123,9 +127,9 @@ namespace YachtDice.Server.Services
             }
         }
 
-        private void HandleChannelEnded(string roomCode, string playerId, Contracts.IChatCallback callback)
+        private void HandleChannelEnded(LogicRooms.RoomMember member, Contracts.IChatCallback callback)
         {
-            _callbacks.RemoveIfCurrent(roomCode, playerId, callback);
+            _callbacks.RemoveIfCurrent(member, callback);
         }
     }
 }

@@ -41,21 +41,21 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <inheritdoc />
-        public GameActionResult GetState(string roomCode, string playerId)
+        public GameActionResult GetState(RoomMember member)
         {
-            return Execute(roomCode, game => CheckMember(game, playerId));
+            return Execute(member.RoomCode, game => CheckMember(game, member.PlayerId));
         }
 
         /// <inheritdoc />
-        public GameActionResult Roll(string roomCode, string playerId, IReadOnlyList<bool> heldDice)
+        public GameActionResult Roll(RoomMember member, IReadOnlyList<bool> heldDice)
         {
-            return Execute(roomCode, game => game.Roll(playerId, heldDice));
+            return Execute(member.RoomCode, game => game.Roll(member.PlayerId, heldDice));
         }
 
         /// <inheritdoc />
-        public GameActionResult Score(string roomCode, string playerId, ScoreCategory category)
+        public GameActionResult Score(RoomMember member, ScoreCategory category)
         {
-            return Execute(roomCode, game => game.Score(playerId, category));
+            return Execute(member.RoomCode, game => game.Score(member.PlayerId, category));
         }
 
         /// <inheritdoc />
@@ -65,21 +65,21 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <inheritdoc />
-        public GameActionResult MarkAbsent(string roomCode, string playerId)
+        public GameActionResult MarkAbsent(RoomMember member)
         {
-            return Execute(roomCode, game => ChangePresence(game, playerId, false));
+            return Execute(member.RoomCode, game => ChangePresence(game, member.PlayerId, false));
         }
 
         /// <inheritdoc />
-        public GameActionResult MarkPresent(string roomCode, string playerId)
+        public GameActionResult MarkPresent(RoomMember member)
         {
-            return Execute(roomCode, game => ChangePresence(game, playerId, true));
+            return Execute(member.RoomCode, game => ChangePresence(game, member.PlayerId, true));
         }
 
         /// <inheritdoc />
-        public GameActionResult Remove(string roomCode, string playerId)
+        public GameActionResult Remove(RoomMember member)
         {
-            return Execute(roomCode, game => RemovePlayer(game, playerId));
+            return Execute(member.RoomCode, game => RemovePlayer(game, member.PlayerId));
         }
 
         /// <inheritdoc />

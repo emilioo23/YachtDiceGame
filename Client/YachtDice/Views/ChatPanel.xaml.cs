@@ -193,7 +193,16 @@ namespace YachtDice.Views
 
         private Brush GetAuthorBrush(ChatMessageKind kind)
         {
-            string brushKey = kind == ChatMessageKind.Own ? ResourceKeys.FeltLightBrushKey : GetContentBrushKey(kind);
+            string brushKey;
+
+            if (kind == ChatMessageKind.Own)
+            {
+                brushKey = ResourceKeys.FeltLightBrushKey;
+            }
+            else
+            {
+                brushKey = GetContentBrushKey(kind);
+            }
 
             return (Brush)FindResource(brushKey);
         }

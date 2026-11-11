@@ -62,7 +62,13 @@ namespace YachtDice.Views
                 box.MaxLength = MaxDigitsPerBox;
             }
 
-            DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
+            DestinationEmailTextBlock.Text = _email;
+
+            if (!_isActivation)
+            {
+                DestinationEmailTextBlock.Text = MaskEmail(_email);
+            }
+
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
         }
@@ -279,7 +285,13 @@ namespace YachtDice.Views
 
         private void PasteCodeFromClipboard()
         {
-            string clipboardText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
+            string clipboardText = string.Empty;
+
+            if (Clipboard.ContainsText())
+            {
+                clipboardText = Clipboard.GetText();
+            }
+
             var digits = new string(clipboardText.Where(char.IsDigit).Take(_digitBoxes.Length).ToArray());
 
             ClearDigits();

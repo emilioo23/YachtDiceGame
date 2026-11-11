@@ -84,7 +84,14 @@ namespace YachtDice.Views
         {
             CategoryScore entry = card.Scores.FirstOrDefault(score => score.Category == category);
 
-            return entry != null && entry.IsFilled ? entry.Points.ToString() : string.Empty;
+            string points = string.Empty;
+
+            if (entry != null && entry.IsFilled)
+            {
+                points = entry.Points.ToString();
+            }
+
+            return points;
         }
 
         private void AddMetaRowAfter(ScoreCategory category, RenderContext context)

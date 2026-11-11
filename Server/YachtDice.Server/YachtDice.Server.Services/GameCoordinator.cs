@@ -57,13 +57,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Subscribes a player to the changes of the game and gives the current state.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <param name="callback">Callback channel of the player.</param>
         /// <returns>Whether the player joined and the state of the game.</returns>
-        public Contracts.JoinGameResult Join(string roomCode, string playerId, Contracts.IGameCallback callback)
+        public Contracts.JoinGameResult Join(LogicRooms.RoomMember member, Contracts.IGameCallback callback)
         {
-            LogicGame.GameActionResult result = _gameManager.GetState(roomCode, playerId);
+            LogicGame.GameActionResult result = _gameManager.GetState(member);
             var joinResult = new Contracts.JoinGameResult
             {
                 Code = Mapping.GameMapper.ToResultCode(result.Status),
@@ -72,8 +71,9 @@ namespace YachtDice.Server.Services
 
             if (result.Status == LogicGame.GameActionStatus.Success)
             {
-                _callbacks.Register(roomCode, playerId, callback);
-                joinResult.State = Mapping.GameMapper.ToContract(result.Snapshot, _timer.GetSecondsLeft(roomCode));
+                _callbacks.Register(member, callback);
+                joinResult.State =
+                    Mapping.GameMapper.ToContract(result.Snapshot, _timer.GetSecondsLeft(member.RoomCode));
             }
 
             return joinResult;
@@ -82,73 +82,66 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Stops notifying a player, only if the channel that is registered is the given one.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <param name="callback">Callback channel that should be the registered one.</param>
-        public void Unsubscribe(string roomCode, string playerId, Contracts.IGameCallback callback)
+        public void Unsubscribe(LogicRooms.RoomMember member, Contracts.IGameCallback callback)
         {
-            _callbacks.RemoveIfCurrent(roomCode, playerId, callback);
+            _callbacks.RemoveIfCurrent(member, callback);
         }
 
         /// <summary>
         /// Rolls the dice for a player and tells everyone.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who rolls.</param>
+        /// <param name="member">Room and identifier of the player who rolls.</param>
         /// <param name="heldDice">One value for each die: true if the die keeps its value.</param>
         /// <returns>Outcome of the roll.</returns>
-        public Contracts.GameResultCode Roll(string roomCode, string playerId, IReadOnlyList<bool> heldDice)
+        public Contracts.GameResultCode Roll(LogicRooms.RoomMember member, IReadOnlyList<bool> heldDice)
         {
-            LogicGame.GameActionResult result = _gameManager.Roll(roomCode, playerId, heldDice);
+            LogicGame.GameActionResult result = _gameManager.Roll(member, heldDice);
 
-            return Complete(roomCode, result, Contracts.GameEventType.DiceRolled);
+            return Complete(member.RoomCode, result, Contracts.GameEventType.DiceRolled);
         }
 
         /// <summary>
         /// Writes the points of the dice in a box for a player and tells everyone.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who chooses the box.</param>
+        /// <param name="member">Room and identifier of the player who chooses the box.</param>
         /// <param name="category">Box to use.</param>
         /// <returns>Outcome of the move.</returns>
-        public Contracts.GameResultCode Score(string roomCode, string playerId, Contracts.ScoreCategory category)
+        public Contracts.GameResultCode Score(LogicRooms.RoomMember member, Contracts.ScoreCategory category)
         {
-            LogicGame.GameActionResult result =
-                _gameManager.Score(roomCode, playerId, Mapping.GameMapper.ToLogic(category));
+            LogicGame.GameActionResult result = _gameManager.Score(member, Mapping.GameMapper.ToLogic(category));
 
-            return CompleteTurn(roomCode, result, Contracts.GameEventType.CategoryScored);
+            return CompleteTurn(member.RoomCode, result, Contracts.GameEventType.CategoryScored);
         }
 
         /// <summary>
         /// Marks that a player left the game or lost the connection, and tells the others.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who left.</param>
-        public void PlayerLeft(string roomCode, string playerId)
+        /// <param name="member">Room and identifier of the player who left.</param>
+        public void PlayerLeft(LogicRooms.RoomMember member)
         {
-            _callbacks.Remove(roomCode, playerId);
-            Complete(roomCode, _gameManager.MarkAbsent(roomCode, playerId), Contracts.GameEventType.PlayerDisconnected);
+            _callbacks.Remove(member);
+            Complete(member.RoomCode, _gameManager.MarkAbsent(member), Contracts.GameEventType.PlayerDisconnected);
         }
 
         /// <summary>
         /// Marks that a player came back to the game, and tells the others.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who returned.</param>
-        public void PlayerReturned(string roomCode, string playerId)
+        /// <param name="member">Room and identifier of the player who returned.</param>
+        public void PlayerReturned(LogicRooms.RoomMember member)
         {
-            Complete(roomCode, _gameManager.MarkPresent(roomCode, playerId), Contracts.GameEventType.PlayerReturned);
+            Complete(member.RoomCode, _gameManager.MarkPresent(member), Contracts.GameEventType.PlayerReturned);
         }
 
         /// <summary>
         /// Removes a player from the game for good, and tells the others.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player to remove.</param>
-        public void PlayerRemoved(string roomCode, string playerId)
+        /// <param name="member">Room and identifier of the player to remove.</param>
+        public void PlayerRemoved(LogicRooms.RoomMember member)
         {
-            _callbacks.Remove(roomCode, playerId);
-            Complete(roomCode, _gameManager.Remove(roomCode, playerId), Contracts.GameEventType.PlayerRemoved);
+            _callbacks.Remove(member);
+            Complete(member.RoomCode, _gameManager.Remove(member), Contracts.GameEventType.PlayerRemoved);
         }
 
         /// <summary>

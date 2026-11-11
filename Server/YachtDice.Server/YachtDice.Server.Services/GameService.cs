@@ -4,6 +4,7 @@ using System.ServiceModel;
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Game;
+    using LogicRooms = YachtDice.Server.Logic.Rooms;
 
     /// <summary>
     /// Lets the players of a game in progress roll the dice and choose the boxes of their scorecards. The
@@ -46,8 +47,8 @@ namespace YachtDice.Server.Services
         /// <returns>Outcome of the roll.</returns>
         public Contracts.GameResultCode RollDice(string playerId, string roomCode, bool[] heldDice)
         {
-            Contracts.GameResultCode result =
-                Execute(heldDice, () => _coordinator.Roll(roomCode, playerId, heldDice));
+            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            Contracts.GameResultCode result = Execute(heldDice, () => _coordinator.Roll(member, heldDice));
 
             return result;
         }
@@ -64,8 +65,8 @@ namespace YachtDice.Server.Services
             string roomCode,
             Contracts.ScoreCategory category)
         {
-            Contracts.GameResultCode result =
-                Execute(playerId, () => _coordinator.Score(roomCode, playerId, category));
+            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            Contracts.GameResultCode result = Execute(playerId, () => _coordinator.Score(member, category));
 
             return result;
         }
@@ -73,22 +74,23 @@ namespace YachtDice.Server.Services
         private Contracts.JoinGameResult ProcessJoin(string playerId, string roomCode)
         {
             Contracts.IGameCallback callback = OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>();
-            Contracts.JoinGameResult result = _coordinator.Join(roomCode, playerId, callback);
+            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            Contracts.JoinGameResult result = _coordinator.Join(member, callback);
 
             if (result.Code == Contracts.GameResultCode.Success)
             {
-                WatchChannel(roomCode, playerId, callback);
+                WatchChannel(member, callback);
             }
 
             return result;
         }
 
-        private void WatchChannel(string roomCode, string playerId, Contracts.IGameCallback callback)
+        private void WatchChannel(LogicRooms.RoomMember member, Contracts.IGameCallback callback)
         {
             ICommunicationObject channel = OperationContext.Current.Channel;
 
-            channel.Closed += (sender, e) => _coordinator.Unsubscribe(roomCode, playerId, callback);
-            channel.Faulted += (sender, e) => _coordinator.Unsubscribe(roomCode, playerId, callback);
+            channel.Closed += (sender, e) => _coordinator.Unsubscribe(member, callback);
+            channel.Faulted += (sender, e) => _coordinator.Unsubscribe(member, callback);
         }
     }
 }

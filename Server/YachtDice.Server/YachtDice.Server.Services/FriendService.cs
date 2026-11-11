@@ -6,6 +6,7 @@ namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Friends;
     using LogicFriends = YachtDice.Server.Logic.Friends;
+    using LogicRooms = YachtDice.Server.Logic.Rooms;
     using PresenceContracts = YachtDice.Server.Contracts.Presence;
 
     /// <summary>
@@ -170,7 +171,8 @@ namespace YachtDice.Server.Services
 
         private Contracts.InvitationResultCode ProcessInvitation(string playerId, string friendName, string roomCode)
         {
-            LogicFriends.InvitationResult result = _invitationService.Validate(playerId, friendName, roomCode);
+            var sender = new LogicRooms.RoomMember(roomCode, playerId);
+            LogicFriends.InvitationResult result = _invitationService.CheckInvitation(sender, friendName);
             Contracts.InvitationResultCode code;
 
             if (result.Status == LogicFriends.InvitationStatus.Allowed)
@@ -194,9 +196,19 @@ namespace YachtDice.Server.Services
                 RoomCode = roomCode
             };
 
-            return _notifier.SendInvitation(friendName, invitation)
-                ? Contracts.InvitationResultCode.Sent
-                : Contracts.InvitationResultCode.FriendOffline;
+            bool isDelivered = _notifier.SendInvitation(friendName, invitation);
+            Contracts.InvitationResultCode code;
+
+            if (isDelivered)
+            {
+                code = Contracts.InvitationResultCode.Sent;
+            }
+            else
+            {
+                code = Contracts.InvitationResultCode.FriendOffline;
+            }
+
+            return code;
         }
 
         private Contracts.FriendActionResultCode ProcessRemoval(string displayName, string friendName)

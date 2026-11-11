@@ -205,9 +205,9 @@ namespace YachtDice.Server.Logic.Game
         {
             var bestTotal = snapshot.Players.Max(player => player.Total);
 
-            foreach (var player in snapshot.Players.Where(player => player.Total == bestTotal))
+            foreach (var player in snapshot.Players)
             {
-                player.IsWinner = true;
+                player.IsWinner = player.Total == bestTotal;
             }
         }
 

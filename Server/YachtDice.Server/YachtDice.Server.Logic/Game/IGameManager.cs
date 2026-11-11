@@ -21,28 +21,25 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Gets the state of the game of a room for a player who takes part in it.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="member">Room and identifier of the player.</param>
         /// <returns>The state of the game, or the reason why it could not be read.</returns>
-        GameActionResult GetState(string roomCode, string playerId);
+        GameActionResult GetState(RoomMember member);
 
         /// <summary>
         /// Rolls the dice for the player whose turn it is.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who rolls.</param>
+        /// <param name="member">Room and identifier of the player who rolls.</param>
         /// <param name="heldDice">One value for each die: true if the die keeps its value.</param>
         /// <returns>The state of the game after the roll, or the reason why it was rejected.</returns>
-        GameActionResult Roll(string roomCode, string playerId, IReadOnlyList<bool> heldDice);
+        GameActionResult Roll(RoomMember member, IReadOnlyList<bool> heldDice);
 
         /// <summary>
         /// Writes the points of the current dice in a box and passes the turn.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who chooses the box.</param>
+        /// <param name="member">Room and identifier of the player who chooses the box.</param>
         /// <param name="category">Box to use.</param>
         /// <returns>The state of the game after the move, or the reason why it was rejected.</returns>
-        GameActionResult Score(string roomCode, string playerId, ScoreCategory category);
+        GameActionResult Score(RoomMember member, ScoreCategory category);
 
         /// <summary>
         /// Plays the turn of the current player because the time is over. Nothing happens if the turn
@@ -56,26 +53,23 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Marks that a player is not connected to the game.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who left.</param>
+        /// <param name="member">Room and identifier of the player who left.</param>
         /// <returns>The state of the game, or the reason why it could not be read.</returns>
-        GameActionResult MarkAbsent(string roomCode, string playerId);
+        GameActionResult MarkAbsent(RoomMember member);
 
         /// <summary>
         /// Marks that a player came back to the game.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player who returned.</param>
+        /// <param name="member">Room and identifier of the player who returned.</param>
         /// <returns>The state of the game, or the reason why it could not be read.</returns>
-        GameActionResult MarkPresent(string roomCode, string playerId);
+        GameActionResult MarkPresent(RoomMember member);
 
         /// <summary>
         /// Removes a player from the game for good, for example because the host kicked the player.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="playerId">Player to remove.</param>
+        /// <param name="member">Room and identifier of the player to remove.</param>
         /// <returns>The state of the game, or the reason why it could not be read.</returns>
-        GameActionResult Remove(string roomCode, string playerId);
+        GameActionResult Remove(RoomMember member);
 
         /// <summary>
         /// Deletes the game of a room, for example because the room was closed.
