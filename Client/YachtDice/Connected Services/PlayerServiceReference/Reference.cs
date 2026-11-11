@@ -494,9 +494,9 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AvatarInfo", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UnlockableAvatar", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class AvatarInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class UnlockableAvatar : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -588,7 +588,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalog", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.AvatarInfo[] GetAvatarCatalog();
+        YachtDice.PlayerServiceReference.UnlockableAvatar[] GetAvatarCatalog();
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault", Name="ServiceFault")]
@@ -634,7 +634,7 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.GetProfile(displayName);
         }
         
-        public YachtDice.PlayerServiceReference.AvatarInfo[] GetAvatarCatalog() {
+        public YachtDice.PlayerServiceReference.UnlockableAvatar[] GetAvatarCatalog() {
             return base.Channel.GetAvatarCatalog();
         }
         

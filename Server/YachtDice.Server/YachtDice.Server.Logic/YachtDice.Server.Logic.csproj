@@ -65,7 +65,7 @@
     <Compile Include="Authentication\RegistrationService.cs" />
     <Compile Include="Avatars\AvatarCatalog.cs" />
     <Compile Include="Avatars\AvatarChangeStatus.cs" />
-    <Compile Include="Avatars\AvatarInfo.cs" />
+    <Compile Include="Avatars\UnlockableAvatar.cs" />
     <Compile Include="Avatars\AvatarService.cs" />
     <Compile Include="Avatars\IAvatarLookup.cs" />
     <Compile Include="Avatars\PlayerProfile.cs" />

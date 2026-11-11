@@ -73,9 +73,9 @@ namespace YachtDice.Server.Services
         /// Gets every avatar of the game with the level that each one needs.
         /// </summary>
         /// <returns>The avatars, ordered by identifier.</returns>
-        public List<Contracts.AvatarInfo> GetAvatarCatalog()
+        public List<Contracts.UnlockableAvatar> GetAvatarCatalog()
         {
-            List<Contracts.AvatarInfo> catalog = Execute(ProcessCatalog);
+            List<Contracts.UnlockableAvatar> catalog = Execute(ProcessCatalog);
 
             return catalog;
         }
@@ -94,7 +94,7 @@ namespace YachtDice.Server.Services
             return result;
         }
 
-        private static List<Contracts.AvatarInfo> ProcessCatalog()
+        private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
         }

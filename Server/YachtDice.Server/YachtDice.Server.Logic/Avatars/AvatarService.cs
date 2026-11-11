@@ -91,7 +91,7 @@ namespace YachtDice.Server.Logic.Avatars
         {
             AvatarChangeStatus status = AvatarChangeStatus.Success;
 
-            if (!AvatarCatalog.TryFind(avatarId, out AvatarInfo avatar))
+            if (!AvatarCatalog.TryFind(avatarId, out UnlockableAvatar avatar))
             {
                 status = AvatarChangeStatus.AvatarNotFound;
             }

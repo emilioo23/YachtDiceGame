@@ -21,7 +21,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string PropertySeparator = ", ";
         private const string MissingConnectionMessage = "The connection string of the database is not configured.";
         private const string ConfigurationFailedMessage = "The configuration of the database could not be read.";
-        private const string InvalidEntityFormat = "The data did not pass the validation of the model. Properties: {0}.";
+        private const string InvalidEntityFormat = "The data did not pass the model validation. Properties: {0}.";
 
         /// <summary>
         /// Reads data from the database.

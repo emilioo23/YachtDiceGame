@@ -215,8 +215,10 @@ namespace YachtDice.Server.Data.Repositories
 
         private static bool IsTwoFactorActive(YachtDiceContext context, int playerId)
         {
-            bool isActive = context.TwoFactorAuth.Any(
-                auth => auth.PlayerId == playerId && auth.Method == EmailMethod && auth.Status == ActiveStatus);
+            bool isActive = context.TwoFactorAuth
+                .Where(auth => auth.PlayerId == playerId)
+                .Where(auth => auth.Method == EmailMethod)
+                .Any(auth => auth.Status == ActiveStatus);
 
             return isActive;
         }

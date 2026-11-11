@@ -83,7 +83,8 @@ namespace YachtDice.Views
             var box = (TextBox)sender;
             int index = Array.IndexOf(_digitBoxes, box);
             bool isPaste = e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
-            bool isBackOnEmptyBox = e.Key == Key.Back && box.Text.Length == 0 && index > 0;
+            bool isEmptyBoxAfterFirst = box.Text.Length == 0 && index > 0;
+            bool isBackOnEmptyBox = e.Key == Key.Back && isEmptyBoxAfterFirst;
 
             if (isPaste)
             {

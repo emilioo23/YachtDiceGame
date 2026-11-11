@@ -33,10 +33,10 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="avatars">Avatars of the catalog.</param>
         /// <returns>Answer for the client.</returns>
-        public static List<Contracts.AvatarInfo> ToContracts(List<Logic.Avatars.AvatarInfo> avatars)
+        public static List<Contracts.UnlockableAvatar> ToContracts(List<Logic.Avatars.UnlockableAvatar> avatars)
         {
-            List<Contracts.AvatarInfo> contracts = avatars
-                .Select(avatar => new Contracts.AvatarInfo { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel })
+            List<Contracts.UnlockableAvatar> contracts = avatars
+                .Select(avatar => new Contracts.UnlockableAvatar { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel })
                 .ToList();
 
             return contracts;

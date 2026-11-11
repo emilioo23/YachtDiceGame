@@ -457,7 +457,9 @@ namespace YachtDice.Views
             PlayerScorecard before = _state.Players.FirstOrDefault(player => player.PlayerId == scorerId);
             PlayerScorecard after = state.Players.FirstOrDefault(player => player.PlayerId == scorerId);
 
-            return before != null && after != null && after.YachtBonus > before.YachtBonus;
+            bool hasBothScorecards = before != null && after != null;
+
+            return hasBothScorecards && after.YachtBonus > before.YachtBonus;
         }
 
         private void GoToResultsWindow()

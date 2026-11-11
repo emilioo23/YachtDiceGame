@@ -20,7 +20,7 @@ namespace YachtDice.Server.Tests.Avatars
         {
             var expected = new { IsFound = true, IsFree = true };
 
-            bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out AvatarInfo avatar);
+            bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
 
             var actual = new { IsFound = found, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
             Assert.Equal(expected, actual);
@@ -31,7 +31,7 @@ namespace YachtDice.Server.Tests.Avatars
         {
             var expected = new { IsFound = false, HasAvatar = false };
 
-            bool found = AvatarCatalog.TryFind(UnknownAvatarId, out AvatarInfo avatar);
+            bool found = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
 
             var actual = new { IsFound = found, HasAvatar = avatar != null };
             Assert.Equal(expected, actual);
@@ -70,7 +70,7 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetAll_ChangingTheReturnedList_DoesNotChangeTheCatalog()
         {
-            List<AvatarInfo> firstCopy = AvatarCatalog.GetAll();
+            List<UnlockableAvatar> firstCopy = AvatarCatalog.GetAll();
             int originalCount = firstCopy.Count;
 
             firstCopy.Clear();

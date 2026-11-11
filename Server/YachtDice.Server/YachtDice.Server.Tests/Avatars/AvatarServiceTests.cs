@@ -131,7 +131,7 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_LevelEqualToTheRequiredOne_UnlocksTheAvatar()
         {
-            AvatarCatalog.TryFind(UnlockedAvatarId, out AvatarInfo avatar);
+            AvatarCatalog.TryFind(UnlockedAvatarId, out UnlockableAvatar avatar);
             _players.Players.Single().Level = avatar.RequiredLevel;
 
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);

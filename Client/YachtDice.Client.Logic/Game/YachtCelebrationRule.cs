@@ -17,7 +17,9 @@
         /// <returns>True if the box was just filled with the fifty points of a Yacht.</returns>
         public static bool IsCelebrationDue(bool wasFilled, bool isFilled, int points)
         {
-            return !wasFilled && isFilled && points == YachtPoints;
+            bool isJustFilled = !wasFilled && isFilled;
+
+            return isJustFilled && points == YachtPoints;
         }
     }
 }

@@ -570,7 +570,7 @@
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarChangeResultCode.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.AvatarInfo.datasource">
+    <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.UnlockableAvatar.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\PlayerServiceReference\YachtDice.PlayerServiceReference.LeaderboardEntry.datasource">

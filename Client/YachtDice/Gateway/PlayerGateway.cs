@@ -52,9 +52,9 @@ namespace YachtDice.Gateway
         /// Gets every avatar of the game with the level that each one needs.
         /// </summary>
         /// <returns>The avatars of the catalog.</returns>
-        public async Task<List<AvatarInfo>> GetAvatarCatalogAsync()
+        public async Task<List<UnlockableAvatar>> GetAvatarCatalogAsync()
         {
-            AvatarInfo[] avatars = await ExecuteAsync(client => client.GetAvatarCatalog());
+            UnlockableAvatar[] avatars = await ExecuteAsync(client => client.GetAvatarCatalog());
 
             return avatars.ToList();
         }

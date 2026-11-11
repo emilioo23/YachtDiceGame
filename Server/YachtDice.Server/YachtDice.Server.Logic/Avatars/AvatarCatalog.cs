@@ -38,17 +38,17 @@ namespace YachtDice.Server.Logic.Avatars
             LegendLevel
         };
 
-        private static readonly List<AvatarInfo> Avatars = RequiredLevels
-            .Select((level, index) => new AvatarInfo(FirstAvatarId + index, level))
+        private static readonly List<UnlockableAvatar> Avatars = RequiredLevels
+            .Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level))
             .ToList();
 
         /// <summary>
         /// Gets every avatar of the game, ordered by identifier.
         /// </summary>
         /// <returns>A copy of the list of avatars.</returns>
-        public static List<AvatarInfo> GetAll()
+        public static List<UnlockableAvatar> GetAll()
         {
-            return new List<AvatarInfo>(Avatars);
+            return new List<UnlockableAvatar>(Avatars);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace YachtDice.Server.Logic.Avatars
         /// <param name="avatarId">Identifier to look for.</param>
         /// <param name="avatar">The avatar found; only valid when the method returns true.</param>
         /// <returns>True if the avatar exists.</returns>
-        public static bool TryFind(int avatarId, out AvatarInfo avatar)
+        public static bool TryFind(int avatarId, out UnlockableAvatar avatar)
         {
             avatar = Avatars.FirstOrDefault(candidate => candidate.Id == avatarId);
 

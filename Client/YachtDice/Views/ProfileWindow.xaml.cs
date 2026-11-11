@@ -44,7 +44,7 @@ namespace YachtDice.Views
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadAvatarsAsync);
         }
 
-        private static AvatarRequirement ToRequirement(AvatarInfo avatar)
+        private static AvatarRequirement ToRequirement(UnlockableAvatar avatar)
         {
             return new AvatarRequirement { Id = avatar.Id, RequiredLevel = avatar.RequiredLevel };
         }
@@ -52,7 +52,7 @@ namespace YachtDice.Views
         private async Task LoadAvatarsAsync()
         {
             PlayerProfile profile = await _playerGateway.GetProfileAsync(_session.DisplayName);
-            List<AvatarInfo> catalog = await _playerGateway.GetAvatarCatalogAsync();
+            List<UnlockableAvatar> catalog = await _playerGateway.GetAvatarCatalogAsync();
 
             _catalog = catalog.Select(ToRequirement).ToList();
             _level = profile.Level;
