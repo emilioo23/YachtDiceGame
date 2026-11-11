@@ -91,16 +91,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who asks for the change.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the player who asks for the change.</param>
         /// <param name="settings">New options of the room.</param>
         /// <returns>Outcome of the change.</returns>
-        public Contracts.RoomResultCode UpdateRoomSettings(
-            string playerId,
-            string roomCode,
-            Contracts.RoomSettings settings)
+        public Contracts.RoomResultCode UpdateRoomSettings(Contracts.RoomMember host, Contracts.RoomSettings settings)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
             Contracts.RoomResultCode result = Execute(settings, () => ProcessSettings(member, settings));
 
             return result;
@@ -109,13 +105,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Starts the game of the room and tells every player. Only the host can do it.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who starts the game.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the player who starts the game.</param>
         /// <returns>Outcome of the start.</returns>
-        public Contracts.RoomResultCode StartGame(string playerId, string roomCode)
+        public Contracts.RoomResultCode StartGame(Contracts.RoomMember host)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
-            Contracts.RoomResultCode result = Execute(playerId, () => ProcessStart(member));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessStart(member));
 
             return result;
         }
@@ -124,14 +119,13 @@ namespace YachtDice.Server.Services
         /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
         /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
-        /// <param name="playerId">Identifier of the host who expels the player.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the host who expels the player.</param>
         /// <param name="targetPlayerId">Identifier of the player to expel.</param>
         /// <returns>Outcome of the expulsion.</returns>
-        public Contracts.RoomResultCode KickPlayer(string playerId, string roomCode, string targetPlayerId)
+        public Contracts.RoomResultCode KickPlayer(Contracts.RoomMember host, string targetPlayerId)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
-            Contracts.RoomResultCode result = Execute(playerId, () => ProcessKick(member, targetPlayerId));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessKick(member, targetPlayerId));
 
             return result;
         }
@@ -139,14 +133,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Makes another player of the room the host and tells everyone. Only the current host can do it.
         /// </summary>
-        /// <param name="playerId">Identifier of the current host.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">Room and identifier of the current host.</param>
         /// <param name="newHostId">Identifier of the player who becomes the host.</param>
         /// <returns>Outcome of the change.</returns>
-        public Contracts.RoomResultCode TransferHost(string playerId, string roomCode, string newHostId)
+        public Contracts.RoomResultCode TransferHost(Contracts.RoomMember host, string newHostId)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
-            Contracts.RoomResultCode result = Execute(playerId, () => ProcessHostTransfer(member, newHostId));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessHostTransfer(member, newHostId));
 
             return result;
         }
@@ -168,13 +161,12 @@ namespace YachtDice.Server.Services
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If
         /// the game already started, the player can come back later. If the room stays empty it disappears.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who leaves.</param>
-        /// <param name="roomCode">Code of the room.</param>
-        public void LeaveRoom(string playerId, string roomCode)
+        /// <param name="member">Room and identifier of the player who leaves.</param>
+        public void LeaveRoom(Contracts.RoomMember member)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            LogicRooms.RoomMember leaving = Mapping.RoomMapper.ToLogic(member);
 
-            Execute(playerId, () => ProcessLeave(member));
+            Execute(member, () => ProcessLeave(leaving));
         }
 
         private static Contracts.RoomEventType GetJoinEventType(LogicRooms.RoomResult result)
@@ -235,8 +227,7 @@ namespace YachtDice.Server.Services
 
         private Contracts.RoomResultCode ProcessSettings(LogicRooms.RoomMember member, Contracts.RoomSettings settings)
         {
-            LogicRooms.RoomResult result =
-                _roomManager.UpdateSettings(member, Mapping.RoomMapper.ToLogic(settings));
+            LogicRooms.RoomResult result = _roomManager.UpdateSettings(member, Mapping.RoomMapper.ToLogic(settings));
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {

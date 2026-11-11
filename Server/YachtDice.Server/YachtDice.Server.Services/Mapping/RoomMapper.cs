@@ -58,6 +58,17 @@ namespace YachtDice.Server.Services.Mapping
         }
 
         /// <summary>
+        /// Converts the player inside a room that a client sends. A missing value is kept empty, so the
+        /// rules of the room answer that the player or the room does not exist.
+        /// </summary>
+        /// <param name="member">Room and identifier sent by the client; it can be null.</param>
+        /// <returns>The player inside the room for the logic layer.</returns>
+        public static Logic.Rooms.RoomMember ToLogic(Contracts.RoomMember member)
+        {
+            return new Logic.Rooms.RoomMember(member?.RoomCode, member?.PlayerId);
+        }
+
+        /// <summary>
         /// Creates the options of the logic layer from the ones sent by a client.
         /// </summary>
         /// <param name="settings">Options received from the client.</param>

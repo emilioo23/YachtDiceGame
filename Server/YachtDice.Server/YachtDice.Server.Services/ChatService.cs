@@ -6,6 +6,7 @@ namespace YachtDice.Server.Services
     using Contracts = YachtDice.Server.Contracts.Chat;
     using LogicLogging = YachtDice.Server.Logic.Logging;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
+    using RoomContracts = YachtDice.Server.Contracts.Rooms;
 
     /// <summary>
     /// Delivers the chat messages to every player subscribed to a room. Only the players who are inside the
@@ -42,30 +43,30 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Subscribes the player to the messages of the room. The player must already be inside the room.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who joins the chat.</param>
-        /// <param name="roomCode">Code of the room.</param>
-        public void JoinChat(string playerId, string roomCode)
+        /// <param name="member">Room and identifier of the player who joins the chat.</param>
+        public void JoinChat(RoomContracts.RoomMember member)
         {
-            Execute(playerId, () => ProcessJoin(playerId, roomCode));
+            LogicRooms.RoomMember joining = Mapping.RoomMapper.ToLogic(member);
+
+            Execute(member, () => ProcessJoin(joining));
         }
 
         /// <summary>
         /// Sends a chat message to every player subscribed to the room, including the sender. The author is
         /// the player that has the identifier, so a player cannot write in the name of another one.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who writes the message.</param>
+        /// <param name="author">Room and identifier of the player who writes the message.</param>
         /// <param name="content">Text of the message.</param>
-        /// <param name="roomCode">Code of the room.</param>
-        public void SendChatMessage(string playerId, string content, string roomCode)
+        public void SendChatMessage(RoomContracts.RoomMember author, string content)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(author);
             var hasContent = !string.IsNullOrWhiteSpace(content);
 
-            if (hasContent && _roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer author))
+            if (hasContent && _roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer writer))
             {
-                Contracts.ChatMessage delivered = CreateDeliveredMessage(author, content);
+                Contracts.ChatMessage delivered = CreateDeliveredMessage(writer, content);
 
-                _callbacks.Notify(roomCode, callback => callback.MessageReceived(delivered));
+                _callbacks.Notify(member.RoomCode, callback => callback.MessageReceived(delivered));
             }
             else
             {
@@ -76,13 +77,15 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Stops sending the messages of the room to the player.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who leaves the chat.</param>
-        /// <param name="roomCode">Code of the room.</param>
-        public void LeaveChat(string playerId, string roomCode)
+        /// <param name="member">Room and identifier of the player who leaves the chat.</param>
+        public void LeaveChat(RoomContracts.RoomMember member)
         {
-            if (!string.IsNullOrWhiteSpace(playerId) && !string.IsNullOrWhiteSpace(roomCode))
+            LogicRooms.RoomMember leaving = Mapping.RoomMapper.ToLogic(member);
+            bool hasPlayer = !string.IsNullOrWhiteSpace(leaving.PlayerId);
+
+            if (hasPlayer && !string.IsNullOrWhiteSpace(leaving.RoomCode))
             {
-                _callbacks.Remove(new LogicRooms.RoomMember(roomCode, playerId));
+                _callbacks.Remove(leaving);
             }
         }
 
@@ -107,10 +110,8 @@ namespace YachtDice.Server.Services
             return delivered;
         }
 
-        private void ProcessJoin(string playerId, string roomCode)
+        private void ProcessJoin(LogicRooms.RoomMember member)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
-
             if (_roomManager.TryGetPlayer(member, out _))
             {
                 Contracts.IChatCallback callback =
@@ -123,7 +124,7 @@ namespace YachtDice.Server.Services
             }
             else
             {
-                throw new ArgumentException(NotInsideRoomMessage, nameof(playerId));
+                throw new ArgumentException(NotInsideRoomMessage, nameof(member));
             }
         }
 

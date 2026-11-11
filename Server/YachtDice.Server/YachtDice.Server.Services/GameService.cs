@@ -5,6 +5,7 @@ namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Game;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
+    using RoomContracts = YachtDice.Server.Contracts.Rooms;
 
     /// <summary>
     /// Lets the players of a game in progress roll the dice and choose the boxes of their scorecards. The
@@ -28,12 +29,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Subscribes the player to the changes of the game of the room and gives the current state.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who joins the game.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="player">Room and identifier of the player who joins the game.</param>
         /// <returns>Whether the player joined and the state of the game.</returns>
-        public Contracts.JoinGameResult JoinGame(string playerId, string roomCode)
+        public Contracts.JoinGameResult JoinGame(RoomContracts.RoomMember player)
         {
-            Contracts.JoinGameResult result = Execute(playerId, () => ProcessJoin(playerId, roomCode));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.JoinGameResult result = Execute(player, () => ProcessJoin(member));
 
             return result;
         }
@@ -41,13 +42,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Rolls the dice of the turn and tells every player.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who rolls.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="player">Room and identifier of the player who rolls.</param>
         /// <param name="heldDice">One value for each die: true if the die keeps its value.</param>
         /// <returns>Outcome of the roll.</returns>
-        public Contracts.GameResultCode RollDice(string playerId, string roomCode, bool[] heldDice)
+        public Contracts.GameResultCode RollDice(RoomContracts.RoomMember player, bool[] heldDice)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
             Contracts.GameResultCode result = Execute(heldDice, () => _coordinator.Roll(member, heldDice));
 
             return result;
@@ -56,25 +56,22 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Writes the points of the current dice in a box and passes the turn to the next player.
         /// </summary>
-        /// <param name="playerId">Identifier of the player who chooses the box.</param>
-        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="player">Room and identifier of the player who chooses the box.</param>
         /// <param name="category">Box to use.</param>
         /// <returns>Outcome of the move.</returns>
         public Contracts.GameResultCode SelectCategory(
-            string playerId,
-            string roomCode,
+            RoomContracts.RoomMember player,
             Contracts.ScoreCategory category)
         {
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
-            Contracts.GameResultCode result = Execute(playerId, () => _coordinator.Score(member, category));
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.GameResultCode result = Execute(player, () => _coordinator.Score(member, category));
 
             return result;
         }
 
-        private Contracts.JoinGameResult ProcessJoin(string playerId, string roomCode)
+        private Contracts.JoinGameResult ProcessJoin(LogicRooms.RoomMember member)
         {
             Contracts.IGameCallback callback = OperationContext.Current.GetCallbackChannel<Contracts.IGameCallback>();
-            var member = new LogicRooms.RoomMember(roomCode, playerId);
             Contracts.JoinGameResult result = _coordinator.Join(member, callback);
 
             if (result.Code == Contracts.GameResultCode.Success)
