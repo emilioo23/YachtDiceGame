@@ -274,7 +274,8 @@ namespace YachtDice.Views
 
         private string FindPlayerName(string playerId)
         {
-            PlayerScorecard card = _state.Players.FirstOrDefault(player => player.PlayerId == playerId);
+            Func<PlayerScorecard, bool> isSamePlayerId = player => player.PlayerId == playerId;
+            PlayerScorecard card = _state.Players.FirstOrDefault(isSamePlayerId);
 
             var name = string.Empty;
 
@@ -446,16 +447,19 @@ namespace YachtDice.Views
 
         private static CategoryScore FindYachtScore(GameState state, string playerId)
         {
-            PlayerScorecard card = state.Players.FirstOrDefault(player => player.PlayerId == playerId);
+            Func<PlayerScorecard, bool> isSamePlayerId = player => player.PlayerId == playerId;
+            PlayerScorecard card = state.Players.FirstOrDefault(isSamePlayerId);
+            Func<CategoryScore, bool> isSameCategory = score => score.Category == ScoreCategory.Yacht;
 
-            return card?.Scores.FirstOrDefault(score => score.Category == ScoreCategory.Yacht);
+            return card?.Scores.FirstOrDefault(isSameCategory);
         }
 
         private bool HasNewYachtBonus(GameState state)
         {
             string scorerId = _state.CurrentPlayerId;
-            PlayerScorecard before = _state.Players.FirstOrDefault(player => player.PlayerId == scorerId);
-            PlayerScorecard after = state.Players.FirstOrDefault(player => player.PlayerId == scorerId);
+            Func<PlayerScorecard, bool> isScorer = player => player.PlayerId == scorerId;
+            PlayerScorecard before = _state.Players.FirstOrDefault(isScorer);
+            PlayerScorecard after = state.Players.FirstOrDefault(isScorer);
 
             bool hasBothScorecards = before != null && after != null;
 
@@ -500,7 +504,9 @@ namespace YachtDice.Views
 
         private bool IsInside(RoomState room)
         {
-            return room.Players.Any(player => player.Id == _playerId);
+            Func<RoomPlayer, bool> isSameId = player => player.Id == _playerId;
+
+            return room.Players.Any(isSameId);
         }
 
         private void LeaveBecauseKicked()
@@ -529,7 +535,8 @@ namespace YachtDice.Views
 
         private void AnnounceNewHost(RoomState room)
         {
-            RoomPlayer host = room.Players.FirstOrDefault(player => player.Id == room.HostId);
+            Func<RoomPlayer, bool> isSameId = player => player.Id == room.HostId;
+            RoomPlayer host = room.Players.FirstOrDefault(isSameId);
 
             if (host != null && room.HostId != _hostId)
             {
@@ -595,8 +602,9 @@ namespace YachtDice.Views
 
         private void KickPlayerButton_Click(object sender, RoutedEventArgs e)
         {
+            Func<MatchPlayer, bool> isActiveOpponent = player => !player.IsLocalPlayer && !player.HasLeft;
             List<MatchPlayer> candidates = _matchPlayers
-                .Where(player => !player.IsLocalPlayer && !player.HasLeft)
+                .Where(isActiveOpponent)
                 .ToList();
 
             if (candidates.Count == NoText)

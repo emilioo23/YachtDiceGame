@@ -74,7 +74,9 @@ namespace YachtDice.Views
 
         private static PlayerScorecard FindCard(GameState state, string playerId)
         {
-            return state.Players.FirstOrDefault(card => card.PlayerId == playerId) ?? new PlayerScorecard
+            Func<PlayerScorecard, bool> isSamePlayerId = card => card.PlayerId == playerId;
+
+            return state.Players.FirstOrDefault(isSamePlayerId) ?? new PlayerScorecard
             {
                 Scores = new CategoryScore[] { }
             };
@@ -82,7 +84,8 @@ namespace YachtDice.Views
 
         private static string GetPoints(PlayerScorecard card, ScoreCategory category)
         {
-            CategoryScore entry = card.Scores.FirstOrDefault(score => score.Category == category);
+            Func<CategoryScore, bool> isSameCategory = score => score.Category == category;
+            CategoryScore entry = card.Scores.FirstOrDefault(isSameCategory);
 
             string points = string.Empty;
 
@@ -130,8 +133,8 @@ namespace YachtDice.Views
             string text = GetPoints(FindCard(context.State, player.Id), category);
             ScoreChoice option = context.FindOption(category);
             bool isLocalPlayerTurn = player.IsLocalPlayer && context.IsLocalTurn;
-            bool isEmptyCell = text.Length == 0;
-            bool canPreviewPoints = isEmptyCell && isLocalPlayerTurn && option != null;
+            bool isOpenCell = text.Length == 0 && isLocalPlayerTurn;
+            bool canPreviewPoints = isOpenCell && option != null;
 
             if (canPreviewPoints)
             {
@@ -248,7 +251,9 @@ namespace YachtDice.Views
                 State = state;
                 Columns = columns;
                 OnCategoryClick = onClick;
-                IsLocalTurn = columns.Any(player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId)
+                Func<MatchPlayer, bool> isLocalCurrentPlayer =
+                    player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId;
+                IsLocalTurn = columns.Any(isLocalCurrentPlayer)
                     && state.Status == GameStatus.InProgress;
             }
 
@@ -279,7 +284,9 @@ namespace YachtDice.Views
             /// <returns>The option of the box, or nothing if the box cannot be used now.</returns>
             public ScoreChoice FindOption(ScoreCategory category)
             {
-                return State.Options.FirstOrDefault(choice => choice.Category == category);
+                Func<ScoreChoice, bool> isSameCategory = choice => choice.Category == category;
+
+                return State.Options.FirstOrDefault(isSameCategory);
             }
         }
     }

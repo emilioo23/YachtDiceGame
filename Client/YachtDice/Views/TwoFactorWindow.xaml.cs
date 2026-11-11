@@ -186,7 +186,8 @@ namespace YachtDice.Views
 
         private bool IsCodeComplete()
         {
-            bool isComplete = _digitBoxes.All(box => !string.IsNullOrEmpty(box.Text));
+            Func<TextBox, bool> hasDigit = box => !string.IsNullOrEmpty(box.Text);
+            bool isComplete = _digitBoxes.All(hasDigit);
 
             return isComplete;
         }

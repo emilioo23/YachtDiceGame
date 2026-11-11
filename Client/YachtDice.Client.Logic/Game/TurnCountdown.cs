@@ -17,11 +17,6 @@ namespace YachtDice.Client.Logic.Game
         public int SecondsLeft { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the time of the turn is over.
-        /// </summary>
-        public bool IsOver => SecondsLeft == NoSeconds;
-
-        /// <summary>
         /// Sets the seconds left, for example when the server sends a new state.
         /// </summary>
         /// <param name="seconds">Seconds left. A negative value is taken as zero.</param>

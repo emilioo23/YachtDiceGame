@@ -58,6 +58,12 @@
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
+    <Compile Include="Game\RankedStandingTests.cs" />
+    <Compile Include="Utils\FriendItemFactoryTests.cs" />
+    <Compile Include="Utils\HowToPlayContentTests.cs" />
+    <Compile Include="Utils\MatchPlayerFactoryTests.cs" />
+    <Compile Include="Utils\PlayerInitialsTests.cs" />
+    <Compile Include="Utils\RoomListItemFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +82,10 @@
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">
       <Project>{661920f3-f041-4e22-8e60-82d4233217a5}</Project>
       <Name>YachtDice.Client.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YachtDice\YachtDice.csproj">
+      <Project>{34361500-4622-4842-BED5-EE1DB51DC434}</Project>
+      <Name>YachtDice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

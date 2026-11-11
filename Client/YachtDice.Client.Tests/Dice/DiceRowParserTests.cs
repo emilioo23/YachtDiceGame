@@ -25,8 +25,10 @@ namespace YachtDice.Client.Tests.Dice
 
             var actual = new
             {
-                Values = dice.Select(die => die.Value).ToArray(),
-                IsAnyDimmed = dice.Any(die => die.IsDimmed)
+                Values =
+                    dice.Select(die => die.Value).ToArray(),
+                IsAnyDimmed =
+                    dice.Any(die => die.IsDimmed)
             };
             Assert.Equivalent(expected, actual);
         }

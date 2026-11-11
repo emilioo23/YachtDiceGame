@@ -36,8 +36,10 @@ namespace YachtDice.Client.Tests.Game
 
             var actual = new
             {
-                PlayerIds = standings.Select(standing => standing.PlayerId).ToArray(),
-                Ranks = standings.Select(standing => standing.Rank).ToArray()
+                PlayerIds =
+                    standings.Select(standing => standing.PlayerId).ToArray(),
+                Ranks =
+                    standings.Select(standing => standing.Rank).ToArray()
             };
             Assert.Equivalent(expected, actual);
         }
@@ -57,8 +59,10 @@ namespace YachtDice.Client.Tests.Game
 
             var actual = new
             {
-                Ranks = standings.Select(standing => standing.Rank).ToArray(),
-                Winners = standings.Select(standing => standing.IsWinner).ToArray()
+                Ranks =
+                    standings.Select(standing => standing.Rank).ToArray(),
+                Winners =
+                    standings.Select(standing => standing.IsWinner).ToArray()
             };
             Assert.Equivalent(expected, actual);
         }

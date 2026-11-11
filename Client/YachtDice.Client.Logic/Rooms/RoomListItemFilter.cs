@@ -27,9 +27,10 @@ namespace YachtDice.Client.Logic.Rooms
             string searchText)
         {
             string search = searchText.Trim();
+            Func<RoomListItem, bool> isVisible = room => MatchesPrivacy(room, privacy) && MatchesName(room, search);
 
             return rooms
-                .Where(room => MatchesPrivacy(room, privacy) && MatchesName(room, search))
+                .Where(isVisible)
                 .ToList();
         }
 

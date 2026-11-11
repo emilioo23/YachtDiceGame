@@ -19,24 +19,20 @@ namespace YachtDice.Client.Tests.Game
         public void Reset_Seconds_SetsTheSecondsLeft()
         {
             var countdown = new TurnCountdown();
-            var expected = new { SecondsLeft = TurnSeconds, IsOver = false };
 
             countdown.Reset(TurnSeconds);
 
-            var actual = new { countdown.SecondsLeft, countdown.IsOver };
-            Assert.Equal(expected, actual);
+            Assert.Equal(TurnSeconds, countdown.SecondsLeft);
         }
 
         [Fact]
         public void Reset_NegativeSeconds_LeavesZero()
         {
             var countdown = new TurnCountdown();
-            var expected = new { SecondsLeft = NoSeconds, IsOver = true };
 
             countdown.Reset(NegativeSeconds);
 
-            var actual = new { countdown.SecondsLeft, countdown.IsOver };
-            Assert.Equal(expected, actual);
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
         }
 
         [Fact]
@@ -56,12 +52,10 @@ namespace YachtDice.Client.Tests.Game
             var countdown = new TurnCountdown();
             countdown.Reset(LastSecond);
             countdown.Tick();
-            var expected = new { SecondsLeft = NoSeconds, IsOver = true };
 
             countdown.Tick();
 
-            var actual = new { countdown.SecondsLeft, countdown.IsOver };
-            Assert.Equal(expected, actual);
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
         }
     }
 }

@@ -246,14 +246,17 @@ namespace YachtDice.Views
 
         private string FindPlayerName(string playerId)
         {
-            RoomPlayer player = _roomGateway.CurrentRoom.Players.FirstOrDefault(candidate => candidate.Id == playerId);
+            Func<RoomPlayer, bool> isSameId = candidate => candidate.Id == playerId;
+            RoomPlayer player = _roomGateway.CurrentRoom.Players.FirstOrDefault(isSameId);
 
             return player == null ? string.Empty : player.DisplayName;
         }
 
         private bool IsInside(RoomState room)
         {
-            return room.Players.Any(player => player.Id == _roomGateway.PlayerId);
+            Func<RoomPlayer, bool> isSameId = player => player.Id == _roomGateway.PlayerId;
+
+            return room.Players.Any(isSameId);
         }
 
         private void LeaveBecauseKicked()
@@ -264,7 +267,8 @@ namespace YachtDice.Views
 
         private void AnnounceHostChange(RoomState room)
         {
-            RoomPlayer host = room.Players.First(player => player.Id == room.HostId);
+            Func<RoomPlayer, bool> isSameId = player => player.Id == room.HostId;
+            RoomPlayer host = room.Players.First(isSameId);
 
             ChatPanelControl.AddMessage(
                 Strings.Game_Chat_SystemName,

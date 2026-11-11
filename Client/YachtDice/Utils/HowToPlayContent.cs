@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Models;
 using YachtDice.Resources;
@@ -26,9 +27,10 @@ namespace YachtDice.Utils
         public static List<RuleStep> GetTurnSteps()
         {
             string[] stepTexts = { Strings.HowToPlay_Step1, Strings.HowToPlay_Step2, Strings.HowToPlay_Step3 };
+            Func<string, int, RuleStep> createRuleStep = CreateStep;
 
             return stepTexts
-                .Select((text, stepIndex) => new RuleStep { Number = stepIndex + 1, Text = text })
+                .Select(createRuleStep)
                 .ToList();
         }
 
@@ -95,6 +97,17 @@ namespace YachtDice.Utils
         private static CategoryRule CreateRule(string title, string description, string dice)
         {
             return new CategoryRule { Title = title, Description = description, Dice = dice };
+        }
+
+        /// <summary>
+        /// Creates a numbered step of the turn.
+        /// </summary>
+        /// <param name="text">Text of the step.</param>
+        /// <param name="stepIndex">Position of the step in the list, starting at zero.</param>
+        /// <returns>The step with its number, starting at one.</returns>
+        private static RuleStep CreateStep(string text, int stepIndex)
+        {
+            return new RuleStep { Number = stepIndex + 1, Text = text };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -89,7 +90,8 @@ namespace YachtDice.Views
 
         private int GetRequiredLevel()
         {
-            AvatarOption option = _options.FirstOrDefault(candidate => candidate.Id == _selectedAvatarId);
+            Func<AvatarOption, bool> isSameId = candidate => candidate.Id == _selectedAvatarId;
+            AvatarOption option = _options.FirstOrDefault(isSameId);
 
             return option == null ? NoLevelRequired : option.RequiredLevel;
         }
@@ -97,7 +99,8 @@ namespace YachtDice.Views
         private void AvatarOption_Click(object sender, MouseButtonEventArgs e)
         {
             int avatarId = (int)((FrameworkElement)sender).Tag;
-            AvatarOption option = _options.First(candidate => candidate.Id == avatarId);
+            Func<AvatarOption, bool> isSameId = candidate => candidate.Id == avatarId;
+            AvatarOption option = _options.First(isSameId);
 
             if (option.IsUnlocked)
             {
