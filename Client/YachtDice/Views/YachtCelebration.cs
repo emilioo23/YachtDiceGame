@@ -6,6 +6,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using YachtDice.Resources;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -64,7 +65,7 @@ namespace YachtDice.Views
 
         private readonly Canvas _canvas;
         private readonly FrameworkElement _resources;
-        private readonly Random _random = new Random();
+        private readonly SecureRandom _random = new SecureRandom();
 
         private int _playId;
 

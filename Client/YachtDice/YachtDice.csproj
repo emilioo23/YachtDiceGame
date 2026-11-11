@@ -292,6 +292,7 @@
     <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
+    <Compile Include="Utils\SecureRandom.cs" />
     <Compile Include="Navigation\InvitationListener.cs" />
     <Compile Include="Navigation\LobbyNavigator.cs" />
     <Compile Include="Navigation\WindowNavigator.cs" />

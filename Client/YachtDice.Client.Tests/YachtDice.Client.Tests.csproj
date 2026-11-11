@@ -73,6 +73,7 @@
     <Compile Include="Utils\PresenceMessagesTests.cs" />
     <Compile Include="Utils\RoomListItemFactoryTests.cs" />
     <Compile Include="Utils\RoomResultMessagesTests.cs" />
+    <Compile Include="Utils\SecureRandomTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
