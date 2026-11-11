@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using YachtDice.Client.Logic.Connection;
@@ -55,9 +54,7 @@ namespace YachtDice.Client.Tests.Connection
                 .AsParallel()
                 .Select(caller => gate.TryEnter())
                 .ToArray();
-            Func<bool, bool> isTrue = isFirst => isFirst;
-
-            Assert.Equal(1, results.Count(isTrue));
+            Assert.Equal(1, results.Count(isFirst => isFirst));
         }
     }
 }

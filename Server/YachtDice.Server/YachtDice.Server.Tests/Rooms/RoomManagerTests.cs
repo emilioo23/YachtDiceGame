@@ -359,7 +359,7 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
 
-            Assert.True(afterLeaving.HostChanged);
+            Assert.True(afterLeaving.HasHostChanged);
         }
 
         [Fact]
@@ -370,7 +370,7 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
 
-            Assert.False(afterLeaving.HostChanged);
+            Assert.False(afterLeaving.HasHostChanged);
         }
 
         [Fact]

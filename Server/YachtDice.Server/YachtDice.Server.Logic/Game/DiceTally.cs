@@ -10,6 +10,7 @@ namespace YachtDice.Server.Logic.Game
     internal sealed class DiceTally
     {
         private const int NoValue = 0;
+        private const int SingleOccurrence = 1;
         private const string InvalidCountMessage = "A roll must have exactly five dice.";
         private const string InvalidValueMessage = "A die can only show a value from one to six.";
 
@@ -39,6 +40,11 @@ namespace YachtDice.Server.Logic.Game
         /// Gets the biggest number of dice that show the same value.
         /// </summary>
         public int HighestCount => _countsByValue.Max();
+
+        /// <summary>
+        /// Gets a value indicating whether the five dice show the same value.
+        /// </summary>
+        public bool IsYacht => HighestCount == DiceRules.DiceCount;
 
         /// <summary>
         /// Gets how many dice show a value.
@@ -85,7 +91,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if each value from the first to the last appears exactly once.</returns>
         public bool ShowsEachValueOnce(int firstValue, int lastValue)
         {
-            Func<int, bool> isSingle = value => _countsByValue[value] == 1;
+            Func<int, bool> isSingle = value => _countsByValue[value] == SingleOccurrence;
 
             return Enumerable.Range(firstValue, lastValue - firstValue + 1)
                 .All(isSingle);

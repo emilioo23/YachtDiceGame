@@ -12,6 +12,8 @@ namespace YachtDice.Server.Logic.Game
     internal sealed class YachtGame
     {
         private const int NoPlayerIndex = -1;
+        private const int NoRolls = 0;
+        private const int FirstTurnNumber = 1;
         private const int RoundOffset = 1;
 
         private readonly List<GamePlayer> _players;
@@ -36,7 +38,7 @@ namespace YachtDice.Server.Logic.Game
                 .ToList();
             _dieSource = dieSource;
             TurnSeconds = turnSeconds;
-            TurnNumber = 1;
+            TurnNumber = FirstTurnNumber;
             _turnIndex = NoPlayerIndex;
             _turnIndex = FindNextPlayerIndex();
         }
@@ -116,7 +118,7 @@ namespace YachtDice.Server.Logic.Game
 
             if (Status == GameStatus.InProgress && _turnIndex != NoPlayerIndex)
             {
-                if (_rollsMade == 0)
+                if (_rollsMade == NoRolls)
                 {
                     RollAll();
                 }
@@ -246,7 +248,7 @@ namespace YachtDice.Server.Logic.Game
             {
                 status = GameActionStatus.NoRollsLeft;
             }
-            else if (_rollsMade == 0)
+            else if (_rollsMade == NoRolls)
             {
                 RollAll();
                 status = GameActionStatus.Success;
@@ -268,7 +270,7 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionStatus status;
 
-            if (_rollsMade == 0)
+            if (_rollsMade == NoRolls)
             {
                 status = GameActionStatus.MustRollFirst;
             }
@@ -329,7 +331,7 @@ namespace YachtDice.Server.Logic.Game
         private void AdvanceTurn()
         {
             _turnIndex = FindNextPlayerIndex();
-            _rollsMade = 0;
+            _rollsMade = NoRolls;
             TurnNumber++;
             Array.Clear(_dice, 0, _dice.Length);
             Array.Clear(_heldDice, 0, _heldDice.Length);
@@ -355,9 +357,9 @@ namespace YachtDice.Server.Logic.Game
 
         private void UpdateStatus()
         {
-            var someonePresent = _players.Any(player => player.IsPresent);
+            var isSomeonePresent = _players.Any(player => player.IsPresent);
 
-            if (_turnIndex == NoPlayerIndex && someonePresent)
+            if (_turnIndex == NoPlayerIndex && isSomeonePresent)
             {
                 Status = GameStatus.Finished;
             }
@@ -377,9 +379,9 @@ namespace YachtDice.Server.Logic.Game
 
         private void RefreshTurnAfterPresenceChange()
         {
-            var currentCannotPlay = _turnIndex != NoPlayerIndex && !_players[_turnIndex].CanPlay;
+            var isCurrentPlayerBlocked = _turnIndex != NoPlayerIndex && !_players[_turnIndex].CanPlay;
 
-            if (currentCannotPlay || _turnIndex == NoPlayerIndex)
+            if (isCurrentPlayerBlocked || _turnIndex == NoPlayerIndex)
             {
                 AdvanceTurn();
             }
@@ -387,7 +389,7 @@ namespace YachtDice.Server.Logic.Game
 
         private void RemoveAt(int index)
         {
-            var wasCurrent = index == _turnIndex;
+            var isCurrentPlayer = index == _turnIndex;
 
             _players.RemoveAt(index);
 
@@ -396,7 +398,7 @@ namespace YachtDice.Server.Logic.Game
                 _turnIndex--;
             }
 
-            if (wasCurrent)
+            if (isCurrentPlayer)
             {
                 AdvanceTurn();
             }
@@ -429,7 +431,7 @@ namespace YachtDice.Server.Logic.Game
 
         private void FillDice(GameSnapshot snapshot)
         {
-            if (_rollsMade > 0)
+            if (_rollsMade > NoRolls)
             {
                 foreach (var die in _dice)
                 {

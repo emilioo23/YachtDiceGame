@@ -11,6 +11,7 @@ namespace YachtDice.Utils
     public sealed class SecureRandom
     {
         private const int BufferStartIndex = 0;
+        private const int SmallestExclusiveMaximum = 1;
         private const int DoubleBits = 53;
         private const int UnsignedLongBits = 64;
         private const int DiscardedBits = UnsignedLongBits - DoubleBits;
@@ -26,7 +27,7 @@ namespace YachtDice.Utils
         /// <exception cref="ArgumentOutOfRangeException">The maximum is not greater than zero.</exception>
         public int Next(int maxExclusive)
         {
-            if (maxExclusive <= 0)
+            if (maxExclusive < SmallestExclusiveMaximum)
             {
                 throw new ArgumentOutOfRangeException(nameof(maxExclusive), InvalidMaximumMessage);
             }

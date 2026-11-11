@@ -11,13 +11,13 @@
         /// <summary>
         /// Tells whether a change in the Yacht box deserves the celebration.
         /// </summary>
-        /// <param name="wasFilled">Whether the Yacht box already had points before the change.</param>
+        /// <param name="isFilledBefore">Whether the Yacht box already had points before the change.</param>
         /// <param name="isFilled">Whether the Yacht box has points after the change.</param>
         /// <param name="points">Points of the Yacht box after the change.</param>
         /// <returns>True if the box was just filled with the fifty points of a Yacht.</returns>
-        public static bool IsCelebrationDue(bool wasFilled, bool isFilled, int points)
+        public static bool IsCelebrationDue(bool isFilledBefore, bool isFilled, int points)
         {
-            bool isJustFilled = !wasFilled && isFilled;
+            bool isJustFilled = !isFilledBefore && isFilled;
 
             return isJustFilled && points == YachtPoints;
         }

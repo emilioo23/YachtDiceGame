@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Security;
 
@@ -29,11 +30,16 @@ namespace YachtDice.Server.Logic.Authentication
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
         private const string NullArgumentMessage = "The value cannot be null.";
+        private const string EmailSubjectResourceKey = "PasswordReset_EmailSubject";
+        private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
+
+        private static readonly CodeEmailTemplate EmailTemplate =
+            new CodeEmailTemplate(EmailSubjectResourceKey, EmailBodyResourceKey, ExpirationMinutes);
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly IPasswordResetRepository _resetRepository;
-        private readonly PasswordResetEmailSender _emailSender;
+        private readonly CodeEmailSender _emailSender;
         private readonly PasswordResetAttemptCounter _attempts = new PasswordResetAttemptCounter();
 
         /// <summary>
@@ -41,18 +47,17 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="resetRepository">Repository that keeps the recovery codes.</param>
-        /// <param name="emailSender">Sender of the email with the recovery code.</param>
+        /// <param name="emailService">Service that delivers the email with the recovery code.</param>
         public PasswordRecoveryService(
             IPlayerRepository playerRepository,
             IPasswordResetRepository resetRepository,
-            PasswordResetEmailSender emailSender)
+            IEmailService emailService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository));
             _resetRepository = resetRepository
                 ?? throw new ArgumentNullException(nameof(resetRepository));
-            _emailSender = emailSender
-                ?? throw new ArgumentNullException(nameof(emailSender));
+            _emailSender = new CodeEmailSender(emailService, EmailTemplate);
             _logger = new AppLogger(GetType());
         }
 

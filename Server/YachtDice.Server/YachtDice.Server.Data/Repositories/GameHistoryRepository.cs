@@ -58,22 +58,29 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)
         {
-            IQueryable<PlayerRankingRecord> records =
-                from entry in context.GameHistoryPlayer
-                group entry by entry.PlayerId into playerGames
-                join player in context.Player on playerGames.Key equals player.Id
-                let totalPoints = (from game in playerGames select game.FinalScore).Sum()
-                let wins = (from game in playerGames where game.IsWinner == true select game).Count()
-                orderby totalPoints descending, player.DisplayName
-                select new PlayerRankingRecord
+            List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
+                .GroupBy(entry => entry.PlayerId)
+                .Select(group => new
                 {
-                    DisplayName = player.DisplayName,
-                    AvatarId = player.AvatarId,
-                    TotalPoints = totalPoints,
-                    Wins = wins
-                };
-
-            List<PlayerRankingRecord> ranking = records.Take(maxEntries).ToList();
+                    PlayerId = group.Key,
+                    TotalPoints = group.Sum(entry => entry.FinalScore),
+                    Wins = group.Count(entry => entry.IsWinner == true)
+                })
+                .Join(
+                    context.Player,
+                    totals => totals.PlayerId,
+                    player => player.Id,
+                    (totals, player) => new PlayerRankingRecord
+                    {
+                        DisplayName = player.DisplayName,
+                        AvatarId = player.AvatarId,
+                        TotalPoints = totals.TotalPoints,
+                        Wins = totals.Wins
+                    })
+                .OrderByDescending(record => record.TotalPoints)
+                .ThenBy(record => record.DisplayName)
+                .Take(maxEntries)
+                .ToList();
 
             return ranking;
         }

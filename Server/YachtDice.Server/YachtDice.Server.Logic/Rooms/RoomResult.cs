@@ -25,7 +25,7 @@
         /// <summary>
         /// Gets a value indicating whether the host of the room changed because the host left it.
         /// </summary>
-        public bool HostChanged { get; private set; }
+        public bool HasHostChanged { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the player came back to a game in progress after leaving it.
@@ -62,11 +62,11 @@
         /// Creates the result of a player who left a room.
         /// </summary>
         /// <param name="room">State of the room after the player left.</param>
-        /// <param name="hostChanged">True if the player was the host and another player is the host now.</param>
+        /// <param name="hasHostChanged">True if the player was the host and another player is the host now.</param>
         /// <returns>A successful result that tells whether the host changed.</returns>
-        public static RoomResult CreateLeft(RoomDetails room, bool hostChanged)
+        public static RoomResult CreateLeft(RoomDetails room, bool hasHostChanged)
         {
-            return new RoomResult(RoomStatus.Success, room, string.Empty) { HostChanged = hostChanged };
+            return new RoomResult(RoomStatus.Success, room, string.Empty) { HasHostChanged = hasHostChanged };
         }
 
         /// <summary>

@@ -435,9 +435,9 @@ namespace YachtDice.Views
             string scorerId = _state.CurrentPlayerId;
             CategoryScore before = FindYachtScore(_state, scorerId);
             CategoryScore after = FindYachtScore(state, scorerId);
-            bool wasFilled = before != null && before.IsFilled;
+            bool isFilledBefore = before != null && before.IsFilled;
             bool isCelebrationDue = after != null
-                && YachtCelebrationRule.IsCelebrationDue(wasFilled, after.IsFilled, after.Points);
+                && YachtCelebrationRule.IsCelebrationDue(isFilledBefore, after.IsFilled, after.Points);
 
             if (isCelebrationDue)
             {

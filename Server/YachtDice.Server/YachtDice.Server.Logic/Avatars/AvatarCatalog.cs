@@ -39,7 +39,9 @@ namespace YachtDice.Server.Logic.Avatars
             LegendLevel
         };
 
-        private static readonly List<UnlockableAvatar> Avatars = CreateAvatars();
+        private static readonly List<UnlockableAvatar> Avatars = RequiredLevels
+            .Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level))
+            .ToList();
 
         /// <summary>
         /// Gets every avatar of the game, ordered by identifier.
@@ -62,16 +64,6 @@ namespace YachtDice.Server.Logic.Avatars
             avatar = Avatars.FirstOrDefault(isSameId);
 
             return avatar != null;
-        }
-
-        /// <summary>
-        /// Creates one avatar for each required level, with consecutive identifiers.
-        /// </summary>
-        /// <returns>The avatars of the game ordered by identifier.</returns>
-        private static List<UnlockableAvatar> CreateAvatars()
-        {
-
-            return RequiredLevels.Select((level, index) => new UnlockableAvatar(FirstAvatarId + index, level)).ToList();
         }
     }
 }

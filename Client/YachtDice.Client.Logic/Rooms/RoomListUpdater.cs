@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Client.Logic.Rooms
@@ -20,12 +19,10 @@ namespace YachtDice.Client.Logic.Rooms
             IReadOnlyList<RoomListItem> oldRooms,
             IReadOnlyList<RoomListItem> newRooms)
         {
-            Func<bool, bool> isTrue = isSame => isSame;
-
             return oldRooms.Count == newRooms.Count
                 && oldRooms
                     .Zip(newRooms, (oldRoom, newRoom) => oldRoom.HasSameContentAs(newRoom))
-                    .All(isTrue);
+                    .All(isSame => isSame);
         }
 
         /// <summary>

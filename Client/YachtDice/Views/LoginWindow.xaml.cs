@@ -17,7 +17,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-
         private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 

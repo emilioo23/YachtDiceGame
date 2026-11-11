@@ -151,11 +151,10 @@ namespace YachtDice.Server.Logic.Friends
         private static List<string> ToNames(List<Player> players)
         {
             Func<string, bool> hasName = name => !string.IsNullOrWhiteSpace(name);
-            Func<string, string> getName = name => name;
             List<string> names = players
                 .Select(player => player.DisplayName)
                 .Where(hasName)
-                .OrderBy(getName)
+                .OrderBy(name => name)
                 .ToList();
 
             return names;
