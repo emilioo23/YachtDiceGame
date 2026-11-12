@@ -58,9 +58,8 @@ namespace YachtDice.Client.Tests.Utils
         public void Next_MaximumNotGreaterThanZero_ThrowsArgumentOutOfRangeException()
         {
             var random = new SecureRandom();
-            Action next = () => random.Next(InvalidMaximum);
 
-            Assert.Throws<ArgumentOutOfRangeException>(next);
+            Assert.Throws<ArgumentOutOfRangeException>(() => random.Next(InvalidMaximum));
         }
 
         [Fact]

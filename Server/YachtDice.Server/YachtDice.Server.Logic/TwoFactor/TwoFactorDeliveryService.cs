@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Mail;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Email;
-using YachtDice.Server.Logic.Logging;
-using YachtDice.Server.Logic.Resources;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -15,14 +12,14 @@ namespace YachtDice.Server.Logic.TwoFactor
     {
         private const string SubjectResourceKey = "TwoFactor_EmailSubject";
         private const string BodyResourceKey = "TwoFactor_EmailBody";
-        private const string SentLogMessage = "Verification code sent by email.";
-        private const string SendFailedLogMessage = "The verification code could not be sent.";
         private const string NullCodeServiceMessage = "The code service cannot be null.";
-        private const string NullEmailServiceMessage = "The email service cannot be null.";
+        private const string NullArgumentMessage = "The value cannot be null.";
 
-        private readonly AppLogger _logger;
+        private static readonly CodeEmailTemplate EmailTemplate =
+            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, TwoFactorCodeService.ExpirationMinutes);
+
         private readonly TwoFactorCodeService _codeService;
-        private readonly IEmailService _emailService;
+        private readonly CodeEmailSender _emailSender;
 
         /// <summary>
         /// Initializes the service with the code generator shared with the validation.
@@ -32,9 +29,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         public TwoFactorDeliveryService(TwoFactorCodeService codeService, IEmailService emailService)
         {
             _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullCodeServiceMessage);
-            _emailService = emailService
-                ?? throw new ArgumentNullException(nameof(emailService), NullEmailServiceMessage);
-            _logger = new AppLogger(GetType());
+            _emailSender = new CodeEmailSender(emailService, EmailTemplate);
         }
 
         /// <summary>
@@ -44,59 +39,17 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="challengeId">Unique session challenge identifier.</param>
         /// <param name="culture">Language in which the email is written.</param>
         /// <returns>True if the email was sent successfully.</returns>
+        /// <exception cref="ArgumentNullException">The player or the culture is null.</exception>
         public bool SendCode(Player player, string challengeId, CultureInfo culture)
         {
-            if (culture == null)
+            if (player == null)
             {
-                throw new ArgumentNullException(nameof(culture));
+                throw new ArgumentNullException(nameof(player), NullArgumentMessage);
             }
 
-            var isSent = false;
             string code = _codeService.GenerateCode(player.Email, challengeId);
-            string subject = EmailStrings.ResourceManager.GetString(SubjectResourceKey, culture);
-            string body = BuildBody(player.DisplayName, code, culture);
 
-            try
-            {
-                _emailService.Send(player.Email, subject, body);
-                isSent = true;
-                _logger.Info(SentLogMessage);
-            }
-            catch (SmtpException ex)
-            {
-                LogSendFailure(ex);
-            }
-            catch (InvalidOperationException ex)
-            {
-                LogSendFailure(ex);
-            }
-            catch (FormatException ex)
-            {
-                LogSendFailure(ex);
-            }
-            catch (ArgumentException ex)
-            {
-                LogSendFailure(ex);
-            }
-
-            return isSent;
-        }
-
-        private void LogSendFailure(Exception exception)
-        {
-            _logger.Error(exception, SendFailedLogMessage);
-        }
-
-        private static string BuildBody(string playerDisplayName, string code, CultureInfo culture)
-        {
-            string template = EmailStrings.ResourceManager.GetString(BodyResourceKey, culture);
-
-            return string.Format(
-                culture,
-                template,
-                playerDisplayName,
-                code,
-                TwoFactorCodeService.ExpirationMinutes);
+            return _emailSender.Send(player, code, culture);
         }
     }
 }

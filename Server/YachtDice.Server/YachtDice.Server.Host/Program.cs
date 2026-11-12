@@ -147,7 +147,7 @@ namespace YachtDice.Server.Host
             var passwordRecoveryService = new PasswordRecoveryService(
                 playerRepository,
                 new PasswordResetRepository(),
-                new PasswordResetEmailSender(new EmailService()));
+                new EmailService());
 
             return new AuthenticationService(
                 new LoginService(playerRepository, verificationService, deliveryService),

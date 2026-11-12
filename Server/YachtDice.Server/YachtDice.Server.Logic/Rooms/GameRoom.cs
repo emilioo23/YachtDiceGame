@@ -103,7 +103,6 @@ namespace YachtDice.Server.Logic.Rooms
         /// <returns>True if a player with that identifier is inside.</returns>
         public bool HasPlayer(string playerId)
         {
-
             return _players.Any(player => IsSameId(player.Id, playerId));
         }
 
@@ -136,11 +135,11 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="playerId">Identifier of the player.</param>
         public void RemovePlayer(string playerId)
         {
-            bool wasHost = IsHost(playerId);
+            bool isHostLeaving = IsHost(playerId);
 
             _players.RemoveAll(player => IsSameId(player.Id, playerId));
 
-            if (wasHost && _players.Any())
+            if (isHostLeaving && _players.Any())
             {
                 HostId = _players.First().Id;
             }

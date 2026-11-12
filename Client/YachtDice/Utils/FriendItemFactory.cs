@@ -20,9 +20,8 @@ namespace YachtDice.Utils
         /// <returns>One row for each name.</returns>
         public static List<FriendItem> Create(IEnumerable<string> names, string status, bool isOnline)
         {
-            Func<string, string> getName = name => name;
             List<FriendItem> friendItems = names
-                .OrderBy(getName)
+                .OrderBy(name => name)
                 .Select(name => CreateItem(name, status, isOnline))
                 .ToList();
 
@@ -37,7 +36,6 @@ namespace YachtDice.Utils
         /// <returns>One row for each friend who is online, ordered by name.</returns>
         public static List<FriendItem> CreateOnline(IEnumerable<string> friendNames, ICollection<string> onlineNames)
         {
-
             return Create(
                 friendNames.Where(name => IsOnline(name, onlineNames)),
                 Strings.MainMenu_Friends_StatusOnline,

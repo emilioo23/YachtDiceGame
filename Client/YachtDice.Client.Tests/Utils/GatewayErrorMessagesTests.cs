@@ -10,7 +10,6 @@ namespace YachtDice.Client.Tests.Utils
     /// </summary>
     public class GatewayErrorMessagesTests
     {
-
         [Fact]
         public void GetMessage_ServerUnavailable_ReturnsTheServerMessage()
         {

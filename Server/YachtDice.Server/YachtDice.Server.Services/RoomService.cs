@@ -189,7 +189,7 @@ namespace YachtDice.Server.Services
             {
                 eventType = Contracts.RoomEventType.PlayerDisconnected;
             }
-            else if (result.HostChanged)
+            else if (result.HasHostChanged)
             {
                 eventType = Contracts.RoomEventType.HostChanged;
             }

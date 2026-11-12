@@ -357,7 +357,7 @@ namespace YachtDice.Server.Tests.Authentication
 
         private PasswordRecoveryService CreateService(IEmailService emailService)
         {
-            return new PasswordRecoveryService(_players, _resets, new PasswordResetEmailSender(emailService));
+            return new PasswordRecoveryService(_players, _resets, emailService);
         }
 
         private bool IsCurrentPassword(string password)

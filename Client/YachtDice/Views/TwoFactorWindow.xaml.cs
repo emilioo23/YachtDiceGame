@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -23,11 +24,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class TwoFactorWindow : Window
     {
-        private const int VisibleLocalPartChars = 2;
-        private const int FirstCharacterIndex = 0;
-        private const char MaskCharacter = '*';
-        private const char AtSign = '@';
         private const int MaxDigitsPerBox = 1;
+        private const int FirstBoxIndex = 0;
 
         private readonly string _email;
         private readonly PlayerSession _session;
@@ -66,7 +64,7 @@ namespace YachtDice.Views
 
             if (!_isActivation)
             {
-                DestinationEmailTextBlock.Text = MaskEmail(_email);
+                DestinationEmailTextBlock.Text = EmailMask.Mask(_email);
             }
 
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
@@ -83,7 +81,7 @@ namespace YachtDice.Views
             var box = (TextBox)sender;
             int index = Array.IndexOf(_digitBoxes, box);
             bool isPaste = e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
-            bool isEmptyBoxAfterFirst = box.Text.Length == 0 && index > 0;
+            bool isEmptyBoxAfterFirst = box.Text.Length == 0 && index > FirstBoxIndex;
             bool isBackOnEmptyBox = e.Key == Key.Back && isEmptyBoxAfterFirst;
 
             if (isPaste)
@@ -166,22 +164,6 @@ namespace YachtDice.Views
             {
                 WindowNavigator.SwitchTo(this, new LoginWindow());
             }
-        }
-
-        private static string MaskEmail(string email)
-        {
-            int atIndex = email.IndexOf(AtSign);
-            string maskedEmail = email;
-
-            if (atIndex > VisibleLocalPartChars)
-            {
-                string visiblePart = email.Substring(FirstCharacterIndex, VisibleLocalPartChars);
-                string hiddenPart = new string(MaskCharacter, atIndex - VisibleLocalPartChars);
-
-                maskedEmail = visiblePart + hiddenPart + email.Substring(atIndex);
-            }
-
-            return maskedEmail;
         }
 
         private bool IsCodeComplete()

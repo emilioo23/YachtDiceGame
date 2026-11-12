@@ -454,14 +454,14 @@ namespace YachtDice.Server.Logic.Rooms
 
             if (room.HasPlayer(playerId))
             {
-                bool wasHost = room.IsHost(playerId);
+                bool isHostLeaving = room.IsHost(playerId);
 
                 RemoveOrMarkAbsent(room, playerId);
                 DeleteIfEmpty(room);
 
                 RoomDetails details = room.ToDetails();
 
-                result = RoomResult.CreateLeft(details, wasHost && !details.IsEmpty);
+                result = RoomResult.CreateLeft(details, isHostLeaving && !details.IsEmpty);
             }
 
             return result;

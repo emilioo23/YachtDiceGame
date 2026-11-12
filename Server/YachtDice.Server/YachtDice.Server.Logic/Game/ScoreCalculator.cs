@@ -99,7 +99,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if the roll is a Yacht.</returns>
         public bool IsYacht(IReadOnlyList<int> dice)
         {
-            return new DiceTally(dice).HighestCount == DiceRules.DiceCount;
+            return new DiceTally(dice).IsYacht;
         }
 
         private static int ScoreUpper(DiceTally tally, ScoreCategory category)
@@ -143,9 +143,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static int ScoreYacht(DiceTally tally)
         {
-            var isYacht = tally.HighestCount == DiceRules.DiceCount;
-
-            return isYacht ? YachtPoints : NoPoints;
+            return tally.IsYacht ? YachtPoints : NoPoints;
         }
 
     }

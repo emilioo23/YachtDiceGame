@@ -10,7 +10,6 @@ namespace YachtDice.Client.Tests.Utils
     /// </summary>
     public class CategoryNamesTests
     {
-
         [Fact]
         public void GetName_Yacht_ReturnsTheYachtName()
         {

@@ -58,7 +58,6 @@
     <Compile Include="Authentication\PasswordRecoveryService.cs" />
     <Compile Include="Authentication\PasswordResetAttemptCounter.cs" />
     <Compile Include="Authentication\PasswordResetConfirmation.cs" />
-    <Compile Include="Authentication\PasswordResetEmailSender.cs" />
     <Compile Include="Authentication\PasswordResetRequestStatus.cs" />
     <Compile Include="Authentication\PasswordResetStatus.cs" />
     <Compile Include="Authentication\RegistrationResult.cs" />
@@ -69,6 +68,8 @@
     <Compile Include="Avatars\AvatarService.cs" />
     <Compile Include="Avatars\IAvatarLookup.cs" />
     <Compile Include="Avatars\PlayerProfile.cs" />
+    <Compile Include="Email\CodeEmailSender.cs" />
+    <Compile Include="Email\CodeEmailTemplate.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Friends\FriendActionStatus.cs" />

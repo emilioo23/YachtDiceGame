@@ -224,13 +224,13 @@ namespace YachtDice.Gateway
 
         private void HandleConnectionLost(PresenceServiceClient client)
         {
-            bool wasCurrent;
+            bool isCurrentClient;
 
             lock (_syncRoot)
             {
-                wasCurrent = ReferenceEquals(_client, client);
+                isCurrentClient = ReferenceEquals(_client, client);
 
-                if (wasCurrent)
+                if (isCurrentClient)
                 {
                     _client = null;
                     _displayName = null;
@@ -240,7 +240,7 @@ namespace YachtDice.Gateway
 
             client.Abort();
 
-            if (wasCurrent)
+            if (isCurrentClient)
             {
                 PlayersChanged?.Invoke();
                 ConnectionLost?.Invoke();

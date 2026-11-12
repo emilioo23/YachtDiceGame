@@ -167,7 +167,6 @@ namespace YachtDice.Views
 
         private Task LoadPlayerStatisticsAsync(string playerName)
         {
-
             return GatewayCallRunner.RunAsync(this, _logger, () => ShowPlayerStatisticsAsync(playerName));
         }
 
