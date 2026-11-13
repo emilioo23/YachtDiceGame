@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using YachtDice.Client.Logic.Dice;
 
@@ -12,41 +11,56 @@ namespace YachtDice.Client.Tests.Dice
     {
         private const string ThreeFoursRow = "4 4 4 2 6";
         private const string LastTwoDimmedRow = "3 3 3 5- 6-";
-
-        private static readonly int[] ThreeFoursValues = { 4, 4, 4, 2, 6 };
-        private static readonly bool[] LastTwoDimmed = { false, false, false, true, true };
+        private const string LowestAndHighestRow = "1 6";
+        private const string InvalidWordBetweenRow = "2 x 5";
+        private const string ExtraSpacesRow = "  1   2  ";
 
         [Fact]
         public void Parse_NumbersSeparatedBySpaces_ReturnsTheDiceInOrder()
         {
-            var expected = new { Values = ThreeFoursValues, IsAnyDimmed = false };
+            DieDisplay[] expected =
+            {
+                new DieDisplay { Value = 4, IsDimmed = false },
+                new DieDisplay { Value = 4, IsDimmed = false },
+                new DieDisplay { Value = 4, IsDimmed = false },
+                new DieDisplay { Value = 2, IsDimmed = false },
+                new DieDisplay { Value = 6, IsDimmed = false }
+            };
 
             List<DieDisplay> dice = DiceRowParser.Parse(ThreeFoursRow);
 
-            var actual = new
-            {
-                Values =
-                    dice.Select(die => die.Value).ToArray(),
-                IsAnyDimmed =
-                    dice.Any(die => die.IsDimmed)
-            };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, dice);
         }
 
         [Fact]
         public void Parse_NumberWithMinusSign_MarksTheDieAsDimmed()
         {
+            DieDisplay[] expected =
+            {
+                new DieDisplay { Value = 3, IsDimmed = false },
+                new DieDisplay { Value = 3, IsDimmed = false },
+                new DieDisplay { Value = 3, IsDimmed = false },
+                new DieDisplay { Value = 5, IsDimmed = true },
+                new DieDisplay { Value = 6, IsDimmed = true }
+            };
+
             List<DieDisplay> dice = DiceRowParser.Parse(LastTwoDimmedRow);
 
-            Assert.Equal(LastTwoDimmed, dice.Select(die => die.IsDimmed).ToArray());
+            Assert.Equivalent(expected, dice);
         }
 
         [Fact]
         public void Parse_LowestAndHighestFace_AreAccepted()
         {
-            List<DieDisplay> dice = DiceRowParser.Parse("1 6");
+            DieDisplay[] expected =
+            {
+                new DieDisplay { Value = 1, IsDimmed = false },
+                new DieDisplay { Value = 6, IsDimmed = false }
+            };
 
-            Assert.Equal(new[] { 1, 6 }, dice.Select(die => die.Value));
+            List<DieDisplay> dice = DiceRowParser.Parse(LowestAndHighestRow);
+
+            Assert.Equivalent(expected, dice);
         }
 
         [Theory]
@@ -66,17 +80,29 @@ namespace YachtDice.Client.Tests.Dice
         [Fact]
         public void Parse_InvalidWordBetweenValidOnes_KeepsTheValidOnes()
         {
-            List<DieDisplay> dice = DiceRowParser.Parse("2 x 5");
+            DieDisplay[] expected =
+            {
+                new DieDisplay { Value = 2, IsDimmed = false },
+                new DieDisplay { Value = 5, IsDimmed = false }
+            };
 
-            Assert.Equal(new[] { 2, 5 }, dice.Select(die => die.Value));
+            List<DieDisplay> dice = DiceRowParser.Parse(InvalidWordBetweenRow);
+
+            Assert.Equivalent(expected, dice);
         }
 
         [Fact]
         public void Parse_ExtraSpaces_AreIgnored()
         {
-            List<DieDisplay> dice = DiceRowParser.Parse("  1   2  ");
+            DieDisplay[] expected =
+            {
+                new DieDisplay { Value = 1, IsDimmed = false },
+                new DieDisplay { Value = 2, IsDimmed = false }
+            };
 
-            Assert.Equal(new[] { 1, 2 }, dice.Select(die => die.Value));
+            List<DieDisplay> dice = DiceRowParser.Parse(ExtraSpacesRow);
+
+            Assert.Equivalent(expected, dice);
         }
 
         [Theory]
