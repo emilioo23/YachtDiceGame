@@ -70,18 +70,22 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetProfile_RegisteredPlayer_ReturnsAvatarLevelAndExperience()
         {
-            var expected = new { AvatarId = CurrentAvatarId, Level = PlayerLevel, Experience = PlayerExperience };
+            PlayerProfile expected = new PlayerProfile
+            {
+                AvatarId = CurrentAvatarId,
+                Level = PlayerLevel,
+                Experience = PlayerExperience
+            };
 
             PlayerProfile profile = _service.GetProfile(PlayerName);
 
-            var actual = new { profile.AvatarId, profile.Level, profile.Experience };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, profile);
         }
 
         [Fact]
         public void GetProfile_UnknownPlayer_ReturnsTheProfileOfANewPlayer()
         {
-            var expected = new
+            PlayerProfile expected = new PlayerProfile
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = NewPlayerLevel,
@@ -90,8 +94,7 @@ namespace YachtDice.Server.Tests.Avatars
 
             PlayerProfile profile = _service.GetProfile(UnknownName);
 
-            var actual = new { profile.AvatarId, profile.Level, profile.Experience };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, profile);
         }
 
         [Fact]
