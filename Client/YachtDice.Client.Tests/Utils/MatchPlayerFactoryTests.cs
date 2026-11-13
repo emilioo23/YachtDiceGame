@@ -23,7 +23,7 @@ namespace YachtDice.Client.Tests.Utils
         public void Create_LocalPlayerAfterOpponent_PutsTheLocalPlayerFirstAndMarksIt()
         {
             RoomPlayer[] roomPlayers = { _opponent, _localPlayer };
-            MatchPlayer[] expected =
+            MatchPlayer[] expectedPlayers =
             {
                 CreateMatchPlayer(_localPlayer, true, false),
                 CreateMatchPlayer(_opponent, false, false)
@@ -31,7 +31,7 @@ namespace YachtDice.Client.Tests.Utils
 
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
 
-            Assert.Equivalent(expected, players, strict: true);
+            Assert.Equivalent(expectedPlayers, players, strict: true);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace YachtDice.Client.Tests.Utils
                 Players = new[] { _localPlayer },
                 AbsentPlayers = new[] { _opponent }
             };
-            MatchPlayer[] expected =
+            MatchPlayer[] expectedPlayers =
             {
                 CreateMatchPlayer(_localPlayer, true, false),
                 CreateMatchPlayer(_opponent, false, true)
@@ -50,7 +50,7 @@ namespace YachtDice.Client.Tests.Utils
 
             List<MatchPlayer> players = MatchPlayerFactory.CreateForRoom(room, LocalId);
 
-            Assert.Equivalent(expected, players, strict: true);
+            Assert.Equivalent(expectedPlayers, players, strict: true);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace YachtDice.Client.Tests.Utils
         {
             RoomPlayer[] roomPlayers = { _localPlayer, _opponent };
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
-            MatchPlayer[] expected =
+            MatchPlayer[] expectedPlayers =
             {
                 CreateMatchPlayer(_localPlayer, true, false),
                 CreateMatchPlayer(_opponent, false, false)
@@ -66,7 +66,7 @@ namespace YachtDice.Client.Tests.Utils
 
             List<MatchPlayer> updated = MatchPlayerFactory.UpdatePresence(players, roomPlayers);
 
-            Assert.Equivalent(expected, updated, strict: true);
+            Assert.Equivalent(expectedPlayers, updated, strict: true);
         }
 
         private static MatchPlayer CreateMatchPlayer(RoomPlayer roomPlayer, bool isLocalPlayer, bool hasLeft)

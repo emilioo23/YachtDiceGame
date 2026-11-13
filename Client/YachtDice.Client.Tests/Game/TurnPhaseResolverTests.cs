@@ -50,11 +50,11 @@ namespace YachtDice.Client.Tests.Game
         [InlineData(2, TurnHint.ChooseOrRoll)]
         [InlineData(1, TurnHint.ChooseOrRoll)]
         [InlineData(0, TurnHint.PickBox)]
-        public void ResolveHint_LocalTurn_ReturnsHintOfTheMoment(int rollsLeft, TurnHint expected)
+        public void ResolveHint_LocalTurn_ReturnsHintOfTheMoment(int rollsLeft, TurnHint expectedHint)
         {
             TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, new TurnRolls(rollsLeft, MaxRolls));
 
-            Assert.Equal(expected, hint);
+            Assert.Equal(expectedHint, hint);
         }
 
         [Fact]

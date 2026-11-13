@@ -33,7 +33,7 @@ namespace YachtDice.Client.Tests.Utils
         [Fact]
         public void Create_UnsortedNames_ReturnsThemOrderedByName()
         {
-            FriendItem[] expected =
+            FriendItem[] expectedItems =
             {
                 CreateItem(AnaName, AnaInitial, _anyPresence),
                 CreateItem(BetoName, BetoInitial, _anyPresence),
@@ -42,37 +42,37 @@ namespace YachtDice.Client.Tests.Utils
 
             List<FriendItem> items = FriendItemFactory.Create(_friendNames, _anyPresence);
 
-            Assert.Equivalent(expected, items, strict: true);
+            Assert.Equivalent(expectedItems, items, strict: true);
         }
 
         [Fact]
         public void Create_Name_ShowsItsInitial()
         {
             string[] names = { AnaName };
-            FriendItem[] expected = { CreateItem(AnaName, AnaInitial, _anyPresence) };
+            FriendItem[] expectedItems = { CreateItem(AnaName, AnaInitial, _anyPresence) };
 
             List<FriendItem> items = FriendItemFactory.Create(names, _anyPresence);
 
-            Assert.Equivalent(expected, items, strict: true);
+            Assert.Equivalent(expectedItems, items, strict: true);
         }
 
         [Fact]
         public void CreateOnline_OnlineNameWithOtherCase_ReturnsOnlyThatFriend()
         {
-            FriendItem[] expected =
+            FriendItem[] expectedItems =
             {
                 CreateItem(BetoName, BetoInitial, OnlinePresence)
             };
 
             List<FriendItem> items = FriendItemFactory.CreateOnline(_friendNames, _onlineNames);
 
-            Assert.Equivalent(expected, items, strict: true);
+            Assert.Equivalent(expectedItems, items, strict: true);
         }
 
         [Fact]
         public void CreateOffline_OneFriendOnline_ReturnsTheOtherFriends()
         {
-            FriendItem[] expected =
+            FriendItem[] expectedItems =
             {
                 CreateItem(AnaName, AnaInitial, OfflinePresence),
                 CreateItem(CesarName, CesarInitial, OfflinePresence)
@@ -80,7 +80,7 @@ namespace YachtDice.Client.Tests.Utils
 
             List<FriendItem> items = FriendItemFactory.CreateOffline(_friendNames, _onlineNames);
 
-            Assert.Equivalent(expected, items, strict: true);
+            Assert.Equivalent(expectedItems, items, strict: true);
         }
 
         private static FriendItem CreateItem(string name, string initial, FriendPresence presence)

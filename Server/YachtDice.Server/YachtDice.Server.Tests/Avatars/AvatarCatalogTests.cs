@@ -19,23 +19,23 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
         {
-            var expected = new { IsFound = true, IsFree = true };
+            var expectedSearch = new { IsFound = true, IsFree = true };
 
             bool isFound = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
 
-            var actual = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
-            Assert.Equal(expected, actual);
+            var actualSearch = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            Assert.Equal(expectedSearch, actualSearch);
         }
 
         [Fact]
         public void TryFind_UnknownIdentifier_ReturnsFalse()
         {
-            var expected = new { IsFound = false, HasAvatar = false };
+            var expectedSearch = new { IsFound = false, HasAvatar = false };
 
             bool isFound = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
 
-            var actual = new { IsFound = isFound, HasAvatar = avatar != null };
-            Assert.Equal(expected, actual);
+            var actualSearch = new { IsFound = isFound, HasAvatar = avatar != null };
+            Assert.Equal(expectedSearch, actualSearch);
         }
 
         [Fact]

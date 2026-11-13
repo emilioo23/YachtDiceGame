@@ -20,13 +20,13 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RegisterFailure_RepeatedFailures_CountsThemInOrder()
         {
-            var expected = new { First = OneFailure, Second = TwoFailures };
+            var expectedFailures = new { First = OneFailure, Second = TwoFailures };
 
             int first = _counter.RegisterFailure(FirstPlayerId);
             int second = _counter.RegisterFailure(FirstPlayerId);
 
-            var actual = new { First = first, Second = second };
-            Assert.Equal(expected, actual);
+            var actualFailures = new { First = first, Second = second };
+            Assert.Equal(expectedFailures, actualFailures);
         }
 
         [Fact]

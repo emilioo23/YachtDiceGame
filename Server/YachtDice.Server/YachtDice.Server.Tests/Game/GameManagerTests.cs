@@ -42,7 +42,7 @@ namespace YachtDice.Server.Tests.Game
         public void Start_TwoPlayers_GivesTheFirstTurnToTheFirstPlayer()
         {
             GameManager manager = CreateManager(LittleStraightDice);
-            var expected = new
+            var expectedSnapshot = new
             {
                 CurrentPlayerId = FirstId,
                 Round = FirstRound,
@@ -53,7 +53,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameSnapshot snapshot = StartTwoPlayerGame(manager);
 
-            Assert.Equivalent(expected, snapshot);
+            Assert.Equivalent(expectedSnapshot, snapshot);
         }
 
         [Theory]
@@ -73,15 +73,15 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new
+            var expectedRollResult = new
             {
                 Status = GameActionStatus.Success,
                 Snapshot = new { Dice = LittleStraightDice, RollsLeft = TwoRollsLeft }
             };
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            Assert.Equivalent(expected, result);
+            Assert.Equivalent(expectedRollResult, rollResult);
         }
 
         [Fact]
@@ -90,9 +90,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
 
-            Assert.Equal(LittleStraightDice, result.Snapshot.Dice.ToArray());
+            Assert.Equal(LittleStraightDice, rollResult.Snapshot.Dice.ToArray());
         }
 
         [Fact]
@@ -101,16 +101,16 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightThenTwoSixes);
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
-            var expected = new
+            var expectedSnapshot = new
             {
                 Dice = FirstThreeKeptWithTwoSixes,
                 HeldDice = FirstThreeHeld,
                 RollsLeft = OneRollLeft
             };
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
 
-            Assert.Equivalent(expected, result.Snapshot);
+            Assert.Equivalent(expectedSnapshot, rollResult.Snapshot);
         }
 
         [Fact]
@@ -122,9 +122,9 @@ namespace YachtDice.Server.Tests.Game
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            Assert.Equal(GameActionStatus.NoRollsLeft, result.Status);
+            Assert.Equal(GameActionStatus.NoRollsLeft, rollResult.Status);
         }
 
         [Fact]
@@ -134,9 +134,9 @@ namespace YachtDice.Server.Tests.Game
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), new[] { true, false });
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), new[] { true, false });
 
-            Assert.Equal(GameActionStatus.InvalidHeldDice, result.Status);
+            Assert.Equal(GameActionStatus.InvalidHeldDice, rollResult.Status);
         }
 
         [Fact]
@@ -145,9 +145,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, SecondId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, SecondId), NoHeldDice);
 
-            Assert.Equal(GameActionStatus.NotYourTurn, result.Status);
+            Assert.Equal(GameActionStatus.NotYourTurn, rollResult.Status);
         }
 
         [Fact]
@@ -156,9 +156,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, UnknownId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, UnknownId), NoHeldDice);
 
-            Assert.Equal(GameActionStatus.PlayerNotInGame, result.Status);
+            Assert.Equal(GameActionStatus.PlayerNotInGame, rollResult.Status);
         }
 
         [Fact]
@@ -166,9 +166,9 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
 
-            GameActionResult result = manager.Roll(new RoomMember(UnknownRoomCode, FirstId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(UnknownRoomCode, FirstId), NoHeldDice);
 
-            Assert.Equal(GameActionStatus.GameNotFound, result.Status);
+            Assert.Equal(GameActionStatus.GameNotFound, rollResult.Status);
         }
 
         [Fact]
@@ -176,16 +176,16 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { OptionCount = CategoryCount, LittleStraightPoints };
+            var expectedOptions = new { OptionCount = CategoryCount, LittleStraightPoints };
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            var actual = new
+            var actualOptions = new
             {
-                OptionCount = result.Snapshot.Options.Count,
-                LittleStraightPoints = FindOption(result.Snapshot, ScoreCategory.LittleStraight).Points
+                OptionCount = rollResult.Snapshot.Options.Count,
+                LittleStraightPoints = FindOption(rollResult.Snapshot, ScoreCategory.LittleStraight).Points
             };
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedOptions, actualOptions);
         }
 
         [Fact]
@@ -194,9 +194,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
+            GameActionResult scoreResult = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
 
-            Assert.Equal(GameActionStatus.MustRollFirst, result.Status);
+            Assert.Equal(GameActionStatus.MustRollFirst, scoreResult.Status);
         }
 
         [Fact]
@@ -205,7 +205,7 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
-            var expected = new
+            var expectedScore = new
             {
                 Status = GameActionStatus.Success,
                 CurrentPlayerId = SecondId,
@@ -214,17 +214,18 @@ namespace YachtDice.Server.Tests.Game
                 FirstPlayerTotal = LittleStraightPoints
             };
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.LittleStraight);
+            GameActionResult scoreResult =
+                manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.LittleStraight);
 
-            var actual = new
+            var actualScore = new
             {
-                result.Status,
-                result.Snapshot.CurrentPlayerId,
-                result.Snapshot.RollsLeft,
-                result.Snapshot.Dice,
-                FirstPlayerTotal = FindPlayer(result.Snapshot, FirstId).Total
+                scoreResult.Status,
+                scoreResult.Snapshot.CurrentPlayerId,
+                scoreResult.Snapshot.RollsLeft,
+                scoreResult.Snapshot.Dice,
+                FirstPlayerTotal = FindPlayer(scoreResult.Snapshot, FirstId).Total
             };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expectedScore, actualScore);
         }
 
         [Fact]
@@ -234,9 +235,9 @@ namespace YachtDice.Server.Tests.Game
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, SecondId), ScoreCategory.Choice);
+            GameActionResult scoreResult = manager.Score(new RoomMember(RoomCode, SecondId), ScoreCategory.Choice);
 
-            Assert.Equal(GameActionStatus.NotYourTurn, result.Status);
+            Assert.Equal(GameActionStatus.NotYourTurn, scoreResult.Status);
         }
 
         [Fact]
@@ -248,9 +249,9 @@ namespace YachtDice.Server.Tests.Game
             PlayTurn(manager, SecondId, ScoreCategory.Choice);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
+            GameActionResult scoreResult = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
 
-            Assert.Equal(GameActionStatus.CategoryFilled, result.Status);
+            Assert.Equal(GameActionStatus.CategoryFilled, scoreResult.Status);
         }
 
         [Fact]
@@ -274,11 +275,11 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             PlayTurn(manager, FirstId, ScoreCategory.Choice);
-            var expected = new { CurrentPlayerId = FirstId, Round = SecondRound };
+            var expectedSnapshot = new { CurrentPlayerId = FirstId, Round = SecondRound };
 
-            GameActionResult result = PlayTurn(manager, SecondId, ScoreCategory.Choice);
+            GameActionResult scoreResult = PlayTurn(manager, SecondId, ScoreCategory.Choice);
 
-            Assert.Equivalent(expected, result.Snapshot);
+            Assert.Equivalent(expectedSnapshot, scoreResult.Snapshot);
         }
 
         [Fact]
@@ -286,13 +287,18 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartSinglePlayerGame(manager);
-            var expected = new { Status = GameStatus.Finished, CurrentPlayerId = string.Empty, IsWinner = true };
+            var expectedGameEnd = new { Status = GameStatus.Finished, CurrentPlayerId = string.Empty, IsWinner = true };
 
             PlayEveryCategory(manager);
 
             GameSnapshot snapshot = manager.GetState(new RoomMember(RoomCode, FirstId)).Snapshot;
-            var actual = new { snapshot.Status, snapshot.CurrentPlayerId, FindPlayer(snapshot, FirstId).IsWinner };
-            Assert.Equal(expected, actual);
+            var actualGameEnd = new
+            {
+                snapshot.Status,
+                snapshot.CurrentPlayerId,
+                FindPlayer(snapshot, FirstId).IsWinner
+            };
+            Assert.Equal(expectedGameEnd, actualGameEnd);
         }
 
         [Fact]
@@ -302,9 +308,9 @@ namespace YachtDice.Server.Tests.Game
             StartSinglePlayerGame(manager);
             PlayEveryCategory(manager);
 
-            GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
+            GameActionResult scoreResult = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            Assert.Equal(GameActionStatus.GameFinished, result.Status);
+            Assert.Equal(GameActionStatus.GameFinished, scoreResult.Status);
         }
 
         [Fact]
@@ -312,17 +318,17 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { Status = GameStatus.Finished, AreAllWinners = true };
+            var expectedGameEnd = new { Status = GameStatus.Finished, AreAllWinners = true };
 
             GameActionResult lastResult = PlayTwoPlayerGameToTheEnd(manager);
 
-            var actual = new
+            var actualGameEnd = new
             {
                 lastResult.Snapshot.Status,
                 AreAllWinners =
                     lastResult.Snapshot.Players.All(player => player.IsWinner)
             };
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedGameEnd, actualGameEnd);
         }
 
         [Fact]
@@ -331,17 +337,17 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
-            var expected = new { CurrentPlayerId = SecondId, Dice = NoDice, IsPresent = false };
+            var expectedTurnChange = new { CurrentPlayerId = SecondId, Dice = NoDice, IsPresent = false };
 
-            GameActionResult result = manager.MarkAbsent(new RoomMember(RoomCode, FirstId));
+            GameActionResult absenceResult = manager.MarkAbsent(new RoomMember(RoomCode, FirstId));
 
-            var actual = new
+            var actualTurnChange = new
             {
-                result.Snapshot.CurrentPlayerId,
-                result.Snapshot.Dice,
-                FindPlayer(result.Snapshot, FirstId).IsPresent
+                absenceResult.Snapshot.CurrentPlayerId,
+                absenceResult.Snapshot.Dice,
+                FindPlayer(absenceResult.Snapshot, FirstId).IsPresent
             };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expectedTurnChange, actualTurnChange);
         }
 
         [Fact]
@@ -352,9 +358,9 @@ namespace YachtDice.Server.Tests.Game
             manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
+            GameActionResult scoreResult = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
 
-            Assert.Equal(FirstId, result.Snapshot.CurrentPlayerId);
+            Assert.Equal(FirstId, scoreResult.Snapshot.CurrentPlayerId);
         }
 
         [Fact]
@@ -366,9 +372,9 @@ namespace YachtDice.Server.Tests.Game
             manager.MarkPresent(new RoomMember(RoomCode, SecondId));
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            GameActionResult result = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
+            GameActionResult returnResult = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice);
 
-            Assert.Equal(SecondId, result.Snapshot.CurrentPlayerId);
+            Assert.Equal(SecondId, returnResult.Snapshot.CurrentPlayerId);
         }
 
         [Fact]
@@ -377,11 +383,11 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             manager.MarkAbsent(new RoomMember(RoomCode, FirstId));
-            var expected = new { CurrentPlayerId = string.Empty, Status = GameStatus.InProgress };
+            var expectedSnapshot = new { CurrentPlayerId = string.Empty, Status = GameStatus.InProgress };
 
             GameActionResult paused = manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
 
-            Assert.Equivalent(expected, paused.Snapshot);
+            Assert.Equivalent(expectedSnapshot, paused.Snapshot);
         }
 
         [Fact]
@@ -403,9 +409,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.MarkAbsent(new RoomMember(RoomCode, UnknownId));
+            GameActionResult absenceResult = manager.MarkAbsent(new RoomMember(RoomCode, UnknownId));
 
-            Assert.Equal(GameActionStatus.PlayerNotInGame, result.Status);
+            Assert.Equal(GameActionStatus.PlayerNotInGame, absenceResult.Status);
         }
 
         [Fact]
@@ -413,12 +419,16 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { CurrentPlayerId = SecondId, PlayerCount = OnePlayerLeft };
+            var expectedTurnChange = new { CurrentPlayerId = SecondId, PlayerCount = OnePlayerLeft };
 
-            GameActionResult result = manager.Remove(new RoomMember(RoomCode, FirstId));
+            GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, FirstId));
 
-            var actual = new { result.Snapshot.CurrentPlayerId, PlayerCount = result.Snapshot.Players.Count };
-            Assert.Equal(expected, actual);
+            var actualTurnChange = new
+            {
+                removalResult.Snapshot.CurrentPlayerId,
+                PlayerCount = removalResult.Snapshot.Players.Count
+            };
+            Assert.Equal(expectedTurnChange, actualTurnChange);
         }
 
         [Fact]
@@ -426,12 +436,16 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { CurrentPlayerId = FirstId, PlayerCount = OnePlayerLeft };
+            var expectedTurnChange = new { CurrentPlayerId = FirstId, PlayerCount = OnePlayerLeft };
 
-            GameActionResult result = manager.Remove(new RoomMember(RoomCode, SecondId));
+            GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, SecondId));
 
-            var actual = new { result.Snapshot.CurrentPlayerId, PlayerCount = result.Snapshot.Players.Count };
-            Assert.Equal(expected, actual);
+            var actualTurnChange = new
+            {
+                removalResult.Snapshot.CurrentPlayerId,
+                PlayerCount = removalResult.Snapshot.Players.Count
+            };
+            Assert.Equal(expectedTurnChange, actualTurnChange);
         }
 
         [Fact]
@@ -439,22 +453,22 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             int turnNumber = StartTwoPlayerGame(manager).TurnNumber;
-            var expected = new
+            var expectedAutoPlay = new
             {
                 Status = GameActionStatus.Success,
                 CurrentPlayerId = SecondId,
                 FirstPlayerTotal = LittleStraightPoints
             };
 
-            GameActionResult result = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
+            GameActionResult autoPlayResult = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
 
-            var actual = new
+            var actualAutoPlay = new
             {
-                result.Status,
-                result.Snapshot.CurrentPlayerId,
-                FirstPlayerTotal = FindPlayer(result.Snapshot, FirstId).Total
+                autoPlayResult.Status,
+                autoPlayResult.Snapshot.CurrentPlayerId,
+                FirstPlayerTotal = FindPlayer(autoPlayResult.Snapshot, FirstId).Total
             };
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedAutoPlay, actualAutoPlay);
         }
 
         [Fact]
@@ -472,9 +486,9 @@ namespace YachtDice.Server.Tests.Game
             int turnNumber = StartTwoPlayerGame(manager).TurnNumber;
             PlayTurn(manager, FirstId, ScoreCategory.Choice);
 
-            GameActionResult result = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
+            GameActionResult autoPlayResult = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
 
-            Assert.Equal(GameActionStatus.NotYourTurn, result.Status);
+            Assert.Equal(GameActionStatus.NotYourTurn, autoPlayResult.Status);
         }
 
         [Fact]
@@ -495,17 +509,17 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             GameSnapshot started = StartTwoPlayerGame(manager);
-            var expected = new { IsRollNewer = true, IsScoreNewer = true };
+            var expectedVersions = new { IsRollNewer = true, IsScoreNewer = true };
 
             GameSnapshot rolled = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice).Snapshot;
             GameSnapshot scored = manager.Score(new RoomMember(RoomCode, FirstId), ScoreCategory.Choice).Snapshot;
 
-            var actual = new
+            var actualVersions = new
             {
                 IsRollNewer = rolled.Version > started.Version,
                 IsScoreNewer = scored.Version > rolled.Version
             };
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedVersions, actualVersions);
         }
 
         [Fact]
@@ -514,9 +528,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
 
-            GameActionResult result = manager.GetState(new RoomMember(RoomCode, UnknownId));
+            GameActionResult stateResult = manager.GetState(new RoomMember(RoomCode, UnknownId));
 
-            Assert.Equal(GameActionStatus.PlayerNotInGame, result.Status);
+            Assert.Equal(GameActionStatus.PlayerNotInGame, stateResult.Status);
         }
 
         [Fact]
@@ -588,15 +602,15 @@ namespace YachtDice.Server.Tests.Game
 
         private static GameActionResult PlayTwoPlayerGameToTheEnd(GameManager manager)
         {
-            GameActionResult result = GameActionResult.CreateFailed(GameActionStatus.GameNotFound);
+            GameActionResult actionResult = GameActionResult.CreateFailed(GameActionStatus.GameNotFound);
 
             foreach (ScoreCategory category in ScoreCategories.All)
             {
                 PlayTurn(manager, FirstId, category);
-                result = PlayTurn(manager, SecondId, category);
+                actionResult = PlayTurn(manager, SecondId, category);
             }
 
-            return result;
+            return actionResult;
         }
     }
 }

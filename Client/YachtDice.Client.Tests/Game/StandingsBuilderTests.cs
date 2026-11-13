@@ -32,7 +32,7 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            RankedStanding[] expected =
+            RankedStanding[] expectedStandings =
             {
                 new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
                 new RankedStanding(SecondPlace, new StandingEntry(CesarId, CesarName, MiddleTotal)),
@@ -41,7 +41,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings, strict: true);
+            Assert.Equivalent(expectedStandings, standings, strict: true);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            RankedStanding[] expected =
+            RankedStanding[] expectedStandings =
             {
                 new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, HighTotal)),
                 new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
@@ -62,7 +62,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings, strict: true);
+            Assert.Equivalent(expectedStandings, standings, strict: true);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(AnaId, AnaName, TiedTotal),
                 new StandingEntry(BetoId, BetoName, TiedTotal)
             };
-            RankedStanding[] expected =
+            RankedStanding[] expectedStandings =
             {
                 new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, TiedTotal)),
                 new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, TiedTotal))
@@ -81,7 +81,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings, strict: true);
+            Assert.Equivalent(expectedStandings, standings, strict: true);
         }
 
         [Fact]

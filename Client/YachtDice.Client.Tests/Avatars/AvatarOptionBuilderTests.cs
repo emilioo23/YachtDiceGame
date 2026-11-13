@@ -21,7 +21,7 @@ namespace YachtDice.Client.Tests.Avatars
         [Fact]
         public void Build_PlayerBelowTheRequiredLevel_LocksTheAvatar()
         {
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), false, false),
@@ -30,13 +30,13 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FreeLevel, FirstAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
         public void Build_PlayerExactlyAtTheRequiredLevel_UnlocksTheAvatar()
         {
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
@@ -45,13 +45,13 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), ThirdLevel, FirstAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
         public void Build_PlayerAboveEveryLevel_UnlocksEveryAvatar()
         {
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
@@ -60,13 +60,13 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel + 1, FirstAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
         public void Build_SelectedAvatar_MarksOnlyThatAvatarAsSelected()
         {
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, false),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, true),
@@ -75,13 +75,13 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, SecondAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
         public void Build_SelectedAvatarNotInTheCatalog_MarksNoneAsSelected()
         {
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, false),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
@@ -90,14 +90,14 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, UnknownAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
         public void Build_CatalogOutOfOrder_ReturnsTheOptionsOrderedByIdentifier()
         {
             List<AvatarRequirement> catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
-            AvatarOption[] expected =
+            AvatarOption[] expectedOptions =
             {
                 CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
                 CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
@@ -106,7 +106,7 @@ namespace YachtDice.Client.Tests.Avatars
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, FifthLevel, FirstAvatarId);
 
-            Assert.Equivalent(expected, options, strict: true);
+            Assert.Equivalent(expectedOptions, options, strict: true);
         }
 
         [Fact]
