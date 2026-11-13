@@ -22,6 +22,9 @@ namespace YachtDice.Server.Tests.Authentication
         private const int SecondsInsideCooldown = 5;
         private const int SecondsOutsideCooldown = 60;
         private const int MinutesExpired = 1;
+        private const int NoTokens = 0;
+        private const int OneToken = 1;
+        private const int NoRecipients = 0;
         private const string Email = "emilio@example.com";
         private const string UnknownEmail = "nobody@example.com";
         private const string BlankEmail = "  ";
@@ -66,7 +69,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             var expected = new
             {
-                TokenCount = 1,
+                TokenCount = OneToken,
                 TokenLength = HashLength,
                 IsStillValid = true,
                 Recipients = new[] { Email }
@@ -96,7 +99,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_UnknownEmail_DoesNotSaveOrSendAnything()
         {
-            var expected = new { TokenCount = 0, RecipientCount = 0 };
+            var expected = new { TokenCount = NoTokens, RecipientCount = NoRecipients };
 
             _service.RequestReset(UnknownEmail, CultureInfo.InvariantCulture);
 
@@ -172,7 +175,7 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_CorrectCode_ChangesThePasswordAndDeletesTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expected = new { HasNewPassword = true, TokenCount = 0 };
+            var expected = new { HasNewPassword = true, TokenCount = NoTokens };
 
             _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
 
@@ -216,7 +219,7 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_WrongCode_KeepsThePasswordAndTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expected = new { HasOldPassword = true, TokenCount = 1 };
+            var expected = new { HasOldPassword = true, TokenCount = OneToken };
 
             _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
 

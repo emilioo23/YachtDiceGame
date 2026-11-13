@@ -22,6 +22,11 @@ namespace YachtDice.Server.Tests.Game
         private const int RollsPerTurn = 3;
         private const int CategoryCount = 12;
         private const int LittleStraightPoints = 30;
+        private const int FirstRound = 1;
+        private const int SecondRound = 2;
+        private const int OneRollLeft = 1;
+        private const int TwoRollsLeft = 2;
+        private const int OnePlayerLeft = 1;
 
         private static readonly int[] LittleStraightDice = { 1, 2, 3, 4, 5 };
         private static readonly int[] LittleStraightThenTwoSixes = { 1, 2, 3, 4, 5, 6, 6 };
@@ -37,7 +42,7 @@ namespace YachtDice.Server.Tests.Game
             var expected = new
             {
                 CurrentPlayerId = FirstId,
-                Round = 1,
+                Round = FirstRound,
                 RollsLeft = RollsPerTurn,
                 Status = GameStatus.InProgress,
                 Dice = NoDice
@@ -68,7 +73,7 @@ namespace YachtDice.Server.Tests.Game
             var expected = new
             {
                 Status = GameActionStatus.Success,
-                Snapshot = new { Dice = LittleStraightDice, RollsLeft = 2 }
+                Snapshot = new { Dice = LittleStraightDice, RollsLeft = TwoRollsLeft }
             };
 
             GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
@@ -93,7 +98,12 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightThenTwoSixes);
             StartTwoPlayerGame(manager);
             manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
-            var expected = new { Dice = FirstThreeKeptWithTwoSixes, HeldDice = FirstThreeHeld, RollsLeft = 1 };
+            var expected = new
+            {
+                Dice = FirstThreeKeptWithTwoSixes,
+                HeldDice = FirstThreeHeld,
+                RollsLeft = OneRollLeft
+            };
 
             GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
 
@@ -261,7 +271,7 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             PlayTurn(manager, FirstId, ScoreCategory.Choice);
-            var expected = new { CurrentPlayerId = FirstId, Round = 2 };
+            var expected = new { CurrentPlayerId = FirstId, Round = SecondRound };
 
             GameActionResult result = PlayTurn(manager, SecondId, ScoreCategory.Choice);
 
@@ -400,7 +410,7 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { CurrentPlayerId = SecondId, PlayerCount = 1 };
+            var expected = new { CurrentPlayerId = SecondId, PlayerCount = OnePlayerLeft };
 
             GameActionResult result = manager.Remove(new RoomMember(RoomCode, FirstId));
 
@@ -413,7 +423,7 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { CurrentPlayerId = FirstId, PlayerCount = 1 };
+            var expected = new { CurrentPlayerId = FirstId, PlayerCount = OnePlayerLeft };
 
             GameActionResult result = manager.Remove(new RoomMember(RoomCode, SecondId));
 

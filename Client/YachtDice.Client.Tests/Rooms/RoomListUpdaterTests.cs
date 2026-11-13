@@ -13,12 +13,22 @@ namespace YachtDice.Client.Tests.Rooms
         private const string SecondRoomId = "room-2";
         private const string TypedCode = "ABC123";
         private const string NoCode = "";
+        private const int OnePlayer = 1;
+        private const int TwoPlayers = 2;
 
         [Fact]
         public void HasSameContent_SameRooms_ReturnsTrue()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1), CreateRoom(SecondRoomId, 2) };
-            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1), CreateRoom(SecondRoomId, 2) };
+            var oldRooms = new List<RoomListItem>
+            {
+                CreateRoom(FirstRoomId, OnePlayer),
+                CreateRoom(SecondRoomId, TwoPlayers)
+            };
+            var newRooms = new List<RoomListItem>
+            {
+                CreateRoom(FirstRoomId, OnePlayer),
+                CreateRoom(SecondRoomId, TwoPlayers)
+            };
 
             Assert.True(RoomListUpdater.HasSameContent(oldRooms, newRooms));
         }
@@ -26,8 +36,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void HasSameContent_PlayerTypedACodeInAnOldRow_IgnoresTheCode()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
+            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
+            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
             oldRooms[0].AccessCode = TypedCode;
 
             Assert.True(RoomListUpdater.HasSameContent(oldRooms, newRooms));
@@ -36,8 +46,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void HasSameContent_ARoomChangedItsPlayers_ReturnsFalse()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 2) };
+            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
+            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, TwoPlayers) };
 
             Assert.False(RoomListUpdater.HasSameContent(oldRooms, newRooms));
         }
@@ -45,8 +55,12 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void HasSameContent_DifferentNumberOfRooms_ReturnsFalse()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1), CreateRoom(SecondRoomId, 1) };
+            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
+            var newRooms = new List<RoomListItem>
+            {
+                CreateRoom(FirstRoomId, OnePlayer),
+                CreateRoom(SecondRoomId, OnePlayer)
+            };
 
             Assert.False(RoomListUpdater.HasSameContent(oldRooms, newRooms));
         }
@@ -54,8 +68,16 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void HasSameContent_SameRoomsInAnotherOrder_ReturnsFalse()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1), CreateRoom(SecondRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(SecondRoomId, 1), CreateRoom(FirstRoomId, 1) };
+            var oldRooms = new List<RoomListItem>
+            {
+                CreateRoom(FirstRoomId, OnePlayer),
+                CreateRoom(SecondRoomId, OnePlayer)
+            };
+            var newRooms = new List<RoomListItem>
+            {
+                CreateRoom(SecondRoomId, OnePlayer),
+                CreateRoom(FirstRoomId, OnePlayer)
+            };
 
             Assert.False(RoomListUpdater.HasSameContent(oldRooms, newRooms));
         }
@@ -69,8 +91,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void KeepTypedCodes_RoomStillInTheList_CopiesTheTypedCode()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 2) };
+            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
+            var newRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, TwoPlayers) };
             oldRooms[0].AccessCode = TypedCode;
 
             RoomListUpdater.KeepTypedCodes(oldRooms, newRooms);
@@ -81,8 +103,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void KeepTypedCodes_NewRoomInTheList_LeavesItsCodeEmpty()
         {
-            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, 1) };
-            var newRooms = new List<RoomListItem> { CreateRoom(SecondRoomId, 1) };
+            var oldRooms = new List<RoomListItem> { CreateRoom(FirstRoomId, OnePlayer) };
+            var newRooms = new List<RoomListItem> { CreateRoom(SecondRoomId, OnePlayer) };
             oldRooms[0].AccessCode = TypedCode;
 
             RoomListUpdater.KeepTypedCodes(oldRooms, newRooms);

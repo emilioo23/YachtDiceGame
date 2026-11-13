@@ -13,6 +13,7 @@ namespace YachtDice.Server.Tests.Game
     {
         private const int NoCombinationChoicePoints = 16;
         private const int NoPoints = 0;
+        private const int NoOpenCategories = 0;
         private const int UpperBonusThreshold = 63;
         private const int UpperBonusPoints = 35;
         private const int TotalWithUpperBonus = 98;
@@ -71,7 +72,7 @@ namespace YachtDice.Server.Tests.Game
         public void GetScore_OpenCategory_ReturnsZeroAndKeepsItOpen()
         {
             ScoreCard card = CreateCard();
-            var expected = new { Points = 0, IsFilled = false };
+            var expected = new { Points = NoPoints, IsFilled = false };
 
             var actual = new
             {
@@ -86,7 +87,7 @@ namespace YachtDice.Server.Tests.Game
         public void Score_ZeroPoints_StillFillsTheCategory()
         {
             ScoreCard card = CreateCard();
-            var expected = new { IsFilled = true, Points = 0 };
+            var expected = new { IsFilled = true, Points = NoPoints };
 
             card.Score(ScoreCategory.Yacht, NoCombination);
 
@@ -118,7 +119,7 @@ namespace YachtDice.Server.Tests.Game
         public void UpperBonus_UpperSectionBelowSixtyThree_IsZero()
         {
             ScoreCard fewerSixes = CreateCard();
-            var expected = new { UpperSubtotal = UpperSubtotalWithTwoSixes, UpperBonus = 0 };
+            var expected = new { UpperSubtotal = UpperSubtotalWithTwoSixes, UpperBonus = NoPoints };
 
             ScoreUpperWithTwoSixes(fewerSixes);
 
@@ -259,7 +260,7 @@ namespace YachtDice.Server.Tests.Game
         public void IsComplete_AllCategoriesFilled_ReturnsTrueWithoutOpenCategories()
         {
             ScoreCard card = CreateCard();
-            var expected = new { IsComplete = true, OpenCategoryCount = 0 };
+            var expected = new { IsComplete = true, OpenCategoryCount = NoOpenCategories };
 
             foreach (ScoreCategory category in ScoreCategories.All)
             {

@@ -12,6 +12,8 @@ namespace YachtDice.Server.Tests.InMemory
     /// </summary>
     internal sealed class InMemoryPlayerRepository : IPlayerRepository
     {
+        private const int SingleResultCount = 1;
+
         private readonly List<Player> _players = new List<Player>();
         private readonly HashSet<int> _playersWithTwoFactor = new HashSet<int>();
 
@@ -35,7 +37,7 @@ namespace YachtDice.Server.Tests.InMemory
                 player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name);
             List<Player> matches = _players
                 .Where(hasName)
-                .Take(1)
+                .Take(SingleResultCount)
                 .ToList();
 
             return matches;
@@ -44,7 +46,10 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindByUsername(string username)
         {
-            List<Player> matches = _players.Where(player => IsSameText(player.Username, username)).Take(1).ToList();
+            List<Player> matches = _players
+                .Where(player => IsSameText(player.Username, username))
+                .Take(SingleResultCount)
+                .ToList();
 
             return matches;
         }
