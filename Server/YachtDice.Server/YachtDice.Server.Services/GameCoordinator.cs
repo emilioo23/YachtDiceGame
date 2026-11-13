@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Services
 {
@@ -19,8 +21,15 @@ namespace YachtDice.Server.Services
     public sealed class GameCoordinator
     {
         private const string TimeoutFailedLogMessage = "The turn of a game could not be played after its time ran out.";
+        private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
 
         private readonly LogicGame.IGameManager _gameManager;
+        private readonly LogicGame.IGameResultRecorder _resultRecorder;
+
+        private readonly ConcurrentDictionary<string, LogicRooms.RoomSettings> _roomSettings =
+            new ConcurrentDictionary<string, LogicRooms.RoomSettings>();
+
+        private readonly ConcurrentDictionary<string, bool> _savedGames = new ConcurrentDictionary<string, bool>();
 
         private readonly CallbackRegistry<Contracts.IGameCallback> _callbacks =
             new CallbackRegistry<Contracts.IGameCallback>();
@@ -32,10 +41,13 @@ namespace YachtDice.Server.Services
         /// Initializes a coordinator without games.
         /// </summary>
         /// <param name="gameManager">The rules and the state of the games.</param>
-        public GameCoordinator(LogicGame.IGameManager gameManager)
+        /// <param name="resultRecorder">Saves the result of each game that finishes.</param>
+        public GameCoordinator(LogicGame.IGameManager gameManager, LogicGame.IGameResultRecorder resultRecorder)
         {
             _gameManager = gameManager
                 ?? throw new ArgumentNullException(nameof(gameManager));
+            _resultRecorder = resultRecorder
+                ?? throw new ArgumentNullException(nameof(resultRecorder));
             _timer = new TurnTimer(HandleTurnExpired);
             _logger = new LogicLogging.AppLogger(GetType());
         }
@@ -51,6 +63,8 @@ namespace YachtDice.Server.Services
                 .ToList();
             LogicGame.GameSnapshot snapshot = _gameManager.Start(room.Code, participants, room.Settings.Speed);
 
+            _roomSettings[room.Code] = room.Settings;
+            _savedGames.TryRemove(room.Code, out _);
             SyncTimer(room.Code, snapshot);
         }
 
@@ -152,6 +166,8 @@ namespace YachtDice.Server.Services
         {
             _timer.Stop(roomCode);
             _gameManager.End(roomCode);
+            _roomSettings.TryRemove(roomCode, out _);
+            _savedGames.TryRemove(roomCode, out _);
         }
 
         private static Contracts.GameEventType ChooseTurnEvent(
@@ -193,7 +209,31 @@ namespace YachtDice.Server.Services
                 chosen = ChooseTurnEvent(result.Snapshot, eventType);
             }
 
-            return Complete(roomCode, result, chosen);
+            Contracts.GameResultCode code = Complete(roomCode, result, chosen);
+
+            if (chosen == Contracts.GameEventType.GameFinished)
+            {
+                SaveResult(roomCode, result.Snapshot);
+            }
+
+            return code;
+        }
+
+        private void SaveResult(string roomCode, LogicGame.GameSnapshot snapshot)
+        {
+            var isFirstTime = _savedGames.TryAdd(roomCode, true);
+
+            if (isFirstTime && _roomSettings.TryGetValue(roomCode, out LogicRooms.RoomSettings settings))
+            {
+                try
+                {
+                    _resultRecorder.Record(settings, snapshot);
+                }
+                catch (DataAccessException ex)
+                {
+                    _logger.Error(ex, ResultNotSavedLogMessage);
+                }
+            }
         }
 
         private void Publish(string roomCode, LogicGame.GameSnapshot snapshot, Contracts.GameEventType eventType)
