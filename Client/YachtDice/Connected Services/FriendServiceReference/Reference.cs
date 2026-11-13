@@ -117,37 +117,6 @@ namespace YachtDice.FriendServiceReference {
         ValidationFailed = 2,
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FriendActionResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum FriendActionResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotFound = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        RelationNotFound = 2,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="InvitationResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum InvitationResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Sent = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        NotInRoom = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        NotFriends = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FriendOffline = 3,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FriendRequestAnswer", Namespace="urn:yachtdice:contracts")]
@@ -209,21 +178,35 @@ namespace YachtDice.FriendServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendActionResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum FriendActionResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RelationNotFound = 2,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RoomMember", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
     public partial class RoomMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-
+        
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
+        
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PlayerIdField;
-
+        
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string RoomCodeField;
-
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -233,7 +216,7 @@ namespace YachtDice.FriendServiceReference {
                 this.extensionDataField = value;
             }
         }
-
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string PlayerId {
             get {
@@ -246,7 +229,7 @@ namespace YachtDice.FriendServiceReference {
                 }
             }
         }
-
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public string RoomCode {
             get {
@@ -259,9 +242,9 @@ namespace YachtDice.FriendServiceReference {
                 }
             }
         }
-
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
+        
         protected void RaisePropertyChanged(string propertyName) {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
@@ -269,7 +252,24 @@ namespace YachtDice.FriendServiceReference {
             }
         }
     }
-
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InvitationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum InvitationResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotInRoom = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotFriends = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendOffline = 3,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="FriendServiceReference.IFriendService")]
     public interface IFriendService {

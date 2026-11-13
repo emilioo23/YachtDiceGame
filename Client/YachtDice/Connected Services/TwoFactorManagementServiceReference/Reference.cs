@@ -185,6 +185,67 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         CodeSendFailed = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VerificationResultCode", Namespace="urn:yachtdice:contracts")]
     public enum VerificationResultCode : int {
@@ -200,40 +261,6 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Locked = 3,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum ResendResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSent = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ResendTooSoon = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        VerificationLocked = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendFailed = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotFound = 4,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum TwoFactorChangeResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidPassword = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotFound = 2,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -297,65 +324,38 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
-    [System.SerializableAttribute()]
-    public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResendResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum ResendResultCode : int {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSent = 0,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ChallengeIdField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ResendTooSoon = 1,
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CodeField;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationLocked = 2,
         
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 3,
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ChallengeId {
-            get {
-                return this.ChallengeIdField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
-                    this.ChallengeIdField = value;
-                    this.RaisePropertyChanged("ChallengeId");
-                }
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 4,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum TwoFactorChangeResultCode : int {
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Code {
-            get {
-                return this.CodeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
-                    this.CodeField = value;
-                    this.RaisePropertyChanged("Code");
-                }
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
         
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 1,
         
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

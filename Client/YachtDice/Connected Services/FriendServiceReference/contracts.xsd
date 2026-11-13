@@ -48,11 +48,17 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="requesterName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="isAccepted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="answer" nillable="true" type="tns:FriendRequestAnswer" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="FriendRequestAnswer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsAccepted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RequesterName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendRequestAnswer" nillable="true" type="tns:FriendRequestAnswer" />
   <xs:element name="RespondToFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
