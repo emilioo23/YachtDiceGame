@@ -45,15 +45,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameSnapshot snapshot = StartTwoPlayerGame(manager);
 
-            var actual = new
-            {
-                snapshot.CurrentPlayerId,
-                snapshot.Round,
-                snapshot.RollsLeft,
-                snapshot.Status,
-                snapshot.Dice
-            };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, snapshot);
         }
 
         [Theory]
@@ -73,12 +65,15 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var expected = new { Status = GameActionStatus.Success, Dice = LittleStraightDice, RollsLeft = 2 };
+            var expected = new
+            {
+                Status = GameActionStatus.Success,
+                Snapshot = new { Dice = LittleStraightDice, RollsLeft = 2 }
+            };
 
             GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), NoHeldDice);
 
-            var actual = new { result.Status, result.Snapshot.Dice, result.Snapshot.RollsLeft };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
@@ -102,8 +97,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionResult result = manager.Roll(new RoomMember(RoomCode, FirstId), FirstThreeHeld);
 
-            var actual = new { result.Snapshot.Dice, result.Snapshot.HeldDice, result.Snapshot.RollsLeft };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, result.Snapshot);
         }
 
         [Fact]
@@ -271,8 +265,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionResult result = PlayTurn(manager, SecondId, ScoreCategory.Choice);
 
-            var actual = new { result.Snapshot.CurrentPlayerId, result.Snapshot.Round };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, result.Snapshot);
         }
 
         [Fact]
@@ -375,8 +368,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionResult paused = manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
 
-            var actual = new { paused.Snapshot.CurrentPlayerId, paused.Snapshot.Status };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, paused.Snapshot);
         }
 
         [Fact]
