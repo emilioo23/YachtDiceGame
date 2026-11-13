@@ -48,13 +48,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
-            var expected = new { Status = InvitationStatus.Allowed, SenderName = HostName };
+            InvitationResult expected = new InvitationResult(InvitationStatus.Allowed, HostName);
 
             InvitationResult result =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, host.PlayerId), FriendName);
 
-            var actual = new { result.Status, result.SenderName };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
@@ -75,13 +74,12 @@ namespace YachtDice.Server.Tests.Friends
             RoomResult guest = _roomManager.Join(host.Room.Code, StrangerName);
             _friendships.AddFriends(StrangerName, FriendName);
 
-            var expected = new { Status = InvitationStatus.Allowed, SenderName = StrangerName };
+            InvitationResult expected = new InvitationResult(InvitationStatus.Allowed, StrangerName);
 
             InvitationResult result =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, guest.PlayerId), FriendName);
 
-            var actual = new { result.Status, result.SenderName };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
@@ -100,13 +98,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
-            var expected = new { Status = InvitationStatus.NotInRoom, SenderName = string.Empty };
+            InvitationResult expected = new InvitationResult(InvitationStatus.NotInRoom, string.Empty);
 
             InvitationResult result =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, UnknownPlayerId), FriendName);
 
-            var actual = new { result.Status, result.SenderName };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
