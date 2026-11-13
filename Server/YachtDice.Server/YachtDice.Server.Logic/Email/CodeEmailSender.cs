@@ -60,11 +60,16 @@ namespace YachtDice.Server.Logic.Email
 
             var isSent = false;
             string subject = EmailStrings.ResourceManager.GetString(_template.SubjectResourceKey, culture);
-            string body = BuildBody(player.DisplayName, code, culture);
+            var message = new EmailMessage
+            {
+                ToAddress = player.Email,
+                Subject = subject,
+                Body = BuildBody(player.DisplayName, code, culture)
+            };
 
             try
             {
-                _emailService.Send(player.Email, subject, body);
+                _emailService.Send(message);
                 isSent = true;
                 _logger.Info(DescribeEmail(SentLogFormat));
             }
