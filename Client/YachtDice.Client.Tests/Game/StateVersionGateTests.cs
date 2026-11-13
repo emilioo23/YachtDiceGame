@@ -8,6 +8,10 @@ namespace YachtDice.Client.Tests.Game
     /// </summary>
     public class StateVersionGateTests
     {
+        private const int NoVersion = 0;
+        private const int NegativeVersion = -1;
+        private const int FirstVersion = 1;
+        private const int FarVersion = 100;
         [Fact]
         public void TryAccept_FirstState_ReturnsTrue()
         {
@@ -52,6 +56,58 @@ namespace YachtDice.Client.Tests.Game
             var isAccepted = gate.TryAccept(4);
 
             Assert.False(isAccepted);
+        }
+
+        [Fact]
+        public void TryAccept_ZeroVersion_ReturnsFalse()
+        {
+            var gate = new StateVersionGate();
+
+            bool accepted = gate.TryAccept(NoVersion);
+
+            Assert.False(accepted);
+        }
+
+        [Fact]
+        public void TryAccept_NegativeVersion_ReturnsFalse()
+        {
+            var gate = new StateVersionGate();
+
+            bool accepted = gate.TryAccept(NegativeVersion);
+
+            Assert.False(accepted);
+        }
+
+        [Fact]
+        public void TryAccept_HighestInteger_ReturnsTrue()
+        {
+            var gate = new StateVersionGate();
+
+            bool accepted = gate.TryAccept(int.MaxValue);
+
+            Assert.True(accepted);
+        }
+
+        [Fact]
+        public void TryAccept_VersionThatSkipsNumbers_ReturnsTrue()
+        {
+            var gate = new StateVersionGate();
+            gate.TryAccept(FirstVersion);
+
+            bool accepted = gate.TryAccept(FarVersion);
+
+            Assert.True(accepted);
+        }
+
+        [Fact]
+        public void TryAccept_AnyVersionAfterTheHighestInteger_ReturnsFalse()
+        {
+            var gate = new StateVersionGate();
+            gate.TryAccept(int.MaxValue);
+
+            bool accepted = gate.TryAccept(FarVersion);
+
+            Assert.False(accepted);
         }
     }
 }
