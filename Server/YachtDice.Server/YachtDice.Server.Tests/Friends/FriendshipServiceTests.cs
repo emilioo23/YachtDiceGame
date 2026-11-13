@@ -44,13 +44,17 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
         {
-            var expected = new { AddresseeId = TargetId, Status = FriendshipStatus.Pending };
+            var expected = new Friendship
+            {
+                RequesterId = RequesterId,
+                AddresseeId = TargetId,
+                Status = FriendshipStatus.Pending
+            };
 
             _service.SendRequest(RequesterName, TargetUsername);
 
             Friendship savedRequest = _friends.Friendships.Single();
-            var actual = new { savedRequest.AddresseeId, savedRequest.Status };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, savedRequest);
         }
 
         [Fact]
