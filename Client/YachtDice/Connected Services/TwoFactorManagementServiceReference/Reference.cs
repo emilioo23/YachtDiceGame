@@ -185,57 +185,6 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         CodeSendFailed = 4,
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum VerificationResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Valid = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Incorrect = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Expired = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Locked = 3,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum ResendResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSent = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ResendTooSoon = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        VerificationLocked = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendFailed = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotFound = 4,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
-    public enum TwoFactorChangeResultCode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidPassword = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PlayerNotFound = 2,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
@@ -297,6 +246,118 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum VerificationResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Valid = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Incorrect = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Expired = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Locked = 3,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CodeDelivery", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class CodeDelivery : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CultureField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Culture {
+            get {
+                return this.CultureField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CultureField, value) != true)) {
+                    this.CultureField = value;
+                    this.RaisePropertyChanged("Culture");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResendResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum ResendResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ResendTooSoon = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationLocked = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 4,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum TwoFactorChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="TwoFactorManagementServiceReference.ITwoFactorManagementService")]
     public interface ITwoFactorManagementService {
@@ -321,7 +382,7 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCode", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeServiceFa" +
             "ultFault", Name="ServiceFault")]
-        YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture);
+        YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.CodeDelivery delivery);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactor", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorServiceFaultF" +
@@ -368,8 +429,8 @@ namespace YachtDice.TwoFactorManagementServiceReference {
             return base.Channel.ConfirmTwoFactorActivation(displayName, verificationCode);
         }
         
-        public YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture) {
-            return base.Channel.ResendActivationCode(displayName, challengeId, culture);
+        public YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.CodeDelivery delivery) {
+            return base.Channel.ResendActivationCode(displayName, delivery);
         }
         
         public YachtDice.TwoFactorManagementServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password) {

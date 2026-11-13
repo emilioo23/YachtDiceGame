@@ -102,25 +102,26 @@ namespace YachtDice.Navigation
 
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
-            var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);
+            var chatGateway = new ChatGateway(new RoomMembership(roomGateway.PlayerId, roomGateway.CurrentRoom.Code));
             bool isChatAvailable = await chatGateway.TryJoinAsync();
 
             ConnectionLossHandler.Watch(roomGateway);
             ConnectionLossHandler.Watch(chatGateway);
-            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chatGateway, isChatAvailable));
+            var chat = new RoomChat(chatGateway, isChatAvailable);
+            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chat));
         }
 
-        private static Window CreateRoomWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
+        private static Window CreateRoomWindow(RoomGateway roomGateway, RoomChat chat)
         {
             Window roomWindow;
 
             if (roomGateway.CurrentRoom.IsStarted)
             {
-                roomWindow = new GameWindow(roomGateway, chatGateway, isChatAvailable);
+                roomWindow = new GameWindow(roomGateway, chat);
             }
             else
             {
-                roomWindow = new LobbyWindow(roomGateway, chatGateway, isChatAvailable);
+                roomWindow = new LobbyWindow(roomGateway, chat);
             }
 
             return roomWindow;

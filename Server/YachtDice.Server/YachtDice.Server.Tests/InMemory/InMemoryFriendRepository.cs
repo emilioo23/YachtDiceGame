@@ -41,25 +41,31 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public void Add(int requesterId, int addresseeId, string status)
+        public void Add(Friendship friendship)
         {
-            _friendships.Add(new Friendship { RequesterId = requesterId, AddresseeId = addresseeId, Status = status });
+            _friendships.Add(friendship);
         }
 
         /// <inheritdoc />
-        public void UpdateStatus(int requesterId, int addresseeId, string status)
+        public void UpdateStatus(Friendship friendship)
         {
-            Func<Friendship, bool> isSamePair = row => row.RequesterId == requesterId && row.AddresseeId == addresseeId;
-            Friendship friendship = _friendships.First(isSamePair);
+            Friendship stored = _friendships.First(row => IsSamePlayers(row, friendship));
 
-            friendship.Status = status;
+            stored.Status = friendship.Status;
         }
 
         /// <inheritdoc />
-        public void Remove(int requesterId, int addresseeId)
+        public void Remove(Friendship friendship)
         {
-            Predicate<Friendship> isSamePair = row => row.RequesterId == requesterId && row.AddresseeId == addresseeId;
-            _friendships.RemoveAll(isSamePair);
+            _friendships.RemoveAll(row => IsSamePlayers(row, friendship));
+        }
+
+        private static bool IsSamePlayers(Friendship first, Friendship second)
+        {
+            bool isSameRequester = first.RequesterId == second.RequesterId;
+            bool isSameAddressee = first.AddresseeId == second.AddresseeId;
+
+            return isSameRequester && isSameAddressee;
         }
 
         private static bool IsBetween(Friendship friendship, int firstPlayerId, int secondPlayerId)

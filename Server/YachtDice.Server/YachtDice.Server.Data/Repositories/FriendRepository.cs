@@ -12,6 +12,7 @@ namespace YachtDice.Server.Data.Repositories
     public class FriendRepository : IFriendRepository
     {
         private const string EmptyValueMessage = "The value cannot be empty.";
+        private const string NullFriendshipMessage = "The friendship cannot be null.";
         private const string QueryFailedMessage = "Database error occurred while querying the friendships.";
         private const string UpdateFailedMessage = "Database error occurred while saving the friendships.";
 
@@ -58,21 +59,13 @@ namespace YachtDice.Server.Data.Repositories
         /// <summary>
         /// Saves a new friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sends the request.</param>
-        /// <param name="addresseeId">Identifier of the player who receives the request.</param>
-        /// <param name="status">Status of the friendship.</param>
+        /// <param name="friendship">Friendship to save, with the two players and its status.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="ArgumentException">The status is empty.</exception>
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
-        public void Add(int requesterId, int addresseeId, string status)
+        public void Add(Friendship friendship)
         {
-            ValidateText(status, nameof(status));
-
-            var friendship = new Friendship
-            {
-                RequesterId = requesterId,
-                AddresseeId = addresseeId,
-                Status = status
-            };
+            ValidateFriendship(friendship);
 
             Save(context => context.Friendship.Add(friendship));
         }
@@ -80,34 +73,31 @@ namespace YachtDice.Server.Data.Repositories
         /// <summary>
         /// Changes the status of a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
-        /// <param name="status">New status of the friendship.</param>
+        /// <param name="friendship">Friendship that already exists, with its new status.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="ArgumentException">The status is empty.</exception>
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
-        public void UpdateStatus(int requesterId, int addresseeId, string status)
+        public void UpdateStatus(Friendship friendship)
         {
-            ValidateText(status, nameof(status));
+            ValidateFriendship(friendship);
 
-            var changes = new Friendship
-            {
-                RequesterId = requesterId,
-                AddresseeId = addresseeId,
-                Status = status
-            };
-
-            Save(context => ApplyStatus(context, changes));
+            Save(context => ApplyStatus(context, friendship));
         }
 
         /// <summary>
         /// Deletes a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
+        /// <param name="friendship">Friendship to delete, identified by its two players.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="DataAccessException">The friendship could not be deleted.</exception>
-        public void Remove(int requesterId, int addresseeId)
+        public void Remove(Friendship friendship)
         {
-            Save(context => DeleteFriendship(context, requesterId, addresseeId));
+            if (friendship == null)
+            {
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            Save(context => DeleteFriendship(context, friendship));
         }
 
         private static List<Friendship> SelectBetween(YachtDiceContext context, int firstPlayerId, int secondPlayerId)
@@ -141,9 +131,11 @@ namespace YachtDice.Server.Data.Repositories
             }
         }
 
-        private static void DeleteFriendship(YachtDiceContext context, int requesterId, int addresseeId)
+        private static void DeleteFriendship(YachtDiceContext context, Friendship friendshipToDelete)
         {
-            Friendship friendship = context.Friendship.Find(requesterId, addresseeId);
+            Friendship friendship = context.Friendship.Find(
+                friendshipToDelete.RequesterId,
+                friendshipToDelete.AddresseeId);
 
             if (friendship != null)
             {
@@ -194,6 +186,16 @@ namespace YachtDice.Server.Data.Repositories
         private static void Save(Action<YachtDiceContext> change)
         {
             DatabaseOperation.Save(change, UpdateFailedMessage);
+        }
+
+        private static void ValidateFriendship(Friendship friendship)
+        {
+            if (friendship == null)
+            {
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            ValidateText(friendship.Status, nameof(friendship.Status));
         }
 
         private static void ValidateText(string value, string parameterName)

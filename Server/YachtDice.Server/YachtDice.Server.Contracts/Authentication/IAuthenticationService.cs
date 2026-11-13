@@ -32,12 +32,11 @@ namespace YachtDice.Server.Contracts.Authentication
         /// Resends a verification code to the player's email address.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="delivery">Challenge of the login session and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
+        ResendResultCode ResendPlayerCode(string email, CodeDelivery delivery);
 
         /// <summary>
         /// Sends a password recovery code to the email of the account.

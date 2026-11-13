@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Client.Logic.Game
+﻿using System;
+
+namespace YachtDice.Client.Logic.Game
 {
     /// <summary>
     /// Decides the phase of the turn and the hint that the window shows, from what the server sent.
@@ -6,27 +8,34 @@
     public static class TurnPhaseResolver
     {
         private const int NoRolls = 0;
+        private const string NullPlayersMessage = "The players of the turn cannot be null.";
+        private const string NullRollsMessage = "The rolls of the turn cannot be null.";
 
         /// <summary>
         /// Decides the phase of the turn.
         /// </summary>
         /// <param name="isFinished">True if the game is over.</param>
-        /// <param name="currentPlayerId">Identifier of the player in turn; empty if nobody can play.</param>
-        /// <param name="localPlayerId">Identifier of the player who uses the window.</param>
+        /// <param name="players">The player in turn and the player who uses the window.</param>
         /// <returns>The phase that matches the state.</returns>
-        public static TurnPhase ResolvePhase(bool isFinished, string currentPlayerId, string localPlayerId)
+        /// <exception cref="ArgumentNullException">The players are null.</exception>
+        public static TurnPhase ResolvePhase(bool isFinished, TurnPlayers players)
         {
+            if (players == null)
+            {
+                throw new ArgumentNullException(nameof(players), NullPlayersMessage);
+            }
+
             var phase = TurnPhase.OpponentTurn;
 
             if (isFinished)
             {
                 phase = TurnPhase.Finished;
             }
-            else if (string.IsNullOrEmpty(currentPlayerId))
+            else if (string.IsNullOrEmpty(players.CurrentPlayerId))
             {
                 phase = TurnPhase.Paused;
             }
-            else if (currentPlayerId == localPlayerId)
+            else if (players.CurrentPlayerId == players.LocalPlayerId)
             {
                 phase = TurnPhase.LocalTurn;
             }
@@ -38,11 +47,16 @@
         /// Decides the hint to show below the dice.
         /// </summary>
         /// <param name="phase">Phase of the turn.</param>
-        /// <param name="rollsLeft">Rolls that the current player has left.</param>
-        /// <param name="maxRolls">Rolls that a turn gives.</param>
+        /// <param name="rolls">Rolls that the current player has left and rolls that a turn gives.</param>
         /// <returns>The hint that matches the moment of the turn.</returns>
-        public static TurnHint ResolveHint(TurnPhase phase, int rollsLeft, int maxRolls)
+        /// <exception cref="ArgumentNullException">The rolls are null.</exception>
+        public static TurnHint ResolveHint(TurnPhase phase, TurnRolls rolls)
         {
+            if (rolls == null)
+            {
+                throw new ArgumentNullException(nameof(rolls), NullRollsMessage);
+            }
+
             var hint = TurnHint.None;
 
             if (phase == TurnPhase.OpponentTurn)
@@ -51,21 +65,21 @@
             }
             else if (phase == TurnPhase.LocalTurn)
             {
-                hint = ResolveLocalHint(rollsLeft, maxRolls);
+                hint = ResolveLocalHint(rolls);
             }
 
             return hint;
         }
 
-        private static TurnHint ResolveLocalHint(int rollsLeft, int maxRolls)
+        private static TurnHint ResolveLocalHint(TurnRolls rolls)
         {
             var hint = TurnHint.ChooseOrRoll;
 
-            if (rollsLeft >= maxRolls)
+            if (rolls.RollsLeft >= rolls.MaxRolls)
             {
                 hint = TurnHint.PressRoll;
             }
-            else if (rollsLeft <= NoRolls)
+            else if (rolls.RollsLeft <= NoRolls)
             {
                 hint = TurnHint.PickBox;
             }

@@ -17,6 +17,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
+        private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
+
         private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
@@ -29,6 +31,19 @@ namespace YachtDice.Views
             _logger = new AppLogger(GetType());
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
             ApplyFieldLimits();
+            _ = WarmUpConnectionAsync();
+        }
+
+        private async Task WarmUpConnectionAsync()
+        {
+            try
+            {
+                await _gateway.WarmUpAsync();
+            }
+            catch (GatewayException)
+            {
+                _logger.Warning(WarmUpFailedLogMessage);
+            }
         }
 
         private void ApplyFieldLimits()

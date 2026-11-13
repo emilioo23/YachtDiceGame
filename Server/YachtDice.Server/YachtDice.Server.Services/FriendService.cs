@@ -56,16 +56,14 @@ namespace YachtDice.Server.Services
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="requesterName">Name of the player who sent the request.</param>
-        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
+        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
         public Contracts.FriendActionResultCode RespondToFriendRequest(
             string displayName,
-            string requesterName,
-            bool isAccepted)
+            Contracts.FriendRequestAnswer answer)
         {
             Contracts.FriendActionResultCode result =
-                Execute(displayName, () => ProcessResponse(displayName, requesterName, isAccepted));
+                Execute(answer, () => ProcessResponse(displayName, answer));
 
             return result;
         }
@@ -152,16 +150,20 @@ namespace YachtDice.Server.Services
 
         private Contracts.FriendActionResultCode ProcessResponse(
             string displayName,
-            string requesterName,
-            bool isAccepted)
+            Contracts.FriendRequestAnswer answer)
         {
-            LogicFriends.FriendActionStatus status =
-                _friendshipService.RespondToRequest(displayName, requesterName, isAccepted);
+            var logicAnswer = new LogicFriends.FriendRequestAnswer
+            {
+                RequesterName = answer.RequesterName,
+                IsAccepted = answer.IsAccepted
+            };
 
-            if (status == LogicFriends.FriendActionStatus.Success && isAccepted)
+            LogicFriends.FriendActionStatus status = _friendshipService.RespondToRequest(displayName, logicAnswer);
+
+            if (status == LogicFriends.FriendActionStatus.Success && answer.IsAccepted)
             {
                 _notifier.SendEvent(
-                    requesterName,
+                    answer.RequesterName,
                     displayName,
                     PresenceContracts.PresenceEventType.FriendRequestAccepted);
             }

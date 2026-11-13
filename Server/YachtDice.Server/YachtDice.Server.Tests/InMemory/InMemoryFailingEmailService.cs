@@ -11,7 +11,7 @@ namespace YachtDice.Server.Tests.InMemory
         private const string FailureMessage = "The email could not be sent.";
 
         /// <inheritdoc />
-        public void Send(string toAddress, string subject, string body)
+        public void Send(EmailMessage message)
         {
             throw new InvalidOperationException(FailureMessage);
         }

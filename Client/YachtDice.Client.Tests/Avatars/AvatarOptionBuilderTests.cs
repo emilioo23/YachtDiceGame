@@ -23,9 +23,9 @@ namespace YachtDice.Client.Tests.Avatars
         {
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, true),
-                CreateOption(SecondAvatarId, ThirdLevel, false, false),
-                CreateOption(ThirdAvatarId, FifthLevel, false, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), false, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), false, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FreeLevel, FirstAvatarId);
@@ -38,9 +38,9 @@ namespace YachtDice.Client.Tests.Avatars
         {
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, true),
-                CreateOption(SecondAvatarId, ThirdLevel, true, false),
-                CreateOption(ThirdAvatarId, FifthLevel, false, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), false, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), ThirdLevel, FirstAvatarId);
@@ -53,9 +53,9 @@ namespace YachtDice.Client.Tests.Avatars
         {
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, true),
-                CreateOption(SecondAvatarId, ThirdLevel, true, false),
-                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), true, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel + 1, FirstAvatarId);
@@ -68,9 +68,9 @@ namespace YachtDice.Client.Tests.Avatars
         {
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, false),
-                CreateOption(SecondAvatarId, ThirdLevel, true, true),
-                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, false),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, true),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), true, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, SecondAvatarId);
@@ -83,9 +83,9 @@ namespace YachtDice.Client.Tests.Avatars
         {
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, false),
-                CreateOption(SecondAvatarId, ThirdLevel, true, false),
-                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, false),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), true, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, UnknownAvatarId);
@@ -99,9 +99,9 @@ namespace YachtDice.Client.Tests.Avatars
             List<AvatarRequirement> catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
             AvatarOption[] expected =
             {
-                CreateOption(FirstAvatarId, FreeLevel, true, true),
-                CreateOption(SecondAvatarId, ThirdLevel, true, false),
-                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), true, false)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, FifthLevel, FirstAvatarId);
@@ -119,12 +119,17 @@ namespace YachtDice.Client.Tests.Avatars
             Assert.Empty(options);
         }
 
-        private static AvatarOption CreateOption(int id, int requiredLevel, bool isUnlocked, bool isSelected)
+        private static AvatarRequirement CreateRequirement(int id, int requiredLevel)
+        {
+            return new AvatarRequirement { Id = id, RequiredLevel = requiredLevel };
+        }
+
+        private static AvatarOption CreateOption(AvatarRequirement requirement, bool isUnlocked, bool isSelected)
         {
             var option = new AvatarOption
             {
-                Id = id,
-                RequiredLevel = requiredLevel,
+                Id = requirement.Id,
+                RequiredLevel = requirement.RequiredLevel,
                 IsUnlocked = isUnlocked,
                 IsSelected = isSelected
             };

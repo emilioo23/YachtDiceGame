@@ -67,13 +67,14 @@ namespace YachtDice.Server.Services
         /// Resends a verification code to the player's email address.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="delivery">Challenge of the login session and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public TwoFactorContracts.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture)
+        public TwoFactorContracts.ResendResultCode ResendPlayerCode(
+            string email,
+            TwoFactorContracts.CodeDelivery delivery)
         {
             TwoFactorContracts.ResendResultCode result =
-                Execute(email, () => ProcessCodeResend(email, challengeId, culture));
+                Execute(delivery, () => ProcessCodeResend(email, delivery));
 
             return result;
         }
@@ -145,10 +146,18 @@ namespace YachtDice.Server.Services
                 logicResult);
         }
 
-        private TwoFactorContracts.ResendResultCode ProcessCodeResend(string email, string challengeId, string culture)
+        private TwoFactorContracts.ResendResultCode ProcessCodeResend(
+            string email,
+            TwoFactorContracts.CodeDelivery delivery)
         {
+            var logicDelivery = new LogicTwoFactor.CodeDelivery
+            {
+                ChallengeId = delivery.ChallengeId,
+                CultureName = delivery.Culture
+            };
+
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _verificationService.ResendPlayerCode(email, challengeId, culture);
+                _verificationService.ResendPlayerCode(email, logicDelivery);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, TwoFactorContracts.ResendResultCode>(
                 logicResult);

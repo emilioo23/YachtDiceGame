@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace YachtDice.Client.Logic.Authentication
 {
@@ -12,26 +13,32 @@ namespace YachtDice.Client.Logic.Authentication
         /// </summary>
         public const int CodeLength = 6;
 
+        private const string NullInputMessage = "The input of the password reset cannot be null.";
+
         /// <summary>
         /// Checks the code, the new password and its confirmation.
         /// </summary>
-        /// <param name="code">Code written by the player.</param>
-        /// <param name="newPassword">New password written by the player.</param>
-        /// <param name="confirmation">Confirmation of the new password.</param>
+        /// <param name="input">Texts written by the player.</param>
         /// <returns>The first problem found, or <see cref="ResetPasswordInputStatus.Valid"/>.</returns>
-        public static ResetPasswordInputStatus Validate(string code, string newPassword, string confirmation)
+        /// <exception cref="ArgumentNullException">The input is null.</exception>
+        public static ResetPasswordInputStatus Validate(ResetPasswordInput input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input), NullInputMessage);
+            }
+
             ResetPasswordInputStatus status = ResetPasswordInputStatus.Valid;
 
-            if (!IsCompleteCode(code))
+            if (!IsCompleteCode(input.Code))
             {
                 status = ResetPasswordInputStatus.IncompleteCode;
             }
-            else if (string.IsNullOrWhiteSpace(newPassword))
+            else if (string.IsNullOrWhiteSpace(input.NewPassword))
             {
                 status = ResetPasswordInputStatus.EmptyPassword;
             }
-            else if (newPassword != confirmation)
+            else if (input.NewPassword != input.Confirmation)
             {
                 status = ResetPasswordInputStatus.PasswordsDoNotMatch;
             }

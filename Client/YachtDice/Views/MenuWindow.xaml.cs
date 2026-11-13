@@ -9,6 +9,7 @@ using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using FriendRequestAnswer = YachtDice.FriendServiceReference.FriendRequestAnswer;
 using FriendRequestResultCode = YachtDice.FriendServiceReference.FriendRequestResultCode;
 
 namespace YachtDice.Views
@@ -152,10 +153,9 @@ namespace YachtDice.Views
                     List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
                     OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
 
-                    RequestsList.ItemsSource = FriendItemFactory.Create(
-                        requesterNames,
-                        Strings.Friends_Status_WantsFriend,
-                        false);
+                    var requestPresence = new FriendPresence(Strings.Friends_Status_WantsFriend, false);
+
+                    RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
                     ShowOnlinePlayers();
                 }
                 catch (GatewayException)
@@ -273,7 +273,9 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.RespondAsync(_session.DisplayName, requesterName, isAccepted);
+                var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
+
+                await _friendGateway.RespondAsync(_session.DisplayName, answer);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)

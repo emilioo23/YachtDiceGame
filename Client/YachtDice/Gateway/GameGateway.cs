@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.GameServiceReference;
 using GameFault = YachtDice.GameServiceReference.ServiceFault;
 
@@ -13,19 +14,26 @@ namespace YachtDice.Gateway
     /// </summary>
     public class GameGateway : DuplexGatewayBase<GameServiceClient>
     {
+        private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
+
         private readonly RoomMember _player;
 
         /// <summary>
         /// Initializes the gateway for the player in a room.
         /// </summary>
-        /// <param name="playerId">Identifier that the server gave to the player.</param>
-        /// <param name="roomCode">Code of the room whose game is played.</param>
-        public GameGateway(string playerId, string roomCode)
+        /// <param name="membership">Player and the room whose game is played.</param>
+        /// <exception cref="ArgumentNullException">The membership is null.</exception>
+        public GameGateway(RoomMembership membership)
         {
+            if (membership == null)
+            {
+                throw new ArgumentNullException(nameof(membership), NullMembershipMessage);
+            }
+
             _player = new RoomMember
             {
-                PlayerId = playerId,
-                RoomCode = roomCode
+                PlayerId = membership.PlayerId,
+                RoomCode = membership.RoomCode
             };
         }
 

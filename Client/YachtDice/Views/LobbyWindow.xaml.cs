@@ -28,8 +28,7 @@ namespace YachtDice.Views
         private const double UnselectedBorderThickness = 1.5;
 
         private readonly RoomGateway _roomGateway;
-        private readonly ChatGateway _chatGateway;
-        private readonly bool _isChatAvailable;
+        private readonly RoomChat _chat;
         private readonly InvitationListener _invitationListener;
 
         private bool _isShowingRoom = true;
@@ -41,15 +40,13 @@ namespace YachtDice.Views
         /// Initializes the waiting room window of a room where the player already is.
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room, already inside it.</param>
-        /// <param name="chatGateway">Connection of the player to the chat of the room.</param>
-        /// <param name="isChatAvailable">Whether the player could join the chat of the room.</param>
-        public LobbyWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
+        /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
+        public LobbyWindow(RoomGateway roomGateway, RoomChat chat)
         {
             InitializeComponent();
 
             _roomGateway = roomGateway;
-            _chatGateway = chatGateway;
-            _isChatAvailable = isChatAvailable;
+            _chat = chat;
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;
@@ -135,7 +132,7 @@ namespace YachtDice.Views
         {
             _isLeavingOnClose = false;
 
-            return new LobbyWindow(_roomGateway, _chatGateway, _isChatAvailable);
+            return new LobbyWindow(_roomGateway, _chat);
         }
 
         private void StartChat()
@@ -144,7 +141,7 @@ namespace YachtDice.Views
                 Strings.Game_Chat_SystemName,
                 Strings.Lobby_Chat_WelcomeMessage,
                 ChatMessageKind.System);
-            ChatPanelControl.Attach(_chatGateway, _roomGateway.PlayerId, _isChatAvailable);
+            ChatPanelControl.Attach(_chat, _roomGateway.PlayerId);
         }
 
         private void ShowRoom(RoomState room)
@@ -312,7 +309,7 @@ namespace YachtDice.Views
             {
                 _isOpeningGame = true;
                 _isLeavingOnClose = false;
-                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, _chatGateway, _isChatAvailable));
+                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, _chat));
             }
         }
 
@@ -326,7 +323,7 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                await _chatGateway.LeaveAsync();
+                await _chat.Gateway.LeaveAsync();
                 await _roomGateway.LeaveRoomAsync();
             }
         }

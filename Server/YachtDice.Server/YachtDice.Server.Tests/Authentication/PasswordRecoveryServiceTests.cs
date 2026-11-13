@@ -385,12 +385,22 @@ namespace YachtDice.Server.Tests.Authentication
             DateTime createdAt = DateTime.UtcNow.AddSeconds(-secondsSinceRequest);
             DateTime expireDate = createdAt.AddMinutes(PasswordRecoveryService.ExpirationMinutes);
 
-            _resets.Save(PlayerId, PasswordResetCodeHasher.Compute(PlayerId, code), expireDate);
+            _resets.Save(CreateToken(code, expireDate));
         }
 
         private void SeedExpiredCode()
         {
-            _resets.Save(PlayerId, PasswordResetCodeHasher.Compute(PlayerId, CorrectCode), ExpiredDate());
+            _resets.Save(CreateToken(CorrectCode, ExpiredDate()));
+        }
+
+        private static PwdResetToken CreateToken(string code, DateTime expireDate)
+        {
+            return new PwdResetToken
+            {
+                PlayerId = PlayerId,
+                Token = PasswordResetCodeHasher.Compute(PlayerId, code),
+                ExpireDate = expireDate
+            };
         }
     }
 }

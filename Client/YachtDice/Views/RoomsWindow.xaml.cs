@@ -129,7 +129,9 @@ namespace YachtDice.Views
 
         private void ApplyFilters()
         {
-            _visibleRooms = RoomListItemFilter.Apply(_allRooms, GetSelectedPrivacyFilter(), SearchTextBox.Text);
+            _visibleRooms = RoomListItemFilter.Apply(
+                _allRooms,
+                new RoomSearch(GetSelectedPrivacyFilter(), SearchTextBox.Text));
             RoomsItemsControl.ItemsSource = _visibleRooms;
         }
 

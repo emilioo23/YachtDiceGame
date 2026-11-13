@@ -146,7 +146,14 @@ namespace YachtDice.Server.Logic.Authentication
             string code = NumericCodeGenerator.Generate(CodeLength);
             string codeHash = PasswordResetCodeHasher.Compute(player.Id, code);
 
-            _resetRepository.Save(player.Id, codeHash, DateTime.UtcNow.AddMinutes(ExpirationMinutes));
+            var token = new PwdResetToken
+            {
+                PlayerId = player.Id,
+                Token = codeHash,
+                ExpireDate = DateTime.UtcNow.AddMinutes(ExpirationMinutes)
+            };
+
+            _resetRepository.Save(token);
             _attempts.Reset(player.Id);
 
             bool isSent = _emailSender.Send(player, code, culture);

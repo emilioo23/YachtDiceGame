@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
+using YachtDice.Server.Data.Exceptions;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Avatars;
@@ -26,6 +27,9 @@ namespace YachtDice.Server.Host
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
+        private const string WarmUpEmail = "warm-up@yachtdice.local";
+        private const string WarmUpFailedLogMessage =
+            "The database could not be warmed up; the first request will be slower.";
 
         private static readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
@@ -41,6 +45,7 @@ namespace YachtDice.Server.Host
 
             try
             {
+                WarmUpDatabase(logger);
                 OpenServiceHosts(serviceHosts);
                 logger.Info(StartedLogMessage);
                 WaitForExit();
@@ -65,6 +70,18 @@ namespace YachtDice.Server.Host
             }
         }
 
+        private static void WarmUpDatabase(AppLogger logger)
+        {
+            try
+            {
+                new PlayerRepository().EmailExists(WarmUpEmail);
+            }
+            catch (DataAccessException ex)
+            {
+                logger.Error(ex, WarmUpFailedLogMessage);
+            }
+        }
+
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
@@ -81,7 +98,8 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
 
             var roomManager = new RoomManager(avatarService);
-            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()));
+            var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
+            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()), resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));

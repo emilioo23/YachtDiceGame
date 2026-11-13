@@ -16,6 +16,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string DeleteFailedMessage = "Could not delete the recovery code due to a database failure.";
         private const string CompleteFailedMessage = "Could not save the new password due to a database failure.";
         private const string EmptyValueMessage = "The value cannot be empty.";
+        private const string NullTokenMessage = "The recovery code cannot be null.";
 
         /// <summary>
         /// Looks for the recovery code saved for the player.
@@ -35,23 +36,21 @@ namespace YachtDice.Server.Data.Repositories
         /// <summary>
         /// Saves the recovery code of the player. A previous code of the same player is discarded.
         /// </summary>
-        /// <param name="playerId">Identifier of the player.</param>
-        /// <param name="tokenHash">Hash of the recovery code.</param>
-        /// <param name="expireDate">Moment in which the code stops being valid.</param>
+        /// <param name="token">Recovery code to save, with its player, its hash and its expiration date.</param>
+        /// <exception cref="ArgumentNullException">The token is null.</exception>
+        /// <exception cref="ArgumentException">The hash of the token is empty.</exception>
         /// <exception cref="DataAccessException">The code could not be saved.</exception>
-        public void Save(int playerId, string tokenHash, DateTime expireDate)
+        public void Save(PwdResetToken token)
         {
-            if (string.IsNullOrWhiteSpace(tokenHash))
+            if (token == null)
             {
-                throw new ArgumentException(EmptyValueMessage, nameof(tokenHash));
+                throw new ArgumentNullException(nameof(token), NullTokenMessage);
             }
 
-            var token = new PwdResetToken
+            if (string.IsNullOrWhiteSpace(token.Token))
             {
-                PlayerId = playerId,
-                Token = tokenHash,
-                ExpireDate = expireDate
-            };
+                throw new ArgumentException(EmptyValueMessage, nameof(token.Token));
+            }
 
             DatabaseOperation.Save(context => ReplaceToken(context, token), SaveFailedMessage);
         }

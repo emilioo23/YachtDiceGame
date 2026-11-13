@@ -23,9 +23,10 @@ namespace YachtDice.Client.Tests.Utils
         [Fact]
         public void Create_RoomWithFreeSeats_ReturnsTheRowWithTheDataOfTheRoom()
         {
-            RoomListItem expected = CreateExpectedItem(TwoPlayers, FourPlayers, false, true);
+            RoomSummary summary = CreateSummary(TwoPlayers, FourPlayers, false);
+            RoomListItem expected = CreateExpectedItem(summary, true);
 
-            RoomListItem item = CreateItem(TwoPlayers, FourPlayers, false);
+            RoomListItem item = CreateItem(summary);
 
             Assert.Equivalent(expected, item);
         }
@@ -33,9 +34,10 @@ namespace YachtDice.Client.Tests.Utils
         [Fact]
         public void Create_FullRoom_ReturnsTheRowWithoutSpace()
         {
-            RoomListItem expected = CreateExpectedItem(FourPlayers, FourPlayers, false, false);
+            RoomSummary summary = CreateSummary(FourPlayers, FourPlayers, false);
+            RoomListItem expected = CreateExpectedItem(summary, false);
 
-            RoomListItem item = CreateItem(FourPlayers, FourPlayers, false);
+            RoomListItem item = CreateItem(summary);
 
             Assert.Equivalent(expected, item);
         }
@@ -43,14 +45,15 @@ namespace YachtDice.Client.Tests.Utils
         [Fact]
         public void Create_PrivateRoom_ReturnsTheRowWithThePrivateText()
         {
-            RoomListItem expected = CreateExpectedItem(TwoPlayers, FourPlayers, true, true);
+            RoomSummary summary = CreateSummary(TwoPlayers, FourPlayers, true);
+            RoomListItem expected = CreateExpectedItem(summary, true);
 
-            RoomListItem item = CreateItem(TwoPlayers, FourPlayers, true);
+            RoomListItem item = CreateItem(summary);
 
             Assert.Equivalent(expected, item);
         }
 
-        private static RoomListItem CreateExpectedItem(int playerCount, int maxPlayers, bool isPrivate, bool hasSpace)
+        private static RoomListItem CreateExpectedItem(RoomSummary summary, bool hasSpace)
         {
             var item = new RoomListItem
             {
@@ -60,19 +63,19 @@ namespace YachtDice.Client.Tests.Utils
                 Title = string.Format(Strings.Rooms_TitleFormat, HostName),
                 Details = string.Format(
                     Strings.Rooms_DetailsFormat,
-                    playerCount,
-                    maxPlayers,
+                    summary.PlayerCount,
+                    summary.MaxPlayers,
                     Strings.Lobby_Mode1MinuteTitle),
-                PrivacyText = isPrivate ? Strings.Lobby_OptionPrivate : Strings.Lobby_OptionPublic,
-                IsPrivate = isPrivate,
+                PrivacyText = summary.IsPrivate ? Strings.Lobby_OptionPrivate : Strings.Lobby_OptionPublic,
+                IsPrivate = summary.IsPrivate,
                 HasSpace = hasSpace
             };
             return item;
         }
 
-        private static RoomListItem CreateItem(int playerCount, int maxPlayers, bool isPrivate)
+        private static RoomSummary CreateSummary(int playerCount, int maxPlayers, bool isPrivate)
         {
-            var summary = new RoomSummary
+            return new RoomSummary
             {
                 RoomId = RoomId,
                 HostName = HostName,
@@ -81,6 +84,10 @@ namespace YachtDice.Client.Tests.Utils
                 IsPrivate = isPrivate,
                 Speed = GameSpeed.Normal
             };
+        }
+
+        private static RoomListItem CreateItem(RoomSummary summary)
+        {
             RoomSummary[] summaries = { summary };
 
             List<RoomListItem> items = RoomListItemFactory.Create(summaries);

@@ -31,9 +31,8 @@ namespace YachtDice.Views
 
         private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
-        private readonly ChatGateway _chatGateway;
+        private readonly RoomChat _chat;
         private readonly GameGateway _gameGateway;
-        private readonly bool _isChatAvailable;
         private readonly DiceBoard _diceBoard;
         private readonly ScorecardGrid _scorecard;
         private readonly YachtCelebration _celebration;
@@ -54,17 +53,15 @@ namespace YachtDice.Views
         /// Initializes the game window of a room whose game has just started.
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room.</param>
-        /// <param name="chatGateway">Connection of the player to the chat of the room.</param>
-        /// <param name="isChatAvailable">Whether the player could join the chat of the room.</param>
-        public GameWindow(RoomGateway roomGateway, ChatGateway chatGateway, bool isChatAvailable)
+        /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
+        public GameWindow(RoomGateway roomGateway, RoomChat chat)
         {
             InitializeComponent();
 
             _roomGateway = roomGateway;
-            _chatGateway = chatGateway;
-            _isChatAvailable = isChatAvailable;
+            _chat = chat;
             _playerId = roomGateway.PlayerId;
-            _gameGateway = new GameGateway(_playerId, roomGateway.CurrentRoom.Code);
+            _gameGateway = new GameGateway(new RoomMembership(_playerId, roomGateway.CurrentRoom.Code));
             _diceBoard = new DiceBoard(DiceCanvas, this);
             _scorecard = new ScorecardGrid(CategoriesPanel, this);
             _celebration = new YachtCelebration(CelebrationCanvas, this);
@@ -79,8 +76,7 @@ namespace YachtDice.Views
 
         private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
             _state.Status == GameStatus.Finished,
-            _state.CurrentPlayerId,
-            _playerId);
+            new TurnPlayers(_state.CurrentPlayerId, _playerId));
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
@@ -124,7 +120,7 @@ namespace YachtDice.Views
         {
             _isLeavingOnClose = false;
 
-            return new GameWindow(_roomGateway, _chatGateway, _isChatAvailable);
+            return new GameWindow(_roomGateway, _chat);
         }
 
         private void StartChat()
@@ -134,7 +130,7 @@ namespace YachtDice.Views
                 Strings.Game_Chat_MatchStartedMessage,
                 ChatMessageKind.System);
 
-            ChatPanelControl.Attach(_chatGateway, _playerId, _isChatAvailable);
+            ChatPanelControl.Attach(_chat, _playerId);
         }
 
         private async void HandleWindowLoaded(object sender, RoutedEventArgs e)
@@ -259,7 +255,9 @@ namespace YachtDice.Views
         private string GetHintText()
         {
             string name = FindPlayerName(_state.CurrentPlayerId);
-            TurnHint hint = TurnPhaseResolver.ResolveHint(CurrentPhase, _state.RollsLeft, MaxRolls);
+            TurnHint hint = TurnPhaseResolver.ResolveHint(
+                CurrentPhase,
+                new TurnRolls(_state.RollsLeft, MaxRolls));
             var texts = new Dictionary<TurnHint, string>
             {
                 { TurnHint.None, string.Empty },
@@ -573,7 +571,7 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                await _chatGateway.LeaveAsync();
+                await _chat.Gateway.LeaveAsync();
                 await _roomGateway.LeaveRoomAsync();
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -18,6 +19,7 @@ namespace YachtDice.Server.Tests.Friends
         private const string TargetUsername = "GabrielHM";
         private const string TargetDisplayName = "Gabriel";
         private const string UnknownUsername = "NobodyHere";
+        private const string UnknownRequesterName = "NobodySent";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
@@ -119,6 +121,64 @@ namespace YachtDice.Server.Tests.Friends
             _service.SendRequest(RequesterName, username);
 
             Assert.Empty(_friends.Friendships);
+        }
+
+        [Fact]
+        public void RespondToRequest_AcceptedRequest_ReturnsSuccessAndSavesTheFriendshipAsAccepted()
+        {
+            var expected = new Friendship
+            {
+                RequesterId = RequesterId,
+                AddresseeId = TargetId,
+                Status = FriendshipStatus.Accepted
+            };
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            FriendActionStatus status = RespondAsTarget(RequesterName, true);
+
+            Assert.Equal(FriendActionStatus.Success, status);
+            Assert.Equivalent(expected, _friends.Friendships.Single());
+        }
+
+        [Fact]
+        public void RespondToRequest_RejectedRequest_ReturnsSuccessAndRemovesTheRequest()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            FriendActionStatus status = RespondAsTarget(RequesterName, false);
+
+            Assert.Equal(FriendActionStatus.Success, status);
+            Assert.Empty(_friends.Friendships);
+        }
+
+        [Fact]
+        public void RespondToRequest_RequesterWithoutRequest_ReturnsRelationNotFound()
+        {
+            FriendActionStatus status = RespondAsTarget(RequesterName, true);
+
+            Assert.Equal(FriendActionStatus.RelationNotFound, status);
+        }
+
+        [Fact]
+        public void RespondToRequest_UnknownRequester_ReturnsPlayerNotFound()
+        {
+            FriendActionStatus status =
+                RespondAsTarget(UnknownRequesterName, true);
+
+            Assert.Equal(FriendActionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void RespondToRequest_NullAnswer_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _service.RespondToRequest(TargetDisplayName, null));
+        }
+
+        private FriendActionStatus RespondAsTarget(string requesterName, bool isAccepted)
+        {
+            var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
+
+            return _service.RespondToRequest(TargetDisplayName, answer);
         }
     }
 }

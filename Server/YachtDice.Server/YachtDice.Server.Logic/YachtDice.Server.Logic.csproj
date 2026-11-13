@@ -70,9 +70,11 @@
     <Compile Include="Avatars\PlayerProfile.cs" />
     <Compile Include="Email\CodeEmailSender.cs" />
     <Compile Include="Email\CodeEmailTemplate.cs" />
+    <Compile Include="Email\EmailMessage.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Friends\FriendActionStatus.cs" />
+    <Compile Include="Friends\FriendRequestAnswer.cs" />
     <Compile Include="Friends\FriendRequestResult.cs" />
     <Compile Include="Friends\FriendRequestStatus.cs" />
     <Compile Include="Friends\FriendshipService.cs" />
@@ -88,11 +90,14 @@
     <Compile Include="Game\GameActionStatus.cs" />
     <Compile Include="Game\GameManager.cs" />
     <Compile Include="Game\GameParticipant.cs" />
+    <Compile Include="Game\GameResultRecorder.cs" />
     <Compile Include="Game\GamePlayer.cs" />
     <Compile Include="Game\GameSnapshot.cs" />
     <Compile Include="Game\GameStatus.cs" />
+    <Compile Include="Game\GameTurn.cs" />
     <Compile Include="Game\IDieSource.cs" />
     <Compile Include="Game\IGameManager.cs" />
+    <Compile Include="Game\IGameResultRecorder.cs" />
     <Compile Include="Game\PlayerSnapshot.cs" />
     <Compile Include="Game\RandomDieSource.cs" />
     <Compile Include="Game\ScoreCalculator.cs" />
@@ -120,6 +125,7 @@
     <Compile Include="Rooms\GameSpeed.cs" />
     <Compile Include="Rooms\IRoomManager.cs" />
     <Compile Include="Rooms\Room.cs" />
+    <Compile Include="Rooms\RoomActor.cs" />
     <Compile Include="Rooms\RoomApplicant.cs" />
     <Compile Include="Rooms\RoomDetails.cs" />
     <Compile Include="Rooms\RoomManager.cs" />
@@ -135,6 +141,7 @@
     <Compile Include="Security\PasswordResetCodeHasher.cs" />
     <Compile Include="Security\SecureRandom.cs" />
     <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
+    <Compile Include="TwoFactor\CodeDelivery.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorActivationResult.cs" />
     <Compile Include="TwoFactor\TwoFactorActivationStatus.cs" />

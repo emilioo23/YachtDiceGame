@@ -15,20 +15,27 @@ namespace YachtDice.Server.Logic.Email
         private const string SmtpPortKey = "SmtpPort";
         private const string SmtpUserKey = "SmtpUser";
         private const string SmtpPasswordKey = "SmtpPassword";
+        private const int SmtpTimeoutMilliseconds = 10000;
+        private const string NullMessageMessage = "The email to send cannot be null.";
         private const string EmptyRecipientMessage = "The recipient address cannot be empty.";
         private const string MissingSettingMessage = "The setting '{0}' is missing in the configuration file.";
 
         /// <summary>
-        /// Sends a plain-text email to the given recipient.
+        /// Sends a plain-text email to its recipient.
         /// </summary>
-        /// <param name="toAddress">Recipient's email address.</param>
-        /// <param name="subject">Subject of the email.</param>
-        /// <param name="body">Plain-text body of the email.</param>
-        public void Send(string toAddress, string subject, string body)
+        /// <param name="message">Email to send, with its recipient, subject and body.</param>
+        /// <exception cref="ArgumentNullException">The email is null.</exception>
+        /// <exception cref="ArgumentException">The recipient address is empty.</exception>
+        public void Send(EmailMessage message)
         {
-            if (string.IsNullOrWhiteSpace(toAddress))
+            if (message == null)
             {
-                throw new ArgumentException(EmptyRecipientMessage, nameof(toAddress));
+                throw new ArgumentNullException(nameof(message), NullMessageMessage);
+            }
+
+            if (string.IsNullOrWhiteSpace(message.ToAddress))
+            {
+                throw new ArgumentException(EmptyRecipientMessage, nameof(message));
             }
 
             string host = ReadSetting(SmtpHostKey);
@@ -36,14 +43,15 @@ namespace YachtDice.Server.Logic.Email
             string user = ReadSetting(SmtpUserKey);
             string password = ReadSetting(SmtpPasswordKey);
 
-            using (var message = new MailMessage(user, toAddress, subject, body))
+            using (var mail = new MailMessage(user, message.ToAddress, message.Subject, message.Body))
             {
                 using (var client = new SmtpClient(host, port))
                 {
                     client.EnableSsl = true;
+                    client.Timeout = SmtpTimeoutMilliseconds;
                     client.Credentials = new NetworkCredential(user, password);
 
-                    client.Send(message);
+                    client.Send(mail);
                 }
             }
         }

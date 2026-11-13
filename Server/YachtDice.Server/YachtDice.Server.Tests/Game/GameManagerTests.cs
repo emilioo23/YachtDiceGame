@@ -443,7 +443,7 @@ namespace YachtDice.Server.Tests.Game
                 FirstPlayerTotal = LittleStraightPoints
             };
 
-            GameActionResult result = manager.AutoPlay(RoomCode, turnNumber);
+            GameActionResult result = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
 
             var actual = new
             {
@@ -455,13 +455,21 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void AutoPlay_NullTurn_ThrowsArgumentNullException()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+
+            Assert.Throws<ArgumentNullException>(() => manager.AutoPlay(null));
+        }
+
+        [Fact]
         public void AutoPlay_TurnAlreadyChanged_ReturnsNotYourTurn()
         {
             GameManager manager = CreateManager(LittleStraightDice);
             int turnNumber = StartTwoPlayerGame(manager).TurnNumber;
             PlayTurn(manager, FirstId, ScoreCategory.Choice);
 
-            GameActionResult result = manager.AutoPlay(RoomCode, turnNumber);
+            GameActionResult result = manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
 
             Assert.Equal(GameActionStatus.NotYourTurn, result.Status);
         }
@@ -472,7 +480,7 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             int turnNumber = StartTwoPlayerGame(manager).TurnNumber;
             PlayTurn(manager, FirstId, ScoreCategory.Choice);
-            manager.AutoPlay(RoomCode, turnNumber);
+            manager.AutoPlay(new GameTurn(RoomCode, turnNumber));
 
             GameActionResult state = manager.GetState(new RoomMember(RoomCode, SecondId));
 

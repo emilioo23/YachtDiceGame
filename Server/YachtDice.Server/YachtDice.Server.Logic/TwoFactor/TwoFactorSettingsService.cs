@@ -17,6 +17,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
+        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
@@ -112,17 +113,22 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
-        /// <param name="cultureName">Name of the language in which the email is written.</param>
+        /// <param name="delivery">Activation challenge and language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public ResendCodeStatus ResendActivationCode(string displayName, string challengeId, string cultureName)
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendActivationCode(string displayName, CodeDelivery delivery)
         {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
             Player player = FindPlayers(displayName).FirstOrDefault();
             ResendCodeStatus status = ResendCodeStatus.PlayerNotFound;
 
             if (player != null)
             {
-                status = _verificationService.ResendPlayerCode(player.Email, challengeId, cultureName);
+                status = _verificationService.ResendPlayerCode(player.Email, delivery);
             }
 
             return status;

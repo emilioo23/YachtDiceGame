@@ -1,7 +1,9 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.AuthenticationServiceReference;
 using AuthFault = YachtDice.AuthenticationServiceReference.ServiceFault;
+using ResendInput = YachtDice.Client.Logic.Authentication.ResendCodeInput;
 
 namespace YachtDice.Gateway
 {
@@ -10,6 +12,22 @@ namespace YachtDice.Gateway
     /// </summary>
     public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient, IAuthenticationService>
     {
+        private const string NullResendInputMessage = "The data to resend the code cannot be null.";
+
+        /// <summary>
+        /// Opens and closes a connection to the server so the first real call does not pay for the start-up.
+        /// </summary>
+        /// <returns>A task that finishes when the connection was opened.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task WarmUpAsync()
+        {
+            await ExecuteAsync(client =>
+            {
+                client.Open();
+                return true;
+            });
+        }
+
         /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
         /// </summary>
@@ -40,13 +58,18 @@ namespace YachtDice.Gateway
         /// Asks the server to send a new verification code.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="input">Challenge of the login session and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public async Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
+        /// <exception cref="ArgumentNullException">The input is null.</exception>
+        public async Task<ResendResultCode> ResendCodeAsync(string email, ResendInput input)
         {
-            ResendResultCode result =
-                await ExecuteAsync(client => client.ResendPlayerCode(email, challengeId, culture));
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input), NullResendInputMessage);
+            }
+
+            var delivery = new CodeDelivery { ChallengeId = input.ChallengeId, Culture = input.Culture };
+            ResendResultCode result = await ExecuteAsync(client => client.ResendPlayerCode(email, delivery));
 
             return result;
         }

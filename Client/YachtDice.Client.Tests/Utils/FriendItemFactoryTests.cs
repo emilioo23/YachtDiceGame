@@ -22,18 +22,25 @@ namespace YachtDice.Client.Tests.Utils
 
         private readonly string[] _friendNames = { CesarName, AnaName, BetoName };
         private readonly string[] _onlineNames = { LowerCaseBetoName };
+        private readonly FriendPresence _anyPresence = new FriendPresence(AnyStatus, true);
+
+        private static FriendPresence OnlinePresence =>
+            new FriendPresence(Strings.MainMenu_Friends_StatusOnline, true);
+
+        private static FriendPresence OfflinePresence =>
+            new FriendPresence(Strings.MainMenu_Friends_StatusOffline, false);
 
         [Fact]
         public void Create_UnsortedNames_ReturnsThemOrderedByName()
         {
             FriendItem[] expected =
             {
-                CreateItem(AnaName, AnaInitial, AnyStatus, true),
-                CreateItem(BetoName, BetoInitial, AnyStatus, true),
-                CreateItem(CesarName, CesarInitial, AnyStatus, true)
+                CreateItem(AnaName, AnaInitial, _anyPresence),
+                CreateItem(BetoName, BetoInitial, _anyPresence),
+                CreateItem(CesarName, CesarInitial, _anyPresence)
             };
 
-            List<FriendItem> items = FriendItemFactory.Create(_friendNames, AnyStatus, true);
+            List<FriendItem> items = FriendItemFactory.Create(_friendNames, _anyPresence);
 
             Assert.Equivalent(expected, items, strict: true);
         }
@@ -42,9 +49,9 @@ namespace YachtDice.Client.Tests.Utils
         public void Create_Name_ShowsItsInitial()
         {
             string[] names = { AnaName };
-            FriendItem[] expected = { CreateItem(AnaName, AnaInitial, AnyStatus, true) };
+            FriendItem[] expected = { CreateItem(AnaName, AnaInitial, _anyPresence) };
 
-            List<FriendItem> items = FriendItemFactory.Create(names, AnyStatus, true);
+            List<FriendItem> items = FriendItemFactory.Create(names, _anyPresence);
 
             Assert.Equivalent(expected, items, strict: true);
         }
@@ -54,7 +61,7 @@ namespace YachtDice.Client.Tests.Utils
         {
             FriendItem[] expected =
             {
-                CreateItem(BetoName, BetoInitial, Strings.MainMenu_Friends_StatusOnline, true)
+                CreateItem(BetoName, BetoInitial, OnlinePresence)
             };
 
             List<FriendItem> items = FriendItemFactory.CreateOnline(_friendNames, _onlineNames);
@@ -67,8 +74,8 @@ namespace YachtDice.Client.Tests.Utils
         {
             FriendItem[] expected =
             {
-                CreateItem(AnaName, AnaInitial, Strings.MainMenu_Friends_StatusOffline, false),
-                CreateItem(CesarName, CesarInitial, Strings.MainMenu_Friends_StatusOffline, false)
+                CreateItem(AnaName, AnaInitial, OfflinePresence),
+                CreateItem(CesarName, CesarInitial, OfflinePresence)
             };
 
             List<FriendItem> items = FriendItemFactory.CreateOffline(_friendNames, _onlineNames);
@@ -76,14 +83,14 @@ namespace YachtDice.Client.Tests.Utils
             Assert.Equivalent(expected, items, strict: true);
         }
 
-        private static FriendItem CreateItem(string name, string initial, string status, bool isOnline)
+        private static FriendItem CreateItem(string name, string initial, FriendPresence presence)
         {
             var item = new FriendItem
             {
                 Name = name,
                 Initial = initial,
-                Status = status,
-                IsOnline = isOnline
+                Status = presence.Status,
+                IsOnline = presence.IsOnline
             };
             return item;
         }
