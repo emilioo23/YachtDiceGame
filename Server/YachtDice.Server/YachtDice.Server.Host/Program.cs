@@ -98,7 +98,8 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
 
             var roomManager = new RoomManager(avatarService);
-            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()));
+            var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
+            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()), resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
