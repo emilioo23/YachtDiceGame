@@ -2,11 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Game;
+    using DataExceptions = YachtDice.Server.Data.Exceptions;
     using LogicGame = YachtDice.Server.Logic.Game;
     using LogicLogging = YachtDice.Server.Logic.Logging;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
@@ -221,7 +221,7 @@ namespace YachtDice.Server.Services
 
         private void SaveResult(string roomCode, LogicGame.GameSnapshot snapshot)
         {
-            var isFirstTime = _savedGames.TryAdd(roomCode, true);
+            bool isFirstTime = _savedGames.TryAdd(roomCode, true);
 
             if (isFirstTime && _roomSettings.TryGetValue(roomCode, out LogicRooms.RoomSettings settings))
             {
@@ -229,7 +229,7 @@ namespace YachtDice.Server.Services
                 {
                     _resultRecorder.Record(settings, snapshot);
                 }
-                catch (DataAccessException ex)
+                catch (DataExceptions.DataAccessException ex)
                 {
                     _logger.Error(ex, ResultNotSavedLogMessage);
                 }
