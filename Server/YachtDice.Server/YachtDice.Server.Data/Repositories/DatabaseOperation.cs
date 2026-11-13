@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -11,16 +10,12 @@ namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
     /// Runs the operations of the repositories inside a database context and converts the failures of Entity
-    /// Framework into <see cref="DataAccessException"/>. It also checks that the connection string exists before
-    /// opening the context, so a missing configuration file is reported as a database failure and not as an
-    /// unexpected error.
+    /// Framework into <see cref="DataAccessException"/>. The connection string comes from the environment of the
+    /// server, so a missing variable is reported as a database failure and not as an unexpected error.
     /// </summary>
     internal static class DatabaseOperation
     {
-        private const string ConnectionName = "YachtDiceContext";
         private const string PropertySeparator = ", ";
-        private const string MissingConnectionMessage = "The connection string of the database is not configured.";
-        private const string ConfigurationFailedMessage = "The configuration of the database could not be read.";
         private const string InvalidEntityFormat = "The data did not pass the model validation. Properties: {0}.";
 
         /// <summary>
@@ -34,12 +29,11 @@ namespace YachtDice.Server.Data.Repositories
         public static TResult Query<TResult>(Func<YachtDiceContext, TResult> query, string failedMessage)
         {
             TResult result;
-
-            EnsureConnectionIsConfigured();
+            string connectionString = DatabaseConnection.Build();
 
             try
             {
-                using (var context = new YachtDiceContext())
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     result = query(context);
                 }
@@ -61,11 +55,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The change could not be saved.</exception>
         public static void Save(Action<YachtDiceContext> change, string failedMessage)
         {
-            EnsureConnectionIsConfigured();
+            string connectionString = DatabaseConnection.Build();
 
             try
             {
-                using (var context = new YachtDiceContext())
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     change(context);
                     context.SaveChanges();
@@ -82,25 +76,6 @@ namespace YachtDice.Server.Data.Repositories
             catch (EntityException ex)
             {
                 throw new DataAccessException(failedMessage, ex);
-            }
-        }
-
-        private static void EnsureConnectionIsConfigured()
-        {
-            ConnectionStringSettings settings;
-
-            try
-            {
-                settings = ConfigurationManager.ConnectionStrings[ConnectionName];
-            }
-            catch (ConfigurationErrorsException ex)
-            {
-                throw new DataAccessException(ConfigurationFailedMessage, ex);
-            }
-
-            if (settings == null)
-            {
-                throw new DataAccessException(MissingConnectionMessage);
             }
         }
 
