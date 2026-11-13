@@ -15,6 +15,7 @@ namespace YachtDice.Server.Logic.Email
         private const string SmtpPortKey = "SmtpPort";
         private const string SmtpUserKey = "SmtpUser";
         private const string SmtpPasswordKey = "SmtpPassword";
+        private const int SmtpTimeoutMilliseconds = 10000;
         private const string EmptyRecipientMessage = "The recipient address cannot be empty.";
         private const string MissingSettingMessage = "The setting '{0}' is missing in the configuration file.";
 
@@ -41,6 +42,7 @@ namespace YachtDice.Server.Logic.Email
                 using (var client = new SmtpClient(host, port))
                 {
                     client.EnableSsl = true;
+                    client.Timeout = SmtpTimeoutMilliseconds;
                     client.Credentials = new NetworkCredential(user, password);
 
                     client.Send(message);
