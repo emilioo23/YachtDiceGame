@@ -15,8 +15,6 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
-        private readonly AppLogger _logger;
-
         /// <summary>
         /// Initializes the gateway for the player.
         /// </summary>
@@ -24,7 +22,6 @@ namespace YachtDice.Gateway
         public RoomGateway(PlayerSession session)
         {
             Session = session;
-            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -150,23 +147,29 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Takes the player out of the room and closes the connection.
+        /// Takes the player out of the room and closes the connection. If the connection was already lost, the
+        /// server took the player out when it noticed, so there is nothing to do.
         /// </summary>
         /// <returns>A task that finishes when the player left.</returns>
+        /// <exception cref="GatewayException">
+        /// The server could not be told. The connection is closed anyway, so the server takes the player out
+        /// when it notices.
+        /// </exception>
         public async Task LeaveRoomAsync()
         {
-            RoomMember member = CreateMember();
-
-            try
+            if (IsConnected)
             {
-                await ExecuteAsync(client => client.LeaveRoom(member));
-            }
-            catch (GatewayException ex)
-            {
-                _logger.Warning(ex.Message);
-            }
+                RoomMember member = CreateMember();
 
-            await CloseAsync();
+                try
+                {
+                    await ExecuteAsync(client => client.LeaveRoom(member));
+                }
+                finally
+                {
+                    await CloseAsync();
+                }
+            }
         }
 
         /// <inheritdoc />

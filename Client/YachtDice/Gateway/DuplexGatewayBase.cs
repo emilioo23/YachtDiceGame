@@ -42,6 +42,17 @@ namespace YachtDice.Gateway
         public event Action ConnectionLost;
 
         /// <summary>
+        /// Gets whether the connection with the server is open.
+        /// </summary>
+        protected bool IsConnected
+        {
+            get
+            {
+                return CurrentClient() != null;
+            }
+        }
+
+        /// <summary>
         /// Closes the connection with the server, if it is open.
         /// </summary>
         /// <returns>A task that finishes when the connection is closed.</returns>

@@ -323,8 +323,7 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                await _chat.Gateway.LeaveAsync();
-                await _roomGateway.LeaveRoomAsync();
+                await LobbyNavigator.LeaveRoomAsync(_chat, _roomGateway);
             }
         }
 

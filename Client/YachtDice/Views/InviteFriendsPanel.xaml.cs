@@ -18,9 +18,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class InviteFriendsPanel : UserControl
     {
-        private const string FriendsFailedLogMessage = "The friends of the player could not be loaded.";
-
-        private readonly AppLogger _logger;
         private readonly FriendGateway _friendGateway = new FriendGateway();
         private RoomGateway _roomGateway;
         private List<string> _friendNames = new List<string>();
@@ -31,8 +28,6 @@ namespace YachtDice.Views
         public InviteFriendsPanel()
         {
             InitializeComponent();
-
-            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -79,9 +74,9 @@ namespace YachtDice.Views
                 _friendNames = await _friendGateway.GetFriendsAsync(_roomGateway.Session.DisplayName);
                 ShowFriends();
             }
-            catch (GatewayException)
+            catch (GatewayException ex)
             {
-                _logger.Warning(FriendsFailedLogMessage);
+                ShowNotice(GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
