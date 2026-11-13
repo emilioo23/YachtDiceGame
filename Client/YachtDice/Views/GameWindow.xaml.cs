@@ -79,8 +79,7 @@ namespace YachtDice.Views
 
         private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
             _state.Status == GameStatus.Finished,
-            _state.CurrentPlayerId,
-            _playerId);
+            new TurnPlayers(_state.CurrentPlayerId, _playerId));
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
