@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using YachtDice.Client.Logic.Rooms;
 
@@ -25,49 +24,82 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_AllRoomsAndNoSearch_KeepsEveryRoomInTheSameOrder()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("1", FirstHost, false),
+                CreateRoom("2", SecondHost, true),
+                CreateRoom("3", ThirdHost, false)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, NoSearch);
 
-            Assert.Equal(new[] { "1", "2", "3" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
         public void Apply_OnlyPublicRooms_HidesThePrivateOnes()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("1", FirstHost, false),
+                CreateRoom("3", ThirdHost, false)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.Public, NoSearch);
 
-            Assert.Equal(new[] { "1", "3" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
         public void Apply_OnlyPrivateRooms_HidesThePublicOnes()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("2", SecondHost, true)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.Private, NoSearch);
 
-            Assert.Equal(new[] { "2" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
         public void Apply_TextInTheNameOfTheHost_KeepsOnlyThoseRooms()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("2", SecondHost, true)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "gab");
 
-            Assert.Equal(new[] { "2" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
         public void Apply_TextWithDifferentCase_StillMatches()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("3", ThirdHost, false)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "CARLOS");
 
-            Assert.Equal(new[] { "3" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
         public void Apply_TextWithSpacesAround_IgnoresTheSpaces()
         {
+            RoomListItem[] expected =
+            {
+                CreateRoom("1", FirstHost, false)
+            };
+
             List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "  emilio  ");
 
-            Assert.Equal(new[] { "1" }, result.Select(room => room.RoomId));
+            Assert.Equivalent(expected, result, strict: true);
         }
 
         [Fact]
