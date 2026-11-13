@@ -25,8 +25,8 @@ namespace YachtDice.Client.Tests.Utils
             RoomPlayer[] roomPlayers = { _opponent, _localPlayer };
             MatchPlayer[] expected =
             {
-                CreateMatchPlayer(LocalId, LocalName, true, false),
-                CreateMatchPlayer(OpponentId, OpponentName, false, false)
+                CreateMatchPlayer(_localPlayer, true, false),
+                CreateMatchPlayer(_opponent, false, false)
             };
 
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
@@ -44,8 +44,8 @@ namespace YachtDice.Client.Tests.Utils
             };
             MatchPlayer[] expected =
             {
-                CreateMatchPlayer(LocalId, LocalName, true, false),
-                CreateMatchPlayer(OpponentId, OpponentName, false, true)
+                CreateMatchPlayer(_localPlayer, true, false),
+                CreateMatchPlayer(_opponent, false, true)
             };
 
             List<MatchPlayer> players = MatchPlayerFactory.CreateForRoom(room, LocalId);
@@ -60,8 +60,8 @@ namespace YachtDice.Client.Tests.Utils
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
             MatchPlayer[] expected =
             {
-                CreateMatchPlayer(LocalId, LocalName, true, false),
-                CreateMatchPlayer(OpponentId, OpponentName, false, false)
+                CreateMatchPlayer(_localPlayer, true, false),
+                CreateMatchPlayer(_opponent, false, false)
             };
 
             List<MatchPlayer> updated = MatchPlayerFactory.UpdatePresence(players, roomPlayers);
@@ -69,12 +69,12 @@ namespace YachtDice.Client.Tests.Utils
             Assert.Equivalent(expected, updated, strict: true);
         }
 
-        private static MatchPlayer CreateMatchPlayer(string id, string name, bool isLocalPlayer, bool hasLeft)
+        private static MatchPlayer CreateMatchPlayer(RoomPlayer roomPlayer, bool isLocalPlayer, bool hasLeft)
         {
             var player = new MatchPlayer
             {
-                Id = id,
-                Name = name,
+                Id = roomPlayer.Id,
+                Name = roomPlayer.DisplayName,
                 IsLocalPlayer = isLocalPlayer,
                 HasLeft = hasLeft
             };
