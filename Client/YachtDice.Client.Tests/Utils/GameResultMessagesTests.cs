@@ -37,5 +37,53 @@ namespace YachtDice.Client.Tests.Utils
 
             Assert.Equal(Strings.Dialogs_UnexpectedError, message);
         }
+
+        [Fact]
+        public void GetMessage_GameNotFound_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.GameNotFound);
+
+            Assert.Equal(Strings.Game_Result_GameNotFound, message);
+        }
+
+        [Fact]
+        public void GetMessage_PlayerNotInGame_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.PlayerNotInGame);
+
+            Assert.Equal(Strings.Game_Result_PlayerNotInGame, message);
+        }
+
+        [Fact]
+        public void GetMessage_GameFinished_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.GameFinished);
+
+            Assert.Equal(Strings.Game_Result_GameFinished, message);
+        }
+
+        [Fact]
+        public void GetMessage_NoRollsLeft_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.NoRollsLeft);
+
+            Assert.Equal(Strings.Game_Result_NoRollsLeft, message);
+        }
+
+        [Fact]
+        public void GetMessage_CategoryFilled_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.CategoryFilled);
+
+            Assert.Equal(Strings.Game_Result_CategoryFilled, message);
+        }
+
+        [Fact]
+        public void GetMessage_CategoryNotAllowed_ReturnsTheMessageOfThatResult()
+        {
+            string message = GameResultMessages.GetMessage(GameResultCode.CategoryNotAllowed);
+
+            Assert.Equal(Strings.Game_Result_CategoryNotAllowed, message);
+        }
     }
 }
