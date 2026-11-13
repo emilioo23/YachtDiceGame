@@ -42,5 +42,45 @@ namespace YachtDice.Client.Tests.Game
 
             Assert.False(isDue);
         }
+
+        [Fact]
+        public void IsCelebrationDue_FortyNinePoints_ReturnsFalse()
+        {
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, true, YachtPoints - 1);
+
+            Assert.False(isDue);
+        }
+
+        [Fact]
+        public void IsCelebrationDue_FiftyOnePoints_ReturnsFalse()
+        {
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, true, YachtPoints + 1);
+
+            Assert.False(isDue);
+        }
+
+        [Fact]
+        public void IsCelebrationDue_BoxReopenedWithFifty_ReturnsFalse()
+        {
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(true, false, YachtPoints);
+
+            Assert.False(isDue);
+        }
+
+        [Fact]
+        public void IsCelebrationDue_NegativePoints_ReturnsFalse()
+        {
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, true, -YachtPoints);
+
+            Assert.False(isDue);
+        }
+
+        [Fact]
+        public void IsCelebrationDue_BoxStillOpenWithFifty_ReturnsFalse()
+        {
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, false, YachtPoints);
+
+            Assert.False(isDue);
+        }
     }
 }
