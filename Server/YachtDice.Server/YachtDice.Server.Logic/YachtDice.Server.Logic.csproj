@@ -74,6 +74,7 @@
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Friends\FriendActionStatus.cs" />
+    <Compile Include="Friends\FriendRequestAnswer.cs" />
     <Compile Include="Friends\FriendRequestResult.cs" />
     <Compile Include="Friends\FriendRequestStatus.cs" />
     <Compile Include="Friends\FriendshipService.cs" />
