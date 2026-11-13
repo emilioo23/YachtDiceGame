@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
@@ -15,6 +16,13 @@ namespace YachtDice.Server.Data.Repositories
             "Database error occurred while fetching game history by player ID.";
 
         private const string RankingFailedMessage = "Database error occurred while calculating player rankings.";
+        private const string SaveFailedMessage = "Database error occurred while saving the result of a game.";
+        private const string ArchivedRoomName = "Partida";
+        private const string PublicRoomType = "Public";
+        private const string PrivateRoomType = "Private";
+        private const string FinishedRoomStatus = "Finished";
+        private const string RoomCodeFormat = "N";
+        private const int RoomCodeLength = 6;
 
         /// <summary>
         /// Gets the result of every game played by a player.
@@ -46,6 +54,17 @@ namespace YachtDice.Server.Data.Repositories
             return ranking;
         }
 
+        /// <summary>
+        /// Saves the result of a game that just finished, with the players who took part in it. The rooms are
+        /// not stored while the game runs, so a row of the room is created only to link the result to it.
+        /// </summary>
+        /// <param name="result">Result of the game.</param>
+        /// <exception cref="DataAccessException">The database could not be updated.</exception>
+        public void Save(GameResultRecord result)
+        {
+            DatabaseOperation.Save(context => AddResult(context, result), SaveFailedMessage);
+        }
+
         private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
         {
             Expression<Func<GameHistoryPlayer, bool>> isSamePlayerId = entry => entry.PlayerId == playerId;
@@ -54,6 +73,55 @@ namespace YachtDice.Server.Data.Repositories
                 .ToList();
 
             return history;
+        }
+
+        private static void AddResult(YachtDiceContext context, GameResultRecord result)
+        {
+            DateTime now = DateTime.UtcNow;
+            var room = new Room
+            {
+                HostPlayerId = result.HostPlayerId,
+                Code = CreateUnusedRoomCode(context),
+                RoomName = ArchivedRoomName,
+                MaxPlayers = result.MaxPlayers,
+                RoomType = result.IsPrivate ? PrivateRoomType : PublicRoomType,
+                Status = FinishedRoomStatus,
+                CreateDate = now
+            };
+            var game = new GameHistory { Room = room, EndDate = now };
+
+            foreach (PlayerResultRecord player in result.Players)
+            {
+                game.GameHistoryPlayer.Add(new GameHistoryPlayer
+                {
+                    PlayerId = player.PlayerId,
+                    FinalScore = player.FinalScore,
+                    IsWinner = player.IsWinner,
+                    Status = player.Status
+                });
+            }
+
+            context.GameHistory.Add(game);
+        }
+
+        private static string CreateUnusedRoomCode(YachtDiceContext context)
+        {
+            string code;
+            bool isUsed;
+
+            do
+            {
+                code = Guid.NewGuid()
+                    .ToString(RoomCodeFormat, CultureInfo.InvariantCulture)
+                    .Substring(0, RoomCodeLength)
+                    .ToUpperInvariant();
+
+                Expression<Func<Room, bool>> hasCode = candidate => candidate.Code == code;
+                isUsed = context.Room.Any(hasCode);
+            }
+            while (isUsed);
+
+            return code;
         }
 
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)

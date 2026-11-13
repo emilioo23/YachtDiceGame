@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -20,5 +21,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="maxEntries">Maximum number of players to return.</param>
         /// <returns>The ranking, or an empty list if there are no games played.</returns>
         List<PlayerRankingRecord> GetRanking(int maxEntries);
+
+        /// <summary>
+        /// Saves the result of a game that just finished, with the players who took part in it.
+        /// </summary>
+        /// <param name="result">Result of the game.</param>
+        /// <exception cref="DataAccessException">The database could not be updated.</exception>
+        void Save(GameResultRecord result);
     }
 }
