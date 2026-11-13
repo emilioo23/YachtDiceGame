@@ -39,10 +39,10 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public void Save(int playerId, string tokenHash, DateTime expireDate)
+        public void Save(PwdResetToken token)
         {
-            Delete(playerId);
-            _tokens.Add(new PwdResetToken { PlayerId = playerId, Token = tokenHash, ExpireDate = expireDate });
+            Delete(token.PlayerId);
+            _tokens.Add(token);
         }
 
         /// <inheritdoc />

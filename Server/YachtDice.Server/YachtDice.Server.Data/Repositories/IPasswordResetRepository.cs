@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -18,10 +17,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <summary>
         /// Saves the recovery code of the player. A previous code of the same player is discarded.
         /// </summary>
-        /// <param name="playerId">Identifier of the player.</param>
-        /// <param name="tokenHash">Hash of the recovery code.</param>
-        /// <param name="expireDate">Moment in which the code stops being valid.</param>
-        void Save(int playerId, string tokenHash, DateTime expireDate);
+        /// <param name="token">Recovery code to save, with its player, its hash and its expiration date.</param>
+        void Save(PwdResetToken token);
 
         /// <summary>
         /// Deletes the recovery code of the player.
