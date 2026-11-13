@@ -18,8 +18,7 @@ namespace YachtDice.Server.Tests.Game
         private const string AnaName = "Ana";
         private const string GuestName = "Invitado";
         private const string AnaUsername = "ana_99";
-        private const string CompletedStatus = "Completed";
-        private const string AbandonedStatus = "Abandoned";
+        private const string OtherGuestName = "Invitado2";
         private const int BetoId = 1;
         private const int AnaId = 2;
         private const int WinnerTotal = 250;
@@ -54,11 +53,25 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void Record_NullSettings_ThrowsArgumentNullException()
+        {
+            GameSnapshot snapshot = CreateSnapshot();
+
+            Assert.Throws<ArgumentNullException>(() => _recorder.Record(null, snapshot));
+        }
+
+        [Fact]
+        public void Record_NullSnapshot_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _recorder.Record(_settings, null));
+        }
+
+        [Fact]
         public void Record_TwoRegisteredPlayers_SavesTheWinnerAndTheLoser()
         {
-            var expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateResult(BetoId, WinnerTotal, true, CompletedStatus));
-            expected.Players.Add(CreateResult(AnaId, LoserTotal, false, CompletedStatus));
+            GameResultRecord expected = CreateExpectedResult(BetoId);
+            expected.Players.Add(CreateResult(BetoId, WinnerTotal, true, PlayerResultStatus.Completed));
+            expected.Players.Add(CreateResult(AnaId, LoserTotal, false, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreatePlayer(BetoName, WinnerTotal, true, true),
                 CreatePlayer(AnaName, LoserTotal, false, true));
@@ -71,8 +84,8 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Record_GuestAndRegisteredPlayer_LeavesTheGuestOut()
         {
-            var expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateResult(BetoId, LoserTotal, false, CompletedStatus));
+            GameResultRecord expected = CreateExpectedResult(BetoId);
+            expected.Players.Add(CreateResult(BetoId, LoserTotal, false, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreatePlayer(GuestName, WinnerTotal, true, true),
                 CreatePlayer(BetoName, LoserTotal, false, true));
@@ -87,7 +100,7 @@ namespace YachtDice.Server.Tests.Game
         {
             GameSnapshot snapshot = CreateSnapshot(
                 CreatePlayer(GuestName, WinnerTotal, true, true),
-                CreatePlayer(GuestName + "2", LoserTotal, false, true));
+                CreatePlayer(OtherGuestName, LoserTotal, false, true));
 
             _recorder.Record(_settings, snapshot);
 
@@ -97,9 +110,9 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Record_WinnerWhoLeft_IsSavedAsAbandonedAndNotAsWinner()
         {
-            var expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateResult(BetoId, WinnerTotal, false, AbandonedStatus));
-            expected.Players.Add(CreateResult(AnaId, LoserTotal, false, CompletedStatus));
+            GameResultRecord expected = CreateExpectedResult(BetoId);
+            expected.Players.Add(CreateResult(BetoId, WinnerTotal, false, PlayerResultStatus.Abandoned));
+            expected.Players.Add(CreateResult(AnaId, LoserTotal, false, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreatePlayer(BetoName, WinnerTotal, true, false),
                 CreatePlayer(AnaName, LoserTotal, false, true));
@@ -112,8 +125,8 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Record_TwoNamesOfTheSameAccount_SavesTheAccountOnce()
         {
-            var expected = CreateExpectedResult(AnaId);
-            expected.Players.Add(CreateResult(AnaId, WinnerTotal, true, CompletedStatus));
+            GameResultRecord expected = CreateExpectedResult(AnaId);
+            expected.Players.Add(CreateResult(AnaId, WinnerTotal, true, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreatePlayer(AnaName, WinnerTotal, true, true),
                 CreatePlayer(AnaUsername, LoserTotal, false, true));
@@ -128,7 +141,11 @@ namespace YachtDice.Server.Tests.Game
             return new GameResultRecord { HostPlayerId = hostPlayerId, MaxPlayers = RoomMaxPlayers, IsPrivate = true };
         }
 
-        private static PlayerResultRecord CreateResult(int playerId, int finalScore, bool isWinner, string status)
+        private static PlayerResultRecord CreateResult(
+            int playerId,
+            int finalScore,
+            bool isWinner,
+            PlayerResultStatus status)
         {
             return new PlayerResultRecord
             {

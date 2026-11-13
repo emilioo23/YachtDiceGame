@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 
@@ -9,6 +10,8 @@ namespace YachtDice.Server.Tests.InMemory
     /// </summary>
     internal sealed class InMemoryGameHistoryRepository : IGameHistoryRepository
     {
+        private const string NotSupportedMessage = "No test needs this operation of the game history.";
+
         private readonly List<GameResultRecord> _savedResults = new List<GameResultRecord>();
 
         /// <summary>
@@ -19,13 +22,13 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            return new List<GameHistoryPlayer>();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         /// <inheritdoc />
         public List<PlayerRankingRecord> GetRanking(int maxEntries)
         {
-            return new List<PlayerRankingRecord>();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         /// <inheritdoc />
