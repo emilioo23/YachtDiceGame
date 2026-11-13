@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using YachtDice.Client.Logic.Game;
 
@@ -20,6 +19,9 @@ namespace YachtDice.Client.Tests.Game
         private const int MiddleTotal = 150;
         private const int HighTotal = 200;
         private const int TiedTotal = 90;
+        private const int FirstPlace = StandingsBuilder.FirstRank;
+        private const int SecondPlace = 2;
+        private const int ThirdPlace = 3;
 
         [Fact]
         public void Build_UnsortedPlayers_ReturnsThemFromTheHighestTotal()
@@ -30,18 +32,16 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            var expected = new { PlayerIds = new[] { BetoId, CesarId, AnaId }, Ranks = new[] { 1, 2, 3 } };
+            RankedStanding[] expected =
+            {
+                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
+                new RankedStanding(SecondPlace, new StandingEntry(CesarId, CesarName, MiddleTotal)),
+                new RankedStanding(ThirdPlace, new StandingEntry(AnaId, AnaName, LowTotal))
+            };
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            var actual = new
-            {
-                PlayerIds =
-                    standings.Select(standing => standing.PlayerId).ToArray(),
-                Ranks =
-                    standings.Select(standing => standing.Rank).ToArray()
-            };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, standings);
         }
 
         [Fact]
@@ -53,18 +53,16 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            var expected = new { Ranks = new[] { 1, 1, 3 }, Winners = new[] { true, true, false } };
+            RankedStanding[] expected =
+            {
+                new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, HighTotal)),
+                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
+                new RankedStanding(ThirdPlace, new StandingEntry(CesarId, CesarName, MiddleTotal))
+            };
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            var actual = new
-            {
-                Ranks =
-                    standings.Select(standing => standing.Rank).ToArray(),
-                Winners =
-                    standings.Select(standing => standing.IsWinner).ToArray()
-            };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expected, standings);
         }
 
         [Fact]
@@ -75,10 +73,15 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(AnaId, AnaName, TiedTotal),
                 new StandingEntry(BetoId, BetoName, TiedTotal)
             };
+            RankedStanding[] expected =
+            {
+                new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, TiedTotal)),
+                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, TiedTotal))
+            };
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equal(new[] { AnaId, BetoId }, standings.Select(standing => standing.PlayerId).ToArray());
+            Assert.Equivalent(expected, standings);
         }
 
         [Fact]
