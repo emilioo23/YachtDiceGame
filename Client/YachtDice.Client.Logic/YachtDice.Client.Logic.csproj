@@ -71,6 +71,7 @@
     <Compile Include="Rooms\RoomListItem.cs" />
     <Compile Include="Rooms\RoomListItemFilter.cs" />
     <Compile Include="Rooms\RoomListUpdater.cs" />
+    <Compile Include="Rooms\RoomMembership.cs" />
     <Compile Include="Rooms\RoomPrivacyFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
