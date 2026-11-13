@@ -108,9 +108,11 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_UnlockedAvatar_SavesTheNewAvatar()
         {
+            Player expected = CreatePlayer(PlayerLevel, UnlockedAvatarId);
+
             _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
-            Assert.Equal(UnlockedAvatarId, _players.Players.Single().AvatarId);
+            Assert.Equivalent(expected, _players.Players.Single());
         }
 
         [Fact]
@@ -126,9 +128,11 @@ namespace YachtDice.Server.Tests.Avatars
         [InlineData(UnknownAvatarId)]
         public void ChangeAvatar_AvatarThatCannotBeChosen_KeepsTheCurrentOne(int avatarId)
         {
+            Player expected = CreatePlayer(PlayerLevel, CurrentAvatarId);
+
             _service.ChangeAvatar(PlayerName, avatarId);
 
-            Assert.Equal(CurrentAvatarId, _players.Players.Single().AvatarId);
+            Assert.Equivalent(expected, _players.Players.Single());
         }
 
         [Fact]
@@ -168,17 +172,23 @@ namespace YachtDice.Server.Tests.Avatars
             Assert.Equal(AvatarChangeStatus.PlayerNotFound, status);
         }
 
-        private void AddPlayer(int level)
+        private static Player CreatePlayer(int level, int avatarId)
         {
-            _players.Add(new Player
+            var player = new Player
             {
                 Id = PlayerId,
                 Username = PlayerName,
                 DisplayName = PlayerName,
-                AvatarId = CurrentAvatarId,
+                AvatarId = avatarId,
                 Level = level,
                 XP = PlayerExperience
-            });
+            };
+            return player;
+        }
+
+        private void AddPlayer(int level)
+        {
+            _players.Add(CreatePlayer(level, CurrentAvatarId));
         }
     }
 }
