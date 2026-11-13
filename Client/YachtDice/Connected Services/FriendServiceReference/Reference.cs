@@ -150,6 +150,67 @@ namespace YachtDice.FriendServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendRequestAnswer", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class FriendRequestAnswer : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsAcceptedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RequesterNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsAccepted {
+            get {
+                return this.IsAcceptedField;
+            }
+            set {
+                if ((this.IsAcceptedField.Equals(value) != true)) {
+                    this.IsAcceptedField = value;
+                    this.RaisePropertyChanged("IsAccepted");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RequesterName {
+            get {
+                return this.RequesterNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RequesterNameField, value) != true)) {
+                    this.RequesterNameField = value;
+                    this.RaisePropertyChanged("RequesterName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RoomMember", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
     public partial class RoomMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -219,7 +280,7 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted);
+        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault", Name="ServiceFault")]
@@ -273,8 +334,8 @@ namespace YachtDice.FriendServiceReference {
             return base.Channel.SendFriendRequest(displayName, targetUsername);
         }
         
-        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted) {
-            return base.Channel.RespondToFriendRequest(displayName, requesterName, isAccepted);
+        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer) {
+            return base.Channel.RespondToFriendRequest(displayName, answer);
         }
         
         public YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName) {

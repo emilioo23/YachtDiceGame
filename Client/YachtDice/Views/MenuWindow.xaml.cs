@@ -9,6 +9,7 @@ using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using FriendRequestAnswer = YachtDice.FriendServiceReference.FriendRequestAnswer;
 using FriendRequestResultCode = YachtDice.FriendServiceReference.FriendRequestResultCode;
 
 namespace YachtDice.Views
@@ -272,7 +273,9 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.RespondAsync(_session.DisplayName, requesterName, isAccepted);
+                var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
+
+                await _friendGateway.RespondAsync(_session.DisplayName, answer);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)
