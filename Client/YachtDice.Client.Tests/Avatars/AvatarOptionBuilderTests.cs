@@ -18,58 +18,95 @@ namespace YachtDice.Client.Tests.Avatars
         private const int ThirdAvatarId = 3;
         private const int UnknownAvatarId = 99;
 
-        private static readonly bool[] OnlyFirstUnlocked = { true, false, false };
-        private static readonly bool[] FirstTwoUnlocked = { true, true, false };
-
         [Fact]
         public void Build_PlayerBelowTheRequiredLevel_LocksTheAvatar()
         {
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, true),
+                CreateOption(SecondAvatarId, ThirdLevel, false, false),
+                CreateOption(ThirdAvatarId, FifthLevel, false, false)
+            };
+
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FreeLevel, FirstAvatarId);
 
-            Assert.Equal(OnlyFirstUnlocked, options.Select(option => option.IsUnlocked).ToArray());
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
         public void Build_PlayerExactlyAtTheRequiredLevel_UnlocksTheAvatar()
         {
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, true),
+                CreateOption(SecondAvatarId, ThirdLevel, true, false),
+                CreateOption(ThirdAvatarId, FifthLevel, false, false)
+            };
+
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), ThirdLevel, FirstAvatarId);
 
-            Assert.Equal(FirstTwoUnlocked, options.Select(option => option.IsUnlocked).ToArray());
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
         public void Build_PlayerAboveEveryLevel_UnlocksEveryAvatar()
         {
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, true),
+                CreateOption(SecondAvatarId, ThirdLevel, true, false),
+                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+            };
+
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel + 1, FirstAvatarId);
 
-            Assert.True(options.All(option => option.IsUnlocked));
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
         public void Build_SelectedAvatar_MarksOnlyThatAvatarAsSelected()
         {
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, false),
+                CreateOption(SecondAvatarId, ThirdLevel, true, true),
+                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+            };
+
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, SecondAvatarId);
 
-            Assert.Equal(SecondAvatarId, options.Single(option => option.IsSelected).Id);
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
         public void Build_SelectedAvatarNotInTheCatalog_MarksNoneAsSelected()
         {
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, false),
+                CreateOption(SecondAvatarId, ThirdLevel, true, false),
+                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+            };
+
             List<AvatarOption> options = AvatarOptionBuilder.Build(CreateCatalog(), FifthLevel, UnknownAvatarId);
 
-            Assert.DoesNotContain(options, option => option.IsSelected);
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
         public void Build_CatalogOutOfOrder_ReturnsTheOptionsOrderedByIdentifier()
         {
             List<AvatarRequirement> catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
+            AvatarOption[] expected =
+            {
+                CreateOption(FirstAvatarId, FreeLevel, true, true),
+                CreateOption(SecondAvatarId, ThirdLevel, true, false),
+                CreateOption(ThirdAvatarId, FifthLevel, true, false)
+            };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, FifthLevel, FirstAvatarId);
 
-            var expectedOrder = new[] { FirstAvatarId, SecondAvatarId, ThirdAvatarId };
-            Assert.Equal(expectedOrder, options.Select(option => option.Id));
+            Assert.Equivalent(expected, options, strict: true);
         }
 
         [Fact]
@@ -80,6 +117,18 @@ namespace YachtDice.Client.Tests.Avatars
             List<AvatarOption> options = AvatarOptionBuilder.Build(emptyCatalog, FifthLevel, FirstAvatarId);
 
             Assert.Empty(options);
+        }
+
+        private static AvatarOption CreateOption(int id, int requiredLevel, bool isUnlocked, bool isSelected)
+        {
+            var option = new AvatarOption
+            {
+                Id = id,
+                RequiredLevel = requiredLevel,
+                IsUnlocked = isUnlocked,
+                IsSelected = isSelected
+            };
+            return option;
         }
 
         private static List<AvatarRequirement> CreateCatalog()
