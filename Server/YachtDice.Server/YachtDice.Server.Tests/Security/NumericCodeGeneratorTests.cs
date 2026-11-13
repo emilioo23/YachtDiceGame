@@ -12,6 +12,7 @@ namespace YachtDice.Server.Tests.Security
     {
         private const int SixDigits = 6;
         private const int Repetitions = 50;
+        private const string LengthParameterName = "length";
 
         [Fact]
         public void Generate_SixDigits_ReturnsOnlyDigitsWithTheRequestedLength()
@@ -31,6 +32,37 @@ namespace YachtDice.Server.Tests.Security
         public void Generate_LengthBelowOne_ThrowsArgumentOutOfRangeException(int length)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => NumericCodeGenerator.Generate(length));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(4)]
+        [InlineData(9)]
+        [InlineData(10)]
+        public void Generate_LengthFromOneToTen_ReturnsOnlyDigitsWithTheRequestedLength(int length)
+        {
+            string code = NumericCodeGenerator.Generate(length);
+
+            Assert.True(IsDigitsOfLength(code, length));
+        }
+
+        [Fact]
+        public void Generate_MinimumInteger_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => NumericCodeGenerator.Generate(int.MinValue));
+        }
+
+        [Fact]
+        public void Generate_ZeroDigits_ReportsTheLengthParameter()
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => NumericCodeGenerator.Generate(0));
+
+            Assert.Equal(LengthParameterName, exception.ParamName);
+        }
+
+        private static bool IsDigitsOfLength(string code, int length)
+        {
+            return code.Length == length && code.All(char.IsDigit);
         }
 
         private static bool IsSixDigitCode(string code)
