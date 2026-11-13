@@ -64,7 +64,7 @@ namespace YachtDice.Views
             _chatGateway = chatGateway;
             _isChatAvailable = isChatAvailable;
             _playerId = roomGateway.PlayerId;
-            _gameGateway = new GameGateway(_playerId, roomGateway.CurrentRoom.Code);
+            _gameGateway = new GameGateway(new RoomMembership(_playerId, roomGateway.CurrentRoom.Code));
             _diceBoard = new DiceBoard(DiceCanvas, this);
             _scorecard = new ScorecardGrid(CategoriesPanel, this);
             _celebration = new YachtCelebration(CelebrationCanvas, this);

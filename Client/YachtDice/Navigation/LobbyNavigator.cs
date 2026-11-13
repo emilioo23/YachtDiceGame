@@ -102,7 +102,7 @@ namespace YachtDice.Navigation
 
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
-            var chatGateway = new ChatGateway(roomGateway.PlayerId, roomGateway.CurrentRoom.Code);
+            var chatGateway = new ChatGateway(new RoomMembership(roomGateway.PlayerId, roomGateway.CurrentRoom.Code));
             bool isChatAvailable = await chatGateway.TryJoinAsync();
 
             ConnectionLossHandler.Watch(roomGateway);

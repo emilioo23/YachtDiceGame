@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.ChatServiceReference;
 using YachtDice.Utils;
 using ChatFault = YachtDice.ChatServiceReference.ServiceFault;
@@ -17,6 +18,7 @@ namespace YachtDice.Gateway
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
+        private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
         private const string JoinFailedLogMessage = "The player could not join the chat of the room.";
 
         private readonly object _syncRoot = new object();
@@ -28,14 +30,19 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Initializes the gateway for the player in a room.
         /// </summary>
-        /// <param name="playerId">Identifier that the server gave to the player who writes in the chat.</param>
-        /// <param name="roomCode">Code of the room whose chat is used.</param>
-        public ChatGateway(string playerId, string roomCode)
+        /// <param name="membership">Player who writes in the chat and the room whose chat is used.</param>
+        /// <exception cref="ArgumentNullException">The membership is null.</exception>
+        public ChatGateway(RoomMembership membership)
         {
+            if (membership == null)
+            {
+                throw new ArgumentNullException(nameof(membership), NullMembershipMessage);
+            }
+
             _member = new RoomMember
             {
-                PlayerId = playerId,
-                RoomCode = roomCode
+                PlayerId = membership.PlayerId,
+                RoomCode = membership.RoomCode
             };
             _logger = new AppLogger(GetType());
         }
