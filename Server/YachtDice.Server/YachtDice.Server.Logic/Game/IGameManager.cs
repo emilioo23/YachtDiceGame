@@ -45,10 +45,10 @@ namespace YachtDice.Server.Logic.Game
         /// Plays the turn of the current player because the time is over. Nothing happens if the turn
         /// already changed, which means that the player played in time.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="turnNumber">Number of the turn that ran out of time.</param>
+        /// <param name="turn">Turn that ran out of time, with the code of its room and its number.</param>
         /// <returns>The state of the game after the move, or the reason why nothing was done.</returns>
-        GameActionResult AutoPlay(string roomCode, int turnNumber);
+        /// <exception cref="System.ArgumentNullException">The turn is null.</exception>
+        GameActionResult AutoPlay(GameTurn turn);
 
         /// <summary>
         /// Marks that a player is not connected to the game.

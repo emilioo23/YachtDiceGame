@@ -10,6 +10,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameManager : IGameManager
     {
+        private const string NullTurnMessage = "The turn cannot be null.";
+
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
             new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
@@ -59,9 +61,14 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <inheritdoc />
-        public GameActionResult AutoPlay(string roomCode, int turnNumber)
+        public GameActionResult AutoPlay(GameTurn turn)
         {
-            return Execute(roomCode, game => AutoPlayIfSameTurn(game, turnNumber));
+            if (turn == null)
+            {
+                throw new ArgumentNullException(nameof(turn), NullTurnMessage);
+            }
+
+            return Execute(turn.RoomCode, game => AutoPlayIfSameTurn(game, turn.TurnNumber));
         }
 
         /// <inheritdoc />

@@ -92,6 +92,7 @@
     <Compile Include="Game\GamePlayer.cs" />
     <Compile Include="Game\GameSnapshot.cs" />
     <Compile Include="Game\GameStatus.cs" />
+    <Compile Include="Game\GameTurn.cs" />
     <Compile Include="Game\IDieSource.cs" />
     <Compile Include="Game\IGameManager.cs" />
     <Compile Include="Game\IGameResultRecorder.cs" />
