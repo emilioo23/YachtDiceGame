@@ -92,19 +92,18 @@ namespace YachtDice.Views
         /// Connects the chat with the connection of the player. It shows the messages that arrived before and
         /// the new ones as they come. If the chat is not available, it tells the player and stops the writing.
         /// </summary>
-        /// <param name="gateway">Connection of the player to the chat of the room.</param>
+        /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
         /// <param name="playerId">Identifier of the player, to know which messages are their own.</param>
-        /// <param name="isAvailable">Whether the player could join the chat of the room.</param>
-        public void Attach(ChatGateway gateway, string playerId, bool isAvailable)
+        public void Attach(RoomChat chat, string playerId)
         {
-            _gateway = gateway;
+            _gateway = chat.Gateway;
             _playerId = playerId;
 
-            if (isAvailable)
+            if (chat.IsAvailable)
             {
                 _isSubscribed = true;
 
-                foreach (ChatMessage message in gateway.Subscribe(HandleMessageReceived))
+                foreach (ChatMessage message in _gateway.Subscribe(HandleMessageReceived))
                 {
                     ShowChatMessage(message);
                 }
