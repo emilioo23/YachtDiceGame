@@ -13,6 +13,8 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
+        private const string NullRequestMessage = "The request to resend the code cannot be null.";
+
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -69,11 +71,16 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Processes the code resend required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
-        /// <param name="cultureName">The culture name for email localization.</param>
+        /// <param name="request">The session challenge and the culture name for email localization.</param>
         /// <returns>Result status of the resend process.</returns>
-        public ResendCodeStatus ResendPlayerCode(string email, string challengeId, string cultureName)
+        /// <exception cref="ArgumentNullException">The request is null.</exception>
+        public ResendCodeStatus ResendPlayerCode(string email, ResendCodeRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request), NullRequestMessage);
+            }
+
             List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
             ResendCodeStatus status;
@@ -86,14 +93,14 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = ResendCodeStatus.VerificationLocked;
             }
-            else if (!_codeService.IsResendAllowed(player.Email, challengeId))
+            else if (!_codeService.IsResendAllowed(player.Email, request.ChallengeId))
             {
                 status = ResendCodeStatus.ResendTooSoon;
             }
             else
             {
-                var culture = new CultureInfo(cultureName);
-                bool isSent = _deliveryService.SendCode(player, challengeId, culture);
+                var culture = new CultureInfo(request.CultureName);
+                bool isSent = _deliveryService.SendCode(player, request.ChallengeId, culture);
                 status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

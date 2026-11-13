@@ -69,13 +69,12 @@ namespace YachtDice.Server.Services
         /// Sends a new code while the player is turning on the two-step verification.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="request">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture)
+        public Contracts.ResendResultCode ResendActivationCode(string displayName, Contracts.ResendCodeRequest request)
         {
             Contracts.ResendResultCode result =
-                Execute(displayName, () => ProcessActivationResend(displayName, challengeId, culture));
+                Execute(request, () => ProcessActivationResend(displayName, request));
 
             return result;
         }
@@ -130,11 +129,16 @@ namespace YachtDice.Server.Services
 
         private Contracts.ResendResultCode ProcessActivationResend(
             string displayName,
-            string challengeId,
-            string culture)
+            Contracts.ResendCodeRequest request)
         {
+            var logicRequest = new LogicTwoFactor.ResendCodeRequest
+            {
+                ChallengeId = request.ChallengeId,
+                CultureName = request.Culture
+            };
+
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _settingsService.ResendActivationCode(displayName, challengeId, culture);
+                _settingsService.ResendActivationCode(displayName, logicRequest);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }
