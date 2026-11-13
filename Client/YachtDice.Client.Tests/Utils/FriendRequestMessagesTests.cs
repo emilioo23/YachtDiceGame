@@ -37,5 +37,45 @@ namespace YachtDice.Client.Tests.Utils
 
             Assert.Equal(Strings.Dialogs_UnexpectedError, message);
         }
+
+        [Fact]
+        public void GetMessage_RequestSent_ReturnsTheMessageOfThatResult()
+        {
+            string message = FriendRequestMessages.GetMessage(FriendRequestResultCode.RequestSent);
+
+            Assert.Equal(Strings.Friends_Result_RequestSent, message);
+        }
+
+        [Fact]
+        public void GetMessage_RequestAlreadyReceived_ReturnsTheMessageOfThatResult()
+        {
+            string message = FriendRequestMessages.GetMessage(FriendRequestResultCode.RequestAlreadyReceived);
+
+            Assert.Equal(Strings.Friends_Result_RequestAlreadyReceived, message);
+        }
+
+        [Fact]
+        public void GetMessage_InvalidUsername_ReturnsTheMessageOfThatResult()
+        {
+            string message = FriendRequestMessages.GetMessage(FriendRequestResultCode.InvalidUsername);
+
+            Assert.Equal(Strings.Friends_Result_InvalidUsername, message);
+        }
+
+        [Fact]
+        public void GetMessage_UsernameNotFound_ReturnsTheMessageOfThatResult()
+        {
+            string message = FriendRequestMessages.GetMessage(FriendRequestResultCode.UsernameNotFound);
+
+            Assert.Equal(Strings.Friends_Result_UsernameNotFound, message);
+        }
+
+        [Fact]
+        public void GetMessage_AlreadyRequested_ReturnsTheMessageOfThatResult()
+        {
+            string message = FriendRequestMessages.GetMessage(FriendRequestResultCode.AlreadyRequested);
+
+            Assert.Equal(Strings.Friends_Result_AlreadyRequested, message);
+        }
     }
 }
