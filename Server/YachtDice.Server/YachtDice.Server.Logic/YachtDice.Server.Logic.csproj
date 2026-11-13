@@ -140,6 +140,7 @@
     <Compile Include="Security\PasswordResetCodeHasher.cs" />
     <Compile Include="Security\SecureRandom.cs" />
     <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
+    <Compile Include="TwoFactor\ResendCodeRequest.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorActivationResult.cs" />
     <Compile Include="TwoFactor\TwoFactorActivationStatus.cs" />
