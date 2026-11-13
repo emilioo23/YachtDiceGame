@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using Xunit;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Rooms;
@@ -27,6 +28,8 @@ namespace YachtDice.Server.Tests.Game
         private const int OneRollLeft = 1;
         private const int TwoRollsLeft = 2;
         private const int OnePlayerLeft = 1;
+        private const int NormalTurnSeconds = 60;
+        private const int FastTurnSeconds = 30;
 
         private static readonly int[] LittleStraightDice = { 1, 2, 3, 4, 5 };
         private static readonly int[] LittleStraightThenTwoSixes = { 1, 2, 3, 4, 5, 6, 6 };
@@ -54,8 +57,8 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Theory]
-        [InlineData(GameSpeed.Normal, 60)]
-        [InlineData(GameSpeed.Fast, 30)]
+        [InlineData(GameSpeed.Normal, NormalTurnSeconds)]
+        [InlineData(GameSpeed.Fast, FastTurnSeconds)]
         public void Start_Speed_SetsTheSecondsOfTheTurn(GameSpeed speed, int expectedSeconds)
         {
             GameManager manager = CreateManager(LittleStraightDice);
@@ -530,7 +533,13 @@ namespace YachtDice.Server.Tests.Game
 
         private static GameManager CreateManager(int[] dieValues)
         {
-            return new GameManager(new InMemoryDieSource(dieValues));
+            var secondsBySpeed = new Dictionary<GameSpeed, int>
+            {
+                { GameSpeed.Normal, NormalTurnSeconds },
+                { GameSpeed.Fast, FastTurnSeconds }
+            };
+
+            return new GameManager(new InMemoryDieSource(dieValues), new TurnDuration(secondsBySpeed));
         }
 
         private static GameParticipant[] CreateParticipants()

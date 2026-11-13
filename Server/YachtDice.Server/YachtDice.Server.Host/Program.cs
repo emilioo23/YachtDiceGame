@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.ServiceModel;
 using System.Threading;
 using YachtDice.Server.Data.Exceptions;
@@ -27,6 +29,8 @@ namespace YachtDice.Server.Host
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
+        private const string TurnSecondsKeyFormat = "TurnSeconds.{0}";
+        private const string InvalidTurnSecondsFormat = "The setting {0} is missing or is not a number of seconds.";
         private const string WarmUpEmail = "warm-up@yachtdice.local";
         private const string WarmUpFailedLogMessage =
             "The database could not be warmed up; the first request will be slower.";
@@ -64,6 +68,10 @@ namespace YachtDice.Server.Host
             {
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
+            }
             finally
             {
                 AbortServiceHosts(serviceHosts);
@@ -80,6 +88,33 @@ namespace YachtDice.Server.Host
             {
                 logger.Error(ex, WarmUpFailedLogMessage);
             }
+        }
+
+        /// <summary>
+        /// Reads from the configuration the seconds that a turn lasts for each speed of the game.
+        /// </summary>
+        /// <returns>The durations of the turns.</returns>
+        /// <exception cref="InvalidOperationException">A speed has no valid seconds in the configuration.</exception>
+        private static TurnDuration CreateTurnDuration()
+        {
+            var secondsBySpeed = new Dictionary<GameSpeed, int>();
+
+            foreach (GameSpeed speed in Enum.GetValues(typeof(GameSpeed)))
+            {
+                string key = string.Format(CultureInfo.InvariantCulture, TurnSecondsKeyFormat, speed);
+                string configuredSeconds = ConfigurationManager.AppSettings[key];
+
+                if (!int.TryParse(configuredSeconds, NumberStyles.None, CultureInfo.InvariantCulture, out int seconds))
+                {
+                    string message = string.Format(CultureInfo.InvariantCulture, InvalidTurnSecondsFormat, key);
+
+                    throw new InvalidOperationException(message);
+                }
+
+                secondsBySpeed[speed] = seconds;
+            }
+
+            return new TurnDuration(secondsBySpeed);
         }
 
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -99,7 +134,8 @@ namespace YachtDice.Server.Host
 
             var roomManager = new RoomManager(avatarService);
             var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
-            var gameCoordinator = new GameCoordinator(new GameManager(new RandomDieSource()), resultRecorder);
+            var gameManager = new GameManager(new RandomDieSource(), CreateTurnDuration());
+            var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));

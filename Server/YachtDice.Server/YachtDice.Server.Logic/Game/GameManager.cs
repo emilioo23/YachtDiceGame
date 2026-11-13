@@ -12,25 +12,30 @@ namespace YachtDice.Server.Logic.Game
     {
         private const string NullDieSourceMessage = "The source of the dice cannot be null.";
         private const string NullTurnMessage = "The turn cannot be null.";
+        private const string NullTurnDurationMessage = "The duration of the turns cannot be null.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
             new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
         private readonly IDieSource _dieSource;
+        private readonly TurnDuration _turnDuration;
 
         /// <summary>
         /// Initializes a manager without games.
         /// </summary>
         /// <param name="dieSource">Source of the values of the dice.</param>
-        public GameManager(IDieSource dieSource)
+        /// <param name="turnDuration">Seconds that a turn lasts for each speed of the game.</param>
+        public GameManager(IDieSource dieSource, TurnDuration turnDuration)
         {
             _dieSource = dieSource ?? throw new ArgumentNullException(nameof(dieSource), NullDieSourceMessage);
+            _turnDuration = turnDuration
+                ?? throw new ArgumentNullException(nameof(turnDuration), NullTurnDurationMessage);
         }
 
         /// <inheritdoc />
         public GameSnapshot Start(string roomCode, IEnumerable<GameParticipant> participants, GameSpeed speed)
         {
-            var game = new YachtGame(participants, _dieSource, TurnDuration.GetSeconds(speed));
+            var game = new YachtGame(participants, _dieSource, _turnDuration.GetSeconds(speed));
 
             GameSnapshot snapshot;
 
