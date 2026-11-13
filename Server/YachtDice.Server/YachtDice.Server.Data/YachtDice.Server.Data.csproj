@@ -104,6 +104,9 @@
     <Compile Include="Repositories\PasswordResetRepository.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />
     <Compile Include="Repositories\PlayerResultRecord.cs" />
+    <Compile Include="Repositories\PlayerResultStatus.cs" />
+    <Compile Include="Repositories\RoomRecordStatus.cs" />
+    <Compile Include="Repositories\RoomRecordType.cs" />
     <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>

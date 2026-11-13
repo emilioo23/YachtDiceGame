@@ -21,8 +21,8 @@
         public bool IsWinner { get; set; }
 
         /// <summary>
-        /// Gets or sets how the player ended the game, for example completed or abandoned.
+        /// Gets or sets how the player ended the game.
         /// </summary>
-        public string Status { get; set; }
+        public PlayerResultStatus Status { get; set; }
     }
 }

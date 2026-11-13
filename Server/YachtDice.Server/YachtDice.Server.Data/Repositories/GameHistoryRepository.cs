@@ -17,10 +17,8 @@ namespace YachtDice.Server.Data.Repositories
 
         private const string RankingFailedMessage = "Database error occurred while calculating player rankings.";
         private const string SaveFailedMessage = "Database error occurred while saving the result of a game.";
+        private const string NullResultMessage = "The result of the game cannot be null.";
         private const string ArchivedRoomName = "Partida";
-        private const string PublicRoomType = "Public";
-        private const string PrivateRoomType = "Private";
-        private const string FinishedRoomStatus = "Finished";
         private const string RoomCodeFormat = "N";
         private const int RoomCodeLength = 6;
 
@@ -59,9 +57,15 @@ namespace YachtDice.Server.Data.Repositories
         /// not stored while the game runs, so a row of the room is created only to link the result to it.
         /// </summary>
         /// <param name="result">Result of the game.</param>
+        /// <exception cref="ArgumentNullException">The result is null.</exception>
         /// <exception cref="DataAccessException">The database could not be updated.</exception>
         public void Save(GameResultRecord result)
         {
+            if (result == null)
+            {
+                throw new ArgumentNullException(nameof(result), NullResultMessage);
+            }
+
             DatabaseOperation.Save(context => AddResult(context, result), SaveFailedMessage);
         }
 
@@ -78,14 +82,15 @@ namespace YachtDice.Server.Data.Repositories
         private static void AddResult(YachtDiceContext context, GameResultRecord result)
         {
             DateTime now = DateTime.UtcNow;
+            RoomRecordType roomType = result.IsPrivate ? RoomRecordType.Private : RoomRecordType.Public;
             var room = new Room
             {
                 HostPlayerId = result.HostPlayerId,
                 Code = CreateUnusedRoomCode(context),
                 RoomName = ArchivedRoomName,
                 MaxPlayers = result.MaxPlayers,
-                RoomType = result.IsPrivate ? PrivateRoomType : PublicRoomType,
-                Status = FinishedRoomStatus,
+                RoomType = roomType.ToString(),
+                Status = RoomRecordStatus.Finished.ToString(),
                 CreateDate = now
             };
             var game = new GameHistory { Room = room, EndDate = now };
@@ -97,7 +102,7 @@ namespace YachtDice.Server.Data.Repositories
                     PlayerId = player.PlayerId,
                     FinalScore = player.FinalScore,
                     IsWinner = player.IsWinner,
-                    Status = player.Status
+                    Status = player.Status.ToString()
                 });
             }
 
@@ -111,10 +116,9 @@ namespace YachtDice.Server.Data.Repositories
 
             do
             {
-                code = Guid.NewGuid()
-                    .ToString(RoomCodeFormat, CultureInfo.InvariantCulture)
-                    .Substring(0, RoomCodeLength)
-                    .ToUpperInvariant();
+                string uniqueText = Guid.NewGuid().ToString(RoomCodeFormat, CultureInfo.InvariantCulture);
+
+                code = string.Concat(uniqueText.Take(RoomCodeLength)).ToUpperInvariant();
 
                 Expression<Func<Room, bool>> hasCode = candidate => candidate.Code == code;
                 isUsed = context.Room.Any(hasCode);
