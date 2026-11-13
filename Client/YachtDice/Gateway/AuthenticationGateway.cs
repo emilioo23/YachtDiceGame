@@ -68,8 +68,8 @@ namespace YachtDice.Gateway
                 throw new ArgumentNullException(nameof(input), NullResendInputMessage);
             }
 
-            var request = new ResendCodeRequest { ChallengeId = input.ChallengeId, Culture = input.Culture };
-            ResendResultCode result = await ExecuteAsync(client => client.ResendPlayerCode(email, request));
+            var delivery = new CodeDelivery { ChallengeId = input.ChallengeId, Culture = input.Culture };
+            ResendResultCode result = await ExecuteAsync(client => client.ResendPlayerCode(email, delivery));
 
             return result;
         }

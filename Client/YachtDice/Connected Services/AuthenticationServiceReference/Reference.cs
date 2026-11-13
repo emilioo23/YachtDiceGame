@@ -443,9 +443,9 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeRequest", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CodeDelivery", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class ResendCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CodeDelivery : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -577,7 +577,7 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.ResendCodeRequest request);
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.CodeDelivery delivery);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFa" +
@@ -625,8 +625,8 @@ namespace YachtDice.AuthenticationServiceReference {
             return base.Channel.VerifyPlayerCode(email, verificationCode);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.ResendCodeRequest request) {
-            return base.Channel.ResendPlayerCode(email, request);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.CodeDelivery delivery) {
+            return base.Channel.ResendPlayerCode(email, delivery);
         }
         
         public YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode RequestPasswordReset(string email, string culture) {

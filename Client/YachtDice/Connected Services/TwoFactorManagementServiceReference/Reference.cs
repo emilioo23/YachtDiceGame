@@ -238,9 +238,9 @@ namespace YachtDice.TwoFactorManagementServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeRequest", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CodeDelivery", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class ResendCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CodeDelivery : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -382,7 +382,7 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCode", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ResendActivationCodeServiceFa" +
             "ultFault", Name="ServiceFault")]
-        YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.ResendCodeRequest request);
+        YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.CodeDelivery delivery);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactor", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorServiceFaultF" +
@@ -429,8 +429,8 @@ namespace YachtDice.TwoFactorManagementServiceReference {
             return base.Channel.ConfirmTwoFactorActivation(displayName, verificationCode);
         }
         
-        public YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.ResendCodeRequest request) {
-            return base.Channel.ResendActivationCode(displayName, request);
+        public YachtDice.TwoFactorManagementServiceReference.ResendResultCode ResendActivationCode(string displayName, YachtDice.TwoFactorManagementServiceReference.CodeDelivery delivery) {
+            return base.Channel.ResendActivationCode(displayName, delivery);
         }
         
         public YachtDice.TwoFactorManagementServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password) {
