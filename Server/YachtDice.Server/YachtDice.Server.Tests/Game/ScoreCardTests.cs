@@ -110,8 +110,7 @@ namespace YachtDice.Server.Tests.Game
 
             ScoreThreeOfEachUpperValue(card);
 
-            var actual = new { card.UpperSubtotal, card.UpperBonus, card.Total };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, card);
         }
 
         [Fact]
@@ -122,8 +121,7 @@ namespace YachtDice.Server.Tests.Game
 
             ScoreUpperWithTwoSixes(fewerSixes);
 
-            var actual = new { fewerSixes.UpperSubtotal, fewerSixes.UpperBonus };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, fewerSixes);
         }
 
         [Fact]
