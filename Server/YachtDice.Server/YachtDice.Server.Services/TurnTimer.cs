@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace YachtDice.Server.Services
 {
+    using LogicGame = YachtDice.Server.Logic.Game;
+
     /// <summary>
     /// Counts the time of the turn of every game in progress. When the time of a turn is over it tells it to
     /// the owner, which plays the turn for the player. The private steps only run while the lock is held.
@@ -14,13 +16,13 @@ namespace YachtDice.Server.Services
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, TurnClock> _clocks =
             new Dictionary<string, TurnClock>(StringComparer.OrdinalIgnoreCase);
-        private readonly Action<string, int> _onExpired;
+        private readonly Action<LogicGame.GameTurn> _onExpired;
 
         /// <summary>
         /// Initializes a timer without clocks.
         /// </summary>
         /// <param name="onExpired">Action to run with the room code and the turn number when a turn ends.</param>
-        public TurnTimer(Action<string, int> onExpired)
+        public TurnTimer(Action<LogicGame.GameTurn> onExpired)
         {
             _onExpired = onExpired;
         }
@@ -28,17 +30,16 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Starts counting a turn. The countdown of the previous turn of the same room is cancelled.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="turnNumber">Number of the turn.</param>
+        /// <param name="turn">Turn to count, with the code of its room and its number.</param>
         /// <param name="seconds">Seconds that the player has.</param>
-        public void Start(string roomCode, int turnNumber, int seconds)
+        public void Start(LogicGame.GameTurn turn, int seconds)
         {
-            var clock = new TurnClock(turnNumber, seconds, () => _onExpired(roomCode, turnNumber));
+            var clock = new TurnClock(turn.TurnNumber, seconds, () => _onExpired(turn));
 
             lock (_syncRoot)
             {
-                DisposeClock(roomCode);
-                _clocks[roomCode] = clock;
+                DisposeClock(turn.RoomCode);
+                _clocks[turn.RoomCode] = clock;
             }
         }
 
@@ -57,16 +58,16 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Tells whether a turn is already being counted.
         /// </summary>
-        /// <param name="roomCode">Code of the room.</param>
-        /// <param name="turnNumber">Number of the turn.</param>
+        /// <param name="turn">Turn to look for, with the code of its room and its number.</param>
         /// <returns>True if the clock of the room counts that turn.</returns>
-        public bool IsCounting(string roomCode, int turnNumber)
+        public bool IsCounting(LogicGame.GameTurn turn)
         {
             bool isCounting;
 
             lock (_syncRoot)
             {
-                isCounting = _clocks.ContainsKey(roomCode) && _clocks[roomCode].TurnNumber == turnNumber;
+                isCounting = _clocks.ContainsKey(turn.RoomCode)
+                    && _clocks[turn.RoomCode].TurnNumber == turn.TurnNumber;
             }
 
             return isCounting;

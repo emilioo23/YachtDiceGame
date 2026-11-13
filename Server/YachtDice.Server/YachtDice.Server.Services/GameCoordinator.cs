@@ -249,24 +249,25 @@ namespace YachtDice.Server.Services
         {
             var hasTurn = snapshot.Status == LogicGame.GameStatus.InProgress
                 && !string.IsNullOrEmpty(snapshot.CurrentPlayerId);
+            var turn = new LogicGame.GameTurn(roomCode, snapshot.TurnNumber);
 
             if (!hasTurn)
             {
                 _timer.Stop(roomCode);
             }
-            else if (!_timer.IsCounting(roomCode, snapshot.TurnNumber))
+            else if (!_timer.IsCounting(turn))
             {
-                _timer.Start(roomCode, snapshot.TurnNumber, snapshot.TurnSeconds);
+                _timer.Start(turn, snapshot.TurnSeconds);
             }
         }
 
-        private void HandleTurnExpired(string roomCode, int turnNumber)
+        private void HandleTurnExpired(LogicGame.GameTurn turn)
         {
             try
             {
-                LogicGame.GameActionResult result = _gameManager.AutoPlay(roomCode, turnNumber);
+                LogicGame.GameActionResult result = _gameManager.AutoPlay(turn);
 
-                CompleteTurn(roomCode, result, Contracts.GameEventType.TurnTimedOut);
+                CompleteTurn(turn.RoomCode, result, Contracts.GameEventType.TurnTimedOut);
             }
             catch (Exception ex)
             {
