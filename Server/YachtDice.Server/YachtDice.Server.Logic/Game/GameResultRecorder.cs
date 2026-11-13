@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Rooms;
@@ -14,8 +15,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameResultRecorder : IGameResultRecorder
     {
-        private const string CompletedStatus = "Completed";
-        private const string AbandonedStatus = "Abandoned";
+        private const string NullSettingsMessage = "The settings of the room cannot be null.";
+        private const string NullSnapshotMessage = "The state of the game cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -35,6 +36,8 @@ namespace YachtDice.Server.Logic.Game
         /// <inheritdoc />
         public void Record(RoomSettings settings, GameSnapshot snapshot)
         {
+            ValidateArguments(settings, snapshot);
+
             var result = new GameResultRecord
             {
                 MaxPlayers = settings.MaxPlayers,
@@ -49,29 +52,44 @@ namespace YachtDice.Server.Logic.Game
 
             if (result.Players.Count > 0)
             {
-                result.HostPlayerId = result.Players[0].PlayerId;
+                result.HostPlayerId = result.Players.First().PlayerId;
                 _gameHistoryRepository.Save(result);
+            }
+        }
+
+        private static void ValidateArguments(RoomSettings settings, GameSnapshot snapshot)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
+            }
+
+            if (snapshot == null)
+            {
+                throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
             }
         }
 
         private static PlayerResultRecord CreatePlayerResult(int playerId, PlayerSnapshot player)
         {
+            PlayerResultStatus status = player.IsPresent ? PlayerResultStatus.Completed : PlayerResultStatus.Abandoned;
+
             return new PlayerResultRecord
             {
                 PlayerId = playerId,
                 FinalScore = player.Total,
                 IsWinner = player.IsWinner && player.IsPresent,
-                Status = player.IsPresent ? CompletedStatus : AbandonedStatus
+                Status = status
             };
         }
 
         private void AddIfRegistered(GameResultRecord result, ISet<int> savedPlayerIds, PlayerSnapshot player)
         {
-            List<Player> accounts = _playerRepository.FindByName(player.Name);
+            Player account = _playerRepository.FindByName(player.Name).FirstOrDefault();
 
-            if (accounts.Count > 0 && savedPlayerIds.Add(accounts[0].Id))
+            if (account != null && savedPlayerIds.Add(account.Id))
             {
-                result.Players.Add(CreatePlayerResult(accounts[0].Id, player));
+                result.Players.Add(CreatePlayerResult(account.Id, player));
             }
         }
     }
