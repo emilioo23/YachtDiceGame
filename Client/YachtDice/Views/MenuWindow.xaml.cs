@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -40,7 +41,7 @@ namespace YachtDice.Views
             _session = session;
             PlayerNameTextBlock.Text = session.DisplayName;
             PlayerNameHeadingTextBlock.Text = GetGreetingName(session);
-            PlayerInitialTextBlock.Text = PlayerInitials.GetInitial(session.DisplayName);
+            PlayerInitialTextBlock.Text = InitialLetter.From(session.DisplayName, Strings.Global_UnknownInitial);
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(session);
 

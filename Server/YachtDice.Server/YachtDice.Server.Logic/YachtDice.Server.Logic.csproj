@@ -125,7 +125,6 @@
     <Compile Include="Rooms\GameSpeed.cs" />
     <Compile Include="Rooms\IRoomManager.cs" />
     <Compile Include="Rooms\Room.cs" />
-    <Compile Include="Rooms\RoomActor.cs" />
     <Compile Include="Rooms\RoomApplicant.cs" />
     <Compile Include="Rooms\RoomDetails.cs" />
     <Compile Include="Rooms\RoomManager.cs" />

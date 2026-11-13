@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Resources;
 using YachtDice.RoomServiceReference;
@@ -27,7 +28,7 @@ namespace YachtDice.Utils
             {
                 RoomId = room.RoomId,
                 HostName = room.HostName,
-                Initial = PlayerInitials.GetInitial(room.HostName),
+                Initial = InitialLetter.From(room.HostName, Strings.Global_UnknownInitial),
                 Title = string.Format(Strings.Rooms_TitleFormat, room.HostName),
                 Details = string.Format(
                     Strings.Rooms_DetailsFormat,

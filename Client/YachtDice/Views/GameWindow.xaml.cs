@@ -76,7 +76,8 @@ namespace YachtDice.Views
 
         private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
             _state.Status == GameStatus.Finished,
-            new TurnPlayers(_state.CurrentPlayerId, _playerId));
+            _state.CurrentPlayerId,
+            _playerId);
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
@@ -257,7 +258,8 @@ namespace YachtDice.Views
             string name = FindPlayerName(_state.CurrentPlayerId);
             TurnHint hint = TurnPhaseResolver.ResolveHint(
                 CurrentPhase,
-                new TurnRolls(_state.RollsLeft, MaxRolls));
+                _state.RollsLeft,
+                MaxRolls);
             var texts = new Dictionary<TurnHint, string>
             {
                 { TurnHint.None, string.Empty },

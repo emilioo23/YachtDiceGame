@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 using YachtDice.Client.Logic.Game;
 
 namespace YachtDice.Client.Tests.Game
@@ -16,7 +15,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolvePhase_FinishedGame_ReturnsFinished()
         {
-            TurnPhase phase = TurnPhaseResolver.ResolvePhase(true, CreatePlayers(LocalPlayerId));
+            TurnPhase phase = TurnPhaseResolver.ResolvePhase(true, LocalPlayerId, LocalPlayerId);
 
             Assert.Equal(TurnPhase.Finished, phase);
         }
@@ -24,7 +23,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolvePhase_NobodyInTurn_ReturnsPaused()
         {
-            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, CreatePlayers(string.Empty));
+            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, string.Empty, LocalPlayerId);
 
             Assert.Equal(TurnPhase.Paused, phase);
         }
@@ -32,7 +31,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolvePhase_LocalPlayerInTurn_ReturnsLocalTurn()
         {
-            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, CreatePlayers(LocalPlayerId));
+            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, LocalPlayerId, LocalPlayerId);
 
             Assert.Equal(TurnPhase.LocalTurn, phase);
         }
@@ -40,7 +39,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolvePhase_OtherPlayerInTurn_ReturnsOpponentTurn()
         {
-            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, CreatePlayers(OtherPlayerId));
+            TurnPhase phase = TurnPhaseResolver.ResolvePhase(false, OtherPlayerId, LocalPlayerId);
 
             Assert.Equal(TurnPhase.OpponentTurn, phase);
         }
@@ -52,7 +51,7 @@ namespace YachtDice.Client.Tests.Game
         [InlineData(0, TurnHint.PickBox)]
         public void ResolveHint_LocalTurn_ReturnsHintOfTheMoment(int rollsLeft, TurnHint expectedHint)
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, new TurnRolls(rollsLeft, MaxRolls));
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, rollsLeft, MaxRolls);
 
             Assert.Equal(expectedHint, hint);
         }
@@ -60,7 +59,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolveHint_OpponentTurn_ReturnsWaitOpponent()
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.OpponentTurn, new TurnRolls(MaxRolls, MaxRolls));
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.OpponentTurn, MaxRolls, MaxRolls);
 
             Assert.Equal(TurnHint.WaitOpponent, hint);
         }
@@ -68,26 +67,9 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolveHint_PausedGame_ReturnsNone()
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.Paused, new TurnRolls(MaxRolls, MaxRolls));
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.Paused, MaxRolls, MaxRolls);
 
             Assert.Equal(TurnHint.None, hint);
-        }
-
-        [Fact]
-        public void ResolveHint_NullRolls_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, null));
-        }
-
-        [Fact]
-        public void ResolvePhase_NullPlayers_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => TurnPhaseResolver.ResolvePhase(false, null));
-        }
-
-        private static TurnPlayers CreatePlayers(string currentPlayerId)
-        {
-            return new TurnPlayers(currentPlayerId, LocalPlayerId);
         }
     }
 }

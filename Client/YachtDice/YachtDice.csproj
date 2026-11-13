@@ -288,7 +288,6 @@
     <Compile Include="Utils\InvitationResultMessages.cs" />
     <Compile Include="Utils\LoginResultMessages.cs" />
     <Compile Include="Utils\MatchPlayerFactory.cs" />
-    <Compile Include="Utils\PlayerInitials.cs" />
     <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
