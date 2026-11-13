@@ -191,7 +191,14 @@ namespace YachtDice.Server.Logic.Friends
 
             if (existing == null)
             {
-                _friendRepository.Add(requester.Id, target.Id, FriendshipStatus.Pending);
+                var request = new Friendship
+                {
+                    RequesterId = requester.Id,
+                    AddresseeId = target.Id,
+                    Status = FriendshipStatus.Pending
+                };
+
+                _friendRepository.Add(request);
                 status = FriendRequestStatus.RequestSent;
             }
             else if (existing.Status == FriendshipStatus.Accepted)
@@ -216,15 +223,13 @@ namespace YachtDice.Server.Logic.Friends
 
             if (friendRequest != null && isAccepted)
             {
-                _friendRepository.UpdateStatus(
-                    friendRequest.RequesterId,
-                    friendRequest.AddresseeId,
-                    FriendshipStatus.Accepted);
+                friendRequest.Status = FriendshipStatus.Accepted;
+                _friendRepository.UpdateStatus(friendRequest);
                 status = FriendActionStatus.Success;
             }
             else if (friendRequest != null)
             {
-                _friendRepository.Remove(friendRequest.RequesterId, friendRequest.AddresseeId);
+                _friendRepository.Remove(friendRequest);
                 status = FriendActionStatus.Success;
             }
 
@@ -237,7 +242,7 @@ namespace YachtDice.Server.Logic.Friends
 
             if (friendship != null)
             {
-                _friendRepository.Remove(friendship.RequesterId, friendship.AddresseeId);
+                _friendRepository.Remove(friendship);
                 status = FriendActionStatus.Success;
             }
 

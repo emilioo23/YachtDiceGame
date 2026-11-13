@@ -32,24 +32,19 @@ namespace YachtDice.Server.Data.Repositories
         /// <summary>
         /// Saves a new friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sends the request.</param>
-        /// <param name="addresseeId">Identifier of the player who receives the request.</param>
-        /// <param name="status">Status of the friendship.</param>
-        void Add(int requesterId, int addresseeId, string status);
+        /// <param name="friendship">Friendship to save, with the two players and its status.</param>
+        void Add(Friendship friendship);
 
         /// <summary>
         /// Changes the status of a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
-        /// <param name="status">New status of the friendship.</param>
-        void UpdateStatus(int requesterId, int addresseeId, string status);
+        /// <param name="friendship">Friendship that already exists, with its new status.</param>
+        void UpdateStatus(Friendship friendship);
 
         /// <summary>
         /// Deletes a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
-        void Remove(int requesterId, int addresseeId);
+        /// <param name="friendship">Friendship to delete, identified by its two players.</param>
+        void Remove(Friendship friendship);
     }
 }
