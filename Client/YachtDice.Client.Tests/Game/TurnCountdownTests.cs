@@ -57,5 +57,60 @@ namespace YachtDice.Client.Tests.Game
 
             Assert.Equal(NoSeconds, countdown.SecondsLeft);
         }
+
+        [Fact]
+        public void Reset_Zero_LeavesZero()
+        {
+            var countdown = new TurnCountdown();
+
+            countdown.Reset(NoSeconds);
+
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
+        }
+
+        [Fact]
+        public void Reset_MinimumInteger_LeavesZero()
+        {
+            var countdown = new TurnCountdown();
+
+            countdown.Reset(int.MinValue);
+
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
+        }
+
+        [Fact]
+        public void Tick_LastSecond_LeavesZero()
+        {
+            var countdown = new TurnCountdown();
+            countdown.Reset(LastSecond);
+
+            countdown.Tick();
+
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
+        }
+
+        [Fact]
+        public void Tick_TwiceAfterTheLastSecond_StaysAtZero()
+        {
+            var countdown = new TurnCountdown();
+            countdown.Reset(LastSecond);
+            countdown.Tick();
+
+            countdown.Tick();
+
+            Assert.Equal(NoSeconds, countdown.SecondsLeft);
+        }
+
+        [Fact]
+        public void Reset_AfterSomeTicks_StartsAgainFromTheNewSeconds()
+        {
+            var countdown = new TurnCountdown();
+            countdown.Reset(TenSeconds);
+            countdown.Tick();
+
+            countdown.Reset(TurnSeconds);
+
+            Assert.Equal(TurnSeconds, countdown.SecondsLeft);
+        }
     }
 }
