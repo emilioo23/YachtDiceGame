@@ -52,7 +52,7 @@ namespace YachtDice.Client.Tests.Game
         [InlineData(0, TurnHint.PickBox)]
         public void ResolveHint_LocalTurn_ReturnsHintOfTheMoment(int rollsLeft, TurnHint expected)
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, rollsLeft, MaxRolls);
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, new TurnRolls(rollsLeft, MaxRolls));
 
             Assert.Equal(expected, hint);
         }
@@ -60,7 +60,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolveHint_OpponentTurn_ReturnsWaitOpponent()
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.OpponentTurn, MaxRolls, MaxRolls);
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.OpponentTurn, new TurnRolls(MaxRolls, MaxRolls));
 
             Assert.Equal(TurnHint.WaitOpponent, hint);
         }
@@ -68,9 +68,15 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void ResolveHint_PausedGame_ReturnsNone()
         {
-            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.Paused, MaxRolls, MaxRolls);
+            TurnHint hint = TurnPhaseResolver.ResolveHint(TurnPhase.Paused, new TurnRolls(MaxRolls, MaxRolls));
 
             Assert.Equal(TurnHint.None, hint);
+        }
+
+        [Fact]
+        public void ResolveHint_NullRolls_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => TurnPhaseResolver.ResolveHint(TurnPhase.LocalTurn, null));
         }
 
         [Fact]

@@ -9,6 +9,7 @@ namespace YachtDice.Client.Logic.Game
     {
         private const int NoRolls = 0;
         private const string NullPlayersMessage = "The players of the turn cannot be null.";
+        private const string NullRollsMessage = "The rolls of the turn cannot be null.";
 
         /// <summary>
         /// Decides the phase of the turn.
@@ -46,11 +47,16 @@ namespace YachtDice.Client.Logic.Game
         /// Decides the hint to show below the dice.
         /// </summary>
         /// <param name="phase">Phase of the turn.</param>
-        /// <param name="rollsLeft">Rolls that the current player has left.</param>
-        /// <param name="maxRolls">Rolls that a turn gives.</param>
+        /// <param name="rolls">Rolls that the current player has left and rolls that a turn gives.</param>
         /// <returns>The hint that matches the moment of the turn.</returns>
-        public static TurnHint ResolveHint(TurnPhase phase, int rollsLeft, int maxRolls)
+        /// <exception cref="ArgumentNullException">The rolls are null.</exception>
+        public static TurnHint ResolveHint(TurnPhase phase, TurnRolls rolls)
         {
+            if (rolls == null)
+            {
+                throw new ArgumentNullException(nameof(rolls), NullRollsMessage);
+            }
+
             var hint = TurnHint.None;
 
             if (phase == TurnPhase.OpponentTurn)
@@ -59,21 +65,21 @@ namespace YachtDice.Client.Logic.Game
             }
             else if (phase == TurnPhase.LocalTurn)
             {
-                hint = ResolveLocalHint(rollsLeft, maxRolls);
+                hint = ResolveLocalHint(rolls);
             }
 
             return hint;
         }
 
-        private static TurnHint ResolveLocalHint(int rollsLeft, int maxRolls)
+        private static TurnHint ResolveLocalHint(TurnRolls rolls)
         {
             var hint = TurnHint.ChooseOrRoll;
 
-            if (rollsLeft >= maxRolls)
+            if (rolls.RollsLeft >= rolls.MaxRolls)
             {
                 hint = TurnHint.PressRoll;
             }
-            else if (rollsLeft <= NoRolls)
+            else if (rolls.RollsLeft <= NoRolls)
             {
                 hint = TurnHint.PickBox;
             }

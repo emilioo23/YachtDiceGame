@@ -258,7 +258,9 @@ namespace YachtDice.Views
         private string GetHintText()
         {
             string name = FindPlayerName(_state.CurrentPlayerId);
-            TurnHint hint = TurnPhaseResolver.ResolveHint(CurrentPhase, _state.RollsLeft, MaxRolls);
+            TurnHint hint = TurnPhaseResolver.ResolveHint(
+                CurrentPhase,
+                new TurnRolls(_state.RollsLeft, MaxRolls));
             var texts = new Dictionary<TurnHint, string>
             {
                 { TurnHint.None, string.Empty },
