@@ -48,63 +48,25 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_ValidCredentials_ReturnsLoggedIn()
+        public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, Password);
+            LoginResult expected = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.LoggedIn, result.Status);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
-        public void LoginPlayer_ValidCredentials_ReturnsTheDisplayNameOfThePlayer()
-        {
-            LoginCredentials credentials = CreateCredentials(Email, Password);
-
-            LoginResult result = _service.LoginPlayer(credentials);
-
-            Assert.Equal(DisplayName, result.DisplayName);
-        }
-
-        [Fact]
-        public void LoginPlayer_ValidCredentials_ReturnsTheFirstNameOfThePlayer()
-        {
-            LoginCredentials credentials = CreateCredentials(Email, Password);
-
-            LoginResult result = _service.LoginPlayer(credentials);
-
-            Assert.Equal(FirstName, result.FirstName);
-        }
-
-        [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsInvalidPassword()
+        public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
+            LoginResult expected = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
 
             LoginResult result = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidPassword, result.Status);
-        }
-
-        [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsNoDisplayName()
-        {
-            LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
-
-            LoginResult result = _service.LoginPlayer(credentials);
-
-            Assert.Equal(string.Empty, result.DisplayName);
-        }
-
-        [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsNoFirstName()
-        {
-            LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
-
-            LoginResult result = _service.LoginPlayer(credentials);
-
-            Assert.Equal(string.Empty, result.FirstName);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
@@ -180,6 +142,17 @@ namespace YachtDice.Server.Tests.Authentication
             _service.LoginPlayer(credentials);
 
             Assert.Equal(Email, _emailService.Recipients.Single());
+        }
+
+        private static Player CreateKnownPlayer()
+        {
+            var player = new Player
+            {
+                DisplayName = DisplayName,
+                FirstName = FirstName
+            };
+
+            return player;
         }
 
         private static LoginCredentials CreateCredentials(string email, string password)
