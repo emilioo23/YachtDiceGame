@@ -178,19 +178,16 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
             _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
 
-            var expected = new { IsStarted = true, IsPlaying = false, IsAbsent = true };
+            var expected = new
+            {
+                IsStarted = true,
+                Players = new[] { new { Id = host.PlayerId } },
+                AbsentPlayers = new[] { new { Id = player.PlayerId } }
+            };
 
             RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
-            Func<RoomPlayer, bool> isSamePlayer = remaining => remaining.Id == player.PlayerId;
-            Func<RoomPlayer, bool> isSameAbsentPlayer = absent => absent.Id == player.PlayerId;
 
-            var actual = new
-            {
-                afterLeaving.Room.IsStarted,
-                IsPlaying = afterLeaving.Room.Players.Any(isSamePlayer),
-                IsAbsent = afterLeaving.Room.AbsentPlayers.Any(isSameAbsentPlayer)
-            };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, afterLeaving.Room);
         }
 
         [Fact]
@@ -231,8 +228,7 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult returned = _manager.Join(host.Room.Code, PlayerName);
 
-            var actual = new { returned.Status, returned.HasReturned, returned.PlayerId };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, returned);
         }
 
         [Fact]
@@ -243,18 +239,15 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
 
-            var expected = new { IsPlaying = true, IsAbsent = false };
+            var expected = new
+            {
+                Players = new[] { new { Id = host.PlayerId }, new { Id = player.PlayerId } },
+                AbsentPlayers = Array.Empty<RoomPlayer>()
+            };
 
             RoomResult returned = _manager.Join(host.Room.Code, PlayerName.ToUpperInvariant());
-            Func<RoomPlayer, bool> isSamePlayer = back => back.Id == player.PlayerId;
-            Func<RoomPlayer, bool> isSameAbsentPlayer = absent => absent.Id == player.PlayerId;
 
-            var actual = new
-            {
-                IsPlaying = returned.Room.Players.Any(isSamePlayer),
-                IsAbsent = returned.Room.AbsentPlayers.Any(isSameAbsentPlayer)
-            };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, returned.Room);
         }
 
         [Fact]
@@ -430,13 +423,16 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
 
-            var expected = new { Status = RoomStatus.Success, MaxPlayers = ThreePlayers };
+            var expected = new
+            {
+                Status = RoomStatus.Success,
+                Room = new { Settings = new { MaxPlayers = ThreePlayers } }
+            };
 
             RoomResult result =
                 _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(ThreePlayers));
 
-            var actual = new { result.Status, result.Room.Settings.MaxPlayers };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, result);
         }
 
         [Fact]
