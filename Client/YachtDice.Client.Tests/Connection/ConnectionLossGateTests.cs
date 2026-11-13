@@ -56,5 +56,53 @@ namespace YachtDice.Client.Tests.Connection
                 .ToArray();
             Assert.Equal(1, results.Count(isFirst => isFirst));
         }
+
+        [Fact]
+        public void TryEnter_ReleaseWithoutHavingEntered_StillLetsOneIn()
+        {
+            var gate = new ConnectionLossGate();
+            gate.Release();
+
+            bool entered = gate.TryEnter();
+
+            Assert.True(entered);
+        }
+
+        [Fact]
+        public void TryEnter_ReleaseCalledTwice_LetsInOnlyOneAfterwards()
+        {
+            var gate = new ConnectionLossGate();
+            gate.Release();
+            gate.Release();
+            gate.TryEnter();
+
+            bool entered = gate.TryEnter();
+
+            Assert.False(entered);
+        }
+
+        [Fact]
+        public void TryEnter_TwoDifferentGates_DoNotAffectEachOther()
+        {
+            var firstGate = new ConnectionLossGate();
+            var secondGate = new ConnectionLossGate();
+            firstGate.TryEnter();
+
+            bool entered = secondGate.TryEnter();
+
+            Assert.True(entered);
+        }
+
+        [Fact]
+        public void TryEnter_ThreeCallsInARow_ReturnsFalseTheLastOne()
+        {
+            var gate = new ConnectionLossGate();
+            gate.TryEnter();
+            gate.TryEnter();
+
+            bool entered = gate.TryEnter();
+
+            Assert.False(entered);
+        }
     }
 }
