@@ -54,7 +54,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendPlayerCode_UnknownEmail_ReturnsPlayerNotFound()
         {
-            ResendCodeStatus status = _verificationService.ResendPlayerCode(UnknownEmail, CreateRequest());
+            ResendCodeStatus status = _verificationService.ResendPlayerCode(UnknownEmail, CreateDelivery());
 
             Assert.Equal(ResendCodeStatus.PlayerNotFound, status);
         }
@@ -62,7 +62,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendPlayerCode_KnownEmail_SendsTheCodeToThatEmail()
         {
-            ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, CreateRequest());
+            ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, CreateDelivery());
 
             Assert.Equal(ResendCodeStatus.CodeSent, status);
             Assert.Equal(Email, _emailService.Recipients[0]);
@@ -77,7 +77,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendActivationCode_UnknownPlayer_ReturnsPlayerNotFound()
         {
-            ResendCodeStatus status = _settingsService.ResendActivationCode(UnknownDisplayName, CreateRequest());
+            ResendCodeStatus status = _settingsService.ResendActivationCode(UnknownDisplayName, CreateDelivery());
 
             Assert.Equal(ResendCodeStatus.PlayerNotFound, status);
         }
@@ -85,15 +85,15 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendActivationCode_KnownPlayer_SendsTheCodeToTheEmailOfThePlayer()
         {
-            ResendCodeStatus status = _settingsService.ResendActivationCode(DisplayName, CreateRequest());
+            ResendCodeStatus status = _settingsService.ResendActivationCode(DisplayName, CreateDelivery());
 
             Assert.Equal(ResendCodeStatus.CodeSent, status);
             Assert.Equal(Email, _emailService.Recipients[0]);
         }
 
-        private static ResendCodeRequest CreateRequest()
+        private static CodeDelivery CreateDelivery()
         {
-            return new ResendCodeRequest { ChallengeId = ChallengeId, CultureName = CultureName };
+            return new CodeDelivery { ChallengeId = ChallengeId, CultureName = CultureName };
         }
     }
 }

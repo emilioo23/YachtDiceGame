@@ -67,14 +67,14 @@ namespace YachtDice.Server.Services
         /// Resends a verification code to the player's email address.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="request">Challenge of the login session and culture preferred by the player.</param>
+        /// <param name="delivery">Challenge of the login session and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         public TwoFactorContracts.ResendResultCode ResendPlayerCode(
             string email,
-            TwoFactorContracts.ResendCodeRequest request)
+            TwoFactorContracts.CodeDelivery delivery)
         {
             TwoFactorContracts.ResendResultCode result =
-                Execute(request, () => ProcessCodeResend(email, request));
+                Execute(delivery, () => ProcessCodeResend(email, delivery));
 
             return result;
         }
@@ -148,16 +148,16 @@ namespace YachtDice.Server.Services
 
         private TwoFactorContracts.ResendResultCode ProcessCodeResend(
             string email,
-            TwoFactorContracts.ResendCodeRequest request)
+            TwoFactorContracts.CodeDelivery delivery)
         {
-            var logicRequest = new LogicTwoFactor.ResendCodeRequest
+            var logicDelivery = new LogicTwoFactor.CodeDelivery
             {
-                ChallengeId = request.ChallengeId,
-                CultureName = request.Culture
+                ChallengeId = delivery.ChallengeId,
+                CultureName = delivery.Culture
             };
 
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _verificationService.ResendPlayerCode(email, logicRequest);
+                _verificationService.ResendPlayerCode(email, logicDelivery);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, TwoFactorContracts.ResendResultCode>(
                 logicResult);

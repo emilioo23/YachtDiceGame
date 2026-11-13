@@ -3,7 +3,7 @@
     /// <summary>
     /// Challenge that needs a new code together with the language of the email that carries it.
     /// </summary>
-    public class ResendCodeRequest
+    public class CodeDelivery
     {
         /// <summary>
         /// Gets or sets the identifier of the challenge that needs a new code.

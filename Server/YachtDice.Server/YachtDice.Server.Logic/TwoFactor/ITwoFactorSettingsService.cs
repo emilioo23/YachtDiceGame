@@ -34,9 +34,9 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="request">Activation challenge and language in which the email is written.</param>
+        /// <param name="delivery">Activation challenge and language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        ResendCodeStatus ResendActivationCode(string displayName, ResendCodeRequest request);
+        ResendCodeStatus ResendActivationCode(string displayName, CodeDelivery delivery);
 
         /// <summary>
         /// Turns the verification off after checking the player's password.

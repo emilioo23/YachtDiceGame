@@ -7,7 +7,7 @@ namespace YachtDice.Server.Contracts.TwoFactor
     /// always travel together.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class ResendCodeRequest
+    public class CodeDelivery
     {
         /// <summary>
         /// Identifier of the challenge that needs a new code.
