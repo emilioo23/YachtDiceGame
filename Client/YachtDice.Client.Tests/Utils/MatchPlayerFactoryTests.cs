@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using YachtDice.Models;
 using YachtDice.RoomServiceReference;
@@ -21,23 +20,18 @@ namespace YachtDice.Client.Tests.Utils
         private readonly RoomPlayer _opponent = new RoomPlayer { Id = OpponentId, DisplayName = OpponentName };
 
         [Fact]
-        public void Create_LocalPlayerAfterOpponent_PutsTheLocalPlayerFirst()
+        public void Create_LocalPlayerAfterOpponent_PutsTheLocalPlayerFirstAndMarksIt()
         {
             RoomPlayer[] roomPlayers = { _opponent, _localPlayer };
+            MatchPlayer[] expected =
+            {
+                CreateMatchPlayer(LocalId, LocalName, true, false),
+                CreateMatchPlayer(OpponentId, OpponentName, false, false)
+            };
 
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
 
-            Assert.Equal(new[] { LocalId, OpponentId }, players.Select(player => player.Id).ToArray());
-        }
-
-        [Fact]
-        public void Create_TwoPlayers_MarksOnlyTheLocalPlayer()
-        {
-            RoomPlayer[] roomPlayers = { _opponent, _localPlayer };
-
-            List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
-
-            Assert.Equal(new[] { true, false }, players.Select(player => player.IsLocalPlayer).ToArray());
+            Assert.Equivalent(expected, players, strict: true);
         }
 
         [Fact]
@@ -48,10 +42,15 @@ namespace YachtDice.Client.Tests.Utils
                 Players = new[] { _localPlayer },
                 AbsentPlayers = new[] { _opponent }
             };
+            MatchPlayer[] expected =
+            {
+                CreateMatchPlayer(LocalId, LocalName, true, false),
+                CreateMatchPlayer(OpponentId, OpponentName, false, true)
+            };
 
             List<MatchPlayer> players = MatchPlayerFactory.CreateForRoom(room, LocalId);
 
-            Assert.Equal(new[] { false, true }, players.Select(player => player.HasLeft).ToArray());
+            Assert.Equivalent(expected, players, strict: true);
         }
 
         [Fact]
@@ -59,10 +58,27 @@ namespace YachtDice.Client.Tests.Utils
         {
             RoomPlayer[] roomPlayers = { _localPlayer, _opponent };
             List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
+            MatchPlayer[] expected =
+            {
+                CreateMatchPlayer(LocalId, LocalName, true, false),
+                CreateMatchPlayer(OpponentId, OpponentName, false, false)
+            };
 
             List<MatchPlayer> updated = MatchPlayerFactory.UpdatePresence(players, roomPlayers);
 
-            Assert.DoesNotContain(updated, player => player.HasLeft);
+            Assert.Equivalent(expected, updated, strict: true);
+        }
+
+        private static MatchPlayer CreateMatchPlayer(string id, string name, bool isLocalPlayer, bool hasLeft)
+        {
+            var player = new MatchPlayer
+            {
+                Id = id,
+                Name = name,
+                IsLocalPlayer = isLocalPlayer,
+                HasLeft = hasLeft
+            };
+            return player;
         }
     }
 }
