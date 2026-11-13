@@ -41,7 +41,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings);
+            Assert.Equivalent(expected, standings, strict: true);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings);
+            Assert.Equivalent(expected, standings, strict: true);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace YachtDice.Client.Tests.Game
 
             IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
 
-            Assert.Equivalent(expected, standings);
+            Assert.Equivalent(expected, standings, strict: true);
         }
 
         [Fact]

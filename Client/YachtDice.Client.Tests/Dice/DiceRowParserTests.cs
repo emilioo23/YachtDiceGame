@@ -29,7 +29,7 @@ namespace YachtDice.Client.Tests.Dice
 
             List<DieDisplay> dice = DiceRowParser.Parse(ThreeFoursRow);
 
-            Assert.Equivalent(expected, dice);
+            Assert.Equivalent(expected, dice, strict: true);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace YachtDice.Client.Tests.Dice
 
             List<DieDisplay> dice = DiceRowParser.Parse(LastTwoDimmedRow);
 
-            Assert.Equivalent(expected, dice);
+            Assert.Equivalent(expected, dice, strict: true);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace YachtDice.Client.Tests.Dice
 
             List<DieDisplay> dice = DiceRowParser.Parse(LowestAndHighestRow);
 
-            Assert.Equivalent(expected, dice);
+            Assert.Equivalent(expected, dice, strict: true);
         }
 
         [Theory]
@@ -88,7 +88,7 @@ namespace YachtDice.Client.Tests.Dice
 
             List<DieDisplay> dice = DiceRowParser.Parse(InvalidWordBetweenRow);
 
-            Assert.Equivalent(expected, dice);
+            Assert.Equivalent(expected, dice, strict: true);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace YachtDice.Client.Tests.Dice
 
             List<DieDisplay> dice = DiceRowParser.Parse(ExtraSpacesRow);
 
-            Assert.Equivalent(expected, dice);
+            Assert.Equivalent(expected, dice, strict: true);
         }
 
         [Theory]
