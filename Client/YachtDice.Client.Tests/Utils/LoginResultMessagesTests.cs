@@ -37,5 +37,45 @@ namespace YachtDice.Client.Tests.Utils
 
             Assert.Equal(Strings.Dialogs_UnexpectedError, message);
         }
+
+        [Fact]
+        public void GetMessage_MissingRequiredField_ReturnsTheMessageOfThatResult()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.MissingRequiredField);
+
+            Assert.Equal(Strings.Auth_ErrorRequiredFields, message);
+        }
+
+        [Fact]
+        public void GetMessage_InvalidEmail_ReturnsTheMessageOfThatResult()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.InvalidEmail);
+
+            Assert.Equal(Strings.Auth_ErrorInvalidEmail, message);
+        }
+
+        [Fact]
+        public void GetMessage_EmailNotRegistered_ReturnsTheMessageOfThatResult()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.EmailNotRegistered);
+
+            Assert.Equal(Strings.Dialogs_EmailNotRegistered, message);
+        }
+
+        [Fact]
+        public void GetMessage_InvalidPassword_ReturnsTheMessageOfThatResult()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.InvalidPassword);
+
+            Assert.Equal(Strings.Dialogs_InvalidPassword, message);
+        }
+
+        [Fact]
+        public void GetMessage_CodeSendFailed_ReturnsTheMessageOfThatResult()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.CodeSendFailed);
+
+            Assert.Equal(Strings.TwoFactor_ErrorSendFailed, message);
+        }
     }
 }
