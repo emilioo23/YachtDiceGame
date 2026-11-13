@@ -3,7 +3,7 @@
     /// <summary>
     /// Keys of the styles and brushes defined in the resource dictionaries of the application.
     /// </summary>
-    public static class ResourceKeys
+    public static class ThemeResourceKeys
     {
         /// <summary>
         /// Style of the tab button that is currently selected.

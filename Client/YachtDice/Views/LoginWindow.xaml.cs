@@ -64,8 +64,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
         }
 
@@ -73,8 +73,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Collapsed;
             RegisterPanel.Visibility = Visibility.Visible;
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
         }
 

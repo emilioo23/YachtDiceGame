@@ -196,7 +196,7 @@ namespace YachtDice.Views
 
             if (kind == ChatMessageKind.Own)
             {
-                brushKey = ResourceKeys.FeltLightBrushKey;
+                brushKey = ThemeResourceKeys.FeltLightBrushKey;
             }
             else
             {
@@ -226,7 +226,7 @@ namespace YachtDice.Views
 
         private static string GetContentBrushKey(ChatMessageKind kind)
         {
-            return kind == ChatMessageKind.System ? ResourceKeys.DangerBrushKey : ResourceKeys.TextBrushKey;
+            return kind == ChatMessageKind.System ? ThemeResourceKeys.DangerBrushKey : ThemeResourceKeys.TextBrushKey;
         }
 
         private void ShowUnreadNotice(string author, string content)

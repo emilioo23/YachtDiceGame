@@ -75,11 +75,11 @@ namespace YachtDice.Views
         {
             panel.Visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
 
-            string styleKey = ResourceKeys.OutlineButtonStyleKey;
+            string styleKey = ThemeResourceKeys.OutlineButtonStyleKey;
 
             if (isSelected)
             {
-                styleKey = ResourceKeys.ActiveTabStyleKey;
+                styleKey = ThemeResourceKeys.ActiveTabStyleKey;
             }
 
             navButton.Style = (Style)FindResource(styleKey);
@@ -89,13 +89,13 @@ namespace YachtDice.Views
         {
             if (isDark)
             {
-                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey);
+                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.FeltLightBrushKey);
                 DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Right;
                 DarkThemeToggleKnob.Margin = new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin);
             }
             else
             {
-                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
+                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.BorderBrushKey);
                 DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Left;
                 DarkThemeToggleKnob.Margin = new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
             }

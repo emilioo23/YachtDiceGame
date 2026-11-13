@@ -553,7 +553,7 @@ namespace YachtDice.Server.Tests.Game
                 { GameSpeed.Fast, FastTurnSeconds }
             };
 
-            return new GameManager(new InMemoryDieSource(dieValues), new TurnDuration(secondsBySpeed));
+            return new GameManager(new InMemoryDieRoller(dieValues), new TurnDuration(secondsBySpeed));
         }
 
         private static GameParticipant[] CreateParticipants()

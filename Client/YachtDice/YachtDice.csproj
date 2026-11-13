@@ -282,7 +282,7 @@
     <Compile Include="Navigation\ConnectionLossHandler.cs" />
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
-    <Compile Include="Utils\ResourceKeys.cs" />
+    <Compile Include="Utils\ThemeResourceKeys.cs" />
     <Compile Include="Utils\FriendItemFactory.cs" />
     <Compile Include="Utils\FriendRequestMessages.cs" />
     <Compile Include="Utils\InvitationResultMessages.cs" />

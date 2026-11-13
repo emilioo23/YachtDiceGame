@@ -6,7 +6,7 @@ namespace YachtDice.Server.Logic.Game
     /// Rolls dice with a cryptographically secure generator, so nobody can predict the next values. It keeps
     /// no state, so several games can share it at the same time.
     /// </summary>
-    public sealed class RandomDieSource : IDieSource
+    public sealed class RandomDieRoller : IDieRoller
     {
         /// <inheritdoc />
         public int Roll()

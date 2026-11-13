@@ -95,11 +95,11 @@
     <Compile Include="Game\GameSnapshot.cs" />
     <Compile Include="Game\GameStatus.cs" />
     <Compile Include="Game\GameTurn.cs" />
-    <Compile Include="Game\IDieSource.cs" />
+    <Compile Include="Game\IDieRoller.cs" />
     <Compile Include="Game\IGameManager.cs" />
     <Compile Include="Game\IGameResultRecorder.cs" />
     <Compile Include="Game\PlayerSnapshot.cs" />
-    <Compile Include="Game\RandomDieSource.cs" />
+    <Compile Include="Game\RandomDieRoller.cs" />
     <Compile Include="Game\ScoreCalculator.cs" />
     <Compile Include="Game\ScoreCard.cs" />
     <Compile Include="Game\ScoreCategories.cs" />

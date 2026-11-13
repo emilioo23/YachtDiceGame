@@ -59,7 +59,7 @@
     <Compile Include="Game\ScoreCardTests.cs" />
     <Compile Include="Game\TurnDurationTests.cs" />
     <Compile Include="InMemory\InMemoryAvatarLookup.cs" />
-    <Compile Include="InMemory\InMemoryDieSource.cs" />
+    <Compile Include="InMemory\InMemoryDieRoller.cs" />
     <Compile Include="InMemory\InMemoryEmailService.cs" />
     <Compile Include="InMemory\InMemoryFailingEmailService.cs" />
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />

@@ -17,7 +17,7 @@ namespace YachtDice.Server.Logic.Game
         private const int RoundOffset = 1;
 
         private readonly List<GamePlayer> _players;
-        private readonly IDieSource _dieSource;
+        private readonly IDieRoller _dieRoller;
         private readonly ScoreCalculator _calculator = new ScoreCalculator();
         private readonly int[] _dice = new int[DiceRules.DiceCount];
         private readonly bool[] _heldDice = new bool[DiceRules.DiceCount];
@@ -29,14 +29,14 @@ namespace YachtDice.Server.Logic.Game
         /// Initializes a game where the first participant plays the first turn.
         /// </summary>
         /// <param name="participants">Players of the game, in the order of the turns.</param>
-        /// <param name="dieSource">Source of the values of the dice.</param>
+        /// <param name="dieRoller">Rolls the dice of the game.</param>
         /// <param name="turnSeconds">Seconds that a player has to play a turn.</param>
-        public YachtGame(IEnumerable<GameParticipant> participants, IDieSource dieSource, int turnSeconds)
+        public YachtGame(IEnumerable<GameParticipant> participants, IDieRoller dieRoller, int turnSeconds)
         {
             _players = participants
                 .Select(participant => new GamePlayer(participant, new ScoreCard(_calculator)))
                 .ToList();
-            _dieSource = dieSource;
+            _dieRoller = dieRoller;
             TurnSeconds = turnSeconds;
             TurnNumber = FirstTurnNumber;
             _turnIndex = NoPlayerIndex;
@@ -321,7 +321,7 @@ namespace YachtDice.Server.Logic.Game
 
                 if (!heldDice[index])
                 {
-                    _dice[index] = _dieSource.Roll();
+                    _dice[index] = _dieRoller.Roll();
                 }
             }
 
