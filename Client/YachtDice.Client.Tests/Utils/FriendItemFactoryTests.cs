@@ -22,6 +22,7 @@ namespace YachtDice.Client.Tests.Utils
 
         private readonly string[] _friendNames = { CesarName, AnaName, BetoName };
         private readonly string[] _onlineNames = { LowerCaseBetoName };
+        private readonly FriendPresence _anyPresence = new FriendPresence(AnyStatus, true);
 
         [Fact]
         public void Create_UnsortedNames_ReturnsThemOrderedByName()
@@ -33,7 +34,7 @@ namespace YachtDice.Client.Tests.Utils
                 CreateItem(CesarName, CesarInitial, AnyStatus, true)
             };
 
-            List<FriendItem> items = FriendItemFactory.Create(_friendNames, AnyStatus, true);
+            List<FriendItem> items = FriendItemFactory.Create(_friendNames, _anyPresence);
 
             Assert.Equivalent(expected, items, strict: true);
         }
@@ -44,7 +45,7 @@ namespace YachtDice.Client.Tests.Utils
             string[] names = { AnaName };
             FriendItem[] expected = { CreateItem(AnaName, AnaInitial, AnyStatus, true) };
 
-            List<FriendItem> items = FriendItemFactory.Create(names, AnyStatus, true);
+            List<FriendItem> items = FriendItemFactory.Create(names, _anyPresence);
 
             Assert.Equivalent(expected, items, strict: true);
         }

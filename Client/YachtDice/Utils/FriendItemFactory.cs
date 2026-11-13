@@ -15,14 +15,13 @@ namespace YachtDice.Utils
         /// Creates the rows for the players who share the same status, ordered by name.
         /// </summary>
         /// <param name="names">Names of the players.</param>
-        /// <param name="status">Text that describes the status of all of them.</param>
-        /// <param name="isOnline">Whether they are connected to the game.</param>
+        /// <param name="presence">Status and connection that all of them share.</param>
         /// <returns>One row for each name.</returns>
-        public static List<FriendItem> Create(IEnumerable<string> names, string status, bool isOnline)
+        public static List<FriendItem> Create(IEnumerable<string> names, FriendPresence presence)
         {
             List<FriendItem> friendItems = names
                 .OrderBy(name => name)
-                .Select(name => CreateItem(name, status, isOnline))
+                .Select(name => CreateItem(name, presence))
                 .ToList();
 
             return friendItems;
@@ -36,10 +35,9 @@ namespace YachtDice.Utils
         /// <returns>One row for each friend who is online, ordered by name.</returns>
         public static List<FriendItem> CreateOnline(IEnumerable<string> friendNames, ICollection<string> onlineNames)
         {
-            return Create(
-                friendNames.Where(name => IsOnline(name, onlineNames)),
-                Strings.MainMenu_Friends_StatusOnline,
-                true);
+            var presence = new FriendPresence(Strings.MainMenu_Friends_StatusOnline, true);
+
+            return Create(friendNames.Where(name => IsOnline(name, onlineNames)), presence);
         }
 
         /// <summary>
@@ -51,11 +49,9 @@ namespace YachtDice.Utils
         public static List<FriendItem> CreateOffline(IEnumerable<string> friendNames, ICollection<string> onlineNames)
         {
             Func<string, bool> isNotOnline = name => !IsOnline(name, onlineNames);
+            var presence = new FriendPresence(Strings.MainMenu_Friends_StatusOffline, false);
 
-            return Create(
-                friendNames.Where(isNotOnline),
-                Strings.MainMenu_Friends_StatusOffline,
-                false);
+            return Create(friendNames.Where(isNotOnline), presence);
         }
 
         private static bool IsOnline(string name, ICollection<string> onlineNames)
@@ -63,14 +59,14 @@ namespace YachtDice.Utils
             return onlineNames.Contains(name, StringComparer.OrdinalIgnoreCase);
         }
 
-        private static FriendItem CreateItem(string name, string status, bool isOnline)
+        private static FriendItem CreateItem(string name, FriendPresence presence)
         {
             var friend = new FriendItem
             {
                 Name = name,
                 Initial = PlayerInitials.GetInitial(name),
-                Status = status,
-                IsOnline = isOnline
+                Status = presence.Status,
+                IsOnline = presence.IsOnline
             };
 
             return friend;

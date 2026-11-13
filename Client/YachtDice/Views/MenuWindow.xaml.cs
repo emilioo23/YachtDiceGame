@@ -152,10 +152,9 @@ namespace YachtDice.Views
                     List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
                     OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
 
-                    RequestsList.ItemsSource = FriendItemFactory.Create(
-                        requesterNames,
-                        Strings.Friends_Status_WantsFriend,
-                        false);
+                    var requestPresence = new FriendPresence(Strings.Friends_Status_WantsFriend, false);
+
+                    RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
                     ShowOnlinePlayers();
                 }
                 catch (GatewayException)
