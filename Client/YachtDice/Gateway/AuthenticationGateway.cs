@@ -11,6 +11,20 @@ namespace YachtDice.Gateway
     public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient, IAuthenticationService>
     {
         /// <summary>
+        /// Opens and closes a connection to the server so the first real call does not pay for the start-up.
+        /// </summary>
+        /// <returns>A task that finishes when the connection was opened.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task WarmUpAsync()
+        {
+            await ExecuteAsync(client =>
+            {
+                client.Open();
+                return true;
+            });
+        }
+
+        /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
         /// </summary>
         /// <param name="credentials">Login credentials of the player.</param>
