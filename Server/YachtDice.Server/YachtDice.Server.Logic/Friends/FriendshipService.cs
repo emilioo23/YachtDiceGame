@@ -11,6 +11,8 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class FriendshipService : IFriendshipService
     {
+        private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
+
         private readonly IPlayerRepository _playerRepository;
         private readonly IFriendRepository _friendRepository;
 
@@ -53,13 +55,18 @@ namespace YachtDice.Server.Logic.Friends
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="requesterName">Name of the player who sent the request.</param>
-        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
+        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
-        public FriendActionStatus RespondToRequest(string displayName, string requesterName, bool isAccepted)
+        /// <exception cref="ArgumentNullException">The answer is null.</exception>
+        public FriendActionStatus RespondToRequest(string displayName, FriendRequestAnswer answer)
         {
+            if (answer == null)
+            {
+                throw new ArgumentNullException(nameof(answer), NullAnswerMessage);
+            }
+
             Player addressee = _playerRepository.FindByName(displayName).FirstOrDefault();
-            Player requester = _playerRepository.FindByName(requesterName).FirstOrDefault();
+            Player requester = _playerRepository.FindByName(answer.RequesterName).FirstOrDefault();
             FriendActionStatus status = FriendActionStatus.PlayerNotFound;
 
             if (addressee != null && requester != null)
@@ -70,7 +77,7 @@ namespace YachtDice.Server.Logic.Friends
                 Friendship friendRequest = _friendRepository.FindBetween(requester.Id, addressee.Id)
                     .FirstOrDefault(isPendingFromRequester);
 
-                status = AnswerRequest(friendRequest, isAccepted);
+                status = AnswerRequest(friendRequest, answer.IsAccepted);
             }
 
             return status;
