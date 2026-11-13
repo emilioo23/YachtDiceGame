@@ -70,6 +70,7 @@
     <Compile Include="Avatars\PlayerProfile.cs" />
     <Compile Include="Email\CodeEmailSender.cs" />
     <Compile Include="Email\CodeEmailTemplate.cs" />
+    <Compile Include="Email\EmailMessage.cs" />
     <Compile Include="Email\EmailService.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Friends\FriendActionStatus.cs" />
