@@ -142,12 +142,11 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void Join_UnknownRoom_ReturnsRoomNotFound()
         {
-            var expected = new { Status = RoomStatus.RoomNotFound, PlayerId = string.Empty };
+            RoomResult expected = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
 
             RoomResult player = _manager.Join(UnknownRoomCode, PlayerName);
 
-            var actual = new { player.Status, player.PlayerId };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, player);
         }
 
         [Fact]
@@ -263,12 +262,11 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = CreateStartedRoom();
 
-            var expected = new { Status = RoomStatus.GameAlreadyStarted, HasReturned = false };
+            RoomResult expected = RoomResult.CreateFailed(RoomStatus.GameAlreadyStarted);
 
             RoomResult stranger = _manager.Join(host.Room.Code, GuestName);
 
-            var actual = new { stranger.Status, stranger.HasReturned };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, stranger);
         }
 
         [Fact]
@@ -625,12 +623,11 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.CreateRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            var expected = new { Status = RoomStatus.InvalidAccessCode, PlayerId = string.Empty };
+            RoomResult expected = RoomResult.CreateFailed(RoomStatus.InvalidAccessCode);
 
             RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
 
-            var actual = new { player.Status, player.PlayerId };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, player);
         }
 
         [Theory]
