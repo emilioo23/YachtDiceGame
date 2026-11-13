@@ -188,13 +188,11 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
-            var expected = new { Category = ScoreCategory.Fours, Points = YachtOfFoursPoints };
+            ScoreOption[] expected = { new ScoreOption(ScoreCategory.Fours, YachtOfFoursPoints) };
 
             IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
 
-            ScoreOption option = options.Single();
-            var actual = new { option.Category, option.Points };
-            Assert.Equal(expected, actual);
+            Assert.Equivalent(expected, options);
         }
 
         [Fact]
