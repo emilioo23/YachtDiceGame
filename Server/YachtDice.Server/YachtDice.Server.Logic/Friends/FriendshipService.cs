@@ -198,14 +198,14 @@ namespace YachtDice.Server.Logic.Friends
 
             if (existing == null)
             {
-                var request = new Friendship
+                var pendingFriendship = new Friendship
                 {
                     RequesterId = requester.Id,
                     AddresseeId = target.Id,
                     Status = FriendshipStatus.Pending
                 };
 
-                _friendRepository.Add(request);
+                _friendRepository.Add(pendingFriendship);
                 status = FriendRequestStatus.RequestSent;
             }
             else if (existing.Status == FriendshipStatus.Accepted)
