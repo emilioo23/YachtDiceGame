@@ -78,10 +78,9 @@ namespace YachtDice.Server.Logic.Email
 
         private static bool IsDeliveryFailure(Exception exception)
         {
-            return exception is SmtpException
-                || exception is InvalidOperationException
-                || exception is FormatException
-                || exception is ArgumentException;
+            bool isMailFailure = exception is SmtpException || exception is InvalidOperationException;
+
+            return isMailFailure || exception is FormatException || exception is ArgumentException;
         }
 
         private string BuildBody(string playerDisplayName, string code, CultureInfo culture)

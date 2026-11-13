@@ -93,11 +93,11 @@ namespace YachtDice.Server.Logic.Authentication
 
         private static bool HasRequiredFields(Player player, string plainPassword)
         {
-            return !string.IsNullOrWhiteSpace(player.FirstName)
-                && !string.IsNullOrWhiteSpace(player.LastName)
-                && !string.IsNullOrWhiteSpace(player.Username)
-                && !string.IsNullOrWhiteSpace(player.Email)
+            bool hasNames = !string.IsNullOrWhiteSpace(player.FirstName) && !string.IsNullOrWhiteSpace(player.LastName);
+            bool hasCredentials = !string.IsNullOrWhiteSpace(player.Username)
                 && !string.IsNullOrWhiteSpace(plainPassword);
+
+            return hasNames && hasCredentials && !string.IsNullOrWhiteSpace(player.Email);
         }
 
         private static bool HasValidLengths(Player player)
@@ -107,10 +107,11 @@ namespace YachtDice.Server.Logic.Authentication
             int firstNameLength = player.FirstName?.Trim().Length ?? 0;
             int lastNameLength = player.LastName?.Trim().Length ?? 0;
 
-            return usernameLength <= CredentialRules.UsernameMaxLength
-                && emailLength <= EmailMaxLength
-                && firstNameLength <= NameMaxLength
-                && lastNameLength <= NameMaxLength;
+            bool hasValidNameLengths = firstNameLength <= NameMaxLength && lastNameLength <= NameMaxLength;
+
+            return hasValidNameLengths
+                && usernameLength <= CredentialRules.UsernameMaxLength
+                && emailLength <= EmailMaxLength;
         }
 
         private RegistrationResult SavePlayer(Player player, string plainPassword)

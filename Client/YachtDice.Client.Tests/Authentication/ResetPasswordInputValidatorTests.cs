@@ -89,7 +89,8 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void Validate_ConfirmationWithOtherCase_ReturnsPasswordsDoNotMatch()
         {
-            ResetPasswordInputStatus status = ResetPasswordInputValidator.Validate(Code, Password, Password.ToUpperInvariant());
+            ResetPasswordInputStatus status =
+                ResetPasswordInputValidator.Validate(Code, Password, Password.ToUpperInvariant());
 
             Assert.Equal(ResetPasswordInputStatus.PasswordsDoNotMatch, status);
         }

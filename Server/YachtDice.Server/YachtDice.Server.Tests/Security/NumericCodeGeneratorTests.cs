@@ -13,6 +13,7 @@ namespace YachtDice.Server.Tests.Security
         private const int SixDigits = 6;
         private const int Repetitions = 50;
         private const string LengthParameterName = "length";
+        private const int NoDigits = 0;
 
         [Fact]
         public void Generate_SixDigits_ReturnsOnlyDigitsWithTheRequestedLength()
@@ -55,9 +56,9 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Generate_ZeroDigits_ReportsTheLengthParameter()
         {
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => NumericCodeGenerator.Generate(0));
-
-            Assert.Equal(LengthParameterName, exception.ParamName);
+            Assert.Throws<ArgumentOutOfRangeException>(
+                LengthParameterName,
+                () => NumericCodeGenerator.Generate(NoDigits));
         }
 
         private static bool IsDigitsOfLength(string code, int length)

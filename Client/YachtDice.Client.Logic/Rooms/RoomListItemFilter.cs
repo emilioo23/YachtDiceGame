@@ -11,7 +11,7 @@ namespace YachtDice.Client.Logic.Rooms
     public static class RoomListItemFilter
     {
         private const int EmptyLength = 0;
-        private const int FirstCharacterIndex = 0;
+        private const int NotFoundIndex = -1;
 
         /// <summary>
         /// Keeps the rows that match the kind of room and contain the text in the name of the host. The
@@ -36,13 +36,15 @@ namespace YachtDice.Client.Logic.Rooms
 
         private static bool MatchesPrivacy(RoomListItem room, RoomPrivacyFilter privacy)
         {
-            return privacy == RoomPrivacyFilter.All || room.IsPrivate == (privacy == RoomPrivacyFilter.Private);
+            bool isPrivateWanted = privacy == RoomPrivacyFilter.Private;
+
+            return privacy == RoomPrivacyFilter.All || room.IsPrivate == isPrivateWanted;
         }
 
         private static bool MatchesName(RoomListItem room, string search)
         {
             return search.Length == EmptyLength
-                || room.HostName.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= FirstCharacterIndex;
+                || room.HostName.IndexOf(search, StringComparison.OrdinalIgnoreCase) > NotFoundIndex;
         }
     }
 }

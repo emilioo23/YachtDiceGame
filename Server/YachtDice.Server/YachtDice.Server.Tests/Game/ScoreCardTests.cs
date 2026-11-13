@@ -12,6 +12,7 @@ namespace YachtDice.Server.Tests.Game
     public class ScoreCardTests
     {
         private const int NoCombinationChoicePoints = 16;
+        private const int NoPoints = 0;
         private const int UpperBonusThreshold = 63;
         private const int UpperBonusPoints = 35;
         private const int TotalWithUpperBonus = 98;
@@ -226,17 +227,17 @@ namespace YachtDice.Server.Tests.Game
             ScoreCard card = CreateCard();
             FillLowerSection(card);
             card.Score(ScoreCategory.Fours, NoCombination);
-            var expected = new { OptionCount = OpenUpperBoxesWithJoker, AreAllUpper = true, AreAllZero = true };
+            var expected = new { OptionCount = OpenUpperBoxesWithJoker, IsAllUpper = true, HasOnlyZeros = true };
 
             IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
-            Func<ScoreOption, bool> hasNoPoints = option => option.Points == 0;
+            Func<ScoreOption, bool> hasNoPoints = option => option.Points == NoPoints;
 
             var actual = new
             {
                 OptionCount = options.Count,
-                AreAllUpper =
+                IsAllUpper =
                     options.All(option => ScoreCategories.IsUpper(option.Category)),
-                AreAllZero = options.All(hasNoPoints)
+                HasOnlyZeros = options.All(hasNoPoints)
             };
             Assert.Equal(expected, actual);
         }

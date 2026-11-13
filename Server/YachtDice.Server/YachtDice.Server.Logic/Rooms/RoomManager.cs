@@ -333,11 +333,12 @@ namespace YachtDice.Server.Logic.Rooms
 
         private static bool AreValidSettings(GameRoom room, RoomSettings settings)
         {
-            return settings != null
+            bool isWithinCapacity = settings != null
                 && settings.MaxPlayers >= MinCapacity
-                && settings.MaxPlayers <= MaxCapacity
-                && settings.MaxPlayers >= room.Players.Count
-                && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
+                && settings.MaxPlayers <= MaxCapacity;
+            bool hasPlaceForPlayers = isWithinCapacity && settings.MaxPlayers >= room.Players.Count;
+
+            return hasPlaceForPlayers && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
         }
 
         private static RoomResult StartRoomGame(GameRoom room, string playerId)

@@ -63,9 +63,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(NoVersion);
+            bool isAccepted = gate.TryAccept(NoVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
 
         [Fact]
@@ -73,9 +73,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(NegativeVersion);
+            bool isAccepted = gate.TryAccept(NegativeVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
 
         [Fact]
@@ -83,9 +83,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(int.MaxValue);
+            bool isAccepted = gate.TryAccept(int.MaxValue);
 
-            Assert.True(accepted);
+            Assert.True(isAccepted);
         }
 
         [Fact]
@@ -94,9 +94,9 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(FirstVersion);
 
-            bool accepted = gate.TryAccept(FarVersion);
+            bool isAccepted = gate.TryAccept(FarVersion);
 
-            Assert.True(accepted);
+            Assert.True(isAccepted);
         }
 
         [Fact]
@@ -105,9 +105,9 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(int.MaxValue);
 
-            bool accepted = gate.TryAccept(FarVersion);
+            bool isAccepted = gate.TryAccept(FarVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
     }
 }

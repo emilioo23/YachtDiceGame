@@ -58,7 +58,11 @@ namespace YachtDice.Client.Tests.Utils
                 HostName = HostName,
                 Initial = HostInitial,
                 Title = string.Format(Strings.Rooms_TitleFormat, HostName),
-                Details = string.Format(Strings.Rooms_DetailsFormat, playerCount, maxPlayers, Strings.Lobby_Mode1MinuteTitle),
+                Details = string.Format(
+                    Strings.Rooms_DetailsFormat,
+                    playerCount,
+                    maxPlayers,
+                    Strings.Lobby_Mode1MinuteTitle),
                 PrivacyText = isPrivate ? Strings.Lobby_OptionPrivate : Strings.Lobby_OptionPublic,
                 IsPrivate = isPrivate,
                 HasSpace = hasSpace

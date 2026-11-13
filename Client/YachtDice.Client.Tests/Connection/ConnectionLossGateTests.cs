@@ -63,9 +63,9 @@ namespace YachtDice.Client.Tests.Connection
             var gate = new ConnectionLossGate();
             gate.Release();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.True(entered);
+            Assert.True(hasEntered);
         }
 
         [Fact]
@@ -76,9 +76,9 @@ namespace YachtDice.Client.Tests.Connection
             gate.Release();
             gate.TryEnter();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.False(entered);
+            Assert.False(hasEntered);
         }
 
         [Fact]
@@ -88,9 +88,9 @@ namespace YachtDice.Client.Tests.Connection
             var secondGate = new ConnectionLossGate();
             firstGate.TryEnter();
 
-            bool entered = secondGate.TryEnter();
+            bool hasEntered = secondGate.TryEnter();
 
-            Assert.True(entered);
+            Assert.True(hasEntered);
         }
 
         [Fact]
@@ -100,9 +100,9 @@ namespace YachtDice.Client.Tests.Connection
             gate.TryEnter();
             gate.TryEnter();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.False(entered);
+            Assert.False(hasEntered);
         }
     }
 }

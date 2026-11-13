@@ -12,11 +12,16 @@ namespace YachtDice.Server.Tests.InMemory
         private readonly IReadOnlyList<int> _values;
         private int _position;
 
+        /// <summary>
+        /// Initializes the source with the values that the dice will show, in order.
+        /// </summary>
+        /// <param name="values">Values of the dice; they start again from the first one when they run out.</param>
         public InMemoryDieSource(params int[] values)
         {
             _values = values;
         }
 
+        /// <inheritdoc />
         public int Roll()
         {
             var value = _values[_position % _values.Count];

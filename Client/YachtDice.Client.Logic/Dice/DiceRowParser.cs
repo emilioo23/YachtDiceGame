@@ -14,6 +14,7 @@ namespace YachtDice.Client.Logic.Dice
         private const string DimmedMarker = "-";
         private const int LowestValue = 1;
         private const int HighestValue = 6;
+        private const int FirstCharacterIndex = 0;
 
         /// <summary>
         /// Converts the text into the dice that must be drawn. Words that are not a number from 1 to 6 are
@@ -43,12 +44,13 @@ namespace YachtDice.Client.Logic.Dice
 
             if (isDimmed)
             {
-                digits = word.Substring(0, word.Length - DimmedMarker.Length);
+                digits = word.Substring(FirstCharacterIndex, word.Length - DimmedMarker.Length);
             }
 
-            if (int.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out int value)
-                && value >= LowestValue
-                && value <= HighestValue)
+            bool isNumber = int.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out int value);
+            bool isFaceValue = value >= LowestValue && value <= HighestValue;
+
+            if (isNumber && isFaceValue)
             {
                 dice.Add(new DieDisplay { Value = value, IsDimmed = isDimmed });
             }

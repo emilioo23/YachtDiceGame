@@ -10,6 +10,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameManager : IGameManager
     {
+        private const string NullDieSourceMessage = "The source of the dice cannot be null.";
+
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
             new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
@@ -21,7 +23,7 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="dieSource">Source of the values of the dice.</param>
         public GameManager(IDieSource dieSource)
         {
-            _dieSource = dieSource;
+            _dieSource = dieSource ?? throw new ArgumentNullException(nameof(dieSource), NullDieSourceMessage);
         }
 
         /// <inheritdoc />
@@ -167,9 +169,8 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionResult result;
 
-            if (_games.ContainsKey(roomCode))
+            if (_games.TryGetValue(roomCode, out YachtGame game))
             {
-                var game = _games[roomCode];
                 var status = action(game);
 
                 if (status == GameActionStatus.Success)

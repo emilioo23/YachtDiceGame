@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using YachtDice.Server.Logic.Rooms;
+﻿using YachtDice.Server.Logic.Rooms;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -11,12 +10,6 @@ namespace YachtDice.Server.Logic.Game
         private const int NormalSeconds = 60;
         private const int FastSeconds = 30;
 
-        private static readonly Dictionary<GameSpeed, int> SecondsBySpeed = new Dictionary<GameSpeed, int>
-        {
-            { GameSpeed.Normal, NormalSeconds },
-            { GameSpeed.Fast, FastSeconds }
-        };
-
         /// <summary>
         /// Gets the seconds of a turn.
         /// </summary>
@@ -24,7 +17,19 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The seconds that a player has to play a turn.</returns>
         public static int GetSeconds(GameSpeed speed)
         {
-            return SecondsBySpeed[speed];
+            int seconds;
+
+            switch (speed)
+            {
+                case GameSpeed.Fast:
+                    seconds = FastSeconds;
+                    break;
+                default:
+                    seconds = NormalSeconds;
+                    break;
+            }
+
+            return seconds;
         }
     }
 }

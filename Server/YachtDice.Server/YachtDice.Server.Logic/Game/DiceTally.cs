@@ -11,10 +11,12 @@ namespace YachtDice.Server.Logic.Game
     {
         private const int NoValue = 0;
         private const int SingleOccurrence = 1;
+        private const int FaceCount = DiceRules.MaximumFaceValue - DiceRules.MinimumFaceValue + 1;
+        private const int CountsLength = DiceRules.MaximumFaceValue + 1;
         private const string InvalidCountMessage = "A roll must have exactly five dice.";
         private const string InvalidValueMessage = "A die can only show a value from one to six.";
 
-        private readonly int[] _countsByValue = new int[DiceRules.MaximumFaceValue + DiceRules.MinimumFaceValue];
+        private readonly int[] _countsByValue = new int[CountsLength];
 
         /// <summary>
         /// Initializes the tally of a roll.
@@ -65,7 +67,7 @@ namespace YachtDice.Server.Logic.Game
         {
             Func<int, bool> hasMinimumCount = value => _countsByValue[value] >= minimumCount;
 
-            return Enumerable.Range(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue)
+            return Enumerable.Range(DiceRules.MinimumFaceValue, FaceCount)
                 .Where(hasMinimumCount)
                 .DefaultIfEmpty(NoValue)
                 .Max();

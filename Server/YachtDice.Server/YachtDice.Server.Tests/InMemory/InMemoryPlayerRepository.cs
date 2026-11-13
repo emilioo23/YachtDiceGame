@@ -90,6 +90,7 @@ namespace YachtDice.Server.Tests.InMemory
             }
         }
 
+        /// <inheritdoc />
         public void SaveAvatar(int playerId, int avatarId)
         {
             Func<Player, bool> isSameId = candidate => candidate.Id == playerId;

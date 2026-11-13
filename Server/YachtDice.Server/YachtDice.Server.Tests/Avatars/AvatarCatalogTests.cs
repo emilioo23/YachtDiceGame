@@ -21,9 +21,9 @@ namespace YachtDice.Server.Tests.Avatars
         {
             var expected = new { IsFound = true, IsFree = true };
 
-            bool found = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
+            bool isFound = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
 
-            var actual = new { IsFound = found, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            var actual = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
             Assert.Equal(expected, actual);
         }
 
@@ -32,9 +32,9 @@ namespace YachtDice.Server.Tests.Avatars
         {
             var expected = new { IsFound = false, HasAvatar = false };
 
-            bool found = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
+            bool isFound = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
 
-            var actual = new { IsFound = found, HasAvatar = avatar != null };
+            var actual = new { IsFound = isFound, HasAvatar = avatar != null };
             Assert.Equal(expected, actual);
         }
 
