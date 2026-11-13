@@ -10,6 +10,8 @@ namespace YachtDice.Client.Tests.Utils
     /// </summary>
     public class GatewayErrorMessagesTests
     {
+        private const int UnknownCode = 99;
+
         [Fact]
         public void GetMessage_ServerUnavailable_ReturnsTheServerMessage()
         {
@@ -38,6 +40,16 @@ namespace YachtDice.Client.Tests.Utils
         public void GetMessage_UnexpectedError_ReturnsTheUnexpectedError()
         {
             string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.UnexpectedError);
+
+            Assert.Equal(Strings.Dialogs_UnexpectedError, message);
+        }
+
+        [Fact]
+        public void GetMessage_CodeOutsideTheList_ReturnsTheUnexpectedError()
+        {
+            var unknownCode = (GatewayErrorCode)UnknownCode;
+
+            string message = GatewayErrorMessages.GetMessage(unknownCode);
 
             Assert.Equal(Strings.Dialogs_UnexpectedError, message);
         }
