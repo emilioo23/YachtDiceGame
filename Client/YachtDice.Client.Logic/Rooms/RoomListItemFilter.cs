@@ -12,21 +12,25 @@ namespace YachtDice.Client.Logic.Rooms
     {
         private const int EmptyLength = 0;
         private const int FirstCharacterIndex = 0;
+        private const string NullSearchMessage = "The search cannot be null.";
 
         /// <summary>
         /// Keeps the rows that match the kind of room and contain the text in the name of the host. The
         /// comparison ignores the case and the spaces around the text. The order of the rows does not change.
         /// </summary>
         /// <param name="rooms">Rows of the list of rooms.</param>
-        /// <param name="privacy">Kind of rooms to keep.</param>
-        /// <param name="searchText">Text to look for in the name of the host; empty keeps every row.</param>
+        /// <param name="roomSearch">Kind of rooms to keep and text to look for in the name of the host.</param>
         /// <returns>The rows that the player must see.</returns>
-        public static List<RoomListItem> Apply(
-            IEnumerable<RoomListItem> rooms,
-            RoomPrivacyFilter privacy,
-            string searchText)
+        /// <exception cref="ArgumentNullException">The search is null.</exception>
+        public static List<RoomListItem> Apply(IEnumerable<RoomListItem> rooms, RoomSearch roomSearch)
         {
-            string search = searchText.Trim();
+            if (roomSearch == null)
+            {
+                throw new ArgumentNullException(nameof(roomSearch), NullSearchMessage);
+            }
+
+            RoomPrivacyFilter privacy = roomSearch.Privacy;
+            string search = roomSearch.SearchText.Trim();
             Func<RoomListItem, bool> isVisible = room => MatchesPrivacy(room, privacy) && MatchesName(room, search);
 
             return rooms
