@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using YachtDice.Client.Logic.Rooms;
 
@@ -31,7 +32,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, NoSearch);
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, NoSearch);
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -45,7 +46,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.Public, NoSearch);
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Public, NoSearch);
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -58,7 +59,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("2", SecondHost, true)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.Private, NoSearch);
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Private, NoSearch);
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -71,7 +72,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("2", SecondHost, true)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "gab");
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "gab");
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -84,7 +85,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "CARLOS");
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "CARLOS");
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -97,7 +98,7 @@ namespace YachtDice.Client.Tests.Rooms
                 CreateRoom("1", FirstHost, false)
             };
 
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "  emilio  ");
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "  emilio  ");
 
             Assert.Equivalent(expected, result, strict: true);
         }
@@ -105,7 +106,7 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_PrivacyAndTextTogether_KeepsOnlyRoomsThatMatchBoth()
         {
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.Private, "emilio");
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Private, "emilio");
 
             Assert.Empty(result);
         }
@@ -113,16 +114,22 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_TextThatNobodyHas_ReturnsAnEmptyList()
         {
-            List<RoomListItem> result = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, "zzz");
+            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "zzz");
 
             Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Apply_NullSearch_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => RoomListItemFilter.Apply(_rooms, null));
         }
 
         [Fact]
         public void Apply_NoRooms_ReturnsAnEmptyList()
         {
             List<RoomListItem> result =
-                RoomListItemFilter.Apply(new List<RoomListItem>(), RoomPrivacyFilter.All, NoSearch);
+                RoomListItemFilter.Apply(new List<RoomListItem>(), new RoomSearch(RoomPrivacyFilter.All, NoSearch));
 
             Assert.Empty(result);
         }
@@ -130,6 +137,11 @@ namespace YachtDice.Client.Tests.Rooms
         private static RoomListItem CreateRoom(string roomId, string hostName, bool isPrivate)
         {
             return new RoomListItem { RoomId = roomId, HostName = hostName, IsPrivate = isPrivate };
+        }
+
+        private List<RoomListItem> ApplyFilter(RoomPrivacyFilter privacy, string searchText)
+        {
+            return RoomListItemFilter.Apply(_rooms, new RoomSearch(privacy, searchText));
         }
     }
 }
