@@ -443,6 +443,67 @@ namespace YachtDice.AuthenticationServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResendCodeRequest", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class ResendCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CultureField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Culture {
+            get {
+                return this.CultureField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CultureField, value) != true)) {
+                    this.CultureField = value;
+                    this.RaisePropertyChanged("Culture");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
     public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -516,7 +577,7 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.ResendCodeRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFa" +
@@ -564,8 +625,8 @@ namespace YachtDice.AuthenticationServiceReference {
             return base.Channel.VerifyPlayerCode(email, verificationCode);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture) {
-            return base.Channel.ResendPlayerCode(email, challengeId, culture);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.ResendCodeRequest request) {
+            return base.Channel.ResendPlayerCode(email, request);
         }
         
         public YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode RequestPasswordReset(string email, string culture) {

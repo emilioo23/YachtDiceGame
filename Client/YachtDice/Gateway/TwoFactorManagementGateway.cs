@@ -1,6 +1,8 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.TwoFactorManagementServiceReference;
+using ResendInput = YachtDice.Client.Logic.Authentication.ResendCodeInput;
 using TwoFactorFault = YachtDice.TwoFactorManagementServiceReference.ServiceFault;
 
 namespace YachtDice.Gateway
@@ -10,6 +12,8 @@ namespace YachtDice.Gateway
     /// </summary>
     public class TwoFactorManagementGateway : GatewayBase<TwoFactorManagementServiceClient, ITwoFactorManagementService>
     {
+        private const string NullResendInputMessage = "The data to resend the code cannot be null.";
+
         /// <summary>
         /// Asks the server whether the player has the two-step verification turned on.
         /// </summary>
@@ -56,16 +60,18 @@ namespace YachtDice.Gateway
         /// Asks the server to send a new code while the player turns on the two-step verification.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="input">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public async Task<ResendResultCode> ResendActivationCodeAsync(
-            string displayName,
-            string challengeId,
-            string culture)
+        /// <exception cref="ArgumentNullException">The input is null.</exception>
+        public async Task<ResendResultCode> ResendActivationCodeAsync(string displayName, ResendInput input)
         {
-            ResendResultCode result =
-                await ExecuteAsync(client => client.ResendActivationCode(displayName, challengeId, culture));
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input), NullResendInputMessage);
+            }
+
+            var request = new ResendCodeRequest { ChallengeId = input.ChallengeId, Culture = input.Culture };
+            ResendResultCode result = await ExecuteAsync(client => client.ResendActivationCode(displayName, request));
 
             return result;
         }
