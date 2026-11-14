@@ -438,6 +438,12 @@
   <data name="Settings_Preferences_OptionEnglish" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="Settings_Preferences_OptionPortuguese" xml:space="preserve">
+    <value>Português</value>
+  </data>
+  <data name="Settings_Preferences_OptionChinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
   <data name="Settings_Appearance_DarkTheme" xml:space="preserve">
     <value>Dark theme</value>
   </data>
@@ -773,12 +779,6 @@
   </data>
   <data name="Global_FormatPercentage" xml:space="preserve">
     <value>{0}%</value>
-  </data>
-  <data name="Settings_Preferences_OptionEnglishShort" xml:space="preserve">
-    <value>EN</value>
-  </data>
-  <data name="Settings_Preferences_OptionSpanishShort" xml:space="preserve">
-    <value>ES</value>
   </data>
   <data name="Global_UnknownInitial" xml:space="preserve">
     <value>?</value>

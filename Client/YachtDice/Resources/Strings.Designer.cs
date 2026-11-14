@@ -3130,11 +3130,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a EN.
+        ///   Busca una cadena traducida similar a Português.
         /// </summary>
-        public static string Settings_Preferences_OptionEnglishShort {
+        public static string Settings_Preferences_OptionPortuguese {
             get {
-                return ResourceManager.GetString("Settings_Preferences_OptionEnglishShort", resourceCulture);
+                return ResourceManager.GetString("Settings_Preferences_OptionPortuguese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 中文.
+        /// </summary>
+        public static string Settings_Preferences_OptionChinese {
+            get {
+                return ResourceManager.GetString("Settings_Preferences_OptionChinese", resourceCulture);
             }
         }
         
@@ -3144,15 +3153,6 @@ namespace YachtDice.Resources {
         public static string Settings_Preferences_OptionSpanish {
             get {
                 return ResourceManager.GetString("Settings_Preferences_OptionSpanish", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a ES.
-        /// </summary>
-        public static string Settings_Preferences_OptionSpanishShort {
-            get {
-                return ResourceManager.GetString("Settings_Preferences_OptionSpanishShort", resourceCulture);
             }
         }
         
