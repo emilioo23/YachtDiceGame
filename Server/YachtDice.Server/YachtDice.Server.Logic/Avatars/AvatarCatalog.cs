@@ -18,11 +18,21 @@ namespace YachtDice.Server.Logic.Avatars
 
         private const int FirstAvatarId = 1;
         private const int FreeLevel = 1;
+        private const int RookieLevel = 2;
         private const int BronzeLevel = 3;
+        private const int ApprenticeLevel = 4;
         private const int SilverLevel = 5;
+        private const int SkilledLevel = 6;
+        private const int VeteranLevel = 7;
         private const int GoldLevel = 8;
+        private const int ExpertLevel = 9;
+        private const int MasterLevel = 10;
+        private const int ElderLevel = 11;
         private const int PlatinumLevel = 12;
+        private const int ChampionLevel = 14;
         private const int DiamondLevel = 16;
+        private const int HeroLevel = 17;
+        private const int MythicLevel = 19;
         private const int LegendLevel = 20;
 
         private static readonly int[] RequiredLevels =
@@ -36,7 +46,17 @@ namespace YachtDice.Server.Logic.Avatars
             GoldLevel,
             PlatinumLevel,
             DiamondLevel,
-            LegendLevel
+            LegendLevel,
+            RookieLevel,
+            ApprenticeLevel,
+            SkilledLevel,
+            VeteranLevel,
+            ExpertLevel,
+            MasterLevel,
+            ElderLevel,
+            ChampionLevel,
+            HeroLevel,
+            MythicLevel
         };
 
         private static readonly List<UnlockableAvatar> Avatars = RequiredLevels
