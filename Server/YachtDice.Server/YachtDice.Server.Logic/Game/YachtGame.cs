@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -213,6 +214,17 @@ namespace YachtDice.Server.Logic.Game
             foreach (var player in snapshot.Players)
             {
                 player.IsWinner = player.Total == bestTotal;
+            }
+        }
+
+        private static void AwardExperience(GameSnapshot snapshot)
+        {
+            foreach (var player in snapshot.Players)
+            {
+                if (player.IsPresent)
+                {
+                    player.ExperienceGained = ExperienceRules.CalculateGain(player.Total, player.IsWinner);
+                }
             }
         }
 
@@ -460,6 +472,7 @@ namespace YachtDice.Server.Logic.Game
             if (Status == GameStatus.Finished)
             {
                 MarkWinners(snapshot);
+                AwardExperience(snapshot);
             }
         }
     }

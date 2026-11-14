@@ -67,6 +67,8 @@
     <Compile Include="InMemory\InMemoryFriendshipService.cs" />
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
+    <Compile Include="Players\ExperienceRulesTests.cs" />
+    <Compile Include="Players\LevelTableTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rooms\RoomManagerTests.cs" />
     <Compile Include="Security\CredentialRulesTests.cs" />

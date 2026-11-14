@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 using YachtDice.Server.Logic.Game;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
 
@@ -30,6 +31,7 @@ namespace YachtDice.Server.Tests.Game
         private const int OnePlayerLeft = 1;
         private const int NormalTurnSeconds = 60;
         private const int FastTurnSeconds = 30;
+        private const int NoExperience = 0;
 
         private static readonly int[] LittleStraightDice = { 1, 2, 3, 4, 5 };
         private static readonly int[] LittleStraightThenTwoSixes = { 1, 2, 3, 4, 5, 6, 6 };
@@ -299,6 +301,31 @@ namespace YachtDice.Server.Tests.Game
                 FindPlayer(snapshot, FirstId).IsWinner
             };
             Assert.Equal(expectedGameEnd, actualGameEnd);
+        }
+
+        [Fact]
+        public void Score_LastBoxOfTheOnlyPlayer_GivesTheWinnerExperience()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartSinglePlayerGame(manager);
+            PlayEveryCategory(manager);
+
+            PlayerSnapshot winner = FindPlayer(manager.GetState(new RoomMember(RoomCode, FirstId)).Snapshot, FirstId);
+
+            int expectedExperienceGained = ExperienceRules.WinnerBaseExperience + winner.Total;
+            Assert.Equal(expectedExperienceGained, winner.ExperienceGained);
+        }
+
+        [Fact]
+        public void Score_GameInProgress_GivesNoExperience()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+
+            GameActionResult scoreResult = PlayTurn(manager, FirstId, ScoreCategory.Choice);
+
+            PlayerSnapshot player = FindPlayer(scoreResult.Snapshot, FirstId);
+            Assert.Equal(NoExperience, player.ExperienceGained);
         }
 
         [Fact]
