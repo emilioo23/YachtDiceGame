@@ -71,6 +71,7 @@
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
     <Compile Include="Moderation\LinkCensorTests.cs" />
+    <Compile Include="Players\AchievementRulesTests.cs" />
     <Compile Include="Players\ExperienceRulesTests.cs" />
     <Compile Include="Players\LevelTableTests.cs" />
     <Compile Include="Players\ProfileServiceTests.cs" />

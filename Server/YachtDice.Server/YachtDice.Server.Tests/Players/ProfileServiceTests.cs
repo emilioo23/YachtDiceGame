@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Moderation;
@@ -23,8 +25,16 @@ namespace YachtDice.Server.Tests.Players
         private const string UpperCaseCurrentUsername = "EMILIO";
         private const int CurrentPlayerId = 1;
         private const int OtherPlayerId = 2;
+        private const int FirstGameAchievementId = 1;
+        private const int FirstWinAchievementId = 2;
+        private const int CollectorAchievementId = 22;
+        private const int UnknownTitleId = 99;
+        private const int WinningScore = 150;
+        private const string SavedTitleText = "2";
+        private const string NoTitleText = "";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
+        private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
         private readonly ProfileService _service;
 
         /// <summary>
@@ -32,7 +42,10 @@ namespace YachtDice.Server.Tests.Players
         /// </summary>
         public ProfileServiceTests()
         {
-            _service = new ProfileService(_players, new OffensiveWordFilter(new[] { OffensiveWord }));
+            _service = new ProfileService(
+                _players,
+                new OffensiveWordFilter(new[] { OffensiveWord }),
+                new PlayerStatisticsService(_players, _history));
             _players.Add(CreatePlayer(CurrentPlayerId, CurrentUsername));
             _players.Add(CreatePlayer(OtherPlayerId, OtherUsername));
         }
@@ -40,13 +53,118 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void Constructor_NullRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new ProfileService(null, new OffensiveWordFilter(new string[0])));
+            Assert.Throws<ArgumentNullException>(() => new ProfileService(
+                null,
+                new OffensiveWordFilter(new string[0]),
+                new PlayerStatisticsService(_players, _history)));
         }
 
         [Fact]
         public void Constructor_NullWordFilter_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null));
+            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, new PlayerStatisticsService(_players, _history)));
+        }
+
+        [Fact]
+        public void Constructor_NullStatisticsService_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ProfileService(_players, new OffensiveWordFilter(new string[0]), null));
+        }
+
+        [Fact]
+        public void GetAchievements_AnyPlayer_ReturnsEveryAchievement()
+        {
+            List<AchievementStatus> achievements = _service.GetAchievements(CurrentUsername);
+
+            Assert.Equal(AchievementRules.GetAll().Count, achievements.Count);
+        }
+
+        [Fact]
+        public void GetAchievements_PlayerWithoutGames_HasNoUnlockedAchievements()
+        {
+            List<int> unlockedIds = FindUnlockedIds();
+
+            Assert.Empty(unlockedIds);
+        }
+
+        [Fact]
+        public void GetAchievements_PlayerWhoWonOneGame_UnlocksTheFirstGameAndTheFirstWin()
+        {
+            _history.AddPlayedGame(CurrentPlayerId, WinningScore, true);
+            var expectedIds = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
+
+            List<int> unlockedIds = FindUnlockedIds();
+
+            Assert.Equal(expectedIds, unlockedIds);
+        }
+
+        [Fact]
+        public void ChangeTitle_DefaultTitle_ReturnsSuccess()
+        {
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, AchievementRules.DefaultTitleId);
+
+            Assert.Equal(TitleChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeTitle_UnlockedTitle_ReturnsSuccess()
+        {
+            _history.AddPlayedGame(CurrentPlayerId, WinningScore, true);
+
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, FirstWinAchievementId);
+
+            Assert.Equal(TitleChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeTitle_UnlockedTitle_SavesTheTitle()
+        {
+            _history.AddPlayedGame(CurrentPlayerId, WinningScore, true);
+
+            _service.ChangeTitle(CurrentUsername, FirstWinAchievementId);
+
+            Assert.Equal(SavedTitleText, _players.FindTitle(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeTitle_LockedTitle_ReturnsTitleLocked()
+        {
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, FirstWinAchievementId);
+
+            Assert.Equal(TitleChangeStatus.TitleLocked, status);
+        }
+
+        [Fact]
+        public void ChangeTitle_LockedTitle_DoesNotSaveAnything()
+        {
+            _service.ChangeTitle(CurrentUsername, FirstWinAchievementId);
+
+            Assert.Equal(NoTitleText, _players.FindTitle(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeTitle_UnknownTitle_ReturnsTitleNotFound()
+        {
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, UnknownTitleId);
+
+            Assert.Equal(TitleChangeStatus.TitleNotFound, status);
+        }
+
+        [Fact]
+        public void ChangeTitle_AchievementWithoutTitle_ReturnsTitleNotFound()
+        {
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, CollectorAchievementId);
+
+            Assert.Equal(TitleChangeStatus.TitleNotFound, status);
+        }
+
+        [Fact]
+        public void ChangeTitle_UnknownPlayer_ReturnsPlayerNotFound()
+        {
+            TitleChangeStatus status = _service.ChangeTitle(UnknownName, AchievementRules.DefaultTitleId);
+
+            Assert.Equal(TitleChangeStatus.PlayerNotFound, status);
         }
 
         [Fact]
@@ -151,6 +269,14 @@ namespace YachtDice.Server.Tests.Players
             UsernameChangeStatus status = _service.ChangeUsername(CurrentUsername, CurrentUsername);
 
             Assert.Equal(UsernameChangeStatus.Success, status);
+        }
+
+        private List<int> FindUnlockedIds()
+        {
+            Func<AchievementStatus, bool> isUnlocked = achievement => achievement.IsUnlocked;
+            Func<AchievementStatus, int> readId = achievement => achievement.Id;
+
+            return _service.GetAchievements(CurrentUsername).Where(isUnlocked).Select(readId).ToList();
         }
 
         private static Player CreatePlayer(int id, string username)
