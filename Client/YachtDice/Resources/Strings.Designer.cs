@@ -2266,6 +2266,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo cambiar el nombre de usuario. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_UsernameSaveError {
+            get {
+                return ResourceManager.GetString("Profile_UsernameSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
         /// </summary>
         public static string Profile_AvatarSaveError {

@@ -993,6 +993,9 @@
   <data name="Profile_AvatarLockedBadge" xml:space="preserve">
     <value>Lv. {0}</value>
   </data>
+  <data name="Profile_UsernameSaveError" xml:space="preserve">
+    <value>The username could not be changed. Please try again.</value>
+  </data>
   <data name="Profile_AvatarSaveError" xml:space="preserve">
     <value>The avatar could not be changed. Please try again.</value>
   </data>

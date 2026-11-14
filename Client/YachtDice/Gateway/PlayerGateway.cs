@@ -73,6 +73,14 @@ namespace YachtDice.Gateway
         }
 
         /// <inheritdoc />
+        public async Task<UsernameChangeResultCode> ChangeUsernameAsync(string currentName, string newUsername)
+        {
+            UsernameChangeResultCode result =
+                await ExecuteAsync(client => client.ChangeUsername(currentName, newUsername));
+
+            return result;
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;
