@@ -272,6 +272,7 @@
     <Compile Include="Utils\GameResultMessages.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />
+    <Compile Include="Utils\AchievementNotifier.cs" />
     <Compile Include="Utils\ProgressTexts.cs" />
     <Compile Include="Utils\UsernameChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />
@@ -357,6 +358,9 @@
     <Compile Include="Views\MenuWindow.xaml.cs">
       <DependentUpon>MenuWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AchievementToastWindow.xaml.cs">
+      <DependentUpon>AchievementToastWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
@@ -441,6 +445,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MenuWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AchievementToastWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

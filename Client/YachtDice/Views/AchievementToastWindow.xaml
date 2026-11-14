@@ -1,0 +1,41 @@
+﻿<Window x:Class="YachtDice.Views.AchievementToastWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Topmost="True"
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        FontFamily="{StaticResource FontBody}">
+    <Border Width="320"
+            Margin="8"
+            Padding="16,12"
+            CornerRadius="12"
+            Background="{StaticResource BrushWoodDark}"
+            BorderBrush="{StaticResource BrushGold}"
+            BorderThickness="2">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="12"
+                              ShadowDepth="2"
+                              Opacity="0.5"/>
+        </Border.Effect>
+        <StackPanel>
+            <TextBlock x:Name="HeaderTextBlock"
+                       FontSize="13"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource BrushGold}"/>
+            <TextBlock x:Name="NameTextBlock"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+            <TextBlock x:Name="DescriptionTextBlock"
+                       FontSize="13"
+                       Foreground="{StaticResource BrushCream2}"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+    </Border>
+</Window>
