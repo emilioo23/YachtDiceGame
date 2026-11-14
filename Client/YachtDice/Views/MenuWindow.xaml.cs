@@ -171,10 +171,19 @@ namespace YachtDice.Views
                     profile.LevelStartExperience,
                     profile.NextLevelExperience);
                 PlayerTitleTextBlock.Text = ProgressTexts.GetTitleName(profile.TitleId);
+                ShowFlag(profile.FlagCode);
                 PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
                 PlayerAvatarImage.Visibility = Visibility.Visible;
                 PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void ShowFlag(string flagCode)
+        {
+            bool hasFlag = FlagCodes.IsKnown(flagCode);
+
+            PlayerFlagImage.Source = hasFlag ? FlagImages.Get(flagCode) : null;
+            PlayerFlagImage.Visibility = hasFlag ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void ShowStatistics(PlayerStatistics statistics)

@@ -2392,6 +2392,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar la bandera. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_FlagSaveError {
+            get {
+                return ResourceManager.GetString("Profile_FlagSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
         /// </summary>
         public static string Profile_AvatarSaveError {

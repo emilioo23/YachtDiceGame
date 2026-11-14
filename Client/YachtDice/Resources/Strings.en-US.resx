@@ -2175,4 +2175,7 @@
   <data name="Profile_FlagLabel" xml:space="preserve">
     <value>Flag</value>
   </data>
+  <data name="Profile_FlagSaveError" xml:space="preserve">
+    <value>The flag could not be saved. Please try again.</value>
+  </data>
 </root>

@@ -274,6 +274,7 @@
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
     <Compile Include="Utils\AchievementNotifier.cs" />
+    <Compile Include="Utils\FlagImages.cs" />
     <Compile Include="Utils\ProgressTexts.cs" />
     <Compile Include="Utils\UsernameChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />

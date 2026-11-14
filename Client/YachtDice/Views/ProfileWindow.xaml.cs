@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
 using YachtDice.Client.Logic.Avatars;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -25,6 +26,10 @@ namespace YachtDice.Views
         private const int DefaultTitleId = 0;
         private const double LockedOpacity = 0.6;
         private const string HeaderWithCountFormat = "{0} - {1}";
+        private const string NoFlagCode = "";
+        private const int FlagIconWidth = 24;
+        private const int FlagIconHeight = 18;
+        private const int FlagIconGap = 8;
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -36,6 +41,7 @@ namespace YachtDice.Views
         private int _savedAvatarId = AvatarResourceKey.DefaultAvatarId;
         private int _selectedAvatarId = AvatarResourceKey.DefaultAvatarId;
         private int _savedTitleId = DefaultTitleId;
+        private string _savedFlagCode = NoFlagCode;
 
         /// <summary>
         /// Initializes the profile window for the given player and starts loading the avatars.
@@ -68,6 +74,8 @@ namespace YachtDice.Views
 
             LevelTextBlock.Text = string.Format(Strings.Profile_LevelFormat, profile.Level, profile.Experience);
             _savedTitleId = profile.TitleId;
+            _savedFlagCode = profile.FlagCode ?? NoFlagCode;
+            ShowFlags();
             ShowSelection();
             await ShowStatisticsAsync();
             await ShowAchievementsAsync();
@@ -148,6 +156,57 @@ namespace YachtDice.Views
                 ToolTip = ProgressTexts.GetAchievementDescription(achievement.Id),
                 Background = (Brush)FindResource(achievement.IsUnlocked ? "BrushGoldButton" : "BrushBorder")
             };
+        }
+
+        private void ShowFlags()
+        {
+            Func<string, string> readName = ProgressTexts.GetFlagName;
+            IEnumerable<string> sortedCodes = FlagCodes.GetAll().OrderBy(readName);
+
+            FlagComboBox.Items.Clear();
+            FlagComboBox.Items.Add(new ComboBoxItem { Tag = NoFlagCode, Content = Strings.Flag_None });
+
+            foreach (string code in sortedCodes)
+            {
+                FlagComboBox.Items.Add(CreateFlagItem(code));
+            }
+
+            Func<ComboBoxItem, bool> isSavedFlag = item => (string)item.Tag == _savedFlagCode;
+
+            FlagComboBox.SelectedItem = FlagComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(isSavedFlag)
+                ?? FlagComboBox.Items[0];
+        }
+
+        private static ComboBoxItem CreateFlagItem(string code)
+        {
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+
+            row.Children.Add(new Image
+            {
+                Source = FlagImages.Get(code),
+                Width = FlagIconWidth,
+                Height = FlagIconHeight,
+                Margin = new Thickness(0, 0, FlagIconGap, 0)
+            });
+            row.Children.Add(new TextBlock { Text = ProgressTexts.GetFlagName(code) });
+
+            return new ComboBoxItem { Tag = code, Content = row };
+        }
+
+        private string GetSelectedFlagCode()
+        {
+            var selectedItem = FlagComboBox.SelectedItem as ComboBoxItem;
+
+            return selectedItem == null ? _savedFlagCode : (string)selectedItem.Tag;
+        }
+
+        private void FlagComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string code = GetSelectedFlagCode();
+            bool hasFlag = FlagCodes.IsKnown(code);
+
+            FlagPreviewImage.Source = hasFlag ? FlagImages.Get(code) : null;
+            FlagPreviewImage.Visibility = hasFlag ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private int GetSelectedTitleId()
@@ -232,6 +291,7 @@ namespace YachtDice.Views
             bool hasNewAvatar = _selectedAvatarId != _savedAvatarId;
             bool hasNewUsername = newUsername != _session.DisplayName;
             bool hasNewTitle = GetSelectedTitleId() != _savedTitleId;
+            bool hasNewFlag = GetSelectedFlagCode() != _savedFlagCode;
 
             if (hasNewAvatar)
             {
@@ -243,12 +303,17 @@ namespace YachtDice.Views
                 await SaveTitleAsync(hasNewAvatar);
             }
 
-            if (hasNewUsername)
+            if (hasNewFlag)
             {
-                await SaveUsernameAsync(newUsername, hasNewAvatar || hasNewTitle);
+                await SaveFlagAsync(hasNewAvatar || hasNewTitle);
             }
 
-            if (!hasNewAvatar && !hasNewTitle && !hasNewUsername)
+            if (hasNewUsername)
+            {
+                await SaveUsernameAsync(newUsername, hasNewAvatar || hasNewTitle || hasNewFlag);
+            }
+
+            if (!hasNewAvatar && !hasNewTitle && !hasNewFlag && !hasNewUsername)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
             }
@@ -271,6 +336,26 @@ namespace YachtDice.Views
             else
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_TitleSaveError);
+            }
+        }
+
+        private async Task SaveFlagAsync(bool isSavedMessageShown)
+        {
+            string flagCode = GetSelectedFlagCode();
+            FlagChangeResultCode result = await _playerGateway.ChangeFlagAsync(_session.DisplayName, flagCode);
+
+            if (result == FlagChangeResultCode.Success)
+            {
+                _savedFlagCode = flagCode;
+
+                if (!isSavedMessageShown)
+                {
+                    CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+                }
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_FlagSaveError);
             }
         }
 

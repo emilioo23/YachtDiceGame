@@ -102,6 +102,13 @@ namespace YachtDice.Gateway
             return games.ToList();
         }
 
+        public async Task<FlagChangeResultCode> ChangeFlagAsync(string playerName, string flagCode)
+        {
+            FlagChangeResultCode result = await ExecuteAsync(client => client.ChangeFlag(playerName, flagCode));
+
+            return result;
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;

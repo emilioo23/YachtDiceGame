@@ -10,6 +10,7 @@ namespace YachtDice.Utils
         private const string AchievementNameKey = "Achievement_{0}_Name";
         private const string AchievementDescriptionKey = "Achievement_{0}_Description";
         private const string TitleKey = "Title_{0}";
+        private const string FlagKey = "Flag_{0}";
 
         /// <summary>
         /// Gets the name of an achievement.
@@ -39,6 +40,16 @@ namespace YachtDice.Utils
         public static string GetTitleName(int titleId)
         {
             return Read(string.Format(TitleKey, titleId));
+        }
+
+        /// <summary>
+        /// Gets the name of a country from the code of its flag.
+        /// </summary>
+        /// <param name="flagCode">Code of the country with two lowercase letters.</param>
+        /// <returns>The name in the current language, or an empty text if it does not exist.</returns>
+        public static string GetFlagName(string flagCode)
+        {
+            return Read(string.Format(FlagKey, flagCode));
         }
 
         private static string Read(string key)
