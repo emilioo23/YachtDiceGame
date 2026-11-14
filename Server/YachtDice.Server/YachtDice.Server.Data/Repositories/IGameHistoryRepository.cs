@@ -31,5 +31,14 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="ArgumentNullException">The result is null.</exception>
         /// <exception cref="DataAccessException">The database could not be updated.</exception>
         void Save(GameResultRecord result);
+
+        /// <summary>
+        /// Gets the most recent games of a player, with the score of every player who took part in them.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="maxGames">Maximum number of games to return.</param>
+        /// <returns>One record for each player of each game, or an empty list if the player has no games.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        List<PlayedGameRecord> FindRecentGames(int playerId, int maxGames);
     }
 }

@@ -15,6 +15,7 @@ namespace YachtDice.Server.Tests.InMemory
 
         private readonly List<GameResultRecord> _savedResults = new List<GameResultRecord>();
         private readonly List<GameHistoryPlayer> _entries = new List<GameHistoryPlayer>();
+        private readonly List<PlayedGameRecord> _playedGames = new List<PlayedGameRecord>();
 
         /// <summary>
         /// Gets the results saved so far, in the order in which they were saved.
@@ -38,6 +39,32 @@ namespace YachtDice.Server.Tests.InMemory
         public void AddPlayedGame(int playerId, int finalScore, bool isWinner)
         {
             _entries.Add(new GameHistoryPlayer { PlayerId = playerId, FinalScore = finalScore, IsWinner = isWinner });
+        }
+
+        /// <inheritdoc />
+        public List<PlayedGameRecord> FindRecentGames(int playerId, int maxGames)
+        {
+            Func<PlayedGameRecord, bool> belongsToPlayer = record => record.PlayerId == playerId;
+            Func<PlayedGameRecord, DateTime?> readEndDate = record => record.EndDate;
+            Func<PlayedGameRecord, int> readGameId = record => record.GameId;
+            List<int> recentIds = _playedGames
+                .Where(belongsToPlayer)
+                .OrderByDescending(readEndDate)
+                .Select(readGameId)
+                .Take(maxGames)
+                .ToList();
+            Func<PlayedGameRecord, bool> isInRecentGames = record => recentIds.Contains(record.GameId);
+
+            return _playedGames.Where(isInRecentGames).ToList();
+        }
+
+        /// <summary>
+        /// Adds one player of a game that already finished, so the game appears in the recent games.
+        /// </summary>
+        /// <param name="record">What the player scored in the game.</param>
+        public void AddPlayedGameRecord(PlayedGameRecord record)
+        {
+            _playedGames.Add(record);
         }
 
         /// <inheritdoc />

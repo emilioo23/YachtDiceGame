@@ -103,6 +103,7 @@
     <Compile Include="Repositories\IPasswordResetRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
     <Compile Include="Repositories\PasswordResetRepository.cs" />
+    <Compile Include="Repositories\PlayedGameRecord.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />
     <Compile Include="Repositories\PlayerResultRecord.cs" />
     <Compile Include="Repositories\PlayerResultStatus.cs" />

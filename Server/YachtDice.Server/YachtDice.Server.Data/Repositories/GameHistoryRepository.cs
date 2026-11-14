@@ -12,6 +12,7 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class GameHistoryRepository : IGameHistoryRepository
     {
+        private const string RecentGamesFailedMessage = "Database error occurred while reading the recent games.";
         private const string FindByPlayerFailedMessage =
             "Database error occurred while fetching game history by player ID.";
 
@@ -68,6 +69,47 @@ namespace YachtDice.Server.Data.Repositories
             }
 
             DatabaseOperation.Save(context => AddResult(context, result), SaveFailedMessage);
+        }
+
+        /// <summary>
+        /// Gets the most recent games of a player, with the score of every player who took part in them.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="maxGames">Maximum number of games to return.</param>
+        /// <returns>One record for each player of each game, or an empty list if the player has no games.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<PlayedGameRecord> FindRecentGames(int playerId, int maxGames)
+        {
+            List<PlayedGameRecord> games = DatabaseOperation.Query(
+                context => SelectRecentGames(context, playerId, maxGames),
+                RecentGamesFailedMessage);
+
+            return games;
+        }
+
+        private static List<PlayedGameRecord> SelectRecentGames(YachtDiceContext context, int playerId, int maxGames)
+        {
+            Expression<Func<GameHistoryPlayer, bool>> isSamePlayer = entry => entry.PlayerId == playerId;
+            Expression<Func<GameHistoryPlayer, DateTime?>> readEndDate = entry => entry.GameHistory.EndDate;
+            Expression<Func<GameHistoryPlayer, int>> readGameId = entry => entry.GameId;
+            List<int> gameIds = context.GameHistoryPlayer
+                .Where(isSamePlayer)
+                .OrderByDescending(readEndDate)
+                .Select(readGameId)
+                .Take(maxGames)
+                .ToList();
+            Expression<Func<GameHistoryPlayer, bool>> isInRecentGames = entry => gameIds.Contains(entry.GameId);
+            Expression<Func<GameHistoryPlayer, PlayedGameRecord>> createRecord = entry => new PlayedGameRecord
+            {
+                GameId = entry.GameId,
+                EndDate = entry.GameHistory.EndDate,
+                PlayerId = entry.PlayerId,
+                PlayerName = entry.Player.DisplayName,
+                FinalScore = entry.FinalScore,
+                IsWinner = entry.IsWinner == true
+            };
+
+            return context.GameHistoryPlayer.Where(isInRecentGames).Select(createRecord).ToList();
         }
 
         private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
