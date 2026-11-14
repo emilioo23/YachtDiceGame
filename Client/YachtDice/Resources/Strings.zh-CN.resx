@@ -1,0 +1,2190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Auth_Logo" xml:space="preserve">
+    <value>Yacht Dice</value>
+  </data>
+  <data name="Auth_Subtitle" xml:space="preserve">
+    <value>经典多人骰子游戏</value>
+  </data>
+  <data name="Auth_LoginTab" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="Auth_RegisterTab" xml:space="preserve">
+    <value>注册</value>
+  </data>
+  <data name="Auth_Email" xml:space="preserve">
+    <value>邮箱</value>
+  </data>
+  <data name="Auth_EmailPlaceholder" xml:space="preserve">
+    <value>usuario@ejemplo.com</value>
+  </data>
+  <data name="Auth_Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Auth_ForgotPassword" xml:space="preserve">
+    <value>忘记密码？</value>
+  </data>
+  <data name="Auth_FirstName" xml:space="preserve">
+    <value>名字</value>
+  </data>
+  <data name="Auth_LastName" xml:space="preserve">
+    <value>姓氏</value>
+  </data>
+  <data name="Auth_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Auth_UsernamePlaceholder" xml:space="preserve">
+    <value>我的昵称123</value>
+  </data>
+  <data name="Auth_ButtonLogin" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="Auth_ButtonCreateAccount" xml:space="preserve">
+    <value>创建账号</value>
+  </data>
+  <data name="Auth_Divider" xml:space="preserve">
+    <value>或</value>
+  </data>
+  <data name="Auth_ButtonGuest" xml:space="preserve">
+    <value>以游客身份游玩</value>
+  </data>
+  <data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>所有字段均为必填项。</value>
+  </data>
+  <data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>注册成功。</value>
+  </data>
+  <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>请输入邮箱。</value>
+  </data>
+  <data name="Global_ButtonBack" xml:space="preserve">
+    <value>← 返回</value>
+  </data>
+  <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
+    <value>编辑资料</value>
+  </data>
+  <data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
+    <value>{0} 人在线</value>
+  </data>
+  <data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
+    <value>在线</value>
+  </data>
+  <data name="MainMenu_ButtonLogout" xml:space="preserve">
+    <value>退出登录</value>
+  </data>
+  <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
+    <value>排行榜</value>
+  </data>
+  <data name="MainMenu_Nav_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>请输入房间代码。</value>
+  </data>
+  <data name="MainMenu_PlayerLevel" xml:space="preserve">
+    <value>等级 {0}</value>
+  </data>
+  <data name="Profile_SavedMessage" xml:space="preserve">
+    <value>资料保存成功。</value>
+  </data>
+  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
+    <value>功能尚未实现。</value>
+  </data>
+  <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>验证码已重新发送。</value>
+  </data>
+  <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>验证码不完整。</value>
+  </data>
+  <data name="TwoFactor_Title" xml:space="preserve">
+    <value>两步验证</value>
+  </data>
+  <data name="TwoFactor_Subtitle" xml:space="preserve">
+    <value>请输入发送至以下地址的6位验证码</value>
+  </data>
+  <data name="TwoFactor_ResendText" xml:space="preserve">
+    <value>没收到验证码？</value>
+  </data>
+  <data name="TwoFactor_LinkResend" xml:space="preserve">
+    <value>重新发送</value>
+  </data>
+  <data name="TwoFactor_ButtonVerify" xml:space="preserve">
+    <value>验证 →</value>
+  </data>
+  <data name="ForgotPassword_Title" xml:space="preserve">
+    <value>找回密码</value>
+  </data>
+  <data name="ForgotPassword_Email" xml:space="preserve">
+    <value>邮箱</value>
+  </data>
+  <data name="ForgotPassword_LinkBackToLogin" xml:space="preserve">
+    <value>← 返回登录</value>
+  </data>
+  <data name="MainMenu_Friends_Title" xml:space="preserve">
+    <value>好友</value>
+  </data>
+  <data name="MainMenu_Friends_Subtitle" xml:space="preserve">
+    <value>玩家列表</value>
+  </data>
+  <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
+    <value>+ 添加</value>
+  </data>
+  <data name="MainMenu_Play_Welcome" xml:space="preserve">
+    <value>欢迎回来，</value>
+  </data>
+  <data name="MainMenu_Play_CreateRoomTitle" xml:space="preserve">
+    <value>创建房间</value>
+  </data>
+  <data name="MainMenu_Play_CreateRoomDescription" xml:space="preserve">
+    <value>创建私人对局，等待你的好友</value>
+  </data>
+  <data name="MainMenu_Play_JoinRoomTitle" xml:space="preserve">
+    <value>加入房间</value>
+  </data>
+  <data name="MainMenu_Play_JoinRoomDescription" xml:space="preserve">
+    <value>输入房间代码</value>
+  </data>
+  <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
+    <value>进入 →</value>
+  </data>
+  <data name="MainMenu_Play_StatGames" xml:space="preserve">
+    <value>对局</value>
+  </data>
+  <data name="MainMenu_Play_StatWins" xml:space="preserve">
+    <value>胜场</value>
+  </data>
+  <data name="MainMenu_Play_StatBestScore" xml:space="preserve">
+    <value>最高分</value>
+  </data>
+  <data name="MainMenu_Play_StatWinRate" xml:space="preserve">
+    <value>胜率</value>
+  </data>
+  <data name="Lobby_Title" xml:space="preserve">
+    <value>等候室</value>
+  </data>
+  <data name="Lobby_Privacy" xml:space="preserve">
+    <value>隐私</value>
+  </data>
+  <data name="Lobby_OptionPrivate" xml:space="preserve">
+    <value>私人</value>
+  </data>
+  <data name="Lobby_OptionPublic" xml:space="preserve">
+    <value>公开</value>
+  </data>
+  <data name="Lobby_MaxPlayers" xml:space="preserve">
+    <value>最多玩家数</value>
+  </data>
+  <data name="Lobby_GameMode" xml:space="preserve">
+    <value>游戏模式</value>
+  </data>
+  <data name="Lobby_Mode1MinuteTitle" xml:space="preserve">
+    <value>1分钟</value>
+  </data>
+  <data name="Lobby_Mode1MinuteSub" xml:space="preserve">
+    <value>正常节奏 · 无压力</value>
+  </data>
+  <data name="Lobby_Mode30SecondsTitle" xml:space="preserve">
+    <value>30秒</value>
+  </data>
+  <data name="Lobby_Mode30SecondsSub" xml:space="preserve">
+    <value>快节奏 · 有压力</value>
+  </data>
+  <data name="Lobby_Players" xml:space="preserve">
+    <value>玩家</value>
+  </data>
+  <data name="Lobby_Host" xml:space="preserve">
+    <value>房主</value>
+  </data>
+  <data name="Lobby_WaitingPlayer" xml:space="preserve">
+    <value>等待玩家...</value>
+  </data>
+  <data name="Lobby_ButtonCopyCode" xml:space="preserve">
+    <value>复制代码</value>
+  </data>
+  <data name="Lobby_ButtonStartMatch" xml:space="preserve">
+    <value>开始对局 →</value>
+  </data>
+  <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
+    <value>已复制代码：{0}</value>
+  </data>
+  <data name="Leaderboard_Title" xml:space="preserve">
+    <value>全球排行榜</value>
+  </data>
+  <data name="Leaderboard_FilterGlobal" xml:space="preserve">
+    <value>全球</value>
+  </data>
+  <data name="Leaderboard_FilterFriends" xml:space="preserve">
+    <value>好友</value>
+  </data>
+  <data name="Leaderboard_ColumnRank" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Leaderboard_ColumnPlayer" xml:space="preserve">
+    <value>玩家</value>
+  </data>
+  <data name="Leaderboard_ColumnPoints" xml:space="preserve">
+    <value>积分</value>
+  </data>
+  <data name="Leaderboard_ColumnWins" xml:space="preserve">
+    <value>胜场</value>
+  </data>
+  <data name="Leaderboard_YourPosition" xml:space="preserve">
+    <value>你的排名：#{0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Settings_Nav_Account" xml:space="preserve">
+    <value>我的账号</value>
+  </data>
+  <data name="Settings_Nav_Appearance" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="Settings_Nav_Security" xml:space="preserve">
+    <value>安全</value>
+  </data>
+  <data name="Settings_Nav_Notifications" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="Settings_Nav_Preferences" xml:space="preserve">
+    <value>偏好设置</value>
+  </data>
+  <data name="Settings_Nav_Privacy" xml:space="preserve">
+    <value>隐私</value>
+  </data>
+  <data name="Settings_Account_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Settings_Account_Email" xml:space="preserve">
+    <value>邮箱</value>
+  </data>
+  <data name="Settings_Account_Avatar" xml:space="preserve">
+    <value>头像与个性化</value>
+  </data>
+  <data name="Settings_ButtonChange" xml:space="preserve">
+    <value>更改</value>
+  </data>
+  <data name="Settings_Account_ButtonEditProfile" xml:space="preserve">
+    <value>编辑资料</value>
+  </data>
+  <data name="Settings_Security_Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Settings_Security_PasswordCurrent" xml:space="preserve">
+    <value>当前密码</value>
+  </data>
+  <data name="Settings_Security_TwoFactor" xml:space="preserve">
+    <value>两步验证</value>
+  </data>
+  <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
+    <value>登录时通过邮件发送验证码</value>
+  </data>
+  <data name="Settings_Security_ButtonTwoFactorEnable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Settings_Security_ButtonTwoFactorDisable" xml:space="preserve">
+    <value>停用</value>
+  </data>
+  <data name="Settings_Security_TwoFactorEnabledMessage" xml:space="preserve">
+    <value>两步验证已启用。</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisabledMessage" xml:space="preserve">
+    <value>两步验证已停用。</value>
+  </data>
+  <data name="Settings_Security_TwoFactorUnavailableMessage" xml:space="preserve">
+    <value>需要注册账号才能使用此选项。</value>
+  </data>
+  <data name="Settings_Notifications_Match" xml:space="preserve">
+    <value>对局通知</value>
+  </data>
+  <data name="Settings_Notifications_MatchSub" xml:space="preserve">
+    <value>有人邀请你游戏时</value>
+  </data>
+  <data name="Settings_Notifications_SoundsGame" xml:space="preserve">
+    <value>游戏音效</value>
+  </data>
+  <data name="Settings_Notifications_SoundsGameSub" xml:space="preserve">
+    <value>掷骰子时的音效</value>
+  </data>
+  <data name="Settings_Preferences_ShowPotentialPoints" xml:space="preserve">
+    <value>显示潜在得分</value>
+  </data>
+  <data name="Settings_Preferences_ShowPotentialPointsSub" xml:space="preserve">
+    <value>记分前先查看得分</value>
+  </data>
+  <data name="Settings_Preferences_Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_Preferences_OptionSpanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Preferences_OptionEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Preferences_OptionPortuguese" xml:space="preserve">
+    <value>Português</value>
+  </data>
+  <data name="Settings_Preferences_OptionChinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Appearance_DarkTheme" xml:space="preserve">
+    <value>深色主题</value>
+  </data>
+  <data name="Settings_Appearance_DarkThemeSub" xml:space="preserve">
+    <value>更改整个界面的外观</value>
+  </data>
+  <data name="Settings_Privacy_PublicProfile" xml:space="preserve">
+    <value>公开资料</value>
+  </data>
+  <data name="Settings_Privacy_PublicProfileSub" xml:space="preserve">
+    <value>允许其他人查看你的资料</value>
+  </data>
+  <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
+    <value>删除账号</value>
+  </data>
+  <data name="Profile_ChooseAvatar" xml:space="preserve">
+    <value>选择你的头像</value>
+  </data>
+  <data name="Profile_CustomizeProfileTitle" xml:space="preserve">
+    <value>个性化资料</value>
+  </data>
+  <data name="Profile_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Profile_TitleLabel" xml:space="preserve">
+    <value>称号</value>
+  </data>
+  <data name="Profile_TitleBeginner" xml:space="preserve">
+    <value>Debutante</value>
+  </data>
+  <data name="Profile_TitleExpert" xml:space="preserve">
+    <value>Experto en dados</value>
+  </data>
+  <data name="Profile_TitleChampion" xml:space="preserve">
+    <value>Campeón del Yacht</value>
+  </data>
+  <data name="Profile_TitleShooter" xml:space="preserve">
+    <value>Tirador veloz</value>
+  </data>
+  <data name="Profile_TitleStrategist" xml:space="preserve">
+    <value>Estratega</value>
+  </data>
+  <data name="Profile_StatisticsHeader" xml:space="preserve">
+    <value>统计</value>
+  </data>
+  <data name="Profile_StatGames" xml:space="preserve">
+    <value>对局</value>
+  </data>
+  <data name="Profile_StatWins" xml:space="preserve">
+    <value>胜场</value>
+  </data>
+  <data name="Profile_StatBestScore" xml:space="preserve">
+    <value>最高分</value>
+  </data>
+  <data name="Profile_TotalXp" xml:space="preserve">
+    <value>总经验值</value>
+  </data>
+  <data name="Profile_Achievements_Header" xml:space="preserve">
+    <value>成就</value>
+  </data>
+  <data name="Profile_ButtonSaveChanges" xml:space="preserve">
+    <value>保存更改</value>
+  </data>
+  <data name="Game_Sidebar_ButtonKick" xml:space="preserve">
+    <value>踢出玩家</value>
+  </data>
+  <data name="Game_Sidebar_ButtonLeave" xml:space="preserve">
+    <value>离开对局</value>
+  </data>
+  <data name="Game_Topbar_YourTurn" xml:space="preserve">
+    <value>轮到你了</value>
+  </data>
+  <data name="Game_ResultNotSaved" xml:space="preserve">
+    <value>无法保存对局结果，因此本局的经验值没有累计。</value>
+  </data>
+  <data name="Game_Topbar_RoundInfo" xml:space="preserve">
+    <value>第 {0} / {1} 轮</value>
+  </data>
+  <data name="Game_Scorecard_Total" xml:space="preserve">
+    <value>总计</value>
+  </data>
+  <data name="Game_Dice_ButtonRoll" xml:space="preserve">
+    <value>掷骰子 ({0}/3)</value>
+  </data>
+  <data name="Game_Dice_HintPress" xml:space="preserve">
+    <value>点击“掷骰子”开始</value>
+  </data>
+  <data name="Game_Chat_ButtonChat" xml:space="preserve">
+    <value>聊天</value>
+  </data>
+  <data name="Game_Category_Ones" xml:space="preserve">
+    <value>一点</value>
+  </data>
+  <data name="Game_Category_Twos" xml:space="preserve">
+    <value>二点</value>
+  </data>
+  <data name="Game_Category_Threes" xml:space="preserve">
+    <value>三点</value>
+  </data>
+  <data name="Game_Category_Fours" xml:space="preserve">
+    <value>四点</value>
+  </data>
+  <data name="Game_Category_Fives" xml:space="preserve">
+    <value>五点</value>
+  </data>
+  <data name="Game_Category_Sixes" xml:space="preserve">
+    <value>六点</value>
+  </data>
+  <data name="Game_Category_Sum" xml:space="preserve">
+    <value>总和</value>
+  </data>
+  <data name="Game_Category_Bonus" xml:space="preserve">
+    <value>奖励 +35</value>
+  </data>
+  <data name="Game_Category_FourOfAKind" xml:space="preserve">
+    <value>四条</value>
+  </data>
+  <data name="Game_Category_FullHouse" xml:space="preserve">
+    <value>葫芦</value>
+  </data>
+  <data name="Game_Category_Yacht" xml:space="preserve">
+    <value>五条</value>
+  </data>
+  <data name="Results_Title" xml:space="preserve">
+    <value>对局结束</value>
+  </data>
+  <data name="Results_TitleWinner" xml:space="preserve">
+    <value>{0} 获胜</value>
+  </data>
+  <data name="Results_SubtitleScore" xml:space="preserve">
+    <value>获胜得分：{0} 分</value>
+  </data>
+  <data name="Results_ColumnPlayer" xml:space="preserve">
+    <value>玩家</value>
+  </data>
+  <data name="Results_ColumnTotal" xml:space="preserve">
+    <value>总分</value>
+  </data>
+  <data name="Results_ColumnXp" xml:space="preserve">
+    <value>获得经验值</value>
+  </data>
+  <data name="Results_ExperienceGainedFormat" xml:space="preserve">
+    <value>+{0} XP</value>
+  </data>
+  <data name="Results_LevelFormat" xml:space="preserve">
+    <value>等级 {0}</value>
+  </data>
+  <data name="Results_ExperienceProgressFormat" xml:space="preserve">
+    <value>{0} / {1} XP</value>
+  </data>
+  <data name="Results_LevelUp" xml:space="preserve">
+    <value>升级了！</value>
+  </data>
+  <data name="Results_ButtonMenu" xml:space="preserve">
+    <value>菜单</value>
+  </data>
+  <data name="Results_ButtonNewGame" xml:space="preserve">
+    <value>新对局</value>
+  </data>
+  <data name="Dialogs_LeaveMatch" xml:space="preserve">
+    <value>确定要离开对局吗？其他玩家会收到通知，对局进行期间你可以回来。</value>
+  </data>
+  <data name="Dialogs_DeleteFriend" xml:space="preserve">
+    <value>确定要删除这位好友吗？</value>
+  </data>
+  <data name="Dialogs_InvalidCredentials" xml:space="preserve">
+    <value>凭据无效。</value>
+  </data>
+  <data name="Dialogs_UsernameTaken" xml:space="preserve">
+    <value>该用户名已被使用。</value>
+  </data>
+  <data name="Dialogs_EmailRegistered" xml:space="preserve">
+    <value>该邮箱已被注册。</value>
+  </data>
+  <data name="Dialogs_IncorrectCode" xml:space="preserve">
+    <value>验证码不正确。</value>
+  </data>
+  <data name="Dialogs_TooManyAttempts" xml:space="preserve">
+    <value>失败次数过多。验证已被锁定15分钟。</value>
+  </data>
+  <data name="Dialogs_ButtonIgnore" xml:space="preserve">
+    <value>忽略</value>
+  </data>
+  <data name="Dialogs_ButtonOK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Friends_Status_WantsFriend" xml:space="preserve">
+    <value>想加你为好友</value>
+  </data>
+  <data name="Friends_Section_Requests" xml:space="preserve">
+    <value>好友请求</value>
+  </data>
+  <data name="Friends_Section_InGame" xml:space="preserve">
+    <value>对局中</value>
+  </data>
+  <data name="Friends_Section_Offline" xml:space="preserve">
+    <value>离线</value>
+  </data>
+  <data name="Profile_Achievements_FirstMatch" xml:space="preserve">
+    <value>首场对局</value>
+  </data>
+  <data name="Profile_Achievements_FirstWin" xml:space="preserve">
+    <value>首次胜利</value>
+  </data>
+  <data name="Profile_Achievements_SpeedRoller" xml:space="preserve">
+    <value>神速投手</value>
+  </data>
+  <data name="Game_Chat_SystemName" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="Game_Chat_MatchStartedMessage" xml:space="preserve">
+    <value>对局开始。祝你好运。</value>
+  </data>
+  <data name="Game_Sidebar_ButtonHowToPlay" xml:space="preserve">
+    <value>玩法说明</value>
+  </data>
+  <data name="TwoFactor_ErrorSendFailed" xml:space="preserve">
+    <value>无法发送验证码。请检查网络连接后重试。</value>
+  </data>
+  <data name="TwoFactor_ErrorCodeExpired" xml:space="preserve">
+    <value>验证码已过期。请点击重新发送链接获取新的验证码。</value>
+  </data>
+  <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
+    <value>请等待几秒后再申请新的验证码。</value>
+  </data>
+  <data name="Dialogs_ServerUnavailable" xml:space="preserve">
+    <value>无法连接到服务器。请检查网络连接后重试。</value>
+  </data>
+  <data name="Dialogs_DatabaseUnavailable" xml:space="preserve">
+    <value>服务器暂时无法查询数据。请稍后再试。</value>
+  </data>
+  <data name="Dialogs_InvalidData" xml:space="preserve">
+    <value>服务器拒绝了发送的信息。请检查数据后重试。</value>
+  </data>
+  <data name="Dialogs_UnexpectedError" xml:space="preserve">
+    <value>发生意外错误。请重试。</value>
+  </data>
+  <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
+    <value>用户名必须为3到20个字符，只能使用不带重音的字母、数字、句点和下划线。</value>
+  </data>
+  <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
+    <value>用户名不能包含冒犯性词语。请选择其他名称。</value>
+  </data>
+  <data name="Auth_ErrorWeakPassword" xml:space="preserve">
+    <value>密码必须为8到64个字符，且至少包含一个字母和一个数字。</value>
+  </data>
+  <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
+    <value>有字段过长。用户名：最多20个字符，邮箱：100，名字和姓氏：50。</value>
+  </data>
+  <data name="Auth_ErrorInvalidEmail" xml:space="preserve">
+    <value>请输入有效的邮箱。</value>
+  </data>
+  <data name="Auth_GuestDisplayName" xml:space="preserve">
+    <value>游客</value>
+  </data>
+  <data name="Leaderboard_ConnectionError" xml:space="preserve">
+    <value>无法连接到服务器获取排行榜。</value>
+  </data>
+  <data name="MainMenu_Friends_UsernamePlaceholder" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="MainMenu_Friends_YourUsername" xml:space="preserve">
+    <value>你的用户名</value>
+  </data>
+  <data name="MainMenu_Friends_StatusOffline" xml:space="preserve">
+    <value>离线</value>
+  </data>
+  <data name="Friends_Result_RequestSent" xml:space="preserve">
+    <value>好友请求已发送。</value>
+  </data>
+  <data name="Friends_Result_RequestAlreadyReceived" xml:space="preserve">
+    <value>该玩家已向你发送了请求。请在你的好友请求中接受。</value>
+  </data>
+  <data name="Friends_Result_InvalidUsername" xml:space="preserve">
+    <value>请输入用户名。</value>
+  </data>
+  <data name="Friends_Result_UsernameNotFound" xml:space="preserve">
+    <value>不存在该用户名的玩家。</value>
+  </data>
+  <data name="Friends_Result_SelfRequest" xml:space="preserve">
+    <value>这是你自己的用户名。</value>
+  </data>
+  <data name="Friends_Result_AlreadyFriends" xml:space="preserve">
+    <value>你们已经是好友了。</value>
+  </data>
+  <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
+    <value>你已经向该玩家发送过请求了。</value>
+  </data>
+  <data name="Lobby_RoomCodeFormat" xml:space="preserve">
+    <value>代码：{0}</value>
+  </data>
+  <data name="Lobby_PlayerCountFormat" xml:space="preserve">
+    <value>({0}/{1})</value>
+  </data>
+  <data name="Lobby_WaitingForHost" xml:space="preserve">
+    <value>等待房主...</value>
+  </data>
+  <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
+    <value>至少需要2名玩家才能开始对局。</value>
+  </data>
+  <data name="Lobby_Result_NotHost" xml:space="preserve">
+    <value>只有房主才能这样做。</value>
+  </data>
+  <data name="Lobby_Result_RoomNotFound" xml:space="preserve">
+    <value>不存在该代码的房间。</value>
+  </data>
+  <data name="Lobby_Result_RoomFull" xml:space="preserve">
+    <value>房间已满。</value>
+  </data>
+  <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
+    <value>该房间的对局已经开始。</value>
+  </data>
+  <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
+    <value>该设置对房间无效。</value>
+  </data>
+  <data name="Game_Chat_ButtonHide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="Game_Chat_ShowTooltip" xml:space="preserve">
+    <value>显示聊天</value>
+  </data>
+  <data name="Game_Chat_SendFailed" xml:space="preserve">
+    <value>无法发送消息。</value>
+  </data>
+  <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
+    <value>聊天中不允许发送链接。</value>
+  </data>
+  <data name="Game_Chat_Unavailable" xml:space="preserve">
+    <value>本局对局无法使用聊天。</value>
+  </data>
+  <data name="Game_Chat_AuthorSeparator" xml:space="preserve">
+    <value>: </value>
+  </data>
+  <data name="Global_FormatPercentage" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Global_UnknownInitial" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="Global_SymbolMedalBronze" xml:space="preserve">
+    <value>🥉</value>
+  </data>
+  <data name="Global_SymbolClose" xml:space="preserve">
+    <value>✕</value>
+  </data>
+  <data name="Global_SymbolConfirm" xml:space="preserve">
+    <value>✓</value>
+  </data>
+  <data name="Global_SymbolDropdown" xml:space="preserve">
+    <value>▾</value>
+  </data>
+  <data name="Global_SymbolMedalGold" xml:space="preserve">
+    <value>🥇</value>
+  </data>
+  <data name="Game_Chat_ButtonSend" xml:space="preserve">
+    <value>&gt;</value>
+  </data>
+  <data name="Global_SymbolMedalSilver" xml:space="preserve">
+    <value>🥈</value>
+  </data>
+  <data name="MainMenu_Nav_Rooms" xml:space="preserve">
+    <value>房间</value>
+  </data>
+  <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
+    <value>← 返回菜单</value>
+  </data>
+  <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
+    <value>房间代码不正确。</value>
+  </data>
+  <data name="Lobby_Friends_Title" xml:space="preserve">
+    <value>好友</value>
+  </data>
+  <data name="Lobby_Friends_Hint" xml:space="preserve">
+    <value>右键点击在线好友即可邀请其加入房间。</value>
+  </data>
+  <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
+    <value>邀请玩家加入房间</value>
+  </data>
+  <data name="Lobby_Friends_GuestNotice" xml:space="preserve">
+    <value>请使用账号登录，以查看好友并邀请他们加入房间。</value>
+  </data>
+  <data name="Lobby_Friends_Empty" xml:space="preserve">
+    <value>你还没有添加好友。</value>
+  </data>
+  <data name="Rooms_Title" xml:space="preserve">
+    <value>可用房间</value>
+  </data>
+  <data name="Rooms_ButtonRefresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="Rooms_ButtonJoin" xml:space="preserve">
+    <value>加入</value>
+  </data>
+  <data name="Rooms_Empty" xml:space="preserve">
+    <value>目前没有可用房间。请在菜单中创建一个。</value>
+  </data>
+  <data name="Rooms_TitleFormat" xml:space="preserve">
+    <value>{0} 的房间</value>
+  </data>
+  <data name="Rooms_DetailsFormat" xml:space="preserve">
+    <value>{0}/{1} 名玩家 · {2}</value>
+  </data>
+  <data name="Rooms_CodeHint" xml:space="preserve">
+    <value>房间代码（仅限私人房间）</value>
+  </data>
+  <data name="Invitations_Result_Sent" xml:space="preserve">
+    <value>已向 {0} 发送邀请。</value>
+  </data>
+  <data name="Invitations_Result_NotInRoom" xml:space="preserve">
+    <value>你已不在该房间中。</value>
+  </data>
+  <data name="Invitations_Result_NotFriends" xml:space="preserve">
+    <value>你只能邀请你的好友。</value>
+  </data>
+  <data name="Invitations_Result_FriendOffline" xml:space="preserve">
+    <value>{0} 不在线。</value>
+  </data>
+  <data name="Invitations_Received_Title" xml:space="preserve">
+    <value>房间邀请</value>
+  </data>
+  <data name="Invitations_Received_Message" xml:space="preserve">
+    <value>{0} 邀请你加入他的房间。</value>
+  </data>
+  <data name="Invitations_Received_LeaveNotice" xml:space="preserve">
+    <value>如果你加入，将会离开当前所在的房间。</value>
+  </data>
+  <data name="Invitations_Received_Join" xml:space="preserve">
+    <value>加入</value>
+  </data>
+  <data name="Invitations_Received_Reject" xml:space="preserve">
+    <value>拒绝</value>
+  </data>
+  <data name="Auth_ShowPassword" xml:space="preserve">
+    <value>显示密码</value>
+  </data>
+  <data name="Auth_HidePassword" xml:space="preserve">
+    <value>隐藏密码</value>
+  </data>
+  <data name="Rooms_FilterSearchLabel" xml:space="preserve">
+    <value>搜索房间</value>
+  </data>
+  <data name="Rooms_FilterSearchHint" xml:space="preserve">
+    <value>输入创建房间者的名称</value>
+  </data>
+  <data name="Rooms_FilterPrivacyLabel" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="Rooms_FilterAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="Rooms_FilterPublic" xml:space="preserve">
+    <value>公开</value>
+  </data>
+  <data name="Rooms_FilterPrivate" xml:space="preserve">
+    <value>私人</value>
+  </data>
+  <data name="Rooms_NoResults" xml:space="preserve">
+    <value>没有符合搜索条件的房间。</value>
+  </data>
+  <data name="Lobby_Chat_WelcomeMessage" xml:space="preserve">
+    <value>对局开始前，你可以在这里和其他玩家聊天。</value>
+  </data>
+  <data name="ForgotPassword_Description" xml:space="preserve">
+    <value>输入你的邮箱，我们会发送一个6位验证码来重置你的密码。</value>
+  </data>
+  <data name="ForgotPassword_ButtonSendCode" xml:space="preserve">
+    <value>发送验证码</value>
+  </data>
+  <data name="ForgotPassword_CodeSentMessage" xml:space="preserve">
+    <value>如果该邮箱已注册，我们已发送一个6位验证码。</value>
+  </data>
+  <data name="ForgotPassword_ErrorSendFailed" xml:space="preserve">
+    <value>无法发送验证码。请检查网络连接后重试。</value>
+  </data>
+  <data name="ResetPassword_Title" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="ResetPassword_Subtitle" xml:space="preserve">
+    <value>请输入我们发送至以下地址的验证码</value>
+  </data>
+  <data name="ResetPassword_Code" xml:space="preserve">
+    <value>6位验证码</value>
+  </data>
+  <data name="ResetPassword_NewPassword" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>确认密码</value>
+  </data>
+  <data name="ResetPassword_ButtonChange" xml:space="preserve">
+    <value>更改密码</value>
+  </data>
+  <data name="ResetPassword_ResendText" xml:space="preserve">
+    <value>没收到验证码？</value>
+  </data>
+  <data name="ResetPassword_LinkResend" xml:space="preserve">
+    <value>重新发送</value>
+  </data>
+  <data name="ResetPassword_SuccessMessage" xml:space="preserve">
+    <value>你的密码已更改。现在可以登录了。</value>
+  </data>
+  <data name="ResetPassword_ErrorIncompleteCode" xml:space="preserve">
+    <value>验证码必须为6位数字。</value>
+  </data>
+  <data name="ResetPassword_ErrorEmptyPassword" xml:space="preserve">
+    <value>请输入新密码。</value>
+  </data>
+  <data name="ResetPassword_ErrorPasswordsDoNotMatch" xml:space="preserve">
+    <value>两次输入的密码不一致。</value>
+  </data>
+  <data name="ResetPassword_ErrorIncorrectCode" xml:space="preserve">
+    <value>验证码不正确。</value>
+  </data>
+  <data name="ResetPassword_ErrorCodeExpired" xml:space="preserve">
+    <value>验证码已过期或失效。请点击“重新发送”获取新的验证码。</value>
+  </data>
+  <data name="ResetPassword_ErrorTooManyAttempts" xml:space="preserve">
+    <value>失败次数过多。请点击“重新发送”获取新的验证码。</value>
+  </data>
+  <data name="Dialogs_ConnectionLost" xml:space="preserve">
+    <value>与服务器的连接已断开。请重新登录以继续游戏。</value>
+  </data>
+  <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
+    <value>该玩家已不在房间中。</value>
+  </data>
+  <data name="Lobby_HostKick" xml:space="preserve">
+    <value>踢出</value>
+  </data>
+  <data name="Lobby_HostTransfer" xml:space="preserve">
+    <value>转让房主</value>
+  </data>
+  <data name="Lobby_KickedMessage" xml:space="preserve">
+    <value>房主已将你踢出房间。</value>
+  </data>
+  <data name="Lobby_Chat_NewHost" xml:space="preserve">
+    <value>{0} 现在是房间的房主。</value>
+  </data>
+  <data name="Lobby_ConfirmKick" xml:space="preserve">
+    <value>确定要将 {0} 踢出房间吗？</value>
+  </data>
+  <data name="Dialogs_ButtonCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Profile_AvatarLocked" xml:space="preserve">
+    <value>你还未解锁该头像。需要达到 {0} 级。</value>
+  </data>
+  <data name="Profile_AvatarLockedBadge" xml:space="preserve">
+    <value>{0} 级</value>
+  </data>
+  <data name="Profile_UsernameSaveError" xml:space="preserve">
+    <value>无法更改用户名。请重试。</value>
+  </data>
+  <data name="Profile_AvatarSaveError" xml:space="preserve">
+    <value>无法更改头像。请重试。</value>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>等级 {0} · {1} 经验值</value>
+  </data>
+  <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
+    <value>玩法说明</value>
+  </data>
+  <data name="HowToPlay_Title" xml:space="preserve">
+    <value>玩法说明</value>
+  </data>
+  <data name="HowToPlay_Subtitle" xml:space="preserve">
+    <value>一分钟了解Yacht Dice规则。</value>
+  </data>
+  <data name="HowToPlay_GoalTitle" xml:space="preserve">
+    <value>游戏目标</value>
+  </data>
+  <data name="HowToPlay_GoalText" xml:space="preserve">
+    <value>你的计分表上每个类别各进行一轮，每轮用五颗骰子在对应类别中得分。所有类别填满后，得分最高者获胜。</value>
+  </data>
+  <data name="HowToPlay_TurnTitle" xml:space="preserve">
+    <value>你的回合</value>
+  </data>
+  <data name="HowToPlay_Step1" xml:space="preserve">
+    <value>掷出五颗骰子。</value>
+  </data>
+  <data name="HowToPlay_Step2" xml:space="preserve">
+    <value>选择想要保留的骰子，再重掷其余的骰子。每回合最多可掷三次。</value>
+  </data>
+  <data name="HowToPlay_Step3" xml:space="preserve">
+    <value>准备好后，从计分表中选择一个空闲类别并记分。如果骰子不符合该组合，则记0分。每个类别只能使用一次。</value>
+  </data>
+  <data name="HowToPlay_UpperTitle" xml:space="preserve">
+    <value>上半区</value>
+  </data>
+  <data name="HowToPlay_UpperRuleTitle" xml:space="preserve">
+    <value>一点到六点</value>
+  </data>
+  <data name="HowToPlay_UpperRuleText" xml:space="preserve">
+    <value>只计算显示该类别点数的骰子之和。例如在“三点”中掷出3、3、3、5、6，得9分，因为只有三个3计分。</value>
+  </data>
+  <data name="HowToPlay_BonusText" xml:space="preserve">
+    <value>如果一点到六点的总和达到63分或以上（例如每个点数各三颗骰子），可额外获得35分。</value>
+  </data>
+  <data name="HowToPlay_LowerTitle" xml:space="preserve">
+    <value>下半区</value>
+  </data>
+  <data name="HowToPlay_FourOfAKindText" xml:space="preserve">
+    <value>至少四颗相同的骰子。只计算其中四颗的点数之和。例如：5+5+5+5 = 20分；第五颗骰子不计分。</value>
+  </data>
+  <data name="HowToPlay_FullHouseText" xml:space="preserve">
+    <value>三颗相同的骰子，加上另外两颗相同的骰子。计算五颗骰子的点数之和。例如：2+2+3+3+3 = 13分。</value>
+  </data>
+  <data name="HowToPlay_YachtText" xml:space="preserve">
+    <value>五颗骰子全部相同。得50分。</value>
+  </data>
+  <data name="HowToPlay_WinTitle" xml:space="preserve">
+    <value>谁获胜？</value>
+  </data>
+  <data name="HowToPlay_WinText" xml:space="preserve">
+    <value>最后把你所有类别的得分加上奖励相加。得分最高的玩家获胜，每局的得分都会计入排行榜。</value>
+  </data>
+  <data name="HowToPlay_TipsTitle" xml:space="preserve">
+    <value>小贴士</value>
+  </data>
+  <data name="HowToPlay_TipsText" xml:space="preserve">
+    <value>保留出现次数最多的骰子。如果某个类别已经没有希望，就在最不划算的类别记0分来放弃它。</value>
+  </data>
+  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
+    <value>该邮箱尚未注册。</value>
+  </data>
+  <data name="Dialogs_InvalidPassword" xml:space="preserve">
+    <value>密码不正确。</value>
+  </data>
+  <data name="Dialogs_ConfirmLogout" xml:space="preserve">
+    <value>确定要退出登录吗？</value>
+  </data>
+  <data name="Game_Chat_PlayerLeft" xml:space="preserve">
+    <value>{0} 离开了对局或失去了连接。</value>
+  </data>
+  <data name="Game_Chat_PlayerReturned" xml:space="preserve">
+    <value>{0} 回到了对局。</value>
+  </data>
+  <data name="Game_Chat_PlayerKicked" xml:space="preserve">
+    <value>{0} 被踢出了对局。</value>
+  </data>
+  <data name="Game_KickNoPlayers" xml:space="preserve">
+    <value>对局中没有其他玩家可以踢出。</value>
+  </data>
+  <data name="Menu_PendingMatchPrompt" xml:space="preserve">
+    <value>你离开了一场正在进行的对局。要回去吗？</value>
+  </data>
+  <data name="Game_Category_LittleStraight" xml:space="preserve">
+    <value>小顺子</value>
+  </data>
+  <data name="Game_Category_BigStraight" xml:space="preserve">
+    <value>大顺子</value>
+  </data>
+  <data name="Game_Category_Choice" xml:space="preserve">
+    <value>自由</value>
+  </data>
+  <data name="Game_Category_YachtBonus" xml:space="preserve">
+    <value>五条奖励</value>
+  </data>
+  <data name="Game_Topbar_TurnOf" xml:space="preserve">
+    <value>{0} 的回合</value>
+  </data>
+  <data name="Game_Topbar_GameOver" xml:space="preserve">
+    <value>对局结束</value>
+  </data>
+  <data name="Game_Topbar_Paused" xml:space="preserve">
+    <value>等待玩家</value>
+  </data>
+  <data name="Game_Timer_SecondsLeft" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Game_Dice_HintOpponent" xml:space="preserve">
+    <value>等待 {0} 的回合...</value>
+  </data>
+  <data name="Game_Dice_HintChoose" xml:space="preserve">
+    <value>选择一个类别，或保留部分骰子再次掷骰。</value>
+  </data>
+  <data name="Game_Dice_HintPickBox" xml:space="preserve">
+    <value>没有剩余次数。请选择一个类别。</value>
+  </data>
+  <data name="Game_Result_GameNotFound" xml:space="preserve">
+    <value>该对局已不存在。</value>
+  </data>
+  <data name="Game_Result_PlayerNotInGame" xml:space="preserve">
+    <value>你已不在此对局中。</value>
+  </data>
+  <data name="Game_Result_NotYourTurn" xml:space="preserve">
+    <value>还没轮到你。</value>
+  </data>
+  <data name="Game_Result_GameFinished" xml:space="preserve">
+    <value>对局已经结束。</value>
+  </data>
+  <data name="Game_Result_NoRollsLeft" xml:space="preserve">
+    <value>你已用完本回合的三次掷骰机会。</value>
+  </data>
+  <data name="Game_Result_CategoryFilled" xml:space="preserve">
+    <value>该类别已经有分数。</value>
+  </data>
+  <data name="Game_Result_CategoryNotAllowed" xml:space="preserve">
+    <value>重复掷出五条时，百搭规则不允许使用该类别。</value>
+  </data>
+  <data name="Game_Chat_TurnTimedOut" xml:space="preserve">
+    <value>{0} 超时了，服务器替其完成了回合。</value>
+  </data>
+  <data name="Game_Chat_YachtBonus" xml:space="preserve">
+    <value>{0} 又掷出了五条，获得100分奖励。</value>
+  </data>
+  <data name="Game_Result_JoinFailed" xml:space="preserve">
+    <value>无法进入对局。</value>
+  </data>
+  <data name="Results_ColumnRank" xml:space="preserve">
+    <value>名次</value>
+  </data>
+  <data name="HowToPlay_LittleStraightText" xml:space="preserve">
+    <value>骰子为1-2-3-4-5。得30分。</value>
+  </data>
+  <data name="HowToPlay_BigStraightText" xml:space="preserve">
+    <value>骰子为2-3-4-5-6。得30分。</value>
+  </data>
+  <data name="HowToPlay_ChoiceText" xml:space="preserve">
+    <value>适用于任何组合。计算五颗骰子的点数之和。例如：1+3+4+5+6 = 19分。</value>
+  </data>
+  <data name="HowToPlay_YachtBonusText" xml:space="preserve">
+    <value>如果你在“五条”中已得50分，再掷出一个五条，可额外获得100分。如果在“五条”中记了0分，则没有奖励。</value>
+  </data>
+  <data name="HowToPlay_JokerTitle" xml:space="preserve">
+    <value>百搭</value>
+  </data>
+  <data name="HowToPlay_JokerText" xml:space="preserve">
+    <value>如果掷出五条而“五条”格已被使用，必须记在相同点数的上半区格子中（若空闲）。否则记在任意空闲的下半区格子（葫芦和顺子按满分计算）。如果也没有，则记在任意空闲的上半区格子。</value>
+  </data>
+  <data name="Results_TitleTie" xml:space="preserve">
+    <value>平局</value>
+  </data>
+  <data name="Game_Celebration_YachtTitle" xml:space="preserve">
+    <value>五条！</value>
+  </data>
+  <data name="Game_Celebration_YachtPoints" xml:space="preserve">
+    <value>{0} 得了 {1} 分</value>
+  </data>
+  <data name="Achievement_1_Name" xml:space="preserve">
+    <value>首场对局</value>
+  </data>
+  <data name="Achievement_1_Description" xml:space="preserve">
+    <value>完成你的第一场对局</value>
+  </data>
+  <data name="Achievement_2_Name" xml:space="preserve">
+    <value>首次胜利</value>
+  </data>
+  <data name="Achievement_2_Description" xml:space="preserve">
+    <value>赢得你的第一场对局</value>
+  </data>
+  <data name="Achievement_3_Name" xml:space="preserve">
+    <value>热身完毕</value>
+  </data>
+  <data name="Achievement_3_Description" xml:space="preserve">
+    <value>赢得3场对局</value>
+  </data>
+  <data name="Achievement_4_Name" xml:space="preserve">
+    <value>五星好评</value>
+  </data>
+  <data name="Achievement_4_Description" xml:space="preserve">
+    <value>赢得5场对局</value>
+  </data>
+  <data name="Achievement_5_Name" xml:space="preserve">
+    <value>高手连胜</value>
+  </data>
+  <data name="Achievement_5_Description" xml:space="preserve">
+    <value>赢得10场对局</value>
+  </data>
+  <data name="Achievement_6_Name" xml:space="preserve">
+    <value>势不可挡</value>
+  </data>
+  <data name="Achievement_6_Description" xml:space="preserve">
+    <value>赢得25场对局</value>
+  </data>
+  <data name="Achievement_7_Name" xml:space="preserve">
+    <value>活传奇</value>
+  </data>
+  <data name="Achievement_7_Description" xml:space="preserve">
+    <value>赢得50场对局</value>
+  </data>
+  <data name="Achievement_8_Name" xml:space="preserve">
+    <value>持之以恒</value>
+  </data>
+  <data name="Achievement_8_Description" xml:space="preserve">
+    <value>进行10场对局</value>
+  </data>
+  <data name="Achievement_9_Name" xml:space="preserve">
+    <value>老兵</value>
+  </data>
+  <data name="Achievement_9_Description" xml:space="preserve">
+    <value>进行25场对局</value>
+  </data>
+  <data name="Achievement_10_Name" xml:space="preserve">
+    <value>骰子迷</value>
+  </data>
+  <data name="Achievement_10_Description" xml:space="preserve">
+    <value>进行50场对局</value>
+  </data>
+  <data name="Achievement_11_Name" xml:space="preserve">
+    <value>百场达人</value>
+  </data>
+  <data name="Achievement_11_Description" xml:space="preserve">
+    <value>进行100场对局</value>
+  </data>
+  <data name="Achievement_12_Name" xml:space="preserve">
+    <value>开局不错</value>
+  </data>
+  <data name="Achievement_12_Description" xml:space="preserve">
+    <value>在一场对局中获得100分</value>
+  </data>
+  <data name="Achievement_13_Name" xml:space="preserve">
+    <value>神速投手</value>
+  </data>
+  <data name="Achievement_13_Description" xml:space="preserve">
+    <value>在一场对局中获得200分</value>
+  </data>
+  <data name="Achievement_14_Name" xml:space="preserve">
+    <value>近乎完美</value>
+  </data>
+  <data name="Achievement_14_Description" xml:space="preserve">
+    <value>在一场对局中获得250分</value>
+  </data>
+  <data name="Achievement_15_Name" xml:space="preserve">
+    <value>五条大师</value>
+  </data>
+  <data name="Achievement_15_Description" xml:space="preserve">
+    <value>在一场对局中获得300分</value>
+  </data>
+  <data name="Achievement_16_Name" xml:space="preserve">
+    <value>压倒性优势</value>
+  </data>
+  <data name="Achievement_16_Description" xml:space="preserve">
+    <value>赢得60%的对局（至少进行10场）</value>
+  </data>
+  <data name="Achievement_17_Name" xml:space="preserve">
+    <value>无人能敌</value>
+  </data>
+  <data name="Achievement_17_Description" xml:space="preserve">
+    <value>赢得80%的对局（至少进行20场）</value>
+  </data>
+  <data name="Achievement_18_Name" xml:space="preserve">
+    <value>步步高升</value>
+  </data>
+  <data name="Achievement_18_Description" xml:space="preserve">
+    <value>达到5级</value>
+  </data>
+  <data name="Achievement_19_Name" xml:space="preserve">
+    <value>经验丰富</value>
+  </data>
+  <data name="Achievement_19_Description" xml:space="preserve">
+    <value>达到10级</value>
+  </data>
+  <data name="Achievement_20_Name" xml:space="preserve">
+    <value>精英</value>
+  </data>
+  <data name="Achievement_20_Description" xml:space="preserve">
+    <value>达到15级</value>
+  </data>
+  <data name="Achievement_21_Name" xml:space="preserve">
+    <value>大师中的大师</value>
+  </data>
+  <data name="Achievement_21_Description" xml:space="preserve">
+    <value>达到20级</value>
+  </data>
+  <data name="Achievement_22_Name" xml:space="preserve">
+    <value>经验收藏家</value>
+  </data>
+  <data name="Achievement_22_Description" xml:space="preserve">
+    <value>累计1000经验值</value>
+  </data>
+  <data name="Achievement_23_Name" xml:space="preserve">
+    <value>经验之山</value>
+  </data>
+  <data name="Achievement_23_Description" xml:space="preserve">
+    <value>累计5000经验值</value>
+  </data>
+  <data name="Title_0" xml:space="preserve">
+    <value>新手登场</value>
+  </data>
+  <data name="Title_1" xml:space="preserve">
+    <value>菜鸟</value>
+  </data>
+  <data name="Title_2" xml:space="preserve">
+    <value>赢家</value>
+  </data>
+  <data name="Title_3" xml:space="preserve">
+    <value>热身选手</value>
+  </data>
+  <data name="Title_4" xml:space="preserve">
+    <value>潜力新星</value>
+  </data>
+  <data name="Title_5" xml:space="preserve">
+    <value>战略家</value>
+  </data>
+  <data name="Title_6" xml:space="preserve">
+    <value>势不可挡</value>
+  </data>
+  <data name="Title_7" xml:space="preserve">
+    <value>活传奇</value>
+  </data>
+  <data name="Title_8" xml:space="preserve">
+    <value>坚持者</value>
+  </data>
+  <data name="Title_9" xml:space="preserve">
+    <value>老兵</value>
+  </data>
+  <data name="Title_10" xml:space="preserve">
+    <value>骰子狂人</value>
+  </data>
+  <data name="Title_11" xml:space="preserve">
+    <value>百场达人</value>
+  </data>
+  <data name="Title_12" xml:space="preserve">
+    <value>精准投手</value>
+  </data>
+  <data name="Title_13" xml:space="preserve">
+    <value>神速投手</value>
+  </data>
+  <data name="Title_14" xml:space="preserve">
+    <value>完美主义者</value>
+  </data>
+  <data name="Title_15" xml:space="preserve">
+    <value>五条冠军</value>
+  </data>
+  <data name="Title_16" xml:space="preserve">
+    <value>统治者</value>
+  </data>
+  <data name="Title_17" xml:space="preserve">
+    <value>无人能敌</value>
+  </data>
+  <data name="Title_18" xml:space="preserve">
+    <value>学徒</value>
+  </data>
+  <data name="Title_19" xml:space="preserve">
+    <value>传奇</value>
+  </data>
+  <data name="Title_20" xml:space="preserve">
+    <value>精英</value>
+  </data>
+  <data name="Title_21" xml:space="preserve">
+    <value>宗师</value>
+  </data>
+  <data name="Title_23" xml:space="preserve">
+    <value>泰坦</value>
+  </data>
+  <data name="Profile_TitleLocked" xml:space="preserve">
+    <value>{0}（未解锁）</value>
+  </data>
+  <data name="Profile_TitleSaveError" xml:space="preserve">
+    <value>无法保存称号。请重试。</value>
+  </data>
+  <data name="Achievements_Unlocked" xml:space="preserve">
+    <value>成就已解锁</value>
+  </data>
+  <data name="Profile_AchievementsFormat" xml:space="preserve">
+    <value>已解锁 {0} / {1}</value>
+  </data>
+  <data name="MainMenu_Nav_History" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>对局历史</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>你还没有进行过对局。</value>
+  </data>
+  <data name="History_Victory" xml:space="preserve">
+    <value>胜利</value>
+  </data>
+  <data name="History_Defeat" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="History_VersusFormat" xml:space="preserve">
+    <value>对手：{0}</value>
+  </data>
+  <data name="History_ScoreFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Flag_ad" xml:space="preserve">
+    <value>安道尔</value>
+  </data>
+  <data name="Flag_ae" xml:space="preserve">
+    <value>阿拉伯联合酋长国</value>
+  </data>
+  <data name="Flag_af" xml:space="preserve">
+    <value>阿富汗</value>
+  </data>
+  <data name="Flag_ag" xml:space="preserve">
+    <value>安提瓜和巴布达</value>
+  </data>
+  <data name="Flag_ai" xml:space="preserve">
+    <value>安圭拉</value>
+  </data>
+  <data name="Flag_al" xml:space="preserve">
+    <value>阿尔巴尼亚</value>
+  </data>
+  <data name="Flag_am" xml:space="preserve">
+    <value>亚美尼亚</value>
+  </data>
+  <data name="Flag_ao" xml:space="preserve">
+    <value>安哥拉</value>
+  </data>
+  <data name="Flag_aq" xml:space="preserve">
+    <value>南极洲</value>
+  </data>
+  <data name="Flag_ar" xml:space="preserve">
+    <value>阿根廷</value>
+  </data>
+  <data name="Flag_as" xml:space="preserve">
+    <value>美属萨摩亚</value>
+  </data>
+  <data name="Flag_at" xml:space="preserve">
+    <value>奥地利</value>
+  </data>
+  <data name="Flag_au" xml:space="preserve">
+    <value>澳大利亚</value>
+  </data>
+  <data name="Flag_aw" xml:space="preserve">
+    <value>阿鲁巴</value>
+  </data>
+  <data name="Flag_ax" xml:space="preserve">
+    <value>奥兰群岛</value>
+  </data>
+  <data name="Flag_az" xml:space="preserve">
+    <value>阿塞拜疆</value>
+  </data>
+  <data name="Flag_ba" xml:space="preserve">
+    <value>波斯尼亚和黑塞哥维那</value>
+  </data>
+  <data name="Flag_bb" xml:space="preserve">
+    <value>巴巴多斯</value>
+  </data>
+  <data name="Flag_bd" xml:space="preserve">
+    <value>孟加拉国</value>
+  </data>
+  <data name="Flag_be" xml:space="preserve">
+    <value>比利时</value>
+  </data>
+  <data name="Flag_bf" xml:space="preserve">
+    <value>布基纳法索</value>
+  </data>
+  <data name="Flag_bg" xml:space="preserve">
+    <value>保加利亚</value>
+  </data>
+  <data name="Flag_bh" xml:space="preserve">
+    <value>巴林</value>
+  </data>
+  <data name="Flag_bi" xml:space="preserve">
+    <value>布隆迪</value>
+  </data>
+  <data name="Flag_bj" xml:space="preserve">
+    <value>贝宁</value>
+  </data>
+  <data name="Flag_bl" xml:space="preserve">
+    <value>圣巴泰勒米</value>
+  </data>
+  <data name="Flag_bm" xml:space="preserve">
+    <value>百慕大</value>
+  </data>
+  <data name="Flag_bn" xml:space="preserve">
+    <value>文莱</value>
+  </data>
+  <data name="Flag_bo" xml:space="preserve">
+    <value>玻利维亚</value>
+  </data>
+  <data name="Flag_bq" xml:space="preserve">
+    <value>荷属加勒比区</value>
+  </data>
+  <data name="Flag_br" xml:space="preserve">
+    <value>巴西</value>
+  </data>
+  <data name="Flag_bs" xml:space="preserve">
+    <value>巴哈马</value>
+  </data>
+  <data name="Flag_bt" xml:space="preserve">
+    <value>不丹</value>
+  </data>
+  <data name="Flag_bv" xml:space="preserve">
+    <value>布韦岛</value>
+  </data>
+  <data name="Flag_bw" xml:space="preserve">
+    <value>博茨瓦纳</value>
+  </data>
+  <data name="Flag_by" xml:space="preserve">
+    <value>白俄罗斯</value>
+  </data>
+  <data name="Flag_bz" xml:space="preserve">
+    <value>伯利兹</value>
+  </data>
+  <data name="Flag_ca" xml:space="preserve">
+    <value>加拿大</value>
+  </data>
+  <data name="Flag_cc" xml:space="preserve">
+    <value>科科斯群岛</value>
+  </data>
+  <data name="Flag_cd" xml:space="preserve">
+    <value>刚果民主共和国</value>
+  </data>
+  <data name="Flag_cf" xml:space="preserve">
+    <value>中非共和国</value>
+  </data>
+  <data name="Flag_cg" xml:space="preserve">
+    <value>刚果</value>
+  </data>
+  <data name="Flag_ch" xml:space="preserve">
+    <value>瑞士</value>
+  </data>
+  <data name="Flag_ci" xml:space="preserve">
+    <value>科特迪瓦</value>
+  </data>
+  <data name="Flag_ck" xml:space="preserve">
+    <value>库克群岛</value>
+  </data>
+  <data name="Flag_cl" xml:space="preserve">
+    <value>智利</value>
+  </data>
+  <data name="Flag_cm" xml:space="preserve">
+    <value>喀麦隆</value>
+  </data>
+  <data name="Flag_cn" xml:space="preserve">
+    <value>中国</value>
+  </data>
+  <data name="Flag_co" xml:space="preserve">
+    <value>哥伦比亚</value>
+  </data>
+  <data name="Flag_cr" xml:space="preserve">
+    <value>哥斯达黎加</value>
+  </data>
+  <data name="Flag_cu" xml:space="preserve">
+    <value>古巴</value>
+  </data>
+  <data name="Flag_cv" xml:space="preserve">
+    <value>佛得角</value>
+  </data>
+  <data name="Flag_cw" xml:space="preserve">
+    <value>库拉索</value>
+  </data>
+  <data name="Flag_cx" xml:space="preserve">
+    <value>圣诞岛</value>
+  </data>
+  <data name="Flag_cy" xml:space="preserve">
+    <value>塞浦路斯</value>
+  </data>
+  <data name="Flag_cz" xml:space="preserve">
+    <value>捷克</value>
+  </data>
+  <data name="Flag_de" xml:space="preserve">
+    <value>德国</value>
+  </data>
+  <data name="Flag_dj" xml:space="preserve">
+    <value>吉布提</value>
+  </data>
+  <data name="Flag_dk" xml:space="preserve">
+    <value>丹麦</value>
+  </data>
+  <data name="Flag_dm" xml:space="preserve">
+    <value>多米尼克</value>
+  </data>
+  <data name="Flag_do" xml:space="preserve">
+    <value>多米尼加共和国</value>
+  </data>
+  <data name="Flag_dz" xml:space="preserve">
+    <value>阿尔及利亚</value>
+  </data>
+  <data name="Flag_ec" xml:space="preserve">
+    <value>厄瓜多尔</value>
+  </data>
+  <data name="Flag_ee" xml:space="preserve">
+    <value>爱沙尼亚</value>
+  </data>
+  <data name="Flag_eg" xml:space="preserve">
+    <value>埃及</value>
+  </data>
+  <data name="Flag_eh" xml:space="preserve">
+    <value>西撒哈拉</value>
+  </data>
+  <data name="Flag_er" xml:space="preserve">
+    <value>厄立特里亚</value>
+  </data>
+  <data name="Flag_es" xml:space="preserve">
+    <value>西班牙</value>
+  </data>
+  <data name="Flag_et" xml:space="preserve">
+    <value>埃塞俄比亚</value>
+  </data>
+  <data name="Flag_fi" xml:space="preserve">
+    <value>芬兰</value>
+  </data>
+  <data name="Flag_fj" xml:space="preserve">
+    <value>斐济</value>
+  </data>
+  <data name="Flag_fk" xml:space="preserve">
+    <value>马尔维纳斯群岛</value>
+  </data>
+  <data name="Flag_fm" xml:space="preserve">
+    <value>密克罗尼西亚</value>
+  </data>
+  <data name="Flag_fo" xml:space="preserve">
+    <value>法罗群岛</value>
+  </data>
+  <data name="Flag_fr" xml:space="preserve">
+    <value>法国</value>
+  </data>
+  <data name="Flag_ga" xml:space="preserve">
+    <value>加蓬</value>
+  </data>
+  <data name="Flag_gb" xml:space="preserve">
+    <value>英国</value>
+  </data>
+  <data name="Flag_gd" xml:space="preserve">
+    <value>格林纳达</value>
+  </data>
+  <data name="Flag_ge" xml:space="preserve">
+    <value>格鲁吉亚</value>
+  </data>
+  <data name="Flag_gf" xml:space="preserve">
+    <value>法属圭亚那</value>
+  </data>
+  <data name="Flag_gg" xml:space="preserve">
+    <value>根西岛</value>
+  </data>
+  <data name="Flag_gh" xml:space="preserve">
+    <value>加纳</value>
+  </data>
+  <data name="Flag_gi" xml:space="preserve">
+    <value>直布罗陀</value>
+  </data>
+  <data name="Flag_gl" xml:space="preserve">
+    <value>格陵兰</value>
+  </data>
+  <data name="Flag_gm" xml:space="preserve">
+    <value>冈比亚</value>
+  </data>
+  <data name="Flag_gn" xml:space="preserve">
+    <value>几内亚</value>
+  </data>
+  <data name="Flag_gp" xml:space="preserve">
+    <value>瓜德罗普</value>
+  </data>
+  <data name="Flag_gq" xml:space="preserve">
+    <value>赤道几内亚</value>
+  </data>
+  <data name="Flag_gr" xml:space="preserve">
+    <value>希腊</value>
+  </data>
+  <data name="Flag_gs" xml:space="preserve">
+    <value>南乔治亚和南桑威奇群岛</value>
+  </data>
+  <data name="Flag_gt" xml:space="preserve">
+    <value>危地马拉</value>
+  </data>
+  <data name="Flag_gu" xml:space="preserve">
+    <value>关岛</value>
+  </data>
+  <data name="Flag_gw" xml:space="preserve">
+    <value>几内亚比绍</value>
+  </data>
+  <data name="Flag_gy" xml:space="preserve">
+    <value>圭亚那</value>
+  </data>
+  <data name="Flag_hk" xml:space="preserve">
+    <value>中国香港特别行政区</value>
+  </data>
+  <data name="Flag_hm" xml:space="preserve">
+    <value>赫德岛和麦克唐纳群岛</value>
+  </data>
+  <data name="Flag_hn" xml:space="preserve">
+    <value>洪都拉斯</value>
+  </data>
+  <data name="Flag_hr" xml:space="preserve">
+    <value>克罗地亚</value>
+  </data>
+  <data name="Flag_ht" xml:space="preserve">
+    <value>海地</value>
+  </data>
+  <data name="Flag_hu" xml:space="preserve">
+    <value>匈牙利</value>
+  </data>
+  <data name="Flag_id" xml:space="preserve">
+    <value>印度尼西亚</value>
+  </data>
+  <data name="Flag_ie" xml:space="preserve">
+    <value>爱尔兰</value>
+  </data>
+  <data name="Flag_il" xml:space="preserve">
+    <value>以色列</value>
+  </data>
+  <data name="Flag_im" xml:space="preserve">
+    <value>马恩岛</value>
+  </data>
+  <data name="Flag_in" xml:space="preserve">
+    <value>印度</value>
+  </data>
+  <data name="Flag_io" xml:space="preserve">
+    <value>英属印度洋领地</value>
+  </data>
+  <data name="Flag_iq" xml:space="preserve">
+    <value>伊拉克</value>
+  </data>
+  <data name="Flag_ir" xml:space="preserve">
+    <value>伊朗</value>
+  </data>
+  <data name="Flag_is" xml:space="preserve">
+    <value>冰岛</value>
+  </data>
+  <data name="Flag_it" xml:space="preserve">
+    <value>意大利</value>
+  </data>
+  <data name="Flag_je" xml:space="preserve">
+    <value>泽西岛</value>
+  </data>
+  <data name="Flag_jm" xml:space="preserve">
+    <value>牙买加</value>
+  </data>
+  <data name="Flag_jo" xml:space="preserve">
+    <value>约旦</value>
+  </data>
+  <data name="Flag_jp" xml:space="preserve">
+    <value>日本</value>
+  </data>
+  <data name="Flag_ke" xml:space="preserve">
+    <value>肯尼亚</value>
+  </data>
+  <data name="Flag_kg" xml:space="preserve">
+    <value>吉尔吉斯斯坦</value>
+  </data>
+  <data name="Flag_kh" xml:space="preserve">
+    <value>柬埔寨</value>
+  </data>
+  <data name="Flag_ki" xml:space="preserve">
+    <value>基里巴斯</value>
+  </data>
+  <data name="Flag_km" xml:space="preserve">
+    <value>科摩罗</value>
+  </data>
+  <data name="Flag_kn" xml:space="preserve">
+    <value>圣基茨和尼维斯</value>
+  </data>
+  <data name="Flag_kp" xml:space="preserve">
+    <value>朝鲜</value>
+  </data>
+  <data name="Flag_kr" xml:space="preserve">
+    <value>韩国</value>
+  </data>
+  <data name="Flag_kw" xml:space="preserve">
+    <value>科威特</value>
+  </data>
+  <data name="Flag_ky" xml:space="preserve">
+    <value>开曼群岛</value>
+  </data>
+  <data name="Flag_kz" xml:space="preserve">
+    <value>哈萨克斯坦</value>
+  </data>
+  <data name="Flag_la" xml:space="preserve">
+    <value>老挝</value>
+  </data>
+  <data name="Flag_lb" xml:space="preserve">
+    <value>黎巴嫩</value>
+  </data>
+  <data name="Flag_lc" xml:space="preserve">
+    <value>圣卢西亚</value>
+  </data>
+  <data name="Flag_li" xml:space="preserve">
+    <value>列支敦士登</value>
+  </data>
+  <data name="Flag_lk" xml:space="preserve">
+    <value>斯里兰卡</value>
+  </data>
+  <data name="Flag_lr" xml:space="preserve">
+    <value>利比里亚</value>
+  </data>
+  <data name="Flag_ls" xml:space="preserve">
+    <value>莱索托</value>
+  </data>
+  <data name="Flag_lt" xml:space="preserve">
+    <value>立陶宛</value>
+  </data>
+  <data name="Flag_lu" xml:space="preserve">
+    <value>卢森堡</value>
+  </data>
+  <data name="Flag_lv" xml:space="preserve">
+    <value>拉脱维亚</value>
+  </data>
+  <data name="Flag_ly" xml:space="preserve">
+    <value>利比亚</value>
+  </data>
+  <data name="Flag_ma" xml:space="preserve">
+    <value>摩洛哥</value>
+  </data>
+  <data name="Flag_mc" xml:space="preserve">
+    <value>摩纳哥</value>
+  </data>
+  <data name="Flag_md" xml:space="preserve">
+    <value>摩尔多瓦</value>
+  </data>
+  <data name="Flag_me" xml:space="preserve">
+    <value>黑山</value>
+  </data>
+  <data name="Flag_mf" xml:space="preserve">
+    <value>法属圣马丁</value>
+  </data>
+  <data name="Flag_mg" xml:space="preserve">
+    <value>马达加斯加</value>
+  </data>
+  <data name="Flag_mh" xml:space="preserve">
+    <value>马绍尔群岛</value>
+  </data>
+  <data name="Flag_mk" xml:space="preserve">
+    <value>北马其顿</value>
+  </data>
+  <data name="Flag_ml" xml:space="preserve">
+    <value>马里</value>
+  </data>
+  <data name="Flag_mm" xml:space="preserve">
+    <value>缅甸</value>
+  </data>
+  <data name="Flag_mn" xml:space="preserve">
+    <value>蒙古</value>
+  </data>
+  <data name="Flag_mo" xml:space="preserve">
+    <value>中国澳门特别行政区</value>
+  </data>
+  <data name="Flag_mp" xml:space="preserve">
+    <value>北马里亚纳群岛</value>
+  </data>
+  <data name="Flag_mq" xml:space="preserve">
+    <value>马提尼克</value>
+  </data>
+  <data name="Flag_mr" xml:space="preserve">
+    <value>毛里塔尼亚</value>
+  </data>
+  <data name="Flag_ms" xml:space="preserve">
+    <value>蒙特塞拉特</value>
+  </data>
+  <data name="Flag_mt" xml:space="preserve">
+    <value>马耳他</value>
+  </data>
+  <data name="Flag_mu" xml:space="preserve">
+    <value>毛里求斯</value>
+  </data>
+  <data name="Flag_mv" xml:space="preserve">
+    <value>马尔代夫</value>
+  </data>
+  <data name="Flag_mw" xml:space="preserve">
+    <value>马拉维</value>
+  </data>
+  <data name="Flag_mx" xml:space="preserve">
+    <value>墨西哥</value>
+  </data>
+  <data name="Flag_my" xml:space="preserve">
+    <value>马来西亚</value>
+  </data>
+  <data name="Flag_mz" xml:space="preserve">
+    <value>莫桑比克</value>
+  </data>
+  <data name="Flag_na" xml:space="preserve">
+    <value>纳米比亚</value>
+  </data>
+  <data name="Flag_nc" xml:space="preserve">
+    <value>新喀里多尼亚</value>
+  </data>
+  <data name="Flag_ne" xml:space="preserve">
+    <value>尼日尔</value>
+  </data>
+  <data name="Flag_nf" xml:space="preserve">
+    <value>诺福克岛</value>
+  </data>
+  <data name="Flag_ng" xml:space="preserve">
+    <value>尼日利亚</value>
+  </data>
+  <data name="Flag_ni" xml:space="preserve">
+    <value>尼加拉瓜</value>
+  </data>
+  <data name="Flag_nl" xml:space="preserve">
+    <value>荷兰</value>
+  </data>
+  <data name="Flag_no" xml:space="preserve">
+    <value>挪威</value>
+  </data>
+  <data name="Flag_np" xml:space="preserve">
+    <value>尼泊尔</value>
+  </data>
+  <data name="Flag_nr" xml:space="preserve">
+    <value>瑙鲁</value>
+  </data>
+  <data name="Flag_nu" xml:space="preserve">
+    <value>纽埃</value>
+  </data>
+  <data name="Flag_nz" xml:space="preserve">
+    <value>新西兰</value>
+  </data>
+  <data name="Flag_om" xml:space="preserve">
+    <value>阿曼</value>
+  </data>
+  <data name="Flag_pa" xml:space="preserve">
+    <value>巴拿马</value>
+  </data>
+  <data name="Flag_pe" xml:space="preserve">
+    <value>秘鲁</value>
+  </data>
+  <data name="Flag_pf" xml:space="preserve">
+    <value>法属波利尼西亚</value>
+  </data>
+  <data name="Flag_pg" xml:space="preserve">
+    <value>巴布亚新几内亚</value>
+  </data>
+  <data name="Flag_ph" xml:space="preserve">
+    <value>菲律宾</value>
+  </data>
+  <data name="Flag_pk" xml:space="preserve">
+    <value>巴基斯坦</value>
+  </data>
+  <data name="Flag_pl" xml:space="preserve">
+    <value>波兰</value>
+  </data>
+  <data name="Flag_pm" xml:space="preserve">
+    <value>圣皮埃尔和密克隆</value>
+  </data>
+  <data name="Flag_pn" xml:space="preserve">
+    <value>皮特凯恩群岛</value>
+  </data>
+  <data name="Flag_pr" xml:space="preserve">
+    <value>波多黎各</value>
+  </data>
+  <data name="Flag_ps" xml:space="preserve">
+    <value>巴勒斯坦领土</value>
+  </data>
+  <data name="Flag_pt" xml:space="preserve">
+    <value>葡萄牙</value>
+  </data>
+  <data name="Flag_pw" xml:space="preserve">
+    <value>帕劳</value>
+  </data>
+  <data name="Flag_py" xml:space="preserve">
+    <value>巴拉圭</value>
+  </data>
+  <data name="Flag_qa" xml:space="preserve">
+    <value>卡塔尔</value>
+  </data>
+  <data name="Flag_re" xml:space="preserve">
+    <value>留尼汪</value>
+  </data>
+  <data name="Flag_ro" xml:space="preserve">
+    <value>罗马尼亚</value>
+  </data>
+  <data name="Flag_rs" xml:space="preserve">
+    <value>塞尔维亚</value>
+  </data>
+  <data name="Flag_ru" xml:space="preserve">
+    <value>俄罗斯</value>
+  </data>
+  <data name="Flag_rw" xml:space="preserve">
+    <value>卢旺达</value>
+  </data>
+  <data name="Flag_sa" xml:space="preserve">
+    <value>沙特阿拉伯</value>
+  </data>
+  <data name="Flag_sb" xml:space="preserve">
+    <value>所罗门群岛</value>
+  </data>
+  <data name="Flag_sc" xml:space="preserve">
+    <value>塞舌尔</value>
+  </data>
+  <data name="Flag_sd" xml:space="preserve">
+    <value>苏丹</value>
+  </data>
+  <data name="Flag_se" xml:space="preserve">
+    <value>瑞典</value>
+  </data>
+  <data name="Flag_sg" xml:space="preserve">
+    <value>新加坡</value>
+  </data>
+  <data name="Flag_sh" xml:space="preserve">
+    <value>圣赫勒拿</value>
+  </data>
+  <data name="Flag_si" xml:space="preserve">
+    <value>斯洛文尼亚</value>
+  </data>
+  <data name="Flag_sj" xml:space="preserve">
+    <value>斯瓦尔巴和扬马延</value>
+  </data>
+  <data name="Flag_sk" xml:space="preserve">
+    <value>斯洛伐克</value>
+  </data>
+  <data name="Flag_sl" xml:space="preserve">
+    <value>塞拉利昂</value>
+  </data>
+  <data name="Flag_sm" xml:space="preserve">
+    <value>圣马力诺</value>
+  </data>
+  <data name="Flag_sn" xml:space="preserve">
+    <value>塞内加尔</value>
+  </data>
+  <data name="Flag_so" xml:space="preserve">
+    <value>索马里</value>
+  </data>
+  <data name="Flag_sr" xml:space="preserve">
+    <value>苏里南</value>
+  </data>
+  <data name="Flag_ss" xml:space="preserve">
+    <value>南苏丹</value>
+  </data>
+  <data name="Flag_st" xml:space="preserve">
+    <value>圣多美和普林西比</value>
+  </data>
+  <data name="Flag_sv" xml:space="preserve">
+    <value>萨尔瓦多</value>
+  </data>
+  <data name="Flag_sx" xml:space="preserve">
+    <value>荷属圣马丁</value>
+  </data>
+  <data name="Flag_sy" xml:space="preserve">
+    <value>叙利亚</value>
+  </data>
+  <data name="Flag_sz" xml:space="preserve">
+    <value>斯威士兰</value>
+  </data>
+  <data name="Flag_tc" xml:space="preserve">
+    <value>特克斯和凯科斯群岛</value>
+  </data>
+  <data name="Flag_td" xml:space="preserve">
+    <value>乍得</value>
+  </data>
+  <data name="Flag_tf" xml:space="preserve">
+    <value>法属南部领地</value>
+  </data>
+  <data name="Flag_tg" xml:space="preserve">
+    <value>多哥</value>
+  </data>
+  <data name="Flag_th" xml:space="preserve">
+    <value>泰国</value>
+  </data>
+  <data name="Flag_tj" xml:space="preserve">
+    <value>塔吉克斯坦</value>
+  </data>
+  <data name="Flag_tk" xml:space="preserve">
+    <value>托克劳</value>
+  </data>
+  <data name="Flag_tl" xml:space="preserve">
+    <value>东帝汶</value>
+  </data>
+  <data name="Flag_tm" xml:space="preserve">
+    <value>土库曼斯坦</value>
+  </data>
+  <data name="Flag_tn" xml:space="preserve">
+    <value>突尼斯</value>
+  </data>
+  <data name="Flag_to" xml:space="preserve">
+    <value>汤加</value>
+  </data>
+  <data name="Flag_tr" xml:space="preserve">
+    <value>土耳其</value>
+  </data>
+  <data name="Flag_tt" xml:space="preserve">
+    <value>特立尼达和多巴哥</value>
+  </data>
+  <data name="Flag_tv" xml:space="preserve">
+    <value>图瓦卢</value>
+  </data>
+  <data name="Flag_tw" xml:space="preserve">
+    <value>台湾</value>
+  </data>
+  <data name="Flag_tz" xml:space="preserve">
+    <value>坦桑尼亚</value>
+  </data>
+  <data name="Flag_ua" xml:space="preserve">
+    <value>乌克兰</value>
+  </data>
+  <data name="Flag_ug" xml:space="preserve">
+    <value>乌干达</value>
+  </data>
+  <data name="Flag_um" xml:space="preserve">
+    <value>美国本土外小岛屿</value>
+  </data>
+  <data name="Flag_us" xml:space="preserve">
+    <value>美国</value>
+  </data>
+  <data name="Flag_uy" xml:space="preserve">
+    <value>乌拉圭</value>
+  </data>
+  <data name="Flag_uz" xml:space="preserve">
+    <value>乌兹别克斯坦</value>
+  </data>
+  <data name="Flag_va" xml:space="preserve">
+    <value>梵蒂冈</value>
+  </data>
+  <data name="Flag_vc" xml:space="preserve">
+    <value>圣文森特和格林纳丁斯</value>
+  </data>
+  <data name="Flag_ve" xml:space="preserve">
+    <value>委内瑞拉</value>
+  </data>
+  <data name="Flag_vg" xml:space="preserve">
+    <value>英属维尔京群岛</value>
+  </data>
+  <data name="Flag_vi" xml:space="preserve">
+    <value>美属维尔京群岛</value>
+  </data>
+  <data name="Flag_vn" xml:space="preserve">
+    <value>越南</value>
+  </data>
+  <data name="Flag_vu" xml:space="preserve">
+    <value>瓦努阿图</value>
+  </data>
+  <data name="Flag_wf" xml:space="preserve">
+    <value>瓦利斯和富图纳</value>
+  </data>
+  <data name="Flag_ws" xml:space="preserve">
+    <value>萨摩亚</value>
+  </data>
+  <data name="Flag_ye" xml:space="preserve">
+    <value>也门</value>
+  </data>
+  <data name="Flag_yt" xml:space="preserve">
+    <value>马约特</value>
+  </data>
+  <data name="Flag_za" xml:space="preserve">
+    <value>南非</value>
+  </data>
+  <data name="Flag_zm" xml:space="preserve">
+    <value>赞比亚</value>
+  </data>
+  <data name="Flag_zw" xml:space="preserve">
+    <value>津巴布韦</value>
+  </data>
+  <data name="Flag_None" xml:space="preserve">
+    <value>无国旗</value>
+  </data>
+  <data name="Profile_FlagLabel" xml:space="preserve">
+    <value>国旗</value>
+  </data>
+  <data name="Profile_FlagSaveError" xml:space="preserve">
+    <value>无法保存国旗。请重试。</value>
+  </data>
+  <data name="Profile_FlagSearchHint" xml:space="preserve">
+    <value>搜索国家...</value>
+  </data>
+  <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
+    <value>你有未保存的更改。要不保存直接离开吗？</value>
+  </data>
+  <data name="History_GuestOpponent" xml:space="preserve">
+    <value>游客</value>
+  </data>
+</root>
