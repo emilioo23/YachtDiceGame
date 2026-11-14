@@ -117,6 +117,67 @@ namespace YachtDice.FriendServiceReference {
         ValidationFailed = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendRequestAnswer", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class FriendRequestAnswer : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsAcceptedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RequesterNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsAccepted {
+            get {
+                return this.IsAcceptedField;
+            }
+            set {
+                if ((this.IsAcceptedField.Equals(value) != true)) {
+                    this.IsAcceptedField = value;
+                    this.RaisePropertyChanged("IsAccepted");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RequesterName {
+            get {
+                return this.RequesterNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RequesterNameField, value) != true)) {
+                    this.RequesterNameField = value;
+                    this.RaisePropertyChanged("RequesterName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FriendActionResultCode", Namespace="urn:yachtdice:contracts")]
     public enum FriendActionResultCode : int {
@@ -131,6 +192,84 @@ namespace YachtDice.FriendServiceReference {
         RelationNotFound = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomMember", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PlayerIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomCodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerIdField, value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomCode {
+            get {
+                return this.RoomCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomCodeField, value) != true)) {
+                    this.RoomCodeField = value;
+                    this.RaisePropertyChanged("RoomCode");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InvitationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum InvitationResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotInRoom = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotFriends = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendOffline = 3,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="FriendServiceReference.IFriendService")]
     public interface IFriendService {
@@ -139,43 +278,29 @@ namespace YachtDice.FriendServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/SendFriendRequestServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/SendFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/SendFriendRequestResponse")]
-        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string targetUsername);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse")]
-        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RespondToFriendRequestAsync(string displayName, string requesterName, bool isAccepted);
+        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
-        System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName);
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault", Name="ServiceFault")]
+        YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault", Name="ServiceFault")]
         string GetUsername(string displayName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
-        System.Threading.Tasks.Task<string> GetUsernameAsync(string displayName);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriends", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendsServiceFaultFault", Name="ServiceFault")]
         string[] GetFriends(string displayName);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriends", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendsResponse")]
-        System.Threading.Tasks.Task<string[]> GetFriendsAsync(string displayName);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendRequests", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendRequestsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendRequestsServiceFaultFault", Name="ServiceFault")]
         string[] GetFriendRequests(string displayName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendRequests", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendRequestsResponse")]
-        System.Threading.Tasks.Task<string[]> GetFriendRequestsAsync(string displayName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -209,48 +334,28 @@ namespace YachtDice.FriendServiceReference {
             return base.Channel.SendFriendRequest(displayName, targetUsername);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendRequestResultCode> SendFriendRequestAsync(string displayName, string targetUsername) {
-            return base.Channel.SendFriendRequestAsync(displayName, targetUsername);
-        }
-        
-        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted) {
-            return base.Channel.RespondToFriendRequest(displayName, requesterName, isAccepted);
-        }
-        
-        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RespondToFriendRequestAsync(string displayName, string requesterName, bool isAccepted) {
-            return base.Channel.RespondToFriendRequestAsync(displayName, requesterName, isAccepted);
+        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer) {
+            return base.Channel.RespondToFriendRequest(displayName, answer);
         }
         
         public YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName) {
             return base.Channel.RemoveFriend(displayName, friendName);
         }
         
-        public System.Threading.Tasks.Task<YachtDice.FriendServiceReference.FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName) {
-            return base.Channel.RemoveFriendAsync(displayName, friendName);
+        public YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName) {
+            return base.Channel.InviteToRoom(sender, friendName);
         }
         
         public string GetUsername(string displayName) {
             return base.Channel.GetUsername(displayName);
         }
         
-        public System.Threading.Tasks.Task<string> GetUsernameAsync(string displayName) {
-            return base.Channel.GetUsernameAsync(displayName);
-        }
-        
         public string[] GetFriends(string displayName) {
             return base.Channel.GetFriends(displayName);
         }
         
-        public System.Threading.Tasks.Task<string[]> GetFriendsAsync(string displayName) {
-            return base.Channel.GetFriendsAsync(displayName);
-        }
-        
         public string[] GetFriendRequests(string displayName) {
             return base.Channel.GetFriendRequests(displayName);
-        }
-        
-        public System.Threading.Tasks.Task<string[]> GetFriendRequestsAsync(string displayName) {
-            return base.Channel.GetFriendRequestsAsync(displayName);
         }
     }
 }

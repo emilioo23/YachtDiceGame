@@ -52,6 +52,30 @@
         <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="RequestPasswordReset">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmPasswordReset">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordReset" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="AuthenticationService">
     <wsdl:port name="NetTcpBinding_IAuthenticationService" binding="tns:NetTcpBinding_IAuthenticationService">

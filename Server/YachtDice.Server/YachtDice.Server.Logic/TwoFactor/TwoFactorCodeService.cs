@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Globalization;
-using System.Security.Cryptography;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -25,9 +24,6 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int LockMinutes = 15;
         private const int NoFailedAttempts = 0;
         private const int ResendCooldownSeconds = 30;
-        private const int DecimalBase = 10;
-        private const int BufferStartIndex = 0;
-        private const char PaddingCharacter = '0';
         private const string GuidFormat = "N";
 
         private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
@@ -41,7 +37,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Numeric code of <see cref="CodeLength"/> digits.</returns>
         public string GenerateCode(string email, string challengeId)
         {
-            string code = CreateRandomCode();
+            string code = NumericCodeGenerator.Generate(CodeLength);
             DateTime now = DateTime.UtcNow;
             DateTime lockedUntil = DateTime.MinValue;
 
@@ -76,16 +72,20 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Validates the entered code against the last one issued for the email and challenge.
         /// </summary>
         /// <param name="email">Player's email address.</param>
-        /// <param name="code">Code entered by the player.</param>
-        /// <param name="challengeId">Challenge identifier.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge it answers.</param>
         /// <returns>Validation result.</returns>
-        public TwoFactorValidationStatus Validate(string email, string code, string challengeId)
+        public TwoFactorValidationStatus ValidateCode(string email, VerificationCode verificationCode)
         {
+            if (verificationCode == null)
+            {
+                throw new ArgumentNullException(nameof(verificationCode));
+            }
+
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Expired;
 
             if (_entries.TryGetValue(email, out TwoFactorCode entry))
             {
-                status = EvaluateEntry(entry, code, challengeId);
+                status = EvaluateEntry(entry, verificationCode);
 
                 if (status == TwoFactorValidationStatus.Valid || status == TwoFactorValidationStatus.Expired)
                 {
@@ -131,12 +131,12 @@ namespace YachtDice.Server.Logic.TwoFactor
             return isAllowed;
         }
 
-        private static TwoFactorValidationStatus EvaluateEntry(TwoFactorCode entry, string code, string challengeId)
+        private static TwoFactorValidationStatus EvaluateEntry(TwoFactorCode entry, VerificationCode verificationCode)
         {
             TwoFactorValidationStatus status;
             DateTime now = DateTime.UtcNow;
 
-            if (entry.ChallengeId != challengeId)
+            if (entry.ChallengeId != verificationCode.ChallengeId)
             {
                 status = TwoFactorValidationStatus.Incorrect;
             }
@@ -148,7 +148,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = TwoFactorValidationStatus.Expired;
             }
-            else if (entry.Code == code)
+            else if (entry.Code == verificationCode.Code)
             {
                 status = TwoFactorValidationStatus.Valid;
             }
@@ -173,23 +173,6 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             return status;
-        }
-
-        private static string CreateRandomCode()
-        {
-            var upperBound = (long)Math.Pow(DecimalBase, CodeLength);
-            var buffer = new byte[sizeof(uint)];
-
-            using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
-            {
-                generator.GetBytes(buffer);
-            }
-
-            uint randomValue = BitConverter.ToUInt32(buffer, BufferStartIndex);
-
-            return (randomValue % upperBound)
-                .ToString(CultureInfo.InvariantCulture)
-                .PadLeft(CodeLength, PaddingCharacter);
         }
     }
 }

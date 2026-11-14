@@ -28,14 +28,43 @@
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
+            <Button x:Name="BackToMenuButton"
+                    Content="{x:Static properties:Strings.Lobby_ButtonBackToMenu}"
+                    Style="{StaticResource BtnOutline}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Padding="20,10"
+                    FontSize="16"
+                    Panel.ZIndex="99"
+                    Click="BackToMenuButton_Click"/>
+
+            <Grid Width="300"
+                  Height="720"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <views:InviteFriendsPanel x:Name="FriendsPanel"
+                                          Grid.Row="0"
+                                          Margin="0,0,0,14"/>
+
+                <views:ChatPanel x:Name="ChatPanelControl"
+                                 Grid.Row="1"
+                                 PanelHeight="330"/>
+            </Grid>
+
             <Border Style="{StaticResource CardPanel}"
                     Width="760"
+                    Margin="0,0,300,0"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
 
                 <StackPanel>
 
-                    <Grid Margin="0,0,0,6">
+                    <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
@@ -58,12 +87,6 @@
                                        Foreground="{StaticResource BrushWoodDark}"/>
                         </Border>
                     </Grid>
-
-                    <TextBlock Text="{x:Static properties:Strings.Lobby_LinkBackToPlay}"
-                               Style="{StaticResource LinkText}"
-                               Margin="0,0,0,20"
-                               FontSize="15"
-                               MouseLeftButtonUp="BackToPlayLink_Click"/>
 
                     <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
@@ -209,33 +232,45 @@
                                             CornerRadius="8"
                                             Padding="10">
 
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel>
 
-                                            <Border Width="30"
-                                                    Height="30"
-                                                    CornerRadius="15"
-                                                    Background="{StaticResource BrushWood}"
-                                                    Margin="0,0,8,0">
+                                            <StackPanel Orientation="Horizontal">
 
-                                                <TextBlock Text="{Binding Initial}"
-                                                           Foreground="White"
-                                                           FontWeight="Bold"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           FontSize="15"/>
-                                            </Border>
+                                                <Image Source="{Binding AvatarId,
+                                                               Converter={StaticResource AvatarImageConverter}}"
+                                                       Width="36"
+                                                       Height="36"
+                                                       VerticalAlignment="Top"
+                                                       Margin="0,0,8,0"/>
 
-                                            <StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
 
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           FontSize="15"
-                                                           Foreground="{StaticResource BrushText}"/>
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Foreground="{StaticResource BrushText}"/>
 
-                                                <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
-                                                           Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                           FontSize="12"
-                                                           Foreground="{StaticResource BrushFeltLight}"/>
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
+                                                               Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
+                                                </StackPanel>
+
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,8,0,0"
+                                                        Visibility="{Binding CanManage,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostKick}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Margin="0,0,0,4"
+                                                        Click="KickButton_Click"/>
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Click="TransferButton_Click"/>
                                             </StackPanel>
 
                                         </StackPanel>

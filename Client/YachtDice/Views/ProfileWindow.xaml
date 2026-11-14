@@ -43,80 +43,129 @@
                                Foreground="{StaticResource BrushTextMuted}"
                                Margin="0,0,0,16"/>
 
-                    <Border Width="120"
-                            Height="120"
-                            CornerRadius="60"
-                            Background="{StaticResource BrushCream2}"
-                            BorderBrush="{StaticResource BrushGold}"
-                            BorderThickness="3"
-                            HorizontalAlignment="Center"
-                            Margin="0,0,0,20">
+                    <Grid Width="120"
+                          Height="120"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,12">
+                        <Border CornerRadius="60"
+                                Background="{StaticResource BrushCream2}"
+                                BorderBrush="{StaticResource BrushGold}"
+                                BorderThickness="3">
+                            <Image x:Name="AvatarPreviewImage"
+                                   Margin="3"/>
+                        </Border>
+                        <Image x:Name="FlagPreviewImage"
+                               Width="40"
+                               Height="30"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Margin="0,-6,-18,0"
+                               Visibility="Collapsed"/>
+                    </Grid>
 
-                        <TextBlock x:Name="AvatarInitialTextBlock"
-                                   FontFamily="{StaticResource FontDisplay}"
-                                   FontSize="48"
-                                   Foreground="{StaticResource BrushWoodDark}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Border>
-
-                    <TextBlock Text="{x:Static properties:Strings.Profile_BackgroundColor}"
+                    <TextBlock x:Name="TitlePreviewTextBlock"
                                FontSize="16"
-                               FontWeight="Bold"
+                               FontStyle="Italic"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BrushGold}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,4"/>
+                    <TextBlock x:Name="LevelTextBlock"
+                               FontSize="15"
+                               FontWeight="SemiBold"
                                Foreground="{StaticResource BrushTextMuted}"
-                               Margin="0,0,0,10"/>
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,16"/>
 
-                    <UniformGrid Columns="6"
-                                 Margin="0,0,0,20">
+                    <ItemsControl x:Name="AvatarOptionsItemsControl"
+                                  Margin="0,0,0,20">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#E0E0E0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#F5D368"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="3"
+                                        Padding="3"
+                                        CornerRadius="30"
+                                        BorderThickness="3"
+                                        Background="Transparent"
+                                        Tag="{Binding Id}"
+                                        MouseLeftButtonUp="AvatarOption_Click">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#8FD3B6"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush"
+                                                    Value="Transparent"/>
+                                            <Setter Property="Cursor"
+                                                    Value="Hand"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}"
+                                                             Value="True">
+                                                    <Setter Property="BorderBrush"
+                                                            Value="{StaticResource BrushGold}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsUnlocked}"
+                                                             Value="False">
+                                                    <Setter Property="Cursor"
+                                                            Value="Arrow"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#A9C9F0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                    <Grid>
+                                        <Image Width="46"
+                                               Height="46"
+                                               Source="{Binding Id, Converter={StaticResource AvatarImageConverter}}">
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#F0A9C4"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsUnlocked}"
+                                                                     Value="False">
+                                                            <Setter Property="Opacity"
+                                                                    Value="0.35"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
 
-                        <Border Width="34"
-                                Height="34"
-                                Margin="3"
-                                CornerRadius="17"
-                                Background="#D2A9F0"
-                                Cursor="Hand"
-                                MouseLeftButtonUp="ColorSwatch_Click"/>
-                    </UniformGrid>
+                                        <Border Background="{StaticResource BrushWoodDark}"
+                                                CornerRadius="8"
+                                                Padding="5,1"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom">
+
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsUnlocked}"
+                                                                     Value="False">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <TextBlock Text="{Binding RequiredLevel,
+                                                StringFormat={x:Static properties:Strings.Profile_AvatarLockedBadge}}"
+                                                       FontSize="11"
+                                                       FontWeight="Bold"
+                                                       Foreground="White"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                 </StackPanel>
             </Border>
@@ -124,9 +173,15 @@
             <Border Grid.Column="1"
                     Style="{StaticResource CardPanel}">
 
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Grid Margin="0,0,0,20">
+                    <Grid Grid.Row="0"
+                          Margin="0,0,0,20">
 
                         <TextBlock Text="{x:Static properties:Strings.Profile_CustomizeProfileTitle}"
                                    FontFamily="{StaticResource FontDisplay}"
@@ -141,6 +196,10 @@
                                 Click="BackButton_Click"/>
                     </Grid>
 
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
+
                     <TextBlock Text="{x:Static properties:Strings.Profile_Username}"
                                Style="{StaticResource FieldLabel}"
                                FontSize="18"/>
@@ -153,20 +212,43 @@
                                Style="{StaticResource FieldLabel}"
                                FontSize="18"/>
 
-                    <ComboBox
+                    <ComboBox x:Name="TitleComboBox"
                               Padding="10,8"
                               FontSize="17"
                               Margin="0,0,0,24"
-                              SelectedIndex="0">
+                              SelectionChanged="TitleComboBox_SelectionChanged"/>
 
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleBeginner}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleExpert}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleChampion}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleShooter}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleStrategist}"/>
+                    <TextBlock Text="{x:Static properties:Strings.Profile_FlagLabel}"
+                               Style="{StaticResource FieldLabel}"
+                               FontSize="18"/>
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    </ComboBox>
+                        <Grid Grid.Column="0"
+                              Margin="0,0,10,0">
+                            <TextBox x:Name="FlagSearchTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     FontSize="17"
+                                     TextChanged="FlagSearchTextBox_TextChanged"/>
+                            <TextBlock x:Name="FlagSearchHintTextBlock"
+                                       Text="{x:Static properties:Strings.Profile_FlagSearchHint}"
+                                       FontSize="17"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Center"
+                                       Margin="18,0,0,0"/>
+                        </Grid>
 
+                        <ComboBox x:Name="FlagComboBox"
+                                  Grid.Column="1"
+                                  Padding="10,8"
+                                  FontSize="17"
+                                  VerticalAlignment="Center"
+                                  SelectionChanged="FlagComboBox_SelectionChanged"/>
+                    </Grid>
                     <TextBlock Text="{x:Static properties:Strings.Profile_StatisticsHeader}"
                                FontSize="18"
                                FontWeight="Bold"
@@ -191,7 +273,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatGamesValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -207,7 +289,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatWinsValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -223,7 +305,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatBestScoreValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -239,7 +321,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatExperienceValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -253,58 +335,29 @@
                         </Grid>
                     </Border>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_Header}"
+                    <TextBlock x:Name="AchievementsHeaderTextBlock"
+                               Text="{x:Static properties:Strings.Profile_Achievements_Header}"
                                FontSize="18"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushTextMuted}"
                                Margin="0,0,0,10"/>
 
-                    <WrapPanel Margin="0,0,0,24">
+                    <WrapPanel x:Name="AchievementsWrapPanel"
+                               Margin="0,0,0,8"/>
 
-                        <Border Background="{StaticResource BrushGoldButton}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8">
+                    </StackPanel>
+                    </ScrollViewer>
 
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstMatch}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushFeltDark}"/>
-                        </Border>
-
-                        <Border Background="{StaticResource BrushGoldButton}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8">
-
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstWin}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushFeltDark}"/>
-                        </Border>
-
-                        <Border Background="{StaticResource BrushBorder}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8"
-                                Opacity="0.6">
-
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_SpeedRoller}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushTextMuted}"/>
-                        </Border>
-
-                    </WrapPanel>
-
-                    <Button Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
+                    <Button Grid.Row="2"
+                            Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
                             Style="{StaticResource BtnPrimary}"
                             HorizontalAlignment="Stretch"
                             FontSize="18"
                             Padding="0,13"
+                            Margin="0,16,0,0"
                             Click="SaveChangesButton_Click"/>
 
-                </StackPanel>
+                </Grid>
             </Border>
 
         </Grid>

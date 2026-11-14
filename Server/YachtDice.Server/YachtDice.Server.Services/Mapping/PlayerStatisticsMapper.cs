@@ -1,4 +1,8 @@
-﻿namespace YachtDice.Server.Services.Mapping
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace YachtDice.Server.Services.Mapping
 {
     using Contracts = YachtDice.Server.Contracts.Players;
     using Logic = YachtDice.Server.Logic;
@@ -21,7 +25,34 @@
                 Wins = statistics.Wins,
                 BestScore = statistics.BestScore,
                 WinRatePercentage = statistics.WinRatePercentage,
-                Level = statistics.Level
+                Level = statistics.Level,
+                Experience = statistics.Experience
+            };
+
+            return contract;
+        }
+
+        /// <summary>
+        /// Converts the recent games of a player into the version that travels to the clients.
+        /// </summary>
+        /// <param name="games">Games of the logic layer.</param>
+        /// <returns>The games for the clients.</returns>
+        public static List<Contracts.GameHistoryEntry> ToHistoryContracts(List<Logic.Players.PlayedGameSummary> games)
+        {
+            Func<Logic.Players.PlayedGameSummary, Contracts.GameHistoryEntry> createEntry = ToHistoryContract;
+
+            return games.Select(createEntry).ToList();
+        }
+
+        private static Contracts.GameHistoryEntry ToHistoryContract(Logic.Players.PlayedGameSummary game)
+        {
+            var contract = new Contracts.GameHistoryEntry
+            {
+                PlayedAt = game.PlayedAt,
+                IsWin = game.IsWin,
+                OwnScore = game.OwnScore,
+                BestOpponentScore = game.BestOpponentScore,
+                Opponents = game.Opponents
             };
 
             return contract;

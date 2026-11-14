@@ -41,13 +41,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\EmailAddressValidatorTests.cs" />
+    <Compile Include="Email\EmailServiceTests.cs" />
     <Compile Include="Authentication\LoginServiceTests.cs" />
+    <Compile Include="Authentication\PasswordRecoveryServiceTests.cs" />
+    <Compile Include="Authentication\PasswordResetAttemptCounterTests.cs" />
     <Compile Include="Authentication\RegistrationServiceTests.cs" />
+    <Compile Include="Avatars\AvatarCatalogTests.cs" />
+    <Compile Include="Avatars\AvatarServiceTests.cs" />
+    <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
+    <Compile Include="Friends\RoomInvitationServiceTests.cs" />
+    <Compile Include="Game\AutoPlayChooserTests.cs" />
+    <Compile Include="Game\DiceHandTests.cs" />
+    <Compile Include="Game\GameManagerTests.cs" />
+    <Compile Include="Game\GameSnapshotTests.cs" />
+    <Compile Include="Game\GameResultRecorderTests.cs" />
+    <Compile Include="Game\ScoreCalculatorTests.cs" />
+    <Compile Include="Game\ScoreCardTests.cs" />
+    <Compile Include="Game\TurnDurationTests.cs" />
+    <Compile Include="InMemory\InMemoryAvatarLookup.cs" />
+    <Compile Include="InMemory\InMemoryDieRoller.cs" />
     <Compile Include="InMemory\InMemoryEmailService.cs" />
+    <Compile Include="InMemory\InMemoryFailingEmailService.cs" />
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />
+    <Compile Include="InMemory\InMemoryGameHistoryRepository.cs" />
+    <Compile Include="InMemory\InMemoryFriendshipService.cs" />
+    <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
+    <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
+    <Compile Include="Moderation\LinkCensorTests.cs" />
+    <Compile Include="Players\AchievementRulesTests.cs" />
+    <Compile Include="Players\ExperienceRulesTests.cs" />
+    <Compile Include="Players\LevelTableTests.cs" />
+    <Compile Include="Players\ProfileServiceTests.cs" />
+    <Compile Include="Players\PlayerStatisticsServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rooms\RoomManagerTests.cs" />
+    <Compile Include="Security\CredentialRulesTests.cs" />
+    <Compile Include="Security\NumericCodeGeneratorTests.cs" />
+    <Compile Include="Security\PasswordResetCodeHasherTests.cs" />
+    <Compile Include="Security\SecureRandomTests.cs" />
+    <Compile Include="TwoFactor\TwoFactorResendTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk">

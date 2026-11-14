@@ -22,6 +22,22 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The host started the game.</summary>
         [EnumMember]
-        GameStarted
+        GameStarted,
+
+        /// <summary>The host expelled a player. The expelled player is no longer in the state of the room.</summary>
+        [EnumMember]
+        PlayerKicked,
+
+        /// <summary>Another player is the host now, because the host passed the control or left the room.</summary>
+        [EnumMember]
+        HostChanged,
+
+        /// <summary>A player left a game in progress or lost the connection, and can still come back.</summary>
+        [EnumMember]
+        PlayerDisconnected,
+
+        /// <summary>A player who had left the game in progress came back.</summary>
+        [EnumMember]
+        PlayerReturned
     }
 }

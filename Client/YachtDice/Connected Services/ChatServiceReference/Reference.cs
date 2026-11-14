@@ -101,6 +101,12 @@ namespace YachtDice.ChatServiceReference {
         private string AuthorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AuthorIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AvatarIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -125,6 +131,32 @@ namespace YachtDice.ChatServiceReference {
                 if ((object.ReferenceEquals(this.AuthorField, value) != true)) {
                     this.AuthorField = value;
                     this.RaisePropertyChanged("Author");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AuthorId {
+            get {
+                return this.AuthorIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AuthorIdField, value) != true)) {
+                    this.AuthorIdField = value;
+                    this.RaisePropertyChanged("AuthorId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AvatarId {
+            get {
+                return this.AvatarIdField;
+            }
+            set {
+                if ((this.AvatarIdField.Equals(value) != true)) {
+                    this.AvatarIdField = value;
+                    this.RaisePropertyChanged("AvatarId");
                 }
             }
         }
@@ -165,19 +197,80 @@ namespace YachtDice.ChatServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomMember", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomMember : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PlayerIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomCodeField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerIdField, value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomCode {
+            get {
+                return this.RoomCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomCodeField, value) != true)) {
+                    this.RoomCodeField = value;
+                    this.RaisePropertyChanged("RoomCode");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="ChatServiceReference.IChatService", CallbackContract=typeof(YachtDice.ChatServiceReference.IChatServiceCallback))]
     public interface IChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IChatService/JoinChat", ReplyAction="urn:yachtdice:contracts/IChatService/JoinChatResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.ChatServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IChatService/JoinChatServiceFaultFault", Name="ServiceFault")]
-        void JoinChat(string playerName, string roomCode);
+        void JoinChat(YachtDice.ChatServiceReference.RoomMember member);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/SendChatMessage")]
-        void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode);
+        void SendChatMessage(YachtDice.ChatServiceReference.RoomMember author, string content);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IChatService/LeaveChat")]
-        void LeaveChat(string playerName, string roomCode);
+        void LeaveChat(YachtDice.ChatServiceReference.RoomMember member);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -215,16 +308,16 @@ namespace YachtDice.ChatServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void JoinChat(string playerName, string roomCode) {
-            base.Channel.JoinChat(playerName, roomCode);
+        public void JoinChat(YachtDice.ChatServiceReference.RoomMember member) {
+            base.Channel.JoinChat(member);
         }
         
-        public void SendChatMessage(YachtDice.ChatServiceReference.ChatMessage message, string roomCode) {
-            base.Channel.SendChatMessage(message, roomCode);
+        public void SendChatMessage(YachtDice.ChatServiceReference.RoomMember author, string content) {
+            base.Channel.SendChatMessage(author, content);
         }
         
-        public void LeaveChat(string playerName, string roomCode) {
-            base.Channel.LeaveChat(playerName, roomCode);
+        public void LeaveChat(YachtDice.ChatServiceReference.RoomMember member) {
+            base.Channel.LeaveChat(member);
         }
     }
 }

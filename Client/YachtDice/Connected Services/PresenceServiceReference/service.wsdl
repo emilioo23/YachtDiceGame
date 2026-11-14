@@ -37,6 +37,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="InvitationReceived">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IPresenceService/InvitationReceived" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PresenceService">
     <wsdl:port name="NetTcpBinding_IPresenceService" binding="tns:NetTcpBinding_IPresenceService">

@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Globalization;
+using System.Linq;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
     /// Runs the operations of the repositories inside a database context and converts the failures of Entity
-    /// Framework into <see cref="DataAccessException"/>.
+    /// Framework into <see cref="DataAccessException"/>. The connection string comes from the environment of the
+    /// server, so a missing variable is reported as a database failure and not as an unexpected error.
     /// </summary>
     internal static class DatabaseOperation
     {
+        private const string PropertySeparator = ", ";
+        private const string InvalidEntityFormat = "The data did not pass the model validation. Properties: {0}.";
+
         /// <summary>
         /// Reads data from the database.
         /// </summary>
@@ -22,10 +29,11 @@ namespace YachtDice.Server.Data.Repositories
         public static TResult Query<TResult>(Func<YachtDiceContext, TResult> query, string failedMessage)
         {
             TResult result;
+            string connectionString = DatabaseConnection.Build();
 
             try
             {
-                using (var context = new YachtDiceContext())
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     result = query(context);
                 }
@@ -43,16 +51,23 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="change">Change to apply.</param>
         /// <param name="failedMessage">Description of the failure, for the logs.</param>
+        /// <exception cref="ArgumentException">The data to save does not respect the model.</exception>
         /// <exception cref="DataAccessException">The change could not be saved.</exception>
         public static void Save(Action<YachtDiceContext> change, string failedMessage)
         {
+            string connectionString = DatabaseConnection.Build();
+
             try
             {
-                using (var context = new YachtDiceContext())
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     change(context);
                     context.SaveChanges();
                 }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                throw new ArgumentException(DescribeInvalidEntities(ex), ex);
             }
             catch (DbUpdateException ex)
             {
@@ -62,6 +77,19 @@ namespace YachtDice.Server.Data.Repositories
             {
                 throw new DataAccessException(failedMessage, ex);
             }
+        }
+
+        private static string DescribeInvalidEntities(DbEntityValidationException exception)
+        {
+            string[] propertyNames = exception.EntityValidationErrors
+                .SelectMany(entity => entity.ValidationErrors)
+                .Select(error => error.PropertyName)
+                .ToArray();
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                InvalidEntityFormat,
+                string.Join(PropertySeparator, propertyNames));
         }
     }
 }

@@ -61,5 +61,52 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
         void SaveTwoFactorEnabled(int playerId, bool isEnabled);
+
+        /// <summary>
+        /// Saves the avatar that the player chose.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
+        void SaveAvatar(int playerId, int avatarId);
+
+        /// <summary>
+        /// Saves the new username of a player, which is also the name that the other players see.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="username">New username of the player.</param>
+        /// <exception cref="DataAccessException">The username could not be saved.</exception>
+        void SaveUsername(int playerId, string username);
+
+        /// <summary>
+        /// Finds the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved title, or an empty text if the player never chose one.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindTitle(int playerId);
+
+        /// <summary>
+        /// Saves the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="title">Title to save.</param>
+        /// <exception cref="DataAccessException">The title could not be saved.</exception>
+        void SaveTitle(int playerId, string title);
+
+        /// <summary>
+        /// Finds the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved code, or an empty text if the player never chose a flag.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindFlagCode(int playerId);
+
+        /// <summary>
+        /// Saves the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="flagCode">Code of the country, or an empty text to remove the flag.</param>
+        /// <exception cref="DataAccessException">The flag could not be saved.</exception>
+        void SaveFlagCode(int playerId, string flagCode);
     }
 }

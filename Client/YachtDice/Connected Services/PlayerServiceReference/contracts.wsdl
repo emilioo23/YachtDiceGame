@@ -24,6 +24,78 @@
   <wsdl:message name="IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfile" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetProfile_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAvatarCatalog" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAvatarCatalogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAvatarCatalog_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsername" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAchievements" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAchievementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeTitle" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameHistory" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeFlag_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeFlag" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeFlag_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeFlagResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeFlag_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -34,6 +106,46 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard" message="tns:IPlayerService_GetLeaderboard_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse" message="tns:IPlayerService_GetLeaderboard_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetLeaderboard_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProfile">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfile" message="tns:IPlayerService_GetProfile_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfileResponse" message="tns:IPlayerService_GetProfile_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetProfileServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetProfile_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAvatarCatalog">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalog" message="tns:IPlayerService_GetAvatarCatalog_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogResponse" message="tns:IPlayerService_GetAvatarCatalog_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAvatarCatalogServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetAvatarCatalog_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeAvatar">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar" message="tns:IPlayerService_ChangeAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse" message="tns:IPlayerService_ChangeAvatar_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername" message="tns:IPlayerService_ChangeUsername_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse" message="tns:IPlayerService_ChangeUsername_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAchievements">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievements" message="tns:IPlayerService_GetAchievements_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse" message="tns:IPlayerService_GetAchievements_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetAchievements_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeTitle">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle" message="tns:IPlayerService_ChangeTitle_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse" message="tns:IPlayerService_ChangeTitle_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGameHistory">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory" message="tns:IPlayerService_GetGameHistory_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse" message="tns:IPlayerService_GetGameHistory_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetGameHistory_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeFlag">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag" message="tns:IPlayerService_ChangeFlag_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse" message="tns:IPlayerService_ChangeFlag_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeFlag_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

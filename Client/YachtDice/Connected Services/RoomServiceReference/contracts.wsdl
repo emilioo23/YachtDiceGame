@@ -4,7 +4,6 @@
     <xsd:schema targetNamespace="urn:yachtdice:contracts/Imports">
       <xsd:import namespace="urn:yachtdice:contracts" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IRoomService_CreateRoom_InputMessage">
@@ -25,6 +24,24 @@
   <wsdl:message name="IRoomService_JoinRoom_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IRoomService_GetRoomList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoomList" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_GetRoomList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoomListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_GetRoomList_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinListedRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinListedRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinListedRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinListedRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinListedRoom_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:message name="IRoomService_UpdateRoomSettings_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateRoomSettings" />
   </wsdl:message>
@@ -41,6 +58,33 @@
     <wsdl:part name="parameters" element="tns:StartGameResponse" />
   </wsdl:message>
   <wsdl:message name="IRoomService_StartGame_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_KickPlayer_InputMessage">
+    <wsdl:part name="parameters" element="tns:KickPlayer" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_KickPlayer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:KickPlayerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_KickPlayer_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_TransferHost_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransferHost" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_TransferHost_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransferHostResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_TransferHost_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_FindPendingRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindPendingRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_FindPendingRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindPendingRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_FindPendingRoom_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IRoomService_LeaveRoom_InputMessage">
@@ -66,6 +110,16 @@
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinRoomResponse" message="tns:IRoomService_JoinRoom_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_JoinRoom_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetRoomList">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/GetRoomList" message="tns:IRoomService_GetRoomList_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/GetRoomListResponse" message="tns:IRoomService_GetRoomList_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/GetRoomListServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_GetRoomList_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="JoinListedRoom">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinListedRoom" message="tns:IRoomService_JoinListedRoom_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomResponse" message="tns:IRoomService_JoinListedRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_JoinListedRoom_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateRoomSettings">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings" message="tns:IRoomService_UpdateRoomSettings_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse" message="tns:IRoomService_UpdateRoomSettings_OutputMessage" />
@@ -75,6 +129,21 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGame" message="tns:IRoomService_StartGame_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGameResponse" message="tns:IRoomService_StartGame_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/StartGameServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_StartGame_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="KickPlayer">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/KickPlayer" message="tns:IRoomService_KickPlayer_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/KickPlayerResponse" message="tns:IRoomService_KickPlayer_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/KickPlayerServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_KickPlayer_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransferHost">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/TransferHost" message="tns:IRoomService_TransferHost_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/TransferHostResponse" message="tns:IRoomService_TransferHost_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/TransferHostServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_TransferHost_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FindPendingRoom">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/FindPendingRoom" message="tns:IRoomService_FindPendingRoom_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IRoomService/FindPendingRoomResponse" message="tns:IRoomService_FindPendingRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IRoomService/FindPendingRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IRoomService_FindPendingRoom_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="LeaveRoom">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IRoomService/LeaveRoom" message="tns:IRoomService_LeaveRoom_InputMessage" />

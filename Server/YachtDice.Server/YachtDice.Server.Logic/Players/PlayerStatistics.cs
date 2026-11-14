@@ -29,5 +29,10 @@
         /// Current level of the player.
         /// </summary>
         public int Level { get; set; }
+
+        /// <summary>
+        /// Total experience points earned by the player.
+        /// </summary>
+        public int Experience { get; set; }
     }
 }

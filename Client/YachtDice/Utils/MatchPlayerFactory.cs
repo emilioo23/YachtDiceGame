@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Models;
+using YachtDice.RoomServiceReference;
 
 namespace YachtDice.Utils
 {
@@ -14,18 +15,31 @@ namespace YachtDice.Utils
         /// Creates the players of a match. The local player goes first, so the scorecard always shows the own
         /// score in the same column, and the others keep the order of the room.
         /// </summary>
-        /// <param name="roomPlayers">Names of the players inside the room.</param>
-        /// <param name="localPlayerName">Name of the player who uses the window.</param>
+        /// <param name="roomPlayers">Players inside the room.</param>
+        /// <param name="localPlayerId">Identifier of the player who uses the window.</param>
         /// <returns>The local player followed by the opponents.</returns>
-        public static List<MatchPlayer> Create(IEnumerable<string> roomPlayers, string localPlayerName)
+        public static List<MatchPlayer> Create(IEnumerable<RoomPlayer> roomPlayers, string localPlayerId)
         {
-            var players = new List<MatchPlayer> { CreatePlayer(localPlayerName, true) };
-
-            players.AddRange(roomPlayers
-                .Where(name => !IsSameName(name, localPlayerName))
-                .Select(name => CreatePlayer(name, false)));
+            List<MatchPlayer> players = roomPlayers
+                .OrderByDescending(player => IsSameId(player.Id, localPlayerId))
+                .Select(player => CreatePlayer(player, IsSameId(player.Id, localPlayerId)))
+                .ToList();
 
             return players;
+        }
+
+        /// <summary>
+        /// Creates the players of a match from the state of the room. The players who left the match and
+        /// can still come back are listed too, marked as absent.
+        /// </summary>
+        /// <param name="room">State of the room.</param>
+        /// <param name="localPlayerId">Identifier of the player who uses the window.</param>
+        /// <returns>The local player followed by the other players.</returns>
+        public static List<MatchPlayer> CreateForRoom(RoomState room, string localPlayerId)
+        {
+            List<MatchPlayer> players = Create(room.Players.Concat(room.AbsentPlayers), localPlayerId);
+
+            return UpdatePresence(players, room.Players);
         }
 
         /// <summary>
@@ -33,48 +47,50 @@ namespace YachtDice.Utils
         /// keeps their column until the match ends.
         /// </summary>
         /// <param name="players">Players of the match.</param>
-        /// <param name="roomPlayers">Names of the players who are inside the room now.</param>
+        /// <param name="roomPlayers">Players who are inside the room now.</param>
         /// <returns>A new list with the same players and the updated presence.</returns>
         public static List<MatchPlayer> UpdatePresence(
             IEnumerable<MatchPlayer> players,
-            IEnumerable<string> roomPlayers)
+            IEnumerable<RoomPlayer> roomPlayers)
         {
-            var presentNames = new HashSet<string>(roomPlayers, StringComparer.OrdinalIgnoreCase);
+            var presentIds = new HashSet<string>(roomPlayers.Select(player => player.Id), StringComparer.Ordinal);
             List<MatchPlayer> updatedPlayers = players
-                .Select(player => CopyWithPresence(player, presentNames))
+                .Select(player => CopyWithPresence(player, presentIds))
                 .ToList();
 
             return updatedPlayers;
         }
 
-        private static MatchPlayer CreatePlayer(string name, bool isLocalPlayer)
+        private static MatchPlayer CreatePlayer(RoomPlayer roomPlayer, bool isLocalPlayer)
         {
             var player = new MatchPlayer
             {
-                Name = name,
-                Initial = PlayerInitials.GetInitial(name),
+                Id = roomPlayer.Id,
+                Name = roomPlayer.DisplayName,
+                AvatarId = roomPlayer.AvatarId,
                 IsLocalPlayer = isLocalPlayer
             };
 
             return player;
         }
 
-        private static MatchPlayer CopyWithPresence(MatchPlayer player, HashSet<string> presentNames)
+        private static MatchPlayer CopyWithPresence(MatchPlayer player, HashSet<string> presentIds)
         {
             var updatedPlayer = new MatchPlayer
             {
+                Id = player.Id,
                 Name = player.Name,
-                Initial = player.Initial,
+                AvatarId = player.AvatarId,
                 IsLocalPlayer = player.IsLocalPlayer,
-                HasLeft = !presentNames.Contains(player.Name)
+                HasLeft = !presentIds.Contains(player.Id)
             };
 
             return updatedPlayer;
         }
 
-        private static bool IsSameName(string firstName, string secondName)
+        private static bool IsSameId(string firstId, string secondId)
         {
-            return string.Equals(firstName, secondName, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(firstId, secondId, StringComparison.Ordinal);
         }
     }
 }

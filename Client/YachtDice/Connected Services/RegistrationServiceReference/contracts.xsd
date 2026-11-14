@@ -32,6 +32,9 @@
       <xs:enumeration value="InvalidEmail" />
       <xs:enumeration value="EmailAlreadyRegistered" />
       <xs:enumeration value="UsernameAlreadyTaken" />
+      <xs:enumeration value="InvalidUsername" />
+      <xs:enumeration value="WeakPassword" />
+      <xs:enumeration value="OffensiveUsername" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RegisterResultCode" nillable="true" type="tns:RegisterResultCode" />

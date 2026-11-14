@@ -71,18 +71,28 @@
 
                         <Grid>
                             <TextBlock
-                                Text="{x:Static properties:Strings.Game_Topbar_YourTurn}"
+                                x:Name="TurnTextBlock"
                                 Foreground="White"
                                 FontWeight="Bold"
                                 FontSize="17"
                                 VerticalAlignment="Center"/>
 
-                            <TextBlock
-                                x:Name="RoundInfoTextBlock"
-                                Foreground="{StaticResource BrushCream2}"
-                                FontSize="12"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center">
+
+                                <TextBlock
+                                    x:Name="TimerTextBlock"
+                                    Foreground="{StaticResource BrushGold}"
+                                    FontWeight="Bold"
+                                    FontSize="14"
+                                    Margin="0,0,12,0"/>
+
+                                <TextBlock
+                                    x:Name="RoundInfoTextBlock"
+                                    Foreground="{StaticResource BrushCream2}"
+                                    FontSize="12"/>
+                            </StackPanel>
                         </Grid>
                     </Border>
 
@@ -144,12 +154,10 @@
                                                 </Style>
                                             </Border.Style>
 
-                                            <TextBlock Text="{Binding Initial}"
-                                                       Foreground="White"
-                                                       FontWeight="Bold"
-                                                       FontSize="14"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"/>
+                                            <Image Source="{Binding AvatarId,
+                                                           Converter={StaticResource AvatarImageConverter}}"
+                                                   Width="32"
+                                                   Height="32"/>
                                         </Border>
 
                                         <TextBlock Text="{Binding Name}"
@@ -186,15 +194,19 @@
                             Style="{StaticResource BtnOutline}"
                             HorizontalAlignment="Left"
                             FontSize="14"
-                            Padding="12,6"/>
+                            Padding="12,6"
+                            Click="HowToPlayButton_Click"/>
 
                         <Button
+                            x:Name="KickPlayerButton"
                             Grid.Column="1"
                             Content="{x:Static properties:Strings.Game_Sidebar_ButtonKick}"
                             Style="{StaticResource BtnOutline}"
                             FontSize="14"
                             Padding="8,6"
-                            Margin="0,0,6,0"/>
+                            Margin="0,0,6,0"
+                            Visibility="Collapsed"
+                            Click="KickPlayerButton_Click"/>
 
                         <Button
                             Grid.Column="2"
@@ -251,26 +263,22 @@
                             Click="RollButton_Click"/>
 
                         <TextBlock
-                            Text="{x:Static properties:Strings.Game_Dice_HintPress}"
+                            x:Name="HintTextBlock"
                             FontSize="11"
                             Foreground="{StaticResource BrushCream2}"
                             HorizontalAlignment="Center"
                             Margin="0,0,0,8"/>
-
-                        <TextBlock
-                            Text="{x:Static properties:Strings.Results_Title}"
-                            FontSize="11"
-                            Foreground="{StaticResource BrushCream2}"
-                            HorizontalAlignment="Center"
-                            TextDecorations="Underline"
-                            Cursor="Hand"
-                            MouseLeftButtonUp="FinishDemoLink_Click"/>
                     </StackPanel>
                 </Border>
 
                 <views:ChatPanel x:Name="ChatPanelControl"
                                  Grid.Row="1"/>
             </Grid>
+
+            <Canvas x:Name="CelebrationCanvas"
+                    Grid.ColumnSpan="2"
+                    IsHitTestVisible="False"
+                    Panel.ZIndex="50"/>
         </Grid>
     </Viewbox>
 </Window>

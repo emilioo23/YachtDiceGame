@@ -3,11 +3,17 @@
   <xs:element name="JoinChat">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="member" nillable="true" type="tns:RoomMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
   <xs:element name="JoinChatResponse">
     <xs:complexType>
       <xs:sequence />
@@ -31,24 +37,15 @@
   <xs:element name="SendChatMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="message" nillable="true" type="tns:ChatMessage" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="author" nillable="true" type="tns:RoomMember" />
+        <xs:element minOccurs="0" name="content" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ChatMessage">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Author" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Content" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
   <xs:element name="LeaveChat">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="member" nillable="true" type="tns:RoomMember" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -59,4 +56,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="ChatMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Author" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AuthorId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
+      <xs:element minOccurs="0" name="Content" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ChatMessage" nillable="true" type="tns:ChatMessage" />
 </xs:schema>

@@ -36,7 +36,79 @@ namespace YachtDice.Gateway
             return entries.ToList();
         }
 
+        /// <summary>
+        /// Gets the avatar, level and experience of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The profile of the player.</returns>
+        public async Task<PlayerProfile> GetProfileAsync(string displayName)
+        {
+            PlayerProfile profile = await ExecuteAsync(client => client.GetProfile(displayName));
+
+            return profile;
+        }
+
+        /// <summary>
+        /// Gets every avatar of the game with the level that each one needs.
+        /// </summary>
+        /// <returns>The avatars of the catalog.</returns>
+        public async Task<List<UnlockableAvatar>> GetAvatarCatalogAsync()
+        {
+            UnlockableAvatar[] avatars = await ExecuteAsync(client => client.GetAvatarCatalog());
+
+            return avatars.ToList();
+        }
+
+        /// <summary>
+        /// Asks the server to change the avatar of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
+        /// <returns>The outcome of the change.</returns>
+        public async Task<AvatarChangeResultCode> ChangeAvatarAsync(string displayName, int avatarId)
+        {
+            AvatarChangeResultCode result = await ExecuteAsync(client => client.ChangeAvatar(displayName, avatarId));
+
+            return result;
+        }
+
         /// <inheritdoc />
+        public async Task<UsernameChangeResultCode> ChangeUsernameAsync(string currentName, string newUsername)
+        {
+            UsernameChangeResultCode result =
+                await ExecuteAsync(client => client.ChangeUsername(currentName, newUsername));
+
+            return result;
+        }
+
+        public async Task<List<AchievementInfo>> GetAchievementsAsync(string playerName)
+        {
+            AchievementInfo[] achievements = await ExecuteAsync(client => client.GetAchievements(playerName));
+
+            return achievements.ToList();
+        }
+
+        public async Task<TitleChangeResultCode> ChangeTitleAsync(string playerName, int titleId)
+        {
+            TitleChangeResultCode result = await ExecuteAsync(client => client.ChangeTitle(playerName, titleId));
+
+            return result;
+        }
+
+        public async Task<List<GameHistoryEntry>> GetGameHistoryAsync(string playerName)
+        {
+            GameHistoryEntry[] games = await ExecuteAsync(client => client.GetGameHistory(playerName));
+
+            return games.ToList();
+        }
+
+        public async Task<FlagChangeResultCode> ChangeFlagAsync(string playerName, string flagCode)
+        {
+            FlagChangeResultCode result = await ExecuteAsync(client => client.ChangeFlag(playerName, flagCode));
+
+            return result;
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;

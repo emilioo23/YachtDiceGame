@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace YachtDice.Server.Services.Mapping
 {
@@ -20,12 +21,51 @@ namespace YachtDice.Server.Services.Mapping
             var state = new Contracts.RoomState
             {
                 Code = room.Code,
-                HostName = room.HostName,
-                Players = room.Players.ToList(),
+                HostId = room.HostId,
+                Players = room.Players.Select(ToContract).ToList(),
+                AbsentPlayers = room.AbsentPlayers.Select(ToContract).ToList(),
+                IsStarted = room.IsStarted,
                 Settings = ToContract(room.Settings)
             };
 
             return state;
+        }
+
+        /// <summary>
+        /// Creates the data contracts of the rooms of the list of rooms.
+        /// </summary>
+        /// <param name="rooms">Descriptions of the rooms in the logic layer.</param>
+        /// <returns>The descriptions for the clients.</returns>
+        public static List<Contracts.RoomSummary> ToSummaries(List<Logic.Rooms.RoomSummary> rooms)
+        {
+            return rooms.Select(ToContract).ToList();
+        }
+
+        /// <summary>
+        /// Creates the room of the list of the logic layer from the one sent by a client.
+        /// </summary>
+        /// <param name="roomAccess">Room of the list received from the client.</param>
+        /// <returns>The room of the list for the logic layer.</returns>
+        public static Logic.Rooms.RoomAccess ToLogic(Contracts.RoomAccess roomAccess)
+        {
+            var logicRoomAccess = new Logic.Rooms.RoomAccess
+            {
+                RoomId = roomAccess.RoomId,
+                AccessCode = roomAccess.AccessCode
+            };
+
+            return logicRoomAccess;
+        }
+
+        /// <summary>
+        /// Converts the player inside a room that a client sends. A missing value is kept empty, so the
+        /// rules of the room answer that the player or the room does not exist.
+        /// </summary>
+        /// <param name="member">Room and identifier sent by the client; it can be null.</param>
+        /// <returns>The player inside the room for the logic layer.</returns>
+        public static Logic.Rooms.RoomMember ToLogic(Contracts.RoomMember member)
+        {
+            return new Logic.Rooms.RoomMember(member?.RoomCode, member?.PlayerId);
         }
 
         /// <summary>
@@ -55,10 +95,27 @@ namespace YachtDice.Server.Services.Mapping
             var joinResult = new Contracts.JoinRoomResult
             {
                 Code = ToResultCode(result.Status),
+                PlayerId = result.PlayerId,
                 Room = ToContract(result.Room)
             };
 
             return joinResult;
+        }
+
+        /// <summary>
+        /// Creates the answer to the player who created a room.
+        /// </summary>
+        /// <param name="result">Result of the logic layer.</param>
+        /// <returns>The answer for the client.</returns>
+        public static Contracts.CreateRoomResult ToCreateResult(Logic.Rooms.RoomResult result)
+        {
+            var createResult = new Contracts.CreateRoomResult
+            {
+                PlayerId = result.PlayerId,
+                Room = ToContract(result.Room)
+            };
+
+            return createResult;
         }
 
         /// <summary>
@@ -83,6 +140,43 @@ namespace YachtDice.Server.Services.Mapping
                 MaxPlayers = settings.MaxPlayers,
                 IsPrivate = settings.IsPrivate,
                 Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed)
+            };
+
+            return contract;
+        }
+
+        /// <summary>
+        /// Creates the data contract of a room of the list of rooms.
+        /// </summary>
+        /// <param name="room">Description of the room in the logic layer.</param>
+        /// <returns>The description for the clients.</returns>
+        private static Contracts.RoomSummary ToContract(Logic.Rooms.RoomSummary room)
+        {
+            var contract = new Contracts.RoomSummary
+            {
+                RoomId = room.RoomId,
+                HostName = room.HostName,
+                PlayerCount = room.PlayerCount,
+                MaxPlayers = room.MaxPlayers,
+                IsPrivate = room.IsPrivate,
+                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(room.Speed)
+            };
+
+            return contract;
+        }
+
+        /// <summary>
+        /// Creates the data contract of a player inside a room.
+        /// </summary>
+        /// <param name="player">Player in the logic layer.</param>
+        /// <returns>The player for the clients.</returns>
+        private static Contracts.RoomPlayer ToContract(Logic.Rooms.RoomPlayer player)
+        {
+            var contract = new Contracts.RoomPlayer
+            {
+                Id = player.Id,
+                DisplayName = player.DisplayName,
+                AvatarId = player.AvatarId
             };
 
             return contract;

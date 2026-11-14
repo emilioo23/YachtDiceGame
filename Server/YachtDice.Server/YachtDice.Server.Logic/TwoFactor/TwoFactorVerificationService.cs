@@ -13,7 +13,7 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
+        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
@@ -31,10 +31,10 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
+            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService));
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(deliveryService));
         }
 
         /// <summary>
@@ -60,23 +60,27 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Processes the code verification required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="code">The verification code provided.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="verificationCode">The code provided and the session challenge it answers.</param>
         /// <returns>Result status of the verification process.</returns>
-        public TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId)
+        public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            return _codeService.Validate(email, code, challengeId);
+            return _codeService.ValidateCode(email, verificationCode);
         }
 
         /// <summary>
         /// Processes the code resend required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="cultureName">The culture name for email localization.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="delivery">The session challenge and the culture name for email localization.</param>
         /// <returns>Result status of the resend process.</returns>
-        public ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId)
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery)
         {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
             List<Player> matches = _playerRepository.FindByEmail(email);
             Player player = matches.FirstOrDefault();
             ResendCodeStatus status;
@@ -89,14 +93,14 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = ResendCodeStatus.VerificationLocked;
             }
-            else if (!_codeService.IsResendAllowed(player.Email, challengeId))
+            else if (!_codeService.IsResendAllowed(player.Email, delivery.ChallengeId))
             {
                 status = ResendCodeStatus.ResendTooSoon;
             }
             else
             {
-                var culture = new CultureInfo(cultureName);
-                bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+                var culture = new CultureInfo(delivery.CultureName);
+                bool isSent = _deliveryService.SendCode(player, delivery.ChallengeId, culture);
                 status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

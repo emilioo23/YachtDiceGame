@@ -15,11 +15,22 @@ namespace YachtDice.Utils
         /// <returns>The text to show to the player.</returns>
         public static string GetMessage(GatewayErrorCode errorCode)
         {
-            string message = Strings.Dialogs_UnexpectedError;
+            string message;
 
-            if (errorCode == GatewayErrorCode.ServerUnavailable || errorCode == GatewayErrorCode.DatabaseUnavailable)
+            switch (errorCode)
             {
-                message = Strings.Dialogs_DatabaseConnectionError;
+                case GatewayErrorCode.ServerUnavailable:
+                    message = Strings.Dialogs_ServerUnavailable;
+                    break;
+                case GatewayErrorCode.DatabaseUnavailable:
+                    message = Strings.Dialogs_DatabaseUnavailable;
+                    break;
+                case GatewayErrorCode.ValidationFailed:
+                    message = Strings.Dialogs_InvalidData;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
             }
 
             return message;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.ChatServiceReference;
 using YachtDice.Utils;
 using ChatFault = YachtDice.ChatServiceReference.ServiceFault;
@@ -17,33 +18,55 @@ namespace YachtDice.Gateway
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
+        private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
+        private const string JoinFailedLogMessage = "The player could not join the chat of the room.";
+
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
-        private readonly string _playerName;
-        private readonly string _roomCode;
+        private readonly RoomMember _member;
         private Action<ChatMessage> _messageReceived;
 
         /// <summary>
         /// Initializes the gateway for the player in a room.
         /// </summary>
-        /// <param name="playerName">Name of the player who writes in the chat.</param>
-        /// <param name="roomCode">Code of the room whose chat is used.</param>
-        public ChatGateway(string playerName, string roomCode)
+        /// <param name="membership">Player who writes in the chat and the room whose chat is used.</param>
+        /// <exception cref="ArgumentNullException">The membership is null.</exception>
+        public ChatGateway(RoomMembership membership)
         {
-            _playerName = playerName;
-            _roomCode = roomCode;
+            if (membership == null)
+            {
+                throw new ArgumentNullException(nameof(membership), NullMembershipMessage);
+            }
+
+            _member = new RoomMember
+            {
+                PlayerId = membership.PlayerId,
+                RoomCode = membership.RoomCode
+            };
             _logger = new AppLogger(GetType());
         }
 
         /// <summary>
-        /// Registers the player in the chat of the room so the server sends the messages to this computer.
+        /// Tries to register the player in the chat of the room so the server sends the messages to this
+        /// computer. The game can be played without chat, so a failure is only written in the log.
         /// </summary>
-        /// <returns>A task that finishes when the player is registered.</returns>
-        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task JoinAsync()
+        /// <returns>True if the player is registered in the chat; false if the chat is not available.</returns>
+        public async Task<bool> TryJoinAsync()
         {
-            await ConnectAndExecuteAsync(client => client.JoinChat(_playerName, _roomCode));
+            bool isJoined = true;
+
+            try
+            {
+                await ConnectAndExecuteAsync(client => client.JoinChat(_member));
+            }
+            catch (GatewayException)
+            {
+                _logger.Warning(JoinFailedLogMessage);
+                isJoined = false;
+            }
+
+            return isJoined;
         }
 
         /// <summary>
@@ -54,14 +77,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server could not be reached.</exception>
         public async Task SendAsync(string content)
         {
-            var message = new ChatMessage
-            {
-                Author = _playerName,
-                Content = content,
-                Timestamp = DateTime.UtcNow
-            };
-
-            await ExecuteAsync(client => client.SendChatMessage(message, _roomCode));
+            await ExecuteAsync(client => client.SendChatMessage(_member, content));
         }
 
         /// <summary>
@@ -97,21 +113,27 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Unsubscribes the player from the chat and closes the connection.
+        /// Unsubscribes the player from the chat and closes the connection. If the player never joined the chat
+        /// or the connection was already lost, there is nothing to do.
         /// </summary>
         /// <returns>A task that finishes when the player left the chat.</returns>
+        /// <exception cref="GatewayException">
+        /// The server could not be told. The connection is closed anyway, so the server takes the player out
+        /// when it notices.
+        /// </exception>
         public async Task LeaveAsync()
         {
-            try
+            if (IsConnected)
             {
-                await ExecuteAsync(client => client.LeaveChat(_playerName, _roomCode));
+                try
+                {
+                    await ExecuteAsync(client => client.LeaveChat(_member));
+                }
+                finally
+                {
+                    await CloseAsync();
+                }
             }
-            catch (GatewayException ex)
-            {
-                _logger.Warning(ex.Message);
-            }
-
-            await CloseAsync();
         }
 
         /// <inheritdoc />

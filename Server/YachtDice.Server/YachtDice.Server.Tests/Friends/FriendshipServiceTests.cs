@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -17,7 +18,8 @@ namespace YachtDice.Server.Tests.Friends
         private const string RequesterName = "DiceKing99";
         private const string TargetUsername = "GabrielHM";
         private const string TargetDisplayName = "Gabriel";
-        private const string UnknownUsername = "NobodyHere";
+        private const string UnknownUsername = "CarlosRamirez";
+        private const string UnknownRequesterName = "LuisHernandez";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
@@ -34,50 +36,59 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void SendRequest_ExistingUsername_ReturnsRequestSent()
+        {
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.RequestSent, requestResult.Status);
+        }
+
+        [Fact]
         public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
         {
-            FriendRequestResult result = _service.SendRequest(RequesterName, TargetUsername);
+            var expectedSavedRequest = new Friendship
+            {
+                RequesterId = RequesterId,
+                AddresseeId = TargetId,
+                Status = FriendshipStatus.Pending
+            };
+
+            _service.SendRequest(RequesterName, TargetUsername);
 
             Friendship savedRequest = _friends.Friendships.Single();
-            Assert.Equal(FriendRequestStatus.RequestSent, result.Status);
-            Assert.Equal(TargetId, savedRequest.AddresseeId);
-            Assert.Equal(FriendshipStatus.Pending, savedRequest.Status);
+            Assert.Equivalent(expectedSavedRequest, savedRequest);
         }
 
         [Fact]
         public void SendRequest_UnknownUsername_ReturnsUsernameNotFound()
         {
-            FriendRequestResult result = _service.SendRequest(RequesterName, UnknownUsername);
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, UnknownUsername);
 
-            Assert.Equal(FriendRequestStatus.UsernameNotFound, result.Status);
-            Assert.Empty(_friends.Friendships);
+            Assert.Equal(FriendRequestStatus.UsernameNotFound, requestResult.Status);
         }
 
         [Fact]
         public void SendRequest_DisplayNameInsteadOfUsername_ReturnsUsernameNotFound()
         {
-            FriendRequestResult result = _service.SendRequest(RequesterName, TargetDisplayName);
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetDisplayName);
 
-            Assert.Equal(FriendRequestStatus.UsernameNotFound, result.Status);
-            Assert.Empty(_friends.Friendships);
+            Assert.Equal(FriendRequestStatus.UsernameNotFound, requestResult.Status);
         }
 
         [Fact]
         public void SendRequest_BlankUsername_ReturnsInvalidUsername()
         {
-            FriendRequestResult result = _service.SendRequest(RequesterName, string.Empty);
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, string.Empty);
 
-            Assert.Equal(FriendRequestStatus.InvalidUsername, result.Status);
-            Assert.Empty(_friends.Friendships);
+            Assert.Equal(FriendRequestStatus.InvalidUsername, requestResult.Status);
         }
 
         [Fact]
         public void SendRequest_OwnUsername_ReturnsSelfRequest()
         {
-            FriendRequestResult result = _service.SendRequest(RequesterName, RequesterName);
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, RequesterName);
 
-            Assert.Equal(FriendRequestStatus.SelfRequest, result.Status);
-            Assert.Empty(_friends.Friendships);
+            Assert.Equal(FriendRequestStatus.SelfRequest, requestResult.Status);
         }
 
         [Fact]
@@ -85,10 +96,89 @@ namespace YachtDice.Server.Tests.Friends
         {
             _service.SendRequest(RequesterName, TargetUsername);
 
-            FriendRequestResult result = _service.SendRequest(RequesterName, TargetUsername);
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
 
-            Assert.Equal(FriendRequestStatus.AlreadyRequested, result.Status);
+            Assert.Equal(FriendRequestStatus.AlreadyRequested, requestResult.Status);
+        }
+
+        [Fact]
+        public void SendRequest_RequestAlreadySent_KeepsOnlyOneRequest()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            _service.SendRequest(RequesterName, TargetUsername);
+
             Assert.Single(_friends.Friendships);
+        }
+
+        [Theory]
+        [InlineData(UnknownUsername)]
+        [InlineData(TargetDisplayName)]
+        [InlineData("")]
+        [InlineData(RequesterName)]
+        public void SendRequest_RejectedUsername_SavesNothing(string username)
+        {
+            _service.SendRequest(RequesterName, username);
+
+            Assert.Empty(_friends.Friendships);
+        }
+
+        [Fact]
+        public void RespondToRequest_AcceptedRequest_ReturnsSuccessAndSavesTheFriendshipAsAccepted()
+        {
+            var expectedFriendship = new Friendship
+            {
+                RequesterId = RequesterId,
+                AddresseeId = TargetId,
+                Status = FriendshipStatus.Accepted
+            };
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            FriendActionStatus status = RespondAsTarget(RequesterName, true);
+
+            Assert.Equal(FriendActionStatus.Success, status);
+            Assert.Equivalent(expectedFriendship, _friends.Friendships.Single());
+        }
+
+        [Fact]
+        public void RespondToRequest_RejectedRequest_ReturnsSuccessAndRemovesTheRequest()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            FriendActionStatus status = RespondAsTarget(RequesterName, false);
+
+            Assert.Equal(FriendActionStatus.Success, status);
+            Assert.Empty(_friends.Friendships);
+        }
+
+        [Fact]
+        public void RespondToRequest_RequesterWithoutRequest_ReturnsRelationNotFound()
+        {
+            FriendActionStatus status = RespondAsTarget(RequesterName, true);
+
+            Assert.Equal(FriendActionStatus.RelationNotFound, status);
+        }
+
+        [Fact]
+        public void RespondToRequest_UnknownRequester_ReturnsPlayerNotFound()
+        {
+            FriendActionStatus status =
+                RespondAsTarget(UnknownRequesterName, true);
+
+            Assert.Equal(FriendActionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void RespondToRequest_NullAnswer_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _service.RespondToRequest(TargetDisplayName, null));
+        }
+
+        private FriendActionStatus RespondAsTarget(string requesterName, bool isAccepted)
+        {
+            var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
+
+            return _service.RespondToRequest(TargetDisplayName, answer);
         }
     }
 }

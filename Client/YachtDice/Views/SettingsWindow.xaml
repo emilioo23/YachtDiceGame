@@ -31,7 +31,7 @@
 
                     <TextBlock Text="{x:Static properties:Strings.Settings_Title}"
                                FontFamily="{StaticResource FontDisplay}"
-                               FontSize="28"
+                               FontSize="32"
                                Foreground="{StaticResource BrushText}"
                                Margin="0,0,0,20"/>
 
@@ -40,51 +40,51 @@
                             Style="{StaticResource TabButtonActive}"
                             Margin="0,0,0,8"
                             Click="AccountNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Button x:Name="AppearanceNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Appearance}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="AppearanceNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Button x:Name="SecurityNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Security}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="SecurityNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Button x:Name="NotificationsNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Notifications}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="NotificationsNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Button x:Name="PreferencesNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Preferences}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="PreferencesNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Button x:Name="PrivacyNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Privacy}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,20"
                             Click="PrivacyNavButton_Click"
-                            FontSize="17"/>
+                            FontSize="19"/>
 
                     <Border Height="1"
                             Background="{StaticResource BrushBorder}"
                             Margin="0,0,0,20"/>
 
-                    <TextBlock Text="{x:Static properties:Strings.Global_ButtonBack}"
-                               Style="{StaticResource LinkText}"
-                               MouseLeftButtonUp="BackLink_Click"
-                               FontSize="15"/>
+                    <Button Content="{x:Static properties:Strings.Global_ButtonBack}"
+                            Style="{StaticResource BtnBack}"
+                            HorizontalAlignment="Stretch"
+                            Click="BackButton_Click"/>
 
                 </StackPanel>
             </Border>
@@ -104,12 +104,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Username}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Account_Username}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock x:Name="AccountUsernameTextBlock"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -117,8 +117,8 @@
                             <Button Grid.Column="1"
                                     Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
-                                    Padding="14,6"
-                                    FontSize="15"/>
+                                    Padding="22,10"
+                                    FontSize="19"/>
                         </Grid>
 
                         <Border Height="1"
@@ -133,12 +133,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Email}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Account_Email}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -146,8 +146,8 @@
                             <Button Grid.Column="1"
                                     Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
-                                    Padding="14,6"
-                                    FontSize="15"/>
+                                    Padding="22,10"
+                                    FontSize="19"/>
                         </Grid>
 
                         <Border Height="1"
@@ -160,17 +160,17 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Account_Avatar}"
                                        FontWeight="Bold"
-                                       FontSize="17"
+                                       FontSize="22"
                                        VerticalAlignment="Center"/>
 
                             <Button Grid.Column="1"
                                     Content="{x:Static properties:Strings.Settings_Account_ButtonEditProfile}"
                                     Style="{StaticResource BtnPrimary}"
-                                    Padding="14,8"
-                                    FontSize="15"
+                                    Padding="22,11"
+                                    FontSize="19"
                                     Click="EditProfileButton_Click"/>
                         </Grid>
 
@@ -187,12 +187,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkThemeSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -228,17 +228,17 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Security_Password}"
                                        FontWeight="Bold"
-                                       FontSize="17"
+                                       FontSize="22"
                                        VerticalAlignment="Center"/>
 
                             <Button Grid.Column="1"
                                     Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
-                                    Padding="14,6"
-                                    FontSize="12"/>
+                                    Padding="22,10"
+                                    FontSize="18"/>
                         </Grid>
 
                         <Border Height="1"
@@ -253,12 +253,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactor}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Security_TwoFactor}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactorSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -269,16 +269,17 @@
 
                                 <PasswordBox x:Name="TwoFactorPasswordBox"
                                              Style="{StaticResource PasswordBoxRounded}"
-                                             Width="180"
-                                             Margin="0,0,10,0"
-                                             Padding="10,6"
+                                             Width="240"
+                                             FontSize="18"
+                                             Margin="0,0,12,0"
+                                             Padding="12,9"
                                              Visibility="Collapsed"
                                              ToolTip="{x:Static properties:Strings.Settings_Security_PasswordCurrent}"/>
 
                                 <Button x:Name="TwoFactorToggleButton"
                                         Style="{StaticResource BtnOutline}"
-                                        Padding="14,6"
-                                        FontSize="12"
+                                        Padding="22,10"
+                                        FontSize="18"
                                         IsEnabled="False"
                                         Click="TwoFactorToggleButton_Click"/>
 
@@ -298,12 +299,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_Match}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Notifications_Match}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_MatchSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -336,12 +337,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsGame}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Notifications_SoundsGame}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsGameSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -373,24 +374,24 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Preferences_Language}"
                                        FontWeight="Bold"
-                                       FontSize="17"
+                                       FontSize="22"
                                        VerticalAlignment="Center"/>
 
                             <ComboBox x:Name="LanguageComboBox"
                                       Grid.Column="1"
-                                      Width="160"
-                                      Padding="10,8"
+                                      Width="200"
+                                      FontSize="20"
+                                      Padding="12,9"
                                       SelectionChanged="LanguageComboBox_SelectionChanged">
 
                                 <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionSpanish}"
                                               Tag="es-MX"/>
 
                                 <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionEnglish}"
-                                              Tag="en-US"
-                                              FontSize="18"/>
+                                              Tag="en-US"/>
 
                             </ComboBox>
                         </Grid>
@@ -407,12 +408,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPointsSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -446,12 +447,12 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}"
                                            FontWeight="Bold"
-                                           FontSize="17"/>
+                                           FontSize="22"/>
 
                                 <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfileSub}"
-                                           FontSize="14"
+                                           FontSize="18"
                                            Foreground="{StaticResource BrushTextMuted}"/>
 
                             </StackPanel>
@@ -479,8 +480,8 @@
                         <Button Content="{x:Static properties:Strings.Settings_Privacy_ButtonDeleteAccount}"
                                 Style="{StaticResource BtnOutline}"
                                 Foreground="{StaticResource BrushDanger}"
-                                Padding="16,8"
-                                FontSize="13"
+                                Padding="24,11"
+                                FontSize="18"
                                 HorizontalAlignment="Left"
                                 Click="DeleteAccountButton_Click"/>
 

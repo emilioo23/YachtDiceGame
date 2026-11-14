@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using YachtDice.Server.Contracts.Rooms;
 
 namespace YachtDice.Server.Contracts.Friends
 {
@@ -23,12 +24,11 @@ namespace YachtDice.Server.Contracts.Friends
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="requesterName">Name of the player who sent the request.</param>
-        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
+        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted);
+        FriendActionResultCode RespondToFriendRequest(string displayName, FriendRequestAnswer answer);
 
         /// <summary>
         /// Removes a friend from the list of the player.
@@ -39,6 +39,16 @@ namespace YachtDice.Server.Contracts.Friends
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         FriendActionResultCode RemoveFriend(string displayName, string friendName);
+
+        /// <summary>
+        /// Invites a friend who is online to join the room where the player is.
+        /// </summary>
+        /// <param name="sender">Room and identifier of the player who invites.</param>
+        /// <param name="friendName">Name of the friend to invite.</param>
+        /// <returns>Whether the invitation reached the friend or why not.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        InvitationResultCode InviteToRoom(RoomMember sender, string friendName);
 
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.

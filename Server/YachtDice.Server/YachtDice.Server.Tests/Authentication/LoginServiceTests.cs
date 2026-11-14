@@ -15,8 +15,9 @@ namespace YachtDice.Server.Tests.Authentication
     public class LoginServiceTests
     {
         private const int PlayerId = 1;
-        private const string Email = "gabriel@example.com";
-        private const string UnknownEmail = "nobody@example.com";
+        private const string Email = "gabriel@gmail.com";
+        private const string UnknownEmail = "carlos.ramirez@gmail.com";
+        private const string MalformedEmail = "gabriel";
         private const string Password = "Secret123!";
         private const string WrongPassword = "Wrong123!";
         private const string DisplayName = "gabrielhernandez";
@@ -47,37 +48,68 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithThePlayerNames()
+        public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, Password);
+            LoginResult expectedLoginResult = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.LoggedIn, result.Status);
-            Assert.Equal(DisplayName, result.DisplayName);
-            Assert.Equal(FirstName, result.FirstName);
+            Assert.Equivalent(expectedLoginResult, loginResult);
         }
 
         [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsInvalidCredentialsWithoutNames()
+        public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
+            LoginResult expectedLoginResult = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidCredentials, result.Status);
-            Assert.Equal(string.Empty, result.DisplayName);
-            Assert.Equal(string.Empty, result.FirstName);
+            Assert.Equivalent(expectedLoginResult, loginResult);
         }
 
         [Fact]
-        public void LoginPlayer_UnknownEmail_ReturnsInvalidCredentials()
+        public void LoginPlayer_UnknownEmail_ReturnsEmailNotRegistered()
         {
             LoginCredentials credentials = CreateCredentials(UnknownEmail, Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidCredentials, result.Status);
+            Assert.Equal(LoginStatus.EmailNotRegistered, loginResult.Status);
+        }
+
+        [Theory]
+        [InlineData("gabriel")]
+        [InlineData("gabriel@")]
+        [InlineData("gabriel gmail.com")]
+        public void LoginPlayer_MalformedEmail_ReturnsInvalidEmail(string email)
+        {
+            LoginCredentials credentials = CreateCredentials(email, Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidEmail, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_MalformedEmailAndWrongPassword_ReturnsInvalidEmail()
+        {
+            LoginCredentials credentials = CreateCredentials(MalformedEmail, WrongPassword);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidEmail, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_EmailWithSpacesAround_StillFindsThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials("  " + Email + "  ", Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.LoggedIn, loginResult.Status);
         }
 
         [Fact]
@@ -85,21 +117,42 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials(Email, string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.MissingRequiredField, result.Status);
+            Assert.Equal(LoginStatus.MissingRequiredField, loginResult.Status);
         }
 
         [Fact]
-        public void LoginPlayer_TwoFactorEnabled_SendsTheCodeInsteadOfCompletingTheLogin()
+        public void LoginPlayer_TwoFactorEnabled_ReturnsVerificationCodeSent()
         {
             _players.SaveTwoFactorEnabled(PlayerId, true);
             LoginCredentials credentials = CreateCredentials(Email, Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.VerificationCodeSent, result.Status);
+            Assert.Equal(LoginStatus.VerificationCodeSent, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_TwoFactorEnabled_SendsTheCodeToTheEmailOfThePlayer()
+        {
+            _players.SaveTwoFactorEnabled(PlayerId, true);
+            LoginCredentials credentials = CreateCredentials(Email, Password);
+
+            _service.LoginPlayer(credentials);
+
             Assert.Equal(Email, _emailService.Recipients.Single());
+        }
+
+        private static Player CreateKnownPlayer()
+        {
+            var player = new Player
+            {
+                DisplayName = DisplayName,
+                FirstName = FirstName
+            };
+
+            return player;
         }
 
         private static LoginCredentials CreateCredentials(string email, string password)

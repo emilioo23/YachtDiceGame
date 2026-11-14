@@ -10,6 +10,7 @@
 
 namespace YachtDice.PresenceServiceReference {
     using System.Runtime.Serialization;
+    using System;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -32,6 +33,67 @@ namespace YachtDice.PresenceServiceReference {
         FriendRemoved = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoomInvitation", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class RoomInvitation : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SenderNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomCode {
+            get {
+                return this.RoomCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomCodeField, value) != true)) {
+                    this.RoomCodeField = value;
+                    this.RaisePropertyChanged("RoomCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SenderName {
+            get {
+                return this.SenderNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SenderNameField, value) != true)) {
+                    this.SenderNameField = value;
+                    this.RaisePropertyChanged("SenderName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PresenceServiceReference.IPresenceService", CallbackContract=typeof(YachtDice.PresenceServiceReference.IPresenceServiceCallback))]
     public interface IPresenceService {
@@ -48,6 +110,9 @@ namespace YachtDice.PresenceServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IPresenceService/PresenceChanged")]
         void PresenceChanged(string displayName, YachtDice.PresenceServiceReference.PresenceEventType eventType);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IPresenceService/InvitationReceived")]
+        void InvitationReceived(YachtDice.PresenceServiceReference.RoomInvitation invitation);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

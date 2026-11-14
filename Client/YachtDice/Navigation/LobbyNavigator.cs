@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.RoomServiceReference;
@@ -27,7 +30,7 @@ namespace YachtDice.Navigation
             try
             {
                 await roomGateway.CreateRoomAsync();
-                OpenLobby(currentWindow, roomGateway);
+                await OpenLobbyAsync(currentWindow, roomGateway);
             }
             catch (GatewayException ex)
             {
@@ -46,13 +49,46 @@ namespace YachtDice.Navigation
         {
             var roomGateway = new RoomGateway(session);
 
+            await JoinAndOpenAsync(currentWindow, roomGateway, () => roomGateway.JoinRoomAsync(roomCode));
+        }
+
+        /// <summary>
+        /// Enters a room of the list of rooms and opens its waiting room.
+        /// </summary>
+        /// <param name="currentWindow">Window that is open now; it closes if the player enters the room.</param>
+        /// <param name="session">Session of the player who enters the room.</param>
+        /// <param name="room">Row of the list that the player chose, with the code typed for a private room.</param>
+        /// <returns>A task that finishes when the waiting room is open or the player was told the problem.</returns>
+        public static async Task JoinListedRoomAndOpenAsync(
+            Window currentWindow,
+            PlayerSession session,
+            RoomListItem room)
+        {
+            var roomGateway = new RoomGateway(session);
+            var roomToJoin = new RoomAccess
+            {
+                RoomId = room.RoomId,
+                AccessCode = room.AccessCode.Trim()
+            };
+
+            await JoinAndOpenAsync(
+                currentWindow,
+                roomGateway,
+                () => roomGateway.JoinListedRoomAsync(roomToJoin));
+        }
+
+        private static async Task JoinAndOpenAsync(
+            Window currentWindow,
+            RoomGateway roomGateway,
+            Func<Task<RoomResultCode>> join)
+        {
             try
             {
-                RoomResultCode result = await roomGateway.JoinRoomAsync(roomCode);
+                RoomResultCode result = await join();
 
                 if (result == RoomResultCode.Success)
                 {
-                    OpenLobby(currentWindow, roomGateway);
+                    await OpenLobbyAsync(currentWindow, roomGateway);
                 }
                 else
                 {
@@ -65,9 +101,52 @@ namespace YachtDice.Navigation
             }
         }
 
-        private static void OpenLobby(Window currentWindow, RoomGateway roomGateway)
+        /// <summary>
+        /// Takes the player out of the chat and of the room. The window of the room is already closed, so if the
+        /// server cannot be told, the player is told on the window that is open now.
+        /// </summary>
+        /// <param name="chat">Chat of the room that the player leaves.</param>
+        /// <param name="roomGateway">Connection of the player to the room that the player leaves.</param>
+        /// <returns>A task that finishes when the player left or was told the problem.</returns>
+        public static async Task LeaveRoomAsync(RoomChat chat, RoomGateway roomGateway)
         {
-            WindowNavigator.SwitchTo(currentWindow, new LobbyWindow(roomGateway));
+            try
+            {
+                await Task.WhenAll(chat.Gateway.LeaveAsync(), roomGateway.LeaveRoomAsync());
+            }
+            catch (GatewayException ex)
+            {
+                Window openWindow = Application.Current.Windows.OfType<Window>().LastOrDefault();
+
+                CustomDialogWindow.ShowMessage(openWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
+        {
+            var chatGateway = new ChatGateway(new RoomMembership(roomGateway.PlayerId, roomGateway.CurrentRoom.Code));
+            bool isChatAvailable = await chatGateway.TryJoinAsync();
+
+            ConnectionLossHandler.Watch(roomGateway);
+            ConnectionLossHandler.Watch(chatGateway);
+            var chat = new RoomChat(chatGateway, isChatAvailable);
+            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chat));
+        }
+
+        private static Window CreateRoomWindow(RoomGateway roomGateway, RoomChat chat)
+        {
+            Window roomWindow;
+
+            if (roomGateway.CurrentRoom.IsStarted)
+            {
+                roomWindow = new GameWindow(roomGateway, chat);
+            }
+            else
+            {
+                roomWindow = new LobbyWindow(roomGateway, chat);
+            }
+
+            return roomWindow;
         }
     }
 }

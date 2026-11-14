@@ -5,6 +5,7 @@ using System.ServiceModel;
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Players;
+    using LogicAvatars = YachtDice.Server.Logic.Avatars;
     using LogicPlayers = YachtDice.Server.Logic.Players;
 
     /// <summary>
@@ -13,10 +14,9 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
-
         private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
-        private readonly LogicPlayers.LeaderboardService _leaderboardService;
+        private readonly LogicAvatars.AvatarService _avatarService;
+        private readonly LogicPlayers.ProfileService _profileService;
 
         /// <summary>
         /// Initializes the service with the logic it uses.
@@ -25,12 +25,15 @@ namespace YachtDice.Server.Services
         /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
         public PlayerService(
             LogicPlayers.PlayerStatisticsService statisticsService,
-            LogicPlayers.LeaderboardService leaderboardService)
+            LogicAvatars.AvatarService avatarService,
+            LogicPlayers.ProfileService profileService)
         {
             _statisticsService = statisticsService
-                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
-            _leaderboardService = leaderboardService
-                ?? throw new ArgumentNullException(nameof(leaderboardService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(statisticsService));
+            _avatarService = avatarService
+                ?? throw new ArgumentNullException(nameof(avatarService));
+            _profileService = profileService
+                ?? throw new ArgumentNullException(nameof(profileService));
         }
 
         /// <summary>
@@ -54,6 +57,87 @@ namespace YachtDice.Server.Services
             return Execute(ProcessLeaderboard);
         }
 
+        /// <summary>
+        /// Gets the avatar, level and experience of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The profile of the player.</returns>
+        public Contracts.PlayerProfile GetProfile(string displayName)
+        {
+            Contracts.PlayerProfile profile = Execute(displayName, () => ProcessProfile(displayName));
+
+            return profile;
+        }
+
+        /// <summary>
+        /// Gets every avatar of the game with the level that each one needs.
+        /// </summary>
+        /// <returns>The avatars, ordered by identifier.</returns>
+        public List<Contracts.UnlockableAvatar> GetAvatarCatalog()
+        {
+            List<Contracts.UnlockableAvatar> catalog = Execute(ProcessCatalog);
+
+            return catalog;
+        }
+
+        /// <summary>
+        /// Changes the avatar of a player. The avatar must exist and the player must have unlocked it.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
+        /// <returns>The outcome of the change.</returns>
+        public Contracts.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId)
+        {
+            Contracts.AvatarChangeResultCode result =
+                Execute(displayName, () => ProcessAvatarChange(displayName, avatarId));
+
+            return result;
+        }
+
+        public Contracts.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername)
+        {
+            Contracts.UsernameChangeResultCode result =
+                Execute(currentName, () => ProcessUsernameChange(currentName, newUsername));
+
+            return result;
+        }
+
+        public List<Contracts.AchievementInfo> GetAchievements(string playerName)
+        {
+            List<Contracts.AchievementInfo> achievements =
+                Execute(playerName, () => ProcessAchievements(playerName));
+
+            return achievements;
+        }
+
+        public Contracts.TitleChangeResultCode ChangeTitle(string playerName, int titleId)
+        {
+            Contracts.TitleChangeResultCode result =
+                Execute(playerName, () => ProcessTitleChange(playerName, titleId));
+
+            return result;
+        }
+
+        public List<Contracts.GameHistoryEntry> GetGameHistory(string playerName)
+        {
+            List<Contracts.GameHistoryEntry> history = Execute(playerName, () => ProcessGameHistory(playerName));
+
+            return history;
+        }
+
+        public Contracts.FlagChangeResultCode ChangeFlag(string playerName, string flagCode)
+        {
+            Contracts.FlagChangeResultCode result =
+                Execute(playerName, () => ProcessFlagChange(playerName, flagCode));
+
+            return result;
+        }
+
+        private static List<Contracts.UnlockableAvatar> ProcessCatalog()
+        {
+            return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
+        }
+
         private Contracts.PlayerStatistics ProcessPlayerStatistics(Contracts.Player player)
         {
             LogicPlayers.PlayerStatistics statistics = _statisticsService.GetStatistics(player.Username);
@@ -61,9 +145,58 @@ namespace YachtDice.Server.Services
             return Mapping.PlayerStatisticsMapper.ToContract(statistics);
         }
 
+        private Contracts.PlayerProfile ProcessProfile(string displayName)
+        {
+            LogicAvatars.PlayerProfile profile = _avatarService.GetProfile(displayName);
+
+            return Mapping.AvatarMapper.ToContract(profile);
+        }
+
+        private Contracts.AvatarChangeResultCode ProcessAvatarChange(string displayName, int avatarId)
+        {
+            LogicAvatars.AvatarChangeStatus status = _avatarService.ChangeAvatar(displayName, avatarId);
+
+            return Mapping.AvatarMapper.ToResultCode(status);
+        }
+
+        private Contracts.UsernameChangeResultCode ProcessUsernameChange(string currentName, string newUsername)
+        {
+            LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
+        }
+
+        private Contracts.FlagChangeResultCode ProcessFlagChange(string playerName, string flagCode)
+        {
+            LogicPlayers.FlagChangeStatus status = _profileService.ChangeFlag(playerName, flagCode);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.FlagChangeStatus, Contracts.FlagChangeResultCode>(status);
+        }
+
+        private List<Contracts.GameHistoryEntry> ProcessGameHistory(string playerName)
+        {
+            List<LogicPlayers.PlayedGameSummary> games = _statisticsService.GetRecentGames(playerName);
+
+            return Mapping.PlayerStatisticsMapper.ToHistoryContracts(games);
+        }
+
+        private List<Contracts.AchievementInfo> ProcessAchievements(string playerName)
+        {
+            List<LogicPlayers.AchievementStatus> achievements = _profileService.GetAchievements(playerName);
+
+            return Mapping.AchievementMapper.ToContracts(achievements);
+        }
+
+        private Contracts.TitleChangeResultCode ProcessTitleChange(string playerName, int titleId)
+        {
+            LogicPlayers.TitleChangeStatus status = _profileService.ChangeTitle(playerName, titleId);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.TitleChangeStatus, Contracts.TitleChangeResultCode>(status);
+        }
+
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
-            List<LogicPlayers.LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
+            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers();
 
             return Mapping.LeaderboardMapper.ToContracts(entries);
         }

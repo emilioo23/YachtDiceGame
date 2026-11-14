@@ -37,5 +37,8 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public int Level { get; set; }
+
+        [DataMember]
+        public int Experience { get; set; }
     }
 }

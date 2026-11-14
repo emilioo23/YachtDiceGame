@@ -28,9 +28,6 @@ namespace YachtDice.Utils
                 case RoomResultCode.GameAlreadyStarted:
                     message = Strings.Lobby_Result_GameAlreadyStarted;
                     break;
-                case RoomResultCode.PlayerAlreadyInRoom:
-                    message = Strings.Lobby_Result_PlayerAlreadyInRoom;
-                    break;
                 case RoomResultCode.NotHost:
                     message = Strings.Lobby_Result_NotHost;
                     break;
@@ -39,6 +36,12 @@ namespace YachtDice.Utils
                     break;
                 case RoomResultCode.InvalidSettings:
                     message = Strings.Lobby_Result_InvalidSettings;
+                    break;
+                case RoomResultCode.InvalidAccessCode:
+                    message = Strings.Lobby_Result_InvalidAccessCode;
+                    break;
+                case RoomResultCode.PlayerNotFound:
+                    message = Strings.Lobby_Result_PlayerNotFound;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;

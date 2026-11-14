@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -21,9 +22,7 @@ namespace YachtDice.Server.Tests.InMemory
         public List<Friendship> FindBetween(int firstPlayerId, int secondPlayerId)
         {
             List<Friendship> matches = _friendships
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
+                .Where(friendship => IsBetween(friendship, firstPlayerId, secondPlayerId))
                 .ToList();
 
             return matches;
@@ -42,24 +41,39 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public void Add(int requesterId, int addresseeId, string status)
+        public void Add(Friendship friendship)
         {
-            _friendships.Add(new Friendship { RequesterId = requesterId, AddresseeId = addresseeId, Status = status });
+            _friendships.Add(friendship);
         }
 
         /// <inheritdoc />
-        public void UpdateStatus(int requesterId, int addresseeId, string status)
+        public void UpdateStatus(Friendship friendship)
         {
-            Friendship friendship = _friendships.First(
-                row => row.RequesterId == requesterId && row.AddresseeId == addresseeId);
+            Friendship stored = _friendships.First(row => IsSamePlayers(row, friendship));
 
-            friendship.Status = status;
+            stored.Status = friendship.Status;
         }
 
         /// <inheritdoc />
-        public void Remove(int requesterId, int addresseeId)
+        public void Remove(Friendship friendship)
         {
-            _friendships.RemoveAll(row => row.RequesterId == requesterId && row.AddresseeId == addresseeId);
+            _friendships.RemoveAll(row => IsSamePlayers(row, friendship));
+        }
+
+        private static bool IsSamePlayers(Friendship first, Friendship second)
+        {
+            bool isSameRequester = first.RequesterId == second.RequesterId;
+            bool isSameAddressee = first.AddresseeId == second.AddresseeId;
+
+            return isSameRequester && isSameAddressee;
+        }
+
+        private static bool IsBetween(Friendship friendship, int firstPlayerId, int secondPlayerId)
+        {
+            bool isRequested = friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId;
+            bool isReceived = friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId;
+
+            return isRequested || isReceived;
         }
     }
 }

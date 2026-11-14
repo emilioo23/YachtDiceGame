@@ -17,7 +17,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int FirstCharacterIndex = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
-        private const string NullDependencyMessage = "The dependency cannot be null.";
+        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
@@ -35,11 +35,11 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository));
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(verificationService));
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(deliveryService));
         }
 
         /// <summary>
@@ -89,17 +89,16 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Checks the code entered by the player and, if it is correct, turns the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="verificationCode">Code entered by the player and the activation challenge it answers.</param>
         /// <returns>Result of the validation.</returns>
-        public TwoFactorValidationStatus ConfirmActivation(string displayName, string code, string challengeId)
+        public TwoFactorValidationStatus ConfirmActivation(string displayName, VerificationCode verificationCode)
         {
             Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
 
             if (player != null)
             {
-                status = _verificationService.VerifyPlayerCode(player.Email, code, challengeId);
+                status = _verificationService.VerifyPlayerCode(player.Email, verificationCode);
 
                 if (status == TwoFactorValidationStatus.Valid)
                 {
@@ -114,17 +113,22 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="cultureName">Name of the language in which the email is written.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="delivery">Activation challenge and language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public ResendCodeStatus ResendActivationCode(string displayName, string cultureName, string challengeId)
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendActivationCode(string displayName, CodeDelivery delivery)
         {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
             Player player = FindPlayers(displayName).FirstOrDefault();
             ResendCodeStatus status = ResendCodeStatus.PlayerNotFound;
 
             if (player != null)
             {
-                status = _verificationService.ResendPlayerCode(player.Email, cultureName, challengeId);
+                status = _verificationService.ResendPlayerCode(player.Email, delivery);
             }
 
             return status;
@@ -194,7 +198,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
             if (isSent)

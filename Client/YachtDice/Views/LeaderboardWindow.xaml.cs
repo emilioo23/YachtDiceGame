@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -37,6 +36,8 @@ namespace YachtDice.Views
         private const int NameColumnWeight = 1;
         private const int NoSpacing = 0;
         private const int NoRank = 0;
+        private const int AvatarSize = 28;
+        private const int AvatarGap = 8;
         private const string PointsFormat = "N0";
 
         private readonly PlayerSession _session;
@@ -58,20 +59,20 @@ namespace YachtDice.Views
 
         private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            GlobalFilterButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            FriendsFilterButton.Style = (Style)FindResource(ThemeResourceKeys.OutlineButtonStyleKey);
             RenderRanking(_ranking);
         }
 
         private async void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            FriendsFilterButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            GlobalFilterButton.Style = (Style)FindResource(ThemeResourceKeys.OutlineButtonStyleKey);
 
             await ShowFriendsRankingAsync();
         }
 
-        private void BackLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
@@ -96,6 +97,27 @@ namespace YachtDice.Views
             return medal;
         }
 
+        private static StackPanel CreateNameCell(LeaderboardEntry entry, TextBlock nameLabel)
+        {
+            var avatar = new Image
+            {
+                Source = AvatarImages.Get(entry.AvatarId),
+                Width = AvatarSize,
+                Height = AvatarSize,
+                Margin = new Thickness(NoSpacing, NoSpacing, AvatarGap, NoSpacing)
+            };
+            var cell = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            cell.Children.Add(avatar);
+            cell.Children.Add(nameLabel);
+
+            return cell;
+        }
+
         private async Task LoadRankingAsync()
         {
             try
@@ -109,6 +131,7 @@ namespace YachtDice.Views
                     ranking.Add(new LeaderboardEntry
                     {
                         Name = serverEntry.DisplayName,
+                        AvatarId = serverEntry.AvatarId,
                         Points = serverEntry.TotalPoints,
                         Wins = serverEntry.Wins
                     });
@@ -188,25 +211,27 @@ namespace YachtDice.Views
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
 
-            var textBrush = (Brush)FindResource(ResourceKeys.TextBrushKey);
+            var textBrush = (Brush)FindResource(ThemeResourceKeys.TextBrushKey);
             var medalLabel = new TextBlock
             {
                 Text = entry.Medal,
                 FontSize = MedalFontSize,
+                Foreground = textBrush,
                 Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, NoSpacing, CellVerticalPadding)
             };
             TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
             nameLabel.FontWeight = FontWeights.SemiBold;
+            StackPanel nameCell = CreateNameCell(entry, nameLabel);
             TextBlock pointsLabel = CreateCellLabel(entry.Points.ToString(PointsFormat), textBrush);
             TextBlock winsLabel = CreateCellLabel(entry.Wins.ToString(), textBrush);
 
             Grid.SetColumn(medalLabel, MedalColumnIndex);
-            Grid.SetColumn(nameLabel, NameColumnIndex);
+            Grid.SetColumn(nameCell, NameColumnIndex);
             Grid.SetColumn(pointsLabel, PointsColumnIndex);
             Grid.SetColumn(winsLabel, WinsColumnIndex);
 
             row.Children.Add(medalLabel);
-            row.Children.Add(nameLabel);
+            row.Children.Add(nameCell);
             row.Children.Add(pointsLabel);
             row.Children.Add(winsLabel);
 

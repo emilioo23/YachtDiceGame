@@ -30,16 +30,12 @@ namespace YachtDice.Gateway
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="requesterName">Name of the player who sent the request.</param>
-        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
+        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
-        public async Task<FriendActionResultCode> RespondAsync(
-            string displayName,
-            string requesterName,
-            bool isAccepted)
+        public async Task<FriendActionResultCode> RespondAsync(string displayName, FriendRequestAnswer answer)
         {
             FriendActionResultCode result =
-                await ExecuteAsync(client => client.RespondToFriendRequest(displayName, requesterName, isAccepted));
+                await ExecuteAsync(client => client.RespondToFriendRequest(displayName, answer));
 
             return result;
         }
@@ -53,6 +49,19 @@ namespace YachtDice.Gateway
         public async Task<FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName)
         {
             FriendActionResultCode result = await ExecuteAsync(client => client.RemoveFriend(displayName, friendName));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Invites a friend who is online to join the room where the player is.
+        /// </summary>
+        /// <param name="sender">Room and identifier of the player who invites.</param>
+        /// <param name="friendName">Name of the friend to invite.</param>
+        /// <returns>Whether the invitation reached the friend or why not.</returns>
+        public async Task<InvitationResultCode> InviteToRoomAsync(RoomMember sender, string friendName)
+        {
+            InvitationResultCode result = await ExecuteAsync(client => client.InviteToRoom(sender, friendName));
 
             return result;
         }

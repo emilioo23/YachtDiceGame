@@ -1,12 +1,15 @@
 ﻿<Application x:Class="YachtDice.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:YachtDice">
+             xmlns:local="clr-namespace:YachtDice"
+             xmlns:utils="clr-namespace:YachtDice.Utils">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <utils:AvatarImageConverter x:Key="AvatarImageConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

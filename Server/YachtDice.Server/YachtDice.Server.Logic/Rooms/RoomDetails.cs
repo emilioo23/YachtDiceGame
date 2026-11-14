@@ -13,14 +13,24 @@ namespace YachtDice.Server.Logic.Rooms
         public string Code { get; internal set; }
 
         /// <summary>
-        /// Gets the name of the player who controls the room.
+        /// Gets the identifier of the player who controls the room.
         /// </summary>
-        public string HostName { get; internal set; }
+        public string HostId { get; internal set; }
 
         /// <summary>
-        /// Gets the names of the players inside the room, in the order in which they entered.
+        /// Gets the players inside the room, in the order in which they entered.
         /// </summary>
-        public List<string> Players { get; internal set; }
+        public List<RoomPlayer> Players { get; internal set; }
+
+        /// <summary>
+        /// Gets the players who left a game in progress and can still come back.
+        /// </summary>
+        public List<RoomPlayer> AbsentPlayers { get; internal set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the game of the room already started.
+        /// </summary>
+        public bool IsStarted { get; internal set; }
 
         /// <summary>
         /// Gets the options of the room.
@@ -41,8 +51,9 @@ namespace YachtDice.Server.Logic.Rooms
             var details = new RoomDetails
             {
                 Code = string.Empty,
-                HostName = string.Empty,
-                Players = new List<string>(),
+                HostId = string.Empty,
+                Players = new List<RoomPlayer>(),
+                AbsentPlayers = new List<RoomPlayer>(),
                 Settings = new RoomSettings()
             };
 

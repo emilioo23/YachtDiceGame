@@ -66,12 +66,28 @@
                                         BorderThickness="1.5"
                                         Margin="0,0,10,0">
 
-                                    <TextBlock x:Name="PlayerInitialTextBlock"
-                                               FontWeight="Bold"
-                                               FontSize="19"
-                                               Foreground="{StaticResource BrushText}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                    <Grid>
+
+                                        <TextBlock x:Name="PlayerInitialTextBlock"
+                                                   FontWeight="Bold"
+                                                   FontSize="19"
+                                                   Foreground="{StaticResource BrushText}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+
+                                        <Image x:Name="PlayerAvatarImage"
+                                               Margin="2"
+                                               Visibility="Collapsed"/>
+
+                                        <Image x:Name="PlayerFlagImage"
+                                               Width="20"
+                                               Height="15"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Top"
+                                               Margin="0,-4,-8,0"
+                                               Visibility="Collapsed"/>
+
+                                    </Grid>
                                 </Border>
 
                                 <StackPanel VerticalAlignment="Center">
@@ -80,6 +96,12 @@
                                                FontWeight="Bold"
                                                FontSize="15"
                                                Foreground="{StaticResource BrushText}"/>
+
+                                    <TextBlock x:Name="PlayerTitleTextBlock"
+                                               FontSize="12"
+                                               FontStyle="Italic"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource BrushGold}"/>
 
                                     <TextBlock x:Name="PlayerLevelTextBlock"
                                                FontSize="13"
@@ -92,10 +114,15 @@
                                     Background="{StaticResource BrushBorder}"
                                     CornerRadius="3">
 
-                                <Border HorizontalAlignment="Left"
-                                        Width="55"
+                                <Border HorizontalAlignment="Stretch"
                                         Background="{StaticResource BrushFeltLight}"
-                                        CornerRadius="3"/>
+                                        CornerRadius="3"
+                                        RenderTransformOrigin="0,0.5">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform x:Name="LevelBarScale"
+                                                        ScaleX="0"/>
+                                    </Border.RenderTransform>
+                                </Border>
                             </Border>
 
                             <Button Content="{x:Static properties:Strings.MainMenu_ButtonEditProfile}"
@@ -108,17 +135,10 @@
                     </Border>
 
                     <Button
-                            Content="{x:Static properties:Strings.MainMenu_Nav_Play}"
-                            Style="{StaticResource TabButtonActive}"
-                            Margin="0,0,0,8"
-                            FontSize="19"/>
-
-                    <Button
-                            Content="{x:Static properties:Strings.MainMenu_Nav_Lobby}"
+                            Content="{x:Static properties:Strings.MainMenu_Nav_Rooms}"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
-                            IsEnabled="False"
-                            Opacity="0.5"
+                            Click="RoomsNavButton_Click"
                             FontSize="19"/>
 
                     <Button
@@ -126,6 +146,20 @@
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="LeaderboardNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button
+                            Content="{x:Static properties:Strings.MainMenu_Nav_History}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="HistoryNavButton_Click"
+                            FontSize="19"/>
+
+                    <Button
+                            Content="{x:Static properties:Strings.MainMenu_Nav_HowToPlay}"
+                            Style="{StaticResource BtnOutline}"
+                            Margin="0,0,0,8"
+                            Click="HowToPlayNavButton_Click"
                             FontSize="19"/>
 
                     <Button

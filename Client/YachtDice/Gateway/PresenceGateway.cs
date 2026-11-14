@@ -10,12 +10,13 @@ using YachtDice.Utils;
 namespace YachtDice.Gateway
 {
     /// <summary>
-    /// Keeps the player connected to the presence service while the game is open and knows which players are
-    /// online. The session of the player holds one instance that all the windows share. The changes arrive in
+    /// Keeps the player connected to the presence service while the game is open, knows which players are
+    /// online and passes on the invitations to a room. The session of the player holds one instance that all
+    /// the windows share. The changes arrive in
     /// a network thread while the windows read them in the thread of the interface. The connection, the name
     /// and the list of players change together, so they need the lock.
     /// </summary>
-    public class PresenceGateway
+    public class PresenceGateway : IConnectionLossSource
     {
         private const string UnavailableLogMessage = "The presence service could not be reached.";
         private const string UnavailableMessage = "The server is not available.";
@@ -40,10 +41,21 @@ namespace YachtDice.Gateway
         public event Action PlayersChanged;
 
         /// <summary>
+        /// Event triggered when the connection with the server is lost without the player leaving. It can be
+        /// raised from any thread.
+        /// </summary>
+        public event Action ConnectionLost;
+
+        /// <summary>
         /// Event triggered when a friend request arrives, is accepted or a friend is removed. It can be raised
         /// from any thread.
         /// </summary>
         public event Action FriendsChanged;
+
+        /// <summary>
+        /// Event triggered when a friend invites the player to join a room. It can be raised from any thread.
+        /// </summary>
+        public event Action<RoomInvitation> InvitationReceived;
 
         /// <summary>
         /// Gets the names of the players who are online right now.
@@ -137,6 +149,7 @@ namespace YachtDice.Gateway
         {
             var handler = new PresenceCallbackHandler();
             handler.PresenceChanged += HandlePresenceChanged;
+            handler.InvitationReceived += HandleInvitationReceived;
 
             var client = new PresenceServiceClient(new InstanceContext(handler));
             ServerAddress.Apply(client.Endpoint);
@@ -146,6 +159,7 @@ namespace YachtDice.Gateway
                 string[] names = await Task.Run(() => client.Connect(displayName));
 
                 client.InnerChannel.Faulted += (sender, e) => HandleConnectionLost(client);
+                client.InnerChannel.Closed += (sender, e) => HandleConnectionLost(client);
                 SaveConnection(client, displayName, names);
             }
             catch (CommunicationException ex)
@@ -188,6 +202,11 @@ namespace YachtDice.Gateway
             }
         }
 
+        private void HandleInvitationReceived(RoomInvitation invitation)
+        {
+            InvitationReceived?.Invoke(invitation);
+        }
+
         private void UpdateOnlinePlayers(string displayName, PresenceEventType eventType)
         {
             lock (_syncRoot)
@@ -205,9 +224,13 @@ namespace YachtDice.Gateway
 
         private void HandleConnectionLost(PresenceServiceClient client)
         {
+            bool isCurrentClient;
+
             lock (_syncRoot)
             {
-                if (ReferenceEquals(_client, client))
+                isCurrentClient = ReferenceEquals(_client, client);
+
+                if (isCurrentClient)
                 {
                     _client = null;
                     _displayName = null;
@@ -216,7 +239,12 @@ namespace YachtDice.Gateway
             }
 
             client.Abort();
-            PlayersChanged?.Invoke();
+
+            if (isCurrentClient)
+            {
+                PlayersChanged?.Invoke();
+                ConnectionLost?.Invoke();
+            }
         }
     }
 }

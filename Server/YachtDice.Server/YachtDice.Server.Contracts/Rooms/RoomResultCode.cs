@@ -24,10 +24,6 @@ namespace YachtDice.Server.Contracts.Rooms
         [EnumMember]
         GameAlreadyStarted,
 
-        /// <summary>A player with the same name is already inside the room.</summary>
-        [EnumMember]
-        PlayerAlreadyInRoom,
-
         /// <summary>Only the host of the room can do the operation.</summary>
         [EnumMember]
         NotHost,
@@ -38,6 +34,18 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The options sent are not valid for the room.</summary>
         [EnumMember]
-        InvalidSettings
+        InvalidSettings,
+
+        /// <summary>The code sent does not open the private room.</summary>
+        [EnumMember]
+        InvalidAccessCode,
+
+        /// <summary>The player chosen by the host is not inside the room.</summary>
+        [EnumMember]
+        PlayerNotFound,
+
+        /// <summary>The host chose themselves, which makes no sense for this operation.</summary>
+        [EnumMember]
+        InvalidTarget
     }
 }

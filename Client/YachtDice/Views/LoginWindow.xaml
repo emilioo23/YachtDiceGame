@@ -68,9 +68,8 @@
                                        Style="{StaticResource FieldLabel}"
                                        FontSize="15"/>
 
-                            <PasswordBox x:Name="LoginPasswordBox"
-                                         Style="{StaticResource PasswordBoxRounded}"
-                                         Margin="0,0,0,8" Padding="10,8"/>
+                            <views:PasswordRevealBox x:Name="LoginPasswordBox"
+                                                     Margin="0,0,0,8"/>
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_ForgotPassword}"
                                        Style="{StaticResource LinkText}"
@@ -122,9 +121,8 @@
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
                                        Style="{StaticResource FieldLabel}" FontSize="15"/>
-                            <PasswordBox x:Name="RegisterPasswordBox"
-                                         Style="{StaticResource PasswordBoxRounded}"
-                                         Margin="0,0,0,15" FontSize="16" Padding="10,8"/>
+                            <views:PasswordRevealBox x:Name="RegisterPasswordBox"
+                                                     Margin="0,0,0,15"/>
                         </StackPanel>
 
                         <Button x:Name="AuthSubmitButton"

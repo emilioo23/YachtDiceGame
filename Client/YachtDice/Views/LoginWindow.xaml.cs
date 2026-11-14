@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -17,7 +17,7 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
+        private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
 
         private readonly AppLogger _logger;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
@@ -30,6 +30,29 @@ namespace YachtDice.Views
             InitializeComponent();
             _logger = new AppLogger(GetType());
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
+            ApplyFieldLimits();
+            _ = WarmUpConnectionAsync();
+        }
+
+        private async Task WarmUpConnectionAsync()
+        {
+            try
+            {
+                await _gateway.WarmUpAsync();
+            }
+            catch (GatewayException)
+            {
+                _logger.Warning(WarmUpFailedLogMessage);
+            }
+        }
+
+        private void ApplyFieldLimits()
+        {
+            EmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
+            FirstNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            LastNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            RegisterEmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
@@ -41,8 +64,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
         }
 
@@ -50,8 +73,8 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Collapsed;
             RegisterPanel.Visibility = Visibility.Visible;
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
         }
 
@@ -61,29 +84,25 @@ namespace YachtDice.Views
 
             try
             {
-                bool isLogin = LoginPanel.Visibility == Visibility.Visible;
-
-                if (isLogin)
-                {
-                    await ProcessLoginAsync();
-                }
-                else
-                {
-                    await ProcessRegisterAsync();
-                }
-            }
-            catch (GatewayException ex)
-            {
-                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedErrorLogMessage);
-                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
+                await GatewayCallRunner.RunAsync(this, _logger, SubmitAuthFormAsync);
             }
             finally
             {
                 AuthSubmitButton.IsEnabled = true;
+            }
+        }
+
+        private async Task SubmitAuthFormAsync()
+        {
+            bool isLogin = LoginPanel.Visibility == Visibility.Visible;
+
+            if (isLogin)
+            {
+                await ProcessLoginAsync();
+            }
+            else
+            {
+                await ProcessRegisterAsync();
             }
         }
 
@@ -97,32 +116,6 @@ namespace YachtDice.Views
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
-        }
-
-        private static string GetLoginMessage(LoginResultCode code)
-        {
-            string message;
-
-            switch (code)
-            {
-                case LoginResultCode.MissingRequiredField:
-                    message = Strings.Auth_ErrorRequiredFields;
-                    break;
-                case LoginResultCode.InvalidCredentials:
-                    message = Strings.Dialogs_InvalidCredentials;
-                    break;
-                case LoginResultCode.VerificationLocked:
-                    message = Strings.Dialogs_TooManyAttempts;
-                    break;
-                case LoginResultCode.CodeSendFailed:
-                    message = Strings.TwoFactor_ErrorSendFailed;
-                    break;
-                default:
-                    message = Strings.Dialogs_UnexpectedError;
-                    break;
-            }
-
-            return message;
         }
 
         private static string GetRegisterMessage(RegisterResultCode code)
@@ -145,6 +138,15 @@ namespace YachtDice.Views
                     break;
                 case RegisterResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
+                    break;
+                case RegisterResultCode.InvalidUsername:
+                    message = Strings.Auth_ErrorInvalidUsername;
+                    break;
+                case RegisterResultCode.WeakPassword:
+                    message = Strings.Auth_ErrorWeakPassword;
+                    break;
+                case RegisterResultCode.OffensiveUsername:
+                    message = Strings.Auth_ErrorOffensiveUsername;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
@@ -176,7 +178,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, GetLoginMessage(loginData.Code));
+                CustomDialogWindow.ShowMessage(this, LoginResultMessages.GetMessage(loginData.Code));
             }
         }
 

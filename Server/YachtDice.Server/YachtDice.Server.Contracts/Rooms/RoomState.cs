@@ -16,16 +16,28 @@ namespace YachtDice.Server.Contracts.Rooms
         public string Code { get; set; }
 
         /// <summary>
-        /// Name of the player who controls the room.
+        /// Identifier of the player who controls the room.
         /// </summary>
         [DataMember]
-        public string HostName { get; set; }
+        public string HostId { get; set; }
 
         /// <summary>
-        /// Names of the players inside the room, in the order in which they entered.
+        /// Players inside the room, in the order in which they entered.
         /// </summary>
         [DataMember]
-        public List<string> Players { get; set; }
+        public List<RoomPlayer> Players { get; set; }
+
+        /// <summary>
+        /// Players who left the game in progress and can still come back.
+        /// </summary>
+        [DataMember]
+        public List<RoomPlayer> AbsentPlayers { get; set; }
+
+        /// <summary>
+        /// Whether the game of the room already started.
+        /// </summary>
+        [DataMember]
+        public bool IsStarted { get; set; }
 
         /// <summary>
         /// Options chosen by the host.

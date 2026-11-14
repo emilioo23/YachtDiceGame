@@ -22,22 +22,39 @@ namespace YachtDice.Server.Contracts.Authentication
         /// Validates the verification code entered by the player.
         /// </summary>
         /// <param name="email">Email address the code was sent to.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the login session.</param>
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
+        VerificationResultCode VerifyPlayerCode(string email, VerificationCode verificationCode);
 
         /// <summary>
         /// Resends a verification code to the player's email address.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="delivery">Challenge of the login session and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
+        ResendResultCode ResendPlayerCode(string email, CodeDelivery delivery);
+
+        /// <summary>
+        /// Sends a password recovery code to the email of the account.
+        /// </summary>
+        /// <param name="email">Email of the account to recover.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the request.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordResetRequestResultCode RequestPasswordReset(string email, string culture);
+
+        /// <summary>
+        /// Checks the recovery code and, if it is correct, changes the password of the account.
+        /// </summary>
+        /// <param name="data">Email, code and new password written by the player.</param>
+        /// <returns>Outcome of the confirmation.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordResetResultCode ConfirmPasswordReset(PasswordResetData data);
     }
 }
