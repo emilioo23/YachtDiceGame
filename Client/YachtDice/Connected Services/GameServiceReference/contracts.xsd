@@ -48,7 +48,6 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="CurrentPlayerId" nillable="true" type="xs:string" />
       <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Dice" nillable="true" type="q1:ArrayOfint" />
-      <xs:element minOccurs="0" name="HasResultSaveFailed" type="xs:boolean" />
       <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="HeldDice" nillable="true" type="q2:ArrayOfboolean" />
       <xs:element minOccurs="0" name="Options" nillable="true" type="tns:ArrayOfScoreChoice" />
       <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfPlayerScorecard" />
@@ -100,7 +99,6 @@
   <xs:element name="ArrayOfPlayerScorecard" nillable="true" type="tns:ArrayOfPlayerScorecard" />
   <xs:complexType name="PlayerScorecard">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ExperienceGained" type="xs:int" />
       <xs:element minOccurs="0" name="IsPresent" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsWinner" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
