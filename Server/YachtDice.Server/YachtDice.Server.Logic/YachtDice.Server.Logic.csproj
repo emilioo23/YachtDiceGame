@@ -112,6 +112,7 @@
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />
+    <Compile Include="Players\PlayerProgression.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Players\PlayerStatistics.cs" />
     <Compile Include="Players\PlayerStatisticsService.cs" />

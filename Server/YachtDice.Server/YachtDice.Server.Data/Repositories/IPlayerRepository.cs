@@ -68,5 +68,14 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
         void SaveAvatar(int playerId, int avatarId);
+
+        /// <summary>
+        /// Saves the experience and the level of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="experience">Total experience points that the player has now.</param>
+        /// <param name="level">Level that the player reached with that experience.</param>
+        /// <exception cref="Exceptions.DataAccessException">The progress could not be saved.</exception>
+        void SaveProgress(int playerId, int experience, int level);
     }
 }

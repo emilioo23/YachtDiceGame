@@ -15,6 +15,8 @@ namespace YachtDice.Server.Tests.Data
     public class PlayerRepositoryTests : IDisposable
     {
         private const string Username = "emilioalvarez";
+        private const int ProgressExperience = 350;
+        private const int ProgressLevel = 2;
         private const int PlayerId = 1;
         private const int AvatarId = 1;
         private const string Email = "emilioalvarez@gmail.com";
@@ -57,6 +59,13 @@ namespace YachtDice.Server.Tests.Data
         public void SaveAvatar_WithoutConnectionString_ThrowsDataAccessException()
         {
             Assert.Throws<DataAccessException>(() => _repository.SaveAvatar(PlayerId, AvatarId));
+        }
+
+        [Fact]
+        public void SaveProgress_WithoutConnectionString_ThrowsDataAccessException()
+        {
+            Assert.Throws<DataAccessException>(
+                () => _repository.SaveProgress(PlayerId, ProgressExperience, ProgressLevel));
         }
 
         [Theory]

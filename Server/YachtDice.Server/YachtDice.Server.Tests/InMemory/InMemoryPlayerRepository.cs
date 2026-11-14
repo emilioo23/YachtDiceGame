@@ -98,6 +98,16 @@ namespace YachtDice.Server.Tests.InMemory
             player.AvatarId = avatarId;
         }
 
+        /// <inheritdoc />
+        public void SaveProgress(int playerId, int experience, int level)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+            Player player = _players.First(isSameId);
+
+            player.XP = experience;
+            player.Level = level;
+        }
+
         private static bool IsSameText(string firstText, string secondText)
         {
             return string.Equals(firstText, secondText, StringComparison.OrdinalIgnoreCase);

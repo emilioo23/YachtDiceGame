@@ -14,7 +14,7 @@ Yacht Dice Multiplayer es un videojuego de dados basado en las reglas originales
 
 - **Moderación**: Reporte de jugadores y expulsión de la sala por parte del anfitrión, ya sea manual o mediante confirmación tras 3 infracciones de chat acumuladas (el sistema notifica al anfitrión, pero la expulsión siempre requiere su confirmación).
 
-- **Progresión**: Marcador Top Global según los puntos históricos acumulados y sistema de experiencia (XP) que otorga niveles progresivos a los jugadores registrados según su desempeño.
+- **Progresión**: Marcador Top Global según los puntos históricos acumulados y sistema de experiencia (XP) que otorga niveles progresivos a los jugadores registrados según su desempeño. Al terminar una partida, el ganador recibe 100 XP y los demás jugadores 30 XP, más 1 XP por cada punto obtenido; quien abandona no recibe XP y los invitados no tienen progresión. El nivel 2 pide 200 XP, el 3 pide 500, el 4 pide 900, y cada nivel pide 100 XP más que el salto anterior.
 
 - **Internacionalización**: Interfaz con soporte en tiempo real para Español (es-MX) e Inglés (en-US), mediante enlace de datos estático hacia diccionarios de recursos `.resx`.
 
