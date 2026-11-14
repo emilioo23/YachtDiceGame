@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.ServiceModel;
 using System.Threading;
 using YachtDice.Server.Data.Exceptions;
@@ -12,6 +13,7 @@ using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Logic.TwoFactor;
@@ -32,6 +34,7 @@ namespace YachtDice.Server.Host
         private const string TurnSecondsKeyFormat = "TurnSeconds.{0}";
         private const string InvalidTurnSecondsFormat = "The setting {0} is missing or is not a number of seconds.";
         private const string LevelExperienceKey = "LevelExperience";
+        private const string OffensiveWordsPath = "Resources\\OffensiveWords.txt";
         private const char LevelExperienceSeparator = ',';
         private const string InvalidLevelExperienceMessage =
             "The setting LevelExperience is missing or is not a list of numbers separated by commas.";
@@ -77,6 +80,10 @@ namespace YachtDice.Server.Host
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
             catch (ArgumentException ex)
+            {
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
+            }
+            catch (IOException ex)
             {
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
@@ -147,6 +154,18 @@ namespace YachtDice.Server.Host
             }
 
             return new LevelTable(thresholds);
+        }
+
+        /// <summary>
+        /// Reads the offensive words from the file of the server, once, when the server starts.
+        /// </summary>
+        /// <returns>The filter with the words of the file.</returns>
+        /// <exception cref="IOException">The file could not be read.</exception>
+        private static OffensiveWordFilter CreateOffensiveWordFilter()
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, OffensiveWordsPath);
+
+            return new OffensiveWordFilter(File.ReadAllLines(path));
         }
 
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -268,7 +287,9 @@ namespace YachtDice.Server.Host
         {
             var playerRepository = new PlayerRepository();
 
-            return new PlayerRegistrationService(new RegistrationService(playerRepository));
+            var registrationService = new RegistrationService(playerRepository, CreateOffensiveWordFilter());
+
+            return new PlayerRegistrationService(registrationService);
         }
 
         /// <summary>

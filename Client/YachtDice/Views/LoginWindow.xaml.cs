@@ -145,6 +145,9 @@ namespace YachtDice.Views
                 case RegisterResultCode.WeakPassword:
                     message = Strings.Auth_ErrorWeakPassword;
                     break;
+                case RegisterResultCode.OffensiveUsername:
+                    message = Strings.Auth_ErrorOffensiveUsername;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

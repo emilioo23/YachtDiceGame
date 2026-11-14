@@ -2,6 +2,7 @@
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Tests.InMemory;
 
@@ -23,6 +24,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const string WhitespaceOnly = "   ";
         private const string UsernameWithSpaces = "gabriel hm";
         private const string WeakPassword = "abc";
+        private const string OffensiveWord = "pendejo";
+        private const string OffensiveUsername = "el_pendejo99";
         private const string EmailDomain = "@example.com";
         private const char FillCharacter = 'a';
         private const int UsernameMaxLength = 20;
@@ -43,7 +46,7 @@ namespace YachtDice.Server.Tests.Authentication
         /// </summary>
         public RegistrationServiceTests()
         {
-            _service = new RegistrationService(_players);
+            _service = new RegistrationService(_players, new OffensiveWordFilter(new[] { OffensiveWord }));
         }
 
         [Fact]
@@ -196,6 +199,15 @@ namespace YachtDice.Server.Tests.Authentication
                 _service.RegisterPlayer(CreatePlayer(UsernameWithSpaces, Email), Password);
 
             Assert.Equal(RegistrationResult.InvalidUsername, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_UsernameWithOffensiveWord_ReturnsOffensiveUsername()
+        {
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(OffensiveUsername, Email), Password);
+
+            Assert.Equal(RegistrationResult.OffensiveUsername, registrationResult);
         }
 
         [Fact]

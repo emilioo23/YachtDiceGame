@@ -124,6 +124,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario no puede tener palabras ofensivas. Elige otro nombre.
+        /// </summary>
+        public static string Auth_ErrorOffensiveUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorOffensiveUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
         /// </summary>
         public static string Auth_ErrorInvalidUsername {

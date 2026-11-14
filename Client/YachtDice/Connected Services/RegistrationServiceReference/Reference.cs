@@ -149,6 +149,9 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WeakPassword = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OffensiveUsername = 8,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

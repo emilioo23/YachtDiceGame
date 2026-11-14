@@ -38,6 +38,12 @@ namespace YachtDice.Server.Contracts.Players
 
         /// <summary>The password is too short, too long or does not have a letter and a digit.</summary>
         [EnumMember]
-        WeakPassword
+        WeakPassword,
+
+        /// <summary>
+        /// The username contains an offensive word.
+        /// </summary>
+        [EnumMember]
+        OffensiveUsername
     }
 }

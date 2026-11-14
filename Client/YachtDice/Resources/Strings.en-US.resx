@@ -678,6 +678,9 @@
   <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
     <value>The username must have 3 to 20 characters and can only use letters without accents, digits, dots and underscores.</value>
   </data>
+  <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
+    <value>The username cannot contain offensive words. Choose another name.</value>
+  </data>
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>The password must have 8 to 64 characters, with at least one letter and one digit.</value>
   </data>
