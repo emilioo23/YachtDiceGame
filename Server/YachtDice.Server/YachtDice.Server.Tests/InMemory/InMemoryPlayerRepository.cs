@@ -16,6 +16,7 @@ namespace YachtDice.Server.Tests.InMemory
 
         private readonly List<Player> _players = new List<Player>();
         private readonly HashSet<int> _playersWithTwoFactor = new HashSet<int>();
+        private readonly Dictionary<int, string> _titles = new Dictionary<int, string>();
 
         /// <summary>
         /// Gets the players saved so far.
@@ -111,6 +112,16 @@ namespace YachtDice.Server.Tests.InMemory
 
             player.Username = username;
             player.DisplayName = username;
+        }
+
+        public string FindTitle(int playerId)
+        {
+            return _titles.TryGetValue(playerId, out string title) ? title : string.Empty;
+        }
+
+        public void SaveTitle(int playerId, string title)
+        {
+            _titles[playerId] = title;
         }
 
         private static bool IsSameText(string firstText, string secondText)

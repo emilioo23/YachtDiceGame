@@ -30,6 +30,9 @@ namespace YachtDice.Server.Data.Repositories
             "Database error occurred while checking the two-step verification.";
         private const string TwoFactorUpdateFailedMessage =
             "Could not save the two-step verification setting due to a database failure.";
+        private const string NoTitle = "";
+        private const string TitleQueryFailedMessage = "Could not read the title due to a database failure.";
+        private const string TitleUpdateFailedMessage = "Could not save the title due to a database failure.";
         private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
@@ -187,6 +190,34 @@ namespace YachtDice.Server.Data.Repositories
                 UsernameUpdateFailedMessage);
         }
 
+        /// <summary>
+        /// Finds the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved title, or an empty text if the player never chose one.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public string FindTitle(int playerId)
+        {
+            string title = DatabaseOperation.Query(
+                context => SelectTitle(context, playerId),
+                TitleQueryFailedMessage);
+
+            return title;
+        }
+
+        /// <summary>
+        /// Saves the title that the player chose, creating the settings of the player when they do not exist.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="title">Title to save.</param>
+        /// <exception cref="DataAccessException">The title could not be saved.</exception>
+        public void SaveTitle(int playerId, string title)
+        {
+            DatabaseOperation.Save(
+                context => ApplyTitle(context, playerId, title),
+                TitleUpdateFailedMessage);
+        }
+
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
             Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
@@ -271,6 +302,28 @@ namespace YachtDice.Server.Data.Repositories
             {
                 player.AvatarId = avatarId;
             }
+        }
+
+        private static string SelectTitle(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<PlayerSettings, bool>> isSamePlayer = row => row.PlayerId == playerId;
+            PlayerSettings settings = context.PlayerSettings.FirstOrDefault(isSamePlayer);
+
+            return settings?.Title ?? NoTitle;
+        }
+
+        private static void ApplyTitle(YachtDiceContext context, int playerId, string title)
+        {
+            Expression<Func<PlayerSettings, bool>> isSamePlayer = row => row.PlayerId == playerId;
+            PlayerSettings settings = context.PlayerSettings.FirstOrDefault(isSamePlayer);
+
+            if (settings == null)
+            {
+                settings = new PlayerSettings { PlayerId = playerId };
+                context.PlayerSettings.Add(settings);
+            }
+
+            settings.Title = title;
         }
 
         private static void ApplyUsername(YachtDiceContext context, int playerId, string username)

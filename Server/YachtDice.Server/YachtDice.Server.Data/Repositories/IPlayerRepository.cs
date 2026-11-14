@@ -76,5 +76,21 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="username">New username of the player.</param>
         /// <exception cref="DataAccessException">The username could not be saved.</exception>
         void SaveUsername(int playerId, string username);
+
+        /// <summary>
+        /// Finds the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved title, or an empty text if the player never chose one.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindTitle(int playerId);
+
+        /// <summary>
+        /// Saves the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="title">Title to save.</param>
+        /// <exception cref="DataAccessException">The title could not be saved.</exception>
+        void SaveTitle(int playerId, string title);
     }
 }
