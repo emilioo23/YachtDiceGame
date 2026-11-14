@@ -60,6 +60,14 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult Leave(RoomMember member);
 
         /// <summary>
+        /// Forgets a player who left a game in progress and did not come back in time, so the player cannot
+        /// return to that game.
+        /// </summary>
+        /// <param name="member">Room and identifier of the absent player.</param>
+        /// <returns>Whether the room exists and its state.</returns>
+        RoomResult ForgetAbsentPlayer(RoomMember member);
+
+        /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
         /// </summary>
         /// <param name="member">Room and identifier of the player who asks for the change.</param>

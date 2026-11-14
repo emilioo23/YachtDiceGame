@@ -296,6 +296,28 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
+        public void FindPendingRoomCode_PlayerWhoWasForgotten_ReturnsEmpty()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+            _manager.ForgetAbsentPlayer(new RoomMember(host.Room.Code, player.PlayerId));
+
+            string code = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, code);
+        }
+
+        [Fact]
+        public void ForgetAbsentPlayer_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult result = _manager.ForgetAbsentPlayer(new RoomMember(UnknownRoomCode, HostName));
+
+            Assert.Equal(RoomStatus.RoomNotFound, result.Status);
+        }
+
+        [Fact]
         public void FindPendingRoomCode_PlayerWhoReturned_ReturnsEmpty()
         {
             RoomResult host = _manager.CreateRoom(HostName);

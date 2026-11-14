@@ -160,6 +160,15 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
+        /// Forgets an absent player for good, so the player cannot come back to the game.
+        /// </summary>
+        /// <param name="playerId">Identifier of the absent player.</param>
+        public void ForgetAbsentPlayer(string playerId)
+        {
+            _absentPlayers.RemoveAll(player => IsSameId(player.Id, playerId));
+        }
+
+        /// <summary>
         /// Brings back the absent player who has the name. The player keeps the identifier and the avatar.
         /// </summary>
         /// <param name="displayName">Name that the returning player shows.</param>

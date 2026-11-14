@@ -134,6 +134,14 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public RoomResult ForgetAbsentPlayer(RoomMember member)
+        {
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => ForgetAbsent(room, member.PlayerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
         public RoomResult UpdateSettings(RoomMember member, RoomSettings settings)
         {
             RoomResult result =
@@ -417,6 +425,13 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return CreateResult(status, room);
+        }
+
+        private static RoomResult ForgetAbsent(GameRoom room, string playerId)
+        {
+            room.ForgetAbsentPlayer(playerId);
+
+            return CreateResult(RoomStatus.Success, room);
         }
 
         private static void RemoveOrMarkAbsent(GameRoom room, string playerId)
