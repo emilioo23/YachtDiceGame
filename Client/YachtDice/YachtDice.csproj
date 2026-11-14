@@ -272,6 +272,7 @@
     <Compile Include="Utils\GameResultMessages.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />
+    <Compile Include="Utils\ProgressTexts.cs" />
     <Compile Include="Utils\UsernameChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />
     <Compile Include="Utils\AvatarImages.cs" />

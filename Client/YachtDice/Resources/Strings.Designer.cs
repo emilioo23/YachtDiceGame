@@ -2275,6 +2275,42 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} (bloqueado).
+        /// </summary>
+        public static string Profile_TitleLocked {
+            get {
+                return ResourceManager.GetString("Profile_TitleLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar el título. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_TitleSaveError {
+            get {
+                return ResourceManager.GetString("Profile_TitleSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Logro desbloqueado.
+        /// </summary>
+        public static string Achievements_Unlocked {
+            get {
+                return ResourceManager.GetString("Achievements_Unlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} de {1} desbloqueados.
+        /// </summary>
+        public static string Profile_AchievementsFormat {
+            get {
+                return ResourceManager.GetString("Profile_AchievementsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
         /// </summary>
         public static string Profile_AvatarSaveError {

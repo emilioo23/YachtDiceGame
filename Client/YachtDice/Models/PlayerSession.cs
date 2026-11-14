@@ -1,4 +1,5 @@
-﻿using YachtDice.Gateway;
+﻿using System.Collections.Generic;
+using YachtDice.Gateway;
 
 namespace YachtDice.Models
 {
@@ -47,5 +48,10 @@ namespace YachtDice.Models
         /// offer is not repeated every time the menu opens.
         /// </summary>
         public string LastOfferedMatchCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the achievements that the player is known to have unlocked, or null before they are first read.
+        /// </summary>
+        public List<int> KnownAchievementIds { get; set; }
     }
 }

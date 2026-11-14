@@ -1182,4 +1182,223 @@
   <data name="Game_Celebration_YachtPoints" xml:space="preserve">
     <value>{0} suma {1} puntos</value>
   </data>
+  <data name="Achievement_1_Name" xml:space="preserve">
+    <value>Primera partida</value>
+  </data>
+  <data name="Achievement_1_Description" xml:space="preserve">
+    <value>Termina tu primera partida</value>
+  </data>
+  <data name="Achievement_2_Name" xml:space="preserve">
+    <value>Primera victoria</value>
+  </data>
+  <data name="Achievement_2_Description" xml:space="preserve">
+    <value>Gana tu primera partida</value>
+  </data>
+  <data name="Achievement_3_Name" xml:space="preserve">
+    <value>Calentando motores</value>
+  </data>
+  <data name="Achievement_3_Description" xml:space="preserve">
+    <value>Gana 3 partidas</value>
+  </data>
+  <data name="Achievement_4_Name" xml:space="preserve">
+    <value>Cinco estrellas</value>
+  </data>
+  <data name="Achievement_4_Description" xml:space="preserve">
+    <value>Gana 5 partidas</value>
+  </data>
+  <data name="Achievement_5_Name" xml:space="preserve">
+    <value>Racha de experto</value>
+  </data>
+  <data name="Achievement_5_Description" xml:space="preserve">
+    <value>Gana 10 partidas</value>
+  </data>
+  <data name="Achievement_6_Name" xml:space="preserve">
+    <value>Imparable</value>
+  </data>
+  <data name="Achievement_6_Description" xml:space="preserve">
+    <value>Gana 25 partidas</value>
+  </data>
+  <data name="Achievement_7_Name" xml:space="preserve">
+    <value>Leyenda viva</value>
+  </data>
+  <data name="Achievement_7_Description" xml:space="preserve">
+    <value>Gana 50 partidas</value>
+  </data>
+  <data name="Achievement_8_Name" xml:space="preserve">
+    <value>Jugador constante</value>
+  </data>
+  <data name="Achievement_8_Description" xml:space="preserve">
+    <value>Juega 10 partidas</value>
+  </data>
+  <data name="Achievement_9_Name" xml:space="preserve">
+    <value>Veterano</value>
+  </data>
+  <data name="Achievement_9_Description" xml:space="preserve">
+    <value>Juega 25 partidas</value>
+  </data>
+  <data name="Achievement_10_Name" xml:space="preserve">
+    <value>Adicto a los dados</value>
+  </data>
+  <data name="Achievement_10_Description" xml:space="preserve">
+    <value>Juega 50 partidas</value>
+  </data>
+  <data name="Achievement_11_Name" xml:space="preserve">
+    <value>Centenario</value>
+  </data>
+  <data name="Achievement_11_Description" xml:space="preserve">
+    <value>Juega 100 partidas</value>
+  </data>
+  <data name="Achievement_12_Name" xml:space="preserve">
+    <value>Buen comienzo</value>
+  </data>
+  <data name="Achievement_12_Description" xml:space="preserve">
+    <value>Consigue 100 puntos en una partida</value>
+  </data>
+  <data name="Achievement_13_Name" xml:space="preserve">
+    <value>Tirador veloz</value>
+  </data>
+  <data name="Achievement_13_Description" xml:space="preserve">
+    <value>Consigue 200 puntos en una partida</value>
+  </data>
+  <data name="Achievement_14_Name" xml:space="preserve">
+    <value>Casi perfecto</value>
+  </data>
+  <data name="Achievement_14_Description" xml:space="preserve">
+    <value>Consigue 250 puntos en una partida</value>
+  </data>
+  <data name="Achievement_15_Name" xml:space="preserve">
+    <value>Maestro del Yacht</value>
+  </data>
+  <data name="Achievement_15_Description" xml:space="preserve">
+    <value>Consigue 300 puntos en una partida</value>
+  </data>
+  <data name="Achievement_16_Name" xml:space="preserve">
+    <value>Dominante</value>
+  </data>
+  <data name="Achievement_16_Description" xml:space="preserve">
+    <value>Gana el 60% de tus partidas (mínimo 10 jugadas)</value>
+  </data>
+  <data name="Achievement_17_Name" xml:space="preserve">
+    <value>Intocable</value>
+  </data>
+  <data name="Achievement_17_Description" xml:space="preserve">
+    <value>Gana el 80% de tus partidas (mínimo 20 jugadas)</value>
+  </data>
+  <data name="Achievement_18_Name" xml:space="preserve">
+    <value>Subiendo de nivel</value>
+  </data>
+  <data name="Achievement_18_Description" xml:space="preserve">
+    <value>Llega al nivel 5</value>
+  </data>
+  <data name="Achievement_19_Name" xml:space="preserve">
+    <value>Experimentado</value>
+  </data>
+  <data name="Achievement_19_Description" xml:space="preserve">
+    <value>Llega al nivel 10</value>
+  </data>
+  <data name="Achievement_20_Name" xml:space="preserve">
+    <value>Élite</value>
+  </data>
+  <data name="Achievement_20_Description" xml:space="preserve">
+    <value>Llega al nivel 15</value>
+  </data>
+  <data name="Achievement_21_Name" xml:space="preserve">
+    <value>Maestro de maestros</value>
+  </data>
+  <data name="Achievement_21_Description" xml:space="preserve">
+    <value>Llega al nivel 20</value>
+  </data>
+  <data name="Achievement_22_Name" xml:space="preserve">
+    <value>Coleccionista de XP</value>
+  </data>
+  <data name="Achievement_22_Description" xml:space="preserve">
+    <value>Acumula 1000 de XP</value>
+  </data>
+  <data name="Achievement_23_Name" xml:space="preserve">
+    <value>Montaña de XP</value>
+  </data>
+  <data name="Achievement_23_Description" xml:space="preserve">
+    <value>Acumula 5000 de XP</value>
+  </data>
+  <data name="Title_0" xml:space="preserve">
+    <value>Debutante</value>
+  </data>
+  <data name="Title_1" xml:space="preserve">
+    <value>Novato</value>
+  </data>
+  <data name="Title_2" xml:space="preserve">
+    <value>Ganador</value>
+  </data>
+  <data name="Title_3" xml:space="preserve">
+    <value>Calentado</value>
+  </data>
+  <data name="Title_4" xml:space="preserve">
+    <value>Promesa</value>
+  </data>
+  <data name="Title_5" xml:space="preserve">
+    <value>Estratega</value>
+  </data>
+  <data name="Title_6" xml:space="preserve">
+    <value>Imparable</value>
+  </data>
+  <data name="Title_7" xml:space="preserve">
+    <value>Leyenda viva</value>
+  </data>
+  <data name="Title_8" xml:space="preserve">
+    <value>Constante</value>
+  </data>
+  <data name="Title_9" xml:space="preserve">
+    <value>Veterano</value>
+  </data>
+  <data name="Title_10" xml:space="preserve">
+    <value>Dadero</value>
+  </data>
+  <data name="Title_11" xml:space="preserve">
+    <value>Centenario</value>
+  </data>
+  <data name="Title_12" xml:space="preserve">
+    <value>Afinado</value>
+  </data>
+  <data name="Title_13" xml:space="preserve">
+    <value>Tirador veloz</value>
+  </data>
+  <data name="Title_14" xml:space="preserve">
+    <value>Perfeccionista</value>
+  </data>
+  <data name="Title_15" xml:space="preserve">
+    <value>Campeón del Yacht</value>
+  </data>
+  <data name="Title_16" xml:space="preserve">
+    <value>Dominador</value>
+  </data>
+  <data name="Title_17" xml:space="preserve">
+    <value>Intocable</value>
+  </data>
+  <data name="Title_18" xml:space="preserve">
+    <value>Aprendiz</value>
+  </data>
+  <data name="Title_19" xml:space="preserve">
+    <value>Leyenda</value>
+  </data>
+  <data name="Title_20" xml:space="preserve">
+    <value>Élite</value>
+  </data>
+  <data name="Title_21" xml:space="preserve">
+    <value>Gran maestro</value>
+  </data>
+  <data name="Title_23" xml:space="preserve">
+    <value>Titán</value>
+  </data>
+  <data name="Profile_TitleLocked" xml:space="preserve">
+    <value>{0} (bloqueado)</value>
+  </data>
+  <data name="Profile_TitleSaveError" xml:space="preserve">
+    <value>No se pudo guardar el título. Inténtalo de nuevo.</value>
+  </data>
+  <data name="Achievements_Unlocked" xml:space="preserve">
+    <value>Logro desbloqueado</value>
+  </data>
+  <data name="Profile_AchievementsFormat" xml:space="preserve">
+    <value>{0} de {1} desbloqueados</value>
+  </data>
 </root>

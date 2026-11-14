@@ -1182,4 +1182,223 @@
   <data name="Game_Celebration_YachtPoints" xml:space="preserve">
     <value>{0} scores {1} points</value>
   </data>
+  <data name="Achievement_1_Name" xml:space="preserve">
+    <value>First game</value>
+  </data>
+  <data name="Achievement_1_Description" xml:space="preserve">
+    <value>Finish your first game</value>
+  </data>
+  <data name="Achievement_2_Name" xml:space="preserve">
+    <value>First win</value>
+  </data>
+  <data name="Achievement_2_Description" xml:space="preserve">
+    <value>Win your first game</value>
+  </data>
+  <data name="Achievement_3_Name" xml:space="preserve">
+    <value>Warming up</value>
+  </data>
+  <data name="Achievement_3_Description" xml:space="preserve">
+    <value>Win 3 games</value>
+  </data>
+  <data name="Achievement_4_Name" xml:space="preserve">
+    <value>Five stars</value>
+  </data>
+  <data name="Achievement_4_Description" xml:space="preserve">
+    <value>Win 5 games</value>
+  </data>
+  <data name="Achievement_5_Name" xml:space="preserve">
+    <value>Expert streak</value>
+  </data>
+  <data name="Achievement_5_Description" xml:space="preserve">
+    <value>Win 10 games</value>
+  </data>
+  <data name="Achievement_6_Name" xml:space="preserve">
+    <value>Unstoppable</value>
+  </data>
+  <data name="Achievement_6_Description" xml:space="preserve">
+    <value>Win 25 games</value>
+  </data>
+  <data name="Achievement_7_Name" xml:space="preserve">
+    <value>Living legend</value>
+  </data>
+  <data name="Achievement_7_Description" xml:space="preserve">
+    <value>Win 50 games</value>
+  </data>
+  <data name="Achievement_8_Name" xml:space="preserve">
+    <value>Steady player</value>
+  </data>
+  <data name="Achievement_8_Description" xml:space="preserve">
+    <value>Play 10 games</value>
+  </data>
+  <data name="Achievement_9_Name" xml:space="preserve">
+    <value>Veteran</value>
+  </data>
+  <data name="Achievement_9_Description" xml:space="preserve">
+    <value>Play 25 games</value>
+  </data>
+  <data name="Achievement_10_Name" xml:space="preserve">
+    <value>Dice addict</value>
+  </data>
+  <data name="Achievement_10_Description" xml:space="preserve">
+    <value>Play 50 games</value>
+  </data>
+  <data name="Achievement_11_Name" xml:space="preserve">
+    <value>Centurion</value>
+  </data>
+  <data name="Achievement_11_Description" xml:space="preserve">
+    <value>Play 100 games</value>
+  </data>
+  <data name="Achievement_12_Name" xml:space="preserve">
+    <value>Good start</value>
+  </data>
+  <data name="Achievement_12_Description" xml:space="preserve">
+    <value>Score 100 points in a game</value>
+  </data>
+  <data name="Achievement_13_Name" xml:space="preserve">
+    <value>Fast shooter</value>
+  </data>
+  <data name="Achievement_13_Description" xml:space="preserve">
+    <value>Score 200 points in a game</value>
+  </data>
+  <data name="Achievement_14_Name" xml:space="preserve">
+    <value>Almost perfect</value>
+  </data>
+  <data name="Achievement_14_Description" xml:space="preserve">
+    <value>Score 250 points in a game</value>
+  </data>
+  <data name="Achievement_15_Name" xml:space="preserve">
+    <value>Yacht master</value>
+  </data>
+  <data name="Achievement_15_Description" xml:space="preserve">
+    <value>Score 300 points in a game</value>
+  </data>
+  <data name="Achievement_16_Name" xml:space="preserve">
+    <value>Dominant</value>
+  </data>
+  <data name="Achievement_16_Description" xml:space="preserve">
+    <value>Win 60% of your games (at least 10 played)</value>
+  </data>
+  <data name="Achievement_17_Name" xml:space="preserve">
+    <value>Untouchable</value>
+  </data>
+  <data name="Achievement_17_Description" xml:space="preserve">
+    <value>Win 80% of your games (at least 20 played)</value>
+  </data>
+  <data name="Achievement_18_Name" xml:space="preserve">
+    <value>Leveling up</value>
+  </data>
+  <data name="Achievement_18_Description" xml:space="preserve">
+    <value>Reach level 5</value>
+  </data>
+  <data name="Achievement_19_Name" xml:space="preserve">
+    <value>Experienced</value>
+  </data>
+  <data name="Achievement_19_Description" xml:space="preserve">
+    <value>Reach level 10</value>
+  </data>
+  <data name="Achievement_20_Name" xml:space="preserve">
+    <value>Elite</value>
+  </data>
+  <data name="Achievement_20_Description" xml:space="preserve">
+    <value>Reach level 15</value>
+  </data>
+  <data name="Achievement_21_Name" xml:space="preserve">
+    <value>Master of masters</value>
+  </data>
+  <data name="Achievement_21_Description" xml:space="preserve">
+    <value>Reach level 20</value>
+  </data>
+  <data name="Achievement_22_Name" xml:space="preserve">
+    <value>XP collector</value>
+  </data>
+  <data name="Achievement_22_Description" xml:space="preserve">
+    <value>Earn 1000 XP</value>
+  </data>
+  <data name="Achievement_23_Name" xml:space="preserve">
+    <value>XP mountain</value>
+  </data>
+  <data name="Achievement_23_Description" xml:space="preserve">
+    <value>Earn 5000 XP</value>
+  </data>
+  <data name="Title_0" xml:space="preserve">
+    <value>Debutant</value>
+  </data>
+  <data name="Title_1" xml:space="preserve">
+    <value>Rookie</value>
+  </data>
+  <data name="Title_2" xml:space="preserve">
+    <value>Winner</value>
+  </data>
+  <data name="Title_3" xml:space="preserve">
+    <value>Warmed up</value>
+  </data>
+  <data name="Title_4" xml:space="preserve">
+    <value>Promising</value>
+  </data>
+  <data name="Title_5" xml:space="preserve">
+    <value>Strategist</value>
+  </data>
+  <data name="Title_6" xml:space="preserve">
+    <value>Unstoppable</value>
+  </data>
+  <data name="Title_7" xml:space="preserve">
+    <value>Living legend</value>
+  </data>
+  <data name="Title_8" xml:space="preserve">
+    <value>Steady</value>
+  </data>
+  <data name="Title_9" xml:space="preserve">
+    <value>Veteran</value>
+  </data>
+  <data name="Title_10" xml:space="preserve">
+    <value>Dice fan</value>
+  </data>
+  <data name="Title_11" xml:space="preserve">
+    <value>Centurion</value>
+  </data>
+  <data name="Title_12" xml:space="preserve">
+    <value>Sharp</value>
+  </data>
+  <data name="Title_13" xml:space="preserve">
+    <value>Fast shooter</value>
+  </data>
+  <data name="Title_14" xml:space="preserve">
+    <value>Perfectionist</value>
+  </data>
+  <data name="Title_15" xml:space="preserve">
+    <value>Yacht champion</value>
+  </data>
+  <data name="Title_16" xml:space="preserve">
+    <value>Dominator</value>
+  </data>
+  <data name="Title_17" xml:space="preserve">
+    <value>Untouchable</value>
+  </data>
+  <data name="Title_18" xml:space="preserve">
+    <value>Apprentice</value>
+  </data>
+  <data name="Title_19" xml:space="preserve">
+    <value>Legend</value>
+  </data>
+  <data name="Title_20" xml:space="preserve">
+    <value>Elite</value>
+  </data>
+  <data name="Title_21" xml:space="preserve">
+    <value>Grand master</value>
+  </data>
+  <data name="Title_23" xml:space="preserve">
+    <value>Titan</value>
+  </data>
+  <data name="Profile_TitleLocked" xml:space="preserve">
+    <value>{0} (locked)</value>
+  </data>
+  <data name="Profile_TitleSaveError" xml:space="preserve">
+    <value>The title could not be saved. Please try again.</value>
+  </data>
+  <data name="Achievements_Unlocked" xml:space="preserve">
+    <value>Achievement unlocked</value>
+  </data>
+  <data name="Profile_AchievementsFormat" xml:space="preserve">
+    <value>{0} of {1} unlocked</value>
+  </data>
 </root>

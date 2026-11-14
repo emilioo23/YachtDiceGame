@@ -81,6 +81,20 @@ namespace YachtDice.Gateway
             return result;
         }
 
+        public async Task<List<AchievementInfo>> GetAchievementsAsync(string playerName)
+        {
+            AchievementInfo[] achievements = await ExecuteAsync(client => client.GetAchievements(playerName));
+
+            return achievements.ToList();
+        }
+
+        public async Task<TitleChangeResultCode> ChangeTitleAsync(string playerName, int titleId)
+        {
+            TitleChangeResultCode result = await ExecuteAsync(client => client.ChangeTitle(playerName, titleId));
+
+            return result;
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;
