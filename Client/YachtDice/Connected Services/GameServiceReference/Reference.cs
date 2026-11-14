@@ -824,6 +824,9 @@ namespace YachtDice.GameServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         GameFinished = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerForfeited = 7,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

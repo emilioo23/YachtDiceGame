@@ -196,6 +196,7 @@
       <xs:enumeration value="PlayerReturned" />
       <xs:enumeration value="PlayerRemoved" />
       <xs:enumeration value="GameFinished" />
+      <xs:enumeration value="PlayerForfeited" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameEventType" nillable="true" type="tns:GameEventType" />
