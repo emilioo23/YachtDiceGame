@@ -36,7 +36,7 @@ namespace YachtDice.Server.Tests.Security
                 .Distinct()
                 .ToArray();
 
-            Assert.Equal(DiceRules.MaximumFaceValue - DiceRules.MinimumFaceValue + 1, faces.Length);
+            Assert.Equal(DiceHand.MaximumFaceValue - DiceHand.MinimumFaceValue + 1, faces.Length);
         }
 
         [Fact]
@@ -69,12 +69,12 @@ namespace YachtDice.Server.Tests.Security
 
         private static int RollDie()
         {
-            return SecureRandom.Next(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue + 1);
+            return SecureRandom.Next(DiceHand.MinimumFaceValue, DiceHand.MaximumFaceValue + 1);
         }
 
         private static bool IsDieFace(int value)
         {
-            return value >= DiceRules.MinimumFaceValue && value <= DiceRules.MaximumFaceValue;
+            return value >= DiceHand.MinimumFaceValue && value <= DiceHand.MaximumFaceValue;
         }
 
         private static bool IsInNegativeRange(int value)

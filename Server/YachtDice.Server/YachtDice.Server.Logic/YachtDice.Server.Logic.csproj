@@ -84,8 +84,7 @@
     <Compile Include="Friends\InvitationStatus.cs" />
     <Compile Include="Friends\RoomInvitationService.cs" />
     <Compile Include="Game\AutoPlayChooser.cs" />
-    <Compile Include="Game\DiceRules.cs" />
-    <Compile Include="Game\DiceTally.cs" />
+    <Compile Include="Game\DiceHand.cs" />
     <Compile Include="Game\GameActionResult.cs" />
     <Compile Include="Game\GameActionStatus.cs" />
     <Compile Include="Game\GameManager.cs" />

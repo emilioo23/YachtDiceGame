@@ -176,11 +176,11 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
-        public void Calculate_DieWithValueSeven_ThrowsArgumentException()
+        public void Calculate_DieWithValueSeven_ThrowsArgumentOutOfRangeException()
         {
             var calculator = new ScoreCalculator();
 
-            Assert.Throws<ArgumentException>(() => calculator.Calculate(ScoreCategory.Choice, DieWithSeven));
+            Assert.Throws<ArgumentOutOfRangeException>(() => calculator.Calculate(ScoreCategory.Choice, DieWithSeven));
         }
 
         [Fact]

@@ -11,7 +11,7 @@ namespace YachtDice.Server.Logic.Game
         /// <inheritdoc />
         public int Roll()
         {
-            return SecureRandom.Next(DiceRules.MinimumFaceValue, DiceRules.MaximumFaceValue + 1);
+            return SecureRandom.Next(DiceHand.MinimumFaceValue, DiceHand.MaximumFaceValue + 1);
         }
     }
 }

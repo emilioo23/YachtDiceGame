@@ -13,6 +13,7 @@ namespace YachtDice.Server.Logic.Game
     internal sealed class YachtGame
     {
         private const int NoPlayerIndex = -1;
+        private const int RollsPerTurn = 3;
         private const int NoRolls = 0;
         private const int FirstTurnNumber = 1;
         private const int RoundOffset = 1;
@@ -20,8 +21,8 @@ namespace YachtDice.Server.Logic.Game
         private readonly List<GamePlayer> _players;
         private readonly IDieRoller _dieRoller;
         private readonly ScoreCalculator _calculator = new ScoreCalculator();
-        private readonly int[] _dice = new int[DiceRules.DiceCount];
-        private readonly bool[] _heldDice = new bool[DiceRules.DiceCount];
+        private readonly int[] _dice = new int[DiceHand.DiceCount];
+        private readonly bool[] _heldDice = new bool[DiceHand.DiceCount];
         private int _turnIndex;
         private int _rollsMade;
         private int _version;
@@ -178,7 +179,7 @@ namespace YachtDice.Server.Logic.Game
                 CurrentPlayerId = GetCurrentPlayerId(),
                 TurnNumber = TurnNumber,
                 Round = GetCurrentRound(),
-                RollsLeft = DiceRules.RollsPerTurn - _rollsMade,
+                RollsLeft = RollsPerTurn - _rollsMade,
                 TurnSeconds = TurnSeconds
             };
 
@@ -256,7 +257,7 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionStatus status;
 
-            if (_rollsMade >= DiceRules.RollsPerTurn)
+            if (_rollsMade >= RollsPerTurn)
             {
                 status = GameActionStatus.NoRollsLeft;
             }
@@ -265,7 +266,7 @@ namespace YachtDice.Server.Logic.Game
                 RollAll();
                 status = GameActionStatus.Success;
             }
-            else if (heldDice.Count != DiceRules.DiceCount)
+            else if (heldDice.Count != DiceHand.DiceCount)
             {
                 status = GameActionStatus.InvalidHeldDice;
             }
@@ -322,12 +323,12 @@ namespace YachtDice.Server.Logic.Game
 
         private void RollAll()
         {
-            RollFree(new bool[DiceRules.DiceCount]);
+            RollFree(new bool[DiceHand.DiceCount]);
         }
 
         private void RollFree(IReadOnlyList<bool> heldDice)
         {
-            for (var index = 0; index < DiceRules.DiceCount; index++)
+            for (var index = 0; index < DiceHand.DiceCount; index++)
             {
                 _heldDice[index] = heldDice[index];
 
