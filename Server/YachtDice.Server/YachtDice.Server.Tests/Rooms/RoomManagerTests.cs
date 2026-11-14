@@ -14,11 +14,11 @@ namespace YachtDice.Server.Tests.Rooms
     /// </summary>
     public class RoomManagerTests
     {
-        private const string GuestName = "Guest";
-        private const string SecondGuestName = "Guest 2";
-        private const string ThirdGuestName = "Guest 3";
-        private const string LowercaseGuestName = "guest";
-        private const string SecondLowercaseGuestName = "guest 2";
+        private const string GuestName = "Invitado";
+        private const string SecondGuestName = "Invitado 2";
+        private const string ThirdGuestName = "Invitado 3";
+        private const string LowercaseGuestName = "invitado";
+        private const string SecondLowercaseGuestName = "invitado 2";
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
         private const string UnknownRoomCode = "ZZZZZZ";

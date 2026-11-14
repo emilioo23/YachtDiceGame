@@ -14,9 +14,9 @@ namespace YachtDice.Server.Tests.TwoFactor
     {
         private const int PlayerId = 1;
         private const string Email = "gabriel@gmail.com";
-        private const string UnknownEmail = "nobody@gmail.com";
+        private const string UnknownEmail = "carlos.ramirez@gmail.com";
         private const string DisplayName = "gabrielhernandez";
-        private const string UnknownDisplayName = "nobody";
+        private const string UnknownDisplayName = "carlosramirez";
         private const string Password = "Secret123!";
         private const string ChallengeId = "challenge-1";
         private const string CultureName = "es-MX";

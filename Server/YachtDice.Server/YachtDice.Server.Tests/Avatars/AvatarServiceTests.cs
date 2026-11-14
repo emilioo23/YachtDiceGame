@@ -13,7 +13,7 @@ namespace YachtDice.Server.Tests.Avatars
     public class AvatarServiceTests
     {
         private const string PlayerName = "Emilio";
-        private const string UnknownName = "Nobody";
+        private const string UnknownName = "Carlos";
         private const string BlankName = "  ";
         private const int PlayerId = 1;
         private const int PlayerLevel = 5;

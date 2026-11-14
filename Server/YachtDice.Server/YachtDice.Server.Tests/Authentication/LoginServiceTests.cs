@@ -16,7 +16,7 @@ namespace YachtDice.Server.Tests.Authentication
     {
         private const int PlayerId = 1;
         private const string Email = "gabriel@gmail.com";
-        private const string UnknownEmail = "nobody@gmail.com";
+        private const string UnknownEmail = "carlos.ramirez@gmail.com";
         private const string MalformedEmail = "gabriel";
         private const string Password = "Secret123!";
         private const string WrongPassword = "Wrong123!";

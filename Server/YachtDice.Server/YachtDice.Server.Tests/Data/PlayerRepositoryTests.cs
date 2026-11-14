@@ -12,10 +12,10 @@ namespace YachtDice.Server.Tests.Data
     /// </summary>
     public class PlayerRepositoryTests
     {
-        private const string Username = "player";
+        private const string Username = "emilioalvarez";
         private const int PlayerId = 1;
         private const int AvatarId = 1;
-        private const string Email = "player@gmail.com";
+        private const string Email = "emilioalvarez@gmail.com";
 
         private readonly PlayerRepository _repository = new PlayerRepository();
 

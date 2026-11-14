@@ -18,8 +18,8 @@ namespace YachtDice.Server.Tests.Friends
         private const string RequesterName = "DiceKing99";
         private const string TargetUsername = "GabrielHM";
         private const string TargetDisplayName = "Gabriel";
-        private const string UnknownUsername = "NobodyHere";
-        private const string UnknownRequesterName = "NobodySent";
+        private const string UnknownUsername = "CarlosRamirez";
+        private const string UnknownRequesterName = "LuisHernandez";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
