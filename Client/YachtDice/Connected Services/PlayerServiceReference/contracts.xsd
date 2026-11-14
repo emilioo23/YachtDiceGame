@@ -229,4 +229,34 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="TitleChangeResultCode" nillable="true" type="tns:TitleChangeResultCode" />
+  <xs:element name="GetGameHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetGameHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetGameHistoryResult" nillable="true" type="tns:ArrayOfGameHistoryEntry" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfGameHistoryEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GameHistoryEntry" nillable="true" type="tns:GameHistoryEntry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGameHistoryEntry" nillable="true" type="tns:ArrayOfGameHistoryEntry" />
+  <xs:complexType name="GameHistoryEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BestOpponentScore" type="xs:int" />
+      <xs:element minOccurs="0" name="IsWin" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Opponents" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OwnScore" type="xs:int" />
+      <xs:element minOccurs="0" name="PlayedAt" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameHistoryEntry" nillable="true" type="tns:GameHistoryEntry" />
 </xs:schema>

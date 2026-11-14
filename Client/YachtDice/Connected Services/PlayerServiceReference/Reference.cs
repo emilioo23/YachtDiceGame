@@ -748,6 +748,115 @@ namespace YachtDice.PlayerServiceReference {
         TitleLocked = 3,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameHistoryEntry", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class GameHistoryEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BestOpponentScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsWinField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OpponentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int OwnScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime PlayedAtField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BestOpponentScore {
+            get {
+                return this.BestOpponentScoreField;
+            }
+            set {
+                if ((this.BestOpponentScoreField.Equals(value) != true)) {
+                    this.BestOpponentScoreField = value;
+                    this.RaisePropertyChanged("BestOpponentScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsWin {
+            get {
+                return this.IsWinField;
+            }
+            set {
+                if ((this.IsWinField.Equals(value) != true)) {
+                    this.IsWinField = value;
+                    this.RaisePropertyChanged("IsWin");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Opponents {
+            get {
+                return this.OpponentsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OpponentsField, value) != true)) {
+                    this.OpponentsField = value;
+                    this.RaisePropertyChanged("Opponents");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int OwnScore {
+            get {
+                return this.OwnScoreField;
+            }
+            set {
+                if ((this.OwnScoreField.Equals(value) != true)) {
+                    this.OwnScoreField = value;
+                    this.RaisePropertyChanged("OwnScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime PlayedAt {
+            get {
+                return this.PlayedAtField;
+            }
+            set {
+                if ((this.PlayedAtField.Equals(value) != true)) {
+                    this.PlayedAtField = value;
+                    this.RaisePropertyChanged("PlayedAt");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -783,6 +892,10 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -842,6 +955,10 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId) {
             return base.Channel.ChangeTitle(playerName, titleId);
+        }
+        
+        public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName) {
+            return base.Channel.GetGameHistory(playerName);
         }
     }
 }

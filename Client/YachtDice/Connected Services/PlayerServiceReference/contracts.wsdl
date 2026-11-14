@@ -78,6 +78,15 @@
   <wsdl:message name="IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameHistory" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGameHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetGameHistory_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -118,6 +127,11 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle" message="tns:IPlayerService_ChangeTitle_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse" message="tns:IPlayerService_ChangeTitle_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGameHistory">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory" message="tns:IPlayerService_GetGameHistory_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse" message="tns:IPlayerService_GetGameHistory_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetGameHistory_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
