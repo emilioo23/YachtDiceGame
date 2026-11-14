@@ -341,4 +341,247 @@
     </DrawingImage.Drawing>
   </DrawingImage>
 
+  <DrawingImage x:Key="Avatar_11">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#7CC6EA" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#FFD54A" Geometry="M 23,70 A 27,21 0 1 0 77,70 A 27,21 0 1 0 23,70 Z"/>
+        <GeometryDrawing Brush="#F2B705" Geometry="M 30,66 Q 36,80 52,78 Q 44,70 30,66 Z"/>
+        <GeometryDrawing Brush="#FFD54A" Geometry="M 30,42 A 20,20 0 1 0 70,42 A 20,20 0 1 0 30,42 Z"/>
+        <GeometryDrawing Brush="#73F28B82" Geometry="M 34.6,48 A 3.4,3.4 0 1 0 41.4,48 A 3.4,3.4 0 1 0 34.6,48 Z"/>
+        <GeometryDrawing Brush="#73F28B82" Geometry="M 58.6,48 A 3.4,3.4 0 1 0 65.4,48 A 3.4,3.4 0 1 0 58.6,48 Z"/>
+        <GeometryDrawing Brush="#F5A623" Geometry="M 39,52 A 11,6 0 1 0 61,52 A 11,6 0 1 0 39,52 Z"/>
+        <GeometryDrawing Geometry="M 40,52 Q 50,56 60,52">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#C77E0A" Thickness="1.4" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 39.9,38 A 2.6,2.6 0 1 0 45.1,38 A 2.6,2.6 0 1 0 39.9,38 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 54.9,38 A 2.6,2.6 0 1 0 60.1,38 A 2.6,2.6 0 1 0 54.9,38 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 42.5,37.2 A 0.8,0.8 0 1 0 44.1,37.2 A 0.8,0.8 0 1 0 42.5,37.2 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 57.5,37.2 A 0.8,0.8 0 1 0 59.1,37.2 A 0.8,0.8 0 1 0 57.5,37.2 Z"/>
+        <GeometryDrawing Brush="#2F7FC1" Geometry="M 0,82 Q 12,74 25,82 T 50,82 T 75,82 T 100,82 L 100,100 L 0,100 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_12">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#2E6F6B" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#E8742B" Geometry="M 24,42 L 27,12 L 47,30 Z"/>
+        <GeometryDrawing Brush="#E8742B" Geometry="M 76,42 L 73,12 L 53,30 Z"/>
+        <GeometryDrawing Brush="#3B2A20" Geometry="M 29,35 L 30,21 L 40,30 Z"/>
+        <GeometryDrawing Brush="#3B2A20" Geometry="M 71,35 L 70,21 L 60,30 Z"/>
+        <GeometryDrawing Brush="#E8742B" Geometry="M 19,48 Q 21,28 50,28 Q 79,28 81,48 Q 79,72 50,86 Q 21,72 19,48 Z"/>
+        <GeometryDrawing Brush="#FFF4E6" Geometry="M 19,50 Q 34,50 50,68 Q 66,50 81,50 Q 79,72 50,86 Q 21,72 19,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 45.6,77 A 4.4,3.2 0 1 0 54.4,77 A 4.4,3.2 0 1 0 45.6,77 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 35.3,51 A 2.7,3 0 1 0 40.7,51 A 2.7,3 0 1 0 35.3,51 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 59.3,51 A 2.7,3 0 1 0 64.7,51 A 2.7,3 0 1 0 59.3,51 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 38,50 A 0.9,0.9 0 1 0 39.8,50 A 0.9,0.9 0 1 0 38,50 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 62,50 A 0.9,0.9 0 1 0 63.8,50 A 0.9,0.9 0 1 0 62,50 Z"/>
+        <GeometryDrawing Geometry="M 50,80 L 50,84">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#2B2B2B" Thickness="1.6" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_13">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#243044" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#1B1B22" Geometry="M 12,100 Q 14,74 50,72 Q 86,74 88,100 Z"/>
+        <GeometryDrawing Brush="#23232B" Geometry="M 25,52 A 25,25 0 1 0 75,52 A 25,25 0 1 0 25,52 Z"/>
+        <GeometryDrawing Brush="#F2C6A0" Geometry="M 27,46 Q 50,40 73,46 L 73,58 Q 50,64 27,58 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 36.8,52 A 4.2,2.8 0 1 0 45.2,52 A 4.2,2.8 0 1 0 36.8,52 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 54.8,52 A 4.2,2.8 0 1 0 63.2,52 A 4.2,2.8 0 1 0 54.8,52 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 39.9,52 A 1.7,1.7 0 1 0 43.3,52 A 1.7,1.7 0 1 0 39.9,52 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 56.7,52 A 1.7,1.7 0 1 0 60.1,52 A 1.7,1.7 0 1 0 56.7,52 Z"/>
+        <GeometryDrawing Geometry="M 35,46 L 46,49.5">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#2B2B2B" Thickness="2.2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="M 65,46 L 54,49.5">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#2B2B2B" Thickness="2.2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#C0392B" Geometry="M 25,35 H 75 V 42 H 25 Z"/>
+        <GeometryDrawing Brush="#C0392B" Geometry="M 75,36 L 92,29 L 88,38 L 94,46 L 75,42 Z"/>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 46,36 H 54 V 42 H 46 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_14">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#3F3A7A" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 16.6,24 A 1.4,1.4 0 1 0 19.4,24 A 1.4,1.4 0 1 0 16.6,24 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 80.8,18 A 1.2,1.2 0 1 0 83.2,18 A 1.2,1.2 0 1 0 80.8,18 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 84.6,60 A 1.4,1.4 0 1 0 87.4,60 A 1.4,1.4 0 1 0 84.6,60 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 10.8,64 A 1.2,1.2 0 1 0 13.2,64 A 1.2,1.2 0 1 0 10.8,64 Z"/>
+        <GeometryDrawing Brush="#6A4FB5" Geometry="M 12,100 Q 14,74 50,72 Q 86,74 88,100 Z"/>
+        <GeometryDrawing Brush="#F2F2F2" Geometry="M 30,56 Q 32,88 50,94 Q 68,88 70,56 Q 62,72 50,72 Q 38,72 30,56 Z"/>
+        <GeometryDrawing Brush="#F2C6A0" Geometry="M 31,54 A 19,18 0 1 0 69,54 A 19,18 0 1 0 31,54 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 40.7,52 A 2.3,2.3 0 1 0 45.3,52 A 2.3,2.3 0 1 0 40.7,52 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 54.7,52 A 2.3,2.3 0 1 0 59.3,52 A 2.3,2.3 0 1 0 54.7,52 Z"/>
+        <GeometryDrawing Brush="#E8A98A" Geometry="M 46.8,59 A 3.2,3.2 0 1 0 53.2,59 A 3.2,3.2 0 1 0 46.8,59 Z"/>
+        <GeometryDrawing Brush="#F2F2F2" Geometry="M 36,64 Q 43,59 50,64 Q 57,59 64,64 Q 57,71 50,66 Q 43,71 36,64 Z"/>
+        <GeometryDrawing Brush="#4B2F8F" Geometry="M 28,41 Q 50,48 72,41 Q 64,36 50,36 Q 36,36 28,41 Z"/>
+        <GeometryDrawing Brush="#5A3CB0" Geometry="M 33,38 Q 42,34 52,6 Q 62,32 68,38 Q 50,42 33,38 Z"/>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 34,36 Q 50,41 67,36 L 68.5,39.5 Q 50,45 32.5,39.5 Z"/>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 48,22 A 3,3 0 1 0 54,22 A 3,3 0 1 0 48,22 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_15">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#0F1B3D" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 12.7,20 A 1.3,1.3 0 1 0 15.3,20 A 1.3,1.3 0 1 0 12.7,20 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 29,10 A 1,1 0 1 0 31,10 A 1,1 0 1 0 29,10 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 82.6,16 A 1.4,1.4 0 1 0 85.4,16 A 1.4,1.4 0 1 0 82.6,16 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 89,44 A 1,1 0 1 0 91,44 A 1,1 0 1 0 89,44 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 9,52 A 1,1 0 1 0 11,52 A 1,1 0 1 0 9,52 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 71,8 A 1,1 0 1 0 73,8 A 1,1 0 1 0 71,8 Z"/>
+        <GeometryDrawing Brush="#E8ECF1" Geometry="M 12,100 Q 14,74 50,72 Q 86,74 88,100 Z"/>
+        <GeometryDrawing Brush="#9AA7B5" Geometry="M 28,76 Q 50,88 72,76 L 72,81 Q 50,93 28,81 Z"/>
+        <GeometryDrawing Brush="#F4F6F8" Geometry="M 21,48 A 29,29 0 1 0 79,48 A 29,29 0 1 0 21,48 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#C4CCD6" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#1D2B4F" Geometry="M 29,50 A 21,18 0 1 0 71,50 A 21,18 0 1 0 29,50 Z"/>
+        <GeometryDrawing Geometry="M 36,44 Q 40,38 48,37">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#8FB4FF" Thickness="2.4" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#4F7BD9" Geometry="M 57.8,58 A 2.2,2.2 0 1 0 62.2,58 A 2.2,2.2 0 1 0 57.8,58 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_16">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#A5D6A7" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 19,29 A 10,10 0 1 0 39,29 A 10,10 0 1 0 19,29 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 61,29 A 10,10 0 1 0 81,29 A 10,10 0 1 0 61,29 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 23,54 A 27,25 0 1 0 77,54 A 27,25 0 1 0 23,54 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 32,50 Q 33,39 43,43 Q 48,54 40,61 Q 31,59 32,50 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 68,50 Q 67,39 57,43 Q 52,54 60,61 Q 69,59 68,50 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 37.6,51 A 2.4,2.4 0 1 0 42.4,51 A 2.4,2.4 0 1 0 37.6,51 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 57.6,51 A 2.4,2.4 0 1 0 62.4,51 A 2.4,2.4 0 1 0 57.6,51 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 39.2,51.2 A 1.2,1.2 0 1 0 41.6,51.2 A 1.2,1.2 0 1 0 39.2,51.2 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 58.4,51.2 A 1.2,1.2 0 1 0 60.8,51.2 A 1.2,1.2 0 1 0 58.4,51.2 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 45.2,63 A 4.8,3.4 0 1 0 54.8,63 A 4.8,3.4 0 1 0 45.2,63 Z"/>
+        <GeometryDrawing Geometry="M 44,69 Q 50,74 56,69">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#2B2B2B" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_17">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#E3B27A" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#FFE082" Geometry="M 71,22 A 9,9 0 1 0 89,22 A 9,9 0 1 0 71,22 Z"/>
+        <GeometryDrawing Brush="#3C6EA8" Geometry="M 12,100 Q 14,74 50,72 Q 86,74 88,100 Z"/>
+        <GeometryDrawing Brush="#C0392B" Geometry="M 36,73 L 50,90 L 64,73 Q 50,79 36,73 Z"/>
+        <GeometryDrawing Brush="#E0A97F" Geometry="M 44,66 H 56 V 78 H 44 Z"/>
+        <GeometryDrawing Brush="#F2C6A0" Geometry="M 30,56 A 20,21 0 1 0 70,56 A 20,21 0 1 0 30,56 Z"/>
+        <GeometryDrawing Brush="#73F28B82" Geometry="M 29.8,62 A 3.6,3.6 0 1 0 37,62 A 3.6,3.6 0 1 0 29.8,62 Z"/>
+        <GeometryDrawing Brush="#73F28B82" Geometry="M 63,62 A 3.6,3.6 0 1 0 70.2,62 A 3.6,3.6 0 1 0 63,62 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 39.5,54 A 2.5,2.5 0 1 0 44.5,54 A 2.5,2.5 0 1 0 39.5,54 Z"/>
+        <GeometryDrawing Brush="#2B2B2B" Geometry="M 55.5,54 A 2.5,2.5 0 1 0 60.5,54 A 2.5,2.5 0 1 0 55.5,54 Z"/>
+        <GeometryDrawing Brush="#6B4423" Geometry="M 39,66 Q 45,62 50,66 Q 55,62 61,66 Q 55,70 50,68 Q 45,70 39,66 Z"/>
+        <GeometryDrawing Brush="#8B5A2B" Geometry="M 14,44 Q 50,52 86,44 Q 80,36 70,38 H 30 Q 20,36 14,44 Z"/>
+        <GeometryDrawing Brush="#A06A35" Geometry="M 30,40 Q 30,14 50,14 Q 70,14 70,40 Z"/>
+        <GeometryDrawing Brush="#5B3A1A" Geometry="M 30,35 H 70 V 40 H 30 Z"/>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 47.8,37.5 A 2.2,2.2 0 1 0 52.2,37.5 A 2.2,2.2 0 1 0 47.8,37.5 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_18">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#1E2A44" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 12.7,24 A 1.3,1.3 0 1 0 15.3,24 A 1.3,1.3 0 1 0 12.7,24 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 84.8,30 A 1.2,1.2 0 1 0 87.2,30 A 1.2,1.2 0 1 0 84.8,30 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 19,62 A 1,1 0 1 0 21,62 A 1,1 0 1 0 19,62 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 78.7,64 A 1.3,1.3 0 1 0 81.3,64 A 1.3,1.3 0 1 0 78.7,64 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 59,10 A 1,1 0 1 0 61,10 A 1,1 0 1 0 59,10 Z"/>
+        <GeometryDrawing Brush="#4FA36A" Geometry="M 12,100 Q 14,74 50,72 Q 86,74 88,100 Z"/>
+        <GeometryDrawing Geometry="M 42,28 Q 38,16 32,11">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#4FA36A" Thickness="2.4" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="M 58,28 Q 62,16 68,11">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#4FA36A" Thickness="2.4" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 28.8,10 A 3.2,3.2 0 1 0 35.2,10 A 3.2,3.2 0 1 0 28.8,10 Z"/>
+        <GeometryDrawing Brush="#F5C542" Geometry="M 64.8,10 A 3.2,3.2 0 1 0 71.2,10 A 3.2,3.2 0 1 0 64.8,10 Z"/>
+        <GeometryDrawing Brush="#7ED68C" Geometry="M 26,46 Q 26,24 50,24 Q 74,24 74,46 Q 74,70 50,84 Q 26,70 26,46 Z"/>
+        <GeometryDrawing Brush="#111111" Geometry="M 30,44 Q 38,40 47,54 Q 41,63 32,55 Z"/>
+        <GeometryDrawing Brush="#111111" Geometry="M 70,44 Q 62,40 53,54 Q 59,63 68,55 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 35.3,49 A 1.7,1.7 0 1 0 38.7,49 A 1.7,1.7 0 1 0 35.3,49 Z"/>
+        <GeometryDrawing Brush="#FFFFFF" Geometry="M 61.3,49 A 1.7,1.7 0 1 0 64.7,49 A 1.7,1.7 0 1 0 61.3,49 Z"/>
+        <GeometryDrawing Geometry="M 44,72 Q 50,75 56,72">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#2F7A47" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_19">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#4A5568" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#9AA5B1" Geometry="M 10,100 Q 12,75 50,73 Q 88,75 90,100 Z"/>
+        <GeometryDrawing Brush="#C0392B" Geometry="M 46,22 Q 36,2 58,3 Q 78,5 82,24 Q 62,14 46,22 Z"/>
+        <GeometryDrawing Brush="#B8C2CC" Geometry="M 26,60 Q 24,22 50,20 Q 76,22 74,60 L 74,76 Q 50,86 26,76 Z">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#8895A3" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#20262E" Geometry="M 29,47 H 71 V 55 H 29 Z"/>
+        <GeometryDrawing Brush="#20262E" Geometry="M 47,55 H 53 V 74 H 47 Z"/>
+        <GeometryDrawing Geometry="M 33,32 Q 36,26 44,24">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#F2F6FA" Thickness="2.2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round"/>
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#8895A3" Geometry="M 31.4,66 A 1.6,1.6 0 1 0 34.6,66 A 1.6,1.6 0 1 0 31.4,66 Z"/>
+        <GeometryDrawing Brush="#8895A3" Geometry="M 65.4,66 A 1.6,1.6 0 1 0 68.6,66 A 1.6,1.6 0 1 0 65.4,66 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
+  <DrawingImage x:Key="Avatar_20">
+    <DrawingImage.Drawing>
+      <DrawingGroup ClipGeometry="M 50,0 A 50,50 0 1 0 50,100 A 50,50 0 1 0 50,0 Z">
+        <GeometryDrawing Brush="#1B1220" Geometry="M 0,50 A 50,50 0 1 0 100,50 A 50,50 0 1 0 0,50 Z"/>
+        <GeometryDrawing Brush="#E8541C" Geometry="M 50,8 Q 62,30 74,44 Q 84,66 70,81 Q 60,93 50,93 Q 38,93 30,81 Q 16,66 28,48 Q 32,56 38,57 Q 36,32 50,8 Z"/>
+        <GeometryDrawing Brush="#F5A623" Geometry="M 50,32 Q 58,50 66,58 Q 71,72 62,81 Q 56,87 50,87 Q 42,87 38,79 Q 32,68 40,58 Q 44,62 46,60 Q 44,45 50,32 Z"/>
+        <GeometryDrawing Brush="#FFE08A" Geometry="M 50,56 Q 57,66 58,72 Q 58,80 50,83 Q 42,80 42,72 Q 44,66 50,56 Z"/>
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+
 </ResourceDictionary>
