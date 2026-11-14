@@ -216,6 +216,7 @@ namespace YachtDice.Views
             {
                 Text = entry.Medal,
                 FontSize = MedalFontSize,
+                Foreground = textBrush,
                 Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, NoSpacing, CellVerticalPadding)
             };
             TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
