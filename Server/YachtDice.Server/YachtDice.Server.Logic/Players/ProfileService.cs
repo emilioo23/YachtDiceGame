@@ -16,21 +16,29 @@ namespace YachtDice.Server.Logic.Players
     {
         private const string NullRepositoryMessage = "The data access of the players cannot be null.";
         private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
+        private const string NullStatisticsMessage = "The service of statistics cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly OffensiveWordFilter _wordFilter;
+        private readonly PlayerStatisticsService _statisticsService;
 
         /// <summary>
         /// Initializes the service with the data access and the filter it needs.
         /// </summary>
         /// <param name="playerRepository">Data access of the players.</param>
         /// <param name="wordFilter">Filter that detects offensive words.</param>
+        /// <param name="statisticsService">Service that calculates the statistics that unlock achievements.</param>
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
-        public ProfileService(IPlayerRepository playerRepository, OffensiveWordFilter wordFilter)
+        public ProfileService(
+            IPlayerRepository playerRepository,
+            OffensiveWordFilter wordFilter,
+            PlayerStatisticsService statisticsService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
             _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
+            _statisticsService = statisticsService
+                ?? throw new ArgumentNullException(nameof(statisticsService), NullStatisticsMessage);
         }
 
         /// <summary>
@@ -54,6 +62,72 @@ namespace YachtDice.Server.Logic.Players
             if (status == UsernameChangeStatus.Success && username != player.Username)
             {
                 _playerRepository.SaveUsername(player.Id, username);
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Gets every achievement with the information of whether the player has unlocked it.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <returns>The achievements, in the order in which they are shown.</returns>
+        /// <exception cref="DataAccessException">The statistics could not be read.</exception>
+        public List<AchievementStatus> GetAchievements(string playerName)
+        {
+            List<int> unlockedIds = AchievementRules.GetUnlockedIds(_statisticsService.GetStatistics(playerName));
+            var achievements = new List<AchievementStatus>();
+
+            foreach (AchievementRule rule in AchievementRules.GetAll())
+            {
+                achievements.Add(new AchievementStatus
+                {
+                    Id = rule.Id,
+                    IsUnlocked = unlockedIds.Contains(rule.Id),
+                    HasTitle = rule.HasTitle
+                });
+            }
+
+            return achievements;
+        }
+
+        /// <summary>
+        /// Saves the title that a player wants to show in the profile, if the player has unlocked it.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <param name="titleId">Identifier of the title.</param>
+        /// <returns>The result of the change.</returns>
+        /// <exception cref="DataAccessException">The title could not be saved.</exception>
+        public TitleChangeStatus ChangeTitle(string playerName, int titleId)
+        {
+            Player player = FindPlayer(playerName);
+            TitleChangeStatus status = TitleChangeStatus.PlayerNotFound;
+
+            if (player != null)
+            {
+                status = FindTitleProblem(playerName, titleId);
+            }
+
+            if (status == TitleChangeStatus.Success)
+            {
+                _playerRepository.SaveTitle(player.Id, titleId.ToString());
+            }
+
+            return status;
+        }
+
+        private TitleChangeStatus FindTitleProblem(string playerName, int titleId)
+        {
+            List<int> unlockedIds = AchievementRules.GetUnlockedIds(_statisticsService.GetStatistics(playerName));
+            TitleChangeStatus status = TitleChangeStatus.Success;
+
+            if (!AchievementRules.ExistsTitle(titleId))
+            {
+                status = TitleChangeStatus.TitleNotFound;
+            }
+            else if (!AchievementRules.IsTitleAvailable(titleId, unlockedIds))
+            {
+                status = TitleChangeStatus.TitleLocked;
             }
 
             return status;

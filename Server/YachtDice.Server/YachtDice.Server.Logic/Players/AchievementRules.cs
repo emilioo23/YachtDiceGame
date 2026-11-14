@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Logic.Players
@@ -134,7 +135,9 @@ namespace YachtDice.Server.Logic.Players
         /// <returns>True if it is the default title or the title of an achievement.</returns>
         public static bool ExistsTitle(int titleId)
         {
-            return titleId == DefaultTitleId || Rules.Any(rule => rule.Id == titleId && rule.HasTitle);
+            Func<AchievementRule, bool> hasThatTitle = rule => rule.Id == titleId && rule.HasTitle;
+
+            return titleId == DefaultTitleId || Rules.Any(hasThatTitle);
         }
 
         private static int Measure(AchievementMetric metric, PlayerStatistics statistics)
