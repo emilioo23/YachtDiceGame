@@ -576,6 +576,9 @@
   <data name="Results_ColumnXp" xml:space="preserve">
     <value>XP ganada</value>
   </data>
+  <data name="Results_ExperienceGainedFormat" xml:space="preserve">
+    <value>+{0} XP</value>
+  </data>
   <data name="Results_ButtonMenu" xml:space="preserve">
     <value>Menú</value>
   </data>

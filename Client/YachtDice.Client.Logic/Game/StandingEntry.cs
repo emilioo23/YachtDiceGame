@@ -32,5 +32,10 @@
         /// Gets the total points of the player.
         /// </summary>
         public int Total { get; }
+
+        /// <summary>
+        /// Gets or sets the experience that the player earned in the game.
+        /// </summary>
+        public int ExperienceGained { get; set; }
     }
 }

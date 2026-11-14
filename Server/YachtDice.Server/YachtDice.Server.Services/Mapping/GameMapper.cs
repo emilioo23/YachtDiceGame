@@ -78,6 +78,7 @@ namespace YachtDice.Server.Services.Mapping
                 YachtBonus = player.YachtBonus,
                 Total = player.Total,
                 IsWinner = player.IsWinner,
+                ExperienceGained = player.ExperienceGained,
                 Scores = player.Scores.Select(ToContract).ToList()
             };
 

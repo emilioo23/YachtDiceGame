@@ -99,6 +99,7 @@
   <xs:element name="ArrayOfPlayerScorecard" nillable="true" type="tns:ArrayOfPlayerScorecard" />
   <xs:complexType name="PlayerScorecard">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ExperienceGained" type="xs:int" />
       <xs:element minOccurs="0" name="IsPresent" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsWinner" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />

@@ -16,6 +16,7 @@
             PlayerId = entry.PlayerId;
             Name = entry.Name;
             Total = entry.Total;
+            ExperienceGained = entry.ExperienceGained;
         }
 
         /// <summary>
@@ -37,6 +38,11 @@
         /// Gets the total points of the player.
         /// </summary>
         public int Total { get; }
+
+        /// <summary>
+        /// Gets the experience that the player earned in the game.
+        /// </summary>
+        public int ExperienceGained { get; }
 
         /// <summary>
         /// Gets a value indicating whether the player has the first place.

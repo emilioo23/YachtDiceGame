@@ -468,11 +468,15 @@ namespace YachtDice.Views
 
         private void GoToResultsWindow()
         {
-            IEnumerable<StandingEntry> entries = _state.Players
-                .Select(card => new StandingEntry(card.PlayerId, card.Name, card.Total));
+            IEnumerable<StandingEntry> entries = _state.Players.Select(CreateStandingEntry);
 
             RememberLeftMatch();
             WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, StandingsBuilder.Build(entries)));
+        }
+
+        private static StandingEntry CreateStandingEntry(PlayerScorecard card)
+        {
+            return new StandingEntry(card.PlayerId, card.Name, card.Total) { ExperienceGained = card.ExperienceGained };
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)

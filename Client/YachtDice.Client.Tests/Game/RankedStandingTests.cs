@@ -12,6 +12,7 @@ namespace YachtDice.Client.Tests.Game
         private const string PlayerName = "Ana";
         private const int Total = 150;
         private const int SecondRank = 2;
+        private const int ExperienceGained = 250;
 
         private readonly StandingEntry _entry = new StandingEntry(PlayerId, PlayerName, Total);
 
@@ -37,6 +38,16 @@ namespace YachtDice.Client.Tests.Game
             var standing = new RankedStanding(SecondRank, _entry);
 
             Assert.Equal(Total, standing.Total);
+        }
+
+        [Fact]
+        public void Constructor_EntryWithExperience_KeepsTheExperienceGained()
+        {
+            var entry = new StandingEntry(PlayerId, PlayerName, Total) { ExperienceGained = ExperienceGained };
+
+            var standing = new RankedStanding(SecondRank, entry);
+
+            Assert.Equal(ExperienceGained, standing.ExperienceGained);
         }
     }
 }

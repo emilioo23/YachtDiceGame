@@ -2590,6 +2590,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a +{0} XP.
+        /// </summary>
+        public static string Results_ExperienceGainedFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceGainedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Puntaje ganador: {0} pts.
         /// </summary>
         public static string Results_SubtitleScore {

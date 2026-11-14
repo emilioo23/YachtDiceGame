@@ -1,7 +1,7 @@
 ﻿namespace YachtDice.Models
 {
     /// <summary>
-    /// Row of the final scoreboard: the place, the player and the points.
+    /// Row of the final scoreboard: the place, the player, the points and the experience earned.
     /// </summary>
     public class StandingRow
     {
@@ -19,6 +19,11 @@
         /// Gets or sets the points of the player.
         /// </summary>
         public int Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets the experience earned in the game, as the scoreboard shows it.
+        /// </summary>
+        public string ExperienceText { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the player won the game.

@@ -42,6 +42,7 @@ namespace YachtDice.Views
                 PlaceText = GetPlaceText(standing),
                 Name = standing.Name,
                 Total = standing.Total,
+                ExperienceText = string.Format(Strings.Results_ExperienceGainedFormat, standing.ExperienceGained),
                 IsWinner = standing.IsWinner
             };
         }

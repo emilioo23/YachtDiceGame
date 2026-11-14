@@ -401,6 +401,9 @@ namespace YachtDice.GameServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ExperienceGainedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsPresentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -434,6 +437,19 @@ namespace YachtDice.GameServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ExperienceGained {
+            get {
+                return this.ExperienceGainedField;
+            }
+            set {
+                if ((this.ExperienceGainedField.Equals(value) != true)) {
+                    this.ExperienceGainedField = value;
+                    this.RaisePropertyChanged("ExperienceGained");
+                }
             }
         }
         
