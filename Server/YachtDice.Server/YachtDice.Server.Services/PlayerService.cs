@@ -16,6 +16,7 @@ namespace YachtDice.Server.Services
     {
         private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
         private readonly LogicAvatars.AvatarService _avatarService;
+        private readonly LogicPlayers.ProfileService _profileService;
 
         /// <summary>
         /// Initializes the service with the logic it uses.
@@ -24,12 +25,15 @@ namespace YachtDice.Server.Services
         /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
         public PlayerService(
             LogicPlayers.PlayerStatisticsService statisticsService,
-            LogicAvatars.AvatarService avatarService)
+            LogicAvatars.AvatarService avatarService,
+            LogicPlayers.ProfileService profileService)
         {
             _statisticsService = statisticsService
                 ?? throw new ArgumentNullException(nameof(statisticsService));
             _avatarService = avatarService
                 ?? throw new ArgumentNullException(nameof(avatarService));
+            _profileService = profileService
+                ?? throw new ArgumentNullException(nameof(profileService));
         }
 
         /// <summary>
@@ -90,6 +94,14 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        public Contracts.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername)
+        {
+            Contracts.UsernameChangeResultCode result =
+                Execute(currentName, () => ProcessUsernameChange(currentName, newUsername));
+
+            return result;
+        }
+
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
@@ -114,6 +126,13 @@ namespace YachtDice.Server.Services
             LogicAvatars.AvatarChangeStatus status = _avatarService.ChangeAvatar(displayName, avatarId);
 
             return Mapping.AvatarMapper.ToResultCode(status);
+        }
+
+        private Contracts.UsernameChangeResultCode ProcessUsernameChange(string currentName, string newUsername)
+        {
+            LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
         }
 
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()

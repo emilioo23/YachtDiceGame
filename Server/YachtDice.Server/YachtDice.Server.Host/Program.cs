@@ -183,7 +183,7 @@ namespace YachtDice.Server.Host
 
             LevelTable levelTable = CreateLevelTable();
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
-            serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
+            serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService, wordFilter)));
 
             var roomManager = new RoomManager(avatarService);
             var resultRecorder = new GameResultRecorder(
@@ -312,13 +312,16 @@ namespace YachtDice.Server.Host
         /// Creates and configures the player service with its required dependencies.
         /// </summary>
         /// <param name="avatarService">Service that handles the avatars of the players.</param>
+        /// <param name="wordFilter">Filter that rejects the offensive usernames.</param>
         /// <returns>A fully configured instance of PlayerService.</returns>
-        private static PlayerService CreatePlayerService(AvatarService avatarService)
+        private static PlayerService CreatePlayerService(AvatarService avatarService, OffensiveWordFilter wordFilter)
         {
             var gameHistoryRepository = new GameHistoryRepository();
             var statisticsService = new PlayerStatisticsService(new PlayerRepository(), gameHistoryRepository);
 
-            return new PlayerService(statisticsService, avatarService);
+            var profileService = new ProfileService(new PlayerRepository(), wordFilter);
+
+            return new PlayerService(statisticsService, avatarService, profileService);
         }
     }
 }

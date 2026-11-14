@@ -52,5 +52,15 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId);
+
+        /// <summary>
+        /// Changes the username of a player after checking that the new one is valid and free.
+        /// </summary>
+        /// <param name="currentName">Name that the player uses now.</param>
+        /// <param name="newUsername">Username that the player wants.</param>
+        /// <returns>The result of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        UsernameChangeResultCode ChangeUsername(string currentName, string newUsername);
     }
 }
