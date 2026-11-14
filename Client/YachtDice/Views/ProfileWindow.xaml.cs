@@ -423,10 +423,11 @@ namespace YachtDice.Views
 
         private bool HasUnsavedChanges()
         {
-            return _selectedAvatarId != _savedAvatarId
-                || UsernameTextBox.Text.Trim() != _session.DisplayName
-                || GetSelectedTitleId() != _savedTitleId
+            bool hasNewLook = _selectedAvatarId != _savedAvatarId || GetSelectedTitleId() != _savedTitleId;
+            bool hasNewIdentity = UsernameTextBox.Text.Trim() != _session.DisplayName
                 || GetSelectedFlagCode() != _savedFlagCode;
+
+            return hasNewLook || hasNewIdentity;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
