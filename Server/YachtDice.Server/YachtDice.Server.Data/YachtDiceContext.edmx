@@ -118,6 +118,7 @@
           <Property Name="Bio" Type="nvarchar" MaxLength="150" />
           <Property Name="ThemePref" Type="nvarchar" MaxLength="20" />
           <Property Name="LangPref" Type="nvarchar" MaxLength="20" />
+          <Property Name="FlagCode" Type="nvarchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -859,6 +860,7 @@
           <Property Name="Bio" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ThemePref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="LangPref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FlagCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER_SE__Playe__1BC821DD" FromRole="PlayerSettings" ToRole="Player" />
         </EntityType>
         <EntityType Name="PwdResetToken">
@@ -1591,6 +1593,7 @@
                 <ScalarProperty Name="Bio" ColumnName="Bio" />
                 <ScalarProperty Name="ThemePref" ColumnName="ThemePref" />
                 <ScalarProperty Name="LangPref" ColumnName="LangPref" />
+                <ScalarProperty Name="FlagCode" ColumnName="FlagCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
