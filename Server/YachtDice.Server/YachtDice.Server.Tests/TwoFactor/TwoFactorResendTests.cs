@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Security;
@@ -46,7 +47,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         }
 
         [Fact]
-        public void ResendPlayerCode_NullRequest_ThrowsArgumentNullException()
+        public void ResendPlayerCode_NullDelivery_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => _verificationService.ResendPlayerCode(Email, null));
         }
@@ -62,14 +63,16 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendPlayerCode_KnownEmail_SendsTheCodeToThatEmail()
         {
+            var expectedOutcome = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
+
             ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, CreateDelivery());
 
-            Assert.Equal(ResendCodeStatus.CodeSent, status);
-            Assert.Equal(Email, _emailService.Recipients[0]);
+            var actualOutcome = new { Status = status, Recipient = _emailService.Recipients.First() };
+            Assert.Equal(expectedOutcome, actualOutcome);
         }
 
         [Fact]
-        public void ResendActivationCode_NullRequest_ThrowsArgumentNullException()
+        public void ResendActivationCode_NullDelivery_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => _settingsService.ResendActivationCode(DisplayName, null));
         }
@@ -85,10 +88,12 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendActivationCode_KnownPlayer_SendsTheCodeToTheEmailOfThePlayer()
         {
+            var expectedOutcome = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
+
             ResendCodeStatus status = _settingsService.ResendActivationCode(DisplayName, CreateDelivery());
 
-            Assert.Equal(ResendCodeStatus.CodeSent, status);
-            Assert.Equal(Email, _emailService.Recipients[0]);
+            var actualOutcome = new { Status = status, Recipient = _emailService.Recipients.First() };
+            Assert.Equal(expectedOutcome, actualOutcome);
         }
 
         private static CodeDelivery CreateDelivery()
