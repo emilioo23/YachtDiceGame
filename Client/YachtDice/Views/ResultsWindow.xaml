@@ -85,7 +85,8 @@
                                             <ColumnDefinition Width="90"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Text="{Binding PlaceText}" FontSize="16"/>
+                                        <TextBlock Grid.Column="0" Text="{Binding PlaceText}" FontSize="16"
+                                                   Foreground="{StaticResource BrushText}"/>
                                         <TextBlock Grid.Column="1" Text="{Binding Name}" ToolTip="{Binding Name}"
                                                    FontSize="13" FontWeight="SemiBold"
                                                    Foreground="{StaticResource BrushText}"
