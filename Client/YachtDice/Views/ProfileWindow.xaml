@@ -173,9 +173,15 @@
             <Border Grid.Column="1"
                     Style="{StaticResource CardPanel}">
 
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Grid Margin="0,0,0,20">
+                    <Grid Grid.Row="0"
+                          Margin="0,0,0,20">
 
                         <TextBlock Text="{x:Static properties:Strings.Profile_CustomizeProfileTitle}"
                                    FontFamily="{StaticResource FontDisplay}"
@@ -189,6 +195,10 @@
                                 FontSize="18"
                                 Click="BackButton_Click"/>
                     </Grid>
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
 
                     <TextBlock Text="{x:Static properties:Strings.Profile_Username}"
                                Style="{StaticResource FieldLabel}"
@@ -211,11 +221,34 @@
                     <TextBlock Text="{x:Static properties:Strings.Profile_FlagLabel}"
                                Style="{StaticResource FieldLabel}"
                                FontSize="18"/>
-                    <ComboBox x:Name="FlagComboBox"
-                              Padding="10,8"
-                              FontSize="17"
-                              Margin="0,0,0,24"
-                              SelectionChanged="FlagComboBox_SelectionChanged"/>
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0"
+                              Margin="0,0,10,0">
+                            <TextBox x:Name="FlagSearchTextBox"
+                                     Style="{StaticResource TextBoxRounded}"
+                                     FontSize="17"
+                                     TextChanged="FlagSearchTextBox_TextChanged"/>
+                            <TextBlock x:Name="FlagSearchHintTextBlock"
+                                       Text="{x:Static properties:Strings.Profile_FlagSearchHint}"
+                                       FontSize="17"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Center"
+                                       Margin="18,0,0,0"/>
+                        </Grid>
+
+                        <ComboBox x:Name="FlagComboBox"
+                                  Grid.Column="1"
+                                  Padding="10,8"
+                                  FontSize="17"
+                                  VerticalAlignment="Center"
+                                  SelectionChanged="FlagComboBox_SelectionChanged"/>
+                    </Grid>
                     <TextBlock Text="{x:Static properties:Strings.Profile_StatisticsHeader}"
                                FontSize="18"
                                FontWeight="Bold"
@@ -310,16 +343,21 @@
                                Margin="0,0,0,10"/>
 
                     <WrapPanel x:Name="AchievementsWrapPanel"
-                               Margin="0,0,0,24"/>
+                               Margin="0,0,0,8"/>
 
-                    <Button Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
+                    </StackPanel>
+                    </ScrollViewer>
+
+                    <Button Grid.Row="2"
+                            Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
                             Style="{StaticResource BtnPrimary}"
                             HorizontalAlignment="Stretch"
                             FontSize="18"
                             Padding="0,13"
+                            Margin="0,16,0,0"
                             Click="SaveChangesButton_Click"/>
 
-                </StackPanel>
+                </Grid>
             </Border>
 
         </Grid>

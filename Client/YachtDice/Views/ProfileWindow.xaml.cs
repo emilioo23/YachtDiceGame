@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +31,7 @@ namespace YachtDice.Views
         private const int FlagIconWidth = 24;
         private const int FlagIconHeight = 18;
         private const int FlagIconGap = 8;
+        private const int NotFoundIndex = -1;
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -198,6 +200,37 @@ namespace YachtDice.Views
             var selectedItem = FlagComboBox.SelectedItem as ComboBoxItem;
 
             return selectedItem == null ? _savedFlagCode : (string)selectedItem.Tag;
+        }
+
+        private void FlagSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string query = FlagSearchTextBox.Text.Trim();
+
+            FlagSearchHintTextBlock.Visibility = FlagSearchTextBox.Text.Length == 0
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
+            foreach (ComboBoxItem item in FlagComboBox.Items.Cast<ComboBoxItem>())
+            {
+                item.Visibility = IsFlagItemShown(item, query) ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            FlagComboBox.IsDropDownOpen = query.Length > 0;
+        }
+
+        private static bool IsFlagItemShown(ComboBoxItem item, string query)
+        {
+            var code = (string)item.Tag;
+
+            if (code == NoFlagCode || query.Length == 0)
+            {
+                return true;
+            }
+
+            CompareOptions ignoreCaseAndAccents = CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace;
+
+            return CultureInfo.CurrentCulture.CompareInfo
+                .IndexOf(ProgressTexts.GetFlagName(code), query, ignoreCaseAndAccents) != NotFoundIndex;
         }
 
         private void FlagComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -388,8 +421,21 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new ProfileWindow(renamedSession));
         }
 
+        private bool HasUnsavedChanges()
+        {
+            return _selectedAvatarId != _savedAvatarId
+                || UsernameTextBox.Text.Trim() != _session.DisplayName
+                || GetSelectedTitleId() != _savedTitleId
+                || GetSelectedFlagCode() != _savedFlagCode;
+        }
+
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            if (HasUnsavedChanges() && !CustomDialogWindow.Confirm(this, Strings.Profile_DiscardChangesConfirm))
+            {
+                return;
+            }
+
             WindowNavigator.SwitchTo(this, new MenuWindow(_session));
         }
     }
