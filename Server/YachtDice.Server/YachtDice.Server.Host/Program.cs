@@ -31,6 +31,10 @@ namespace YachtDice.Server.Host
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
         private const string TurnSecondsKeyFormat = "TurnSeconds.{0}";
         private const string InvalidTurnSecondsFormat = "The setting {0} is missing or is not a number of seconds.";
+        private const string LevelExperienceKey = "LevelExperience";
+        private const char LevelExperienceSeparator = ',';
+        private const string InvalidLevelExperienceMessage =
+            "The setting LevelExperience is missing or is not a list of numbers separated by commas.";
         private const string WarmUpEmail = "warm-up@yachtdice.local";
         private const string WarmUpFailedLogMessage =
             "The database could not be warmed up; the first request will be slower.";
@@ -69,6 +73,10 @@ namespace YachtDice.Server.Host
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
             catch (ArgumentOutOfRangeException ex)
+            {
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
+            }
+            catch (ArgumentException ex)
             {
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
@@ -117,6 +125,30 @@ namespace YachtDice.Server.Host
             return new TurnDuration(secondsBySpeed);
         }
 
+        /// <summary>
+        /// Reads from the configuration the experience that each level needs, from the first level to the last.
+        /// </summary>
+        /// <returns>The table of levels.</returns>
+        /// <exception cref="InvalidOperationException">The setting is missing or has a value that is not a
+        /// number.</exception>
+        private static LevelTable CreateLevelTable()
+        {
+            string configuredExperience = ConfigurationManager.AppSettings[LevelExperienceKey] ?? string.Empty;
+            var thresholds = new List<int>();
+
+            foreach (string value in configuredExperience.Split(LevelExperienceSeparator))
+            {
+                if (!int.TryParse(value.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out int experience))
+                {
+                    throw new InvalidOperationException(InvalidLevelExperienceMessage);
+                }
+
+                thresholds.Add(experience);
+            }
+
+            return new LevelTable(thresholds);
+        }
+
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
@@ -133,7 +165,10 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
 
             var roomManager = new RoomManager(avatarService);
-            var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
+            var resultRecorder = new GameResultRecorder(
+                new PlayerRepository(),
+                new GameHistoryRepository(),
+                CreateLevelTable());
             var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
             var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));

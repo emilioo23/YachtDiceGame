@@ -24,7 +24,8 @@ namespace YachtDice.Server.Data.Repositories
         List<PlayerRankingRecord> GetRanking(int maxEntries);
 
         /// <summary>
-        /// Saves the result of a game that just finished, with the players who took part in it.
+        /// Saves the result of a game that just finished, with the players who took part in it, and updates
+        /// the experience and the level of each player.
         /// </summary>
         /// <param name="result">Result of the game.</param>
         /// <exception cref="ArgumentNullException">The result is null.</exception>
