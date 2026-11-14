@@ -1083,6 +1083,12 @@
   <data name="Game_Chat_PlayerKicked" xml:space="preserve">
     <value>{0} foi expulso da partida.</value>
   </data>
+  <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
+    <value>Aguardando {0} voltar à partida: {1} s</value>
+  </data>
+  <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
+    <value>{0} não voltou a tempo e saiu da partida.</value>
+  </data>
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>Não há outros jogadores na partida para expulsar.</value>
   </data>

@@ -1083,6 +1083,12 @@
   <data name="Game_Chat_PlayerKicked" xml:space="preserve">
     <value>{0} was expelled from the match.</value>
   </data>
+  <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
+    <value>Waiting for {0} to come back: {1} s</value>
+  </data>
+  <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
+    <value>{0} did not come back in time and is out of the match.</value>
+  </data>
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>There are no other players in the match to expel.</value>
   </data>

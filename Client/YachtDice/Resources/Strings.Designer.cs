@@ -826,6 +826,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} no volvió a tiempo y quedó fuera de la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerForfeited {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerForfeited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando que {0} vuelva a la partida: {1} s.
+        /// </summary>
+        public static string Game_Reconnect_WaitingFormat {
+            get {
+                return ResourceManager.GetString("Game_Reconnect_WaitingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a {0} fue expulsado de la partida..
         /// </summary>
         public static string Game_Chat_PlayerKicked {

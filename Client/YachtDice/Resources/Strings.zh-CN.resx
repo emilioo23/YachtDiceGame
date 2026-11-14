@@ -1083,6 +1083,12 @@
   <data name="Game_Chat_PlayerKicked" xml:space="preserve">
     <value>{0} 被踢出了对局。</value>
   </data>
+  <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
+    <value>正在等待 {0} 回到对局：{1} 秒</value>
+  </data>
+  <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
+    <value>{0} 未能及时回来，已被移出对局。</value>
+  </data>
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>对局中没有其他玩家可以踢出。</value>
   </data>
