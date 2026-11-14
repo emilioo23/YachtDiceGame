@@ -104,7 +104,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Username}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Account_Username}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -133,7 +133,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Account_Email}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Account_Email}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -160,7 +160,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Account_Avatar}"
                                        FontWeight="Bold"
                                        FontSize="22"
@@ -187,7 +187,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Appearance_DarkTheme}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -228,7 +228,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Security_Password}"
                                        FontWeight="Bold"
                                        FontSize="22"
@@ -253,7 +253,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Security_TwoFactor}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Security_TwoFactor}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -299,7 +299,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_Match}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Notifications_Match}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -337,7 +337,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Notifications_SoundsGame}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Notifications_SoundsGame}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -374,7 +374,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <TextBlock Foreground="{StaticResource BrushText}" Grid.Column="0"
                                        Text="{x:Static properties:Strings.Settings_Preferences_Language}"
                                        FontWeight="Bold"
                                        FontSize="22"
@@ -408,7 +408,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Preferences_ShowPotentialPoints}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
@@ -447,7 +447,7 @@
 
                             <StackPanel Grid.Column="0">
 
-                                <TextBlock Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}"
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Privacy_PublicProfile}"
                                            FontWeight="Bold"
                                            FontSize="22"/>
 
