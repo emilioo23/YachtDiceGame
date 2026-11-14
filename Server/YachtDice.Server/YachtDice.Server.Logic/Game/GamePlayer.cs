@@ -38,6 +38,8 @@
         /// </summary>
         public bool IsPresent { get; set; }
 
+        public bool HasForfeited { get; set; }
+
         /// <summary>
         /// Gets a value indicating whether the player can play a turn.
         /// </summary>

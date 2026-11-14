@@ -58,6 +58,14 @@ namespace YachtDice.Server.Logic.Game
         GameActionResult MarkAbsent(RoomMember member);
 
         /// <summary>
+        /// Takes an absent player out of the game for good because the player did not come back in time. The
+        /// player loses. If only one player is left, the game finishes and that player wins.
+        /// </summary>
+        /// <param name="member">Room and identifier of the player who did not return.</param>
+        /// <returns>The state of the game, or the reason why it could not be read.</returns>
+        GameActionResult Forfeit(RoomMember member);
+
+        /// <summary>
         /// Marks that a player came back to the game.
         /// </summary>
         /// <param name="member">Room and identifier of the player who returned.</param>

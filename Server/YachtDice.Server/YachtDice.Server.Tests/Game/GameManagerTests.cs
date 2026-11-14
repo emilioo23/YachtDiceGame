@@ -19,6 +19,8 @@ namespace YachtDice.Server.Tests.Game
         private const string SecondId = "player-b";
         private const string FirstName = "Emilio";
         private const string SecondName = "Gabriel";
+        private const string ThirdId = "player-c";
+        private const string ThirdName = "Carlos";
         private const string UnknownId = "player-x";
         private const string UnknownRoomCode = "NOROOM";
         private const int RollsPerTurn = 3;
@@ -442,6 +444,117 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void Forfeit_AbsentPlayerOfATwoPlayerGame_FinishesTheGameWithTheOtherPlayerAsWinner()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
+            var expectedGameEnd = new { Status = GameStatus.Finished, FirstWins = true, SecondWins = false };
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, SecondId));
+
+            var actualGameEnd = new
+            {
+                forfeitResult.Snapshot.Status,
+                FirstWins = FindPlayer(forfeitResult.Snapshot, FirstId).IsWinner,
+                SecondWins = FindPlayer(forfeitResult.Snapshot, SecondId).IsWinner
+            };
+            Assert.Equivalent(expectedGameEnd, actualGameEnd);
+        }
+
+        [Fact]
+        public void Forfeit_AbsentPlayerOfATwoPlayerGame_GivesExperienceOnlyToTheOtherPlayer()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
+            var expectedExperience = new { FirstGainsExperience = true, SecondExperience = NoExperience };
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, SecondId));
+
+            var actualExperience = new
+            {
+                FirstGainsExperience = FindPlayer(forfeitResult.Snapshot, FirstId).ExperienceGained > NoExperience,
+                SecondExperience = FindPlayer(forfeitResult.Snapshot, SecondId).ExperienceGained
+            };
+            Assert.Equivalent(expectedExperience, actualExperience);
+        }
+
+        [Fact]
+        public void Forfeit_AbsentPlayerOfAThreePlayerGame_KeepsTheGameInProgress()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartThreePlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, ThirdId));
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, ThirdId));
+
+            Assert.Equal(GameStatus.InProgress, forfeitResult.Snapshot.Status);
+        }
+
+        [Fact]
+        public void Forfeit_TwoAbsentPlayersOfAThreePlayerGame_FinishesTheGameWithTheLastPlayerAsWinner()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartThreePlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
+            manager.MarkAbsent(new RoomMember(RoomCode, ThirdId));
+            manager.Forfeit(new RoomMember(RoomCode, SecondId));
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, ThirdId));
+
+            Assert.True(FindPlayer(forfeitResult.Snapshot, FirstId).IsWinner);
+        }
+
+        [Fact]
+        public void Forfeit_PlayerWhoIsPresent_KeepsThePlayerInTheGame()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, SecondId));
+
+            Assert.Equal(GameStatus.InProgress, forfeitResult.Snapshot.Status);
+        }
+
+        [Fact]
+        public void Forfeit_UnknownPlayer_ReturnsPlayerNotInGame()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+
+            GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, UnknownId));
+
+            Assert.Equal(GameActionStatus.PlayerNotInGame, forfeitResult.Status);
+        }
+
+        [Fact]
+        public void MarkPresent_PlayerWhoForfeited_StaysOutOfTheGame()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartThreePlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, ThirdId));
+            manager.Forfeit(new RoomMember(RoomCode, ThirdId));
+
+            GameActionResult returnResult = manager.MarkPresent(new RoomMember(RoomCode, ThirdId));
+
+            Assert.Equal(GameActionStatus.PlayerNotInGame, returnResult.Status);
+        }
+
+        [Fact]
+        public void Roll_PlayerWhoForfeited_ReturnsPlayerNotInGame()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartThreePlayerGame(manager);
+            manager.MarkAbsent(new RoomMember(RoomCode, ThirdId));
+            manager.Forfeit(new RoomMember(RoomCode, ThirdId));
+
+            GameActionResult rollResult = manager.Roll(new RoomMember(RoomCode, ThirdId), NoHeldDice);
+
+            Assert.Equal(GameActionStatus.PlayerNotInGame, rollResult.Status);
+        }
+
+        [Fact]
         public void Remove_PlayerWithTheTurn_PassesTheTurnAndDropsThePlayer()
         {
             GameManager manager = CreateManager(LittleStraightDice);
@@ -591,6 +704,18 @@ namespace YachtDice.Server.Tests.Game
         private static GameSnapshot StartTwoPlayerGame(GameManager manager)
         {
             return manager.Start(RoomCode, CreateParticipants(), GameSpeed.Normal);
+        }
+
+        private static GameSnapshot StartThreePlayerGame(GameManager manager)
+        {
+            var participants = new[]
+            {
+                new GameParticipant(FirstId, FirstName),
+                new GameParticipant(SecondId, SecondName),
+                new GameParticipant(ThirdId, ThirdName)
+            };
+
+            return manager.Start(RoomCode, participants, GameSpeed.Normal);
         }
 
         private static GameSnapshot StartSinglePlayerGame(GameManager manager)

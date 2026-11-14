@@ -17,6 +17,8 @@ namespace YachtDice.Server.Logic.Game
         private const int NoRolls = 0;
         private const int FirstTurnNumber = 1;
         private const int RoundOffset = 1;
+        private const int LastPlayerCount = 1;
+        private const int NoContenders = 0;
 
         private readonly List<GamePlayer> _players;
         private readonly IDieRoller _dieRoller;
@@ -61,13 +63,13 @@ namespace YachtDice.Server.Logic.Game
         public GameStatus Status { get; private set; }
 
         /// <summary>
-        /// Tells whether a player takes part in the game.
+        /// Tells whether a player takes part in the game. A player who forfeited is out of the game.
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
         /// <returns>True if the player is in the game.</returns>
         public bool HasPlayer(string playerId)
         {
-            Func<GamePlayer, bool> isSamePlayerId = player => player.PlayerId == playerId;
+            Func<GamePlayer, bool> isSamePlayerId = player => player.PlayerId == playerId && !player.HasForfeited;
 
             return _players.Any(isSamePlayerId);
         }
@@ -150,6 +152,23 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
+        /// Takes an absent player out of the game for good because the time to come back ran out. The player
+        /// loses and cannot return. If only one player is left, the game finishes and that player wins.
+        /// </summary>
+        /// <param name="playerId">Absent player who did not come back.</param>
+        public void Forfeit(string playerId)
+        {
+            Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
+            var player = _players.FirstOrDefault(isSamePlayerId);
+
+            if (player != null && Status == GameStatus.InProgress && !player.IsPresent)
+            {
+                player.HasForfeited = true;
+                FinishIfOnePlayerIsLeft();
+            }
+        }
+
+        /// <summary>
         /// Removes a player for good, for example because the host kicked the player.
         /// </summary>
         /// <param name="playerId">Player to remove.</param>
@@ -210,11 +229,16 @@ namespace YachtDice.Server.Logic.Game
 
         private static void MarkWinners(GameSnapshot snapshot)
         {
-            var bestTotal = snapshot.Players.Max(player => player.Total);
+            var contenders = snapshot.Players.Where(player => player.IsPresent).ToList();
 
-            foreach (var player in snapshot.Players)
+            if (contenders.Count > NoContenders)
             {
-                player.IsWinner = player.Total == bestTotal;
+                var bestTotal = contenders.Max(player => player.Total);
+
+                foreach (var player in contenders)
+                {
+                    player.IsWinner = player.Total == bestTotal;
+                }
             }
         }
 
@@ -359,6 +383,21 @@ namespace YachtDice.Server.Logic.Game
             return nextIndex;
         }
 
+        private void FinishIfOnePlayerIsLeft()
+        {
+            Func<GamePlayer, bool> isStillInGame = candidate => !candidate.HasForfeited;
+
+            if (_players.Count(isStillInGame) <= LastPlayerCount)
+            {
+                _turnIndex = NoPlayerIndex;
+                _rollsMade = NoRolls;
+                TurnNumber++;
+                Array.Clear(_dice, 0, _dice.Length);
+                Array.Clear(_heldDice, 0, _heldDice.Length);
+                Status = GameStatus.Finished;
+            }
+        }
+
         private void UpdateStatus()
         {
             var isSomeonePresent = _players.Any(player => player.IsPresent);
@@ -374,7 +413,7 @@ namespace YachtDice.Server.Logic.Game
             Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
             var player = _players.FirstOrDefault(isSamePlayerId);
 
-            if (player != null && Status == GameStatus.InProgress)
+            if (player != null && !player.HasForfeited && Status == GameStatus.InProgress)
             {
                 player.IsPresent = isPresent;
                 RefreshTurnAfterPresenceChange();

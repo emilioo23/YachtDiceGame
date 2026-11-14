@@ -84,6 +84,12 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <inheritdoc />
+        public GameActionResult Forfeit(RoomMember member)
+        {
+            return Execute(member.RoomCode, game => ForfeitPlayer(game, member.PlayerId));
+        }
+
+        /// <inheritdoc />
         public GameActionResult MarkPresent(RoomMember member)
         {
             return Execute(member.RoomCode, game => ChangePresence(game, member.PlayerId, true));
@@ -147,6 +153,18 @@ namespace YachtDice.Server.Logic.Game
             else if (status == GameActionStatus.Success)
             {
                 game.MarkAbsent(playerId);
+            }
+
+            return status;
+        }
+
+        private static GameActionStatus ForfeitPlayer(YachtGame game, string playerId)
+        {
+            var status = CheckMember(game, playerId);
+
+            if (status == GameActionStatus.Success)
+            {
+                game.Forfeit(playerId);
             }
 
             return status;
