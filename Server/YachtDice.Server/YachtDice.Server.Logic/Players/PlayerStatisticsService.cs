@@ -16,6 +16,8 @@ namespace YachtDice.Server.Logic.Players
         private const int PercentageFactor = 100;
         private const int FirstPosition = 1;
         private const int MaxLeaderboardEntries = 100;
+        private const int MaxHistoryGames = 20;
+        private const string OpponentSeparator = ", ";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -70,6 +72,54 @@ namespace YachtDice.Server.Logic.Players
                 .ToList();
 
             return entries;
+        }
+
+        /// <summary>
+        /// Gets the most recent games of a player, from the newest to the oldest.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <returns>The games of the player, or an empty list if the player does not exist or has no games.</returns>
+        /// <exception cref="DataAccessException">The history could not be read.</exception>
+        public List<PlayedGameSummary> GetRecentGames(string playerName)
+        {
+            Player player = _playerRepository.FindByName(playerName).FirstOrDefault();
+            var games = new List<PlayedGameSummary>();
+
+            if (player != null)
+            {
+                List<PlayedGameRecord> records = _gameHistoryRepository.FindRecentGames(player.Id, MaxHistoryGames);
+                Func<PlayedGameRecord, int> readGameId = record => record.GameId;
+
+                foreach (IGrouping<int, PlayedGameRecord> game in records.GroupBy(readGameId))
+                {
+                    games.Add(SummarizeGame(player.Id, game.ToList()));
+                }
+            }
+
+            Func<PlayedGameSummary, DateTime> readPlayedAt = summary => summary.PlayedAt;
+
+            return games.OrderByDescending(readPlayedAt).ToList();
+        }
+
+        private static PlayedGameSummary SummarizeGame(int playerId, List<PlayedGameRecord> game)
+        {
+            Func<PlayedGameRecord, bool> isOwnRecord = record => record.PlayerId == playerId;
+            Func<PlayedGameRecord, bool> isOpponent = record => record.PlayerId != playerId;
+            Func<PlayedGameRecord, string> readName = record => record.PlayerName;
+            Func<PlayedGameRecord, int> readScore = record => record.FinalScore;
+            PlayedGameRecord own = game.First(isOwnRecord);
+            List<PlayedGameRecord> opponents = game.Where(isOpponent).ToList();
+
+            var summary = new PlayedGameSummary
+            {
+                PlayedAt = own.EndDate ?? DateTime.MinValue,
+                IsWin = own.IsWinner,
+                OwnScore = own.FinalScore,
+                BestOpponentScore = opponents.Count > EmptyCount ? opponents.Max(readScore) : EmptyCount,
+                Opponents = string.Join(OpponentSeparator, opponents.Select(readName))
+            };
+
+            return summary;
         }
 
         private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int index)

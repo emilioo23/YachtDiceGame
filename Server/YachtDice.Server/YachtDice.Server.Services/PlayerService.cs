@@ -118,6 +118,13 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        public List<Contracts.GameHistoryEntry> GetGameHistory(string playerName)
+        {
+            List<Contracts.GameHistoryEntry> history = Execute(playerName, () => ProcessGameHistory(playerName));
+
+            return history;
+        }
+
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
@@ -149,6 +156,13 @@ namespace YachtDice.Server.Services
             LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
 
             return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
+        }
+
+        private List<Contracts.GameHistoryEntry> ProcessGameHistory(string playerName)
+        {
+            List<LogicPlayers.PlayedGameSummary> games = _statisticsService.GetRecentGames(playerName);
+
+            return Mapping.PlayerStatisticsMapper.ToHistoryContracts(games);
         }
 
         private List<Contracts.AchievementInfo> ProcessAchievements(string playerName)

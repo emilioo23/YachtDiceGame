@@ -81,5 +81,14 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         TitleChangeResultCode ChangeTitle(string playerName, int titleId);
+
+        /// <summary>
+        /// Gets the most recent games of a player, from the newest to the oldest.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <returns>The games of the player.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<GameHistoryEntry> GetGameHistory(string playerName);
     }
 }
