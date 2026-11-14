@@ -618,6 +618,26 @@ namespace YachtDice.PlayerServiceReference {
         AvatarLocked = 3,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UsernameChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum UsernameChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsername = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OffensiveUsername = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameAlreadyTaken = 4,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -641,6 +661,10 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -688,6 +712,10 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId) {
             return base.Channel.ChangeAvatar(displayName, avatarId);
+        }
+        
+        public YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername) {
+            return base.Channel.ChangeUsername(currentName, newUsername);
         }
     }
 }

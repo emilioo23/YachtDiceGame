@@ -51,6 +51,15 @@
   <wsdl:message name="IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsername" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -76,6 +85,11 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar" message="tns:IPlayerService_ChangeAvatar_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse" message="tns:IPlayerService_ChangeAvatar_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeAvatar_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername" message="tns:IPlayerService_ChangeUsername_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse" message="tns:IPlayerService_ChangeUsername_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

@@ -151,4 +151,29 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AvatarChangeResultCode" nillable="true" type="tns:AvatarChangeResultCode" />
+  <xs:element name="ChangeUsername">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="currentName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="newUsername" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeUsernameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangeUsernameResult" type="tns:UsernameChangeResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="UsernameChangeResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="InvalidUsername" />
+      <xs:enumeration value="OffensiveUsername" />
+      <xs:enumeration value="UsernameAlreadyTaken" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="UsernameChangeResultCode" nillable="true" type="tns:UsernameChangeResultCode" />
 </xs:schema>
