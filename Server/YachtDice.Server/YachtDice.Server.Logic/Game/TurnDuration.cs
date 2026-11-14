@@ -1,30 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using YachtDice.Server.Logic.Rooms;
 
 namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
-    /// The time that a player has to play a turn, according to the speed of the game.
+    /// The time that a player has to play a turn, according to the speed of the game. The seconds of each speed
+    /// come from the configuration of the server, so a new speed only needs its own value there.
     /// </summary>
-    public static class TurnDuration
+    public sealed class TurnDuration
     {
-        private const int NormalSeconds = 60;
-        private const int FastSeconds = 30;
+        private const int MinimumSeconds = 1;
+        private const string NullSecondsMessage = "The seconds of each speed cannot be null.";
+        private const string TooShortSecondsMessage = "The turn of every speed must last at least one second.";
+        private const string MissingSpeedFormat = "There is no turn duration for the speed {0}.";
 
-        private static readonly Dictionary<GameSpeed, int> SecondsBySpeed = new Dictionary<GameSpeed, int>
+        private readonly Dictionary<GameSpeed, int> _secondsBySpeed;
+
+        /// <summary>
+        /// Initializes the durations with the seconds of each speed.
+        /// </summary>
+        /// <param name="secondsBySpeed">Seconds that a turn lasts for each speed of the game.</param>
+        /// <exception cref="ArgumentNullException">The seconds are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">A speed has less than one second.</exception>
+        public TurnDuration(IDictionary<GameSpeed, int> secondsBySpeed)
         {
-            { GameSpeed.Normal, NormalSeconds },
-            { GameSpeed.Fast, FastSeconds }
-        };
+            if (secondsBySpeed == null)
+            {
+                throw new ArgumentNullException(nameof(secondsBySpeed), NullSecondsMessage);
+            }
+
+            Func<int, bool> isTooShort = seconds => seconds < MinimumSeconds;
+
+            if (secondsBySpeed.Values.Any(isTooShort))
+            {
+                throw new ArgumentOutOfRangeException(nameof(secondsBySpeed), TooShortSecondsMessage);
+            }
+
+            _secondsBySpeed = new Dictionary<GameSpeed, int>(secondsBySpeed);
+        }
 
         /// <summary>
         /// Gets the seconds of a turn.
         /// </summary>
         /// <param name="speed">Speed chosen for the game.</param>
         /// <returns>The seconds that a player has to play a turn.</returns>
-        public static int GetSeconds(GameSpeed speed)
+        /// <exception cref="ArgumentOutOfRangeException">The speed has no duration configured.</exception>
+        public int GetSeconds(GameSpeed speed)
         {
-            return SecondsBySpeed[speed];
+            if (!_secondsBySpeed.TryGetValue(speed, out int seconds))
+            {
+                string message = string.Format(CultureInfo.InvariantCulture, MissingSpeedFormat, speed);
+
+                throw new ArgumentOutOfRangeException(nameof(speed), message);
+            }
+
+            return seconds;
         }
     }
 }

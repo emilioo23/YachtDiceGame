@@ -33,31 +33,31 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The points of the box, or zero if the dice do not fit it.</returns>
         public int Calculate(ScoreCategory category, IReadOnlyList<int> dice)
         {
-            var tally = new DiceTally(dice);
+            var hand = new DiceHand(dice);
             int points;
 
             switch (category)
             {
                 case ScoreCategory.FullHouse:
-                    points = ScoreFullHouse(tally);
+                    points = ScoreFullHouse(hand);
                     break;
                 case ScoreCategory.FourOfAKind:
-                    points = ScoreFourOfAKind(tally);
+                    points = ScoreFourOfAKind(hand);
                     break;
                 case ScoreCategory.LittleStraight:
-                    points = ScoreLittleStraight(tally);
+                    points = ScoreLittleStraight(hand);
                     break;
                 case ScoreCategory.BigStraight:
-                    points = ScoreBigStraight(tally);
+                    points = ScoreBigStraight(hand);
                     break;
                 case ScoreCategory.Choice:
-                    points = tally.Sum;
+                    points = hand.Sum;
                     break;
                 case ScoreCategory.Yacht:
-                    points = ScoreYacht(tally);
+                    points = ScoreYacht(hand);
                     break;
                 default:
-                    points = ScoreUpper(tally, category);
+                    points = ScoreUpper(hand, category);
                     break;
             }
 
@@ -78,7 +78,7 @@ namespace YachtDice.Server.Logic.Game
             switch (category)
             {
                 case ScoreCategory.FullHouse:
-                    points = new DiceTally(dice).Sum;
+                    points = new DiceHand(dice).Sum;
                     break;
                 case ScoreCategory.LittleStraight:
                 case ScoreCategory.BigStraight:
@@ -99,10 +99,10 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>True if the roll is a Yacht.</returns>
         public bool IsYacht(IReadOnlyList<int> dice)
         {
-            return new DiceTally(dice).IsYacht;
+            return new DiceHand(dice).IsYacht;
         }
 
-        private static int ScoreUpper(DiceTally tally, ScoreCategory category)
+        private static int ScoreUpper(DiceHand hand, ScoreCategory category)
         {
             if (!ScoreCategories.IsUpper(category))
             {
@@ -111,40 +111,39 @@ namespace YachtDice.Server.Logic.Game
 
             int value = ScoreCategories.GetFaceValue(category);
 
-            return tally.CountOf(value) * value;
+            return hand.CountFace(value) * value;
         }
 
-        private static int ScoreFullHouse(DiceTally tally)
+        private static int ScoreFullHouse(DiceHand hand)
         {
-            var isFullHouse = tally.HasValueExactly(FullHouseTripleCount)
-                && tally.HasValueExactly(FullHousePairCount);
+            var isFullHouse = hand.HasFaceExactly(FullHouseTripleCount)
+                && hand.HasFaceExactly(FullHousePairCount);
 
-            return isFullHouse ? tally.Sum : NoPoints;
+            return isFullHouse ? hand.Sum : NoPoints;
         }
 
-        private static int ScoreFourOfAKind(DiceTally tally)
+        private static int ScoreFourOfAKind(DiceHand hand)
         {
-            return tally.GetValueRepeatedAtLeast(FourOfAKindCount) * FourOfAKindCount;
+            return hand.GetFaceRepeatedAtLeast(FourOfAKindCount) * FourOfAKindCount;
         }
 
-        private static int ScoreLittleStraight(DiceTally tally)
+        private static int ScoreLittleStraight(DiceHand hand)
         {
-            var isStraight = tally.ShowsEachValueOnce(LittleStraightFirstValue, LittleStraightLastValue);
+            var isStraight = hand.ShowsEachFaceOnce(LittleStraightFirstValue, LittleStraightLastValue);
 
             return isStraight ? StraightPoints : NoPoints;
         }
 
-        private static int ScoreBigStraight(DiceTally tally)
+        private static int ScoreBigStraight(DiceHand hand)
         {
-            var isStraight = tally.ShowsEachValueOnce(BigStraightFirstValue, BigStraightLastValue);
+            var isStraight = hand.ShowsEachFaceOnce(BigStraightFirstValue, BigStraightLastValue);
 
             return isStraight ? StraightPoints : NoPoints;
         }
 
-        private static int ScoreYacht(DiceTally tally)
+        private static int ScoreYacht(DiceHand hand)
         {
-            return tally.IsYacht ? YachtPoints : NoPoints;
+            return hand.IsYacht ? YachtPoints : NoPoints;
         }
-
     }
 }

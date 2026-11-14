@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -12,15 +13,16 @@ namespace YachtDice.Server.Logic.Game
     internal sealed class YachtGame
     {
         private const int NoPlayerIndex = -1;
+        private const int RollsPerTurn = 3;
         private const int NoRolls = 0;
         private const int FirstTurnNumber = 1;
         private const int RoundOffset = 1;
 
         private readonly List<GamePlayer> _players;
-        private readonly IDieSource _dieSource;
+        private readonly IDieRoller _dieRoller;
         private readonly ScoreCalculator _calculator = new ScoreCalculator();
-        private readonly int[] _dice = new int[DiceRules.DiceCount];
-        private readonly bool[] _heldDice = new bool[DiceRules.DiceCount];
+        private readonly int[] _dice = new int[DiceHand.DiceCount];
+        private readonly bool[] _heldDice = new bool[DiceHand.DiceCount];
         private int _turnIndex;
         private int _rollsMade;
         private int _version;
@@ -29,14 +31,14 @@ namespace YachtDice.Server.Logic.Game
         /// Initializes a game where the first participant plays the first turn.
         /// </summary>
         /// <param name="participants">Players of the game, in the order of the turns.</param>
-        /// <param name="dieSource">Source of the values of the dice.</param>
+        /// <param name="dieRoller">Rolls the dice of the game.</param>
         /// <param name="turnSeconds">Seconds that a player has to play a turn.</param>
-        public YachtGame(IEnumerable<GameParticipant> participants, IDieSource dieSource, int turnSeconds)
+        public YachtGame(IEnumerable<GameParticipant> participants, IDieRoller dieRoller, int turnSeconds)
         {
             _players = participants
                 .Select(participant => new GamePlayer(participant, new ScoreCard(_calculator)))
                 .ToList();
-            _dieSource = dieSource;
+            _dieRoller = dieRoller;
             TurnSeconds = turnSeconds;
             TurnNumber = FirstTurnNumber;
             _turnIndex = NoPlayerIndex;
@@ -79,11 +81,11 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Roll(string playerId, IReadOnlyList<bool> heldDice)
         {
-            var status = ValidateTurn(playerId);
+            var status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
-                status = RollValidated(heldDice);
+                status = RollIfAllowed(heldDice);
             }
 
             return status;
@@ -97,11 +99,11 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Score(string playerId, ScoreCategory category)
         {
-            var status = ValidateTurn(playerId);
+            var status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
-                status = ScoreValidated(category);
+                status = ScoreIfAllowed(category);
             }
 
             return status;
@@ -123,7 +125,7 @@ namespace YachtDice.Server.Logic.Game
                     RollAll();
                 }
 
-                status = ScoreValidated(ChooseBestCategory());
+                status = ScoreIfAllowed(ChooseBestCategory());
             }
 
             return status;
@@ -177,7 +179,7 @@ namespace YachtDice.Server.Logic.Game
                 CurrentPlayerId = GetCurrentPlayerId(),
                 TurnNumber = TurnNumber,
                 Round = GetCurrentRound(),
-                RollsLeft = DiceRules.RollsPerTurn - _rollsMade,
+                RollsLeft = RollsPerTurn - _rollsMade,
                 TurnSeconds = TurnSeconds
             };
 
@@ -216,7 +218,18 @@ namespace YachtDice.Server.Logic.Game
             }
         }
 
-        private GameActionStatus ValidateTurn(string playerId)
+        private static void AwardExperience(GameSnapshot snapshot)
+        {
+            foreach (var player in snapshot.Players)
+            {
+                if (player.IsPresent)
+                {
+                    player.ExperienceGained = ExperienceRules.CalculateGain(player.Total, player.IsWinner);
+                }
+            }
+        }
+
+        private GameActionStatus CheckTurn(string playerId)
         {
             GameActionStatus status;
 
@@ -240,11 +253,11 @@ namespace YachtDice.Server.Logic.Game
             return status;
         }
 
-        private GameActionStatus RollValidated(IReadOnlyList<bool> heldDice)
+        private GameActionStatus RollIfAllowed(IReadOnlyList<bool> heldDice)
         {
             GameActionStatus status;
 
-            if (_rollsMade >= DiceRules.RollsPerTurn)
+            if (_rollsMade >= RollsPerTurn)
             {
                 status = GameActionStatus.NoRollsLeft;
             }
@@ -253,7 +266,7 @@ namespace YachtDice.Server.Logic.Game
                 RollAll();
                 status = GameActionStatus.Success;
             }
-            else if (heldDice.Count != DiceRules.DiceCount)
+            else if (heldDice.Count != DiceHand.DiceCount)
             {
                 status = GameActionStatus.InvalidHeldDice;
             }
@@ -266,7 +279,7 @@ namespace YachtDice.Server.Logic.Game
             return status;
         }
 
-        private GameActionStatus ScoreValidated(ScoreCategory category)
+        private GameActionStatus ScoreIfAllowed(ScoreCategory category)
         {
             GameActionStatus status;
 
@@ -284,18 +297,9 @@ namespace YachtDice.Server.Logic.Game
 
         private GameActionStatus ApplyScore(ScoreCategory category)
         {
-            var scoreStatus = _players[_turnIndex].Card.Score(category, _dice);
-            var status = GameActionStatus.Success;
+            GameActionStatus status = _players[_turnIndex].Card.Score(category, _dice);
 
-            if (scoreStatus == ScoreStatus.AlreadyFilled)
-            {
-                status = GameActionStatus.CategoryFilled;
-            }
-            else if (scoreStatus == ScoreStatus.NotAllowed)
-            {
-                status = GameActionStatus.CategoryNotAllowed;
-            }
-            else
+            if (status == GameActionStatus.Success)
             {
                 AdvanceTurn();
             }
@@ -310,18 +314,18 @@ namespace YachtDice.Server.Logic.Game
 
         private void RollAll()
         {
-            RollFree(new bool[DiceRules.DiceCount]);
+            RollFree(new bool[DiceHand.DiceCount]);
         }
 
         private void RollFree(IReadOnlyList<bool> heldDice)
         {
-            for (var index = 0; index < DiceRules.DiceCount; index++)
+            for (var index = 0; index < DiceHand.DiceCount; index++)
             {
                 _heldDice[index] = heldDice[index];
 
                 if (!heldDice[index])
                 {
-                    _dice[index] = _dieSource.Roll();
+                    _dice[index] = _dieRoller.Roll();
                 }
             }
 
@@ -460,6 +464,7 @@ namespace YachtDice.Server.Logic.Game
             if (Status == GameStatus.Finished)
             {
                 MarkWinners(snapshot);
+                AwardExperience(snapshot);
             }
         }
     }

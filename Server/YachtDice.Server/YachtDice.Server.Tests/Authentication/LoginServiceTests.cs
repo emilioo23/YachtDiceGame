@@ -51,22 +51,22 @@ namespace YachtDice.Server.Tests.Authentication
         public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, Password);
-            LoginResult expected = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
+            LoginResult expectedLoginResult = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equivalent(expected, result);
+            Assert.Equivalent(expectedLoginResult, loginResult);
         }
 
         [Fact]
         public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
-            LoginResult expected = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
+            LoginResult expectedLoginResult = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equivalent(expected, result);
+            Assert.Equivalent(expectedLoginResult, loginResult);
         }
 
         [Fact]
@@ -74,9 +74,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials(UnknownEmail, Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.EmailNotRegistered, result.Status);
+            Assert.Equal(LoginStatus.EmailNotRegistered, loginResult.Status);
         }
 
         [Theory]
@@ -87,9 +87,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials(email, Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidEmail, result.Status);
+            Assert.Equal(LoginStatus.InvalidEmail, loginResult.Status);
         }
 
         [Fact]
@@ -97,9 +97,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials(MalformedEmail, WrongPassword);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.InvalidEmail, result.Status);
+            Assert.Equal(LoginStatus.InvalidEmail, loginResult.Status);
         }
 
         [Fact]
@@ -107,9 +107,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials("  " + Email + "  ", Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.LoggedIn, result.Status);
+            Assert.Equal(LoginStatus.LoggedIn, loginResult.Status);
         }
 
         [Fact]
@@ -117,9 +117,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             LoginCredentials credentials = CreateCredentials(Email, string.Empty);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.MissingRequiredField, result.Status);
+            Assert.Equal(LoginStatus.MissingRequiredField, loginResult.Status);
         }
 
         [Fact]
@@ -128,9 +128,9 @@ namespace YachtDice.Server.Tests.Authentication
             _players.SaveTwoFactorEnabled(PlayerId, true);
             LoginCredentials credentials = CreateCredentials(Email, Password);
 
-            LoginResult result = _service.LoginPlayer(credentials);
+            LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.VerificationCodeSent, result.Status);
+            Assert.Equal(LoginStatus.VerificationCodeSent, loginResult.Status);
         }
 
         [Fact]

@@ -209,12 +209,12 @@ namespace YachtDice.Server.Services
                 chosen = ChooseTurnEvent(result.Snapshot, eventType);
             }
 
-            Contracts.GameResultCode code = Complete(roomCode, result, chosen);
-
             if (chosen == Contracts.GameEventType.GameFinished)
             {
                 SaveResult(roomCode, result.Snapshot);
             }
+
+            Contracts.GameResultCode code = Complete(roomCode, result, chosen);
 
             return code;
         }
@@ -232,6 +232,7 @@ namespace YachtDice.Server.Services
                 catch (DataExceptions.DataAccessException ex)
                 {
                     _logger.Error(ex, ResultNotSavedLogMessage);
+                    snapshot.MarkResultNotSaved();
                 }
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Xunit;
-using YachtDice.Server.Data.Configuration;
 using YachtDice.Server.Data.Exceptions;
 using YachtDice.Server.Data.Repositories;
 
@@ -15,17 +14,18 @@ namespace YachtDice.Server.Tests.Data
     public class PlayerRepositoryTests : IDisposable
     {
         private const string Username = "emilioalvarez";
-        private const int ProgressExperience = 350;
-        private const int ProgressLevel = 2;
+        private const string ServerVariable = "YACHTDICE_DB_SERVER";
+        private const string UserVariable = "YACHTDICE_DB_USER";
+        private const string PasswordVariable = "YACHTDICE_DB_PASSWORD";
         private const int PlayerId = 1;
         private const int AvatarId = 1;
         private const string Email = "emilioalvarez@gmail.com";
 
         private static readonly string[] DatabaseVariables =
         {
-            EnvironmentSettings.DatabaseServer,
-            EnvironmentSettings.DatabaseUser,
-            EnvironmentSettings.DatabasePassword
+            ServerVariable,
+            UserVariable,
+            PasswordVariable
         };
 
         private readonly PlayerRepository _repository = new PlayerRepository();
@@ -59,13 +59,6 @@ namespace YachtDice.Server.Tests.Data
         public void SaveAvatar_WithoutConnectionString_ThrowsDataAccessException()
         {
             Assert.Throws<DataAccessException>(() => _repository.SaveAvatar(PlayerId, AvatarId));
-        }
-
-        [Fact]
-        public void SaveProgress_WithoutConnectionString_ThrowsDataAccessException()
-        {
-            Assert.Throws<DataAccessException>(
-                () => _repository.SaveProgress(PlayerId, ProgressExperience, ProgressLevel));
         }
 
         [Theory]

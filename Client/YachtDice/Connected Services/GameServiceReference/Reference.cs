@@ -90,6 +90,9 @@ namespace YachtDice.GameServiceReference {
         private int[] DiceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasResultSaveFailedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool[] HeldDiceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -151,6 +154,19 @@ namespace YachtDice.GameServiceReference {
                 if ((object.ReferenceEquals(this.DiceField, value) != true)) {
                     this.DiceField = value;
                     this.RaisePropertyChanged("Dice");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasResultSaveFailed {
+            get {
+                return this.HasResultSaveFailedField;
+            }
+            set {
+                if ((this.HasResultSaveFailedField.Equals(value) != true)) {
+                    this.HasResultSaveFailedField = value;
+                    this.RaisePropertyChanged("HasResultSaveFailed");
                 }
             }
         }
@@ -401,6 +417,9 @@ namespace YachtDice.GameServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ExperienceGainedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsPresentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -434,6 +453,19 @@ namespace YachtDice.GameServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ExperienceGained {
+            get {
+                return this.ExperienceGainedField;
+            }
+            set {
+                if ((this.ExperienceGainedField.Equals(value) != true)) {
+                    this.ExperienceGainedField = value;
+                    this.RaisePropertyChanged("ExperienceGained");
+                }
             }
         }
         

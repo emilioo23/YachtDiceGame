@@ -61,18 +61,6 @@
                                FontWeight="SemiBold"
                                Foreground="{StaticResource BrushTextMuted}"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,6"/>
-
-                    <ProgressBar x:Name="ExperienceProgressBar"
-                                 Height="10"
-                                 Width="220"
-                                 Foreground="{StaticResource BrushGold}"
-                                 Margin="0,0,0,4"/>
-
-                    <TextBlock x:Name="NextLevelTextBlock"
-                               FontSize="12"
-                               Foreground="{StaticResource BrushTextMuted}"
-                               HorizontalAlignment="Center"
                                Margin="0,0,0,16"/>
 
                     <ItemsControl x:Name="AvatarOptionsItemsControl"

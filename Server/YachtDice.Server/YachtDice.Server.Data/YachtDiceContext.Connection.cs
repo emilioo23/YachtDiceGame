@@ -1,14 +1,15 @@
 ﻿namespace YachtDice.Server.Data
 {
     /// <summary>
-    /// Part of the context that lets the repositories open the database with a connection string built at run time.
+    /// Part of the context that is not generated from the model. It lets the server open the context with a
+    /// connection string built at run time, so the credentials of the database do not live in a file.
     /// </summary>
     public partial class YachtDiceContext
     {
         /// <summary>
-        /// Creates the context with an explicit connection string.
+        /// Initializes the context with the given connection string.
         /// </summary>
-        /// <param name="connectionString">Connection string of Entity Framework.</param>
+        /// <param name="connectionString">Entity Framework connection string of the database.</param>
         public YachtDiceContext(string connectionString)
             : base(connectionString)
         {

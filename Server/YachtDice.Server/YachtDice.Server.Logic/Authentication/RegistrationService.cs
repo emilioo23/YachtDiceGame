@@ -2,6 +2,7 @@
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Security;
 
@@ -20,18 +21,22 @@ namespace YachtDice.Server.Logic.Authentication
         private const string RegisteredLogMessage = "Player registered successfully.";
         private const string NullPlayerMessage = "The new player cannot be null.";
         private const string NullRepositoryMessage = "The player repository cannot be null.";
+        private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
+        private readonly OffensiveWordFilter _wordFilter;
 
         /// <summary>
-        /// Initializes the service with the data access it needs.
+        /// Initializes the service with the data access and the filter of offensive words it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read and save players.</param>
-        public RegistrationService(IPlayerRepository playerRepository)
+        /// <param name="wordFilter">Filter that rejects the usernames with offensive words.</param>
+        public RegistrationService(IPlayerRepository playerRepository, OffensiveWordFilter wordFilter)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
+            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -48,7 +53,7 @@ namespace YachtDice.Server.Logic.Authentication
                 throw new ArgumentNullException(nameof(newPlayer), NullPlayerMessage);
             }
 
-            RegistrationResult result = ValidatePlayer(newPlayer, plainPassword);
+            RegistrationResult result = FindRegistrationProblem(newPlayer, plainPassword);
 
             if (result == RegistrationResult.Success)
             {
@@ -63,7 +68,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static RegistrationResult ValidatePlayer(Player player, string plainPassword)
+        private RegistrationResult FindRegistrationProblem(Player player, string plainPassword)
         {
             RegistrationResult result = RegistrationResult.Success;
 
@@ -79,6 +84,10 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RegistrationResult.InvalidUsername;
             }
+            else if (_wordFilter.ContainsOffensiveWord(player.Username.Trim()))
+            {
+                result = RegistrationResult.OffensiveUsername;
+            }
             else if (!EmailAddressValidator.IsValid(player.Email.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
@@ -93,11 +102,11 @@ namespace YachtDice.Server.Logic.Authentication
 
         private static bool HasRequiredFields(Player player, string plainPassword)
         {
-            return !string.IsNullOrWhiteSpace(player.FirstName)
-                && !string.IsNullOrWhiteSpace(player.LastName)
-                && !string.IsNullOrWhiteSpace(player.Username)
-                && !string.IsNullOrWhiteSpace(player.Email)
+            bool hasNames = !string.IsNullOrWhiteSpace(player.FirstName) && !string.IsNullOrWhiteSpace(player.LastName);
+            bool hasCredentials = !string.IsNullOrWhiteSpace(player.Username)
                 && !string.IsNullOrWhiteSpace(plainPassword);
+
+            return hasNames && hasCredentials && !string.IsNullOrWhiteSpace(player.Email);
         }
 
         private static bool HasValidLengths(Player player)
@@ -107,10 +116,11 @@ namespace YachtDice.Server.Logic.Authentication
             int firstNameLength = player.FirstName?.Trim().Length ?? 0;
             int lastNameLength = player.LastName?.Trim().Length ?? 0;
 
-            return usernameLength <= CredentialRules.UsernameMaxLength
-                && emailLength <= EmailMaxLength
-                && firstNameLength <= NameMaxLength
-                && lastNameLength <= NameMaxLength;
+            bool hasValidNameLengths = firstNameLength <= NameMaxLength && lastNameLength <= NameMaxLength;
+
+            return hasValidNameLengths
+                && usernameLength <= CredentialRules.UsernameMaxLength
+                && emailLength <= EmailMaxLength;
         }
 
         private RegistrationResult SavePlayer(Player player, string plainPassword)

@@ -76,7 +76,8 @@ namespace YachtDice.Views
 
         private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
             _state.Status == GameStatus.Finished,
-            new TurnPlayers(_state.CurrentPlayerId, _playerId));
+            _state.CurrentPlayerId,
+            _playerId);
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
@@ -257,7 +258,8 @@ namespace YachtDice.Views
             string name = FindPlayerName(_state.CurrentPlayerId);
             TurnHint hint = TurnPhaseResolver.ResolveHint(
                 CurrentPhase,
-                new TurnRolls(_state.RollsLeft, MaxRolls));
+                _state.RollsLeft,
+                MaxRolls);
             var texts = new Dictionary<TurnHint, string>
             {
                 { TurnHint.None, string.Empty },
@@ -466,11 +468,23 @@ namespace YachtDice.Views
 
         private void GoToResultsWindow()
         {
-            IEnumerable<StandingEntry> entries = _state.Players
-                .Select(card => new StandingEntry(card.PlayerId, card.Name, card.Total));
+            IEnumerable<StandingEntry> entries = _state.Players.Select(CreateStandingEntry);
+
+            if (_state.HasResultSaveFailed)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Game_ResultNotSaved);
+            }
 
             RememberLeftMatch();
-            WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, StandingsBuilder.Build(entries)));
+            WindowNavigator.SwitchTo(this, new ResultsWindow(
+                _roomGateway.Session,
+                StandingsBuilder.Build(entries),
+                _playerId));
+        }
+
+        private static StandingEntry CreateStandingEntry(PlayerScorecard card)
+        {
+            return new StandingEntry(card.PlayerId, card.Name, card.Total) { ExperienceGained = card.ExperienceGained };
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
@@ -571,8 +585,7 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                await _chat.Gateway.LeaveAsync();
-                await _roomGateway.LeaveRoomAsync();
+                await LobbyNavigator.LeaveRoomAsync(_chat, _roomGateway);
             }
         }
 

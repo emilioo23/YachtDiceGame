@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.ChatServiceReference;
+using YachtDice.Client.Logic.Chat;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Resources;
@@ -196,7 +197,7 @@ namespace YachtDice.Views
 
             if (kind == ChatMessageKind.Own)
             {
-                brushKey = ResourceKeys.FeltLightBrushKey;
+                brushKey = ThemeResourceKeys.FeltLightBrushKey;
             }
             else
             {
@@ -226,7 +227,7 @@ namespace YachtDice.Views
 
         private static string GetContentBrushKey(ChatMessageKind kind)
         {
-            return kind == ChatMessageKind.System ? ResourceKeys.DangerBrushKey : ResourceKeys.TextBrushKey;
+            return kind == ChatMessageKind.System ? ThemeResourceKeys.DangerBrushKey : ThemeResourceKeys.TextBrushKey;
         }
 
         private void ShowUnreadNotice(string author, string content)
@@ -259,7 +260,13 @@ namespace YachtDice.Views
         {
             string content = MessageTextBox.Text.Trim();
 
-            if (content.Length > EmptyLength && _isSubscribed)
+            bool canSend = content.Length > EmptyLength && _isSubscribed;
+
+            if (canSend && ChatLinkDetector.ContainsLink(content))
+            {
+                AddMessage(Strings.Game_Chat_SystemName, Strings.Game_Chat_LinksNotAllowed, ChatMessageKind.System);
+            }
+            else if (canSend)
             {
                 MessageTextBox.Clear();
                 _ = SendMessageAsync(content);

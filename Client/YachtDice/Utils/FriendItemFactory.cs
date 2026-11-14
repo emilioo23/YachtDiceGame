@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Models;
 using YachtDice.Resources;
 
@@ -64,7 +65,7 @@ namespace YachtDice.Utils
             var friend = new FriendItem
             {
                 Name = name,
-                Initial = PlayerInitials.GetInitial(name),
+                Initial = InitialLetter.From(name, Strings.Global_UnknownInitial),
                 Status = presence.Status,
                 IsOnline = presence.IsOnline
             };

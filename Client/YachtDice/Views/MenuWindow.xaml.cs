@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -20,10 +21,6 @@ namespace YachtDice.Views
     public partial class MenuWindow : Window
     {
         private const int DefaultPlayerLevel = 1;
-        private const string PresenceFailedLogMessage = "The player could not be connected to the presence service.";
-        private const string FriendsFailedLogMessage = "The friends of the player could not be loaded.";
-        private const string PendingMatchFailedLogMessage = "The pending match of the player could not be checked.";
-        private const string AvatarFailedLogMessage = "The avatar of the player could not be loaded.";
 
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -44,7 +41,7 @@ namespace YachtDice.Views
             _session = session;
             PlayerNameTextBlock.Text = session.DisplayName;
             PlayerNameHeadingTextBlock.Text = GetGreetingName(session);
-            PlayerInitialTextBlock.Text = PlayerInitials.GetInitial(session.DisplayName);
+            PlayerInitialTextBlock.Text = InitialLetter.From(session.DisplayName, Strings.Global_UnknownInitial);
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);
             LanguageSwitcherControl.ReopenWindowFunc = () => new MenuWindow(session);
 
@@ -56,11 +53,23 @@ namespace YachtDice.Views
             _session.Presence.FriendsChanged += HandleFriendsChanged;
             Closed += HandleWindowClosed;
 
-            _ = ConnectPresenceAsync(session.DisplayName);
-            _ = LoadPlayerStatisticsAsync(session.DisplayName);
-            _ = LoadAvatarAsync(session.DisplayName);
-            _ = LoadFriendsAsync();
-            _ = OfferPendingMatchAsync();
+            _ = GatewayCallRunner.RunAsync(this, _logger, () => LoadPlayerDataAsync(session.DisplayName));
+        }
+
+        /// <summary>
+        /// Loads what the menu shows about the player one call after the other, so if the server is not
+        /// available the player is told only once.
+        /// </summary>
+        /// <param name="playerName">Name of the player who entered the menu.</param>
+        /// <returns>A task that finishes when everything is loaded.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        private async Task LoadPlayerDataAsync(string playerName)
+        {
+            await ConnectPresenceAsync(playerName);
+            await ShowPlayerStatisticsAsync(playerName);
+            await LoadAvatarAsync(playerName);
+            await LoadFriendsAsync();
+            await OfferPendingMatchAsync();
         }
 
         private static string GetGreetingName(PlayerSession session)
@@ -72,16 +81,9 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                try
-                {
-                    string roomCode = await new RoomListGateway().FindPendingRoomAsync(_session.DisplayName);
+                string roomCode = await new RoomListGateway().FindPendingRoomAsync(_session.DisplayName);
 
-                    await AskToReturnAsync(roomCode);
-                }
-                catch (GatewayException)
-                {
-                    _logger.Warning(PendingMatchFailedLogMessage);
-                }
+                await AskToReturnAsync(roomCode);
             }
         }
 
@@ -109,15 +111,8 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                try
-                {
-                    await _session.Presence.ConnectAsync(playerName);
-                    ConnectionLossHandler.Watch(_session.Presence);
-                }
-                catch (GatewayException)
-                {
-                    _logger.Warning(PresenceFailedLogMessage);
-                }
+                await _session.Presence.ConnectAsync(playerName);
+                ConnectionLossHandler.Watch(_session.Presence);
             }
         }
 
@@ -140,34 +135,22 @@ namespace YachtDice.Views
 
         private void RefreshFriends()
         {
-            _ = LoadFriendsAsync();
+            _ = GatewayCallRunner.RunAsync(this, _logger, LoadFriendsAsync);
         }
 
         private async Task LoadFriendsAsync()
         {
             if (!_session.IsGuest)
             {
-                try
-                {
-                    _friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
-                    List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
-                    OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
+                _friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
+                List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
+                OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
 
-                    var requestPresence = new FriendPresence(Strings.Friends_Status_WantsFriend, false);
+                var requestPresence = new FriendPresence(Strings.Friends_Status_WantsFriend, false);
 
-                    RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
-                    ShowOnlinePlayers();
-                }
-                catch (GatewayException)
-                {
-                    _logger.Warning(FriendsFailedLogMessage);
-                }
+                RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
+                ShowOnlinePlayers();
             }
-        }
-
-        private Task LoadPlayerStatisticsAsync(string playerName)
-        {
-            return GatewayCallRunner.RunAsync(this, _logger, () => ShowPlayerStatisticsAsync(playerName));
         }
 
         private async Task ShowPlayerStatisticsAsync(string playerName)
@@ -180,18 +163,11 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                try
-                {
-                    PlayerProfile profile = await _gateway.GetProfileAsync(playerName);
+                PlayerProfile profile = await _gateway.GetProfileAsync(playerName);
 
-                    PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
-                    PlayerAvatarImage.Visibility = Visibility.Visible;
-                    PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
-                }
-                catch (GatewayException)
-                {
-                    _logger.Warning(AvatarFailedLogMessage);
-                }
+                PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
+                PlayerAvatarImage.Visibility = Visibility.Visible;
+                PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
             }
         }
 

@@ -10,26 +10,32 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameManager : IGameManager
     {
+        private const string NullDieRollerMessage = "The roller of the dice cannot be null.";
         private const string NullTurnMessage = "The turn cannot be null.";
+        private const string NullTurnDurationMessage = "The duration of the turns cannot be null.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
             new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
-        private readonly IDieSource _dieSource;
+        private readonly IDieRoller _dieRoller;
+        private readonly TurnDuration _turnDuration;
 
         /// <summary>
         /// Initializes a manager without games.
         /// </summary>
-        /// <param name="dieSource">Source of the values of the dice.</param>
-        public GameManager(IDieSource dieSource)
+        /// <param name="dieRoller">Rolls the dice of the game.</param>
+        /// <param name="turnDuration">Seconds that a turn lasts for each speed of the game.</param>
+        public GameManager(IDieRoller dieRoller, TurnDuration turnDuration)
         {
-            _dieSource = dieSource;
+            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller), NullDieRollerMessage);
+            _turnDuration = turnDuration
+                ?? throw new ArgumentNullException(nameof(turnDuration), NullTurnDurationMessage);
         }
 
         /// <inheritdoc />
         public GameSnapshot Start(string roomCode, IEnumerable<GameParticipant> participants, GameSpeed speed)
         {
-            var game = new YachtGame(participants, _dieSource, TurnDuration.GetSeconds(speed));
+            var game = new YachtGame(participants, _dieRoller, _turnDuration.GetSeconds(speed));
 
             GameSnapshot snapshot;
 
@@ -174,9 +180,8 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionResult result;
 
-            if (_games.ContainsKey(roomCode))
+            if (_games.TryGetValue(roomCode, out YachtGame game))
             {
-                var game = _games[roomCode];
                 var status = action(game);
 
                 if (status == GameActionStatus.Success)

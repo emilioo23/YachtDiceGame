@@ -510,6 +510,9 @@
   <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Your turn</value>
   </data>
+  <data name="Game_ResultNotSaved" xml:space="preserve">
+    <value>The result of the game could not be saved, so the experience of this game was not added.</value>
+  </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
     <value>Round {0} / {1}</value>
   </data>
@@ -575,6 +578,18 @@
   </data>
   <data name="Results_ColumnXp" xml:space="preserve">
     <value>XP earned</value>
+  </data>
+  <data name="Results_ExperienceGainedFormat" xml:space="preserve">
+    <value>+{0} XP</value>
+  </data>
+  <data name="Results_LevelFormat" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
+  <data name="Results_ExperienceProgressFormat" xml:space="preserve">
+    <value>{0} / {1} XP</value>
+  </data>
+  <data name="Results_LevelUp" xml:space="preserve">
+    <value>Level up!</value>
   </data>
   <data name="Results_ButtonMenu" xml:space="preserve">
     <value>Menu</value>
@@ -663,6 +678,9 @@
   <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
     <value>The username must have 3 to 20 characters and can only use letters without accents, digits, dots and underscores.</value>
   </data>
+  <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
+    <value>The username cannot contain offensive words. Choose another name.</value>
+  </data>
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>The password must have 8 to 64 characters, with at least one letter and one digit.</value>
   </data>
@@ -743,6 +761,9 @@
   </data>
   <data name="Game_Chat_SendFailed" xml:space="preserve">
     <value>The message could not be sent.</value>
+  </data>
+  <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
+    <value>Links are not allowed in the chat.</value>
   </data>
   <data name="Game_Chat_Unavailable" xml:space="preserve">
     <value>The chat is not available in this game.</value>
@@ -977,9 +998,6 @@
   </data>
   <data name="Profile_LevelFormat" xml:space="preserve">
     <value>Level {0} · {1} XP</value>
-  </data>
-  <data name="Profile_NextLevelFormat" xml:space="preserve">
-    <value>Next level: {0} / {1} XP</value>
   </data>
   <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
     <value>How to play</value>

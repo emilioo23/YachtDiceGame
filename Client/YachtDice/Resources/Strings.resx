@@ -510,6 +510,9 @@
   <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Tu turno</value>
   </data>
+  <data name="Game_ResultNotSaved" xml:space="preserve">
+    <value>No se pudo guardar el resultado de la partida, así que la experiencia de esta partida no se sumó.</value>
+  </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
     <value>Ronda {0} / {1}</value>
   </data>
@@ -575,6 +578,18 @@
   </data>
   <data name="Results_ColumnXp" xml:space="preserve">
     <value>XP ganada</value>
+  </data>
+  <data name="Results_ExperienceGainedFormat" xml:space="preserve">
+    <value>+{0} XP</value>
+  </data>
+  <data name="Results_LevelFormat" xml:space="preserve">
+    <value>Nivel {0}</value>
+  </data>
+  <data name="Results_ExperienceProgressFormat" xml:space="preserve">
+    <value>{0} / {1} XP</value>
+  </data>
+  <data name="Results_LevelUp" xml:space="preserve">
+    <value>¡Subiste de nivel!</value>
   </data>
   <data name="Results_ButtonMenu" xml:space="preserve">
     <value>Menú</value>
@@ -663,6 +678,9 @@
   <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
     <value>El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo.</value>
   </data>
+  <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
+    <value>El nombre de usuario no puede tener palabras ofensivas. Elige otro nombre.</value>
+  </data>
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>La contraseña debe tener de 8 a 64 caracteres, con al menos una letra y un número.</value>
   </data>
@@ -743,6 +761,9 @@
   </data>
   <data name="Game_Chat_SendFailed" xml:space="preserve">
     <value>No se pudo enviar el mensaje.</value>
+  </data>
+  <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
+    <value>No se permiten enlaces en el chat.</value>
   </data>
   <data name="Game_Chat_Unavailable" xml:space="preserve">
     <value>El chat no está disponible en esta partida.</value>
@@ -977,9 +998,6 @@
   </data>
   <data name="Profile_LevelFormat" xml:space="preserve">
     <value>Nivel {0} · {1} XP</value>
-  </data>
-  <data name="Profile_NextLevelFormat" xml:space="preserve">
-    <value>Siguiente nivel: {0} / {1} XP</value>
   </data>
   <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
     <value>Cómo jugar</value>

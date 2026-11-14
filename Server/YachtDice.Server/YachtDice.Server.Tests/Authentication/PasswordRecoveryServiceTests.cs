@@ -22,8 +22,11 @@ namespace YachtDice.Server.Tests.Authentication
         private const int SecondsInsideCooldown = 5;
         private const int SecondsOutsideCooldown = 60;
         private const int MinutesExpired = 1;
-        private const string Email = "emilio@gmail.com";
-        private const string UnknownEmail = "carlos.ramirez@gmail.com";
+        private const int NoTokens = 0;
+        private const int OneToken = 1;
+        private const int NoRecipients = 0;
+        private const string Email = "emilio@example.com";
+        private const string UnknownEmail = "nobody@example.com";
         private const string BlankEmail = "  ";
         private const string DisplayName = "emilio";
         private const string OldPassword = "OldPass123!";
@@ -64,9 +67,9 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_RegisteredEmail_SavesTheHashOfTheCodeAndSendsTheEmail()
         {
-            var expected = new
+            var expectedRecovery = new
             {
-                TokenCount = 1,
+                TokenCount = OneToken,
                 TokenLength = HashLength,
                 IsStillValid = true,
                 Recipients = new[] { Email }
@@ -75,14 +78,14 @@ namespace YachtDice.Server.Tests.Authentication
             _service.RequestReset(Email, CultureInfo.InvariantCulture);
 
             PwdResetToken savedToken = _resets.Tokens.First();
-            var actual = new
+            var actualRecovery = new
             {
                 TokenCount = _resets.Tokens.Count,
                 TokenLength = savedToken.Token.Length,
                 IsStillValid = savedToken.ExpireDate > DateTime.UtcNow,
                 Recipients = _emailService.Recipients.ToArray()
             };
-            Assert.Equivalent(expected, actual);
+            Assert.Equivalent(expectedRecovery, actualRecovery);
         }
 
         [Fact]
@@ -96,12 +99,16 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_UnknownEmail_DoesNotSaveOrSendAnything()
         {
-            var expected = new { TokenCount = 0, RecipientCount = 0 };
+            var expectedRecovery = new { TokenCount = NoTokens, RecipientCount = NoRecipients };
 
             _service.RequestReset(UnknownEmail, CultureInfo.InvariantCulture);
 
-            var actual = new { TokenCount = _resets.Tokens.Count, RecipientCount = _emailService.Recipients.Count };
-            Assert.Equal(expected, actual);
+            var actualRecovery = new
+            {
+                TokenCount = _resets.Tokens.Count,
+                RecipientCount = _emailService.Recipients.Count
+            };
+            Assert.Equal(expectedRecovery, actualRecovery);
         }
 
         [Fact]
@@ -172,12 +179,16 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_CorrectCode_ChangesThePasswordAndDeletesTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expected = new { HasNewPassword = true, TokenCount = 0 };
+            var expectedReset = new { HasNewPassword = true, TokenCount = NoTokens };
 
             _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
 
-            var actual = new { HasNewPassword = IsCurrentPassword(NewPassword), TokenCount = _resets.Tokens.Count };
-            Assert.Equal(expected, actual);
+            var actualReset = new
+            {
+                HasNewPassword = IsCurrentPassword(NewPassword),
+                TokenCount = _resets.Tokens.Count
+            };
+            Assert.Equal(expectedReset, actualReset);
         }
 
         [Fact]
@@ -216,12 +227,16 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_WrongCode_KeepsThePasswordAndTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expected = new { HasOldPassword = true, TokenCount = 1 };
+            var expectedReset = new { HasOldPassword = true, TokenCount = OneToken };
 
             _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
 
-            var actual = new { HasOldPassword = IsCurrentPassword(OldPassword), TokenCount = _resets.Tokens.Count };
-            Assert.Equal(expected, actual);
+            var actualReset = new
+            {
+                HasOldPassword = IsCurrentPassword(OldPassword),
+                TokenCount = _resets.Tokens.Count
+            };
+            Assert.Equal(expectedReset, actualReset);
         }
 
         [Fact]

@@ -1,7 +1,8 @@
 ﻿namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
-    /// A box of a scorecard, as it is at some moment.
+    /// A box of a scorecard with its points. It describes a box as it is at some moment, or a box that the
+    /// player can still choose with the current dice and the points that it would receive.
     /// </summary>
     public sealed class ScoreEntry
     {
@@ -16,6 +17,16 @@
             Category = category;
             IsFilled = isFilled;
             Points = points;
+        }
+
+        /// <summary>
+        /// Initializes an open box that the player can choose, with the points that the dice would give it.
+        /// </summary>
+        /// <param name="category">The box.</param>
+        /// <param name="points">Points that the box would receive.</param>
+        public ScoreEntry(ScoreCategory category, int points)
+            : this(category, false, points)
+        {
         }
 
         /// <summary>

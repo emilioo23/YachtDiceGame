@@ -3,6 +3,7 @@ using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Tests.InMemory;
 
 namespace YachtDice.Server.Tests.Avatars
@@ -13,7 +14,7 @@ namespace YachtDice.Server.Tests.Avatars
     public class AvatarServiceTests
     {
         private const string PlayerName = "Emilio";
-        private const string UnknownName = "Carlos";
+        private const string UnknownName = "Nobody";
         private const string BlankName = "  ";
         private const int PlayerId = 1;
         private const int PlayerLevel = 5;
@@ -24,9 +25,11 @@ namespace YachtDice.Server.Tests.Avatars
         private const int UnknownAvatarId = 9999;
         private const int NewPlayerLevel = 1;
         private const int NoExperience = 0;
-        private const int PlayerLevelStartExperience = 1400;
-        private const int PlayerNextLevelExperience = 2000;
-        private const int NewPlayerNextLevelExperience = 200;
+        private const int SecondLevelExperience = 100;
+        private const int ThirdLevelExperience = 200;
+        private const int FourthLevelExperience = 300;
+        private const int FifthLevelExperience = 400;
+        private const int SixthLevelExperience = 500;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly AvatarService _service;
@@ -36,14 +39,20 @@ namespace YachtDice.Server.Tests.Avatars
         /// </summary>
         public AvatarServiceTests()
         {
-            _service = new AvatarService(_players);
+            _service = new AvatarService(_players, CreateLevelTable());
             AddPlayer(PlayerLevel);
         }
 
         [Fact]
         public void Constructor_NullRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new AvatarService(null));
+            Assert.Throws<ArgumentNullException>(() => new AvatarService(null, CreateLevelTable()));
+        }
+
+        [Fact]
+        public void Constructor_NullLevelTable_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new AvatarService(_players, null));
         }
 
         [Fact]
@@ -73,35 +82,35 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetProfile_RegisteredPlayer_ReturnsAvatarLevelAndExperience()
         {
-            PlayerProfile expected = new PlayerProfile
+            PlayerProfile expectedProfile = new PlayerProfile
             {
                 AvatarId = CurrentAvatarId,
                 Level = PlayerLevel,
                 Experience = PlayerExperience,
-                LevelStartExperience = PlayerLevelStartExperience,
-                NextLevelExperience = PlayerNextLevelExperience
+                LevelStartExperience = FifthLevelExperience,
+                NextLevelExperience = SixthLevelExperience
             };
 
             PlayerProfile profile = _service.GetProfile(PlayerName);
 
-            Assert.Equivalent(expected, profile);
+            Assert.Equivalent(expectedProfile, profile);
         }
 
         [Fact]
         public void GetProfile_UnknownPlayer_ReturnsTheProfileOfANewPlayer()
         {
-            PlayerProfile expected = new PlayerProfile
+            PlayerProfile expectedProfile = new PlayerProfile
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = NewPlayerLevel,
                 Experience = NoExperience,
                 LevelStartExperience = NoExperience,
-                NextLevelExperience = NewPlayerNextLevelExperience
+                NextLevelExperience = SecondLevelExperience
             };
 
             PlayerProfile profile = _service.GetProfile(UnknownName);
 
-            Assert.Equivalent(expected, profile);
+            Assert.Equivalent(expectedProfile, profile);
         }
 
         [Fact]
@@ -115,11 +124,11 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_UnlockedAvatar_SavesTheNewAvatar()
         {
-            Player expected = CreatePlayer(PlayerLevel, UnlockedAvatarId);
+            Player expectedSavedPlayer = CreatePlayer(PlayerLevel, UnlockedAvatarId);
 
             _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
-            Assert.Equivalent(expected, _players.Players.Single());
+            Assert.Equivalent(expectedSavedPlayer, _players.Players.Single());
         }
 
         [Fact]
@@ -135,11 +144,11 @@ namespace YachtDice.Server.Tests.Avatars
         [InlineData(UnknownAvatarId)]
         public void ChangeAvatar_AvatarThatCannotBeChosen_KeepsTheCurrentOne(int avatarId)
         {
-            Player expected = CreatePlayer(PlayerLevel, CurrentAvatarId);
+            Player expectedSavedPlayer = CreatePlayer(PlayerLevel, CurrentAvatarId);
 
             _service.ChangeAvatar(PlayerName, avatarId);
 
-            Assert.Equivalent(expected, _players.Players.Single());
+            Assert.Equivalent(expectedSavedPlayer, _players.Players.Single());
         }
 
         [Fact]
@@ -191,6 +200,21 @@ namespace YachtDice.Server.Tests.Avatars
                 XP = PlayerExperience
             };
             return player;
+        }
+
+        private static LevelTable CreateLevelTable()
+        {
+            int[] thresholds =
+            {
+                NoExperience,
+                SecondLevelExperience,
+                ThirdLevelExperience,
+                FourthLevelExperience,
+                FifthLevelExperience,
+                SixthLevelExperience
+            };
+
+            return new LevelTable(thresholds);
         }
 
         private void AddPlayer(int level)

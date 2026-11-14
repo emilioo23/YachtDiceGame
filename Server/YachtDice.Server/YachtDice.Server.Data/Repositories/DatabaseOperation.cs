@@ -10,9 +10,8 @@ namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
     /// Runs the operations of the repositories inside a database context and converts the failures of Entity
-    /// Framework into <see cref="DataAccessException"/>. It also checks that the connection string exists before
-    /// opening the context, so a missing configuration is reported as a database failure and not as an
-    /// unexpected error.
+    /// Framework into <see cref="DataAccessException"/>. The connection string comes from the environment of the
+    /// server, so a missing variable is reported as a database failure and not as an unexpected error.
     /// </summary>
     internal static class DatabaseOperation
     {
@@ -30,10 +29,11 @@ namespace YachtDice.Server.Data.Repositories
         public static TResult Query<TResult>(Func<YachtDiceContext, TResult> query, string failedMessage)
         {
             TResult result;
+            string connectionString = DatabaseConnection.Build();
 
             try
             {
-                using (var context = new YachtDiceContext(DatabaseConnection.Build()))
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     result = query(context);
                 }
@@ -55,9 +55,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The change could not be saved.</exception>
         public static void Save(Action<YachtDiceContext> change, string failedMessage)
         {
+            string connectionString = DatabaseConnection.Build();
+
             try
             {
-                using (var context = new YachtDiceContext(DatabaseConnection.Build()))
+                using (var context = new YachtDiceContext(connectionString))
                 {
                     change(context);
                     context.SaveChanges();

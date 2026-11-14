@@ -63,6 +63,12 @@ namespace YachtDice.Server.Logic.Game
         public bool IsWinner { get; set; }
 
         /// <summary>
+        /// Gets or sets the experience that the player earned in the game. It is only set when the game is
+        /// over, and it stays at zero for the players who left before the end.
+        /// </summary>
+        public int ExperienceGained { get; set; }
+
+        /// <summary>
         /// Gets the boxes of the scorecard, in the order of the scorecard.
         /// </summary>
         public IList<ScoreEntry> Scores { get; }

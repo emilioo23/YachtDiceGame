@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Client.Logic.Rooms;
@@ -64,7 +65,7 @@ namespace YachtDice.Navigation
             RoomListItem room)
         {
             var roomGateway = new RoomGateway(session);
-            var roomToJoin = new Room
+            var roomToJoin = new RoomAccess
             {
                 RoomId = room.RoomId,
                 AccessCode = room.AccessCode.Trim()
@@ -97,6 +98,27 @@ namespace YachtDice.Navigation
             catch (GatewayException ex)
             {
                 CustomDialogWindow.ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        /// <summary>
+        /// Takes the player out of the chat and of the room. The window of the room is already closed, so if the
+        /// server cannot be told, the player is told on the window that is open now.
+        /// </summary>
+        /// <param name="chat">Chat of the room that the player leaves.</param>
+        /// <param name="roomGateway">Connection of the player to the room that the player leaves.</param>
+        /// <returns>A task that finishes when the player left or was told the problem.</returns>
+        public static async Task LeaveRoomAsync(RoomChat chat, RoomGateway roomGateway)
+        {
+            try
+            {
+                await Task.WhenAll(chat.Gateway.LeaveAsync(), roomGateway.LeaveRoomAsync());
+            }
+            catch (GatewayException ex)
+            {
+                Window openWindow = Application.Current.Windows.OfType<Window>().LastOrDefault();
+
+                CustomDialogWindow.ShowMessage(openWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 

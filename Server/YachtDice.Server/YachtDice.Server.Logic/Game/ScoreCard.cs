@@ -102,7 +102,7 @@ namespace YachtDice.Server.Logic.Game
         /// </summary>
         /// <param name="dice">Values shown by the five dice.</param>
         /// <returns>The boxes that can be chosen.</returns>
-        public IReadOnlyList<ScoreOption> GetOptions(IReadOnlyList<int> dice)
+        public IReadOnlyList<ScoreEntry> GetOptions(IReadOnlyList<int> dice)
         {
             var isJoker = IsJoker(dice);
             IReadOnlyList<ScoreCategory> categories;
@@ -116,7 +116,7 @@ namespace YachtDice.Server.Logic.Game
                 categories = GetOpenCategories();
             }
 
-            return categories.Select(category => new ScoreOption(category, CalculatePoints(category, dice, isJoker)))
+            return categories.Select(category => new ScoreEntry(category, CalculatePoints(category, dice, isJoker)))
                 .ToList();
         }
 
@@ -126,24 +126,24 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="category">Box to use.</param>
         /// <param name="dice">Values shown by the five dice.</param>
         /// <returns>The outcome of the operation.</returns>
-        public ScoreStatus Score(ScoreCategory category, IReadOnlyList<int> dice)
+        public GameActionStatus Score(ScoreCategory category, IReadOnlyList<int> dice)
         {
-            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+            Func<ScoreEntry, bool> isSameCategory = option => option.Category == category;
             var options = GetOptions(dice).Where(isSameCategory).ToList();
-            ScoreStatus status;
+            GameActionStatus status;
 
             if (IsFilled(category))
             {
-                status = ScoreStatus.AlreadyFilled;
+                status = GameActionStatus.CategoryFilled;
             }
             else if (!options.Any())
             {
-                status = ScoreStatus.NotAllowed;
+                status = GameActionStatus.CategoryNotAllowed;
             }
             else
             {
                 Write(options.Single(), dice);
-                status = ScoreStatus.Success;
+                status = GameActionStatus.Success;
             }
 
             return status;
@@ -206,7 +206,7 @@ namespace YachtDice.Server.Logic.Game
             return points;
         }
 
-        private void Write(ScoreOption option, IReadOnlyList<int> dice)
+        private void Write(ScoreEntry option, IReadOnlyList<int> dice)
         {
             if (_calculator.IsYacht(dice) && GetScore(ScoreCategory.Yacht) > NoPoints)
             {

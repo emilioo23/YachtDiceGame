@@ -199,12 +199,12 @@ namespace YachtDice.Views
 
         private void SelectModeBorder(Border selected, Border unselected)
         {
-            selected.Background = (SolidColorBrush)FindResource(ResourceKeys.Cream2BrushKey);
-            selected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey);
+            selected.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.Cream2BrushKey);
+            selected.BorderBrush = (SolidColorBrush)FindResource(ThemeResourceKeys.FeltLightBrushKey);
             selected.BorderThickness = new Thickness(SelectedBorderThickness);
 
             unselected.Background = Brushes.Transparent;
-            unselected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
+            unselected.BorderBrush = (SolidColorBrush)FindResource(ThemeResourceKeys.BorderBrushKey);
             unselected.BorderThickness = new Thickness(UnselectedBorderThickness);
         }
 
@@ -323,8 +323,7 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                await _chat.Gateway.LeaveAsync();
-                await _roomGateway.LeaveRoomAsync();
+                await LobbyNavigator.LeaveRoomAsync(_chat, _roomGateway);
             }
         }
 

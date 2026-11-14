@@ -113,21 +113,27 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Unsubscribes the player from the chat and closes the connection.
+        /// Unsubscribes the player from the chat and closes the connection. If the player never joined the chat
+        /// or the connection was already lost, there is nothing to do.
         /// </summary>
         /// <returns>A task that finishes when the player left the chat.</returns>
+        /// <exception cref="GatewayException">
+        /// The server could not be told. The connection is closed anyway, so the server takes the player out
+        /// when it notices.
+        /// </exception>
         public async Task LeaveAsync()
         {
-            try
+            if (IsConnected)
             {
-                await ExecuteAsync(client => client.LeaveChat(_member));
+                try
+                {
+                    await ExecuteAsync(client => client.LeaveChat(_member));
+                }
+                finally
+                {
+                    await CloseAsync();
+                }
             }
-            catch (GatewayException ex)
-            {
-                _logger.Warning(ex.Message);
-            }
-
-            await CloseAsync();
         }
 
         /// <inheritdoc />

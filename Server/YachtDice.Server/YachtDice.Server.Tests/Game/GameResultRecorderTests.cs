@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Game;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
 
@@ -10,7 +12,8 @@ namespace YachtDice.Server.Tests.Game
 {
     /// <summary>
     /// Rules to save the result of a finished game: only the registered players are saved, the one who left
-    /// is marked as abandoned and cannot win, and nothing is saved when no registered player took part.
+    /// is marked as abandoned and cannot win, nothing is saved when no registered player took part, and the
+    /// experience earned is added to the account with the level that matches it.
     /// </summary>
     public class GameResultRecorderTests
     {
@@ -24,11 +27,14 @@ namespace YachtDice.Server.Tests.Game
         private const int WinnerTotal = 250;
         private const int LoserTotal = 180;
         private const int RoomMaxPlayers = 3;
-        private const int WinnerExperience = 350;
-        private const int LoserExperience = 210;
-        private const int PreviousExperience = 400;
+        private const int NoExperience = 0;
+        private const int FirstLevel = 1;
         private const int SecondLevel = 2;
-        private const int ThirdLevel = 3;
+        private const int SecondLevelExperience = 200;
+        private const int ThirdLevelExperience = 500;
+        private const int PreviousExperience = 150;
+        private const int ExperienceGained = 280;
+        private const int ExperienceAfterTheGame = 430;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
@@ -40,7 +46,7 @@ namespace YachtDice.Server.Tests.Game
         /// </summary>
         public GameResultRecorderTests()
         {
-            _recorder = new GameResultRecorder(_players, _history);
+            _recorder = new GameResultRecorder(_players, _history, CreateLevelTable());
             _players.Add(new Player { Id = BetoId, DisplayName = BetoName, Username = BetoName });
             _players.Add(new Player { Id = AnaId, DisplayName = AnaName, Username = AnaUsername });
         }
@@ -48,13 +54,35 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(null, _history));
+            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(null, _history, CreateLevelTable()));
         }
 
         [Fact]
         public void Constructor_NullHistoryRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, null));
+            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, null, CreateLevelTable()));
+        }
+
+        [Fact]
+        public void Constructor_NullLevelTable_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, _history, null));
+        }
+
+        [Fact]
+        public void Record_PlayerWithExperience_AddsTheGainAndUpdatesTheLevel()
+        {
+            _players.FindByName(BetoName).Single().XP = PreviousExperience;
+            PlayerResultRecord expectedBetoResult = CreateWinnerResult(BetoId, WinnerTotal);
+            expectedBetoResult.Experience = ExperienceAfterTheGame;
+            expectedBetoResult.Level = SecondLevel;
+            PlayerSnapshot beto = CreateWinner(BetoName, WinnerTotal, true);
+            beto.ExperienceGained = ExperienceGained;
+
+            _recorder.Record(_settings, CreateSnapshot(beto));
+
+            PlayerResultRecord betoResult = _history.SavedResults.Single().Players.Single();
+            Assert.Equivalent(expectedBetoResult, betoResult);
         }
 
         [Fact]
@@ -74,30 +102,30 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Record_TwoRegisteredPlayers_SavesTheWinnerAndTheLoser()
         {
-            GameResultRecord expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateWinnerResult(BetoId, WinnerTotal));
-            expected.Players.Add(CreateResult(AnaId, LoserTotal, PlayerResultStatus.Completed));
+            GameResultRecord expectedSavedResult = CreateExpectedResult(BetoId);
+            expectedSavedResult.Players.Add(CreateWinnerResult(BetoId, WinnerTotal));
+            expectedSavedResult.Players.Add(CreateResult(AnaId, LoserTotal, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreateWinner(BetoName, WinnerTotal, true),
                 CreatePlayer(AnaName, LoserTotal, true));
 
             _recorder.Record(_settings, snapshot);
 
-            Assert.Equivalent(new[] { expected }, _history.SavedResults, strict: true);
+            Assert.Equivalent(new[] { expectedSavedResult }, _history.SavedResults, strict: true);
         }
 
         [Fact]
         public void Record_GuestAndRegisteredPlayer_LeavesTheGuestOut()
         {
-            GameResultRecord expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateResult(BetoId, LoserTotal, PlayerResultStatus.Completed));
+            GameResultRecord expectedSavedResult = CreateExpectedResult(BetoId);
+            expectedSavedResult.Players.Add(CreateResult(BetoId, LoserTotal, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreateWinner(GuestName, WinnerTotal, true),
                 CreatePlayer(BetoName, LoserTotal, true));
 
             _recorder.Record(_settings, snapshot);
 
-            Assert.Equivalent(new[] { expected }, _history.SavedResults, strict: true);
+            Assert.Equivalent(new[] { expectedSavedResult }, _history.SavedResults, strict: true);
         }
 
         [Fact]
@@ -115,127 +143,30 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Record_WinnerWhoLeft_IsSavedAsAbandonedAndNotAsWinner()
         {
-            GameResultRecord expected = CreateExpectedResult(BetoId);
-            expected.Players.Add(CreateResult(BetoId, WinnerTotal, PlayerResultStatus.Abandoned));
-            expected.Players.Add(CreateResult(AnaId, LoserTotal, PlayerResultStatus.Completed));
+            GameResultRecord expectedSavedResult = CreateExpectedResult(BetoId);
+            expectedSavedResult.Players.Add(CreateResult(BetoId, WinnerTotal, PlayerResultStatus.Abandoned));
+            expectedSavedResult.Players.Add(CreateResult(AnaId, LoserTotal, PlayerResultStatus.Completed));
             GameSnapshot snapshot = CreateSnapshot(
                 CreateWinner(BetoName, WinnerTotal, false),
                 CreatePlayer(AnaName, LoserTotal, true));
 
             _recorder.Record(_settings, snapshot);
 
-            Assert.Equivalent(new[] { expected }, _history.SavedResults, strict: true);
+            Assert.Equivalent(new[] { expectedSavedResult }, _history.SavedResults, strict: true);
         }
 
         [Fact]
         public void Record_TwoNamesOfTheSameAccount_SavesTheAccountOnce()
         {
-            GameResultRecord expected = CreateExpectedResult(AnaId);
-            expected.Players.Add(CreateWinnerResult(AnaId, WinnerTotal));
+            GameResultRecord expectedSavedResult = CreateExpectedResult(AnaId);
+            expectedSavedResult.Players.Add(CreateWinnerResult(AnaId, WinnerTotal));
             GameSnapshot snapshot = CreateSnapshot(
                 CreateWinner(AnaName, WinnerTotal, true),
                 CreatePlayer(AnaUsername, LoserTotal, true));
 
             _recorder.Record(_settings, snapshot);
 
-            Assert.Equivalent(new[] { expected }, _history.SavedResults, strict: true);
-        }
-
-        [Fact]
-        public void Record_WinnerAndLoser_AddTheExperienceOfEachOne()
-        {
-            Player[] expectedAccounts =
-            {
-                CreateAccount(BetoId, BetoName, BetoName, WinnerExperience, SecondLevel),
-                CreateAccount(AnaId, AnaName, AnaUsername, LoserExperience, SecondLevel)
-            };
-            GameSnapshot snapshot = CreateSnapshot(
-                CreateWinner(BetoName, WinnerTotal, true),
-                CreatePlayer(AnaName, LoserTotal, true));
-
-            _recorder.Record(_settings, snapshot);
-
-            Assert.Equivalent(expectedAccounts, _players.Players, strict: true);
-        }
-
-        [Fact]
-        public void Record_PlayerWithExperience_AddsTheNewExperienceAndGoesUpALevel()
-        {
-            _players.Players[0].XP = PreviousExperience;
-            _players.Players[0].Level = SecondLevel;
-            Player[] expectedAccounts =
-            {
-                CreateAccount(BetoId, BetoName, BetoName, PreviousExperience + WinnerExperience, ThirdLevel),
-                CreateAccount(AnaId, AnaName, AnaUsername, null, null)
-            };
-            GameSnapshot snapshot = CreateSnapshot(CreateWinner(BetoName, WinnerTotal, true));
-
-            _recorder.Record(_settings, snapshot);
-
-            Assert.Equivalent(expectedAccounts, _players.Players, strict: true);
-        }
-
-        [Fact]
-        public void Record_PlayerWhoLeft_DoesNotEarnExperience()
-        {
-            Player[] expectedAccounts =
-            {
-                CreateAccount(BetoId, BetoName, BetoName, null, null),
-                CreateAccount(AnaId, AnaName, AnaUsername, LoserExperience, SecondLevel)
-            };
-            GameSnapshot snapshot = CreateSnapshot(
-                CreateWinner(BetoName, WinnerTotal, false),
-                CreatePlayer(AnaName, LoserTotal, true));
-
-            _recorder.Record(_settings, snapshot);
-
-            Assert.Equivalent(expectedAccounts, _players.Players, strict: true);
-        }
-
-        [Fact]
-        public void Record_GuestAndRegisteredPlayer_OnlyTheRegisteredPlayerEarnsExperience()
-        {
-            Player[] expectedAccounts =
-            {
-                CreateAccount(BetoId, BetoName, BetoName, LoserExperience, SecondLevel),
-                CreateAccount(AnaId, AnaName, AnaUsername, null, null)
-            };
-            GameSnapshot snapshot = CreateSnapshot(
-                CreateWinner(GuestName, WinnerTotal, true),
-                CreatePlayer(BetoName, LoserTotal, true));
-
-            _recorder.Record(_settings, snapshot);
-
-            Assert.Equivalent(expectedAccounts, _players.Players, strict: true);
-        }
-
-        [Fact]
-        public void Record_TwoNamesOfTheSameAccount_EarnsTheExperienceOnce()
-        {
-            Player[] expectedAccounts =
-            {
-                CreateAccount(BetoId, BetoName, BetoName, null, null),
-                CreateAccount(AnaId, AnaName, AnaUsername, WinnerExperience, SecondLevel)
-            };
-            GameSnapshot snapshot = CreateSnapshot(
-                CreateWinner(AnaName, WinnerTotal, true),
-                CreatePlayer(AnaUsername, LoserTotal, true));
-
-            _recorder.Record(_settings, snapshot);
-
-            Assert.Equivalent(expectedAccounts, _players.Players, strict: true);
-        }
-
-        private static Player CreateAccount(int id, string displayName, string username, int? experience, int? level)
-        {
-            return new Player
-            {
-                Id = id,
-                DisplayName = displayName,
-                Username = username,
-                XP = experience,
-                Level = level
-            };
+            Assert.Equivalent(new[] { expectedSavedResult }, _history.SavedResults, strict: true);
         }
 
         private static GameResultRecord CreateExpectedResult(int hostPlayerId)
@@ -250,15 +181,22 @@ namespace YachtDice.Server.Tests.Game
                 PlayerId = playerId,
                 FinalScore = finalScore,
                 IsWinner = false,
-                Status = status
+                Status = status,
+                Experience = NoExperience,
+                Level = FirstLevel
             };
         }
 
         private static PlayerResultRecord CreateWinnerResult(int playerId, int finalScore)
         {
-            PlayerResultRecord result = CreateResult(playerId, finalScore, PlayerResultStatus.Completed);
-            result.IsWinner = true;
-            return result;
+            PlayerResultRecord winnerResult = CreateResult(playerId, finalScore, PlayerResultStatus.Completed);
+            winnerResult.IsWinner = true;
+            return winnerResult;
+        }
+
+        private static LevelTable CreateLevelTable()
+        {
+            return new LevelTable(new[] { NoExperience, SecondLevelExperience, ThirdLevelExperience });
         }
 
         private static PlayerSnapshot CreatePlayer(string name, int total, bool isPresent)

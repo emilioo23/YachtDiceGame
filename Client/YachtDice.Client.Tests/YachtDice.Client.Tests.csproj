@@ -55,6 +55,8 @@
     <Compile Include="Game\TurnPhaseResolverTests.cs" />
     <Compile Include="Game\YachtCelebrationRuleTests.cs" />
     <Compile Include="Players\InitialLetterTests.cs" />
+    <Compile Include="Chat\ChatLinkDetectorTests.cs" />
+    <Compile Include="Players\LevelProgressTests.cs" />
     <Compile Include="Rooms\PresenceComparerTests.cs" />
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
@@ -70,7 +72,6 @@
     <Compile Include="Utils\InvitationResultMessagesTests.cs" />
     <Compile Include="Utils\LoginResultMessagesTests.cs" />
     <Compile Include="Utils\MatchPlayerFactoryTests.cs" />
-    <Compile Include="Utils\PlayerInitialsTests.cs" />
     <Compile Include="Utils\PresenceMessagesTests.cs" />
     <Compile Include="Utils\RoomListItemFactoryTests.cs" />
     <Compile Include="Utils\RoomResultMessagesTests.cs" />

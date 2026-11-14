@@ -11,6 +11,8 @@ namespace YachtDice.Client.Tests.Connection
     public class ConnectionLossGateTests
     {
         private const int Callers = 20;
+        private const int FirstCaller = 0;
+        private const int SingleWinner = 1;
 
         [Fact]
         public void TryEnter_FirstCall_ReturnsTrue()
@@ -50,11 +52,11 @@ namespace YachtDice.Client.Tests.Connection
         {
             var gate = new ConnectionLossGate();
 
-            bool[] results = Enumerable.Range(0, Callers)
+            bool[] results = Enumerable.Range(FirstCaller, Callers)
                 .AsParallel()
                 .Select(caller => gate.TryEnter())
                 .ToArray();
-            Assert.Equal(1, results.Count(isFirst => isFirst));
+            Assert.Equal(SingleWinner, results.Count(isFirst => isFirst));
         }
 
         [Fact]
@@ -63,9 +65,9 @@ namespace YachtDice.Client.Tests.Connection
             var gate = new ConnectionLossGate();
             gate.Release();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.True(entered);
+            Assert.True(hasEntered);
         }
 
         [Fact]
@@ -76,9 +78,9 @@ namespace YachtDice.Client.Tests.Connection
             gate.Release();
             gate.TryEnter();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.False(entered);
+            Assert.False(hasEntered);
         }
 
         [Fact]
@@ -88,9 +90,9 @@ namespace YachtDice.Client.Tests.Connection
             var secondGate = new ConnectionLossGate();
             firstGate.TryEnter();
 
-            bool entered = secondGate.TryEnter();
+            bool hasEntered = secondGate.TryEnter();
 
-            Assert.True(entered);
+            Assert.True(hasEntered);
         }
 
         [Fact]
@@ -100,9 +102,9 @@ namespace YachtDice.Client.Tests.Connection
             gate.TryEnter();
             gate.TryEnter();
 
-            bool entered = gate.TryEnter();
+            bool hasEntered = gate.TryEnter();
 
-            Assert.False(entered);
+            Assert.False(hasEntered);
         }
     }
 }

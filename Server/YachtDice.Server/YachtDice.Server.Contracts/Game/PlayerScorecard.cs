@@ -58,6 +58,13 @@ namespace YachtDice.Server.Contracts.Game
         public bool IsWinner { get; set; }
 
         /// <summary>
+        /// The experience that the player earned in the game. It is only set when the game is over, and it is
+        /// zero for the players who left before the end.
+        /// </summary>
+        [DataMember]
+        public int ExperienceGained { get; set; }
+
+        /// <summary>
         /// The boxes of the scorecard, in the order of the scorecard.
         /// </summary>
         [DataMember]

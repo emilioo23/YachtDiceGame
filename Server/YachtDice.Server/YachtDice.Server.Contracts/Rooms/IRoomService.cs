@@ -43,11 +43,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// Puts the player inside a room of the list. A private room also needs its code.
         /// </summary>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
-        /// <param name="room">Room of the list that the player wants to enter and its code.</param>
+        /// <param name="roomAccess">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        JoinRoomResult JoinListedRoom(string displayName, Room room);
+        JoinRoomResult JoinListedRoom(string displayName, RoomAccess roomAccess);
 
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.

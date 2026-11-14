@@ -124,6 +124,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario no puede tener palabras ofensivas. Elige otro nombre.
+        /// </summary>
+        public static string Auth_ErrorOffensiveUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorOffensiveUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
         /// </summary>
         public static string Auth_ErrorInvalidUsername {
@@ -844,6 +853,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se permiten enlaces en el chat.
+        /// </summary>
+        public static string Game_Chat_LinksNotAllowed {
+            get {
+                return ResourceManager.GetString("Game_Chat_LinksNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo enviar el mensaje..
         /// </summary>
         public static string Game_Chat_SendFailed {
@@ -1101,6 +1119,15 @@ namespace YachtDice.Resources {
         public static string Game_Topbar_TurnOf {
             get {
                 return ResourceManager.GetString("Game_Topbar_TurnOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar el resultado de la partida, así que la experiencia de esta partida no se sumó..
+        /// </summary>
+        public static string Game_ResultNotSaved {
+            get {
+                return ResourceManager.GetString("Game_ResultNotSaved", resourceCulture);
             }
         }
         
@@ -2275,15 +2302,6 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Siguiente nivel: {0} / {1} XP.
-        /// </summary>
-        public static string Profile_NextLevelFormat {
-            get {
-                return ResourceManager.GetString("Profile_NextLevelFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Nivel {0} · {1} XP.
         /// </summary>
         public static string Profile_LevelFormat {
@@ -2595,6 +2613,42 @@ namespace YachtDice.Resources {
         public static string Results_ColumnXp {
             get {
                 return ResourceManager.GetString("Results_ColumnXp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a +{0} XP.
+        /// </summary>
+        public static string Results_ExperienceGainedFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceGainedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel {0}.
+        /// </summary>
+        public static string Results_LevelFormat {
+            get {
+                return ResourceManager.GetString("Results_LevelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} / {1} XP.
+        /// </summary>
+        public static string Results_ExperienceProgressFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceProgressFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Subiste de nivel!.
+        /// </summary>
+        public static string Results_LevelUp {
+            get {
+                return ResourceManager.GetString("Results_LevelUp", resourceCulture);
             }
         }
         

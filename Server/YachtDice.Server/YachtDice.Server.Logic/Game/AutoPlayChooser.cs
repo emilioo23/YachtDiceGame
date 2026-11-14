@@ -31,7 +31,7 @@ namespace YachtDice.Server.Logic.Game
         /// </summary>
         /// <param name="options">Boxes that the player can choose with the current dice.</param>
         /// <returns>The box to use.</returns>
-        public static ScoreCategory Choose(IReadOnlyList<ScoreOption> options)
+        public static ScoreCategory Choose(IReadOnlyList<ScoreEntry> options)
         {
             return options
                 .OrderByDescending(option => option.Points)

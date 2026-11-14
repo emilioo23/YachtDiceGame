@@ -53,8 +53,9 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
-        /// Saves the result of a game that just finished, with the players who took part in it. The rooms are
-        /// not stored while the game runs, so a row of the room is created only to link the result to it.
+        /// Saves the result of a game that just finished, with the players who took part in it, and updates
+        /// the experience and the level of each player in the same transaction. The rooms are not stored while
+        /// the game runs, so a row of the room is created only to link the result to it.
         /// </summary>
         /// <param name="result">Result of the game.</param>
         /// <exception cref="ArgumentNullException">The result is null.</exception>
@@ -104,9 +105,21 @@ namespace YachtDice.Server.Data.Repositories
                     IsWinner = player.IsWinner,
                     Status = player.Status.ToString()
                 });
+                UpdateProgress(context, player);
             }
 
             context.GameHistory.Add(game);
+        }
+
+        private static void UpdateProgress(YachtDiceContext context, PlayerResultRecord player)
+        {
+            Player account = context.Player.Find(player.PlayerId);
+
+            if (account != null)
+            {
+                account.XP = player.Experience;
+                account.Level = player.Level;
+            }
         }
 
         private static string CreateUnusedRoomCode(YachtDiceContext context)

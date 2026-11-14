@@ -24,33 +24,33 @@ namespace YachtDice.Client.Tests.Utils
         public void Create_RoomWithFreeSeats_ReturnsTheRowWithTheDataOfTheRoom()
         {
             RoomSummary summary = CreateSummary(TwoPlayers, FourPlayers, false);
-            RoomListItem expected = CreateExpectedItem(summary, true);
+            RoomListItem expectedItem = CreateExpectedItem(summary, true);
 
             RoomListItem item = CreateItem(summary);
 
-            Assert.Equivalent(expected, item);
+            Assert.Equivalent(expectedItem, item);
         }
 
         [Fact]
         public void Create_FullRoom_ReturnsTheRowWithoutSpace()
         {
             RoomSummary summary = CreateSummary(FourPlayers, FourPlayers, false);
-            RoomListItem expected = CreateExpectedItem(summary, false);
+            RoomListItem expectedItem = CreateExpectedItem(summary, false);
 
             RoomListItem item = CreateItem(summary);
 
-            Assert.Equivalent(expected, item);
+            Assert.Equivalent(expectedItem, item);
         }
 
         [Fact]
         public void Create_PrivateRoom_ReturnsTheRowWithThePrivateText()
         {
             RoomSummary summary = CreateSummary(TwoPlayers, FourPlayers, true);
-            RoomListItem expected = CreateExpectedItem(summary, true);
+            RoomListItem expectedItem = CreateExpectedItem(summary, true);
 
             RoomListItem item = CreateItem(summary);
 
-            Assert.Equivalent(expected, item);
+            Assert.Equivalent(expectedItem, item);
         }
 
         private static RoomListItem CreateExpectedItem(RoomSummary summary, bool hasSpace)

@@ -2,6 +2,7 @@
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Tests.InMemory;
 
@@ -14,8 +15,8 @@ namespace YachtDice.Server.Tests.Authentication
     {
         private const string Username = "gabrielhernandez";
         private const string OtherUsername = "emilio23";
-        private const string Email = "gabriel@gmail.com";
-        private const string OtherEmail = "emilio@gmail.com";
+        private const string Email = "gabriel@example.com";
+        private const string OtherEmail = "emilio@example.com";
         private const string InvalidEmail = "not-an-email";
         private const string Password = "Secret123!";
         private const string FirstName = "Gabriel";
@@ -23,7 +24,9 @@ namespace YachtDice.Server.Tests.Authentication
         private const string WhitespaceOnly = "   ";
         private const string UsernameWithSpaces = "gabriel hm";
         private const string WeakPassword = "abc";
-        private const string EmailDomain = "@gmail.com";
+        private const string OffensiveWord = "pendejo";
+        private const string OffensiveUsername = "el_pendejo99";
+        private const string EmailDomain = "@example.com";
         private const char FillCharacter = 'a';
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
@@ -43,7 +46,7 @@ namespace YachtDice.Server.Tests.Authentication
         /// </summary>
         public RegistrationServiceTests()
         {
-            _service = new RegistrationService(_players);
+            _service = new RegistrationService(_players, new OffensiveWordFilter(new[] { OffensiveWord }));
         }
 
         [Fact]
@@ -51,26 +54,26 @@ namespace YachtDice.Server.Tests.Authentication
         {
             Player newPlayer = CreatePlayer(Username, Email);
 
-            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
-            Assert.Equal(RegistrationResult.Success, result);
+            Assert.Equal(RegistrationResult.Success, registrationResult);
         }
 
         [Fact]
         public void RegisterPlayer_ValidData_SavesThePlayerWithTheHashedPassword()
         {
             Player newPlayer = CreatePlayer(Username, Email);
-            var expected = new { IsPlainText = false, MatchesThePassword = true };
+            var expectedSavedPassword = new { IsPlainText = false, MatchesThePassword = true };
 
             _service.RegisterPlayer(newPlayer, Password);
 
             Player savedPlayer = _players.Players.Single();
-            var actual = new
+            var actualSavedPassword = new
             {
                 IsPlainText = savedPlayer.PwdHash == Password,
                 MatchesThePassword = PasswordHasher.Verify(Password, savedPlayer.PwdHash)
             };
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedSavedPassword, actualSavedPassword);
         }
 
         [Fact]
@@ -78,9 +81,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             _players.Add(CreatePlayer(OtherUsername, Email));
 
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
 
-            Assert.Equal(RegistrationResult.EmailAlreadyRegistered, result);
+            Assert.Equal(RegistrationResult.EmailAlreadyRegistered, registrationResult);
         }
 
         [Fact]
@@ -98,9 +101,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             _players.Add(CreatePlayer(Username, OtherEmail));
 
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
 
-            Assert.Equal(RegistrationResult.UsernameAlreadyTaken, result);
+            Assert.Equal(RegistrationResult.UsernameAlreadyTaken, registrationResult);
         }
 
         [Fact]
@@ -118,9 +121,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             Player newPlayer = CreatePlayer(string.Empty, Email);
 
-            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
-            Assert.Equal(RegistrationResult.MissingRequiredField, result);
+            Assert.Equal(RegistrationResult.MissingRequiredField, registrationResult);
         }
 
         [Fact]
@@ -128,9 +131,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             Player newPlayer = CreatePlayer(Username, InvalidEmail);
 
-            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
-            Assert.Equal(RegistrationResult.InvalidEmail, result);
+            Assert.Equal(RegistrationResult.InvalidEmail, registrationResult);
         }
 
         [Theory]
@@ -146,25 +149,28 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RegisterPlayer_UsernameAtTheLimit_ReturnsSuccess()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(UsernameAtTheLimit, Email), Password);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(UsernameAtTheLimit, Email), Password);
 
-            Assert.Equal(RegistrationResult.Success, result);
+            Assert.Equal(RegistrationResult.Success, registrationResult);
         }
 
         [Fact]
         public void RegisterPlayer_UsernameLongerThanTheLimit_ReturnsFieldTooLong()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(TooLongUsername, Email), Password);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(TooLongUsername, Email), Password);
 
-            Assert.Equal(RegistrationResult.FieldTooLong, result);
+            Assert.Equal(RegistrationResult.FieldTooLong, registrationResult);
         }
 
         [Fact]
         public void RegisterPlayer_EmailLongerThanTheLimit_ReturnsFieldTooLong()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, TooLongEmail), Password);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(Username, TooLongEmail), Password);
 
-            Assert.Equal(RegistrationResult.FieldTooLong, result);
+            Assert.Equal(RegistrationResult.FieldTooLong, registrationResult);
         }
 
         [Fact]
@@ -173,9 +179,9 @@ namespace YachtDice.Server.Tests.Authentication
             Player newPlayer = CreatePlayer(Username, Email);
             newPlayer.FirstName = TooLongName;
 
-            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
-            Assert.Equal(RegistrationResult.FieldTooLong, result);
+            Assert.Equal(RegistrationResult.FieldTooLong, registrationResult);
         }
 
         [Fact]
@@ -189,17 +195,28 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RegisterPlayer_UsernameWithSpaces_ReturnsInvalidUsername()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(UsernameWithSpaces, Email), Password);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(UsernameWithSpaces, Email), Password);
 
-            Assert.Equal(RegistrationResult.InvalidUsername, result);
+            Assert.Equal(RegistrationResult.InvalidUsername, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_UsernameWithOffensiveWord_ReturnsOffensiveUsername()
+        {
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(OffensiveUsername, Email), Password);
+
+            Assert.Equal(RegistrationResult.OffensiveUsername, registrationResult);
         }
 
         [Fact]
         public void RegisterPlayer_WeakPassword_ReturnsWeakPassword()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), WeakPassword);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(Username, Email), WeakPassword);
 
-            Assert.Equal(RegistrationResult.WeakPassword, result);
+            Assert.Equal(RegistrationResult.WeakPassword, registrationResult);
         }
 
         [Fact]
@@ -216,17 +233,18 @@ namespace YachtDice.Server.Tests.Authentication
             Player newPlayer = CreatePlayer(Username, Email);
             newPlayer.LastName = WhitespaceOnly;
 
-            RegistrationResult result = _service.RegisterPlayer(newPlayer, Password);
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
-            Assert.Equal(RegistrationResult.MissingRequiredField, result);
+            Assert.Equal(RegistrationResult.MissingRequiredField, registrationResult);
         }
 
         [Fact]
         public void RegisterPlayer_PasswordWithOnlySpaces_ReturnsMissingRequiredField()
         {
-            RegistrationResult result = _service.RegisterPlayer(CreatePlayer(Username, Email), WhitespaceOnly);
+            RegistrationResult registrationResult =
+                _service.RegisterPlayer(CreatePlayer(Username, Email), WhitespaceOnly);
 
-            Assert.Equal(RegistrationResult.MissingRequiredField, result);
+            Assert.Equal(RegistrationResult.MissingRequiredField, registrationResult);
         }
 
         private static Player CreatePlayer(string username, string email)

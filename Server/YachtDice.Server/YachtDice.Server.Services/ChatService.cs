@@ -5,6 +5,7 @@ namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Chat;
     using LogicLogging = YachtDice.Server.Logic.Logging;
+    using LogicModeration = YachtDice.Server.Logic.Moderation;
     using LogicRooms = YachtDice.Server.Logic.Rooms;
     using RoomContracts = YachtDice.Server.Contracts.Rooms;
 
@@ -22,7 +23,10 @@ namespace YachtDice.Server.Services
 
         private const string NotInsideRoomMessage = "A player who is not inside the room cannot join its chat.";
 
+        private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
+
         private readonly LogicRooms.IRoomManager _roomManager;
+        private readonly LogicModeration.OffensiveWordFilter _wordFilter;
 
         private readonly CallbackRegistry<Contracts.IChatCallback> _callbacks =
             new CallbackRegistry<Contracts.IChatCallback>();
@@ -33,10 +37,11 @@ namespace YachtDice.Server.Services
         /// Initializes a new instance of the ChatService class.
         /// </summary>
         /// <param name="roomManager">The rules and the state of the rooms. It is shared with the room service.</param>
-        public ChatService(LogicRooms.IRoomManager roomManager)
+        public ChatService(LogicRooms.IRoomManager roomManager, LogicModeration.OffensiveWordFilter wordFilter)
         {
             _roomManager = roomManager
                 ?? throw new ArgumentNullException(nameof(roomManager));
+            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -89,7 +94,7 @@ namespace YachtDice.Server.Services
             }
         }
 
-        private static Contracts.ChatMessage CreateDeliveredMessage(LogicRooms.RoomPlayer author, string content)
+        private Contracts.ChatMessage CreateDeliveredMessage(LogicRooms.RoomPlayer author, string content)
         {
             string text = content.Trim();
 
@@ -103,7 +108,7 @@ namespace YachtDice.Server.Services
                 AuthorId = author.Id,
                 Author = author.DisplayName,
                 AvatarId = author.AvatarId,
-                Content = text,
+                Content = LogicModeration.LinkCensor.Censor(_wordFilter.Censor(text)),
                 Timestamp = DateTime.UtcNow
             };
 

@@ -59,15 +59,15 @@ namespace YachtDice.Views
 
         private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            GlobalFilterButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            FriendsFilterButton.Style = (Style)FindResource(ThemeResourceKeys.OutlineButtonStyleKey);
             RenderRanking(_ranking);
         }
 
         private async void FriendsFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            FriendsFilterButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            GlobalFilterButton.Style = (Style)FindResource(ResourceKeys.OutlineButtonStyleKey);
+            FriendsFilterButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            GlobalFilterButton.Style = (Style)FindResource(ThemeResourceKeys.OutlineButtonStyleKey);
 
             await ShowFriendsRankingAsync();
         }
@@ -211,7 +211,7 @@ namespace YachtDice.Views
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
 
-            var textBrush = (Brush)FindResource(ResourceKeys.TextBrushKey);
+            var textBrush = (Brush)FindResource(ThemeResourceKeys.TextBrushKey);
             var medalLabel = new TextBlock
             {
                 Text = entry.Medal,

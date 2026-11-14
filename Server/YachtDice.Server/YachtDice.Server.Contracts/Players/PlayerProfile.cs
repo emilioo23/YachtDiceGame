@@ -4,7 +4,7 @@ namespace YachtDice.Server.Contracts.Players
 {
     /// <summary>
     /// Avatar, level and experience of a player, as seen by the client. The profile screen uses it to show
-    /// which avatars the player can choose and how much experience is left for the next level.
+    /// which avatars the player can choose.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
     public class PlayerProfile
@@ -28,13 +28,13 @@ namespace YachtDice.Server.Contracts.Players
         public int Experience { get; set; }
 
         /// <summary>
-        /// Experience points that the player needed to reach the current level.
+        /// Experience where the current level of the player starts.
         /// </summary>
         [DataMember]
         public int LevelStartExperience { get; set; }
 
         /// <summary>
-        /// Experience points that the player needs to reach the next level.
+        /// Experience where the next level starts. At the last level it is the same as the start of the level.
         /// </summary>
         [DataMember]
         public int NextLevelExperience { get; set; }

@@ -63,7 +63,6 @@
     <Compile Include="Category.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\EnvironmentSettings.cs" />
     <Compile Include="Exceptions\DataAccessException.cs" />
     <Compile Include="Friendship.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
@@ -136,12 +135,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="YachtDiceContext.Connection.cs" />
     <Compile Include="YachtDiceContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="YachtDiceContext.Connection.cs" />
     <Compile Include="YachtDiceContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

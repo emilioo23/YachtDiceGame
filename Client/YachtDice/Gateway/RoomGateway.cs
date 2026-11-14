@@ -15,8 +15,6 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
-        private readonly AppLogger _logger;
-
         /// <summary>
         /// Initializes the gateway for the player.
         /// </summary>
@@ -24,7 +22,6 @@ namespace YachtDice.Gateway
         public RoomGateway(PlayerSession session)
         {
             Session = session;
-            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -80,13 +77,13 @@ namespace YachtDice.Gateway
         /// Puts the player inside a room of the list of rooms. A private room also needs its code. If the
         /// player cannot enter, the connection is closed.
         /// </summary>
-        /// <param name="room">Room of the list that the player wants to enter and its code.</param>
+        /// <param name="roomAccess">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered or why not.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task<RoomResultCode> JoinListedRoomAsync(Room room)
+        public async Task<RoomResultCode> JoinListedRoomAsync(RoomAccess roomAccess)
         {
             JoinRoomResult result = await ConnectAndExecuteAsync(
-                client => client.JoinListedRoom(Session.DisplayName, room));
+                client => client.JoinListedRoom(Session.DisplayName, roomAccess));
 
             return await ApplyJoinResultAsync(result);
         }
@@ -150,23 +147,29 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Takes the player out of the room and closes the connection.
+        /// Takes the player out of the room and closes the connection. If the connection was already lost, the
+        /// server took the player out when it noticed, so there is nothing to do.
         /// </summary>
         /// <returns>A task that finishes when the player left.</returns>
+        /// <exception cref="GatewayException">
+        /// The server could not be told. The connection is closed anyway, so the server takes the player out
+        /// when it notices.
+        /// </exception>
         public async Task LeaveRoomAsync()
         {
-            RoomMember member = CreateMember();
-
-            try
+            if (IsConnected)
             {
-                await ExecuteAsync(client => client.LeaveRoom(member));
-            }
-            catch (GatewayException ex)
-            {
-                _logger.Warning(ex.Message);
-            }
+                RoomMember member = CreateMember();
 
-            await CloseAsync();
+                try
+                {
+                    await ExecuteAsync(client => client.LeaveRoom(member));
+                }
+                finally
+                {
+                    await CloseAsync();
+                }
+            }
         }
 
         /// <inheritdoc />

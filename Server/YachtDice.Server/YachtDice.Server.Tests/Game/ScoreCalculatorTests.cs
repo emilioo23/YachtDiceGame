@@ -9,6 +9,16 @@ namespace YachtDice.Server.Tests.Game
     /// </summary>
     public class ScoreCalculatorTests
     {
+        private const int NoCombinationChoicePoints = 16;
+        private const int UnknownCategoryValue = 99;
+
+        private static readonly int[] ThreeFoursAndTwoOthers = { 4, 4, 4, 1, 2 };
+        private static readonly int[] NoCombination = { 1, 2, 3, 4, 6 };
+        private static readonly int[] YachtOfThrees = { 3, 3, 3, 3, 3 };
+        private static readonly int[] OnlyFourDice = { 1, 2, 3, 4 };
+        private static readonly int[] DieWithSeven = { 1, 2, 3, 4, 7 };
+        private static readonly int[] LittleStraight = { 1, 2, 3, 4, 5 };
+
         [Theory]
         [InlineData(ScoreCategory.Ones, new[] { 1, 1, 1, 4, 5 }, 3)]
         [InlineData(ScoreCategory.Twos, new[] { 2, 2, 3, 4, 5 }, 4)]
@@ -71,7 +81,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.FourOfAKind, new[] { 4, 4, 4, 1, 2 });
+            var points = calculator.Calculate(ScoreCategory.FourOfAKind, ThreeFoursAndTwoOthers);
 
             Assert.Equal(0, points);
         }
@@ -109,9 +119,9 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.Choice, new[] { 1, 2, 3, 4, 6 });
+            var points = calculator.Calculate(ScoreCategory.Choice, NoCombination);
 
-            Assert.Equal(16, points);
+            Assert.Equal(NoCombinationChoicePoints, points);
         }
 
         [Theory]
@@ -138,7 +148,7 @@ namespace YachtDice.Server.Tests.Game
         public void CalculateJoker_YachtOfThrees_UsesTheJokerValueOfEachBox(ScoreCategory category, int expectedPoints)
         {
             var calculator = new ScoreCalculator();
-            var yachtOfThrees = new[] { 3, 3, 3, 3, 3 };
+            var yachtOfThrees = YachtOfThrees;
 
             var points = calculator.CalculateJoker(category, yachtOfThrees);
 
@@ -148,13 +158,13 @@ namespace YachtDice.Server.Tests.Game
         [Theory]
         [InlineData(new[] { 2, 2, 2, 2, 2 }, true)]
         [InlineData(new[] { 2, 2, 2, 2, 3 }, false)]
-        public void IsYacht_Dice_TellsWhetherAllAreEqual(int[] dice, bool expected)
+        public void IsYacht_Dice_TellsWhetherAllAreEqual(int[] dice, bool isExpectedYacht)
         {
             var calculator = new ScoreCalculator();
 
             var isYacht = calculator.IsYacht(dice);
 
-            Assert.Equal(expected, isYacht);
+            Assert.Equal(isExpectedYacht, isYacht);
         }
 
         [Fact]
@@ -162,25 +172,25 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            Assert.Throws<ArgumentException>(() => calculator.Calculate(ScoreCategory.Choice, new[] { 1, 2, 3, 4 }));
+            Assert.Throws<ArgumentException>(() => calculator.Calculate(ScoreCategory.Choice, OnlyFourDice));
         }
 
         [Fact]
-        public void Calculate_DieWithValueSeven_ThrowsArgumentException()
+        public void Calculate_DieWithValueSeven_ThrowsArgumentOutOfRangeException()
         {
             var calculator = new ScoreCalculator();
 
-            Assert.Throws<ArgumentException>(() => calculator.Calculate(ScoreCategory.Choice, new[] { 1, 2, 3, 4, 7 }));
+            Assert.Throws<ArgumentOutOfRangeException>(() => calculator.Calculate(ScoreCategory.Choice, DieWithSeven));
         }
 
         [Fact]
         public void Calculate_UnknownCategory_ThrowsArgumentOutOfRangeException()
         {
             var calculator = new ScoreCalculator();
-            var unknownCategory = (ScoreCategory)99;
+            var unknownCategory = (ScoreCategory)UnknownCategoryValue;
 
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => calculator.Calculate(unknownCategory, new[] { 1, 2, 3, 4, 5 }));
+                () => calculator.Calculate(unknownCategory, LittleStraight));
         }
     }
 }

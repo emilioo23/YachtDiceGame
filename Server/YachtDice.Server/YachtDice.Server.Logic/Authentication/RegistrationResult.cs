@@ -27,6 +27,9 @@
         InvalidUsername,
 
         /// <summary>The password is too short, too long or does not have a letter and a digit.</summary>
-        WeakPassword
+        WeakPassword,
+
+        /// <summary>The username contains an offensive word.</summary>
+        OffensiveUsername
     }
 }

@@ -63,11 +63,11 @@
         /// <returns>True if both rows show the same information.</returns>
         public bool HasSameContentAs(RoomListItem other)
         {
-            return RoomId == other.RoomId
-                && Title == other.Title
-                && Details == other.Details
-                && PrivacyText == other.PrivacyText
-                && HasSpace == other.HasSpace;
+            bool isSameRoom = RoomId == other.RoomId && Title == other.Title;
+            bool isSameDescription = Details == other.Details && PrivacyText == other.PrivacyText;
+            bool hasSameText = isSameRoom && isSameDescription;
+
+            return hasSameText && HasSpace == other.HasSpace;
         }
     }
 }

@@ -82,5 +82,12 @@ namespace YachtDice.Server.Contracts.Game
         /// </summary>
         [DataMember]
         public List<ScoreChoice> Options { get; set; }
+
+        /// <summary>
+        /// Whether the result of the finished game could not be saved. When it is true, nobody earned
+        /// experience in the game.
+        /// </summary>
+        [DataMember]
+        public bool HasResultSaveFailed { get; set; }
     }
 }

@@ -12,12 +12,17 @@ namespace YachtDice.Client.Tests.Game
         private const int NegativeVersion = -1;
         private const int FirstVersion = 1;
         private const int FarVersion = 100;
+        private const int SecondVersion = 2;
+        private const int ThirdVersion = 3;
+        private const int FourthVersion = 4;
+        private const int FifthVersion = 5;
+
         [Fact]
         public void TryAccept_FirstState_ReturnsTrue()
         {
             var gate = new StateVersionGate();
 
-            var isAccepted = gate.TryAccept(1);
+            var isAccepted = gate.TryAccept(FirstVersion);
 
             Assert.True(isAccepted);
         }
@@ -26,20 +31,20 @@ namespace YachtDice.Client.Tests.Game
         public void TryAccept_NewerState_ReturnsTrue()
         {
             var gate = new StateVersionGate();
-            gate.TryAccept(3);
+            gate.TryAccept(ThirdVersion);
 
-            var isAccepted = gate.TryAccept(4);
+            var isAccepted = gate.TryAccept(FourthVersion);
 
             Assert.True(isAccepted);
         }
 
         [Theory]
-        [InlineData(3)]
-        [InlineData(2)]
+        [InlineData(ThirdVersion)]
+        [InlineData(SecondVersion)]
         public void TryAccept_RepeatedOrOlderState_ReturnsFalse(int version)
         {
             var gate = new StateVersionGate();
-            gate.TryAccept(3);
+            gate.TryAccept(ThirdVersion);
 
             var isAccepted = gate.TryAccept(version);
 
@@ -50,10 +55,10 @@ namespace YachtDice.Client.Tests.Game
         public void TryAccept_OldStateAfterNewOne_DoesNotLowerTheLastVersion()
         {
             var gate = new StateVersionGate();
-            gate.TryAccept(5);
-            gate.TryAccept(2);
+            gate.TryAccept(FifthVersion);
+            gate.TryAccept(SecondVersion);
 
-            var isAccepted = gate.TryAccept(4);
+            var isAccepted = gate.TryAccept(FourthVersion);
 
             Assert.False(isAccepted);
         }
@@ -63,9 +68,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(NoVersion);
+            bool isAccepted = gate.TryAccept(NoVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
 
         [Fact]
@@ -73,9 +78,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(NegativeVersion);
+            bool isAccepted = gate.TryAccept(NegativeVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
 
         [Fact]
@@ -83,9 +88,9 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            bool accepted = gate.TryAccept(int.MaxValue);
+            bool isAccepted = gate.TryAccept(int.MaxValue);
 
-            Assert.True(accepted);
+            Assert.True(isAccepted);
         }
 
         [Fact]
@@ -94,9 +99,9 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(FirstVersion);
 
-            bool accepted = gate.TryAccept(FarVersion);
+            bool isAccepted = gate.TryAccept(FarVersion);
 
-            Assert.True(accepted);
+            Assert.True(isAccepted);
         }
 
         [Fact]
@@ -105,9 +110,9 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(int.MaxValue);
 
-            bool accepted = gate.TryAccept(FarVersion);
+            bool isAccepted = gate.TryAccept(FarVersion);
 
-            Assert.False(accepted);
+            Assert.False(isAccepted);
         }
     }
 }

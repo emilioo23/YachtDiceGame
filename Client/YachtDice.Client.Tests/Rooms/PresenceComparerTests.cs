@@ -31,11 +31,11 @@ namespace YachtDice.Client.Tests.Rooms
             List<MatchParticipant> before = CreatePlayers(FirstId, SecondId);
             List<MatchParticipant> after = CreatePlayers(FirstId);
 
-            MatchParticipant[] expected = { new MatchParticipant(SecondId, SecondName) };
+            MatchParticipant[] expectedDeparted = { new MatchParticipant(SecondId, SecondName) };
 
             List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
-            Assert.Equivalent(expected, departed, strict: true);
+            Assert.Equivalent(expectedDeparted, departed, strict: true);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace YachtDice.Client.Tests.Rooms
             List<MatchParticipant> before = CreatePlayers(FirstId, SecondId, ThirdId);
             List<MatchParticipant> after = CreatePlayers(FirstId);
 
-            MatchParticipant[] expected =
+            MatchParticipant[] expectedDeparted =
             {
                 new MatchParticipant(SecondId, SecondName),
                 new MatchParticipant(ThirdId, ThirdName)
@@ -52,7 +52,7 @@ namespace YachtDice.Client.Tests.Rooms
 
             List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
-            Assert.Equivalent(expected, departed, strict: true);
+            Assert.Equivalent(expectedDeparted, departed, strict: true);
         }
 
         [Fact]
@@ -70,11 +70,11 @@ namespace YachtDice.Client.Tests.Rooms
             List<MatchParticipant> before = CreatePlayers(FirstId);
             List<MatchParticipant> after = CreatePlayers(FirstId, SecondId);
 
-            MatchParticipant[] expected = { new MatchParticipant(SecondId, SecondName) };
+            MatchParticipant[] expectedArrived = { new MatchParticipant(SecondId, SecondName) };
 
             List<MatchParticipant> arrived = PresenceComparer.FindArrived(before, after);
 
-            Assert.Equivalent(expected, arrived, strict: true);
+            Assert.Equivalent(expectedArrived, arrived, strict: true);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace YachtDice.Client.Tests.Rooms
         {
             List<MatchParticipant> after = CreatePlayers(FirstId, SecondId);
 
-            MatchParticipant[] expected =
+            MatchParticipant[] expectedArrived =
             {
                 new MatchParticipant(FirstId, FirstName),
                 new MatchParticipant(SecondId, SecondName)
@@ -99,7 +99,7 @@ namespace YachtDice.Client.Tests.Rooms
 
             List<MatchParticipant> arrived = PresenceComparer.FindArrived(new List<MatchParticipant>(), after);
 
-            Assert.Equivalent(expected, arrived, strict: true);
+            Assert.Equivalent(expectedArrived, arrived, strict: true);
         }
 
         [Fact]
@@ -108,11 +108,11 @@ namespace YachtDice.Client.Tests.Rooms
             var before = new List<MatchParticipant> { new MatchParticipant(FirstId, FirstName) };
             var after = new List<MatchParticipant> { new MatchParticipant(SecondId, FirstName) };
 
-            MatchParticipant[] expected = { new MatchParticipant(FirstId, FirstName) };
+            MatchParticipant[] expectedDeparted = { new MatchParticipant(FirstId, FirstName) };
 
             List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
-            Assert.Equivalent(expected, departed, strict: true);
+            Assert.Equivalent(expectedDeparted, departed, strict: true);
         }
 
         private static List<MatchParticipant> CreatePlayers(params string[] ids)

@@ -25,98 +25,98 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_AllRoomsAndNoSearch_KeepsEveryRoomInTheSameOrder()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("1", FirstHost, false),
                 CreateRoom("2", SecondHost, true),
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, NoSearch);
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, NoSearch);
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_OnlyPublicRooms_HidesThePrivateOnes()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("1", FirstHost, false),
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Public, NoSearch);
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Public, NoSearch);
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_OnlyPrivateRooms_HidesThePublicOnes()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("2", SecondHost, true)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Private, NoSearch);
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, NoSearch);
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_TextInTheNameOfTheHost_KeepsOnlyThoseRooms()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("2", SecondHost, true)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "gab");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "gab");
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_TextWithDifferentCase_StillMatches()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("3", ThirdHost, false)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "CARLOS");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "CARLOS");
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_TextWithSpacesAround_IgnoresTheSpaces()
         {
-            RoomListItem[] expected =
+            RoomListItem[] expectedFilteredRooms =
             {
                 CreateRoom("1", FirstHost, false)
             };
 
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "  emilio  ");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "  emilio  ");
 
-            Assert.Equivalent(expected, result, strict: true);
+            Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
         }
 
         [Fact]
         public void Apply_PrivacyAndTextTogether_KeepsOnlyRoomsThatMatchBoth()
         {
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.Private, "emilio");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, "emilio");
 
-            Assert.Empty(result);
+            Assert.Empty(filteredRooms);
         }
 
         [Fact]
         public void Apply_TextThatNobodyHas_ReturnsAnEmptyList()
         {
-            List<RoomListItem> result = ApplyFilter(RoomPrivacyFilter.All, "zzz");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "zzz");
 
-            Assert.Empty(result);
+            Assert.Empty(filteredRooms);
         }
 
         [Fact]
@@ -128,10 +128,10 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_NoRooms_ReturnsAnEmptyList()
         {
-            List<RoomListItem> result =
+            List<RoomListItem> filteredRooms =
                 RoomListItemFilter.Apply(new List<RoomListItem>(), new RoomSearch(RoomPrivacyFilter.All, NoSearch));
 
-            Assert.Empty(result);
+            Assert.Empty(filteredRooms);
         }
 
         private static RoomListItem CreateRoom(string roomId, string hostName, bool isPrivate)

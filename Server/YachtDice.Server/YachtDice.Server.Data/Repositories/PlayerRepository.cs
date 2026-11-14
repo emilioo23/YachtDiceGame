@@ -31,7 +31,6 @@ namespace YachtDice.Server.Data.Repositories
         private const string TwoFactorUpdateFailedMessage =
             "Could not save the two-step verification setting due to a database failure.";
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
-        private const string ProgressUpdateFailedMessage = "Could not save the progress due to a database failure.";
 
         /// <summary>
         /// Finds a list of players matching the given email address.
@@ -174,20 +173,6 @@ namespace YachtDice.Server.Data.Repositories
                 AvatarUpdateFailedMessage);
         }
 
-        /// <summary>
-        /// Saves the experience and the level of a player.
-        /// </summary>
-        /// <param name="playerId">Identifier of the player.</param>
-        /// <param name="experience">Total experience points that the player has now.</param>
-        /// <param name="level">Level that the player reached with that experience.</param>
-        /// <exception cref="DataAccessException">The progress could not be saved.</exception>
-        public void SaveProgress(int playerId, int experience, int level)
-        {
-            DatabaseOperation.Save(
-                context => ApplyProgress(context, playerId, experience, level),
-                ProgressUpdateFailedMessage);
-        }
-
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
             Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
@@ -271,18 +256,6 @@ namespace YachtDice.Server.Data.Repositories
             if (player != null)
             {
                 player.AvatarId = avatarId;
-            }
-        }
-
-        private static void ApplyProgress(YachtDiceContext context, int playerId, int experience, int level)
-        {
-            Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
-            Player player = context.Player.FirstOrDefault(isSameId);
-
-            if (player != null)
-            {
-                player.XP = experience;
-                player.Level = level;
             }
         }
 

@@ -9,14 +9,22 @@ namespace YachtDice.Server.Tests.Game
     /// </summary>
     public class AutoPlayChooserTests
     {
+        private const int NoPoints = 0;
+        private const int OnesPoints = 2;
+        private const int SixesPoints = 12;
+        private const int ChoicePoints = 18;
+        private const int TiedPoints = 20;
+        private const int YachtOfSixesUpperPoints = 30;
+        private const int YachtPoints = 50;
+
         [Fact]
         public void Choose_OptionsWithDifferentPoints_ReturnsTheBoxWithMorePoints()
         {
-            var options = new List<ScoreOption>
+            var options = new List<ScoreEntry>
             {
-                new ScoreOption(ScoreCategory.Ones, 2),
-                new ScoreOption(ScoreCategory.Choice, 18),
-                new ScoreOption(ScoreCategory.Sixes, 12)
+                new ScoreEntry(ScoreCategory.Ones, OnesPoints),
+                new ScoreEntry(ScoreCategory.Choice, ChoicePoints),
+                new ScoreEntry(ScoreCategory.Sixes, SixesPoints)
             };
 
             var category = AutoPlayChooser.Choose(options);
@@ -27,12 +35,12 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Choose_AllOptionsWithZero_SacrificesTheLeastValuableBox()
         {
-            var options = new List<ScoreOption>
+            var options = new List<ScoreEntry>
             {
-                new ScoreOption(ScoreCategory.Yacht, 0),
-                new ScoreOption(ScoreCategory.BigStraight, 0),
-                new ScoreOption(ScoreCategory.Twos, 0),
-                new ScoreOption(ScoreCategory.Sixes, 0)
+                new ScoreEntry(ScoreCategory.Yacht, NoPoints),
+                new ScoreEntry(ScoreCategory.BigStraight, NoPoints),
+                new ScoreEntry(ScoreCategory.Twos, NoPoints),
+                new ScoreEntry(ScoreCategory.Sixes, NoPoints)
             };
 
             var category = AutoPlayChooser.Choose(options);
@@ -43,7 +51,7 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Choose_OnlyYachtIsOpenWithZero_UsesYacht()
         {
-            var options = new List<ScoreOption> { new ScoreOption(ScoreCategory.Yacht, 0) };
+            var options = new List<ScoreEntry> { new ScoreEntry(ScoreCategory.Yacht, NoPoints) };
 
             var category = AutoPlayChooser.Choose(options);
 
@@ -53,10 +61,10 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Choose_TieWithPoints_KeepsTheMostValuableBox()
         {
-            var options = new List<ScoreOption>
+            var options = new List<ScoreEntry>
             {
-                new ScoreOption(ScoreCategory.FullHouse, 20),
-                new ScoreOption(ScoreCategory.Choice, 20)
+                new ScoreEntry(ScoreCategory.FullHouse, TiedPoints),
+                new ScoreEntry(ScoreCategory.Choice, TiedPoints)
             };
 
             var category = AutoPlayChooser.Choose(options);
@@ -67,11 +75,11 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Choose_YachtOfSixesWithYachtOpen_ReturnsYacht()
         {
-            var options = new List<ScoreOption>
+            var options = new List<ScoreEntry>
             {
-                new ScoreOption(ScoreCategory.Sixes, 30),
-                new ScoreOption(ScoreCategory.Choice, 30),
-                new ScoreOption(ScoreCategory.Yacht, 50)
+                new ScoreEntry(ScoreCategory.Sixes, YachtOfSixesUpperPoints),
+                new ScoreEntry(ScoreCategory.Choice, YachtOfSixesUpperPoints),
+                new ScoreEntry(ScoreCategory.Yacht, YachtPoints)
             };
 
             var category = AutoPlayChooser.Choose(options);

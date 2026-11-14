@@ -63,41 +63,41 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_NullCode_ReturnsTheSameHashAsAnEmptyCode()
         {
-            string expected = PasswordResetCodeHasher.Compute(FirstPlayerId, string.Empty);
+            string emptyCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, string.Empty);
 
-            string hash = PasswordResetCodeHasher.Compute(FirstPlayerId, null);
+            string nullCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, null);
 
-            Assert.Equal(expected, hash);
+            Assert.Equal(emptyCodeHash, nullCodeHash);
         }
 
         [Fact]
         public void Compute_DigitsMovedFromTheCodeToTheIdentifier_ReturnsDifferentHashes()
         {
-            string expected = PasswordResetCodeHasher.Compute(FirstPlayerId, ShortCode);
+            string originalHash = PasswordResetCodeHasher.Compute(FirstPlayerId, ShortCode);
 
-            string hash = PasswordResetCodeHasher.Compute(TwelfthPlayerId, ShiftedCode);
+            string shiftedHash = PasswordResetCodeHasher.Compute(TwelfthPlayerId, ShiftedCode);
 
-            Assert.NotEqual(expected, hash);
+            Assert.NotEqual(originalHash, shiftedHash);
         }
 
         [Fact]
         public void Compute_SameCodeWithSpacesAround_ReturnsADifferentHash()
         {
-            string expected = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string trimmedCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
 
-            string hash = PasswordResetCodeHasher.Compute(FirstPlayerId, " " + Code + " ");
+            string spacedCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, " " + Code + " ");
 
-            Assert.NotEqual(expected, hash);
+            Assert.NotEqual(trimmedCodeHash, spacedCodeHash);
         }
 
         [Fact]
         public void Compute_ZeroIdentifier_ReturnsADifferentHashThanTheFirstPlayer()
         {
-            string expected = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string firstPlayerHash = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
 
-            string hash = PasswordResetCodeHasher.Compute(NoPlayerId, Code);
+            string noPlayerHash = PasswordResetCodeHasher.Compute(NoPlayerId, Code);
 
-            Assert.NotEqual(expected, hash);
+            Assert.NotEqual(firstPlayerHash, noPlayerHash);
         }
     }
 }

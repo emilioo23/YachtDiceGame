@@ -9,6 +9,8 @@ namespace YachtDice.Client.Tests.Players
     public class InitialLetterTests
     {
         private const string Unknown = "?";
+        private const string AccentedName = "álvaro";
+        private const string AccentedInitial = "Á";
 
         [Fact]
         public void From_LowercaseName_ReturnsTheFirstLetterInUppercase()
@@ -35,6 +37,12 @@ namespace YachtDice.Client.Tests.Players
         public void From_NameThatStartsWithANumber_ReturnsThatNumber()
         {
             Assert.Equal("7", InitialLetter.From("7seas", Unknown));
+        }
+
+        [Fact]
+        public void From_NameWithAnAccent_KeepsTheAccentInUppercase()
+        {
+            Assert.Equal(AccentedInitial, InitialLetter.From(AccentedName, Unknown));
         }
     }
 }

@@ -1,60 +1,69 @@
-﻿using System.Data.Entity.Core.EntityClient;
+﻿using System;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
-using YachtDice.Server.Data.Configuration;
+using System.Globalization;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
-    /// Builds the connection string of the database from the environment variables of the user.
+    /// Builds the connection string of the database from the environment variables of the computer that runs
+    /// the server. The user and the password of the database are never written in a file of the project, and a
+    /// container receives them the same way as a computer.
     /// </summary>
     internal static class DatabaseConnection
     {
+        private const string ServerVariable = "YACHTDICE_DB_SERVER";
+        private const string UserVariable = "YACHTDICE_DB_USER";
+        private const string PasswordVariable = "YACHTDICE_DB_PASSWORD";
         private const string DatabaseName = "YachtDiceDB";
-        private const string ApplicationName = "EntityFramework";
+        private const string ApplicationName = "YachtDice.Server";
         private const string ProviderName = "System.Data.SqlClient";
-        private const string ModelMetadata =
-            "res://*/YachtDiceContext.csdl|res://*/YachtDiceContext.ssdl|res://*/YachtDiceContext.msl";
-        private const string MissingConnectionMessage =
-            "The connection of the database is not configured. Set the environment variables " +
-            "YACHTDICE_DB_SERVER, YACHTDICE_DB_USER and YACHTDICE_DB_PASSWORD.";
+        private const string ModelMetadata = "res://YachtDice.Server.Data/YachtDiceContext.csdl"
+            + "|res://YachtDice.Server.Data/YachtDiceContext.ssdl"
+            + "|res://YachtDice.Server.Data/YachtDiceContext.msl";
+        private const string MissingVariableFormat = "The environment variable {0} is not defined on this computer.";
 
         /// <summary>
-        /// Builds the connection string that Entity Framework uses to open the database.
+        /// Builds the connection string with the server, the user and the password of the environment.
         /// </summary>
-        /// <returns>The connection string with the credentials of the environment variables.</returns>
-        /// <exception cref="DataAccessException">Any of the database variables is not set.</exception>
+        /// <returns>The Entity Framework connection string of the database.</returns>
+        /// <exception cref="DataAccessException">One of the environment variables is not defined.</exception>
         public static string Build()
         {
-            string server = EnvironmentSettings.Read(EnvironmentSettings.DatabaseServer);
-            string user = EnvironmentSettings.Read(EnvironmentSettings.DatabaseUser);
-            string password = EnvironmentSettings.Read(EnvironmentSettings.DatabasePassword);
-
-            if (server.Length == 0 || user.Length == 0 || password.Length == 0)
+            var databaseConnection = new SqlConnectionStringBuilder
             {
-                throw new DataAccessException(MissingConnectionMessage);
-            }
-
-            var providerBuilder = new SqlConnectionStringBuilder
-            {
-                DataSource = server,
+                DataSource = ReadVariable(ServerVariable),
                 InitialCatalog = DatabaseName,
-                UserID = user,
-                Password = password,
+                UserID = ReadVariable(UserVariable),
+                Password = ReadVariable(PasswordVariable),
                 MultipleActiveResultSets = true,
                 Encrypt = true,
                 TrustServerCertificate = true,
                 ApplicationName = ApplicationName
             };
-
-            var entityBuilder = new EntityConnectionStringBuilder
+            var entityConnection = new EntityConnectionStringBuilder
             {
                 Metadata = ModelMetadata,
                 Provider = ProviderName,
-                ProviderConnectionString = providerBuilder.ConnectionString
+                ProviderConnectionString = databaseConnection.ConnectionString
             };
 
-            return entityBuilder.ConnectionString;
+            return entityConnection.ConnectionString;
+        }
+
+        private static string ReadVariable(string name)
+        {
+            string value = Environment.GetEnvironmentVariable(name);
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                string message = string.Format(CultureInfo.InvariantCulture, MissingVariableFormat, name);
+
+                throw new DataAccessException(message);
+            }
+
+            return value;
         }
     }
 }

@@ -14,53 +14,59 @@ namespace YachtDice.Client.Tests.Dice
         private const string LowestAndHighestRow = "1 6";
         private const string InvalidWordBetweenRow = "2 x 5";
         private const string ExtraSpacesRow = "  1   2  ";
+        private const int FaceOne = 1;
+        private const int FaceTwo = 2;
+        private const int FaceThree = 3;
+        private const int FaceFour = 4;
+        private const int FaceFive = 5;
+        private const int FaceSix = 6;
 
         [Fact]
         public void Parse_NumbersSeparatedBySpaces_ReturnsTheDiceInOrder()
         {
-            DieDisplay[] expected =
+            DieDisplay[] expectedDice =
             {
-                new DieDisplay { Value = 4, IsDimmed = false },
-                new DieDisplay { Value = 4, IsDimmed = false },
-                new DieDisplay { Value = 4, IsDimmed = false },
-                new DieDisplay { Value = 2, IsDimmed = false },
-                new DieDisplay { Value = 6, IsDimmed = false }
+                new DieDisplay { Value = FaceFour, IsDimmed = false },
+                new DieDisplay { Value = FaceFour, IsDimmed = false },
+                new DieDisplay { Value = FaceFour, IsDimmed = false },
+                new DieDisplay { Value = FaceTwo, IsDimmed = false },
+                new DieDisplay { Value = FaceSix, IsDimmed = false }
             };
 
             List<DieDisplay> dice = DiceRowParser.Parse(ThreeFoursRow);
 
-            Assert.Equivalent(expected, dice, strict: true);
+            Assert.Equivalent(expectedDice, dice, strict: true);
         }
 
         [Fact]
         public void Parse_NumberWithMinusSign_MarksTheDieAsDimmed()
         {
-            DieDisplay[] expected =
+            DieDisplay[] expectedDice =
             {
-                new DieDisplay { Value = 3, IsDimmed = false },
-                new DieDisplay { Value = 3, IsDimmed = false },
-                new DieDisplay { Value = 3, IsDimmed = false },
-                new DieDisplay { Value = 5, IsDimmed = true },
-                new DieDisplay { Value = 6, IsDimmed = true }
+                new DieDisplay { Value = FaceThree, IsDimmed = false },
+                new DieDisplay { Value = FaceThree, IsDimmed = false },
+                new DieDisplay { Value = FaceThree, IsDimmed = false },
+                new DieDisplay { Value = FaceFive, IsDimmed = true },
+                new DieDisplay { Value = FaceSix, IsDimmed = true }
             };
 
             List<DieDisplay> dice = DiceRowParser.Parse(LastTwoDimmedRow);
 
-            Assert.Equivalent(expected, dice, strict: true);
+            Assert.Equivalent(expectedDice, dice, strict: true);
         }
 
         [Fact]
         public void Parse_LowestAndHighestFace_AreAccepted()
         {
-            DieDisplay[] expected =
+            DieDisplay[] expectedDice =
             {
-                new DieDisplay { Value = 1, IsDimmed = false },
-                new DieDisplay { Value = 6, IsDimmed = false }
+                new DieDisplay { Value = FaceOne, IsDimmed = false },
+                new DieDisplay { Value = FaceSix, IsDimmed = false }
             };
 
             List<DieDisplay> dice = DiceRowParser.Parse(LowestAndHighestRow);
 
-            Assert.Equivalent(expected, dice, strict: true);
+            Assert.Equivalent(expectedDice, dice, strict: true);
         }
 
         [Theory]
@@ -80,29 +86,29 @@ namespace YachtDice.Client.Tests.Dice
         [Fact]
         public void Parse_InvalidWordBetweenValidOnes_KeepsTheValidOnes()
         {
-            DieDisplay[] expected =
+            DieDisplay[] expectedDice =
             {
-                new DieDisplay { Value = 2, IsDimmed = false },
-                new DieDisplay { Value = 5, IsDimmed = false }
+                new DieDisplay { Value = FaceTwo, IsDimmed = false },
+                new DieDisplay { Value = FaceFive, IsDimmed = false }
             };
 
             List<DieDisplay> dice = DiceRowParser.Parse(InvalidWordBetweenRow);
 
-            Assert.Equivalent(expected, dice, strict: true);
+            Assert.Equivalent(expectedDice, dice, strict: true);
         }
 
         [Fact]
         public void Parse_ExtraSpaces_AreIgnored()
         {
-            DieDisplay[] expected =
+            DieDisplay[] expectedDice =
             {
-                new DieDisplay { Value = 1, IsDimmed = false },
-                new DieDisplay { Value = 2, IsDimmed = false }
+                new DieDisplay { Value = FaceOne, IsDimmed = false },
+                new DieDisplay { Value = FaceTwo, IsDimmed = false }
             };
 
             List<DieDisplay> dice = DiceRowParser.Parse(ExtraSpacesRow);
 
-            Assert.Equivalent(expected, dice, strict: true);
+            Assert.Equivalent(expectedDice, dice, strict: true);
         }
 
         [Theory]
