@@ -109,6 +109,9 @@
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
     <Compile Include="Moderation\LinkCensor.cs" />
+    <Compile Include="Players\AchievementMetric.cs" />
+    <Compile Include="Players\AchievementRule.cs" />
+    <Compile Include="Players\AchievementRules.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\PlayerState.cs" />
     <Compile Include="Players\ProfileService.cs" />
