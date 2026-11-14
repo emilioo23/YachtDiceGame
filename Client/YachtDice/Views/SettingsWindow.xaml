@@ -393,6 +393,12 @@
                                 <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionEnglish}"
                                               Tag="en-US"/>
 
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionPortuguese}"
+                                              Tag="pt-BR"/>
+
+                                <ComboBoxItem Content="{x:Static properties:Strings.Settings_Preferences_OptionChinese}"
+                                              Tag="zh-CN"/>
+
                             </ComboBox>
                         </Grid>
 

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -27,9 +28,6 @@ namespace YachtDice.Views
         private const string NotificationsSection = "Notifications";
         private const string PreferencesSection = "Preferences";
         private const string PrivacySection = "Privacy";
-        private const string SpanishCultureCode = "es-MX";
-        private const int SpanishLanguageIndex = 0;
-        private const int OtherLanguageIndex = 1;
         private const int ToggleKnobMargin = 3;
         private const int NoMargin = 0;
 
@@ -50,9 +48,7 @@ namespace YachtDice.Views
             _isInitializing = true;
 
             AccountUsernameTextBlock.Text = session.DisplayName;
-            LanguageComboBox.SelectedIndex = App.CurrentCultureCode == SpanishCultureCode
-                ? SpanishLanguageIndex
-                : OtherLanguageIndex;
+            LanguageComboBox.SelectedIndex = LanguageCatalog.IndexOf(App.CurrentCultureCode);
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
 
             ShowSection(initialSection);
