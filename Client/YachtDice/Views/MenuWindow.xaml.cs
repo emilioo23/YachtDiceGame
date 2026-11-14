@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -21,6 +23,7 @@ namespace YachtDice.Views
     public partial class MenuWindow : Window
     {
         private const int DefaultPlayerLevel = 1;
+        private const double LevelBarAnimationSeconds = 0.8;
 
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -166,16 +169,29 @@ namespace YachtDice.Views
             {
                 PlayerProfile profile = await _gateway.GetProfileAsync(playerName);
 
-                LevelBarScale.ScaleX = LevelProgress.GetFraction(
+                AnimateLevelBar(LevelProgress.GetFraction(
                     profile.Experience,
                     profile.LevelStartExperience,
-                    profile.NextLevelExperience);
+                    profile.NextLevelExperience));
                 PlayerTitleTextBlock.Text = ProgressTexts.GetTitleName(profile.TitleId);
                 ShowFlag(profile.FlagCode);
                 PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
                 PlayerAvatarImage.Visibility = Visibility.Visible;
                 PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void AnimateLevelBar(double fraction)
+        {
+            var growth = new DoubleAnimation(
+                LevelProgress.EmptyFraction,
+                fraction,
+                TimeSpan.FromSeconds(LevelBarAnimationSeconds))
+            {
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            LevelBarScale.BeginAnimation(ScaleTransform.ScaleXProperty, growth);
         }
 
         private void ShowFlag(string flagCode)
