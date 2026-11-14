@@ -63,6 +63,7 @@
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
     <Compile Include="Game\RankedStandingTests.cs" />
     <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
+    <Compile Include="Utils\UsernameChangeMessagesTests.cs" />
     <Compile Include="Utils\CategoryNamesTests.cs" />
     <Compile Include="Utils\FriendItemFactoryTests.cs" />
     <Compile Include="Utils\FriendRequestMessagesTests.cs" />
