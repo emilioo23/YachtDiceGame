@@ -76,6 +76,10 @@ Después de crearlas hay que cerrar y volver a abrir Visual Studio. Los valores 
 - SQL Server
 - Visual Studio / Visual Studio Code
 
+## Créditos de recursos de terceros
+
+- **Banderas de países:** [flag-icons](https://github.com/lipis/flag-icons), licencia MIT. Se convirtieron a PNG de 48x36 y están en `Client/YachtDice/Resources/Flags`. El texto de la licencia está en `Client/YachtDice/Resources/Flags/LICENSE-flag-icons.txt`.
+
 ## Equipo de Desarrollo
 
 Universidad Veracruzana - Licenciatura en Ingeniería de Software.
