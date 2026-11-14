@@ -15,6 +15,7 @@ namespace YachtDice.Server.Tests.Friends
     {
         private const int RequesterId = 1;
         private const int TargetId = 2;
+        private const int NoFriendships = 0;
         private const string RequesterName = "DiceKing99";
         private const string TargetUsername = "GabrielHM";
         private const string TargetDisplayName = "Gabriel";
@@ -132,23 +133,25 @@ namespace YachtDice.Server.Tests.Friends
                 AddresseeId = TargetId,
                 Status = FriendshipStatus.Accepted
             };
+            var expectedOutcome = new { Status = FriendActionStatus.Success, Friendship = expectedFriendship };
             _service.SendRequest(RequesterName, TargetUsername);
 
             FriendActionStatus status = RespondAsTarget(RequesterName, true);
 
-            Assert.Equal(FriendActionStatus.Success, status);
-            Assert.Equivalent(expectedFriendship, _friends.Friendships.Single());
+            var actualOutcome = new { Status = status, Friendship = _friends.Friendships.Single() };
+            Assert.Equivalent(expectedOutcome, actualOutcome);
         }
 
         [Fact]
         public void RespondToRequest_RejectedRequest_ReturnsSuccessAndRemovesTheRequest()
         {
+            var expectedOutcome = new { Status = FriendActionStatus.Success, SavedFriendships = NoFriendships };
             _service.SendRequest(RequesterName, TargetUsername);
 
             FriendActionStatus status = RespondAsTarget(RequesterName, false);
 
-            Assert.Equal(FriendActionStatus.Success, status);
-            Assert.Empty(_friends.Friendships);
+            var actualOutcome = new { Status = status, SavedFriendships = _friends.Friendships.Count };
+            Assert.Equal(expectedOutcome, actualOutcome);
         }
 
         [Fact]
