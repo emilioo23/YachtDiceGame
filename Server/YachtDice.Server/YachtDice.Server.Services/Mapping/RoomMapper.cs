@@ -44,17 +44,17 @@ namespace YachtDice.Server.Services.Mapping
         /// <summary>
         /// Creates the room of the list of the logic layer from the one sent by a client.
         /// </summary>
-        /// <param name="room">Room of the list received from the client.</param>
+        /// <param name="roomAccess">Room of the list received from the client.</param>
         /// <returns>The room of the list for the logic layer.</returns>
-        public static Logic.Rooms.Room ToLogic(Contracts.Room room)
+        public static Logic.Rooms.RoomAccess ToLogic(Contracts.RoomAccess roomAccess)
         {
-            var logicRoom = new Logic.Rooms.Room
+            var logicRoomAccess = new Logic.Rooms.RoomAccess
             {
-                RoomId = room.RoomId,
-                AccessCode = room.AccessCode
+                RoomId = roomAccess.RoomId,
+                AccessCode = roomAccess.AccessCode
             };
 
-            return logicRoom;
+            return logicRoomAccess;
         }
 
         /// <summary>

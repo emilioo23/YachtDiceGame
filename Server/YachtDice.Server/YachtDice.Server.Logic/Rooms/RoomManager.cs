@@ -70,7 +70,7 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
-        public RoomResult JoinListed(string playerName, Room room)
+        public RoomResult JoinListed(string playerName, RoomAccess roomAccess)
         {
             RejectBlankName(playerName);
             RoomApplicant applicant = CreateApplicant(playerName);
@@ -78,9 +78,9 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                if (TryGetRoomById(room.RoomId, out GameRoom gameRoom))
+                if (TryGetRoomById(roomAccess.RoomId, out GameRoom gameRoom))
                 {
-                    result = JoinWithAccessCode(gameRoom, applicant, NormalizeCode(room.AccessCode));
+                    result = JoinWithAccessCode(gameRoom, applicant, NormalizeCode(roomAccess.AccessCode));
                 }
             }
 

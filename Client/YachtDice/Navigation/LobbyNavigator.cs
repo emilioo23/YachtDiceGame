@@ -65,7 +65,7 @@ namespace YachtDice.Navigation
             RoomListItem room)
         {
             var roomGateway = new RoomGateway(session);
-            var roomToJoin = new Room
+            var roomToJoin = new RoomAccess
             {
                 RoomId = room.RoomId,
                 AccessCode = room.AccessCode.Trim()

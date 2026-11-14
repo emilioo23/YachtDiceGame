@@ -620,10 +620,10 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            Room room = CreateListedRoom(roomId, host.Room.Code.ToLowerInvariant());
+            RoomAccess roomAccess = CreateListedRoom(roomId, host.Room.Code.ToLowerInvariant());
             var expectedJoinedPlayer = new { Status = RoomStatus.Success, host.Room.Code };
 
-            RoomResult player = _manager.JoinListed(PlayerName, room);
+            RoomResult player = _manager.JoinListed(PlayerName, roomAccess);
 
             var actualJoinedPlayer = new { player.Status, player.Room.Code };
             Assert.Equal(expectedJoinedPlayer, actualJoinedPlayer);
@@ -943,15 +943,15 @@ namespace YachtDice.Server.Tests.Rooms
             return settings;
         }
 
-        private static Room CreateListedRoom(string roomId, string accessCode)
+        private static RoomAccess CreateListedRoom(string roomId, string accessCode)
         {
-            var room = new Room
+            var roomAccess = new RoomAccess
             {
                 RoomId = roomId,
                 AccessCode = accessCode
             };
 
-            return room;
+            return roomAccess;
         }
 
         private RoomResult CreatePublicRoom(string hostName)

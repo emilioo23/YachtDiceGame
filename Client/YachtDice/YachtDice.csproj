@@ -620,7 +620,7 @@
     <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.JoinRoomResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.Room.datasource">
+    <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.RoomAccess.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\RoomServiceReference\YachtDice.RoomServiceReference.RoomResultCode.datasource">
