@@ -63,8 +63,8 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0"
-                            Background="{StaticResource BrushWood}"
+                    <StackPanel Grid.Row="0">
+                    <Border Background="{StaticResource BrushWood}"
                             CornerRadius="8"
                             Padding="12,8"
                             Margin="0,0,0,10">
@@ -95,6 +95,20 @@
                             </StackPanel>
                         </Grid>
                     </Border>
+
+                    <Border x:Name="ReconnectBanner"
+                            Visibility="Collapsed"
+                            Background="{StaticResource BrushWood}"
+                            CornerRadius="8"
+                            Padding="12,6"
+                            Margin="0,0,0,10">
+                        <TextBlock x:Name="ReconnectTextBlock"
+                                   Foreground="{StaticResource BrushGold}"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                    </StackPanel>
 
                     <Grid Grid.Row="1"
                           Margin="0,0,17,8">

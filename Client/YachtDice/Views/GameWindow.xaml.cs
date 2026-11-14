@@ -27,6 +27,8 @@ namespace YachtDice.Views
         private const int MaxRolls = 3;
         private const int NoRolls = 0;
         private const int NoText = 0;
+        private const int NoWaitingPlayers = 0;
+        private const string NameSeparator = ", ";
         private const int ClockIntervalSeconds = 1;
 
         private readonly string _playerId;
@@ -39,6 +41,7 @@ namespace YachtDice.Views
         private readonly HeldDiceSelection _heldDice = new HeldDiceSelection();
         private readonly StateVersionGate _versionGate = new StateVersionGate();
         private readonly TurnCountdown _countdown = new TurnCountdown();
+        private readonly ReconnectWaitTracker _reconnectWait = new ReconnectWaitTracker();
         private readonly DispatcherTimer _clock = new DispatcherTimer();
 
         private bool _isLeavingOnClose = true;
@@ -216,6 +219,7 @@ namespace YachtDice.Views
             }
 
             _countdown.Reset(state.TurnSecondsLeft);
+            _reconnectWait.Update(FindAbsentPlayerIds(state));
             RenderState();
 
             if (CurrentPhase == TurnPhase.Finished)
@@ -234,6 +238,7 @@ namespace YachtDice.Views
                 Enum.GetValues(typeof(ScoreCategory)).Length);
 
             RenderTimer();
+            RenderReconnectBanner();
             RenderDice();
             _scorecard.Render(_state, _matchPlayers, HandleCategoryClick);
             RenderRollButton();
@@ -306,7 +311,38 @@ namespace YachtDice.Views
             if (_state != null)
             {
                 _countdown.Tick();
+                _reconnectWait.Tick();
                 RenderTimer();
+                RenderReconnectBanner();
+            }
+        }
+
+        private static IEnumerable<string> FindAbsentPlayerIds(GameState state)
+        {
+            Func<PlayerScorecard, bool> isAbsent = player => !player.IsPresent;
+            Func<PlayerScorecard, string> getId = player => player.PlayerId;
+
+            return state.Players.Where(isAbsent).Select(getId).ToList();
+        }
+
+        private void RenderReconnectBanner()
+        {
+            IReadOnlyList<string> waiting = _reconnectWait.GetWaitingPlayerIds();
+
+            if (waiting.Count > NoWaitingPlayers && CurrentPhase != TurnPhase.Finished)
+            {
+                Func<string, string> findName = FindPlayerName;
+                Func<string, int> findSeconds = _reconnectWait.GetSecondsLeft;
+
+                ReconnectTextBlock.Text = string.Format(
+                    Strings.Game_Reconnect_WaitingFormat,
+                    string.Join(NameSeparator, waiting.Select(findName)),
+                    waiting.Min(findSeconds));
+                ReconnectBanner.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ReconnectBanner.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -417,6 +453,19 @@ namespace YachtDice.Views
             {
                 AnnounceYachtBonus(state);
                 CelebrateYacht(state);
+            }
+
+            if (hasPreviousState && eventType == GameEventType.PlayerForfeited)
+            {
+                AnnounceForfeits();
+            }
+        }
+
+        private void AnnounceForfeits()
+        {
+            foreach (string playerId in _reconnectWait.TakeExpiredPlayerIds())
+            {
+                AddNotice(string.Format(Strings.Game_Chat_PlayerForfeited, FindPlayerName(playerId)));
             }
         }
 
