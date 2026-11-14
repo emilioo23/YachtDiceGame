@@ -24,6 +24,7 @@ namespace YachtDice.Server.Tests.Avatars
         private const int LockedAvatarId = 8;
         private const int UnknownAvatarId = 9999;
         private const int NewPlayerLevel = 1;
+        private const string NoFlagCode = "";
         private const int NoExperience = 0;
         private const int SecondLevelExperience = 100;
         private const int ThirdLevelExperience = 200;
@@ -88,7 +89,8 @@ namespace YachtDice.Server.Tests.Avatars
                 Level = PlayerLevel,
                 Experience = PlayerExperience,
                 LevelStartExperience = FifthLevelExperience,
-                NextLevelExperience = SixthLevelExperience
+                NextLevelExperience = SixthLevelExperience,
+                FlagCode = NoFlagCode
             };
 
             PlayerProfile profile = _service.GetProfile(PlayerName);
@@ -105,7 +107,8 @@ namespace YachtDice.Server.Tests.Avatars
                 Level = NewPlayerLevel,
                 Experience = NoExperience,
                 LevelStartExperience = NoExperience,
-                NextLevelExperience = SecondLevelExperience
+                NextLevelExperience = SecondLevelExperience,
+                FlagCode = NoFlagCode
             };
 
             PlayerProfile profile = _service.GetProfile(UnknownName);

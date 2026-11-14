@@ -32,6 +32,13 @@ namespace YachtDice.Server.Tests.Players
         private const int WinningScore = 150;
         private const string SavedTitleText = "2";
         private const string NoTitleText = "";
+        private const string MexicoFlagCode = "mx";
+        private const string SpainFlagCodeInUpperCase = "ES";
+        private const string SpainFlagCode = "es";
+        private const string OneLetterFlagCode = "m";
+        private const string ThreeLetterFlagCode = "mex";
+        private const string SymbolFlagCode = "1!";
+        private const string NoFlagCode = "";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
@@ -165,6 +172,88 @@ namespace YachtDice.Server.Tests.Players
             TitleChangeStatus status = _service.ChangeTitle(UnknownName, AchievementRules.DefaultTitleId);
 
             Assert.Equal(TitleChangeStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_ValidCode_ReturnsSuccess()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(CurrentUsername, MexicoFlagCode);
+
+            Assert.Equal(FlagChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_ValidCode_SavesTheCode()
+        {
+            _service.ChangeFlag(CurrentUsername, MexicoFlagCode);
+
+            Assert.Equal(MexicoFlagCode, _players.FindFlagCode(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeFlag_CodeInUpperCase_SavesItInLowerCase()
+        {
+            _service.ChangeFlag(CurrentUsername, SpainFlagCodeInUpperCase);
+
+            Assert.Equal(SpainFlagCode, _players.FindFlagCode(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeFlag_EmptyCode_RemovesTheFlag()
+        {
+            _service.ChangeFlag(CurrentUsername, MexicoFlagCode);
+
+            _service.ChangeFlag(CurrentUsername, NoFlagCode);
+
+            Assert.Equal(NoFlagCode, _players.FindFlagCode(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeFlag_NullCode_ReturnsSuccess()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(CurrentUsername, null);
+
+            Assert.Equal(FlagChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_OneLetter_ReturnsInvalidFlag()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(CurrentUsername, OneLetterFlagCode);
+
+            Assert.Equal(FlagChangeStatus.InvalidFlag, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_ThreeLetters_ReturnsInvalidFlag()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(CurrentUsername, ThreeLetterFlagCode);
+
+            Assert.Equal(FlagChangeStatus.InvalidFlag, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_DigitAndSymbol_ReturnsInvalidFlag()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(CurrentUsername, SymbolFlagCode);
+
+            Assert.Equal(FlagChangeStatus.InvalidFlag, status);
+        }
+
+        [Fact]
+        public void ChangeFlag_InvalidCode_DoesNotSaveAnything()
+        {
+            _service.ChangeFlag(CurrentUsername, ThreeLetterFlagCode);
+
+            Assert.Equal(NoFlagCode, _players.FindFlagCode(CurrentPlayerId));
+        }
+
+        [Fact]
+        public void ChangeFlag_UnknownPlayer_ReturnsPlayerNotFound()
+        {
+            FlagChangeStatus status = _service.ChangeFlag(UnknownName, MexicoFlagCode);
+
+            Assert.Equal(FlagChangeStatus.PlayerNotFound, status);
         }
 
         [Fact]
