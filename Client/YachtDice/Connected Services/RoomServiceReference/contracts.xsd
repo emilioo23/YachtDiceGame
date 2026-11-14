@@ -143,21 +143,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RoomSummary" nillable="true" type="tns:RoomSummary" />
-  <xs:element name="JoinListedRoom">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="room" nillable="true" type="tns:Room" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="Room">
+  <xs:complexType name="RoomAccess">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RoomId" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Room" nillable="true" type="tns:Room" />
+  <xs:element name="RoomAccess" nillable="true" type="tns:RoomAccess" />
+  <xs:element name="JoinListedRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="roomAccess" nillable="true" type="tns:RoomAccess" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="JoinListedRoomResponse">
     <xs:complexType>
       <xs:sequence>
