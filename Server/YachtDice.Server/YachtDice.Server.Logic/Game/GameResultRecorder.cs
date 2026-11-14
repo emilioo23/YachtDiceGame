@@ -19,6 +19,8 @@ namespace YachtDice.Server.Logic.Game
     {
         private const string NullSettingsMessage = "The settings of the room cannot be null.";
         private const string NullSnapshotMessage = "The state of the game cannot be null.";
+        private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
+        private const string NullGameHistoryRepositoryMessage = "The data access of the game history cannot be null.";
         private const string NullLevelTableMessage = "The table of levels cannot be null.";
         private const int NoExperience = 0;
 
@@ -37,9 +39,10 @@ namespace YachtDice.Server.Logic.Game
             IGameHistoryRepository gameHistoryRepository,
             LevelTable levelTable)
         {
-            _playerRepository = playerRepository ?? throw new ArgumentNullException(nameof(playerRepository));
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullPlayerRepositoryMessage);
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository));
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullGameHistoryRepositoryMessage);
             _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullLevelTableMessage);
         }
 

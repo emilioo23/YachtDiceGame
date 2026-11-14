@@ -67,7 +67,7 @@ namespace YachtDice.Server.Logic.Players
                 throw new ArgumentException(EmptyThresholdsMessage, nameof(thresholds));
             }
 
-            if (thresholds[0] != StartingExperience)
+            if (thresholds.First() != StartingExperience)
             {
                 throw new ArgumentException(InvalidFirstThresholdMessage, nameof(thresholds));
             }
