@@ -226,7 +226,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatGamesValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -242,7 +242,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatWinsValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -258,7 +258,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatBestScoreValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"
@@ -274,7 +274,7 @@
                                         HorizontalAlignment="Center"
                                         Margin="0,14">
 
-                                <TextBlock
+                                <TextBlock x:Name="StatExperienceValueTextBlock"
                                            FontFamily="{StaticResource FontDisplay}"
                                            FontSize="23"
                                            Foreground="{StaticResource BrushFeltLight}"

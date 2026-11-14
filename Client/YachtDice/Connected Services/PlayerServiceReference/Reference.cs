@@ -135,6 +135,9 @@ namespace YachtDice.PlayerServiceReference {
         private int BestScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ExperienceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int GamesPlayedField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -165,6 +168,19 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.BestScoreField.Equals(value) != true)) {
                     this.BestScoreField = value;
                     this.RaisePropertyChanged("BestScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Experience {
+            get {
+                return this.ExperienceField;
+            }
+            set {
+                if ((this.ExperienceField.Equals(value) != true)) {
+                    this.ExperienceField = value;
+                    this.RaisePropertyChanged("Experience");
                 }
             }
         }

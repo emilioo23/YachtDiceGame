@@ -65,7 +65,8 @@ namespace YachtDice.Server.Logic.Players
                 Wins = wins,
                 BestScore = FindBestScore(history),
                 WinRatePercentage = CalculateWinRate(wins, gamesPlayed),
-                Level = player.Level ?? DefaultPlayerLevel
+                Level = player.Level ?? DefaultPlayerLevel,
+                Experience = player.XP ?? EmptyCount
             };
 
             return statistics;

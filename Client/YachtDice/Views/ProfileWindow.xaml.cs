@@ -62,6 +62,17 @@ namespace YachtDice.Views
 
             LevelTextBlock.Text = string.Format(Strings.Profile_LevelFormat, profile.Level, profile.Experience);
             ShowSelection();
+            await ShowStatisticsAsync();
+        }
+
+        private async Task ShowStatisticsAsync()
+        {
+            PlayerStatistics statistics = await _playerGateway.GetStatisticsAsync(_session.DisplayName);
+
+            StatGamesValueTextBlock.Text = statistics.GamesPlayed.ToString();
+            StatWinsValueTextBlock.Text = statistics.Wins.ToString();
+            StatBestScoreValueTextBlock.Text = statistics.BestScore.ToString();
+            StatExperienceValueTextBlock.Text = statistics.Experience.ToString();
         }
 
         private void ShowSelection()

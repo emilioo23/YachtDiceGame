@@ -27,6 +27,7 @@
   <xs:complexType name="PlayerStatistics">
     <xs:sequence>
       <xs:element minOccurs="0" name="BestScore" type="xs:int" />
+      <xs:element minOccurs="0" name="Experience" type="xs:int" />
       <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
       <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="WinRatePercentage" type="xs:int" />

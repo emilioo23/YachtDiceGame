@@ -21,7 +21,8 @@
                 Wins = statistics.Wins,
                 BestScore = statistics.BestScore,
                 WinRatePercentage = statistics.WinRatePercentage,
-                Level = statistics.Level
+                Level = statistics.Level,
+                Experience = statistics.Experience
             };
 
             return contract;
