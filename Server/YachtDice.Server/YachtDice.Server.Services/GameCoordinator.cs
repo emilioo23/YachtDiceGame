@@ -232,6 +232,7 @@ namespace YachtDice.Server.Services
                 catch (DataExceptions.DataAccessException ex)
                 {
                     _logger.Error(ex, ResultNotSavedLogMessage);
+                    snapshot.MarkResultNotSaved();
                 }
             }
         }

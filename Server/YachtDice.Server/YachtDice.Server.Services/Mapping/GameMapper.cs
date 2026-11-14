@@ -31,7 +31,8 @@ namespace YachtDice.Server.Services.Mapping
                 Dice = snapshot.Dice.ToList(),
                 HeldDice = snapshot.HeldDice.ToList(),
                 Players = snapshot.Players.Select(ToContract).ToList(),
-                Options = snapshot.Options.Select(ToChoice).ToList()
+                Options = snapshot.Options.Select(ToChoice).ToList(),
+                HasResultSaveFailed = snapshot.HasResultSaveFailed
             };
 
             return state;

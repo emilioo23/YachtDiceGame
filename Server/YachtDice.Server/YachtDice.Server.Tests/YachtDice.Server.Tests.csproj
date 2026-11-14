@@ -55,6 +55,7 @@
     <Compile Include="Game\AutoPlayChooserTests.cs" />
     <Compile Include="Game\DiceHandTests.cs" />
     <Compile Include="Game\GameManagerTests.cs" />
+    <Compile Include="Game\GameSnapshotTests.cs" />
     <Compile Include="Game\GameResultRecorderTests.cs" />
     <Compile Include="Game\ScoreCalculatorTests.cs" />
     <Compile Include="Game\ScoreCardTests.cs" />

@@ -470,6 +470,11 @@ namespace YachtDice.Views
         {
             IEnumerable<StandingEntry> entries = _state.Players.Select(CreateStandingEntry);
 
+            if (_state.HasResultSaveFailed)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Game_ResultNotSaved);
+            }
+
             RememberLeftMatch();
             WindowNavigator.SwitchTo(this, new ResultsWindow(
                 _roomGateway.Session,

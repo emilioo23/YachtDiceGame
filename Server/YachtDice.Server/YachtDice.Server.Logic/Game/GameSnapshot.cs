@@ -7,6 +7,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameSnapshot
     {
+        private const int NoExperience = 0;
+
         /// <summary>
         /// Initializes an empty snapshot.
         /// </summary>
@@ -74,5 +76,25 @@ namespace YachtDice.Server.Logic.Game
         /// Gets the boxes that the current player can choose with the current dice.
         /// </summary>
         public IList<ScoreEntry> Options { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the result of the finished game could not be saved. When it is
+        /// true, nobody earned experience in the game.
+        /// </summary>
+        public bool HasResultSaveFailed { get; private set; }
+
+        /// <summary>
+        /// Marks that the result of the game could not be saved, and takes away the experience of the players
+        /// because it was not added to their accounts.
+        /// </summary>
+        public void MarkResultNotSaved()
+        {
+            HasResultSaveFailed = true;
+
+            foreach (PlayerSnapshot player in Players)
+            {
+                player.ExperienceGained = NoExperience;
+            }
+        }
     }
 }

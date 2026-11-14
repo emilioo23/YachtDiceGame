@@ -510,6 +510,9 @@
   <data name="Game_Topbar_YourTurn" xml:space="preserve">
     <value>Tu turno</value>
   </data>
+  <data name="Game_ResultNotSaved" xml:space="preserve">
+    <value>No se pudo guardar el resultado de la partida, así que la experiencia de esta partida no se sumó.</value>
+  </data>
   <data name="Game_Topbar_RoundInfo" xml:space="preserve">
     <value>Ronda {0} / {1}</value>
   </data>

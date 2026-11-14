@@ -90,6 +90,9 @@ namespace YachtDice.GameServiceReference {
         private int[] DiceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasResultSaveFailedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool[] HeldDiceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -151,6 +154,19 @@ namespace YachtDice.GameServiceReference {
                 if ((object.ReferenceEquals(this.DiceField, value) != true)) {
                     this.DiceField = value;
                     this.RaisePropertyChanged("Dice");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasResultSaveFailed {
+            get {
+                return this.HasResultSaveFailedField;
+            }
+            set {
+                if ((this.HasResultSaveFailedField.Equals(value) != true)) {
+                    this.HasResultSaveFailedField = value;
+                    this.RaisePropertyChanged("HasResultSaveFailed");
                 }
             }
         }

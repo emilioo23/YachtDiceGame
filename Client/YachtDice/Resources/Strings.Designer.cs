@@ -1105,6 +1105,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar el resultado de la partida, así que la experiencia de esta partida no se sumó..
+        /// </summary>
+        public static string Game_ResultNotSaved {
+            get {
+                return ResourceManager.GetString("Game_ResultNotSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Tu turno.
         /// </summary>
         public static string Game_Topbar_YourTurn {
