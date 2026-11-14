@@ -1,23 +1,51 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
+using YachtDice.Server.Data.Configuration;
 using YachtDice.Server.Data.Exceptions;
 using YachtDice.Server.Data.Repositories;
 
 namespace YachtDice.Server.Tests.Data
 {
     /// <summary>
-    /// Behavior of the data layer when the server runs without its configuration. The test project has no
-    /// connection string, so every repository must fail with the exception that the services turn into the
+    /// Behavior of the data layer when the server runs without its configuration. The tests clear the database
+    /// variables of the process, so every repository must fail with the exception that the services turn into the
     /// database fault.
     /// </summary>
-    public class PlayerRepositoryTests
+    public class PlayerRepositoryTests : IDisposable
     {
         private const string Username = "emilioalvarez";
         private const int PlayerId = 1;
         private const int AvatarId = 1;
         private const string Email = "emilioalvarez@gmail.com";
 
+        private static readonly string[] DatabaseVariables =
+        {
+            EnvironmentSettings.DatabaseServer,
+            EnvironmentSettings.DatabaseUser,
+            EnvironmentSettings.DatabasePassword
+        };
+
         private readonly PlayerRepository _repository = new PlayerRepository();
+        private readonly string[] _savedValues;
+
+        public PlayerRepositoryTests()
+        {
+            _savedValues = DatabaseVariables.Select(Environment.GetEnvironmentVariable).ToArray();
+
+            foreach (string variable in DatabaseVariables)
+            {
+                Environment.SetEnvironmentVariable(variable, null);
+            }
+        }
+
+        public void Dispose()
+        {
+            for (int index = 0; index < DatabaseVariables.Length; index++)
+            {
+                Environment.SetEnvironmentVariable(DatabaseVariables[index], _savedValues[index]);
+            }
+        }
 
         [Fact]
         public void FindByUsername_WithoutConnectionString_ThrowsDataAccessException()

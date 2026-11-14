@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using YachtDice.Server.Data.Configuration;
 
 namespace YachtDice.Server.Logic.Email
 {
@@ -13,12 +14,11 @@ namespace YachtDice.Server.Logic.Email
     {
         private const string SmtpHostKey = "SmtpHost";
         private const string SmtpPortKey = "SmtpPort";
-        private const string SmtpUserKey = "SmtpUser";
-        private const string SmtpPasswordKey = "SmtpPassword";
         private const int SmtpTimeoutMilliseconds = 10000;
         private const string NullMessageMessage = "The email to send cannot be null.";
         private const string EmptyRecipientMessage = "The recipient address cannot be empty.";
         private const string MissingSettingMessage = "The setting '{0}' is missing in the configuration file.";
+        private const string MissingVariableMessage = "The environment variable '{0}' is not set.";
 
         /// <summary>
         /// Sends a plain-text email to its recipient.
@@ -40,8 +40,8 @@ namespace YachtDice.Server.Logic.Email
 
             string host = ReadSetting(SmtpHostKey);
             int port = int.Parse(ReadSetting(SmtpPortKey), CultureInfo.InvariantCulture);
-            string user = ReadSetting(SmtpUserKey);
-            string password = ReadSetting(SmtpPasswordKey);
+            string user = ReadSecret(EnvironmentSettings.SmtpUser);
+            string password = ReadSecret(EnvironmentSettings.SmtpPassword);
 
             using (var mail = new MailMessage(user, message.ToAddress, message.Subject, message.Body))
             {
@@ -63,6 +63,20 @@ namespace YachtDice.Server.Logic.Email
             if (string.IsNullOrWhiteSpace(value))
             {
                 string message = string.Format(CultureInfo.InvariantCulture, MissingSettingMessage, key);
+
+                throw new InvalidOperationException(message);
+            }
+
+            return value;
+        }
+
+        private static string ReadSecret(string variableName)
+        {
+            string value = EnvironmentSettings.Read(variableName);
+
+            if (value.Length == 0)
+            {
+                string message = string.Format(CultureInfo.InvariantCulture, MissingVariableMessage, variableName);
 
                 throw new InvalidOperationException(message);
             }

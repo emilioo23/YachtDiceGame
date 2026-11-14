@@ -63,6 +63,7 @@
     <Compile Include="Category.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Configuration\EnvironmentSettings.cs" />
     <Compile Include="Exceptions\DataAccessException.cs" />
     <Compile Include="Friendship.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
@@ -92,6 +93,7 @@
     <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\DatabaseConnection.cs" />
     <Compile Include="Repositories\DatabaseOperation.cs" />
     <Compile Include="Repositories\FriendRepository.cs" />
     <Compile Include="Repositories\FriendshipStatus.cs" />
@@ -134,6 +136,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="YachtDiceContext.Connection.cs" />
     <Compile Include="YachtDiceContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

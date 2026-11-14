@@ -54,6 +54,20 @@ La persistencia se maneja en SQL Server, en la base de datos `YachtDiceDB`. El e
 
 > El diseño de la base de datos especifica la intercalación `Latin1_General_100_CI_AS_SC_UTF8` para admitir caracteres acentuados y emojis de forma nativa. La autenticación a la base de datos debe utilizar SQL Authentication mediante credenciales, evitando el uso de Windows Authentication (Autenticación Integrada).
 
+## Configuración de Credenciales
+
+Las credenciales de la base de datos y del correo no se guardan en el código ni en el repositorio. El servidor las lee de variables de entorno del usuario de Windows, que cada integrante crea en su equipo (en PowerShell, con `[Environment]::SetEnvironmentVariable('NOMBRE', 'valor', 'User')`):
+
+| Variable | Contenido |
+| --- | --- |
+| `YACHTDICE_DB_SERVER` | Servidor de SQL Server (por ejemplo, `localhost`) |
+| `YACHTDICE_DB_USER` | Usuario de SQL Authentication |
+| `YACHTDICE_DB_PASSWORD` | Contraseña de ese usuario |
+| `YACHTDICE_SMTP_USER` | Cuenta de correo que envía los códigos |
+| `YACHTDICE_SMTP_PASSWORD` | Contraseña de aplicación de esa cuenta |
+
+Después de crearlas hay que cerrar y volver a abrir Visual Studio. Los valores reales no se comparten por chat ni se suben a git.
+
 ## Tecnologías Utilizadas
 
 - C# / .NET
