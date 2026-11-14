@@ -34,6 +34,7 @@ namespace YachtDice.Server.Services
                 ?? throw new ArgumentNullException(nameof(roomManager));
             _gameCoordinator = gameCoordinator
                 ?? throw new ArgumentNullException(nameof(gameCoordinator));
+            _gameCoordinator.ReconnectTimeExpired += ForgetPlayerWhoDidNotReturn;
         }
 
         /// <summary>
@@ -282,6 +283,11 @@ namespace YachtDice.Server.Services
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
+        }
+
+        private void ForgetPlayerWhoDidNotReturn(LogicRooms.RoomMember member)
+        {
+            _roomManager.ForgetAbsentPlayer(member);
         }
 
         private void TellExpelledPlayer(LogicRooms.RoomDetails room, LogicRooms.RoomMember expelled)

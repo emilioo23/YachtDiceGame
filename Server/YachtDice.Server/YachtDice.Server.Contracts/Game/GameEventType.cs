@@ -34,6 +34,9 @@ namespace YachtDice.Server.Contracts.Game
 
         /// <summary>The last turn was played and the game is over.</summary>
         [EnumMember]
-        GameFinished
+        GameFinished,
+
+        [EnumMember]
+        PlayerForfeited
     }
 }

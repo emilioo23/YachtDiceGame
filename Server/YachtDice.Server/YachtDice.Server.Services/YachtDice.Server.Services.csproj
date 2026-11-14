@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBase.cs" />
     <Compile Include="TurnClock.cs" />
+    <Compile Include="ReconnectTimer.cs" />
     <Compile Include="TurnTimer.cs" />
     <Compile Include="TwoFactorManagementService.cs" />
   </ItemGroup>

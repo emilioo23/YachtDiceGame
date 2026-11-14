@@ -16,10 +16,18 @@ namespace YachtDice.Server.Services
     /// subscribed player what changed, counts the time of each turn and plays the turn of a player who runs
     /// out of time. The room service and the game service share one coordinator. The turn that runs out of
     /// time is played in a thread of the timer, so any error there only goes to the log, because an unhandled
-    /// error in that thread would close the whole server.
+    /// error in that thread would close the whole server. A player who leaves a game in progress has
+    /// <see cref="ReconnectSeconds"/> to come back; after that the player is out of the game and loses.
     /// </summary>
     public sealed class GameCoordinator
     {
+        /// <summary>
+        /// Seconds that a player who left a game in progress has to come back before losing.
+        /// </summary>
+        public const int ReconnectSeconds = 60;
+
+        private const string ReconnectFailedLogMessage =
+            "The player who did not come back could not be taken out of the game.";
         private const string TimeoutFailedLogMessage = "The turn of a game could not be played after its time ran out.";
         private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
 
@@ -35,6 +43,7 @@ namespace YachtDice.Server.Services
             new CallbackRegistry<Contracts.IGameCallback>();
 
         private readonly TurnTimer _timer;
+        private readonly ReconnectTimer _reconnectTimer = new ReconnectTimer();
         private readonly LogicLogging.AppLogger _logger;
 
         /// <summary>
@@ -51,6 +60,11 @@ namespace YachtDice.Server.Services
             _timer = new TurnTimer(HandleTurnExpired);
             _logger = new LogicLogging.AppLogger(GetType());
         }
+
+        /// <summary>
+        /// Raised when a player did not come back in time and lost, so the room can forget the player.
+        /// </summary>
+        public event Action<LogicRooms.RoomMember> ReconnectTimeExpired;
 
         /// <summary>
         /// Creates the game of a room that just started and begins to count the first turn.
@@ -136,7 +150,16 @@ namespace YachtDice.Server.Services
         public void PlayerLeft(LogicRooms.RoomMember member)
         {
             _callbacks.Remove(member);
-            Complete(member.RoomCode, _gameManager.MarkAbsent(member), Contracts.GameEventType.PlayerDisconnected);
+
+            LogicGame.GameActionResult result = _gameManager.MarkAbsent(member);
+
+            Complete(member.RoomCode, result, Contracts.GameEventType.PlayerDisconnected);
+
+            if (result.Status == LogicGame.GameActionStatus.Success
+                && result.Snapshot.Status == LogicGame.GameStatus.InProgress)
+            {
+                _reconnectTimer.Start(member, ReconnectSeconds, () => HandleReconnectExpired(member));
+            }
         }
 
         /// <summary>
@@ -145,6 +168,7 @@ namespace YachtDice.Server.Services
         /// <param name="member">Room and identifier of the player who returned.</param>
         public void PlayerReturned(LogicRooms.RoomMember member)
         {
+            _reconnectTimer.Cancel(member);
             Complete(member.RoomCode, _gameManager.MarkPresent(member), Contracts.GameEventType.PlayerReturned);
         }
 
@@ -154,6 +178,7 @@ namespace YachtDice.Server.Services
         /// <param name="member">Room and identifier of the player to remove.</param>
         public void PlayerRemoved(LogicRooms.RoomMember member)
         {
+            _reconnectTimer.Cancel(member);
             _callbacks.Remove(member);
             Complete(member.RoomCode, _gameManager.Remove(member), Contracts.GameEventType.PlayerRemoved);
         }
@@ -165,6 +190,7 @@ namespace YachtDice.Server.Services
         public void EndGame(string roomCode)
         {
             _timer.Stop(roomCode);
+            _reconnectTimer.CancelRoom(roomCode);
             _gameManager.End(roomCode);
             _roomSettings.TryRemove(roomCode, out _);
             _savedGames.TryRemove(roomCode, out _);
@@ -211,6 +237,7 @@ namespace YachtDice.Server.Services
 
             if (chosen == Contracts.GameEventType.GameFinished)
             {
+                _reconnectTimer.CancelRoom(roomCode);
                 SaveResult(roomCode, result.Snapshot);
             }
 
@@ -259,6 +286,27 @@ namespace YachtDice.Server.Services
             else if (!_timer.IsCounting(turn))
             {
                 _timer.Start(turn, snapshot.TurnSeconds);
+            }
+        }
+
+        private void HandleReconnectExpired(LogicRooms.RoomMember member)
+        {
+            try
+            {
+                _reconnectTimer.Cancel(member);
+
+                LogicGame.GameActionResult result = _gameManager.Forfeit(member);
+
+                CompleteTurn(member.RoomCode, result, Contracts.GameEventType.PlayerForfeited);
+
+                if (result.Status == LogicGame.GameActionStatus.Success)
+                {
+                    ReconnectTimeExpired?.Invoke(member);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ReconnectFailedLogMessage);
             }
         }
 
