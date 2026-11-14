@@ -104,7 +104,7 @@ namespace YachtDice.Client.Tests.Rooms
         }
 
         [Fact]
-        public void Apply_PrivacyAndTextTogether_KeepsOnlyRoomsThatMatchBoth()
+        public void Apply_PrivateFilterWithTextOfAPublicRoomHost_ReturnsAnEmptyList()
         {
             List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, "emilio");
 
