@@ -56,6 +56,13 @@
                                Margin="3"/>
                     </Border>
 
+                    <TextBlock x:Name="TitlePreviewTextBlock"
+                               FontSize="16"
+                               FontStyle="Italic"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BrushGold}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,4"/>
                     <TextBlock x:Name="LevelTextBlock"
                                FontSize="15"
                                FontWeight="SemiBold"
@@ -188,19 +195,11 @@
                                Style="{StaticResource FieldLabel}"
                                FontSize="18"/>
 
-                    <ComboBox
+                    <ComboBox x:Name="TitleComboBox"
                               Padding="10,8"
                               FontSize="17"
                               Margin="0,0,0,24"
-                              SelectedIndex="0">
-
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleBeginner}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleExpert}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleChampion}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleShooter}"/>
-                        <ComboBoxItem Content="{x:Static properties:Strings.Profile_TitleStrategist}"/>
-
-                    </ComboBox>
+                              SelectionChanged="TitleComboBox_SelectionChanged"/>
 
                     <TextBlock Text="{x:Static properties:Strings.Profile_StatisticsHeader}"
                                FontSize="18"
@@ -288,49 +287,15 @@
                         </Grid>
                     </Border>
 
-                    <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_Header}"
+                    <TextBlock x:Name="AchievementsHeaderTextBlock"
+                               Text="{x:Static properties:Strings.Profile_Achievements_Header}"
                                FontSize="18"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushTextMuted}"
                                Margin="0,0,0,10"/>
 
-                    <WrapPanel Margin="0,0,0,24">
-
-                        <Border Background="{StaticResource BrushGoldButton}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8">
-
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstMatch}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushFeltDark}"/>
-                        </Border>
-
-                        <Border Background="{StaticResource BrushGoldButton}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8">
-
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_FirstWin}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushFeltDark}"/>
-                        </Border>
-
-                        <Border Background="{StaticResource BrushBorder}"
-                                CornerRadius="16"
-                                Padding="12,7"
-                                Margin="0,0,8,8"
-                                Opacity="0.6">
-
-                            <TextBlock Text="{x:Static properties:Strings.Profile_Achievements_SpeedRoller}"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource BrushTextMuted}"/>
-                        </Border>
-
-                    </WrapPanel>
+                    <WrapPanel x:Name="AchievementsWrapPanel"
+                               Margin="0,0,0,24"/>
 
                     <Button Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
                             Style="{StaticResource BtnPrimary}"

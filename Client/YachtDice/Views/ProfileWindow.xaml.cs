@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Input;
 using YachtDice.Client.Logic.Avatars;
 using YachtDice.Gateway;
@@ -20,6 +22,9 @@ namespace YachtDice.Views
     public partial class ProfileWindow : Window
     {
         private const int NoLevelRequired = 0;
+        private const int DefaultTitleId = 0;
+        private const double LockedOpacity = 0.6;
+        private const string HeaderWithCountFormat = "{0} - {1}";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -30,6 +35,7 @@ namespace YachtDice.Views
         private int _level = AvatarResourceKey.DefaultAvatarId;
         private int _savedAvatarId = AvatarResourceKey.DefaultAvatarId;
         private int _selectedAvatarId = AvatarResourceKey.DefaultAvatarId;
+        private int _savedTitleId = DefaultTitleId;
 
         /// <summary>
         /// Initializes the profile window for the given player and starts loading the avatars.
@@ -61,8 +67,99 @@ namespace YachtDice.Views
             _selectedAvatarId = profile.AvatarId;
 
             LevelTextBlock.Text = string.Format(Strings.Profile_LevelFormat, profile.Level, profile.Experience);
+            _savedTitleId = profile.TitleId;
             ShowSelection();
             await ShowStatisticsAsync();
+            await ShowAchievementsAsync();
+        }
+
+        private async Task ShowAchievementsAsync()
+        {
+            List<AchievementInfo> achievements = await _playerGateway.GetAchievementsAsync(_session.DisplayName);
+
+            ShowTitles(achievements);
+            ShowAchievementBadges(achievements);
+        }
+
+        private void ShowTitles(List<AchievementInfo> achievements)
+        {
+            TitleComboBox.Items.Clear();
+            TitleComboBox.Items.Add(CreateTitleItem(DefaultTitleId, true));
+
+            Func<AchievementInfo, bool> grantsTitle = candidate => candidate.HasTitle;
+
+            foreach (AchievementInfo achievement in achievements.Where(grantsTitle))
+            {
+                TitleComboBox.Items.Add(CreateTitleItem(achievement.Id, achievement.IsUnlocked));
+            }
+
+            Func<ComboBoxItem, bool> isSavedTitle = item => (int)item.Tag == _savedTitleId;
+            ComboBoxItem savedItem = TitleComboBox.Items.Cast<ComboBoxItem>().FirstOrDefault(isSavedTitle);
+
+            TitleComboBox.SelectedItem = savedItem ?? TitleComboBox.Items[0];
+        }
+
+        private static ComboBoxItem CreateTitleItem(int titleId, bool isUnlocked)
+        {
+            string name = ProgressTexts.GetTitleName(titleId);
+
+            return new ComboBoxItem
+            {
+                Tag = titleId,
+                IsEnabled = isUnlocked,
+                Content = isUnlocked ? name : string.Format(Strings.Profile_TitleLocked, name)
+            };
+        }
+
+        private void ShowAchievementBadges(List<AchievementInfo> achievements)
+        {
+            Func<AchievementInfo, bool> isUnlocked = candidate => candidate.IsUnlocked;
+            int unlockedCount = achievements.Count(isUnlocked);
+
+            AchievementsHeaderTextBlock.Text = string.Format(
+                HeaderWithCountFormat,
+                Strings.Profile_Achievements_Header,
+                string.Format(Strings.Profile_AchievementsFormat, unlockedCount, achievements.Count));
+            AchievementsWrapPanel.Children.Clear();
+
+            foreach (AchievementInfo achievement in achievements)
+            {
+                AchievementsWrapPanel.Children.Add(CreateAchievementBadge(achievement));
+            }
+        }
+
+        private Border CreateAchievementBadge(AchievementInfo achievement)
+        {
+            var name = new TextBlock
+            {
+                Text = ProgressTexts.GetAchievementName(achievement.Id),
+                FontSize = 14,
+                FontWeight = FontWeights.Bold,
+                Foreground = (Brush)FindResource(achievement.IsUnlocked ? "BrushFeltDark" : "BrushTextMuted")
+            };
+
+            return new Border
+            {
+                Child = name,
+                CornerRadius = new CornerRadius(16),
+                Padding = new Thickness(12, 7, 12, 7),
+                Margin = new Thickness(0, 0, 8, 8),
+                Opacity = achievement.IsUnlocked ? 1 : LockedOpacity,
+                ToolTip = ProgressTexts.GetAchievementDescription(achievement.Id),
+                Background = (Brush)FindResource(achievement.IsUnlocked ? "BrushGoldButton" : "BrushBorder")
+            };
+        }
+
+        private int GetSelectedTitleId()
+        {
+            var selectedItem = TitleComboBox.SelectedItem as ComboBoxItem;
+
+            return selectedItem == null ? _savedTitleId : (int)selectedItem.Tag;
+        }
+
+        private void TitleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TitlePreviewTextBlock.Text = ProgressTexts.GetTitleName(GetSelectedTitleId());
         }
 
         private async Task ShowStatisticsAsync()
@@ -134,20 +231,46 @@ namespace YachtDice.Views
             string newUsername = UsernameTextBox.Text.Trim();
             bool hasNewAvatar = _selectedAvatarId != _savedAvatarId;
             bool hasNewUsername = newUsername != _session.DisplayName;
+            bool hasNewTitle = GetSelectedTitleId() != _savedTitleId;
 
             if (hasNewAvatar)
             {
                 await SaveAvatarAsync();
             }
 
-            if (hasNewUsername)
+            if (hasNewTitle)
             {
-                await SaveUsernameAsync(newUsername, hasNewAvatar);
+                await SaveTitleAsync(hasNewAvatar);
             }
 
-            if (!hasNewAvatar && !hasNewUsername)
+            if (hasNewUsername)
+            {
+                await SaveUsernameAsync(newUsername, hasNewAvatar || hasNewTitle);
+            }
+
+            if (!hasNewAvatar && !hasNewTitle && !hasNewUsername)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+            }
+        }
+
+        private async Task SaveTitleAsync(bool isSavedMessageShown)
+        {
+            int titleId = GetSelectedTitleId();
+            TitleChangeResultCode result = await _playerGateway.ChangeTitleAsync(_session.DisplayName, titleId);
+
+            if (result == TitleChangeResultCode.Success)
+            {
+                _savedTitleId = titleId;
+
+                if (!isSavedMessageShown)
+                {
+                    CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+                }
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_TitleSaveError);
             }
         }
 
