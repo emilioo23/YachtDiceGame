@@ -13,8 +13,8 @@ namespace YachtDice.Server.Tests.TwoFactor
     public class TwoFactorResendTests
     {
         private const int PlayerId = 1;
-        private const string Email = "gabriel@example.com";
-        private const string UnknownEmail = "nobody@example.com";
+        private const string Email = "gabriel@gmail.com";
+        private const string UnknownEmail = "nobody@gmail.com";
         private const string DisplayName = "gabrielhernandez";
         private const string UnknownDisplayName = "nobody";
         private const string Password = "Secret123!";

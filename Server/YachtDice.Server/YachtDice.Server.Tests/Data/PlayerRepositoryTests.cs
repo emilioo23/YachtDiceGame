@@ -15,7 +15,7 @@ namespace YachtDice.Server.Tests.Data
         private const string Username = "player";
         private const int PlayerId = 1;
         private const int AvatarId = 1;
-        private const string Email = "player@example.com";
+        private const string Email = "player@gmail.com";
 
         private readonly PlayerRepository _repository = new PlayerRepository();
 

@@ -22,8 +22,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const int SecondsInsideCooldown = 5;
         private const int SecondsOutsideCooldown = 60;
         private const int MinutesExpired = 1;
-        private const string Email = "emilio@example.com";
-        private const string UnknownEmail = "nobody@example.com";
+        private const string Email = "emilio@gmail.com";
+        private const string UnknownEmail = "nobody@gmail.com";
         private const string BlankEmail = "  ";
         private const string DisplayName = "emilio";
         private const string OldPassword = "OldPass123!";

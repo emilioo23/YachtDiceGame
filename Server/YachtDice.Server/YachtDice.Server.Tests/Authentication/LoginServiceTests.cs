@@ -15,8 +15,8 @@ namespace YachtDice.Server.Tests.Authentication
     public class LoginServiceTests
     {
         private const int PlayerId = 1;
-        private const string Email = "gabriel@example.com";
-        private const string UnknownEmail = "nobody@example.com";
+        private const string Email = "gabriel@gmail.com";
+        private const string UnknownEmail = "nobody@gmail.com";
         private const string MalformedEmail = "gabriel";
         private const string Password = "Secret123!";
         private const string WrongPassword = "Wrong123!";
@@ -82,7 +82,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Theory]
         [InlineData("gabriel")]
         [InlineData("gabriel@")]
-        [InlineData("gabriel example.com")]
+        [InlineData("gabriel gmail.com")]
         public void LoginPlayer_MalformedEmail_ReturnsInvalidEmail(string email)
         {
             LoginCredentials credentials = CreateCredentials(email, Password);

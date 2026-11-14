@@ -14,8 +14,8 @@ namespace YachtDice.Server.Tests.Authentication
     {
         private const string Username = "gabrielhernandez";
         private const string OtherUsername = "emilio23";
-        private const string Email = "gabriel@example.com";
-        private const string OtherEmail = "emilio@example.com";
+        private const string Email = "gabriel@gmail.com";
+        private const string OtherEmail = "emilio@gmail.com";
         private const string InvalidEmail = "not-an-email";
         private const string Password = "Secret123!";
         private const string FirstName = "Gabriel";
@@ -23,7 +23,7 @@ namespace YachtDice.Server.Tests.Authentication
         private const string WhitespaceOnly = "   ";
         private const string UsernameWithSpaces = "gabriel hm";
         private const string WeakPassword = "abc";
-        private const string EmailDomain = "@example.com";
+        private const string EmailDomain = "@gmail.com";
         private const char FillCharacter = 'a';
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;

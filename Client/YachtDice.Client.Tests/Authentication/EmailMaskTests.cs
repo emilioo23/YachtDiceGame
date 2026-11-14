@@ -8,16 +8,16 @@ namespace YachtDice.Client.Tests.Authentication
     /// </summary>
     public class EmailMaskTests
     {
-        private const string LongEmail = "gabriel@example.com";
-        private const string MaskedLongEmail = "ga*****@example.com";
-        private const string ShortEmail = "ab@example.com";
-        private const string ThreeCharactersEmail = "abc@example.com";
-        private const string MaskedThreeCharactersEmail = "ab*@example.com";
-        private const string OneCharacterEmail = "a@example.com";
-        private const string TextWithoutAtSign = "gabriel.example.com";
-        private const string AtSignFirstText = "@example.com";
-        private const string TwoAtSignsText = "gabriel@ex@mple.com";
-        private const string MaskedTwoAtSignsText = "ga*****@ex@mple.com";
+        private const string LongEmail = "gabriel@gmail.com";
+        private const string MaskedLongEmail = "ga*****@gmail.com";
+        private const string ShortEmail = "ab@gmail.com";
+        private const string ThreeCharactersEmail = "abc@gmail.com";
+        private const string MaskedThreeCharactersEmail = "ab*@gmail.com";
+        private const string OneCharacterEmail = "a@gmail.com";
+        private const string TextWithoutAtSign = "gabriel.gmail.com";
+        private const string AtSignFirstText = "@gmail.com";
+        private const string TwoAtSignsText = "gabriel@gm@il.com";
+        private const string MaskedTwoAtSignsText = "ga*****@gm@il.com";
 
         [Fact]
         public void Mask_LongLocalPart_KeepsTheFirstTwoCharactersAndTheDomain()

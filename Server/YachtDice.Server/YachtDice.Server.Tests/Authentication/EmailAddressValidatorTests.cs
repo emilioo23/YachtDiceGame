@@ -9,7 +9,7 @@ namespace YachtDice.Server.Tests.Authentication
     public class EmailAddressValidatorTests
     {
         [Theory]
-        [InlineData("gabriel@example.com")]
+        [InlineData("gabriel@gmail.com")]
         [InlineData("emilio.alvarez@uv.mx")]
         public void IsValid_WellWrittenEmail_ReturnsTrue(string email)
         {
@@ -22,8 +22,8 @@ namespace YachtDice.Server.Tests.Authentication
         [InlineData("    ")]
         [InlineData("gabriel")]
         [InlineData("gabriel@")]
-        [InlineData("@example.com")]
-        [InlineData("gabriel example.com")]
+        [InlineData("@gmail.com")]
+        [InlineData("gabriel gmail.com")]
         public void IsValid_EmptyOrMalformedText_ReturnsFalse(string email)
         {
             Assert.False(EmailAddressValidator.IsValid(email));
@@ -32,7 +32,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void IsValid_EmailWithSpacesAround_ReturnsFalse()
         {
-            Assert.False(EmailAddressValidator.IsValid(" gabriel@example.com "));
+            Assert.False(EmailAddressValidator.IsValid(" gabriel@gmail.com "));
         }
     }
 }
