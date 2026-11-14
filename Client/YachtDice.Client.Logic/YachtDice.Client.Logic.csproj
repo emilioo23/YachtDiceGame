@@ -67,6 +67,7 @@
     <Compile Include="Game\TurnPhaseResolver.cs" />
     <Compile Include="Game\YachtCelebrationRule.cs" />
     <Compile Include="Players\AchievementChanges.cs" />
+    <Compile Include="Players\FlagCodes.cs" />
     <Compile Include="Players\InitialLetter.cs" />
     <Compile Include="Players\LevelProgress.cs" />
     <Compile Include="Rooms\MatchParticipant.cs" />

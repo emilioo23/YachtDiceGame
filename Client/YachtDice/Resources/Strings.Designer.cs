@@ -2374,6 +2374,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Sin bandera.
+        /// </summary>
+        public static string Flag_None {
+            get {
+                return ResourceManager.GetString("Flag_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bandera.
+        /// </summary>
+        public static string Profile_FlagLabel {
+            get {
+                return ResourceManager.GetString("Profile_FlagLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
         /// </summary>
         public static string Profile_AvatarSaveError {
