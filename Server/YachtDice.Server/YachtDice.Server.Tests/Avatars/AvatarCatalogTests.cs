@@ -15,6 +15,7 @@ namespace YachtDice.Server.Tests.Avatars
         private const int MinimumFreeAvatars = 4;
         private const int UnknownAvatarId = 9999;
         private const int FirstAvatarPosition = 0;
+        private const int LastLevelOfTheGame = 20;
 
         [Fact]
         public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
@@ -68,6 +69,29 @@ namespace YachtDice.Server.Tests.Avatars
             List<int> identifiers = AvatarCatalog.GetAll().Select(avatar => avatar.Id).ToList();
 
             Assert.Equal(AvatarCatalog.DefaultAvatarId, identifiers[FirstAvatarPosition]);
+        }
+
+        [Fact]
+        public void GetAll_Always_HasConsecutiveIdentifiersFromTheDefaultAvatar()
+        {
+            Func<UnlockableAvatar, int> readId = avatar => avatar.Id;
+            List<int> expectedIdentifiers = Enumerable
+                .Range(AvatarCatalog.DefaultAvatarId, AvatarCatalog.GetAll().Count)
+                .ToList();
+
+            List<int> identifiers = AvatarCatalog.GetAll().Select(readId).ToList();
+
+            Assert.Equal(expectedIdentifiers, identifiers);
+        }
+
+        [Fact]
+        public void GetAll_Always_NeverNeedsMoreThanTheLastLevelOfTheGame()
+        {
+            Func<UnlockableAvatar, int> readLevel = avatar => avatar.RequiredLevel;
+
+            int highestRequiredLevel = AvatarCatalog.GetAll().Max(readLevel);
+
+            Assert.True(highestRequiredLevel <= LastLevelOfTheGame);
         }
 
         [Fact]
