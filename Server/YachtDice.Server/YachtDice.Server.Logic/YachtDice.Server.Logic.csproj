@@ -104,8 +104,6 @@
     <Compile Include="Game\ScoreCategories.cs" />
     <Compile Include="Game\ScoreCategory.cs" />
     <Compile Include="Game\ScoreEntry.cs" />
-    <Compile Include="Game\ScoreOption.cs" />
-    <Compile Include="Game\ScoreStatus.cs" />
     <Compile Include="Game\TurnDuration.cs" />
     <Compile Include="Game\YachtGame.cs" />
     <Compile Include="Logging\AppLogger.cs" />

@@ -44,25 +44,25 @@ namespace YachtDice.Server.Tests.Game
             ScoreCard card = CreateCard();
             var expectedScore = new
             {
-                Status = ScoreStatus.Success,
+                Status = GameActionStatus.Success,
                 Points = NoCombinationChoicePoints,
                 Total = NoCombinationChoicePoints
             };
 
-            ScoreStatus status = card.Score(ScoreCategory.Choice, NoCombination);
+            GameActionStatus status = card.Score(ScoreCategory.Choice, NoCombination);
 
             var actualScore = new { Status = status, Points = card.GetScore(ScoreCategory.Choice), card.Total };
             Assert.Equal(expectedScore, actualScore);
         }
 
         [Fact]
-        public void Score_CategoryAlreadyFilled_ReturnsAlreadyFilledAndKeepsThePoints()
+        public void Score_CategoryAlreadyFilled_ReturnsCategoryFilledAndKeepsThePoints()
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Choice, NoCombination);
-            var expectedScore = new { Status = ScoreStatus.AlreadyFilled, Points = NoCombinationChoicePoints };
+            var expectedScore = new { Status = GameActionStatus.CategoryFilled, Points = NoCombinationChoicePoints };
 
-            ScoreStatus status = card.Score(ScoreCategory.Choice, YachtOfSixes);
+            GameActionStatus status = card.Score(ScoreCategory.Choice, YachtOfSixes);
 
             var actualScore = new { Status = status, Points = card.GetScore(ScoreCategory.Choice) };
             Assert.Equal(expectedScore, actualScore);
@@ -172,8 +172,8 @@ namespace YachtDice.Server.Tests.Game
             card.Score(ScoreCategory.Choice, NoCombination);
             var expectedOptions = new { OptionCount = OpenCategoriesAfterOneScore, OffersChoice = false };
 
-            IReadOnlyList<ScoreOption> options = card.GetOptions(NoCombination);
-            Func<ScoreOption, bool> isSameCategory = option => option.Category == ScoreCategory.Choice;
+            IReadOnlyList<ScoreEntry> options = card.GetOptions(NoCombination);
+            Func<ScoreEntry, bool> isSameCategory = option => option.Category == ScoreCategory.Choice;
 
             var actualOptions = new
             {
@@ -188,9 +188,9 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
-            ScoreOption[] expectedOptions = { new ScoreOption(ScoreCategory.Fours, YachtOfFoursPoints) };
+            ScoreEntry[] expectedOptions = { new ScoreEntry(ScoreCategory.Fours, YachtOfFoursPoints) };
 
-            IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
+            IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
 
             Assert.Equivalent(expectedOptions, options);
         }
@@ -209,7 +209,7 @@ namespace YachtDice.Server.Tests.Game
                 ChoicePoints = YachtOfFoursPoints
             };
 
-            IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
+            IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
 
             var actualOptions = new
             {
@@ -230,8 +230,8 @@ namespace YachtDice.Server.Tests.Game
             card.Score(ScoreCategory.Fours, NoCombination);
             var expectedOptions = new { OptionCount = OpenUpperBoxesWithJoker, IsAllUpper = true, HasOnlyZeros = true };
 
-            IReadOnlyList<ScoreOption> options = card.GetOptions(YachtOfFours);
-            Func<ScoreOption, bool> hasNoPoints = option => option.Points == NoPoints;
+            IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
+            Func<ScoreEntry, bool> hasNoPoints = option => option.Points == NoPoints;
 
             var actualOptions = new
             {
@@ -244,13 +244,13 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
-        public void Score_JokerInABoxThatTheRuleDoesNotAllow_ReturnsNotAllowedAndKeepsTheBoxOpen()
+        public void Score_JokerInABoxThatTheRuleDoesNotAllow_ReturnsCategoryNotAllowedAndKeepsTheBoxOpen()
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
-            var expectedScore = new { Status = ScoreStatus.NotAllowed, IsFilled = false };
+            var expectedScore = new { Status = GameActionStatus.CategoryNotAllowed, IsFilled = false };
 
-            ScoreStatus status = card.Score(ScoreCategory.Choice, YachtOfFours);
+            GameActionStatus status = card.Score(ScoreCategory.Choice, YachtOfFours);
 
             var actualScore = new { Status = status, IsFilled = card.IsFilled(ScoreCategory.Choice) };
             Assert.Equal(expectedScore, actualScore);
@@ -286,9 +286,9 @@ namespace YachtDice.Server.Tests.Game
             return new ScoreCard(new ScoreCalculator());
         }
 
-        private static ScoreOption FindOption(IEnumerable<ScoreOption> options, ScoreCategory category)
+        private static ScoreEntry FindOption(IEnumerable<ScoreEntry> options, ScoreCategory category)
         {
-            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+            Func<ScoreEntry, bool> isSameCategory = option => option.Category == category;
 
             return options.Single(isSameCategory);
         }

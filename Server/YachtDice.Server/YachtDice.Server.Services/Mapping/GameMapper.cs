@@ -31,7 +31,7 @@ namespace YachtDice.Server.Services.Mapping
                 Dice = snapshot.Dice.ToList(),
                 HeldDice = snapshot.HeldDice.ToList(),
                 Players = snapshot.Players.Select(ToContract).ToList(),
-                Options = snapshot.Options.Select(ToContract).ToList()
+                Options = snapshot.Options.Select(ToChoice).ToList()
             };
 
             return state;
@@ -95,7 +95,7 @@ namespace YachtDice.Server.Services.Mapping
             };
         }
 
-        private static Contracts.ScoreChoice ToContract(LogicGame.ScoreOption option)
+        private static Contracts.ScoreChoice ToChoice(LogicGame.ScoreEntry option)
         {
             return new Contracts.ScoreChoice
             {

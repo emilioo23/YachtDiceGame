@@ -16,7 +16,7 @@ namespace YachtDice.Server.Logic.Game
             Dice = new List<int>();
             HeldDice = new List<bool>();
             Players = new List<PlayerSnapshot>();
-            Options = new List<ScoreOption>();
+            Options = new List<ScoreEntry>();
         }
 
         /// <summary>
@@ -73,6 +73,6 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Gets the boxes that the current player can choose with the current dice.
         /// </summary>
-        public IList<ScoreOption> Options { get; }
+        public IList<ScoreEntry> Options { get; }
     }
 }

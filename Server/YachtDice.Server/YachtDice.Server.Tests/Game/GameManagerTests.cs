@@ -605,9 +605,9 @@ namespace YachtDice.Server.Tests.Game
             return snapshot.Players.Single(isSamePlayerId);
         }
 
-        private static ScoreOption FindOption(GameSnapshot snapshot, ScoreCategory category)
+        private static ScoreEntry FindOption(GameSnapshot snapshot, ScoreCategory category)
         {
-            Func<ScoreOption, bool> isSameCategory = option => option.Category == category;
+            Func<ScoreEntry, bool> isSameCategory = option => option.Category == category;
 
             return snapshot.Options.Single(isSameCategory);
         }

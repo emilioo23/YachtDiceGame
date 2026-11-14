@@ -297,18 +297,9 @@ namespace YachtDice.Server.Logic.Game
 
         private GameActionStatus ApplyScore(ScoreCategory category)
         {
-            var scoreStatus = _players[_turnIndex].Card.Score(category, _dice);
-            var status = GameActionStatus.Success;
+            GameActionStatus status = _players[_turnIndex].Card.Score(category, _dice);
 
-            if (scoreStatus == ScoreStatus.AlreadyFilled)
-            {
-                status = GameActionStatus.CategoryFilled;
-            }
-            else if (scoreStatus == ScoreStatus.NotAllowed)
-            {
-                status = GameActionStatus.CategoryNotAllowed;
-            }
-            else
+            if (status == GameActionStatus.Success)
             {
                 AdvanceTurn();
             }
