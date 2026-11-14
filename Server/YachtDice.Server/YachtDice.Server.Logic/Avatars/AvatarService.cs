@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.Avatars
 {
@@ -13,17 +14,22 @@ namespace YachtDice.Server.Logic.Avatars
     {
         private const int DefaultLevel = 1;
         private const int DefaultExperience = 0;
+        private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
+        private const string NullLevelTableMessage = "The table of levels cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
+        private readonly LevelTable _levelTable;
 
         /// <summary>
-        /// Initializes the service with the data access it needs.
+        /// Initializes the service with the data access and the table of levels it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read and save the players.</param>
-        public AvatarService(IPlayerRepository playerRepository)
+        /// <param name="levelTable">Experience that each level needs.</param>
+        public AvatarService(IPlayerRepository playerRepository, LevelTable levelTable)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullPlayerRepositoryMessage);
+            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullLevelTableMessage);
         }
 
         /// <summary>
@@ -39,7 +45,8 @@ namespace YachtDice.Server.Logic.Avatars
         }
 
         /// <summary>
-        /// Gets the avatar, level and experience of a player.
+        /// Gets the avatar, level and experience of a player, with the experience where the level starts and
+        /// where the next one starts.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The profile; a profile with the default values if the player does not exist.</returns>
@@ -59,6 +66,9 @@ namespace YachtDice.Server.Logic.Avatars
                 profile.Level = player.Level ?? DefaultLevel;
                 profile.Experience = player.XP ?? DefaultExperience;
             }
+
+            profile.LevelStartExperience = _levelTable.GetLevelStart(profile.Level);
+            profile.NextLevelExperience = _levelTable.GetNextLevelStart(profile.Level);
 
             return profile;
         }

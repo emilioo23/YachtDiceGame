@@ -19,5 +19,16 @@
         /// Gets or sets the experience points of the player.
         /// </summary>
         public int Experience { get; set; }
+
+        /// <summary>
+        /// Gets or sets the experience where the current level of the player starts.
+        /// </summary>
+        public int LevelStartExperience { get; set; }
+
+        /// <summary>
+        /// Gets or sets the experience where the next level starts. At the last level it is the same as
+        /// <see cref="LevelStartExperience"/>.
+        /// </summary>
+        public int NextLevelExperience { get; set; }
     }
 }

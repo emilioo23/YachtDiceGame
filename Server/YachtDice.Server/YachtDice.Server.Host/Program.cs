@@ -161,14 +161,15 @@ namespace YachtDice.Server.Host
             serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
 
-            var avatarService = new AvatarService(new PlayerRepository());
+            LevelTable levelTable = CreateLevelTable();
+            var avatarService = new AvatarService(new PlayerRepository(), levelTable);
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService)));
 
             var roomManager = new RoomManager(avatarService);
             var resultRecorder = new GameResultRecorder(
                 new PlayerRepository(),
                 new GameHistoryRepository(),
-                CreateLevelTable());
+                levelTable);
             var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
             var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));

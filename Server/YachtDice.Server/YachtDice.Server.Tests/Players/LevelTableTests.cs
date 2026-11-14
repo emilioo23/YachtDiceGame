@@ -18,6 +18,8 @@ namespace YachtDice.Server.Tests.Players
         private const int BelowSecondLevelExperience = 199;
         private const int FarAboveLastLevelExperience = 9000;
         private const int NegativeExperience = -1;
+        private const int NoLevel = 0;
+        private const int AboveLastLevel = 9;
 
         private static readonly int[] Thresholds = { NoExperience, SecondLevelExperience, ThirdLevelExperience };
 
@@ -51,6 +53,40 @@ namespace YachtDice.Server.Tests.Players
             var levelTable = new LevelTable(Thresholds);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => levelTable.GetLevel(NegativeExperience));
+        }
+
+        [Theory]
+        [InlineData(FirstLevel, NoExperience)]
+        [InlineData(SecondLevel, SecondLevelExperience)]
+        [InlineData(AboveLastLevel, ThirdLevelExperience)]
+        public void GetLevelStart_Level_ReturnsTheExperienceThatTheLevelNeeds(int level, int expectedExperience)
+        {
+            var levelTable = new LevelTable(Thresholds);
+
+            int levelStart = levelTable.GetLevelStart(level);
+
+            Assert.Equal(expectedExperience, levelStart);
+        }
+
+        [Theory]
+        [InlineData(FirstLevel, SecondLevelExperience)]
+        [InlineData(SecondLevel, ThirdLevelExperience)]
+        [InlineData(ThirdLevel, ThirdLevelExperience)]
+        public void GetNextLevelStart_Level_ReturnsTheExperienceOfTheNextLevel(int level, int expectedExperience)
+        {
+            var levelTable = new LevelTable(Thresholds);
+
+            int nextLevelStart = levelTable.GetNextLevelStart(level);
+
+            Assert.Equal(expectedExperience, nextLevelStart);
+        }
+
+        [Fact]
+        public void GetLevelStart_NoLevel_ThrowsArgumentOutOfRangeException()
+        {
+            var levelTable = new LevelTable(Thresholds);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => levelTable.GetLevelStart(NoLevel));
         }
 
         [Fact]

@@ -26,5 +26,17 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public int Experience { get; set; }
+
+        /// <summary>
+        /// Experience where the current level of the player starts.
+        /// </summary>
+        [DataMember]
+        public int LevelStartExperience { get; set; }
+
+        /// <summary>
+        /// Experience where the next level starts. At the last level it is the same as the start of the level.
+        /// </summary>
+        [DataMember]
+        public int NextLevelExperience { get; set; }
     }
 }

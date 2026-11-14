@@ -11,11 +11,13 @@ namespace YachtDice.Server.Logic.Players
     public sealed class LevelTable
     {
         private const int StartingExperience = 0;
+        private const int FirstLevel = 1;
         private const string NullThresholdsMessage = "The experience of each level cannot be null.";
         private const string EmptyThresholdsMessage = "There must be at least one level.";
         private const string InvalidFirstThresholdMessage = "The first level must need zero experience.";
         private const string UnorderedThresholdsMessage = "Each level must need more experience than the last one.";
         private const string NegativeExperienceMessage = "The experience of a player cannot be negative.";
+        private const string InvalidLevelMessage = "The level must be at least one.";
 
         private readonly List<int> _thresholds;
 
@@ -58,6 +60,41 @@ namespace YachtDice.Server.Logic.Players
             Func<int, bool> isReached = threshold => threshold <= experience;
 
             return _thresholds.Count(isReached);
+        }
+
+        /// <summary>
+        /// Gets the experience that a level needs. A level above the last one counts as the last one.
+        /// </summary>
+        /// <param name="level">Level of the player, starting at one.</param>
+        /// <returns>The experience where the level starts.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The level is lower than one.</exception>
+        public int GetLevelStart(int level)
+        {
+            if (level < FirstLevel)
+            {
+                throw new ArgumentOutOfRangeException(nameof(level), InvalidLevelMessage);
+            }
+
+            int levelIndex = Math.Min(level, MaxLevel) - 1;
+
+            return _thresholds[levelIndex];
+        }
+
+        /// <summary>
+        /// Gets the experience that the level after the given one needs. At the last level there is no next
+        /// level, so it returns the experience of the last level.
+        /// </summary>
+        /// <param name="level">Level of the player, starting at one.</param>
+        /// <returns>The experience where the next level starts.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The level is lower than one.</exception>
+        public int GetNextLevelStart(int level)
+        {
+            if (level < FirstLevel)
+            {
+                throw new ArgumentOutOfRangeException(nameof(level), InvalidLevelMessage);
+            }
+
+            return GetLevelStart(Math.Min(level + 1, MaxLevel));
         }
 
         private static void ValidateThresholds(List<int> thresholds)
