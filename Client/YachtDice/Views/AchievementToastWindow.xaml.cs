@@ -39,7 +39,6 @@ namespace YachtDice.Views
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
-            Left = SystemParameters.WorkArea.Right - ActualWidth - ScreenMargin;
             _closeTimer.Start();
         }
 
