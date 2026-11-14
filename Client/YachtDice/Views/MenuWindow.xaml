@@ -100,10 +100,15 @@
                                     Background="{StaticResource BrushBorder}"
                                     CornerRadius="3">
 
-                                <Border HorizontalAlignment="Left"
-                                        Width="55"
+                                <Border HorizontalAlignment="Stretch"
                                         Background="{StaticResource BrushFeltLight}"
-                                        CornerRadius="3"/>
+                                        CornerRadius="3"
+                                        RenderTransformOrigin="0,0.5">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform x:Name="LevelBarScale"
+                                                        ScaleX="0"/>
+                                    </Border.RenderTransform>
+                                </Border>
                             </Border>
 
                             <Button Content="{x:Static properties:Strings.MainMenu_ButtonEditProfile}"

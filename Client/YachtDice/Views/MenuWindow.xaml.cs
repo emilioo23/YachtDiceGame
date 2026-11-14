@@ -165,6 +165,10 @@ namespace YachtDice.Views
             {
                 PlayerProfile profile = await _gateway.GetProfileAsync(playerName);
 
+                LevelBarScale.ScaleX = LevelProgress.GetFraction(
+                    profile.Experience,
+                    profile.LevelStartExperience,
+                    profile.NextLevelExperience);
                 PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
                 PlayerAvatarImage.Visibility = Visibility.Visible;
                 PlayerInitialTextBlock.Visibility = Visibility.Collapsed;
