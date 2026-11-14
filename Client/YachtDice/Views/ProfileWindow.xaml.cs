@@ -346,7 +346,10 @@ namespace YachtDice.Views
                 await SaveUsernameAsync(newUsername, hasNewAvatar || hasNewTitle || hasNewFlag);
             }
 
-            if (!hasNewAvatar && !hasNewTitle && !hasNewFlag && !hasNewUsername)
+            bool hasNoNewLook = !hasNewAvatar && !hasNewTitle;
+            bool hasNoNewIdentity = !hasNewFlag && !hasNewUsername;
+
+            if (hasNoNewLook && hasNoNewIdentity)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
             }
