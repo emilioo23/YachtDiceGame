@@ -96,6 +96,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="Experience" type="xs:int" />
+      <xs:element minOccurs="0" name="FlagCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="LevelStartExperience" type="xs:int" />
       <xs:element minOccurs="0" name="NextLevelExperience" type="xs:int" />
@@ -259,4 +260,27 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GameHistoryEntry" nillable="true" type="tns:GameHistoryEntry" />
+  <xs:element name="ChangeFlag">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="flagCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeFlagResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangeFlagResult" type="tns:FlagChangeResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="FlagChangeResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="InvalidFlag" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FlagChangeResultCode" nillable="true" type="tns:FlagChangeResultCode" />
 </xs:schema>

@@ -447,6 +447,9 @@ namespace YachtDice.PlayerServiceReference {
         private int ExperienceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FlagCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LevelField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -490,6 +493,19 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.ExperienceField.Equals(value) != true)) {
                     this.ExperienceField = value;
                     this.RaisePropertyChanged("Experience");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FlagCode {
+            get {
+                return this.FlagCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FlagCodeField, value) != true)) {
+                    this.FlagCodeField = value;
+                    this.RaisePropertyChanged("FlagCode");
                 }
             }
         }
@@ -857,6 +873,20 @@ namespace YachtDice.PlayerServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FlagChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum FlagChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidFlag = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -896,6 +926,10 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -959,6 +993,10 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName) {
             return base.Channel.GetGameHistory(playerName);
+        }
+        
+        public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode) {
+            return base.Channel.ChangeFlag(playerName, flagCode);
         }
     }
 }
