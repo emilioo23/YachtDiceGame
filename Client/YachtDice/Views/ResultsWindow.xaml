@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        Title="{x:Static properties:Strings.Auth_Logo}" Height="600" Width="600"
+        Title="{x:Static properties:Strings.Auth_Logo}" Height="680" Width="600"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         ResizeMode="NoResize"
@@ -28,6 +28,28 @@
                 <TextBlock x:Name="ScoreSubtitleTextBlock"
                            FontSize="14" Foreground="{StaticResource BrushTextMuted}"
                            HorizontalAlignment="Center" Margin="0,4,0,26"/>
+
+                <StackPanel x:Name="ExperiencePanel" Visibility="Collapsed" Margin="0,0,0,22">
+                    <Grid>
+                        <TextBlock x:Name="LevelTextBlock" FontSize="13" FontWeight="Bold"
+                                   Foreground="{StaticResource BrushText}"/>
+                        <TextBlock x:Name="ExperienceProgressTextBlock" FontSize="12"
+                                   Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <Border Height="14" CornerRadius="7" Margin="0,6,0,0" ClipToBounds="True"
+                            Background="{StaticResource BrushCream2}" BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="1">
+                        <Border CornerRadius="6" Background="{StaticResource BrushGold}"
+                                RenderTransformOrigin="0,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="ExperienceFillScale" ScaleX="0"/>
+                            </Border.RenderTransform>
+                        </Border>
+                    </Border>
+                    <TextBlock x:Name="LevelUpTextBlock" Text="{x:Static properties:Strings.Results_LevelUp}"
+                               Visibility="Collapsed" FontSize="13" FontWeight="Bold" Margin="0,6,0,0"
+                               Foreground="{StaticResource BrushGoldDark}" HorizontalAlignment="Center"/>
+                </StackPanel>
 
                 <Border Background="{StaticResource BrushCream2}" CornerRadius="10"
                         BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" Margin="0,0,0,24"

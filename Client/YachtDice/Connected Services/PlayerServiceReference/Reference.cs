@@ -433,6 +433,12 @@ namespace YachtDice.PlayerServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LevelField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LevelStartExperienceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NextLevelExperienceField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -478,6 +484,32 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.LevelField.Equals(value) != true)) {
                     this.LevelField = value;
                     this.RaisePropertyChanged("Level");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LevelStartExperience {
+            get {
+                return this.LevelStartExperienceField;
+            }
+            set {
+                if ((this.LevelStartExperienceField.Equals(value) != true)) {
+                    this.LevelStartExperienceField = value;
+                    this.RaisePropertyChanged("LevelStartExperience");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NextLevelExperience {
+            get {
+                return this.NextLevelExperienceField;
+            }
+            set {
+                if ((this.NextLevelExperienceField.Equals(value) != true)) {
+                    this.NextLevelExperienceField = value;
+                    this.RaisePropertyChanged("NextLevelExperience");
                 }
             }
         }

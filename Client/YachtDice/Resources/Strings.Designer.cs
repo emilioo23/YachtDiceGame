@@ -2599,6 +2599,33 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Nivel {0}.
+        /// </summary>
+        public static string Results_LevelFormat {
+            get {
+                return ResourceManager.GetString("Results_LevelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} / {1} XP.
+        /// </summary>
+        public static string Results_ExperienceProgressFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceProgressFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Subiste de nivel!.
+        /// </summary>
+        public static string Results_LevelUp {
+            get {
+                return ResourceManager.GetString("Results_LevelUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Puntaje ganador: {0} pts.
         /// </summary>
         public static string Results_SubtitleScore {

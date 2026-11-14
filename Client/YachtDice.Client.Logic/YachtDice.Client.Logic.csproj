@@ -66,6 +66,7 @@
     <Compile Include="Game\TurnPhaseResolver.cs" />
     <Compile Include="Game\YachtCelebrationRule.cs" />
     <Compile Include="Players\InitialLetter.cs" />
+    <Compile Include="Players\LevelProgress.cs" />
     <Compile Include="Rooms\MatchParticipant.cs" />
     <Compile Include="Rooms\PresenceComparer.cs" />
     <Compile Include="Rooms\RoomListItem.cs" />

@@ -471,7 +471,10 @@ namespace YachtDice.Views
             IEnumerable<StandingEntry> entries = _state.Players.Select(CreateStandingEntry);
 
             RememberLeftMatch();
-            WindowNavigator.SwitchTo(this, new ResultsWindow(_roomGateway.Session, StandingsBuilder.Build(entries)));
+            WindowNavigator.SwitchTo(this, new ResultsWindow(
+                _roomGateway.Session,
+                StandingsBuilder.Build(entries),
+                _playerId));
         }
 
         private static StandingEntry CreateStandingEntry(PlayerScorecard card)
