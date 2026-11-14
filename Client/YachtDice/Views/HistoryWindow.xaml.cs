@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -59,14 +60,14 @@ namespace YachtDice.Views
 
         private static string ReadOpponents(GameHistoryEntry game)
         {
-            return string.IsNullOrEmpty(game.Opponents) ? Strings.History_GuestOpponent : game.Opponents;
+            return HistoryDisplay.ChooseOpponents(game.Opponents, Strings.History_GuestOpponent);
         }
 
         private static string ReadScore(GameHistoryEntry game)
         {
-            return string.IsNullOrEmpty(game.Opponents)
-                ? game.OwnScore.ToString()
-                : string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore);
+            return HistoryDisplay.HasRegisteredOpponents(game.Opponents)
+                ? string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore)
+                : game.OwnScore.ToString();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
