@@ -68,6 +68,7 @@ namespace YachtDice.Views
             await ConnectPresenceAsync(playerName);
             await ShowPlayerStatisticsAsync(playerName);
             await LoadAvatarAsync(playerName);
+            await new AchievementNotifier(_session).CheckAsync();
             await LoadFriendsAsync();
             await OfferPendingMatchAsync();
         }
@@ -169,6 +170,7 @@ namespace YachtDice.Views
                     profile.Experience,
                     profile.LevelStartExperience,
                     profile.NextLevelExperience);
+                PlayerTitleTextBlock.Text = ProgressTexts.GetTitleName(profile.TitleId);
                 PlayerAvatarImage.Source = AvatarImages.Get(profile.AvatarId);
                 PlayerAvatarImage.Visibility = Visibility.Visible;
                 PlayerInitialTextBlock.Visibility = Visibility.Collapsed;

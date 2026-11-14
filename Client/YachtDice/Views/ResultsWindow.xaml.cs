@@ -130,6 +130,7 @@ namespace YachtDice.Views
             ExperiencePanel.Visibility = Visibility.Visible;
 
             AnimateExperienceBar(startFraction, endFraction);
+            await new AchievementNotifier(_session).CheckAsync();
         }
 
         private void AnimateExperienceBar(double startFraction, double endFraction)

@@ -89,6 +89,12 @@
                                                FontSize="15"
                                                Foreground="{StaticResource BrushText}"/>
 
+                                    <TextBlock x:Name="PlayerTitleTextBlock"
+                                               FontSize="12"
+                                               FontStyle="Italic"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource BrushGold}"/>
+
                                     <TextBlock x:Name="PlayerLevelTextBlock"
                                                FontSize="13"
                                                Foreground="{StaticResource BrushTextMuted}"/>
