@@ -51,6 +51,7 @@
     <Compile Include="Game\HeldDiceSelectionTests.cs" />
     <Compile Include="Game\StandingsBuilderTests.cs" />
     <Compile Include="Game\StateVersionGateTests.cs" />
+    <Compile Include="Game\ReconnectWaitTrackerTests.cs" />
     <Compile Include="Game\TurnCountdownTests.cs" />
     <Compile Include="Game\TurnPhaseResolverTests.cs" />
     <Compile Include="Game\YachtCelebrationRuleTests.cs" />

@@ -61,6 +61,7 @@
     <Compile Include="Game\StandingEntry.cs" />
     <Compile Include="Game\StandingsBuilder.cs" />
     <Compile Include="Game\StateVersionGate.cs" />
+    <Compile Include="Game\ReconnectWaitTracker.cs" />
     <Compile Include="Game\TurnCountdown.cs" />
     <Compile Include="Game\TurnHint.cs" />
     <Compile Include="Game\TurnPhase.cs" />
