@@ -90,5 +90,15 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         List<GameHistoryEntry> GetGameHistory(string playerName);
+
+        /// <summary>
+        /// Chooses the country flag that the player shows next to the avatar. Any country can be chosen.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <param name="flagCode">Code of the country with two letters, or an empty text to remove the flag.</param>
+        /// <returns>The result of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        FlagChangeResultCode ChangeFlag(string playerName, string flagCode);
     }
 }

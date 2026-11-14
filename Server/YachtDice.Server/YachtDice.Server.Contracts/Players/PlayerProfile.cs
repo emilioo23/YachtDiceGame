@@ -44,5 +44,11 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public int TitleId { get; set; }
+
+        /// <summary>
+        /// Code with two letters of the country flag that the player shows next to the avatar. Empty if none.
+        /// </summary>
+        [DataMember]
+        public string FlagCode { get; set; }
     }
 }

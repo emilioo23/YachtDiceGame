@@ -125,6 +125,14 @@ namespace YachtDice.Server.Services
             return history;
         }
 
+        public Contracts.FlagChangeResultCode ChangeFlag(string playerName, string flagCode)
+        {
+            Contracts.FlagChangeResultCode result =
+                Execute(playerName, () => ProcessFlagChange(playerName, flagCode));
+
+            return result;
+        }
+
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
@@ -156,6 +164,13 @@ namespace YachtDice.Server.Services
             LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
 
             return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
+        }
+
+        private Contracts.FlagChangeResultCode ProcessFlagChange(string playerName, string flagCode)
+        {
+            LogicPlayers.FlagChangeStatus status = _profileService.ChangeFlag(playerName, flagCode);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.FlagChangeStatus, Contracts.FlagChangeResultCode>(status);
         }
 
         private List<Contracts.GameHistoryEntry> ProcessGameHistory(string playerName)

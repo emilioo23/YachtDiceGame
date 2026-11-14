@@ -35,5 +35,10 @@
         /// Gets or sets the identifier of the title that the player shows in the profile.
         /// </summary>
         public int TitleId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code of the country flag that the player shows next to the avatar.
+        /// </summary>
+        public string FlagCode { get; set; }
     }
 }

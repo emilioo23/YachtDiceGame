@@ -31,6 +31,9 @@ namespace YachtDice.Server.Data.Repositories
         private const string TwoFactorUpdateFailedMessage =
             "Could not save the two-step verification setting due to a database failure.";
         private const string NoTitle = "";
+        private const string NoFlagCode = "";
+        private const string FlagQueryFailedMessage = "Could not read the flag due to a database failure.";
+        private const string FlagUpdateFailedMessage = "Could not save the flag due to a database failure.";
         private const string TitleQueryFailedMessage = "Could not read the title due to a database failure.";
         private const string TitleUpdateFailedMessage = "Could not save the title due to a database failure.";
         private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
@@ -218,6 +221,34 @@ namespace YachtDice.Server.Data.Repositories
                 TitleUpdateFailedMessage);
         }
 
+        /// <summary>
+        /// Finds the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved code, or an empty text if the player never chose a flag.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public string FindFlagCode(int playerId)
+        {
+            string flagCode = DatabaseOperation.Query(
+                context => SelectFlagCode(context, playerId),
+                FlagQueryFailedMessage);
+
+            return flagCode;
+        }
+
+        /// <summary>
+        /// Saves the code of the country flag that the player chose, creating the settings when they do not exist.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="flagCode">Code of the country, or an empty text to remove the flag.</param>
+        /// <exception cref="DataAccessException">The flag could not be saved.</exception>
+        public void SaveFlagCode(int playerId, string flagCode)
+        {
+            DatabaseOperation.Save(
+                context => GetOrCreateSettings(context, playerId).FlagCode = flagCode,
+                FlagUpdateFailedMessage);
+        }
+
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
             Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
@@ -312,7 +343,20 @@ namespace YachtDice.Server.Data.Repositories
             return settings?.Title ?? NoTitle;
         }
 
+        private static string SelectFlagCode(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<PlayerSettings, bool>> isSamePlayer = row => row.PlayerId == playerId;
+            PlayerSettings settings = context.PlayerSettings.FirstOrDefault(isSamePlayer);
+
+            return settings?.FlagCode ?? NoFlagCode;
+        }
+
         private static void ApplyTitle(YachtDiceContext context, int playerId, string title)
+        {
+            GetOrCreateSettings(context, playerId).Title = title;
+        }
+
+        private static PlayerSettings GetOrCreateSettings(YachtDiceContext context, int playerId)
         {
             Expression<Func<PlayerSettings, bool>> isSamePlayer = row => row.PlayerId == playerId;
             PlayerSettings settings = context.PlayerSettings.FirstOrDefault(isSamePlayer);
@@ -323,7 +367,7 @@ namespace YachtDice.Server.Data.Repositories
                 context.PlayerSettings.Add(settings);
             }
 
-            settings.Title = title;
+            return settings;
         }
 
         private static void ApplyUsername(YachtDiceContext context, int playerId, string username)

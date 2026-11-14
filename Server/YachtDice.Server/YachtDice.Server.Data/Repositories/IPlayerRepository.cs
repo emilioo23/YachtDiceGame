@@ -92,5 +92,21 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="title">Title to save.</param>
         /// <exception cref="DataAccessException">The title could not be saved.</exception>
         void SaveTitle(int playerId, string title);
+
+        /// <summary>
+        /// Finds the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved code, or an empty text if the player never chose a flag.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindFlagCode(int playerId);
+
+        /// <summary>
+        /// Saves the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="flagCode">Code of the country, or an empty text to remove the flag.</param>
+        /// <exception cref="DataAccessException">The flag could not be saved.</exception>
+        void SaveFlagCode(int playerId, string flagCode);
     }
 }

@@ -58,7 +58,8 @@ namespace YachtDice.Server.Logic.Avatars
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = DefaultLevel,
                 Experience = DefaultExperience,
-                TitleId = AchievementRules.DefaultTitleId
+                TitleId = AchievementRules.DefaultTitleId,
+                FlagCode = string.Empty
             };
 
             if (player != null)
@@ -67,6 +68,7 @@ namespace YachtDice.Server.Logic.Avatars
                 profile.Level = player.Level ?? DefaultLevel;
                 profile.Experience = player.XP ?? DefaultExperience;
                 profile.TitleId = ReadTitleId(player.Id);
+                profile.FlagCode = _playerRepository.FindFlagCode(player.Id);
             }
 
             profile.LevelStartExperience = _levelTable.GetLevelStart(profile.Level);

@@ -14,6 +14,9 @@ namespace YachtDice.Server.Logic.Players
     /// </summary>
     public class ProfileService
     {
+        private const int FlagCodeLength = 2;
+        private const char FirstLetter = 'a';
+        private const char LastLetter = 'z';
         private const string NullRepositoryMessage = "The data access of the players cannot be null.";
         private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
         private const string NullStatisticsMessage = "The service of statistics cannot be null.";
@@ -131,6 +134,39 @@ namespace YachtDice.Server.Logic.Players
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Saves the country flag that a player wants to show next to the avatar. Any country can be chosen.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <param name="flagCode">Code of the country with two letters, or an empty text to remove the flag.</param>
+        /// <returns>The result of the change.</returns>
+        /// <exception cref="DataAccessException">The flag could not be saved.</exception>
+        public FlagChangeStatus ChangeFlag(string playerName, string flagCode)
+        {
+            Player player = FindPlayer(playerName);
+            string code = flagCode?.Trim().ToLowerInvariant() ?? string.Empty;
+            FlagChangeStatus status = FlagChangeStatus.PlayerNotFound;
+
+            if (player != null)
+            {
+                status = IsValidFlagCode(code) ? FlagChangeStatus.Success : FlagChangeStatus.InvalidFlag;
+            }
+
+            if (status == FlagChangeStatus.Success)
+            {
+                _playerRepository.SaveFlagCode(player.Id, code);
+            }
+
+            return status;
+        }
+
+        private static bool IsValidFlagCode(string code)
+        {
+            Func<char, bool> isLetter = letter => letter >= FirstLetter && letter <= LastLetter;
+
+            return code.Length == 0 || (code.Length == FlagCodeLength && code.All(isLetter));
         }
 
         private UsernameChangeStatus FindUsernameProblem(Player player, string username)

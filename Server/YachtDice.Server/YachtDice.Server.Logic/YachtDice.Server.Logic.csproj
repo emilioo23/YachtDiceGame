@@ -114,6 +114,7 @@
     <Compile Include="Players\AchievementRules.cs" />
     <Compile Include="Players\AchievementStatus.cs" />
     <Compile Include="Players\TitleChangeStatus.cs" />
+    <Compile Include="Players\FlagChangeStatus.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\PlayedGameSummary.cs" />
     <Compile Include="Players\PlayerState.cs" />
