@@ -7,13 +7,15 @@ using YachtDice.Server.Data.Repositories;
 namespace YachtDice.Server.Logic.Players
 {
     /// <summary>
-    /// Calculates the statistics of the players from their game history.
+    /// Calculates the statistics and the leaderboard of the players from their game history.
     /// </summary>
     public class PlayerStatisticsService
     {
         private const int DefaultPlayerLevel = 1;
         private const int EmptyCount = 0;
         private const int PercentageFactor = 100;
+        private const int FirstPosition = 1;
+        private const int MaxLeaderboardEntries = 100;
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -51,6 +53,37 @@ namespace YachtDice.Server.Logic.Players
             }
 
             return statistics;
+        }
+
+        /// <summary>
+        /// Gets the players with the most points, from the first place downwards.
+        /// </summary>
+        /// <returns>The entries of the leaderboard, in order.</returns>
+        /// <exception cref="DataAccessException">The ranking could not be read.</exception>
+        public List<LeaderboardEntry> GetTopPlayers()
+        {
+            List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxLeaderboardEntries);
+            Func<PlayerRankingRecord, int, LeaderboardEntry> createLeaderboardEntry = CreateLeaderboardEntry;
+
+            List<LeaderboardEntry> entries = records
+                .Select(createLeaderboardEntry)
+                .ToList();
+
+            return entries;
+        }
+
+        private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int index)
+        {
+            var entry = new LeaderboardEntry
+            {
+                Position = index + FirstPosition,
+                DisplayName = record.DisplayName,
+                AvatarId = record.AvatarId,
+                TotalPoints = record.TotalPoints,
+                Wins = record.Wins
+            };
+
+            return entry;
         }
 
         private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)

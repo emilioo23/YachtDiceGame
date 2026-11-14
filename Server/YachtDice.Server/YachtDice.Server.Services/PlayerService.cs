@@ -15,7 +15,6 @@ namespace YachtDice.Server.Services
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
         private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
-        private readonly LogicPlayers.LeaderboardService _leaderboardService;
         private readonly LogicAvatars.AvatarService _avatarService;
 
         /// <summary>
@@ -25,13 +24,10 @@ namespace YachtDice.Server.Services
         /// <param name="leaderboardService">Logic that builds the ranking of the players.</param>
         public PlayerService(
             LogicPlayers.PlayerStatisticsService statisticsService,
-            LogicPlayers.LeaderboardService leaderboardService,
             LogicAvatars.AvatarService avatarService)
         {
             _statisticsService = statisticsService
                 ?? throw new ArgumentNullException(nameof(statisticsService));
-            _leaderboardService = leaderboardService
-                ?? throw new ArgumentNullException(nameof(leaderboardService));
             _avatarService = avatarService
                 ?? throw new ArgumentNullException(nameof(avatarService));
         }
@@ -122,7 +118,7 @@ namespace YachtDice.Server.Services
 
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
-            List<LogicPlayers.LeaderboardEntry> entries = _leaderboardService.GetTopPlayers();
+            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers();
 
             return Mapping.LeaderboardMapper.ToContracts(entries);
         }
