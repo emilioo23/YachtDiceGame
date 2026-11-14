@@ -111,6 +111,8 @@
     <Compile Include="Moderation\LinkCensor.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\PlayerState.cs" />
+    <Compile Include="Players\ProfileService.cs" />
+    <Compile Include="Players\UsernameChangeStatus.cs" />
     <Compile Include="Players\PlayerStatistics.cs" />
     <Compile Include="Players\PlayerStatisticsService.cs" />
     <Compile Include="Players\ExperienceRules.cs" />

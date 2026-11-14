@@ -68,5 +68,13 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
         void SaveAvatar(int playerId, int avatarId);
+
+        /// <summary>
+        /// Saves the new username of a player, which is also the name that the other players see.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="username">New username of the player.</param>
+        /// <exception cref="DataAccessException">The username could not be saved.</exception>
+        void SaveUsername(int playerId, string username);
     }
 }

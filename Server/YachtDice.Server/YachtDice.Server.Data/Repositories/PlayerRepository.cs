@@ -30,6 +30,7 @@ namespace YachtDice.Server.Data.Repositories
             "Database error occurred while checking the two-step verification.";
         private const string TwoFactorUpdateFailedMessage =
             "Could not save the two-step verification setting due to a database failure.";
+        private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
         /// <summary>
@@ -173,6 +174,19 @@ namespace YachtDice.Server.Data.Repositories
                 AvatarUpdateFailedMessage);
         }
 
+        /// <summary>
+        /// Saves the new username of the player and the moment when it was changed.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="username">New username of the player.</param>
+        /// <exception cref="DataAccessException">The username could not be saved.</exception>
+        public void SaveUsername(int playerId, string username)
+        {
+            DatabaseOperation.Save(
+                context => ApplyUsername(context, playerId, username),
+                UsernameUpdateFailedMessage);
+        }
+
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)
         {
             Expression<Func<Player, bool>> isSameEmail = player => player.Email == email;
@@ -256,6 +270,19 @@ namespace YachtDice.Server.Data.Repositories
             if (player != null)
             {
                 player.AvatarId = avatarId;
+            }
+        }
+
+        private static void ApplyUsername(YachtDiceContext context, int playerId, string username)
+        {
+            Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
+            Player player = context.Player.FirstOrDefault(isSameId);
+
+            if (player != null)
+            {
+                player.Username = username;
+                player.DisplayName = username;
+                player.LastUserChange = DateTime.UtcNow;
             }
         }
 

@@ -104,6 +104,15 @@ namespace YachtDice.Server.Tests.InMemory
             player.AvatarId = avatarId;
         }
 
+        public void SaveUsername(int playerId, string username)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+            Player player = _players.First(isSameId);
+
+            player.Username = username;
+            player.DisplayName = username;
+        }
+
         private static bool IsSameText(string firstText, string secondText)
         {
             return string.Equals(firstText, secondText, StringComparison.OrdinalIgnoreCase);
