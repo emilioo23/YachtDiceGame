@@ -108,6 +108,7 @@
     <Compile Include="Game\YachtGame.cs" />
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
+    <Compile Include="Moderation\LinkCensor.cs" />
     <Compile Include="Players\LeaderboardEntry.cs" />
     <Compile Include="Players\LeaderboardService.cs" />
     <Compile Include="Players\PlayerState.cs" />

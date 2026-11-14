@@ -762,6 +762,9 @@
   <data name="Game_Chat_SendFailed" xml:space="preserve">
     <value>The message could not be sent.</value>
   </data>
+  <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
+    <value>Links are not allowed in the chat.</value>
+  </data>
   <data name="Game_Chat_Unavailable" xml:space="preserve">
     <value>The chat is not available in this game.</value>
   </data>

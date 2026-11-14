@@ -853,6 +853,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se permiten enlaces en el chat.
+        /// </summary>
+        public static string Game_Chat_LinksNotAllowed {
+            get {
+                return ResourceManager.GetString("Game_Chat_LinksNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo enviar el mensaje..
         /// </summary>
         public static string Game_Chat_SendFailed {

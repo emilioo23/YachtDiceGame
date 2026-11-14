@@ -51,6 +51,7 @@
     <Compile Include="Avatars\AvatarOptionBuilder.cs" />
     <Compile Include="Avatars\AvatarRequirement.cs" />
     <Compile Include="Avatars\AvatarResourceKey.cs" />
+    <Compile Include="Chat\ChatLinkDetector.cs" />
     <Compile Include="Connection\ConnectionLossGate.cs" />
     <Compile Include="Dice\DiceRowParser.cs" />
     <Compile Include="Dice\DieDisplay.cs" />

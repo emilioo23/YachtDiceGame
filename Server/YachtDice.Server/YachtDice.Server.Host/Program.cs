@@ -178,7 +178,8 @@ namespace YachtDice.Server.Host
         {
             serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
             serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
-            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService()));
+            OffensiveWordFilter wordFilter = CreateOffensiveWordFilter();
+            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService(wordFilter)));
 
             LevelTable levelTable = CreateLevelTable();
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
@@ -193,7 +194,7 @@ namespace YachtDice.Server.Host
             var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
-            serviceHosts.Add(new ServiceHost(new ChatService(roomManager)));
+            serviceHosts.Add(new ServiceHost(new ChatService(roomManager, wordFilter)));
 
             var presenceService = new PresenceService();
             serviceHosts.Add(new ServiceHost(presenceService));
@@ -282,12 +283,13 @@ namespace YachtDice.Server.Host
         /// <summary>
         /// Creates and configures the player registration service with its required dependencies.
         /// </summary>
+        /// <param name="wordFilter">Filter that rejects the usernames with offensive words.</param>
         /// <returns>A fully configured instance of PlayerRegistrationService.</returns>
-        private static PlayerRegistrationService CreatePlayerRegistrationService()
+        private static PlayerRegistrationService CreatePlayerRegistrationService(OffensiveWordFilter wordFilter)
         {
             var playerRepository = new PlayerRepository();
 
-            var registrationService = new RegistrationService(playerRepository, CreateOffensiveWordFilter());
+            var registrationService = new RegistrationService(playerRepository, wordFilter);
 
             return new PlayerRegistrationService(registrationService);
         }
