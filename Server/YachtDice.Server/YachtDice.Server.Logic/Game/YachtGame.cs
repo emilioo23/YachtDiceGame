@@ -81,11 +81,11 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Roll(string playerId, IReadOnlyList<bool> heldDice)
         {
-            var status = ValidateTurn(playerId);
+            var status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
-                status = RollValidated(heldDice);
+                status = RollIfAllowed(heldDice);
             }
 
             return status;
@@ -99,11 +99,11 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Score(string playerId, ScoreCategory category)
         {
-            var status = ValidateTurn(playerId);
+            var status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
-                status = ScoreValidated(category);
+                status = ScoreIfAllowed(category);
             }
 
             return status;
@@ -125,7 +125,7 @@ namespace YachtDice.Server.Logic.Game
                     RollAll();
                 }
 
-                status = ScoreValidated(ChooseBestCategory());
+                status = ScoreIfAllowed(ChooseBestCategory());
             }
 
             return status;
@@ -229,7 +229,7 @@ namespace YachtDice.Server.Logic.Game
             }
         }
 
-        private GameActionStatus ValidateTurn(string playerId)
+        private GameActionStatus CheckTurn(string playerId)
         {
             GameActionStatus status;
 
@@ -253,7 +253,7 @@ namespace YachtDice.Server.Logic.Game
             return status;
         }
 
-        private GameActionStatus RollValidated(IReadOnlyList<bool> heldDice)
+        private GameActionStatus RollIfAllowed(IReadOnlyList<bool> heldDice)
         {
             GameActionStatus status;
 
@@ -279,7 +279,7 @@ namespace YachtDice.Server.Logic.Game
             return status;
         }
 
-        private GameActionStatus ScoreValidated(ScoreCategory category)
+        private GameActionStatus ScoreIfAllowed(ScoreCategory category)
         {
             GameActionStatus status;
 

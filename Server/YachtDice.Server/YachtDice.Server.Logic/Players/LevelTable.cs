@@ -35,8 +35,24 @@ namespace YachtDice.Server.Logic.Players
                 throw new ArgumentNullException(nameof(thresholds), NullThresholdsMessage);
             }
 
-            _thresholds = thresholds.ToList();
-            ValidateThresholds(_thresholds);
+            List<int> levelThresholds = thresholds.ToList();
+
+            if (levelThresholds.Count == 0)
+            {
+                throw new ArgumentException(EmptyThresholdsMessage, nameof(thresholds));
+            }
+
+            if (levelThresholds.First() != StartingExperience)
+            {
+                throw new ArgumentException(InvalidFirstThresholdMessage, nameof(thresholds));
+            }
+
+            if (!IsAscending(levelThresholds))
+            {
+                throw new ArgumentException(UnorderedThresholdsMessage, nameof(thresholds));
+            }
+
+            _thresholds = levelThresholds;
         }
 
         /// <summary>
@@ -97,25 +113,16 @@ namespace YachtDice.Server.Logic.Players
             return GetLevelStart(Math.Min(level + 1, MaxLevel));
         }
 
-        private static void ValidateThresholds(List<int> thresholds)
+        private static bool IsAscending(List<int> thresholds)
         {
-            if (thresholds.Count == 0)
-            {
-                throw new ArgumentException(EmptyThresholdsMessage, nameof(thresholds));
-            }
-
-            if (thresholds.First() != StartingExperience)
-            {
-                throw new ArgumentException(InvalidFirstThresholdMessage, nameof(thresholds));
-            }
+            bool isAscending = true;
 
             for (int levelIndex = 1; levelIndex < thresholds.Count; levelIndex++)
             {
-                if (thresholds[levelIndex] <= thresholds[levelIndex - 1])
-                {
-                    throw new ArgumentException(UnorderedThresholdsMessage, nameof(thresholds));
-                }
+                isAscending = isAscending && thresholds[levelIndex] > thresholds[levelIndex - 1];
             }
+
+            return isAscending;
         }
     }
 }

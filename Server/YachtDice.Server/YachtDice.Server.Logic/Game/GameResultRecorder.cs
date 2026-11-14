@@ -49,7 +49,15 @@ namespace YachtDice.Server.Logic.Game
         /// <inheritdoc />
         public void Record(RoomSettings settings, GameSnapshot snapshot)
         {
-            ValidateArguments(settings, snapshot);
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
+            }
+
+            if (snapshot == null)
+            {
+                throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
+            }
 
             var result = new GameResultRecord
             {
@@ -67,19 +75,6 @@ namespace YachtDice.Server.Logic.Game
             {
                 result.HostPlayerId = result.Players.First().PlayerId;
                 _gameHistoryRepository.Save(result);
-            }
-        }
-
-        private static void ValidateArguments(RoomSettings settings, GameSnapshot snapshot)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
-            }
-
-            if (snapshot == null)
-            {
-                throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
             }
         }
 

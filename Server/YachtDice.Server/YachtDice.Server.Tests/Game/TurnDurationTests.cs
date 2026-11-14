@@ -11,13 +11,13 @@ namespace YachtDice.Server.Tests.Game
     /// </summary>
     public class TurnDurationTests
     {
-        private const int NormalTurnSeconds = 60;
-        private const int FastTurnSeconds = 30;
+        private const int LongerTurnSeconds = 60;
+        private const int ShorterTurnSeconds = 30;
         private const int NoSeconds = 0;
 
         [Theory]
-        [InlineData(GameSpeed.Normal, NormalTurnSeconds)]
-        [InlineData(GameSpeed.Fast, FastTurnSeconds)]
+        [InlineData(GameSpeed.Normal, LongerTurnSeconds)]
+        [InlineData(GameSpeed.Fast, ShorterTurnSeconds)]
         public void GetSeconds_ConfiguredSpeed_ReturnsItsSeconds(GameSpeed speed, int expectedSeconds)
         {
             var turnDuration = new TurnDuration(CreateSecondsBySpeed());
@@ -30,7 +30,7 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void GetSeconds_SpeedWithoutDuration_ThrowsArgumentOutOfRangeException()
         {
-            var secondsBySpeed = new Dictionary<GameSpeed, int> { { GameSpeed.Normal, NormalTurnSeconds } };
+            var secondsBySpeed = new Dictionary<GameSpeed, int> { { GameSpeed.Normal, LongerTurnSeconds } };
             var turnDuration = new TurnDuration(secondsBySpeed);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => turnDuration.GetSeconds(GameSpeed.Fast));
@@ -55,19 +55,19 @@ namespace YachtDice.Server.Tests.Game
         {
             Dictionary<GameSpeed, int> secondsBySpeed = CreateSecondsBySpeed();
             var turnDuration = new TurnDuration(secondsBySpeed);
-            secondsBySpeed[GameSpeed.Normal] = FastTurnSeconds;
+            secondsBySpeed[GameSpeed.Normal] = ShorterTurnSeconds;
 
             int seconds = turnDuration.GetSeconds(GameSpeed.Normal);
 
-            Assert.Equal(NormalTurnSeconds, seconds);
+            Assert.Equal(LongerTurnSeconds, seconds);
         }
 
         private static Dictionary<GameSpeed, int> CreateSecondsBySpeed()
         {
             var secondsBySpeed = new Dictionary<GameSpeed, int>
             {
-                { GameSpeed.Normal, NormalTurnSeconds },
-                { GameSpeed.Fast, FastTurnSeconds }
+                { GameSpeed.Normal, LongerTurnSeconds },
+                { GameSpeed.Fast, ShorterTurnSeconds }
             };
 
             return secondsBySpeed;

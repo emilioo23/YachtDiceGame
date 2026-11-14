@@ -48,7 +48,7 @@ namespace YachtDice.Server.Logic.Authentication
                 throw new ArgumentNullException(nameof(newPlayer), NullPlayerMessage);
             }
 
-            RegistrationResult result = ValidatePlayer(newPlayer, plainPassword);
+            RegistrationResult result = FindRegistrationProblem(newPlayer, plainPassword);
 
             if (result == RegistrationResult.Success)
             {
@@ -63,7 +63,7 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private static RegistrationResult ValidatePlayer(Player player, string plainPassword)
+        private static RegistrationResult FindRegistrationProblem(Player player, string plainPassword)
         {
             RegistrationResult result = RegistrationResult.Success;
 

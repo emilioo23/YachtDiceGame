@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using YachtDice.Server.Logic.Rooms;
 
 namespace YachtDice.Server.Logic.Game
@@ -13,7 +14,7 @@ namespace YachtDice.Server.Logic.Game
     {
         private const int MinimumSeconds = 1;
         private const string NullSecondsMessage = "The seconds of each speed cannot be null.";
-        private const string InvalidSecondsFormat = "The turn of the speed {0} must last at least one second.";
+        private const string TooShortSecondsMessage = "The turn of every speed must last at least one second.";
         private const string MissingSpeedFormat = "There is no turn duration for the speed {0}.";
 
         private readonly Dictionary<GameSpeed, int> _secondsBySpeed;
@@ -31,9 +32,11 @@ namespace YachtDice.Server.Logic.Game
                 throw new ArgumentNullException(nameof(secondsBySpeed), NullSecondsMessage);
             }
 
-            foreach (KeyValuePair<GameSpeed, int> speedSeconds in secondsBySpeed)
+            Func<int, bool> isTooShort = seconds => seconds < MinimumSeconds;
+
+            if (secondsBySpeed.Values.Any(isTooShort))
             {
-                ValidateSeconds(speedSeconds);
+                throw new ArgumentOutOfRangeException(nameof(secondsBySpeed), TooShortSecondsMessage);
             }
 
             _secondsBySpeed = new Dictionary<GameSpeed, int>(secondsBySpeed);
@@ -55,16 +58,6 @@ namespace YachtDice.Server.Logic.Game
             }
 
             return seconds;
-        }
-
-        private static void ValidateSeconds(KeyValuePair<GameSpeed, int> speedSeconds)
-        {
-            if (speedSeconds.Value < MinimumSeconds)
-            {
-                string message = string.Format(CultureInfo.InvariantCulture, InvalidSecondsFormat, speedSeconds.Key);
-
-                throw new ArgumentOutOfRangeException(nameof(speedSeconds), message);
-            }
         }
     }
 }

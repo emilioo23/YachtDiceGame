@@ -42,7 +42,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public RoomResult CreateRoom(string hostName)
         {
-            ValidateName(hostName);
+            RejectBlankName(hostName);
             RoomApplicant applicant = CreateApplicant(hostName);
             RoomResult result;
 
@@ -61,7 +61,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public RoomResult Join(string roomCode, string playerName)
         {
-            ValidateName(playerName);
+            RejectBlankName(playerName);
             RoomApplicant applicant = CreateApplicant(playerName);
 
             RoomResult result = ExecuteInRoom(roomCode, room => AddPlayer(room, applicant));
@@ -72,7 +72,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public RoomResult JoinListed(string playerName, Room room)
         {
-            ValidateName(playerName);
+            RejectBlankName(playerName);
             RoomApplicant applicant = CreateApplicant(playerName);
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
 
@@ -108,7 +108,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public string FindPendingRoomCode(string playerName)
         {
-            ValidateName(playerName);
+            RejectBlankName(playerName);
             string code = string.Empty;
 
             lock (_syncRoot)
@@ -188,7 +188,7 @@ namespace YachtDice.Server.Logic.Rooms
             return isFound;
         }
 
-        private static void ValidateName(string playerName)
+        private static void RejectBlankName(string playerName)
         {
             if (string.IsNullOrWhiteSpace(playerName))
             {

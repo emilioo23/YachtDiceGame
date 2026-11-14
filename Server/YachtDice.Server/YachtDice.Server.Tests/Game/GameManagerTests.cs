@@ -29,8 +29,8 @@ namespace YachtDice.Server.Tests.Game
         private const int OneRollLeft = 1;
         private const int TwoRollsLeft = 2;
         private const int OnePlayerLeft = 1;
-        private const int NormalTurnSeconds = 60;
-        private const int FastTurnSeconds = 30;
+        private const int LongerTurnSeconds = 60;
+        private const int ShorterTurnSeconds = 30;
         private const int NoExperience = 0;
 
         private static readonly int[] LittleStraightDice = { 1, 2, 3, 4, 5 };
@@ -59,8 +59,8 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Theory]
-        [InlineData(GameSpeed.Normal, NormalTurnSeconds)]
-        [InlineData(GameSpeed.Fast, FastTurnSeconds)]
+        [InlineData(GameSpeed.Normal, LongerTurnSeconds)]
+        [InlineData(GameSpeed.Fast, ShorterTurnSeconds)]
         public void Start_Speed_SetsTheSecondsOfTheTurn(GameSpeed speed, int expectedSeconds)
         {
             GameManager manager = CreateManager(LittleStraightDice);
@@ -576,8 +576,8 @@ namespace YachtDice.Server.Tests.Game
         {
             var secondsBySpeed = new Dictionary<GameSpeed, int>
             {
-                { GameSpeed.Normal, NormalTurnSeconds },
-                { GameSpeed.Fast, FastTurnSeconds }
+                { GameSpeed.Normal, LongerTurnSeconds },
+                { GameSpeed.Fast, ShorterTurnSeconds }
             };
 
             return new GameManager(new InMemoryDieRoller(dieValues), new TurnDuration(secondsBySpeed));

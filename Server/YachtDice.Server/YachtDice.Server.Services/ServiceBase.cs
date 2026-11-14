@@ -46,7 +46,7 @@ namespace YachtDice.Server.Services
             Func<TResult> operation,
             [CallerMemberName] string operationName = "")
         {
-            ValidateData(data);
+            RejectMissingData(data);
 
             return Run(operation, operationName);
         }
@@ -90,7 +90,7 @@ namespace YachtDice.Server.Services
             return true;
         }
 
-        private static void ValidateData(object data)
+        private static void RejectMissingData(object data)
         {
             if (data == null)
             {
