@@ -152,6 +152,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Scripts\AddFlagCodeToPlayerSettings.sql" />
+    <None Include="Scripts\AddMoreAvatars.sql" />
     <EntityDeploy Include="YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>
