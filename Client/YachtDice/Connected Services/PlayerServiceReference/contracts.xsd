@@ -96,6 +96,8 @@
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="Experience" type="xs:int" />
       <xs:element minOccurs="0" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" name="LevelStartExperience" type="xs:int" />
+      <xs:element minOccurs="0" name="NextLevelExperience" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerProfile" nillable="true" type="tns:PlayerProfile" />

@@ -2275,6 +2275,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Siguiente nivel: {0} / {1} XP.
+        /// </summary>
+        public static string Profile_NextLevelFormat {
+            get {
+                return ResourceManager.GetString("Profile_NextLevelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Nivel {0} · {1} XP.
         /// </summary>
         public static string Profile_LevelFormat {

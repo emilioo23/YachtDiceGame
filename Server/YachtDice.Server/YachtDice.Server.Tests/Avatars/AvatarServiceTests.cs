@@ -24,6 +24,9 @@ namespace YachtDice.Server.Tests.Avatars
         private const int UnknownAvatarId = 9999;
         private const int NewPlayerLevel = 1;
         private const int NoExperience = 0;
+        private const int PlayerLevelStartExperience = 1400;
+        private const int PlayerNextLevelExperience = 2000;
+        private const int NewPlayerNextLevelExperience = 200;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly AvatarService _service;
@@ -74,7 +77,9 @@ namespace YachtDice.Server.Tests.Avatars
             {
                 AvatarId = CurrentAvatarId,
                 Level = PlayerLevel,
-                Experience = PlayerExperience
+                Experience = PlayerExperience,
+                LevelStartExperience = PlayerLevelStartExperience,
+                NextLevelExperience = PlayerNextLevelExperience
             };
 
             PlayerProfile profile = _service.GetProfile(PlayerName);
@@ -89,7 +94,9 @@ namespace YachtDice.Server.Tests.Avatars
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = NewPlayerLevel,
-                Experience = NoExperience
+                Experience = NoExperience,
+                LevelStartExperience = NoExperience,
+                NextLevelExperience = NewPlayerNextLevelExperience
             };
 
             PlayerProfile profile = _service.GetProfile(UnknownName);

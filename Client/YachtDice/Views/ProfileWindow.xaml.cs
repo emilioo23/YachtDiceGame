@@ -61,7 +61,19 @@ namespace YachtDice.Views
             _selectedAvatarId = profile.AvatarId;
 
             LevelTextBlock.Text = string.Format(Strings.Profile_LevelFormat, profile.Level, profile.Experience);
+            ShowLevelProgress(profile);
             ShowSelection();
+        }
+
+        private void ShowLevelProgress(PlayerProfile profile)
+        {
+            ExperienceProgressBar.Minimum = profile.LevelStartExperience;
+            ExperienceProgressBar.Maximum = profile.NextLevelExperience;
+            ExperienceProgressBar.Value = profile.Experience;
+            NextLevelTextBlock.Text = string.Format(
+                Strings.Profile_NextLevelFormat,
+                profile.Experience,
+                profile.NextLevelExperience);
         }
 
         private void ShowSelection()

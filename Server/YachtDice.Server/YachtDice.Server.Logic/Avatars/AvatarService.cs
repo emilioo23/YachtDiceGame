@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.Avatars
 {
@@ -11,6 +12,13 @@ namespace YachtDice.Server.Logic.Avatars
     /// </summary>
     public class AvatarService : IAvatarLookup
     {
+        private static int GetExperienceToReach(int level)
+        {
+            long requiredExperience = PlayerProgression.GetRequiredExperience(level);
+
+            return (int)Math.Min(requiredExperience, int.MaxValue);
+        }
+
         private const int DefaultLevel = 1;
         private const int DefaultExperience = 0;
 
@@ -39,7 +47,8 @@ namespace YachtDice.Server.Logic.Avatars
         }
 
         /// <summary>
-        /// Gets the avatar, level and experience of a player.
+        /// Gets the avatar, level and experience of a player, with the experience that marks the start of the
+        /// current level and the start of the next one.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The profile; a profile with the default values if the player does not exist.</returns>
@@ -59,6 +68,9 @@ namespace YachtDice.Server.Logic.Avatars
                 profile.Level = player.Level ?? DefaultLevel;
                 profile.Experience = player.XP ?? DefaultExperience;
             }
+
+            profile.LevelStartExperience = GetExperienceToReach(profile.Level);
+            profile.NextLevelExperience = GetExperienceToReach(profile.Level + 1);
 
             return profile;
         }

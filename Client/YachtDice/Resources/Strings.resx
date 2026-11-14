@@ -978,6 +978,9 @@
   <data name="Profile_LevelFormat" xml:space="preserve">
     <value>Nivel {0} · {1} XP</value>
   </data>
+  <data name="Profile_NextLevelFormat" xml:space="preserve">
+    <value>Siguiente nivel: {0} / {1} XP</value>
+  </data>
   <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
     <value>Cómo jugar</value>
   </data>
