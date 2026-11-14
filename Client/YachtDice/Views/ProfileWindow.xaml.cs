@@ -126,14 +126,58 @@ namespace YachtDice.Views
 
         private async void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedAvatarId == _savedAvatarId)
+            await GatewayCallRunner.RunAsync(this, _logger, SaveChangesAsync);
+        }
+
+        private async Task SaveChangesAsync()
+        {
+            string newUsername = UsernameTextBox.Text.Trim();
+            bool hasNewAvatar = _selectedAvatarId != _savedAvatarId;
+            bool hasNewUsername = newUsername != _session.DisplayName;
+
+            if (hasNewAvatar)
+            {
+                await SaveAvatarAsync();
+            }
+
+            if (hasNewUsername)
+            {
+                await SaveUsernameAsync(newUsername, hasNewAvatar);
+            }
+
+            if (!hasNewAvatar && !hasNewUsername)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
             }
+        }
+
+        private async Task SaveUsernameAsync(string newUsername, bool isSavedMessageShown)
+        {
+            UsernameChangeResultCode result =
+                await _playerGateway.ChangeUsernameAsync(_session.DisplayName, newUsername);
+
+            if (result == UsernameChangeResultCode.Success)
+            {
+                ReopenWithNewUsername(newUsername, isSavedMessageShown);
+            }
             else
             {
-                await GatewayCallRunner.RunAsync(this, _logger, SaveAvatarAsync);
+                CustomDialogWindow.ShowMessage(this, UsernameChangeMessages.GetMessage(result));
             }
+        }
+
+        private void ReopenWithNewUsername(string newUsername, bool isSavedMessageShown)
+        {
+            var renamedSession = new PlayerSession(newUsername, _session.FirstName, _session.IsGuest);
+
+            _session.Presence.Disconnect();
+
+            if (!isSavedMessageShown)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
+            }
+
+            WindowNavigator.SwitchTo(this, new ProfileWindow(renamedSession));
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
