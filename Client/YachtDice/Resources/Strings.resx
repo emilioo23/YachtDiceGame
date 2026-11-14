@@ -2178,4 +2178,10 @@
   <data name="Profile_FlagSaveError" xml:space="preserve">
     <value>No se pudo guardar la bandera. Inténtalo de nuevo.</value>
   </data>
+  <data name="Profile_FlagSearchHint" xml:space="preserve">
+    <value>Buscar país...</value>
+  </data>
+  <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
+    <value>Tienes cambios sin guardar. ¿Quieres salir sin guardarlos?</value>
+  </data>
 </root>

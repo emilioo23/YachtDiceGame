@@ -2178,4 +2178,10 @@
   <data name="Profile_FlagSaveError" xml:space="preserve">
     <value>The flag could not be saved. Please try again.</value>
   </data>
+  <data name="Profile_FlagSearchHint" xml:space="preserve">
+    <value>Search country...</value>
+  </data>
+  <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
+    <value>You have unsaved changes. Do you want to leave without saving them?</value>
+  </data>
 </root>

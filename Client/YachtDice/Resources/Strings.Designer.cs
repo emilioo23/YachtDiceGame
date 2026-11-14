@@ -3380,5 +3380,24 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("TwoFactor_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buscar país....
+        /// </summary>
+        public static string Profile_FlagSearchHint {
+            get {
+                return ResourceManager.GetString("Profile_FlagSearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tienes cambios sin guardar. ¿Quieres salir sin guardarlos?.
+        /// </summary>
+        public static string Profile_DiscardChangesConfirm {
+            get {
+                return ResourceManager.GetString("Profile_DiscardChangesConfirm", resourceCulture);
+            }
+        }
+        
     }
 }
