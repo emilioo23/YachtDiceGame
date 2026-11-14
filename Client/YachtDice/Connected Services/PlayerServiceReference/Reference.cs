@@ -455,6 +455,9 @@ namespace YachtDice.PlayerServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int NextLevelExperienceField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TitleIdField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -526,6 +529,19 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.NextLevelExperienceField.Equals(value) != true)) {
                     this.NextLevelExperienceField = value;
                     this.RaisePropertyChanged("NextLevelExperience");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TitleId {
+            get {
+                return this.TitleIdField;
+            }
+            set {
+                if ((this.TitleIdField.Equals(value) != true)) {
+                    this.TitleIdField = value;
+                    this.RaisePropertyChanged("TitleId");
                 }
             }
         }
@@ -638,6 +654,100 @@ namespace YachtDice.PlayerServiceReference {
         UsernameAlreadyTaken = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AchievementInfo", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class AchievementInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasTitleField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsUnlockedField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasTitle {
+            get {
+                return this.HasTitleField;
+            }
+            set {
+                if ((this.HasTitleField.Equals(value) != true)) {
+                    this.HasTitleField = value;
+                    this.RaisePropertyChanged("HasTitle");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsUnlocked {
+            get {
+                return this.IsUnlockedField;
+            }
+            set {
+                if ((this.IsUnlockedField.Equals(value) != true)) {
+                    this.IsUnlockedField = value;
+                    this.RaisePropertyChanged("IsUnlocked");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TitleChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum TitleChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TitleNotFound = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TitleLocked = 3,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -665,6 +775,14 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetAchievements", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.AchievementInfo[] GetAchievements(string playerName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -716,6 +834,14 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername) {
             return base.Channel.ChangeUsername(currentName, newUsername);
+        }
+        
+        public YachtDice.PlayerServiceReference.AchievementInfo[] GetAchievements(string playerName) {
+            return base.Channel.GetAchievements(playerName);
+        }
+        
+        public YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId) {
+            return base.Channel.ChangeTitle(playerName, titleId);
         }
     }
 }

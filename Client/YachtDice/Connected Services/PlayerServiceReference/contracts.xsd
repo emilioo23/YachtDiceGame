@@ -99,6 +99,7 @@
       <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="LevelStartExperience" type="xs:int" />
       <xs:element minOccurs="0" name="NextLevelExperience" type="xs:int" />
+      <xs:element minOccurs="0" name="TitleId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerProfile" nillable="true" type="tns:PlayerProfile" />
@@ -176,4 +177,56 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="UsernameChangeResultCode" nillable="true" type="tns:UsernameChangeResultCode" />
+  <xs:element name="GetAchievements">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAchievementsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetAchievementsResult" nillable="true" type="tns:ArrayOfAchievementInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfAchievementInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementInfo" nillable="true" type="tns:AchievementInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAchievementInfo" nillable="true" type="tns:ArrayOfAchievementInfo" />
+  <xs:complexType name="AchievementInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HasTitle" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsUnlocked" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AchievementInfo" nillable="true" type="tns:AchievementInfo" />
+  <xs:element name="ChangeTitle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeTitleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangeTitleResult" type="tns:TitleChangeResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="TitleChangeResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="TitleNotFound" />
+      <xs:enumeration value="TitleLocked" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TitleChangeResultCode" nillable="true" type="tns:TitleChangeResultCode" />
 </xs:schema>

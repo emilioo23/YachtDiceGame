@@ -60,6 +60,24 @@
   <wsdl:message name="IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAchievements" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAchievementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_GetAchievements_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeTitle" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -90,6 +108,16 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername" message="tns:IPlayerService_ChangeUsername_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse" message="tns:IPlayerService_ChangeUsername_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeUsername_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAchievements">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievements" message="tns:IPlayerService_GetAchievements_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse" message="tns:IPlayerService_GetAchievements_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_GetAchievements_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeTitle">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle" message="tns:IPlayerService_ChangeTitle_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse" message="tns:IPlayerService_ChangeTitle_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeTitle_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
