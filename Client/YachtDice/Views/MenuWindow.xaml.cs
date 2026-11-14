@@ -293,6 +293,11 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new RoomsWindow(_session));
         }
 
+        private void HistoryNavButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowNavigator.SwitchTo(this, new HistoryWindow(_session));
+        }
+
         private void LeaderboardNavButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new LeaderboardWindow(_session));

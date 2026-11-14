@@ -2311,6 +2311,69 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Historial.
+        /// </summary>
+        public static string MainMenu_Nav_History {
+            get {
+                return ResourceManager.GetString("MainMenu_Nav_History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Historial de partidas.
+        /// </summary>
+        public static string History_Title {
+            get {
+                return ResourceManager.GetString("History_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no has jugado partidas..
+        /// </summary>
+        public static string History_Empty {
+            get {
+                return ResourceManager.GetString("History_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a VICTORIA.
+        /// </summary>
+        public static string History_Victory {
+            get {
+                return ResourceManager.GetString("History_Victory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a DERROTA.
+        /// </summary>
+        public static string History_Defeat {
+            get {
+                return ResourceManager.GetString("History_Defeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Contra {0}.
+        /// </summary>
+        public static string History_VersusFormat {
+            get {
+                return ResourceManager.GetString("History_VersusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} - {1}.
+        /// </summary>
+        public static string History_ScoreFormat {
+            get {
+                return ResourceManager.GetString("History_ScoreFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
         /// </summary>
         public static string Profile_AvatarSaveError {

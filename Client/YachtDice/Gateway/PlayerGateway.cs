@@ -95,6 +95,13 @@ namespace YachtDice.Gateway
             return result;
         }
 
+        public async Task<List<GameHistoryEntry>> GetGameHistoryAsync(string playerName)
+        {
+            GameHistoryEntry[] games = await ExecuteAsync(client => client.GetGameHistory(playerName));
+
+            return games.ToList();
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;

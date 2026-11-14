@@ -1401,4 +1401,25 @@
   <data name="Profile_AchievementsFormat" xml:space="preserve">
     <value>{0} of {1} unlocked</value>
   </data>
+  <data name="MainMenu_Nav_History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Game history</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>You have not played any games yet.</value>
+  </data>
+  <data name="History_Victory" xml:space="preserve">
+    <value>VICTORY</value>
+  </data>
+  <data name="History_Defeat" xml:space="preserve">
+    <value>DEFEAT</value>
+  </data>
+  <data name="History_VersusFormat" xml:space="preserve">
+    <value>Against {0}</value>
+  </data>
+  <data name="History_ScoreFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
 </root>
