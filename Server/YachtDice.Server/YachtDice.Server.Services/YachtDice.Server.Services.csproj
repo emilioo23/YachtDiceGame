@@ -51,6 +51,7 @@
     <Compile Include="ChatService.cs" />
     <Compile Include="GameCoordinator.cs" />
     <Compile Include="GameService.cs" />
+    <Compile Include="Mapping\AchievementMapper.cs" />
     <Compile Include="Mapping\AvatarMapper.cs" />
     <Compile Include="Mapping\CultureParser.cs" />
     <Compile Include="Mapping\EnumMapper.cs" />

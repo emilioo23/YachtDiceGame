@@ -102,6 +102,22 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        public List<Contracts.AchievementInfo> GetAchievements(string playerName)
+        {
+            List<Contracts.AchievementInfo> achievements =
+                Execute(playerName, () => ProcessAchievements(playerName));
+
+            return achievements;
+        }
+
+        public Contracts.TitleChangeResultCode ChangeTitle(string playerName, int titleId)
+        {
+            Contracts.TitleChangeResultCode result =
+                Execute(playerName, () => ProcessTitleChange(playerName, titleId));
+
+            return result;
+        }
+
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
@@ -133,6 +149,20 @@ namespace YachtDice.Server.Services
             LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
 
             return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
+        }
+
+        private List<Contracts.AchievementInfo> ProcessAchievements(string playerName)
+        {
+            List<LogicPlayers.AchievementStatus> achievements = _profileService.GetAchievements(playerName);
+
+            return Mapping.AchievementMapper.ToContracts(achievements);
+        }
+
+        private Contracts.TitleChangeResultCode ProcessTitleChange(string playerName, int titleId)
+        {
+            LogicPlayers.TitleChangeStatus status = _profileService.ChangeTitle(playerName, titleId);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.TitleChangeStatus, Contracts.TitleChangeResultCode>(status);
         }
 
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()

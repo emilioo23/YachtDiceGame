@@ -30,5 +30,10 @@
         /// <see cref="LevelStartExperience"/>.
         /// </summary>
         public int NextLevelExperience { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the title that the player shows in the profile.
+        /// </summary>
+        public int TitleId { get; set; }
     }
 }

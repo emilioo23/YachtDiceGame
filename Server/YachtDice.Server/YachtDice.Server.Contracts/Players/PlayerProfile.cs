@@ -38,5 +38,11 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public int NextLevelExperience { get; set; }
+
+        /// <summary>
+        /// Identifier of the title that the player shows in the profile. Zero is the title that everyone has.
+        /// </summary>
+        [DataMember]
+        public int TitleId { get; set; }
     }
 }

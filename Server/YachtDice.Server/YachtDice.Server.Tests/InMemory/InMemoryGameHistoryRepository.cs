@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 
@@ -13,6 +14,7 @@ namespace YachtDice.Server.Tests.InMemory
         private const string NotSupportedMessage = "No test needs this operation of the game history.";
 
         private readonly List<GameResultRecord> _savedResults = new List<GameResultRecord>();
+        private readonly List<GameHistoryPlayer> _entries = new List<GameHistoryPlayer>();
 
         /// <summary>
         /// Gets the results saved so far, in the order in which they were saved.
@@ -22,7 +24,20 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            throw new NotSupportedException(NotSupportedMessage);
+            Func<GameHistoryPlayer, bool> belongsToPlayer = entry => entry.PlayerId == playerId;
+
+            return _entries.Where(belongsToPlayer).ToList();
+        }
+
+        /// <summary>
+        /// Adds a game that a player already played, so it counts in the statistics of the player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="finalScore">Score of the player in the game.</param>
+        /// <param name="isWinner">True if the player won the game.</param>
+        public void AddPlayedGame(int playerId, int finalScore, bool isWinner)
+        {
+            _entries.Add(new GameHistoryPlayer { PlayerId = playerId, FinalScore = finalScore, IsWinner = isWinner });
         }
 
         /// <inheritdoc />

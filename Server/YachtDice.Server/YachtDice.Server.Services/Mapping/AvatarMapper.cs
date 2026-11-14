@@ -25,7 +25,8 @@ namespace YachtDice.Server.Services.Mapping
                 Level = profile.Level,
                 Experience = profile.Experience,
                 LevelStartExperience = profile.LevelStartExperience,
-                NextLevelExperience = profile.NextLevelExperience
+                NextLevelExperience = profile.NextLevelExperience,
+                TitleId = profile.TitleId
             };
 
             return contract;

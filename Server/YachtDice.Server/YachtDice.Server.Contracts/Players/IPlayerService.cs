@@ -62,5 +62,24 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         UsernameChangeResultCode ChangeUsername(string currentName, string newUsername);
+
+        /// <summary>
+        /// Gets every achievement and whether the player has unlocked it.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <returns>The achievements, in the order in which they are shown.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<AchievementInfo> GetAchievements(string playerName);
+
+        /// <summary>
+        /// Chooses the title that the player shows in the profile. The player must have unlocked it.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <param name="titleId">Identifier of the title.</param>
+        /// <returns>The result of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        TitleChangeResultCode ChangeTitle(string playerName, int titleId);
     }
 }

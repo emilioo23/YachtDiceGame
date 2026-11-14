@@ -57,7 +57,8 @@ namespace YachtDice.Server.Logic.Avatars
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = DefaultLevel,
-                Experience = DefaultExperience
+                Experience = DefaultExperience,
+                TitleId = AchievementRules.DefaultTitleId
             };
 
             if (player != null)
@@ -65,6 +66,7 @@ namespace YachtDice.Server.Logic.Avatars
                 profile.AvatarId = player.AvatarId;
                 profile.Level = player.Level ?? DefaultLevel;
                 profile.Experience = player.XP ?? DefaultExperience;
+                profile.TitleId = ReadTitleId(player.Id);
             }
 
             profile.LevelStartExperience = _levelTable.GetLevelStart(profile.Level);
@@ -95,6 +97,13 @@ namespace YachtDice.Server.Logic.Avatars
             }
 
             return status;
+        }
+
+        private int ReadTitleId(int playerId)
+        {
+            bool isNumber = int.TryParse(_playerRepository.FindTitle(playerId), out int titleId);
+
+            return isNumber ? titleId : AchievementRules.DefaultTitleId;
         }
 
         private static AvatarChangeStatus GetChangeStatus(Player player, int avatarId)

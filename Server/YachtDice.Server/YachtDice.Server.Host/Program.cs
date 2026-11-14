@@ -319,7 +319,7 @@ namespace YachtDice.Server.Host
             var gameHistoryRepository = new GameHistoryRepository();
             var statisticsService = new PlayerStatisticsService(new PlayerRepository(), gameHistoryRepository);
 
-            var profileService = new ProfileService(new PlayerRepository(), wordFilter);
+            var profileService = new ProfileService(new PlayerRepository(), wordFilter, statisticsService);
 
             return new PlayerService(statisticsService, avatarService, profileService);
         }
