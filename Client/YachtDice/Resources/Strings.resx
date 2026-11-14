@@ -2184,4 +2184,7 @@
   <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
     <value>Tienes cambios sin guardar. ¿Quieres salir sin guardarlos?</value>
   </data>
+  <data name="History_GuestOpponent" xml:space="preserve">
+    <value>Invitado</value>
+  </data>
 </root>

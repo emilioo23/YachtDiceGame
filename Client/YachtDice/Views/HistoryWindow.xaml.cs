@@ -51,10 +51,22 @@ namespace YachtDice.Views
             {
                 IsWin = game.IsWin,
                 ResultText = game.IsWin ? Strings.History_Victory : Strings.History_Defeat,
-                OpponentsText = string.Format(Strings.History_VersusFormat, game.Opponents),
-                ScoreText = string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore),
+                OpponentsText = string.Format(Strings.History_VersusFormat, ReadOpponents(game)),
+                ScoreText = ReadScore(game),
                 DateText = game.PlayedAt.ToLocalTime().ToString(DateFormat)
             };
+        }
+
+        private static string ReadOpponents(GameHistoryEntry game)
+        {
+            return string.IsNullOrEmpty(game.Opponents) ? Strings.History_GuestOpponent : game.Opponents;
+        }
+
+        private static string ReadScore(GameHistoryEntry game)
+        {
+            return string.IsNullOrEmpty(game.Opponents)
+                ? game.OwnScore.ToString()
+                : string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

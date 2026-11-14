@@ -3399,5 +3399,14 @@ namespace YachtDice.Resources {
             }
         }
         
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitado.
+        /// </summary>
+        public static string History_GuestOpponent {
+            get {
+                return ResourceManager.GetString("History_GuestOpponent", resourceCulture);
+            }
+        }
+        
     }
 }
