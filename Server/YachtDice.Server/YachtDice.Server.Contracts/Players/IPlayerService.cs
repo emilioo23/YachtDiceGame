@@ -100,5 +100,14 @@ namespace YachtDice.Server.Contracts.Players
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         FlagChangeResultCode ChangeFlag(string playerName, string flagCode);
+
+        /// <summary>
+        /// Deletes the account of a player with all its data. It cannot be undone.
+        /// </summary>
+        /// <param name="playerName">Name of the player whose account is deleted.</param>
+        /// <returns>The result of the deletion.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        AccountDeletionResultCode DeleteAccount(string playerName);
     }
 }

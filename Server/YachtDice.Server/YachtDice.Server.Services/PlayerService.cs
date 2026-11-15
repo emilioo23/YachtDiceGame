@@ -133,6 +133,19 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        /// <summary>
+        /// Deletes the account of a player with all its data.
+        /// </summary>
+        /// <param name="playerName">Name of the player whose account is deleted.</param>
+        /// <returns>The result of the deletion.</returns>
+        public Contracts.AccountDeletionResultCode DeleteAccount(string playerName)
+        {
+            Contracts.AccountDeletionResultCode result =
+                Execute(playerName, () => ProcessAccountDeletion(playerName));
+
+            return result;
+        }
+
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
             return Mapping.AvatarMapper.ToContracts(LogicAvatars.AvatarCatalog.GetAll());
@@ -171,6 +184,14 @@ namespace YachtDice.Server.Services
             LogicPlayers.FlagChangeStatus status = _profileService.ChangeFlag(playerName, flagCode);
 
             return Mapping.EnumMapper.Map<LogicPlayers.FlagChangeStatus, Contracts.FlagChangeResultCode>(status);
+        }
+
+        private Contracts.AccountDeletionResultCode ProcessAccountDeletion(string playerName)
+        {
+            LogicPlayers.AccountDeletionStatus status = _profileService.DeleteAccount(playerName);
+
+            return Mapping.EnumMapper.Map<LogicPlayers.AccountDeletionStatus, Contracts.AccountDeletionResultCode>(
+                status);
         }
 
         private List<Contracts.GameHistoryEntry> ProcessGameHistory(string playerName)
