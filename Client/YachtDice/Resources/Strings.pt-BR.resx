@@ -2193,6 +2193,9 @@
   <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
     <value>Você tem alterações não salvas. Quer sair sem salvá-las?</value>
   </data>
+  <data name="History_ComputerOpponent" xml:space="preserve">
+    <value>o computador</value>
+  </data>
   <data name="History_GuestOpponent" xml:space="preserve">
     <value>Convidado</value>
   </data>

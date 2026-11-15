@@ -2193,6 +2193,9 @@
   <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
     <value>你有未保存的更改。要不保存直接离开吗？</value>
   </data>
+  <data name="History_ComputerOpponent" xml:space="preserve">
+    <value>电脑</value>
+  </data>
   <data name="History_GuestOpponent" xml:space="preserve">
     <value>游客</value>
   </data>

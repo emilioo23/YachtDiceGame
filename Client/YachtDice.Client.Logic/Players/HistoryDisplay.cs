@@ -6,6 +6,8 @@
     /// </summary>
     public static class HistoryDisplay
     {
+        private const string NameSeparator = ", ";
+
         /// <summary>
         /// Decides if a game has rivals that were saved with their name.
         /// </summary>
@@ -25,6 +27,17 @@
         public static string ChooseOpponents(string opponents, string guestText)
         {
             return HasRegisteredOpponents(opponents) ? opponents : guestText;
+        }
+
+        /// <summary>
+        /// Adds the computer to the rivals of a game that was played against it.
+        /// </summary>
+        /// <param name="opponents">Names of the rivals that the server sent, separated by commas.</param>
+        /// <param name="computerText">Text that names the computer.</param>
+        /// <returns>The names of the rivals followed by the computer, or only the computer if there are no names.</returns>
+        public static string AddComputer(string opponents, string computerText)
+        {
+            return HasRegisteredOpponents(opponents) ? opponents + NameSeparator + computerText : computerText;
         }
     }
 }

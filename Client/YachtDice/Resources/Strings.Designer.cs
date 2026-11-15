@@ -3805,6 +3805,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a la computadora.
+        /// </summary>
+        public static string History_ComputerOpponent {
+            get {
+                return ResourceManager.GetString("History_ComputerOpponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Invitado.
         /// </summary>
         public static string History_GuestOpponent {

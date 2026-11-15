@@ -60,7 +60,9 @@ namespace YachtDice.Views
 
         private static string ReadOpponents(GameHistoryEntry game)
         {
-            return HistoryDisplay.ChooseOpponents(game.Opponents, Strings.History_GuestOpponent);
+            return game.IsAgainstComputer
+                ? HistoryDisplay.AddComputer(game.Opponents, Strings.History_ComputerOpponent)
+                : HistoryDisplay.ChooseOpponents(game.Opponents, Strings.History_GuestOpponent);
         }
 
         private static string ReadScore(GameHistoryEntry game)

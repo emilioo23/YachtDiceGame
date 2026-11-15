@@ -847,6 +847,9 @@ namespace YachtDice.PlayerServiceReference {
         private int BestOpponentScoreField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsAgainstComputerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsWinField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -877,6 +880,19 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.BestOpponentScoreField.Equals(value) != true)) {
                     this.BestOpponentScoreField = value;
                     this.RaisePropertyChanged("BestOpponentScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsAgainstComputer {
+            get {
+                return this.IsAgainstComputerField;
+            }
+            set {
+                if ((this.IsAgainstComputerField.Equals(value) != true)) {
+                    this.IsAgainstComputerField = value;
+                    this.RaisePropertyChanged("IsAgainstComputer");
                 }
             }
         }
