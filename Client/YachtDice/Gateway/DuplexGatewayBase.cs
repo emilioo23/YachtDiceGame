@@ -67,6 +67,22 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Throws the connection away without waiting for the server and without reporting a loss. It is used
+        /// when the player is about to connect again: a connection that is already broken could take a long time
+        /// to close. The server notices the closed channel and keeps the player as absent until the new one
+        /// arrives.
+        /// </summary>
+        public void Abandon()
+        {
+            TClient client = TakeClient();
+
+            if (client != null)
+            {
+                client.Abort();
+            }
+        }
+
+        /// <summary>
         /// Creates the WCF client of the gateway, already subscribed to the notifications of the server.
         /// </summary>
         /// <returns>A client that is ready to be used.</returns>
