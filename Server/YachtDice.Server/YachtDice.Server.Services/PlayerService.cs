@@ -86,21 +86,21 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Changes the avatar of a player. The avatar must exist and the player must have unlocked it.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
         /// <returns>The outcome of the change.</returns>
-        public Contracts.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId)
+        public Contracts.AvatarChangeResultCode ChangeAvatar(string sessionToken, int avatarId)
         {
             Contracts.AvatarChangeResultCode result =
-                Execute(displayName, () => ProcessAvatarChange(displayName, avatarId));
+                ExecuteForPlayer(sessionToken, playerName => ProcessAvatarChange(playerName, avatarId));
 
             return result;
         }
 
-        public Contracts.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername)
+        public Contracts.UsernameChangeResultCode ChangeUsername(string sessionToken, string newUsername)
         {
             Contracts.UsernameChangeResultCode result =
-                Execute(currentName, () => ProcessUsernameChange(currentName, newUsername));
+                ExecuteForPlayer(sessionToken, playerName => ProcessUsernameChange(playerName, newUsername));
 
             return result;
         }
@@ -113,10 +113,10 @@ namespace YachtDice.Server.Services
             return achievements;
         }
 
-        public Contracts.TitleChangeResultCode ChangeTitle(string playerName, int titleId)
+        public Contracts.TitleChangeResultCode ChangeTitle(string sessionToken, int titleId)
         {
             Contracts.TitleChangeResultCode result =
-                Execute(playerName, () => ProcessTitleChange(playerName, titleId));
+                ExecuteForPlayer(sessionToken, playerName => ProcessTitleChange(playerName, titleId));
 
             return result;
         }
@@ -128,10 +128,10 @@ namespace YachtDice.Server.Services
             return history;
         }
 
-        public Contracts.FlagChangeResultCode ChangeFlag(string playerName, string flagCode)
+        public Contracts.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode)
         {
             Contracts.FlagChangeResultCode result =
-                Execute(playerName, () => ProcessFlagChange(playerName, flagCode));
+                ExecuteForPlayer(sessionToken, playerName => ProcessFlagChange(playerName, flagCode));
 
             return result;
         }
@@ -139,12 +139,12 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Deletes the account of a player with all its data.
         /// </summary>
-        /// <param name="playerName">Name of the player whose account is deleted.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The result of the deletion.</returns>
-        public Contracts.AccountDeletionResultCode DeleteAccount(string playerName)
+        public Contracts.AccountDeletionResultCode DeleteAccount(string sessionToken)
         {
             Contracts.AccountDeletionResultCode result =
-                Execute(playerName, () => ProcessAccountDeletion(playerName));
+                ExecuteForPlayer(sessionToken, ProcessAccountDeletion);
 
             return result;
         }
@@ -179,6 +179,11 @@ namespace YachtDice.Server.Services
         {
             LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
 
+            if (status == LogicPlayers.UsernameChangeStatus.Success)
+            {
+                Sessions.Rename(currentName, newUsername.Trim());
+            }
+
             return Mapping.EnumMapper
                 .Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
         }
@@ -193,6 +198,11 @@ namespace YachtDice.Server.Services
         private Contracts.AccountDeletionResultCode ProcessAccountDeletion(string playerName)
         {
             LogicPlayers.AccountDeletionStatus status = _profileService.DeleteAccount(playerName);
+
+            if (status == LogicPlayers.AccountDeletionStatus.Success)
+            {
+                Sessions.EndFor(playerName);
+            }
 
             return Mapping.EnumMapper.Map<LogicPlayers.AccountDeletionStatus, Contracts.AccountDeletionResultCode>(
                 status);
