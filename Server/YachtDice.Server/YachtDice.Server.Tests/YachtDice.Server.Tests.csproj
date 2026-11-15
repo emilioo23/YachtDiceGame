@@ -47,6 +47,7 @@
     <Compile Include="Email\AccountLockNotifierTests.cs" />
     <Compile Include="Email\EmailServiceTests.cs" />
     <Compile Include="Authentication\LoginServiceTests.cs" />
+    <Compile Include="Authentication\PasswordChangeServiceTests.cs" />
     <Compile Include="Authentication\PasswordRecoveryServiceTests.cs" />
     <Compile Include="Authentication\PasswordResetAttemptCounterTests.cs" />
     <Compile Include="Authentication\RegistrationServiceTests.cs" />

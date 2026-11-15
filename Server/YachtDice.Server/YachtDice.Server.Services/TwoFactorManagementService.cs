@@ -4,6 +4,7 @@ using System.ServiceModel;
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.TwoFactor;
+    using LogicAuthentication = YachtDice.Server.Logic.Authentication;
     using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
 
     /// <summary>
@@ -15,15 +16,22 @@ namespace YachtDice.Server.Services
         private const string NullDependencyMessage = "A dependency of the two-factor management cannot be null.";
 
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
+        private readonly LogicAuthentication.PasswordChangeService _passwordChangeService;
 
         /// <summary>
         /// Initializes a new instance of the TwoFactorManagementService class.
         /// </summary>
         /// <param name="settingsService">The service that turns the two-factor verification on or off.</param>
-        public TwoFactorManagementService(LogicTwoFactor.ITwoFactorSettingsService settingsService)
+        /// <param name="passwordChangeService">The service that changes the password of a player who is logged in.</param>
+        /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
+        public TwoFactorManagementService(
+            LogicTwoFactor.ITwoFactorSettingsService settingsService,
+            LogicAuthentication.PasswordChangeService passwordChangeService)
         {
             _settingsService = settingsService
                 ?? throw new ArgumentNullException(nameof(settingsService), NullDependencyMessage);
+            _passwordChangeService = passwordChangeService
+                ?? throw new ArgumentNullException(nameof(passwordChangeService), NullDependencyMessage);
         }
 
         /// <summary>
@@ -94,6 +102,37 @@ namespace YachtDice.Server.Services
                 ExecuteForPlayer(sessionToken, playerName => ProcessDisable(playerName, password));
 
             return result;
+        }
+
+        /// <summary>
+        /// Changes the password of the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>The result of the change.</returns>
+        public Contracts.PasswordChangeResultCode ChangePassword(string sessionToken, Contracts.PasswordChange change)
+        {
+            Contracts.PasswordChangeResultCode result =
+                ExecuteForPlayer(sessionToken, playerName => ProcessPasswordChange(playerName, change));
+
+            return result;
+        }
+
+        private Contracts.PasswordChangeResultCode ProcessPasswordChange(
+            string displayName,
+            Contracts.PasswordChange change)
+        {
+            var request = new LogicAuthentication.PasswordChangeRequest
+            {
+                CurrentPassword = change?.CurrentPassword,
+                NewPassword = change?.NewPassword
+            };
+            LogicAuthentication.PasswordChangeStatus status =
+                _passwordChangeService.ChangePassword(displayName, request);
+
+            return Mapping.EnumMapper.Map<
+                LogicAuthentication.PasswordChangeStatus,
+                Contracts.PasswordChangeResultCode>(status);
         }
 
         private Contracts.TwoFactorActivationData ProcessActivationStart(string displayName, string culture)

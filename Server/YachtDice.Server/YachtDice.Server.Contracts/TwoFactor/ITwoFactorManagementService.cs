@@ -56,5 +56,15 @@ namespace YachtDice.Server.Contracts.TwoFactor
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password);
+
+        /// <summary>
+        /// Changes the password of the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>The result of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordChangeResultCode ChangePassword(string sessionToken, PasswordChange change);
     }
 }
