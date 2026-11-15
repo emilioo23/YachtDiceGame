@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
@@ -13,6 +14,8 @@ namespace YachtDice.Utils
     /// </summary>
     public class AchievementNotifier
     {
+        private const string NullSessionMessage = "The session of the player cannot be null.";
+
         private readonly PlayerSession _session;
         private readonly PlayerGateway _gateway = new PlayerGateway();
 
@@ -22,7 +25,7 @@ namespace YachtDice.Utils
         /// <param name="session">Session of the player.</param>
         public AchievementNotifier(PlayerSession session)
         {
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
         }
 
         /// <summary>

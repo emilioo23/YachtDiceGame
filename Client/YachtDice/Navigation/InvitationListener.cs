@@ -18,6 +18,9 @@ namespace YachtDice.Navigation
     /// </summary>
     public sealed class InvitationListener
     {
+        private const string NullOwnerMessage = "The window that shows the invitations cannot be null.";
+        private const string NullSessionMessage = "The session of the player cannot be null.";
+
         private readonly Window _owner;
         private readonly PlayerSession _session;
         private readonly Queue<RoomInvitation> _pendingInvitations = new Queue<RoomInvitation>();
@@ -31,8 +34,8 @@ namespace YachtDice.Navigation
         /// <param name="session">Session of the player who receives the invitations.</param>
         public InvitationListener(Window owner, PlayerSession session)
         {
-            _owner = owner;
-            _session = session;
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner), NullOwnerMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
         }
 
         /// <summary>

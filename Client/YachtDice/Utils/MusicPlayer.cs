@@ -14,6 +14,7 @@ namespace YachtDice.Utils
         private const string MusicFolder = "Resources\\Music";
         private const string TrackExtension = ".wav";
         private const string MusicFailedLogMessage = "The background music could not be played.";
+        private const string NullSettingsMessage = "The audio settings of the music cannot be null.";
 
         private readonly MediaPlayer _player = new MediaPlayer();
         private readonly AudioSettings _settings;
@@ -26,7 +27,7 @@ namespace YachtDice.Utils
         /// <param name="settings">Choices of the player; the volume follows their changes.</param>
         public MusicPlayer(AudioSettings settings)
         {
-            _settings = settings;
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
             _settings.Changed += ApplyVolume;
             _player.MediaEnded += HandleMediaEnded;
             _player.MediaFailed += HandleMediaFailed;
