@@ -109,6 +109,13 @@ namespace YachtDice.Gateway
             return result;
         }
 
+        public async Task<AccountDeletionResultCode> DeleteAccountAsync(string playerName)
+        {
+            AccountDeletionResultCode result = await ExecuteAsync(client => client.DeleteAccount(playerName));
+
+            return result;
+        }
+
         protected override GatewayErrorCode GetErrorCode(FaultException fault)
         {
             var typedFault = fault as FaultException<ServiceFault>;
