@@ -2253,4 +2253,16 @@
   <data name="Game_Chat_InfractionNotice" xml:space="preserve">
     <value>Only you see this: {0} already wrote 3 messages with forbidden words. You can expel this player from the room.</value>
   </data>
+  <data name="Global_SymbolBlock" xml:space="preserve">
+    <value>⊘</value>
+  </data>
+  <data name="Friends_BlockTooltip" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="Dialogs_BlockPlayer" xml:space="preserve">
+    <value>Block {0}? You will stop being friends and neither of you will be able to send a request to the other.</value>
+  </data>
+  <data name="Friends_Result_Blocked" xml:space="preserve">
+    <value>You cannot send a request to this player.</value>
+  </data>
 </root>

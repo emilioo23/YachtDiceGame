@@ -54,6 +54,19 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Blocks another player: they stop being friends and cannot send requests to each other again.
+        /// </summary>
+        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="blockedName">Name of the player who is blocked.</param>
+        /// <returns>Outcome of the block.</returns>
+        public async Task<FriendActionResultCode> BlockPlayerAsync(string displayName, string blockedName)
+        {
+            FriendActionResultCode result = await ExecuteAsync(client => client.BlockPlayer(displayName, blockedName));
+
+            return result;
+        }
+
+        /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
         /// <param name="sender">Room and identifier of the player who invites.</param>

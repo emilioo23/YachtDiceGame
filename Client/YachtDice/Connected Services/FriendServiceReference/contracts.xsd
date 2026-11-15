@@ -28,6 +28,7 @@
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="FriendLimitReached" />
       <xs:enumeration value="TooManyPendingRequests" />
+      <xs:enumeration value="Blocked" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendRequestResultCode" nillable="true" type="tns:FriendRequestResultCode" />
@@ -74,6 +75,7 @@
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="RelationNotFound" />
       <xs:enumeration value="FriendLimitReached" />
+      <xs:enumeration value="InvalidTarget" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendActionResultCode" nillable="true" type="tns:FriendActionResultCode" />
@@ -89,6 +91,21 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="RemoveFriendResult" type="tns:FriendActionResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BlockPlayer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="blockedName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BlockPlayerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BlockPlayerResult" type="tns:FriendActionResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

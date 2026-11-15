@@ -46,6 +46,9 @@ namespace YachtDice.FriendServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         TooManyPendingRequests = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Blocked = 10,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -199,6 +202,9 @@ namespace YachtDice.FriendServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         FriendLimitReached = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidTarget = 4,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -295,6 +301,10 @@ namespace YachtDice.FriendServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName);
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/BlockPlayer", ReplyAction="urn:yachtdice:contracts/IFriendService/BlockPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/BlockPlayerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string displayName, string blockedName);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName);
@@ -349,6 +359,10 @@ namespace YachtDice.FriendServiceReference {
         
         public YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName) {
             return base.Channel.RemoveFriend(displayName, friendName);
+        }
+        
+        public YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string displayName, string blockedName) {
+            return base.Channel.BlockPlayer(displayName, blockedName);
         }
         
         public YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName) {

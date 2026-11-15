@@ -1168,6 +1168,42 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a ⊘.
+        /// </summary>
+        public static string Global_SymbolBlock {
+            get {
+                return ResourceManager.GetString("Global_SymbolBlock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloquear.
+        /// </summary>
+        public static string Friends_BlockTooltip {
+            get {
+                return ResourceManager.GetString("Friends_BlockTooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Bloquear a {0}? Dejarán de ser amigos y ninguno podrá mandarle solicitud al otro..
+        /// </summary>
+        public static string Dialogs_BlockPlayer {
+            get {
+                return ResourceManager.GetString("Dialogs_BlockPlayer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a No puedes mandarle solicitud a este jugador..
+        /// </summary>
+        public static string Friends_Result_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Result_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

@@ -256,6 +256,29 @@ namespace YachtDice.Views
             }
         }
 
+        private async void BlockFriendButton_Click(object sender, RoutedEventArgs e)
+        {
+            string friendName = ReadTag(sender);
+
+            if (CustomDialogWindow.Confirm(this, string.Format(Strings.Dialogs_BlockPlayer, friendName)))
+            {
+                await BlockPlayerAsync(friendName);
+            }
+        }
+
+        private async Task BlockPlayerAsync(string playerName)
+        {
+            try
+            {
+                await _friendGateway.BlockPlayerAsync(_session.DisplayName, playerName);
+                await LoadFriendsAsync();
+            }
+            catch (GatewayException ex)
+            {
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
         private async Task SendFriendRequestAsync()
         {
             try

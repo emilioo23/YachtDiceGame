@@ -496,15 +496,28 @@
                                             </TextBlock>
                                         </StackPanel>
 
-                                        <Button Grid.Column="2"
-                                                Content="{x:Static properties:Strings.Global_SymbolClose}"
-                                                Tag="{Binding Name}"
-                                                Width="28"
-                                                Height="28"
-                                                Background="{StaticResource BrushCream2}"
-                                                BorderThickness="0"
-                                                VerticalAlignment="Center"
-                                                Click="RemoveFriendButton_Click"/>
+                                        <StackPanel Grid.Column="2"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+
+                                            <Button Content="{x:Static properties:Strings.Global_SymbolBlock}"
+                                                    ToolTip="{x:Static properties:Strings.Friends_BlockTooltip}"
+                                                    Tag="{Binding Name}"
+                                                    Width="28"
+                                                    Height="28"
+                                                    Margin="0,0,4,0"
+                                                    Background="{StaticResource BrushCream2}"
+                                                    BorderThickness="0"
+                                                    Click="BlockFriendButton_Click"/>
+
+                                            <Button Content="{x:Static properties:Strings.Global_SymbolClose}"
+                                                    Tag="{Binding Name}"
+                                                    Width="28"
+                                                    Height="28"
+                                                    Background="{StaticResource BrushCream2}"
+                                                    BorderThickness="0"
+                                                    Click="RemoveFriendButton_Click"/>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
 

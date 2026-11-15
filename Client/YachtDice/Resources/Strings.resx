@@ -2253,4 +2253,16 @@
   <data name="Game_Chat_InfractionNotice" xml:space="preserve">
     <value>Solo tú ves esto: {0} ya escribió 3 mensajes con palabras prohibidas. Puedes expulsarlo de la sala.</value>
   </data>
+  <data name="Global_SymbolBlock" xml:space="preserve">
+    <value>⊘</value>
+  </data>
+  <data name="Friends_BlockTooltip" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="Dialogs_BlockPlayer" xml:space="preserve">
+    <value>¿Bloquear a {0}? Dejarán de ser amigos y ninguno podrá mandarle solicitud al otro.</value>
+  </data>
+  <data name="Friends_Result_Blocked" xml:space="preserve">
+    <value>No puedes mandarle solicitud a este jugador.</value>
+  </data>
 </root>

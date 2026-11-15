@@ -2253,4 +2253,16 @@
   <data name="Game_Chat_InfractionNotice" xml:space="preserve">
     <value>仅你可见：{0} 已发送 3 条含有违禁词的消息。你可以将其移出房间。</value>
   </data>
+  <data name="Global_SymbolBlock" xml:space="preserve">
+    <value>⊘</value>
+  </data>
+  <data name="Friends_BlockTooltip" xml:space="preserve">
+    <value>屏蔽</value>
+  </data>
+  <data name="Dialogs_BlockPlayer" xml:space="preserve">
+    <value>要屏蔽 {0} 吗？你们将不再是好友，双方都不能再向对方发送请求。</value>
+  </data>
+  <data name="Friends_Result_Blocked" xml:space="preserve">
+    <value>你不能向该玩家发送请求。</value>
+  </data>
 </root>

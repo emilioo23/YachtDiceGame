@@ -46,6 +46,9 @@ namespace YachtDice.Utils
                 case FriendRequestResultCode.TooManyPendingRequests:
                     message = Strings.Friends_Result_TooManyPendingRequests;
                     break;
+                case FriendRequestResultCode.Blocked:
+                    message = Strings.Friends_Result_Blocked;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;
