@@ -124,6 +124,20 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Saves whether the player is ready to start and tells every player of the room.
+        /// </summary>
+        /// <param name="player">Room and identifier of the player.</param>
+        /// <param name="isReady">True if the player is ready.</param>
+        /// <returns>Outcome of the change.</returns>
+        public Contracts.RoomResultCode SetReady(Contracts.RoomMember player, bool isReady)
+        {
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(player);
+            Contracts.RoomResultCode result = Execute(player, () => ProcessReady(member, isReady));
+
+            return result;
+        }
+
+        /// <summary>
         /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
         /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
@@ -251,11 +265,35 @@ namespace YachtDice.Server.Services
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
+                TellLeftOutPlayers(result);
                 _gameCoordinator.StartGame(result.Room);
                 Broadcast(result.Room, Contracts.RoomEventType.GameStarted);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
+        }
+
+        private Contracts.RoomResultCode ProcessReady(LogicRooms.RoomMember member, bool isReady)
+        {
+            LogicRooms.RoomResult result = _roomManager.SetReady(member, isReady);
+
+            if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                Broadcast(result.Room, Contracts.RoomEventType.ReadyChanged);
+            }
+
+            return Mapping.RoomMapper.ToResultCode(result.Status);
+        }
+
+        private void TellLeftOutPlayers(LogicRooms.RoomResult result)
+        {
+            foreach (string playerId in result.LeftOutPlayerIds)
+            {
+                TellRemovedPlayer(
+                    result.Room,
+                    new LogicRooms.RoomMember(result.Room.Code, playerId),
+                    Contracts.RoomEventType.LeftOutOfGame);
+            }
         }
 
         private Contracts.RoomResultCode ProcessKick(LogicRooms.RoomMember member, string targetPlayerId)
@@ -272,7 +310,7 @@ namespace YachtDice.Server.Services
                     targetPlayerId,
                     member.RoomCode,
                     member.PlayerId));
-                TellExpelledPlayer(result.Room, expelled);
+                TellRemovedPlayer(result.Room, expelled, Contracts.RoomEventType.PlayerKicked);
                 _gameCoordinator.PlayerRemoved(expelled);
                 Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
             }
@@ -297,14 +335,15 @@ namespace YachtDice.Server.Services
             _roomManager.ForgetAbsentPlayer(member);
         }
 
-        private void TellExpelledPlayer(LogicRooms.RoomDetails room, LogicRooms.RoomMember expelled)
+        private void TellRemovedPlayer(
+            LogicRooms.RoomDetails room,
+            LogicRooms.RoomMember removed,
+            Contracts.RoomEventType eventType)
         {
             Contracts.RoomState roomState = Mapping.RoomMapper.ToContract(room);
 
-            _callbacks.NotifyPlayer(
-                expelled,
-                callback => callback.RoomChanged(roomState, Contracts.RoomEventType.PlayerKicked));
-            _callbacks.Remove(expelled);
+            _callbacks.NotifyPlayer(removed, callback => callback.RoomChanged(roomState, eventType));
+            _callbacks.Remove(removed);
         }
 
         private void ProcessLeave(LogicRooms.RoomMember member)

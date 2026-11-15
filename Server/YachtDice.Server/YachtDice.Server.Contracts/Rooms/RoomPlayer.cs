@@ -26,5 +26,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// </summary>
         [DataMember]
         public int AvatarId { get; set; }
+
+        /// <summary>
+        /// True if the player confirmed that they are ready to start the game.
+        /// </summary>
+        [DataMember]
+        public bool IsReady { get; set; }
     }
 }

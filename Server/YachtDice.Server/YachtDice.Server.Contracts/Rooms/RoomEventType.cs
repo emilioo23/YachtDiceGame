@@ -44,6 +44,18 @@ namespace YachtDice.Server.Contracts.Rooms
         /// The room closed because it waited fifteen minutes without starting the game.
         /// </summary>
         [EnumMember]
-        RoomClosed
+        RoomClosed,
+
+        /// <summary>
+        /// A player confirmed that they are ready to start or took it back.
+        /// </summary>
+        [EnumMember]
+        ReadyChanged,
+
+        /// <summary>
+        /// The game started without the player because the player never confirmed that they were ready.
+        /// </summary>
+        [EnumMember]
+        LeftOutOfGame
     }
 }

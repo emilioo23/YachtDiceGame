@@ -69,6 +69,16 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode StartGame(RoomMember host);
 
         /// <summary>
+        /// Saves whether the player is ready to start and tells every player of the room.
+        /// </summary>
+        /// <param name="player">Room and identifier of the player.</param>
+        /// <param name="isReady">True if the player is ready.</param>
+        /// <returns>Outcome of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        RoomResultCode SetReady(RoomMember player, bool isReady);
+
+        /// <summary>
         /// Takes another player out of the room and tells everyone. Only the host can do it, also during the
         /// game. The expelled player cannot come back. The expulsion is written in the log of the server.
         /// </summary>
