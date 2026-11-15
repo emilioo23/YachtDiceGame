@@ -48,10 +48,12 @@ namespace YachtDice.Server.Data.Repositories
                 .Where(isPlayerCard)
                 .Select(card => card.Id)
                 .ToList();
-            Expression<Func<ScorecardEntry, bool>> isEntryOfCard = entry => scorecardIds.Contains(entry.ScorecardId);
+            Expression<Func<ScorecardEntry, bool>> isEntryOfCard =
+                scorecardEntry => scorecardIds.Contains(scorecardEntry.ScorecardId);
             Expression<Func<TurnState, bool>> isPlayerTurn = turn => turn.PlayerId == playerId;
-            Expression<Func<GameHistoryPlayer, bool>> isPlayerInHistory = entry => entry.PlayerId == playerId;
-            Expression<Func<RoomPlayer, bool>> isPlayerInRoom = entry => entry.PlayerId == playerId;
+            Expression<Func<GameHistoryPlayer, bool>> isPlayerInHistory =
+                historyPlayer => historyPlayer.PlayerId == playerId;
+            Expression<Func<RoomPlayer, bool>> isPlayerInRoom = roomPlayer => roomPlayer.PlayerId == playerId;
 
             RemoveWhere(context.ScorecardEntry, isEntryOfCard);
             RemoveWhere(context.Scorecard, isPlayerCard);
@@ -117,10 +119,10 @@ namespace YachtDice.Server.Data.Repositories
         private static List<int> FindOtherParticipants(YachtDiceContext context, int roomId, int playerId)
         {
             Expression<Func<GameHistoryPlayer, bool>> isOtherParticipant =
-                entry => entry.GameHistory.RoomId == roomId && entry.PlayerId != playerId;
+                historyPlayer => historyPlayer.GameHistory.RoomId == roomId && historyPlayer.PlayerId != playerId;
             List<int> participants = context.GameHistoryPlayer
                 .Where(isOtherParticipant)
-                .Select(entry => entry.PlayerId)
+                .Select(historyPlayer => historyPlayer.PlayerId)
                 .ToList();
 
             return participants;
@@ -148,10 +150,12 @@ namespace YachtDice.Server.Data.Repositories
 
         private static void RemoveRoomGames(YachtDiceContext context, List<int> gameIds, List<int> scorecardIds)
         {
-            Expression<Func<ScorecardEntry, bool>> isEntryOfCard = entry => scorecardIds.Contains(entry.ScorecardId);
+            Expression<Func<ScorecardEntry, bool>> isEntryOfCard =
+                scorecardEntry => scorecardIds.Contains(scorecardEntry.ScorecardId);
             Expression<Func<Scorecard, bool>> isCardOfGame = card => gameIds.Contains(card.GameId);
             Expression<Func<TurnState, bool>> isTurnOfGame = turn => gameIds.Contains(turn.GameId);
-            Expression<Func<GameHistoryPlayer, bool>> isPlayerOfGame = entry => gameIds.Contains(entry.GameId);
+            Expression<Func<GameHistoryPlayer, bool>> isPlayerOfGame =
+                historyPlayer => gameIds.Contains(historyPlayer.GameId);
 
             RemoveWhere(context.ScorecardEntry, isEntryOfCard);
             RemoveWhere(context.Scorecard, isCardOfGame);
@@ -165,7 +169,7 @@ namespace YachtDice.Server.Data.Repositories
                 report.RoomId == roomId || (report.GameId != null && gameIds.Contains(report.GameId.Value));
             Expression<Func<KickLog, bool>> isKickOfRoom = kick => kick.RoomId == roomId;
             Expression<Func<RoomInvite, bool>> isInviteOfRoom = invite => invite.RoomId == roomId;
-            Expression<Func<RoomPlayer, bool>> isPlayerOfRoom = entry => entry.RoomId == roomId;
+            Expression<Func<RoomPlayer, bool>> isPlayerOfRoom = roomPlayer => roomPlayer.RoomId == roomId;
 
             RemoveWhere(context.PlayerReport, isReportOfRoom);
             RemoveWhere(context.KickLog, isKickOfRoom);

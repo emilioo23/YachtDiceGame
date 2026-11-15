@@ -24,7 +24,7 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
-            Func<GameHistoryPlayer, bool> belongsToPlayer = entry => entry.PlayerId == playerId;
+            Func<GameHistoryPlayer, bool> belongsToPlayer = historyPlayer => historyPlayer.PlayerId == playerId;
 
             return _entries.Where(belongsToPlayer).ToList();
         }

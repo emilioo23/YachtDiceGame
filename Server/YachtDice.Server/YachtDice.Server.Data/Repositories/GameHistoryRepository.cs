@@ -87,24 +87,27 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<PlayedGameRecord> SelectRecentGames(YachtDiceContext context, int playerId, int maxGames)
         {
-            Expression<Func<GameHistoryPlayer, bool>> isSamePlayer = entry => entry.PlayerId == playerId;
-            Expression<Func<GameHistoryPlayer, DateTime?>> readEndDate = entry => entry.GameHistory.EndDate;
-            Expression<Func<GameHistoryPlayer, int>> readGameId = entry => entry.GameId;
+            Expression<Func<GameHistoryPlayer, bool>> isSamePlayer =
+                historyPlayer => historyPlayer.PlayerId == playerId;
+            Expression<Func<GameHistoryPlayer, DateTime?>> readEndDate =
+                historyPlayer => historyPlayer.GameHistory.EndDate;
+            Expression<Func<GameHistoryPlayer, int>> readGameId = historyPlayer => historyPlayer.GameId;
             List<int> gameIds = context.GameHistoryPlayer
                 .Where(isSamePlayer)
                 .OrderByDescending(readEndDate)
                 .Select(readGameId)
                 .Take(maxGames)
                 .ToList();
-            Expression<Func<GameHistoryPlayer, bool>> isInRecentGames = entry => gameIds.Contains(entry.GameId);
-            Expression<Func<GameHistoryPlayer, PlayedGameRecord>> createRecord = entry => new PlayedGameRecord
+            Expression<Func<GameHistoryPlayer, bool>> isInRecentGames =
+                historyPlayer => gameIds.Contains(historyPlayer.GameId);
+            Expression<Func<GameHistoryPlayer, PlayedGameRecord>> createRecord = historyPlayer => new PlayedGameRecord
             {
-                GameId = entry.GameId,
-                EndDate = entry.GameHistory.EndDate,
-                PlayerId = entry.PlayerId,
-                PlayerName = entry.Player.DisplayName,
-                FinalScore = entry.FinalScore,
-                IsWinner = entry.IsWinner == true
+                GameId = historyPlayer.GameId,
+                EndDate = historyPlayer.GameHistory.EndDate,
+                PlayerId = historyPlayer.PlayerId,
+                PlayerName = historyPlayer.Player.DisplayName,
+                FinalScore = historyPlayer.FinalScore,
+                IsWinner = historyPlayer.IsWinner == true
             };
 
             return context.GameHistoryPlayer.Where(isInRecentGames).Select(createRecord).ToList();
@@ -112,7 +115,8 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<GameHistoryPlayer> SelectByPlayerId(YachtDiceContext context, int playerId)
         {
-            Expression<Func<GameHistoryPlayer, bool>> isSamePlayerId = entry => entry.PlayerId == playerId;
+            Expression<Func<GameHistoryPlayer, bool>> isSamePlayerId =
+                historyPlayer => historyPlayer.PlayerId == playerId;
             List<GameHistoryPlayer> history = context.GameHistoryPlayer
                 .Where(isSamePlayerId)
                 .ToList();
@@ -184,12 +188,12 @@ namespace YachtDice.Server.Data.Repositories
         private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context)
         {
             List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
-                .GroupBy(entry => entry.PlayerId)
+                .GroupBy(historyPlayer => historyPlayer.PlayerId)
                 .Select(group => new
                 {
                     PlayerId = group.Key,
-                    TotalPoints = group.Sum(entry => entry.FinalScore),
-                    Wins = group.Count(entry => entry.IsWinner == true),
+                    TotalPoints = group.Sum(historyPlayer => historyPlayer.FinalScore),
+                    Wins = group.Count(historyPlayer => historyPlayer.IsWinner == true),
                     GamesPlayed = group.Count()
                 })
                 .Join(
