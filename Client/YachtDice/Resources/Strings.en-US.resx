@@ -753,9 +753,6 @@
   <data name="Lobby_PlayerCountFormat" xml:space="preserve">
     <value>({0}/{1})</value>
   </data>
-  <data name="Lobby_WaitingForHost" xml:space="preserve">
-    <value>Waiting for the host...</value>
-  </data>
   <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
     <value>At least 2 players are needed to start the game.</value>
   </data>
@@ -2231,5 +2228,20 @@
   </data>
   <data name="Game_Chat_AuthorLevelFormat" xml:space="preserve">
     <value>{0} (Lv. {1})</value>
+  </data>
+  <data name="Lobby_ButtonReady" xml:space="preserve">
+    <value>I am ready</value>
+  </data>
+  <data name="Lobby_ButtonNotReady" xml:space="preserve">
+    <value>I am not ready</value>
+  </data>
+  <data name="Lobby_PlayerReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Lobby_LeftOutMessage" xml:space="preserve">
+    <value>The game started without you because you did not confirm that you were ready.</value>
+  </data>
+  <data name="Lobby_Result_PlayersNotReady" xml:space="preserve">
+    <value>Some players have not confirmed that they are ready. Wait for them or up to 2 minutes to start without them.</value>
   </data>
 </root>

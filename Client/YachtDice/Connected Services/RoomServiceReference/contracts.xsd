@@ -43,6 +43,7 @@
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsReady" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RoomPlayer" nillable="true" type="tns:RoomPlayer" />
@@ -112,6 +113,7 @@
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="InvalidTarget" />
       <xs:enumeration value="PlayerExpelled" />
+      <xs:enumeration value="PlayersNotReady" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomResultCode" nillable="true" type="tns:RoomResultCode" />
@@ -202,6 +204,21 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SetReady">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="player" nillable="true" type="tns:RoomMember" />
+        <xs:element minOccurs="0" name="isReady" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReadyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetReadyResult" type="tns:RoomResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="KickPlayer">
     <xs:complexType>
       <xs:sequence>
@@ -277,6 +294,8 @@
       <xs:enumeration value="PlayerDisconnected" />
       <xs:enumeration value="PlayerReturned" />
       <xs:enumeration value="RoomClosed" />
+      <xs:enumeration value="ReadyChanged" />
+      <xs:enumeration value="LeftOutOfGame" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />

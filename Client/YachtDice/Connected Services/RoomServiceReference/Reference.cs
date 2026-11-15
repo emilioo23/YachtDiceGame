@@ -294,6 +294,9 @@ namespace YachtDice.RoomServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string IdField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsReadyField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -339,6 +342,19 @@ namespace YachtDice.RoomServiceReference {
                 if ((object.ReferenceEquals(this.IdField, value) != true)) {
                     this.IdField = value;
                     this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsReady {
+            get {
+                return this.IsReadyField;
+            }
+            set {
+                if ((this.IsReadyField.Equals(value) != true)) {
+                    this.IsReadyField = value;
+                    this.RaisePropertyChanged("IsReady");
                 }
             }
         }
@@ -552,6 +568,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerExpelled = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayersNotReady = 11,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -770,6 +789,12 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RoomClosed = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ReadyChanged = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LeftOutOfGame = 10,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -861,6 +886,10 @@ namespace YachtDice.RoomServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/StartGameServiceFaultFault", Name="ServiceFault")]
         YachtDice.RoomServiceReference.RoomResultCode StartGame(YachtDice.RoomServiceReference.RoomMember host);
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/SetReady", ReplyAction="urn:yachtdice:contracts/IRoomService/SetReadyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/SetReadyServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.RoomResultCode SetReady(YachtDice.RoomServiceReference.RoomMember player, bool isReady);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/KickPlayer", ReplyAction="urn:yachtdice:contracts/IRoomService/KickPlayerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/KickPlayerServiceFaultFault", Name="ServiceFault")]
         YachtDice.RoomServiceReference.RoomResultCode KickPlayer(YachtDice.RoomServiceReference.RoomMember host, string targetPlayerId);
@@ -935,6 +964,10 @@ namespace YachtDice.RoomServiceReference {
         
         public YachtDice.RoomServiceReference.RoomResultCode StartGame(YachtDice.RoomServiceReference.RoomMember host) {
             return base.Channel.StartGame(host);
+        }
+        
+        public YachtDice.RoomServiceReference.RoomResultCode SetReady(YachtDice.RoomServiceReference.RoomMember player, bool isReady) {
+            return base.Channel.SetReady(player, isReady);
         }
         
         public YachtDice.RoomServiceReference.RoomResultCode KickPlayer(YachtDice.RoomServiceReference.RoomMember host, string targetPlayerId) {

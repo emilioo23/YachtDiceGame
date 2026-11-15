@@ -117,6 +117,20 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Tells the server whether the player is ready to start. The server tells every player of the room.
+        /// </summary>
+        /// <param name="isReady">True if the player is ready.</param>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> SetReadyAsync(bool isReady)
+        {
+            RoomMember player = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.SetReady(player, isReady));
+
+            return result;
+        }
+
+        /// <summary>
         /// Asks the server to expel another player from the room. Only the host can do it, and only before the
         /// game starts. When it is done, the server tells every player of the room.
         /// </summary>

@@ -32,6 +32,7 @@ namespace YachtDice.Views
         private readonly InvitationListener _invitationListener;
 
         private bool _isShowingRoom = true;
+        private bool _isLocalPlayerReady;
         private bool _isLeavingOnClose = true;
         private bool _isOpeningGame;
         private bool _isClosed;
@@ -90,6 +91,7 @@ namespace YachtDice.Views
                 Name = player.DisplayName,
                 AvatarId = player.AvatarId,
                 IsHost = isHost,
+                IsReady = player.IsReady && !isHost,
                 CanManage = canManage,
                 IsEmpty = false
             };
@@ -157,6 +159,7 @@ namespace YachtDice.Views
 
             ShowSettings(room.Settings);
             ApplyHostPermissions(room.HostId == _roomGateway.PlayerId);
+            ShowReadyButton(room);
 
             _isShowingRoom = false;
         }
@@ -193,8 +196,25 @@ namespace YachtDice.Views
             MaxPlayersComboBox.IsEnabled = isHost;
             NormalModeBorder.IsHitTestVisible = isHost;
             FastModeBorder.IsHitTestVisible = isHost;
-            StartGameButton.IsEnabled = isHost;
-            StartGameButton.Content = isHost ? Strings.Lobby_ButtonStartMatch : Strings.Lobby_WaitingForHost;
+            StartGameButton.IsEnabled = true;
+            StartGameButton.Content = Strings.Lobby_ButtonStartMatch;
+        }
+
+        private void ShowReadyButton(RoomState room)
+        {
+            bool isHost = room.HostId == _roomGateway.PlayerId;
+            Func<RoomPlayer, bool> isLocalPlayer = player => player.Id == _roomGateway.PlayerId;
+            _isLocalPlayerReady = room.Players
+                .Where(isLocalPlayer)
+                .Select(player => player.IsReady)
+                .FirstOrDefault();
+
+            if (!isHost)
+            {
+                StartGameButton.Content = _isLocalPlayerReady
+                    ? Strings.Lobby_ButtonNotReady
+                    : Strings.Lobby_ButtonReady;
+            }
         }
 
         private void SelectModeBorder(Border selected, Border unselected)
@@ -262,6 +282,17 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }
 
+        private void LeaveBecauseLeftOut()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_LeftOutMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private Task<RoomResultCode> ToggleReadyAsync()
+        {
+            return _roomGateway.SetReadyAsync(!_isLocalPlayerReady);
+        }
+
         private void LeaveBecauseClosed()
         {
             CustomDialogWindow.ShowMessage(this, Strings.Lobby_ClosedMessage);
@@ -289,6 +320,10 @@ namespace YachtDice.Views
             if (eventType == RoomEventType.PlayerKicked && !IsInside(room))
             {
                 LeaveBecauseKicked();
+            }
+            else if (eventType == RoomEventType.LeftOutOfGame)
+            {
+                LeaveBecauseLeftOut();
             }
             else if (eventType == RoomEventType.RoomClosed)
             {
@@ -403,9 +438,14 @@ namespace YachtDice.Views
 
         private async void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
+            bool isHost = _roomGateway.CurrentRoom.HostId == _roomGateway.PlayerId;
+            Func<Task<RoomResultCode>> startOrConfirm = isHost
+                ? (Func<Task<RoomResultCode>>)_roomGateway.StartGameAsync
+                : ToggleReadyAsync;
+
             StartGameButton.IsEnabled = false;
 
-            string errorMessage = await TryRunAsync(_roomGateway.StartGameAsync);
+            string errorMessage = await TryRunAsync(startOrConfirm);
 
             if (errorMessage.Length > EmptyLength)
             {

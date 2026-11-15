@@ -32,6 +32,11 @@
         public bool IsHost { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player in the place confirmed that they are ready.
+        /// </summary>
+        public bool IsReady { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the place is free.
         /// </summary>
         public bool IsEmpty { get; set; }

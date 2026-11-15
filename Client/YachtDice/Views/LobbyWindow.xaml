@@ -267,6 +267,11 @@
                                                                Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                FontSize="12"
                                                                Foreground="{StaticResource BrushFeltLight}"/>
+
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_PlayerReady}"
+                                                               Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
                                                 </StackPanel>
 
                                             </StackPanel>

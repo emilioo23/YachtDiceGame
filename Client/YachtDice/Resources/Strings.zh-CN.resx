@@ -741,9 +741,6 @@
   <data name="Lobby_PlayerCountFormat" xml:space="preserve">
     <value>({0}/{1})</value>
   </data>
-  <data name="Lobby_WaitingForHost" xml:space="preserve">
-    <value>等待房主...</value>
-  </data>
   <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
     <value>至少需要2名玩家才能开始对局。</value>
   </data>
@@ -2231,5 +2228,20 @@
   </data>
   <data name="Game_Chat_AuthorLevelFormat" xml:space="preserve">
     <value>{0}（等级 {1}）</value>
+  </data>
+  <data name="Lobby_ButtonReady" xml:space="preserve">
+    <value>我准备好了</value>
+  </data>
+  <data name="Lobby_ButtonNotReady" xml:space="preserve">
+    <value>我还没准备好</value>
+  </data>
+  <data name="Lobby_PlayerReady" xml:space="preserve">
+    <value>已准备</value>
+  </data>
+  <data name="Lobby_LeftOutMessage" xml:space="preserve">
+    <value>因为你没有确认准备，游戏已在没有你的情况下开始。</value>
+  </data>
+  <data name="Lobby_Result_PlayersNotReady" xml:space="preserve">
+    <value>还有玩家没有确认准备。请等待他们确认，或等待2分钟后不带他们开始。</value>
   </data>
 </root>

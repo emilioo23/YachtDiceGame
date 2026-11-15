@@ -1096,6 +1096,51 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Estoy listo.
+        /// </summary>
+        public static string Lobby_ButtonReady {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no estoy listo.
+        /// </summary>
+        public static string Lobby_ButtonNotReady {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonNotReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Listo.
+        /// </summary>
+        public static string Lobby_PlayerReady {
+            get {
+                return ResourceManager.GetString("Lobby_PlayerReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida empezó sin ti porque no confirmaste que estabas listo..
+        /// </summary>
+        public static string Lobby_LeftOutMessage {
+            get {
+                return ResourceManager.GetString("Lobby_LeftOutMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía hay jugadores que no confirman que están listos. Espera a que confirmen o hasta 2 minutos para iniciar sin ellos..
+        /// </summary>
+        public static string Lobby_Result_PlayersNotReady {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayersNotReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {
@@ -2127,15 +2172,6 @@ namespace YachtDice.Resources {
         public static string Lobby_Title {
             get {
                 return ResourceManager.GetString("Lobby_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Esperando al anfitrión....
-        /// </summary>
-        public static string Lobby_WaitingForHost {
-            get {
-                return ResourceManager.GetString("Lobby_WaitingForHost", resourceCulture);
             }
         }
         

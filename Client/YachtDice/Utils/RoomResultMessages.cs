@@ -46,6 +46,9 @@ namespace YachtDice.Utils
                 case RoomResultCode.PlayerExpelled:
                     message = Strings.Lobby_Result_PlayerExpelled;
                     break;
+                case RoomResultCode.PlayersNotReady:
+                    message = Strings.Lobby_Result_PlayersNotReady;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;
