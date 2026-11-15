@@ -125,6 +125,9 @@ namespace YachtDice.Views
             _clock.Interval = TimeSpan.FromSeconds(ClockIntervalSeconds);
             _clock.Tick += HandleClockTick;
             RollButton.IsEnabled = false;
+            MusicVolumeSlider.Value = App.Audio.MusicVolume;
+            RenderMuteMusicButton();
+            App.Music.Play(MusicTrack.GameTheme);
             Loaded += HandleWindowLoaded;
         }
 
@@ -737,6 +740,12 @@ namespace YachtDice.Views
         {
             _isClosed = true;
             _clock.Stop();
+
+            if (_isLeavingOnClose)
+            {
+                App.Music.Play(MusicTrack.MenuTheme);
+            }
+
             ConnectionLossHandler.ReleaseRecovery(_recoverConnection);
             ChatPanelControl.Detach();
             _roomGateway.RoomChanged -= HandleRoomChanged;
@@ -764,6 +773,24 @@ namespace YachtDice.Views
                 RememberLeftMatch();
                 WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
             }
+        }
+
+        private void MuteMusicButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.Audio.SetMusicMuted(!App.Audio.IsMusicMuted);
+            RenderMuteMusicButton();
+        }
+
+        private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            App.Audio.SetMusicVolume((int)e.NewValue);
+        }
+
+        private void RenderMuteMusicButton()
+        {
+            MuteMusicButton.Content = App.Audio.IsMusicMuted
+                ? Strings.Game_Sidebar_ButtonUnmuteMusic
+                : Strings.Game_Sidebar_ButtonMuteMusic;
         }
 
         private void HowToPlayButton_Click(object sender, RoutedEventArgs e)

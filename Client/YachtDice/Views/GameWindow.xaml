@@ -61,6 +61,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0">
@@ -243,6 +244,32 @@
                             FontSize="14"
                             Padding="8,6"
                             Click="LeaveMatchButton_Click"/>
+                    </Grid>
+
+                    <Grid Grid.Row="4"
+                          Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            x:Name="MuteMusicButton"
+                            Grid.Column="0"
+                            Style="{StaticResource BtnOutline}"
+                            FontSize="14"
+                            Padding="12,6"
+                            Margin="0,0,10,0"
+                            Click="MuteMusicButton_Click"/>
+
+                        <Slider
+                            x:Name="MusicVolumeSlider"
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="100"
+                            VerticalAlignment="Center"
+                            ToolTip="{x:Static properties:Strings.Game_Sidebar_MusicVolume}"
+                            ValueChanged="MusicVolumeSlider_ValueChanged"/>
                     </Grid>
                 </Grid>
             </Border>
