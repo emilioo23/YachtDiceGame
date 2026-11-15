@@ -39,6 +39,7 @@ namespace YachtDice.Server.Tests.Players
         private const string ThreeLetterFlagCode = "mex";
         private const string SymbolFlagCode = "1!";
         private const string NoFlagCode = "";
+        private const int TwoPlayers = 2;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
@@ -358,6 +359,72 @@ namespace YachtDice.Server.Tests.Players
             UsernameChangeStatus status = _service.ChangeUsername(CurrentUsername, CurrentUsername);
 
             Assert.Equal(UsernameChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void DeleteAccount_ExistingPlayer_ReturnsSuccess()
+        {
+            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername);
+
+            Assert.Equal(AccountDeletionStatus.Success, status);
+        }
+
+        [Fact]
+        public void DeleteAccount_ExistingPlayer_RemovesThePlayer()
+        {
+            _service.DeleteAccount(CurrentUsername);
+
+            Assert.Empty(_players.FindByUsername(CurrentUsername));
+        }
+
+        [Fact]
+        public void DeleteAccount_ExistingPlayer_KeepsTheOtherPlayers()
+        {
+            _service.DeleteAccount(CurrentUsername);
+
+            Assert.Single(_players.FindByUsername(OtherUsername));
+        }
+
+        [Fact]
+        public void DeleteAccount_UsernameInUpperCase_RemovesThePlayer()
+        {
+            _service.DeleteAccount(UpperCaseCurrentUsername);
+
+            Assert.Empty(_players.FindByUsername(CurrentUsername));
+        }
+
+        [Fact]
+        public void DeleteAccount_UnknownPlayer_ReturnsPlayerNotFound()
+        {
+            AccountDeletionStatus status = _service.DeleteAccount(UnknownName);
+
+            Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void DeleteAccount_UnknownPlayer_KeepsEveryPlayer()
+        {
+            _service.DeleteAccount(UnknownName);
+
+            Assert.Equal(TwoPlayers, _players.Players.Count);
+        }
+
+        [Fact]
+        public void DeleteAccount_BlankName_ReturnsPlayerNotFound()
+        {
+            AccountDeletionStatus status = _service.DeleteAccount(BlankName);
+
+            Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void DeleteAccount_CalledTwice_ReturnsPlayerNotFoundTheSecondTime()
+        {
+            _service.DeleteAccount(CurrentUsername);
+
+            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername);
+
+            Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
         }
 
         private List<int> FindUnlockedIds()

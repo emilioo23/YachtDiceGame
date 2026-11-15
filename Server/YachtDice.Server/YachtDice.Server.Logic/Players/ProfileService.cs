@@ -162,6 +162,27 @@ namespace YachtDice.Server.Logic.Players
             return status;
         }
 
+        /// <summary>
+        /// Deletes the account of a player with all its data: profile, security settings, friendships, scorecards
+        /// and game history. It cannot be undone.
+        /// </summary>
+        /// <param name="playerName">Name of the player whose account is deleted.</param>
+        /// <returns>The result of the deletion.</returns>
+        /// <exception cref="DataAccessException">The account could not be deleted.</exception>
+        public AccountDeletionStatus DeleteAccount(string playerName)
+        {
+            Player player = FindPlayer(playerName);
+            AccountDeletionStatus status = AccountDeletionStatus.PlayerNotFound;
+
+            if (player != null)
+            {
+                _playerRepository.Delete(player.Id);
+                status = AccountDeletionStatus.Success;
+            }
+
+            return status;
+        }
+
         private static bool IsValidFlagCode(string code)
         {
             Func<char, bool> isLetter = letter => letter >= FirstLetter && letter <= LastLetter;
