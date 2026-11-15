@@ -261,7 +261,7 @@ namespace YachtDice.Views
             RenderTimer();
             RenderReconnectBanner();
             RenderDice();
-            _scorecard.Render(_state, _matchPlayers, HandleCategoryClick);
+            _scorecard.Render(_state, _matchPlayers, HandleCategoryClickAsync);
             RenderRollButton();
         }
 
@@ -447,7 +447,7 @@ namespace YachtDice.Views
             await RunActionAsync(() => _gameGateway.RollDiceAsync(_heldDice.ToArray()));
         }
 
-        private async void HandleCategoryClick(ScoreCategory category)
+        private async Task HandleCategoryClickAsync(ScoreCategory category)
         {
             if (IsLocalTurn)
             {

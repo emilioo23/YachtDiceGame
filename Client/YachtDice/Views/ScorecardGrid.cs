@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -55,8 +56,11 @@ namespace YachtDice.Views
         /// </summary>
         /// <param name="state">State of the game that the server sent.</param>
         /// <param name="columns">Players in the order of the columns; the local player goes first.</param>
-        /// <param name="onCategoryClick">Action to run when the player clicks a box.</param>
-        public void Render(GameState state, IReadOnlyList<MatchPlayer> columns, Action<ScoreCategory> onCategoryClick)
+        /// <param name="onCategoryClick">Work to run when the player clicks a box.</param>
+        public void Render(
+            GameState state,
+            IReadOnlyList<MatchPlayer> columns,
+            Func<ScoreCategory, Task> onCategoryClick)
         {
             var context = new RenderContext(state, columns, onCategoryClick);
 
@@ -124,7 +128,7 @@ namespace YachtDice.Views
 
             row.Opacity = isFilledByLocal ? FilledRowOpacity : NormalOpacity;
             row.Cursor = canPick ? Cursors.Hand : Cursors.Arrow;
-            row.MouseLeftButtonUp += (sender, e) => context.OnCategoryClick(category);
+            row.MouseLeftButtonUp += async (sender, e) => await context.OnCategoryClick(category);
             _panel.Children.Add(row);
         }
 
@@ -245,8 +249,8 @@ namespace YachtDice.Views
             /// </summary>
             /// <param name="state">State of the game that the server sent.</param>
             /// <param name="columns">Players in the order of the columns.</param>
-            /// <param name="onClick">Action to run when the player clicks a box.</param>
-            public RenderContext(GameState state, IReadOnlyList<MatchPlayer> columns, Action<ScoreCategory> onClick)
+            /// <param name="onClick">Work to run when the player clicks a box.</param>
+            public RenderContext(GameState state, IReadOnlyList<MatchPlayer> columns, Func<ScoreCategory, Task> onClick)
             {
                 State = state;
                 Columns = columns;
@@ -268,9 +272,9 @@ namespace YachtDice.Views
             public IReadOnlyList<MatchPlayer> Columns { get; }
 
             /// <summary>
-            /// Gets the action to run when the player clicks a box.
+            /// Gets the work to run when the player clicks a box.
             /// </summary>
-            public Action<ScoreCategory> OnCategoryClick { get; }
+            public Func<ScoreCategory, Task> OnCategoryClick { get; }
 
             /// <summary>
             /// Gets a value indicating whether it is the turn of the player who uses the window.
