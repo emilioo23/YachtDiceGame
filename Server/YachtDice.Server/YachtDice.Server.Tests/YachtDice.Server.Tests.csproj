@@ -75,6 +75,7 @@
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
+    <Compile Include="Mapping\EnumMapperTests.cs" />
     <Compile Include="Moderation\LinkCensorTests.cs" />
     <Compile Include="Players\AchievementRulesTests.cs" />
     <Compile Include="Players\ExperienceRulesTests.cs" />
@@ -114,6 +115,7 @@
       <Project>{41804ae3-e254-4b5c-a192-c5251948a887}</Project>
       <Name>YachtDice.Server.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YachtDice.Server.Contracts\YachtDice.Server.Contracts.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
