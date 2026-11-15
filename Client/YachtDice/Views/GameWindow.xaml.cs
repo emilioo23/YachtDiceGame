@@ -43,6 +43,7 @@ namespace YachtDice.Views
         private readonly StateVersionGate _versionGate = new StateVersionGate();
         private readonly TurnCountdown _countdown = new TurnCountdown();
         private readonly ReconnectWaitTracker _reconnectWait = new ReconnectWaitTracker();
+        private readonly SoundEffectPlayer _sounds = new SoundEffectPlayer();
         private readonly DispatcherTimer _clock = new DispatcherTimer();
         private readonly GameConnectionRecovery _connectionRecovery;
         private readonly Func<Task<bool>> _recoverConnection;
@@ -233,6 +234,11 @@ namespace YachtDice.Views
             _countdown.Reset(state.TurnSecondsLeft);
             _reconnectWait.Update(FindAbsentPlayerIds(state));
             RenderState();
+
+            if (isNewTurn && IsLocalTurn)
+            {
+                _sounds.Play(SoundEffect.YourTurn);
+            }
 
             if (CurrentPhase == TurnPhase.Finished)
             {
@@ -500,6 +506,11 @@ namespace YachtDice.Views
             bool isTurnTimedOut = hasPreviousState && eventType == GameEventType.TurnTimedOut;
             bool isCategoryScored = hasPreviousState && eventType == GameEventType.CategoryScored;
 
+            if (hasPreviousState && eventType == GameEventType.DiceRolled)
+            {
+                _sounds.Play(SoundEffect.DiceRoll);
+            }
+
             if (isTurnTimedOut)
             {
                 AddNotice(string.Format(Strings.Game_Chat_TurnTimedOut, FindPlayerName(_state.CurrentPlayerId)));
@@ -547,6 +558,11 @@ namespace YachtDice.Views
             if (isCelebrationDue)
             {
                 _celebration.Play(FindPlayerName(scorerId), after.Points);
+                _sounds.Play(SoundEffect.Yacht);
+            }
+            else
+            {
+                _sounds.Play(SoundEffect.Score);
             }
         }
 
@@ -580,6 +596,7 @@ namespace YachtDice.Views
                 CustomDialogWindow.ShowMessage(this, Strings.Game_ResultNotSaved);
             }
 
+            _sounds.Play(SoundEffect.GameOver);
             RememberLeftMatch();
             WindowNavigator.SwitchTo(this, new ResultsWindow(
                 _roomGateway.Session,
