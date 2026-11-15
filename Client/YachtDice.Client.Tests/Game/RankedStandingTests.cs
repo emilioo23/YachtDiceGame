@@ -13,6 +13,11 @@ namespace YachtDice.Client.Tests.Game
         private const int Total = 150;
         private const int SecondRank = 2;
         private const int ExperienceGained = 250;
+        private const int UpperSubtotal = 70;
+        private const int UpperBonus = 35;
+        private const int YachtBonus = 100;
+        private const int FullTotal = 380;
+        private const int LowerTotal = 175;
 
         private readonly StandingEntry _entry = new StandingEntry(PlayerId, PlayerName, Total);
 
@@ -38,6 +43,45 @@ namespace YachtDice.Client.Tests.Game
             var standing = new RankedStanding(SecondRank, _entry);
 
             Assert.Equal(Total, standing.Total);
+        }
+
+        [Fact]
+        public void Constructor_EntryWithBreakdown_KeepsTheUpperSectionAndTheBonuses()
+        {
+            var entry = new StandingEntry(PlayerId, PlayerName, FullTotal)
+            {
+                UpperSubtotal = UpperSubtotal,
+                UpperBonus = UpperBonus,
+                YachtBonus = YachtBonus
+            };
+            var expected = new { UpperSubtotal, UpperBonus, YachtBonus };
+
+            var standing = new RankedStanding(SecondRank, entry);
+
+            Assert.Equivalent(expected, standing);
+        }
+
+        [Fact]
+        public void LowerTotal_EntryWithBreakdown_LeavesOutTheUpperSectionAndTheBonuses()
+        {
+            var entry = new StandingEntry(PlayerId, PlayerName, FullTotal)
+            {
+                UpperSubtotal = UpperSubtotal,
+                UpperBonus = UpperBonus,
+                YachtBonus = YachtBonus
+            };
+
+            var standing = new RankedStanding(SecondRank, entry);
+
+            Assert.Equal(LowerTotal, standing.LowerTotal);
+        }
+
+        [Fact]
+        public void LowerTotal_EntryWithoutBreakdown_IsTheWholeTotal()
+        {
+            var standing = new RankedStanding(SecondRank, _entry);
+
+            Assert.Equal(Total, standing.LowerTotal);
         }
 
         [Fact]

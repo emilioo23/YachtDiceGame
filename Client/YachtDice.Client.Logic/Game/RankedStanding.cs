@@ -17,6 +17,9 @@
             Name = entry.Name;
             Total = entry.Total;
             ExperienceGained = entry.ExperienceGained;
+            UpperSubtotal = entry.UpperSubtotal;
+            UpperBonus = entry.UpperBonus;
+            YachtBonus = entry.YachtBonus;
         }
 
         /// <summary>
@@ -43,6 +46,27 @@
         /// Gets the experience that the player earned in the game.
         /// </summary>
         public int ExperienceGained { get; }
+
+        /// <summary>
+        /// Gets the points of the upper section, before its bonus.
+        /// </summary>
+        public int UpperSubtotal { get; }
+
+        /// <summary>
+        /// Gets the bonus of the upper section.
+        /// </summary>
+        public int UpperBonus { get; }
+
+        /// <summary>
+        /// Gets the bonus of the extra Yachts.
+        /// </summary>
+        public int YachtBonus { get; }
+
+        /// <summary>
+        /// Gets the points of the lower section: what is left of the total without the upper section and the
+        /// bonuses.
+        /// </summary>
+        public int LowerTotal => Total - UpperSubtotal - UpperBonus - YachtBonus;
 
         /// <summary>
         /// Gets a value indicating whether the player has the first place.
