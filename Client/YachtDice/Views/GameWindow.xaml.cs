@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace YachtDice.Views
     /// Window where the match is played: dice, scorecard and chat. The server decides everything about the
     /// game, so the window only shows the state that the server sends and asks for the moves of the player.
     /// </summary>
-    public partial class GameWindow : Window
+    public partial class GameWindow : Window, IClosePromptingWindow
     {
         private const int MaxRolls = 3;
         private const int NoRolls = 0;
@@ -48,6 +49,7 @@ namespace YachtDice.Views
 
         private bool _isLeavingOnClose = true;
         private bool _isClosed;
+        private bool _isCloseAllowed;
         private bool _isBusy;
         private bool _isReconnecting;
         private string _hostId;
@@ -79,6 +81,7 @@ namespace YachtDice.Views
             ConnectGame();
             StartChat();
             _roomGateway.RoomChanged += HandleRoomChanged;
+            Closing += HandleWindowClosing;
             Closed += HandleWindowClosed;
         }
 
@@ -673,6 +676,26 @@ namespace YachtDice.Views
         {
             _matchPlayers = MatchPlayerFactory.UpdatePresence(_matchPlayers, room.Players);
             MatchPlayersItemsControl.ItemsSource = _matchPlayers;
+        }
+
+        /// <summary>
+        /// Makes the window close without asking the player, because the program decided to close it.
+        /// </summary>
+        public void AllowClose()
+        {
+            _isCloseAllowed = true;
+        }
+
+        private void HandleWindowClosing(object sender, CancelEventArgs e)
+        {
+            if (!_isCloseAllowed && _state != null && CurrentPhase != TurnPhase.Finished)
+            {
+                string message = string.Format(
+                    Strings.Dialogs_CloseWindowDuringMatch,
+                    ReconnectWaitTracker.ReconnectSeconds);
+
+                e.Cancel = !CustomDialogWindow.Confirm(this, message);
+            }
         }
 
         private async void HandleWindowClosed(object sender, EventArgs e)
