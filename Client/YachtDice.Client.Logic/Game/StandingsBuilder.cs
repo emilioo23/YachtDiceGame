@@ -21,7 +21,7 @@ namespace YachtDice.Client.Logic.Game
         /// <returns>The players from the first place to the last. Players that tie keep their order.</returns>
         public static IReadOnlyList<RankedStanding> Build(IEnumerable<StandingEntry> entries)
         {
-            var sorted = entries.OrderByDescending(entry => entry.Total).ToList();
+            var sorted = entries.OrderByDescending(standingEntry => standingEntry.Total).ToList();
             var standings = new List<RankedStanding>();
 
             for (var position = 0; position < sorted.Count; position++)

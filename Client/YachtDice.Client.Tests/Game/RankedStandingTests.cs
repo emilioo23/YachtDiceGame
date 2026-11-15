@@ -48,7 +48,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void Constructor_EntryWithBreakdown_KeepsTheUpperSectionAndTheBonuses()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, FullTotal)
+            var standingEntry = new StandingEntry(PlayerId, PlayerName, FullTotal)
             {
                 UpperSubtotal = UpperSubtotal,
                 UpperBonus = UpperBonus,
@@ -56,7 +56,7 @@ namespace YachtDice.Client.Tests.Game
             };
             var expected = new { UpperSubtotal, UpperBonus, YachtBonus };
 
-            var standing = new RankedStanding(SecondRank, entry);
+            var standing = new RankedStanding(SecondRank, standingEntry);
 
             Assert.Equivalent(expected, standing);
         }
@@ -64,14 +64,14 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void LowerTotal_EntryWithBreakdown_LeavesOutTheUpperSectionAndTheBonuses()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, FullTotal)
+            var standingEntry = new StandingEntry(PlayerId, PlayerName, FullTotal)
             {
                 UpperSubtotal = UpperSubtotal,
                 UpperBonus = UpperBonus,
                 YachtBonus = YachtBonus
             };
 
-            var standing = new RankedStanding(SecondRank, entry);
+            var standing = new RankedStanding(SecondRank, standingEntry);
 
             Assert.Equal(LowerTotal, standing.LowerTotal);
         }
@@ -87,9 +87,9 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void Constructor_EntryWithExperience_KeepsTheExperienceGained()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, Total) { ExperienceGained = ExperienceGained };
+            var standingEntry = new StandingEntry(PlayerId, PlayerName, Total) { ExperienceGained = ExperienceGained };
 
-            var standing = new RankedStanding(SecondRank, entry);
+            var standing = new RankedStanding(SecondRank, standingEntry);
 
             Assert.Equal(ExperienceGained, standing.ExperienceGained);
         }

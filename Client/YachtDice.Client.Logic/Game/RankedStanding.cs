@@ -9,17 +9,17 @@
         /// Initializes a new standing.
         /// </summary>
         /// <param name="rank">Place of the player. Players with the same points share it.</param>
-        /// <param name="entry">The player and the points.</param>
-        public RankedStanding(int rank, StandingEntry entry)
+        /// <param name="standingEntry">The player and the points.</param>
+        public RankedStanding(int rank, StandingEntry standingEntry)
         {
             Rank = rank;
-            PlayerId = entry.PlayerId;
-            Name = entry.Name;
-            Total = entry.Total;
-            ExperienceGained = entry.ExperienceGained;
-            UpperSubtotal = entry.UpperSubtotal;
-            UpperBonus = entry.UpperBonus;
-            YachtBonus = entry.YachtBonus;
+            PlayerId = standingEntry.PlayerId;
+            Name = standingEntry.Name;
+            Total = standingEntry.Total;
+            ExperienceGained = standingEntry.ExperienceGained;
+            UpperSubtotal = standingEntry.UpperSubtotal;
+            UpperBonus = standingEntry.UpperBonus;
+            YachtBonus = standingEntry.YachtBonus;
         }
 
         /// <summary>
