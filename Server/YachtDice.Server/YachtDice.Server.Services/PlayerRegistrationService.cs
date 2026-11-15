@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -15,7 +16,12 @@ namespace YachtDice.Server.Services
     {
         private const string NullDependencyMessage = "A dependency of the player registration service cannot be null.";
 
+        private const int CleanupIntervalSeconds = 3600;
+        private const int NoTurnNumber = 0;
+        private const string RemovedAccountsLogFormat = "{0} accounts without a confirmed email were deleted.";
+
         private readonly LogicAuth.IRegistrationService _registrationLogic;
+        private TurnClock _cleanupClock;
 
         /// <summary>
         /// Initializes a new instance of the PlayerRegistrationService class.
@@ -25,6 +31,7 @@ namespace YachtDice.Server.Services
         {
             _registrationLogic = registrationLogic
                 ?? throw new ArgumentNullException(nameof(registrationLogic), NullDependencyMessage);
+            _cleanupClock = StartCleanupClock();
         }
 
         /// <summary>
@@ -37,6 +44,26 @@ namespace YachtDice.Server.Services
             Contracts.RegisterResultCode result = Execute(newPlayer, () => ProcessRegistration(newPlayer));
 
             return result;
+        }
+
+        private TurnClock StartCleanupClock()
+        {
+            return new TurnClock(NoTurnNumber, CleanupIntervalSeconds, RemoveUnverifiedAccounts);
+        }
+
+        private void RemoveUnverifiedAccounts()
+        {
+            try
+            {
+                int removedCount = _registrationLogic.RemoveUnverifiedAccounts(DateTime.UtcNow);
+
+                LogInfo(string.Format(CultureInfo.InvariantCulture, RemovedAccountsLogFormat, removedCount));
+            }
+            finally
+            {
+                _cleanupClock.Dispose();
+                _cleanupClock = StartCleanupClock();
+            }
         }
 
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
