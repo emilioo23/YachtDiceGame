@@ -111,6 +111,7 @@
       <xs:enumeration value="InvalidAccessCode" />
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="InvalidTarget" />
+      <xs:enumeration value="PlayerExpelled" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomResultCode" nillable="true" type="tns:RoomResultCode" />

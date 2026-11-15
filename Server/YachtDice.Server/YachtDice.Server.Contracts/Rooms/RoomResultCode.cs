@@ -46,6 +46,10 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The host chose themselves, which makes no sense for this operation.</summary>
         [EnumMember]
-        InvalidTarget
+        InvalidTarget,
+
+        /// <summary>The host expelled the player from this room, so the player cannot enter it again.</summary>
+        [EnumMember]
+        PlayerExpelled
     }
 }

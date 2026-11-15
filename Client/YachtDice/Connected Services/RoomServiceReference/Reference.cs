@@ -549,6 +549,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         InvalidTarget = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerExpelled = 10,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

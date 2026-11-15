@@ -17,6 +17,7 @@ namespace YachtDice.Server.Logic.Rooms
 
         private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
         private readonly List<RoomPlayer> _absentPlayers = new List<RoomPlayer>();
+        private readonly HashSet<string> _expelledNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Initializes a new room without players. The first player who enters becomes the host.
@@ -150,6 +151,29 @@ namespace YachtDice.Server.Logic.Rooms
         /// progress. If the player was the host, the next player becomes the host.
         /// </summary>
         /// <param name="playerId">Identifier of the player who left.</param>
+        /// <summary>
+        /// Takes a player out of the room and remembers their name, so they cannot enter this room again.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player to expel.</param>
+        public void Expel(string playerId)
+        {
+            if (TryGetPlayer(playerId, out RoomPlayer player))
+            {
+                _expelledNames.Add(player.DisplayName);
+                RemovePlayer(playerId);
+            }
+        }
+
+        /// <summary>
+        /// Tells whether a name belongs to a player who was expelled from this room.
+        /// </summary>
+        /// <param name="displayName">Name that the player who wants to enter uses.</param>
+        /// <returns>True if the host expelled a player with that name.</returns>
+        public bool IsExpelled(string displayName)
+        {
+            return _expelledNames.Contains(displayName.Trim());
+        }
+
         public void MarkAbsent(string playerId)
         {
             if (TryGetPlayer(playerId, out RoomPlayer player))

@@ -242,7 +242,11 @@ namespace YachtDice.Server.Logic.Rooms
         {
             RoomResult result;
 
-            if (room.TryReturnPlayer(applicant.Name, out RoomPlayer returned))
+            if (room.IsExpelled(applicant.Name))
+            {
+                result = RoomResult.CreateFailed(RoomStatus.PlayerExpelled);
+            }
+            else if (room.TryReturnPlayer(applicant.Name, out RoomPlayer returned))
             {
                 result = RoomResult.CreateReturned(room.ToDetails(), returned.Id);
             }
@@ -410,7 +414,7 @@ namespace YachtDice.Server.Logic.Rooms
 
             if (status == RoomStatus.Success)
             {
-                room.RemovePlayer(targetPlayerId);
+                room.Expel(targetPlayerId);
             }
 
             return CreateResult(status, room);

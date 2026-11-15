@@ -2005,6 +2005,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El anfitrión te expulsó de esta sala, así que no puedes volver a entrar.
+        /// </summary>
+        public static string Lobby_Result_PlayerExpelled {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayerExpelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ese jugador ya no está en la sala..
         /// </summary>
         public static string Lobby_Result_PlayerNotFound {

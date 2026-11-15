@@ -1002,6 +1002,9 @@
   <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
     <value>Ese jugador ya no está en la sala.</value>
   </data>
+  <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
+    <value>El anfitrión te expulsó de esta sala, así que no puedes volver a entrar.</value>
+  </data>
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>Expulsar</value>
   </data>

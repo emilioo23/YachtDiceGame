@@ -1002,6 +1002,9 @@
   <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
     <value>That player is no longer in the room.</value>
   </data>
+  <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
+    <value>The host expelled you from this room, so you cannot enter it again.</value>
+  </data>
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>Kick</value>
   </data>

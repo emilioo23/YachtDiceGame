@@ -744,6 +744,31 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
+        public void Join_PlayerExpelledFromTheRoom_ReturnsPlayerExpelled()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            RoomResult returnAttempt = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.PlayerExpelled, returnAttempt.Status);
+        }
+
+        [Fact]
+        public void Join_PlayerExpelledFromAnotherRoom_EntersTheRoom()
+        {
+            RoomResult firstHost = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(firstHost.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(firstHost.Room.Code, firstHost.PlayerId), player.PlayerId);
+            RoomResult secondHost = _manager.CreateRoom(GuestName);
+
+            RoomResult joinAttempt = _manager.Join(secondHost.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.Success, joinAttempt.Status);
+        }
+
+        [Fact]
         public void KickPlayer_PlayerWhoIsNotTheHost_ReturnsNotHost()
         {
             RoomResult host = _manager.CreateRoom(HostName);
@@ -819,7 +844,7 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult attempt = _manager.Join(host.Room.Code, PlayerName);
 
-            Assert.Equal(RoomStatus.GameAlreadyStarted, attempt.Status);
+            Assert.Equal(RoomStatus.PlayerExpelled, attempt.Status);
         }
 
         [Fact]

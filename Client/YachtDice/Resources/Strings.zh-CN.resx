@@ -2232,4 +2232,7 @@
   <data name="History_GuestOpponent" xml:space="preserve">
     <value>游客</value>
   </data>
+  <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
+    <value>房主已将你移出此房间，你不能再进入。</value>
+  </data>
 </root>
