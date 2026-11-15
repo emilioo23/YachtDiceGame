@@ -375,6 +375,27 @@
   <data name="Settings_Account_Avatar" xml:space="preserve">
     <value>头像与个性化</value>
   </data>
+  <data name="Settings_Password_Current" xml:space="preserve">
+    <value>当前密码</value>
+  </data>
+  <data name="Settings_Password_New" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="Settings_Password_Confirm" xml:space="preserve">
+    <value>确认新密码</value>
+  </data>
+  <data name="Settings_Password_Save" xml:space="preserve">
+    <value>保存密码</value>
+  </data>
+  <data name="Settings_Password_Changed" xml:space="preserve">
+    <value>你的密码已成功修改。</value>
+  </data>
+  <data name="Settings_Password_WrongCurrent" xml:space="preserve">
+    <value>当前密码不正确。</value>
+  </data>
+  <data name="Settings_Password_ErrorEmptyCurrent" xml:space="preserve">
+    <value>请输入当前密码。</value>
+  </data>
   <data name="Settings_ButtonChange" xml:space="preserve">
     <value>更改</value>
   </data>

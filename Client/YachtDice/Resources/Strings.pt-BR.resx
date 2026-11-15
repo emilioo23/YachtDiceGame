@@ -375,6 +375,27 @@
   <data name="Settings_Account_Avatar" xml:space="preserve">
     <value>Avatar e personalização</value>
   </data>
+  <data name="Settings_Password_Current" xml:space="preserve">
+    <value>Senha atual</value>
+  </data>
+  <data name="Settings_Password_New" xml:space="preserve">
+    <value>Nova senha</value>
+  </data>
+  <data name="Settings_Password_Confirm" xml:space="preserve">
+    <value>Confirmar nova senha</value>
+  </data>
+  <data name="Settings_Password_Save" xml:space="preserve">
+    <value>Salvar senha</value>
+  </data>
+  <data name="Settings_Password_Changed" xml:space="preserve">
+    <value>Sua senha foi alterada com sucesso.</value>
+  </data>
+  <data name="Settings_Password_WrongCurrent" xml:space="preserve">
+    <value>A senha atual não está correta.</value>
+  </data>
+  <data name="Settings_Password_ErrorEmptyCurrent" xml:space="preserve">
+    <value>Digite sua senha atual.</value>
+  </data>
   <data name="Settings_ButtonChange" xml:space="preserve">
     <value>Alterar</value>
   </data>

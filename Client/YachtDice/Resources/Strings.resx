@@ -375,6 +375,27 @@
   <data name="Settings_Account_Avatar" xml:space="preserve">
     <value>Avatar y personalización</value>
   </data>
+  <data name="Settings_Password_Current" xml:space="preserve">
+    <value>Contraseña actual</value>
+  </data>
+  <data name="Settings_Password_New" xml:space="preserve">
+    <value>Nueva contraseña</value>
+  </data>
+  <data name="Settings_Password_Confirm" xml:space="preserve">
+    <value>Confirmar nueva contraseña</value>
+  </data>
+  <data name="Settings_Password_Save" xml:space="preserve">
+    <value>Guardar contraseña</value>
+  </data>
+  <data name="Settings_Password_Changed" xml:space="preserve">
+    <value>Tu contraseña se cambió correctamente.</value>
+  </data>
+  <data name="Settings_Password_WrongCurrent" xml:space="preserve">
+    <value>La contraseña actual no es correcta.</value>
+  </data>
+  <data name="Settings_Password_ErrorEmptyCurrent" xml:space="preserve">
+    <value>Escribe tu contraseña actual.</value>
+  </data>
   <data name="Settings_ButtonChange" xml:space="preserve">
     <value>Cambiar</value>
   </data>

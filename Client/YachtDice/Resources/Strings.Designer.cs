@@ -3373,6 +3373,69 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Contraseña actual.
+        /// </summary>
+        public static string Settings_Password_Current {
+            get {
+                return ResourceManager.GetString("Settings_Password_Current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string Settings_Password_New {
+            get {
+                return ResourceManager.GetString("Settings_Password_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirmar nueva contraseña.
+        /// </summary>
+        public static string Settings_Password_Confirm {
+            get {
+                return ResourceManager.GetString("Settings_Password_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Guardar contraseña.
+        /// </summary>
+        public static string Settings_Password_Save {
+            get {
+                return ResourceManager.GetString("Settings_Password_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu contraseña se cambió correctamente..
+        /// </summary>
+        public static string Settings_Password_Changed {
+            get {
+                return ResourceManager.GetString("Settings_Password_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña actual no es correcta..
+        /// </summary>
+        public static string Settings_Password_WrongCurrent {
+            get {
+                return ResourceManager.GetString("Settings_Password_WrongCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña actual..
+        /// </summary>
+        public static string Settings_Password_ErrorEmptyCurrent {
+            get {
+                return ResourceManager.GetString("Settings_Password_ErrorEmptyCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Cambiar.
         /// </summary>
         public static string Settings_ButtonChange {

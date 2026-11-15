@@ -49,6 +49,9 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             TwoFactorPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            CurrentPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            NewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            ConfirmNewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             DeleteAccountPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             _session = session;
             _isInitializing = true;
@@ -345,6 +348,79 @@ namespace YachtDice.Views
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_Error);
             }
+        }
+
+        private void ChangePasswordToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool willShow = ChangePasswordPanel.Visibility != Visibility.Visible;
+
+            CurrentPasswordBox.Clear();
+            NewPasswordBox.Clear();
+            ConfirmNewPasswordBox.Clear();
+            ChangePasswordPanel.Visibility = willShow ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private async void SavePasswordButton_Click(object sender, RoutedEventArgs e)
+        {
+            SavePasswordButton.IsEnabled = false;
+            await GatewayCallRunner.RunAsync(this, _logger, ChangePasswordAsync);
+            SavePasswordButton.IsEnabled = true;
+        }
+
+        private async Task ChangePasswordAsync()
+        {
+            PasswordChangeInputStatus inputStatus = PasswordChangeInputValidator.Validate(
+                CurrentPasswordBox.Password,
+                NewPasswordBox.Password,
+                ConfirmNewPasswordBox.Password);
+
+            if (inputStatus == PasswordChangeInputStatus.Valid)
+            {
+                await SendPasswordChangeAsync();
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, GetPasswordInputMessage(inputStatus));
+            }
+        }
+
+        private async Task SendPasswordChangeAsync()
+        {
+            var change = new PasswordChange
+            {
+                CurrentPassword = CurrentPasswordBox.Password,
+                NewPassword = NewPasswordBox.Password
+            };
+
+            PasswordChangeResultCode result =
+                await _twoFactorGateway.ChangePasswordAsync(_session.SessionToken, change);
+
+            CustomDialogWindow.ShowMessage(this, PasswordChangeMessages.GetMessage(result));
+
+            if (result == PasswordChangeResultCode.Success)
+            {
+                ChangePasswordToggleButton_Click(ChangePasswordToggleButton, new RoutedEventArgs());
+            }
+        }
+
+        private static string GetPasswordInputMessage(PasswordChangeInputStatus status)
+        {
+            string message = Strings.Dialogs_UnexpectedError;
+
+            switch (status)
+            {
+                case PasswordChangeInputStatus.EmptyCurrentPassword:
+                    message = Strings.Settings_Password_ErrorEmptyCurrent;
+                    break;
+                case PasswordChangeInputStatus.EmptyNewPassword:
+                    message = Strings.ResetPassword_ErrorEmptyPassword;
+                    break;
+                case PasswordChangeInputStatus.PasswordsDoNotMatch:
+                    message = Strings.ResetPassword_ErrorPasswordsDoNotMatch;
+                    break;
+            }
+
+            return message;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

@@ -236,12 +236,77 @@
                                        FontSize="22"
                                        VerticalAlignment="Center"/>
 
-                            <Button Grid.Column="1"
+                            <Button x:Name="ChangePasswordToggleButton"
+                                    Grid.Column="1"
                                     Content="{x:Static properties:Strings.Settings_ButtonChange}"
                                     Style="{StaticResource BtnOutline}"
                                     Padding="22,10"
-                                    FontSize="18"/>
+                                    FontSize="18"
+                                    Click="ChangePasswordToggleButton_Click"/>
                         </Grid>
+
+                        <StackPanel x:Name="ChangePasswordPanel"
+                                    Visibility="Collapsed"
+                                    Margin="0,0,0,16">
+
+                            <TextBlock Text="{x:Static properties:Strings.Settings_Password_Current}"
+                                       FontSize="16"
+                                       Margin="0,0,0,6"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
+
+                            <PasswordBox x:Name="CurrentPasswordBox"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Width="300"
+                                         FontSize="18"
+                                         Padding="12,9"
+                                         Margin="0,0,0,12"
+                                         HorizontalAlignment="Left"/>
+
+                            <TextBlock Text="{x:Static properties:Strings.Settings_Password_New}"
+                                       FontSize="16"
+                                       Margin="0,0,0,6"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
+
+                            <PasswordBox x:Name="NewPasswordBox"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Width="300"
+                                         FontSize="18"
+                                         Padding="12,9"
+                                         Margin="0,0,0,12"
+                                         HorizontalAlignment="Left"/>
+
+                            <TextBlock Text="{x:Static properties:Strings.Settings_Password_Confirm}"
+                                       FontSize="16"
+                                       Margin="0,0,0,6"
+                                       Foreground="{StaticResource BrushTextMuted}"/>
+
+                            <PasswordBox x:Name="ConfirmNewPasswordBox"
+                                         utils:EnterKeySubmit.Button="{Binding ElementName=SavePasswordButton}"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Width="300"
+                                         FontSize="18"
+                                         Padding="12,9"
+                                         Margin="0,0,0,12"
+                                         HorizontalAlignment="Left"/>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button x:Name="SavePasswordButton"
+                                        Content="{x:Static properties:Strings.Settings_Password_Save}"
+                                        Style="{StaticResource BtnPrimary}"
+                                        Padding="22,10"
+                                        FontSize="18"
+                                        Margin="0,0,12,0"
+                                        Click="SavePasswordButton_Click"/>
+
+                                <Button Content="{x:Static properties:Strings.Dialogs_ButtonCancel}"
+                                        Style="{StaticResource BtnOutline}"
+                                        Padding="22,10"
+                                        FontSize="18"
+                                        Click="ChangePasswordToggleButton_Click"/>
+
+                            </StackPanel>
+                        </StackPanel>
 
                         <Border Height="1"
                                 Background="{StaticResource BrushBorder}"
