@@ -24,7 +24,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
-        private readonly LoginEmails _emails;
+        private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginAttemptTracker _attemptTracker = new LoginAttemptTracker();
 
@@ -33,19 +33,26 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="verificationService">Service that handles verification challenges and lockouts.</param>
-        /// <param name="emails">Senders of the verification code and of the notice of a locked account.</param>
+        /// <param name="deliveryService">Service that sends the verification code by email.</param>
         public LoginService(
             IPlayerRepository playerRepository,
             TwoFactorVerificationService verificationService,
-            LoginEmails emails)
+            TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            _emails = emails ?? throw new ArgumentNullException(nameof(emails), NullDependencyMessage);
+            _deliveryService = deliveryService
+                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
+
+        /// <summary>
+        /// Event triggered when an account is locked for the day because of too many wrong passwords, with the
+        /// player and the language of the login, so the player can be told by email.
+        /// </summary>
+        public event Action<Player, CultureInfo> AccountLockedForTheDay;
 
         /// <summary>
         /// Checks the credentials and, if they are correct, sends the verification code or completes the login.
@@ -157,7 +164,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (newLock == LoginLock.Daily)
             {
-                _emails.LockNotifier.Send(player, culture);
+                AccountLockedForTheDay?.Invoke(player, culture);
             }
         }
 
@@ -207,7 +214,7 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _emails.CodeDelivery.SendCode(player, challengeId, culture);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player, challengeId);

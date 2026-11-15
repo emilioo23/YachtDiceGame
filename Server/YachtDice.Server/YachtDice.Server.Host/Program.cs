@@ -259,10 +259,13 @@ namespace YachtDice.Server.Host
                 new PasswordResetRepository(),
                 new EmailService());
 
-            var loginEmails = new LoginEmails(deliveryService, new AccountLockNotifier(new EmailService()));
+            var loginService = new LoginService(playerRepository, verificationService, deliveryService);
+            var lockNotifier = new AccountLockNotifier(new EmailService());
+
+            loginService.AccountLockedForTheDay += (player, culture) => lockNotifier.Send(player, culture);
 
             return new AuthenticationService(
-                new LoginService(playerRepository, verificationService, loginEmails),
+                loginService,
                 verificationService,
                 passwordRecoveryService);
         }
