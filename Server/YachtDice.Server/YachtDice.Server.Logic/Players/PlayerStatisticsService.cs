@@ -18,6 +18,7 @@ namespace YachtDice.Server.Logic.Players
         private const int MaxLeaderboardEntries = 100;
         private const int MaxHistoryGames = 20;
         private const string OpponentSeparator = ", ";
+        private const string NullDependencyMessage = "A dependency of the player statistics service cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -32,9 +33,9 @@ namespace YachtDice.Server.Logic.Players
             IGameHistoryRepository gameHistoryRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository));
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
         }
 
         /// <summary>

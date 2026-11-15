@@ -12,6 +12,7 @@ namespace YachtDice.Server.Logic.Friends
     public class FriendshipService : IFriendshipService
     {
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IFriendRepository _friendRepository;
@@ -24,9 +25,9 @@ namespace YachtDice.Server.Logic.Friends
         public FriendshipService(IPlayerRepository playerRepository, IFriendRepository friendRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _friendRepository = friendRepository
-                ?? throw new ArgumentNullException(nameof(friendRepository));
+                ?? throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
         }
 
         /// <summary>

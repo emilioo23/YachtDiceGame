@@ -32,6 +32,7 @@ namespace YachtDice.Server.Logic.Authentication
         private const string NullArgumentMessage = "The value cannot be null.";
         private const string EmailSubjectResourceKey = "PasswordReset_EmailSubject";
         private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
+        private const string NullDependencyMessage = "A dependency of the password recovery service cannot be null.";
 
         private static readonly CodeEmailTemplate EmailTemplate =
             new CodeEmailTemplate(EmailSubjectResourceKey, EmailBodyResourceKey, ExpirationMinutes);
@@ -54,9 +55,9 @@ namespace YachtDice.Server.Logic.Authentication
             IEmailService emailService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _resetRepository = resetRepository
-                ?? throw new ArgumentNullException(nameof(resetRepository));
+                ?? throw new ArgumentNullException(nameof(resetRepository), NullDependencyMessage);
             _emailSender = new CodeEmailSender(emailService, EmailTemplate);
             _logger = new AppLogger(GetType());
         }

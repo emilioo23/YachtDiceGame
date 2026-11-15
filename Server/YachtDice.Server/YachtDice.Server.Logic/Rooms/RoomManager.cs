@@ -23,6 +23,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
+        private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
         private readonly object _syncRoot = new object();
@@ -36,7 +37,7 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomManager(IAvatarLookup avatarLookup)
         {
             _avatarLookup = avatarLookup
-                ?? throw new ArgumentNullException(nameof(avatarLookup));
+                ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
         }
 
         /// <inheritdoc />

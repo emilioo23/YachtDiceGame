@@ -25,6 +25,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int NoFailedAttempts = 0;
         private const int ResendCooldownSeconds = 30;
         private const string GuidFormat = "N";
+        private const string NullCodeMessage = "The verification code cannot be null.";
 
         private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
             new ConcurrentDictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
@@ -78,7 +79,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (verificationCode == null)
             {
-                throw new ArgumentNullException(nameof(verificationCode));
+                throw new ArgumentNullException(nameof(verificationCode), NullCodeMessage);
             }
 
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Expired;

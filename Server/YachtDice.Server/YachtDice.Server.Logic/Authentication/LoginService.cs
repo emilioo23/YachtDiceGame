@@ -19,6 +19,7 @@ namespace YachtDice.Server.Logic.Authentication
         private const string WrongPasswordLogMessage = "Login attempt with a wrong password.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the login service cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -37,11 +38,11 @@ namespace YachtDice.Server.Logic.Authentication
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService));
+                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService));
+                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
 

@@ -18,6 +18,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
         private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the two-factor settings cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
@@ -35,11 +36,11 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorDeliveryService deliveryService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository));
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService));
+                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService));
+                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
         }
 
         /// <summary>
