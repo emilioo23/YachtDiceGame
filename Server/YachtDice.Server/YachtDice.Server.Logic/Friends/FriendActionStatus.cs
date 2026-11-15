@@ -15,6 +15,11 @@
         RelationNotFound,
 
         /// <summary>One of the two players already has the most friends allowed.</summary>
-        FriendLimitReached
+        FriendLimitReached,
+
+        /// <summary>
+        /// The player chose themselves, which makes no sense for this action.
+        /// </summary>
+        InvalidTarget
     }
 }

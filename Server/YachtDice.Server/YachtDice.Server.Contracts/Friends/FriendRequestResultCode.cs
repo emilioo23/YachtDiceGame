@@ -46,6 +46,10 @@ namespace YachtDice.Server.Contracts.Friends
 
         /// <summary>The requester already has the most pending requests allowed.</summary>
         [EnumMember]
-        TooManyPendingRequests
+        TooManyPendingRequests,
+
+        /// <summary>One of the two players blocked the other.</summary>
+        [EnumMember]
+        Blocked
     }
 }

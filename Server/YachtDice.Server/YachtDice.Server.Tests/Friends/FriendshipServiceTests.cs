@@ -39,6 +39,53 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void BlockPlayer_Friend_RemovesTheFriendFromTheList()
+        {
+            AcceptRequestBetweenThePlayers();
+
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            Assert.Empty(_service.GetFriendNames(RequesterName));
+        }
+
+        [Fact]
+        public void SendRequest_PlayerWhoBlockedTheRequester_ReturnsBlocked()
+        {
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.Blocked, requestResult.Status);
+        }
+
+        [Fact]
+        public void SendRequest_PlayerWithAPendingRequestThenBlocked_ReturnsBlocked()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.Blocked, requestResult.Status);
+        }
+
+        [Fact]
+        public void BlockPlayer_Themselves_ReturnsInvalidTarget()
+        {
+            FriendActionStatus status = _service.BlockPlayer(RequesterName, RequesterName);
+
+            Assert.Equal(FriendActionStatus.InvalidTarget, status);
+        }
+
+        [Fact]
+        public void BlockPlayer_UnknownPlayer_ReturnsPlayerNotFound()
+        {
+            FriendActionStatus status = _service.BlockPlayer(RequesterName, UnknownRequesterName);
+
+            Assert.Equal(FriendActionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
         public void SendRequest_ExistingUsername_ReturnsRequestSent()
         {
             FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
@@ -246,6 +293,14 @@ namespace YachtDice.Server.Tests.Friends
                     Status = status
                 });
             }
+        }
+
+        private void AcceptRequestBetweenThePlayers()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+            _service.RespondToRequest(
+                TargetDisplayName,
+                new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true });
         }
     }
 }

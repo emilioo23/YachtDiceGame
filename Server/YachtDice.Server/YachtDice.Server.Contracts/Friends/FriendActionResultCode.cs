@@ -22,6 +22,10 @@ namespace YachtDice.Server.Contracts.Friends
 
         /// <summary>One of the two players already has the most friends allowed.</summary>
         [EnumMember]
-        FriendLimitReached
+        FriendLimitReached,
+
+        /// <summary>The player chose themselves, which makes no sense for this action.</summary>
+        [EnumMember]
+        InvalidTarget
     }
 }

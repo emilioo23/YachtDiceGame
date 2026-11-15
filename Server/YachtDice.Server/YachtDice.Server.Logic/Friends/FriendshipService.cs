@@ -129,6 +129,26 @@ namespace YachtDice.Server.Logic.Friends
             return status;
         }
 
+        /// <inheritdoc />
+        public FriendActionStatus BlockPlayer(string displayName, string blockedName)
+        {
+            Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
+            Player blocked = _playerRepository.FindByName(blockedName).FirstOrDefault();
+            FriendActionStatus status = FriendActionStatus.PlayerNotFound;
+
+            if (player != null && blocked != null && player.Id == blocked.Id)
+            {
+                status = FriendActionStatus.InvalidTarget;
+            }
+            else if (player != null && blocked != null)
+            {
+                SaveBlock(player, blocked);
+                status = FriendActionStatus.Success;
+            }
+
+            return status;
+        }
+
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
@@ -222,6 +242,10 @@ namespace YachtDice.Server.Logic.Friends
             {
                 status = AddRequestIfAllowed(requester, target);
             }
+            else if (existing.Status == FriendshipStatus.Blocked)
+            {
+                status = FriendRequestStatus.Blocked;
+            }
             else if (existing.Status == FriendshipStatus.Accepted)
             {
                 status = FriendRequestStatus.AlreadyFriends;
@@ -300,6 +324,26 @@ namespace YachtDice.Server.Logic.Friends
             }
 
             return status;
+        }
+
+        private void SaveBlock(Player player, Player blocked)
+        {
+            Friendship existing = _friendRepository.FindBetween(player.Id, blocked.Id).FirstOrDefault();
+
+            if (existing == null)
+            {
+                _friendRepository.Add(new Friendship
+                {
+                    RequesterId = player.Id,
+                    AddresseeId = blocked.Id,
+                    Status = FriendshipStatus.Blocked
+                });
+            }
+            else
+            {
+                existing.Status = FriendshipStatus.Blocked;
+                _friendRepository.UpdateStatus(existing);
+            }
         }
 
         private FriendActionStatus DeleteFriendship(Friendship friendship)

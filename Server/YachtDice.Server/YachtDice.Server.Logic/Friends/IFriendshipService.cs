@@ -32,6 +32,15 @@ namespace YachtDice.Server.Logic.Friends
         FriendActionStatus RemoveFriend(string displayName, string friendName);
 
         /// <summary>
+        /// Blocks another player: they stop being friends, a pending request between them is dropped and neither
+        /// of them can send a request to the other again.
+        /// </summary>
+        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="blockedName">Name of the player who is blocked.</param>
+        /// <returns>Outcome of the block.</returns>
+        FriendActionStatus BlockPlayer(string displayName, string blockedName);
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

@@ -51,6 +51,12 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public FriendActionStatus BlockPlayer(string displayName, string blockedName)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <inheritdoc />
         public string GetUsername(string displayName)
         {
             throw new NotSupportedException(NotSupportedMessage);

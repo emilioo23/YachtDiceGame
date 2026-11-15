@@ -33,6 +33,9 @@
         FriendLimitReached,
 
         /// <summary>The requester already has the most pending requests allowed.</summary>
-        TooManyPendingRequests
+        TooManyPendingRequests,
+
+        /// <summary>One of the two players blocked the other.</summary>
+        Blocked
     }
 }

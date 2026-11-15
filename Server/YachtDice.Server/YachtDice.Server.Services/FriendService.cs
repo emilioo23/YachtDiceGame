@@ -85,6 +85,20 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Blocks another player and updates the friend list of the blocked player if they were friends.
+        /// </summary>
+        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="blockedName">Name of the player who is blocked.</param>
+        /// <returns>Outcome of the block.</returns>
+        public Contracts.FriendActionResultCode BlockPlayer(string displayName, string blockedName)
+        {
+            Contracts.FriendActionResultCode result =
+                Execute(displayName, () => ProcessBlock(displayName, blockedName));
+
+            return result;
+        }
+
+        /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
         /// <param name="sender">Room and identifier of the player who invites.</param>
@@ -221,6 +235,18 @@ namespace YachtDice.Server.Services
             if (status == LogicFriends.FriendActionStatus.Success)
             {
                 _notifier.SendEvent(friendName, displayName, PresenceContracts.PresenceEventType.FriendRemoved);
+            }
+
+            return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
+        }
+
+        private Contracts.FriendActionResultCode ProcessBlock(string displayName, string blockedName)
+        {
+            LogicFriends.FriendActionStatus status = _friendshipService.BlockPlayer(displayName, blockedName);
+
+            if (status == LogicFriends.FriendActionStatus.Success)
+            {
+                _notifier.SendEvent(blockedName, displayName, PresenceContracts.PresenceEventType.FriendRemoved);
             }
 
             return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
