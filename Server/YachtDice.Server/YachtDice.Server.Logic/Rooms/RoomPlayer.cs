@@ -48,6 +48,11 @@ namespace YachtDice.Server.Logic.Rooms
         public bool IsReady { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of this player.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
         /// Gets or sets the moment in which the player entered the room.
         /// </summary>
         public DateTime JoinedAt { get; set; }

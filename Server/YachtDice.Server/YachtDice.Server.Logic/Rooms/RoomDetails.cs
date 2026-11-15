@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -38,9 +39,9 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomSettings Settings { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether nobody is inside the room.
+        /// Gets a value indicating whether no person is inside the room. Computer players do not count.
         /// </summary>
-        public bool IsEmpty => Players.Count == 0;
+        public bool IsEmpty => Players.All(player => player.IsComputer);
 
         /// <summary>
         /// Creates the details that stand for "no room": no code, no host and no players.

@@ -31,6 +31,8 @@ namespace YachtDice.Server.Logic.Rooms
         private const int ReadyWaitMinutes = 2;
         private const int MaxRoomNameLength = 30;
         private const int NoInfractions = 0;
+        private const int ComputerLevel = 0;
+        private const string ComputerName = "CPU";
         private const string BlankNameMessage = "The name of the player cannot be empty.";
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
@@ -270,6 +272,14 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public RoomResult AddComputer(RoomMember member)
+        {
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => EnterComputer(room, member.PlayerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
         public bool TryGetPlayer(RoomMember member, out RoomPlayer player)
         {
             var isFound = false;
@@ -365,6 +375,27 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return result;
+        }
+
+        private static RoomResult EnterComputer(GameRoom room, string playerId)
+        {
+            RoomStatus status = RoomStatus.NotHost;
+
+            if (room.IsHost(playerId))
+            {
+                status = GetJoinStatus(room);
+            }
+
+            if (status == RoomStatus.Success)
+            {
+                RoomPlayer computer =
+                    room.AddPlayer(new RoomApplicant(ComputerName, AvatarCatalog.DefaultAvatarId, ComputerLevel));
+
+                computer.IsComputer = true;
+                computer.IsReady = true;
+            }
+
+            return CreateResult(status, room);
         }
 
         private static RoomResult JoinWithAccessCode(GameRoom room, RoomApplicant applicant, string accessCode)
@@ -559,8 +590,13 @@ namespace YachtDice.Server.Logic.Rooms
         private static RoomResult ChangeHost(GameRoom room, string playerId, string newHostId)
         {
             RoomStatus status = GetHostActionStatus(room, playerId, newHostId);
+            bool isComputer = room.TryGetPlayer(newHostId, out RoomPlayer newHost) && newHost.IsComputer;
 
-            if (status == RoomStatus.Success)
+            if (status == RoomStatus.Success && isComputer)
+            {
+                status = RoomStatus.InvalidTarget;
+            }
+            else if (status == RoomStatus.Success)
             {
                 room.SetHost(newHostId);
             }
@@ -646,7 +682,7 @@ namespace YachtDice.Server.Logic.Rooms
 
         private void DeleteIfEmpty(GameRoom room)
         {
-            if (room.Players.Count == 0)
+            if (!room.HasPeople)
             {
                 _rooms.Remove(room.Code);
             }

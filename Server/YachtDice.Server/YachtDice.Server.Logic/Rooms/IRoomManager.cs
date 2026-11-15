@@ -124,6 +124,14 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult TransferHost(RoomMember member, string newHostId);
 
         /// <summary>
+        /// Adds a computer player to the room. Only the host can do it, before the game starts and while the
+        /// room has free places. The computer player is always ready.
+        /// </summary>
+        /// <param name="member">Room and identifier of the host.</param>
+        /// <returns>Outcome of the change and the state of the room after it.</returns>
+        RoomResult AddComputer(RoomMember member);
+
+        /// <summary>
         /// Closes the rooms that waited fifteen minutes or more without starting their game.
         /// </summary>
         /// <param name="now">Current moment, in UTC.</param>

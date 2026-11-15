@@ -71,6 +71,8 @@ namespace YachtDice.Server.Logic.Rooms
         /// </summary>
         public IReadOnlyList<RoomPlayer> Players => _players;
 
+        public bool HasPeople => _players.Any(player => !player.IsComputer);
+
         /// <summary>
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another
         /// player already uses the name, a number is added to it so that the names stay different.
@@ -178,9 +180,11 @@ namespace YachtDice.Server.Logic.Rooms
 
             _players.RemoveAll(player => IsSameId(player.Id, playerId));
 
-            if (isHostLeaving && _players.Any())
+            RoomPlayer nextHost = _players.FirstOrDefault(player => !player.IsComputer);
+
+            if (isHostLeaving && nextHost != null)
             {
-                HostId = _players.First().Id;
+                HostId = nextHost.Id;
             }
         }
 
@@ -190,11 +194,12 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="playerId">Identifier of the player to expel.</param>
         public void Expel(string playerId)
         {
-            if (TryGetPlayer(playerId, out RoomPlayer player))
+            if (TryGetPlayer(playerId, out RoomPlayer player) && !player.IsComputer)
             {
                 _expelledNames.Add(player.DisplayName);
-                RemovePlayer(playerId);
             }
+
+            RemovePlayer(playerId);
         }
 
         /// <summary>
