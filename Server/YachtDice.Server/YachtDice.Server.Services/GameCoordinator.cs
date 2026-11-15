@@ -26,9 +26,6 @@ namespace YachtDice.Server.Services
         /// </summary>
         public const int ReconnectSeconds = 60;
 
-        private const string ReconnectFailedLogMessage =
-            "The player who did not come back could not be taken out of the game.";
-        private const string TimeoutFailedLogMessage = "The turn of a game could not be played after its time ran out.";
         private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
 
         private readonly LogicGame.IGameManager _gameManager;
@@ -291,37 +288,23 @@ namespace YachtDice.Server.Services
 
         private void HandleReconnectExpired(LogicRooms.RoomMember member)
         {
-            try
+            _reconnectTimer.Cancel(member);
+
+            LogicGame.GameActionResult result = _gameManager.Forfeit(member);
+
+            CompleteTurn(member.RoomCode, result, Contracts.GameEventType.PlayerForfeited);
+
+            if (result.Status == LogicGame.GameActionStatus.Success)
             {
-                _reconnectTimer.Cancel(member);
-
-                LogicGame.GameActionResult result = _gameManager.Forfeit(member);
-
-                CompleteTurn(member.RoomCode, result, Contracts.GameEventType.PlayerForfeited);
-
-                if (result.Status == LogicGame.GameActionStatus.Success)
-                {
-                    ReconnectTimeExpired?.Invoke(member);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, ReconnectFailedLogMessage);
+                ReconnectTimeExpired?.Invoke(member);
             }
         }
 
         private void HandleTurnExpired(LogicGame.GameTurn turn)
         {
-            try
-            {
-                LogicGame.GameActionResult result = _gameManager.AutoPlay(turn);
+            LogicGame.GameActionResult result = _gameManager.AutoPlay(turn);
 
-                CompleteTurn(turn.RoomCode, result, Contracts.GameEventType.TurnTimedOut);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, TimeoutFailedLogMessage);
-            }
+            CompleteTurn(turn.RoomCode, result, Contracts.GameEventType.TurnTimedOut);
         }
     }
 }
