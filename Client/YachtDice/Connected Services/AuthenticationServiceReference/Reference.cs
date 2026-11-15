@@ -567,6 +567,9 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         WeakPassword = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordUsedBefore = 6,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

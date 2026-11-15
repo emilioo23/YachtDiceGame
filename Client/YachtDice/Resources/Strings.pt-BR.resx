@@ -2268,4 +2268,7 @@
   <data name="Profile_UsernameChangedRecently" xml:space="preserve">
     <value>Você só pode mudar seu nome de usuário uma vez a cada 30 dias.</value>
   </data>
+  <data name="ResetPassword_ErrorPasswordUsedBefore" xml:space="preserve">
+    <value>Você não pode usar sua senha atual nem nenhuma das duas anteriores.</value>
+  </data>
 </root>

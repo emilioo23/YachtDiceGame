@@ -1213,6 +1213,15 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a No puedes usar tu contraseña actual ni ninguna de las dos anteriores.
+        /// </summary>
+        public static string ResetPassword_ErrorPasswordUsedBefore {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorPasswordUsedBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

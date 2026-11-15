@@ -79,6 +79,9 @@ namespace YachtDice.Views
                 case PasswordResetResultCode.WeakPassword:
                     message = Strings.Auth_ErrorWeakPassword;
                     break;
+                case PasswordResetResultCode.PasswordUsedBefore:
+                    message = Strings.ResetPassword_ErrorPasswordUsedBefore;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;
