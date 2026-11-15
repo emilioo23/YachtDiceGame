@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Settings;
 using YachtDice.Utils;
 using YachtDice.Views;
 
@@ -16,9 +17,8 @@ namespace YachtDice
     {
         private const string LightThemeSource = "Styles/Theme.xaml";
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
-        private const string DefaultCultureCode = "es-MX";
-
         private readonly SoundEffectPlayer _clickSounds = new SoundEffectPlayer();
+        private readonly PreferencesStore _preferencesStore = new PreferencesStore();
 
         /// <summary>
         /// Gets a value indicating whether the dark theme is currently active in the application.
@@ -41,15 +41,15 @@ namespace YachtDice
         public static string CurrentCultureCode { get; private set; }
 
         /// <summary>
-        /// Executes when the application starts: sets the language, the theme, and opens the initial window.
+        /// Executes when the application starts: applies the language, the theme and the audio that the player
+        /// chose in the last session, and opens the initial window.
         /// </summary>
         /// <param name="e">Startup event arguments.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            SetCulture(DefaultCultureCode);
-            SetTheme(isDark: false);
+            ApplyPreferences(_preferencesStore.Load());
 
             Music = new MusicPlayer(Audio);
             EventManager.RegisterClassHandler(
@@ -87,6 +87,37 @@ namespace YachtDice
             var themeDictionary = new ResourceDictionary { Source = new Uri(themeSource, UriKind.Relative) };
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(themeDictionary);
+        }
+
+        /// <summary>
+        /// Executes when the application closes: saves the language, the theme and the audio of the player.
+        /// </summary>
+        /// <param name="e">Exit event arguments.</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _preferencesStore.Save(CreateCurrentPreferences());
+            base.OnExit(e);
+        }
+
+        private static void ApplyPreferences(UserPreferences preferences)
+        {
+            SetCulture(preferences.CultureCode);
+            SetTheme(preferences.IsDarkTheme);
+            Audio.SetEffectsEnabled(preferences.AreEffectsEnabled);
+            Audio.SetMusicMuted(preferences.IsMusicMuted);
+            Audio.SetMusicVolume(preferences.MusicVolume);
+        }
+
+        private static UserPreferences CreateCurrentPreferences()
+        {
+            return new UserPreferences
+            {
+                CultureCode = CurrentCultureCode,
+                IsDarkTheme = IsDarkTheme,
+                AreEffectsEnabled = Audio.AreEffectsEnabled,
+                IsMusicMuted = Audio.IsMusicMuted,
+                MusicVolume = Audio.MusicVolume
+            };
         }
 
         private void HandleButtonClick(object sender, RoutedEventArgs e)

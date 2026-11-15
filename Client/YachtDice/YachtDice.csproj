@@ -271,6 +271,7 @@
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
+    <Compile Include="Utils\PreferencesStore.cs" />
     <Compile Include="Utils\MusicTrack.cs" />
     <Compile Include="Utils\SoundEffect.cs" />
     <Compile Include="Utils\SoundEffectPlayer.cs" />
