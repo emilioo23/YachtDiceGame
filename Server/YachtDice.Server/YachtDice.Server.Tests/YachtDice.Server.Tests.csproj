@@ -92,6 +92,7 @@
     <Compile Include="Security\NumericCodeGeneratorTests.cs" />
     <Compile Include="Security\PasswordResetCodeHasherTests.cs" />
     <Compile Include="Security\SecureRandomTests.cs" />
+    <Compile Include="Security\SessionRegistryTests.cs" />
     <Compile Include="TwoFactor\EmailVerificationTests.cs" />
     <Compile Include="TwoFactor\TwoFactorResendTests.cs" />
   </ItemGroup>
