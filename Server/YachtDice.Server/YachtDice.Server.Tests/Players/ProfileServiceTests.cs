@@ -17,6 +17,9 @@ namespace YachtDice.Server.Tests.Players
         private const string CurrentUsername = "emilio";
         private const string OtherUsername = "gabriel";
         private const string NewUsername = "emilio_23";
+        private const string SecondNewUsername = "emilio_24";
+        private const int TenDays = 10;
+        private const int FortyDays = 40;
         private const string UnknownName = "ramiro_lopez";
         private const string BlankName = "  ";
         private const string PaddedNewUsername = "  emilio_23  ";
@@ -257,6 +260,46 @@ namespace YachtDice.Server.Tests.Players
             FlagChangeStatus status = _service.ChangeFlag(UnknownName, MexicoFlagCode);
 
             Assert.Equal(FlagChangeStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void ChangeUsername_ChangedTenDaysAgo_ReturnsChangedRecently()
+        {
+            _players.FindByName(CurrentUsername).Single().LastUserChange = DateTime.UtcNow.AddDays(-TenDays);
+
+            UsernameChangeStatus status = _service.ChangeUsername(CurrentUsername, NewUsername);
+
+            Assert.Equal(UsernameChangeStatus.ChangedRecently, status);
+        }
+
+        [Fact]
+        public void ChangeUsername_ChangedFortyDaysAgo_ReturnsSuccess()
+        {
+            _players.FindByName(CurrentUsername).Single().LastUserChange = DateTime.UtcNow.AddDays(-FortyDays);
+
+            UsernameChangeStatus status = _service.ChangeUsername(CurrentUsername, NewUsername);
+
+            Assert.Equal(UsernameChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeUsername_SameUsernameAfterARecentChange_ReturnsSuccess()
+        {
+            _players.FindByName(CurrentUsername).Single().LastUserChange = DateTime.UtcNow.AddDays(-TenDays);
+
+            UsernameChangeStatus status = _service.ChangeUsername(CurrentUsername, CurrentUsername);
+
+            Assert.Equal(UsernameChangeStatus.Success, status);
+        }
+
+        [Fact]
+        public void ChangeUsername_SecondChangeRightAway_ReturnsChangedRecently()
+        {
+            _service.ChangeUsername(CurrentUsername, NewUsername);
+
+            UsernameChangeStatus status = _service.ChangeUsername(NewUsername, SecondNewUsername);
+
+            Assert.Equal(UsernameChangeStatus.ChangedRecently, status);
         }
 
         [Fact]

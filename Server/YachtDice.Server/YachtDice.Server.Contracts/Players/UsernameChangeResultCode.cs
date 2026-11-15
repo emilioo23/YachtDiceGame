@@ -36,6 +36,12 @@ namespace YachtDice.Server.Contracts.Players
         /// Another player already uses the new username.
         /// </summary>
         [EnumMember]
-        UsernameAlreadyTaken
+        UsernameAlreadyTaken,
+
+        /// <summary>
+        /// The player already changed the username less than 30 days ago.
+        /// </summary>
+        [EnumMember]
+        ChangedRecently
     }
 }

@@ -113,6 +113,7 @@ namespace YachtDice.Server.Tests.InMemory
 
             player.Username = username;
             player.DisplayName = username;
+            player.LastUserChange = DateTime.UtcNow;
         }
 
         public string FindTitle(int playerId)

@@ -28,6 +28,11 @@
         /// <summary>
         /// Another player already uses the new username.
         /// </summary>
-        UsernameAlreadyTaken
+        UsernameAlreadyTaken,
+
+        /// <summary>
+        /// The player already changed the username less than 30 days ago.
+        /// </summary>
+        ChangedRecently
     }
 }

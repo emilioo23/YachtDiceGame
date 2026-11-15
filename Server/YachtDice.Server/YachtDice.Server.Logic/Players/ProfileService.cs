@@ -14,6 +14,7 @@ namespace YachtDice.Server.Logic.Players
     /// </summary>
     public class ProfileService
     {
+        private const int DaysBetweenUsernameChanges = 30;
         private const int FlagCodeLength = 2;
         private const char FirstLetter = 'a';
         private const char LastLetter = 'z';
@@ -206,8 +207,19 @@ namespace YachtDice.Server.Logic.Players
             {
                 status = UsernameChangeStatus.UsernameAlreadyTaken;
             }
+            else if (username != player.Username && HasChangedRecently(player))
+            {
+                status = UsernameChangeStatus.ChangedRecently;
+            }
 
             return status;
+        }
+
+        private static bool HasChangedRecently(Player player)
+        {
+            DateTime oldestAllowedChange = DateTime.UtcNow.AddDays(-DaysBetweenUsernameChanges);
+
+            return player.LastUserChange.HasValue && player.LastUserChange.Value > oldestAllowedChange;
         }
 
         private bool IsUsedByAnotherPlayer(Player player, string username)
