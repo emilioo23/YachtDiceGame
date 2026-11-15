@@ -1,22 +1,25 @@
-﻿namespace YachtDice.Server.Logic.Players
+﻿using System;
+
+namespace YachtDice.Server.Logic.Players
 {
     /// <summary>
     /// Condition that a player must meet to unlock an achievement and, when it has one, a title.
     /// </summary>
     public sealed class AchievementRule
     {
+        private const string NullGoalMessage = "The goal of the achievement cannot be null.";
+
         /// <summary>
         /// Initializes the rule of an achievement.
         /// </summary>
         /// <param name="id">Identifier of the achievement, which is also the identifier of its title.</param>
-        /// <param name="metric">Statistic that the achievement measures.</param>
-        /// <param name="requiredValue">Value of the statistic that unlocks the achievement.</param>
+        /// <param name="goal">Statistic that the achievement measures and the value that unlocks it.</param>
         /// <param name="hasTitle">True if unlocking the achievement also unlocks a title.</param>
-        public AchievementRule(int id, AchievementMetric metric, int requiredValue, bool hasTitle)
+        /// <exception cref="ArgumentNullException">The goal is null.</exception>
+        public AchievementRule(int id, AchievementGoal goal, bool hasTitle)
         {
             Id = id;
-            Metric = metric;
-            RequiredValue = requiredValue;
+            Goal = goal ?? throw new ArgumentNullException(nameof(goal), NullGoalMessage);
             HasTitle = hasTitle;
         }
 
@@ -26,14 +29,9 @@
         public int Id { get; }
 
         /// <summary>
-        /// Gets the statistic that the achievement measures.
+        /// Gets the statistic that the achievement measures and the value that unlocks it.
         /// </summary>
-        public AchievementMetric Metric { get; }
-
-        /// <summary>
-        /// Gets the value of the statistic that unlocks the achievement.
-        /// </summary>
-        public int RequiredValue { get; }
+        public AchievementGoal Goal { get; }
 
         /// <summary>
         /// Gets a value indicating whether the achievement unlocks a title.

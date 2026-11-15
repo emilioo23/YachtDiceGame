@@ -14,6 +14,29 @@ namespace YachtDice.Server.Logic.Players
         /// </summary>
         public const int DefaultTitleId = 0;
 
+        private const int FirstGameId = 1;
+        private const int FirstWinId = 2;
+        private const int ThirdWinId = 3;
+        private const int FifthWinId = 4;
+        private const int TenthWinId = 5;
+        private const int TwentyFifthWinId = 6;
+        private const int FiftiethWinId = 7;
+        private const int TenthGameId = 8;
+        private const int TwentyFifthGameId = 9;
+        private const int FiftiethGameId = 10;
+        private const int HundredthGameId = 11;
+        private const int WellStartedId = 12;
+        private const int FastShooterId = 13;
+        private const int AlmostPerfectId = 14;
+        private const int YachtMasterId = 15;
+        private const int DominantId = 16;
+        private const int UntouchableId = 17;
+        private const int ApprenticeId = 18;
+        private const int ExperiencedId = 19;
+        private const int EliteId = 20;
+        private const int GrandMasterId = 21;
+        private const int CollectorId = 22;
+        private const int MountainId = 23;
         private const int FirstWinCount = 1;
         private const int ThirdWinCount = 3;
         private const int FifthWinCount = 5;
@@ -44,35 +67,44 @@ namespace YachtDice.Server.Logic.Players
 
         private static readonly IReadOnlyList<AchievementRule> Rules = new List<AchievementRule>
         {
-            new AchievementRule(1, AchievementMetric.GamesPlayed, FirstGameCount, WithTitle),
-            new AchievementRule(2, AchievementMetric.Wins, FirstWinCount, WithTitle),
-            new AchievementRule(3, AchievementMetric.Wins, ThirdWinCount, WithTitle),
-            new AchievementRule(4, AchievementMetric.Wins, FifthWinCount, WithTitle),
-            new AchievementRule(5, AchievementMetric.Wins, TenthWinCount, WithTitle),
-            new AchievementRule(6, AchievementMetric.Wins, TwentyFifthWinCount, WithTitle),
-            new AchievementRule(7, AchievementMetric.Wins, FiftiethWinCount, WithTitle),
-            new AchievementRule(8, AchievementMetric.GamesPlayed, TenthGameCount, WithTitle),
-            new AchievementRule(9, AchievementMetric.GamesPlayed, TwentyFifthGameCount, WithTitle),
-            new AchievementRule(10, AchievementMetric.GamesPlayed, FiftiethGameCount, WithTitle),
-            new AchievementRule(11, AchievementMetric.GamesPlayed, HundredthGameCount, WithTitle),
-            new AchievementRule(12, AchievementMetric.BestScore, WellStartedScore, WithTitle),
-            new AchievementRule(13, AchievementMetric.BestScore, FastShooterScore, WithTitle),
-            new AchievementRule(14, AchievementMetric.BestScore, AlmostPerfectScore, WithTitle),
-            new AchievementRule(15, AchievementMetric.BestScore, YachtMasterScore, WithTitle),
-            new AchievementRule(16, AchievementMetric.WinRatePercentage, DominantWinRate, WithTitle)
+            TitledRule(FirstGameId, AchievementMetric.GamesPlayed, FirstGameCount),
+            TitledRule(FirstWinId, AchievementMetric.Wins, FirstWinCount),
+            TitledRule(ThirdWinId, AchievementMetric.Wins, ThirdWinCount),
+            TitledRule(FifthWinId, AchievementMetric.Wins, FifthWinCount),
+            TitledRule(TenthWinId, AchievementMetric.Wins, TenthWinCount),
+            TitledRule(TwentyFifthWinId, AchievementMetric.Wins, TwentyFifthWinCount),
+            TitledRule(FiftiethWinId, AchievementMetric.Wins, FiftiethWinCount),
+            TitledRule(TenthGameId, AchievementMetric.GamesPlayed, TenthGameCount),
+            TitledRule(TwentyFifthGameId, AchievementMetric.GamesPlayed, TwentyFifthGameCount),
+            TitledRule(FiftiethGameId, AchievementMetric.GamesPlayed, FiftiethGameCount),
+            TitledRule(HundredthGameId, AchievementMetric.GamesPlayed, HundredthGameCount),
+            TitledRule(WellStartedId, AchievementMetric.BestScore, WellStartedScore),
+            TitledRule(FastShooterId, AchievementMetric.BestScore, FastShooterScore),
+            TitledRule(AlmostPerfectId, AchievementMetric.BestScore, AlmostPerfectScore),
+            TitledRule(YachtMasterId, AchievementMetric.BestScore, YachtMasterScore),
+            new AchievementRule(
+                DominantId,
+                new AchievementGoal(AchievementMetric.WinRatePercentage, DominantWinRate),
+                WithTitle)
             {
                 MinimumGames = DominantMinimumGames
             },
-            new AchievementRule(17, AchievementMetric.WinRatePercentage, UntouchableWinRate, WithTitle)
+            new AchievementRule(
+                UntouchableId,
+                new AchievementGoal(AchievementMetric.WinRatePercentage, UntouchableWinRate),
+                WithTitle)
             {
                 MinimumGames = UntouchableMinimumGames
             },
-            new AchievementRule(18, AchievementMetric.Level, ApprenticeLevel, WithTitle),
-            new AchievementRule(19, AchievementMetric.Level, ExperiencedLevel, WithTitle),
-            new AchievementRule(20, AchievementMetric.Level, EliteLevel, WithTitle),
-            new AchievementRule(21, AchievementMetric.Level, GrandMasterLevel, WithTitle),
-            new AchievementRule(22, AchievementMetric.Experience, CollectorExperience, WithoutTitle),
-            new AchievementRule(23, AchievementMetric.Experience, MountainExperience, WithTitle)
+            TitledRule(ApprenticeId, AchievementMetric.Level, ApprenticeLevel),
+            TitledRule(ExperiencedId, AchievementMetric.Level, ExperiencedLevel),
+            TitledRule(EliteId, AchievementMetric.Level, EliteLevel),
+            TitledRule(GrandMasterId, AchievementMetric.Level, GrandMasterLevel),
+            new AchievementRule(
+                CollectorId,
+                new AchievementGoal(AchievementMetric.Experience, CollectorExperience),
+                WithoutTitle),
+            TitledRule(MountainId, AchievementMetric.Experience, MountainExperience)
         };
 
         /// <summary>
@@ -94,7 +126,7 @@ namespace YachtDice.Server.Logic.Players
         {
             bool hasPlayedEnough = statistics.GamesPlayed >= rule.MinimumGames;
 
-            return hasPlayedEnough && Measure(rule.Metric, statistics) >= rule.RequiredValue;
+            return hasPlayedEnough && Measure(rule.Goal.Metric, statistics) >= rule.Goal.RequiredValue;
         }
 
         /// <summary>
@@ -138,6 +170,11 @@ namespace YachtDice.Server.Logic.Players
             Func<AchievementRule, bool> hasThatTitle = rule => rule.Id == titleId && rule.HasTitle;
 
             return titleId == DefaultTitleId || Rules.Any(hasThatTitle);
+        }
+
+        private static AchievementRule TitledRule(int id, AchievementMetric metric, int requiredValue)
+        {
+            return new AchievementRule(id, new AchievementGoal(metric, requiredValue), WithTitle);
         }
 
         private static int Measure(AchievementMetric metric, PlayerStatistics statistics)

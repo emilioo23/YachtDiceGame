@@ -214,7 +214,8 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void IsUnlocked_NoValueForTheMetric_ReturnsFalse()
         {
-            var rule = new AchievementRule(FirstGameAchievementId, AchievementMetric.GamesPlayed, OneGame, true);
+            var goal = new AchievementGoal(AchievementMetric.GamesPlayed, OneGame);
+            var rule = new AchievementRule(FirstGameAchievementId, goal, true);
 
             Assert.False(AchievementRules.IsUnlocked(rule, new PlayerStatistics { GamesPlayed = NoValue }));
         }

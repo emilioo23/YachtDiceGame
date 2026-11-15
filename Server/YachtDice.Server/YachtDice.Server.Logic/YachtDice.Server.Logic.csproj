@@ -110,6 +110,7 @@
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
     <Compile Include="Moderation\LinkCensor.cs" />
     <Compile Include="Players\AccountDeletionStatus.cs" />
+    <Compile Include="Players\AchievementGoal.cs" />
     <Compile Include="Players\AchievementMetric.cs" />
     <Compile Include="Players\AchievementRule.cs" />
     <Compile Include="Players\AchievementRules.cs" />
