@@ -129,4 +129,10 @@
   <data name="TwoFactor_EmailSubject" xml:space="preserve">
     <value>Your Yacht Dice verification code</value>
   </data>
+  <data name="AccountLock_EmailBody" xml:space="preserve">
+    <value>Hi {0}, your Yacht Dice account was locked for {1} hours because a wrong password was typed 10 times today. If it was not you, we recommend changing your password when it is unlocked.</value>
+  </data>
+  <data name="AccountLock_EmailSubject" xml:space="preserve">
+    <value>Your Yacht Dice account was locked for security</value>
+  </data>
 </root>

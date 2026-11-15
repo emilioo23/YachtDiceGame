@@ -52,6 +52,7 @@
     <Compile Include="Authentication\IRegistrationService.cs" />
     <Compile Include="Authentication\IVerificationService.cs" />
     <Compile Include="Authentication\LoginCredentials.cs" />
+    <Compile Include="Authentication\LoginEmails.cs" />
     <Compile Include="Authentication\LoginLock.cs" />
     <Compile Include="Authentication\LoginAttempts.cs" />
     <Compile Include="Authentication\LoginAttemptTracker.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Avatars\AvatarService.cs" />
     <Compile Include="Avatars\IAvatarLookup.cs" />
     <Compile Include="Avatars\PlayerProfile.cs" />
+    <Compile Include="Email\AccountLockNotifier.cs" />
     <Compile Include="Email\CodeEmailSender.cs" />
     <Compile Include="Email\CodeEmailTemplate.cs" />
     <Compile Include="Email\EmailMessage.cs" />

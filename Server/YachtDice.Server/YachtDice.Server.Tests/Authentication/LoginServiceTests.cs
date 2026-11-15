@@ -3,6 +3,7 @@ using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Tests.InMemory;
@@ -44,7 +45,9 @@ namespace YachtDice.Server.Tests.Authentication
                 DisplayName = DisplayName,
                 FirstName = FirstName
             });
-            _service = new LoginService(_players, verificationService, deliveryService);
+            var emails = new LoginEmails(deliveryService, new AccountLockNotifier(_emailService));
+
+            _service = new LoginService(_players, verificationService, emails);
         }
 
         [Fact]

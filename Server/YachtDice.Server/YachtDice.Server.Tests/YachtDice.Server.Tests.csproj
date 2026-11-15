@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Authentication\EmailAddressValidatorTests.cs" />
     <Compile Include="Authentication\LoginAttemptTrackerTests.cs" />
+    <Compile Include="Email\AccountLockNotifierTests.cs" />
     <Compile Include="Email\EmailServiceTests.cs" />
     <Compile Include="Authentication\LoginServiceTests.cs" />
     <Compile Include="Authentication\PasswordRecoveryServiceTests.cs" />

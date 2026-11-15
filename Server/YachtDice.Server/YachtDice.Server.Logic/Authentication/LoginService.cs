@@ -24,7 +24,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
-        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly LoginEmails _emails;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginAttemptTracker _attemptTracker = new LoginAttemptTracker();
 
@@ -33,18 +33,17 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="verificationService">Service that handles verification challenges and lockouts.</param>
-        /// <param name="deliveryService">Service that sends the verification code by email.</param>
+        /// <param name="emails">Senders of the verification code and of the notice of a locked account.</param>
         public LoginService(
             IPlayerRepository playerRepository,
             TwoFactorVerificationService verificationService,
-            TwoFactorDeliveryService deliveryService)
+            LoginEmails emails)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _emails = emails ?? throw new ArgumentNullException(nameof(emails), NullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -125,7 +124,7 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
             {
-                result = RejectWrongPassword(player.Id, now);
+                result = RejectWrongPassword(player, credentials.Culture, now);
             }
             else
             {
@@ -136,9 +135,9 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private LoginResult RejectWrongPassword(int playerId, DateTime now)
+        private LoginResult RejectWrongPassword(Player player, CultureInfo culture, DateTime now)
         {
-            LoginLock newLock = _attemptTracker.RegisterFailure(playerId, now);
+            LoginLock newLock = _attemptTracker.RegisterFailure(player.Id, now);
             LoginResult result;
 
             if (newLock == LoginLock.None)
@@ -147,10 +146,19 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else
             {
+                NotifyDailyLock(player, culture, newLock);
                 result = RejectLocked(newLock);
             }
 
             return result;
+        }
+
+        private void NotifyDailyLock(Player player, CultureInfo culture, LoginLock newLock)
+        {
+            if (newLock == LoginLock.Daily)
+            {
+                _emails.LockNotifier.Send(player, culture);
+            }
         }
 
         private LoginResult RejectLocked(LoginLock currentLock)
@@ -199,7 +207,7 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
+            bool isSent = _emails.CodeDelivery.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             return new LoginResult(status, player, challengeId);

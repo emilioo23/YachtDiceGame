@@ -129,4 +129,10 @@
   <data name="TwoFactor_EmailSubject" xml:space="preserve">
     <value>Tu código de verificación de Yacht Dice</value>
   </data>
+  <data name="AccountLock_EmailBody" xml:space="preserve">
+    <value>Hola {0}, tu cuenta de Yacht Dice se bloqueó por {1} horas porque hoy se escribió una contraseña incorrecta 10 veces. Si no fuiste tú, te recomendamos cambiar tu contraseña cuando se desbloquee.</value>
+  </data>
+  <data name="AccountLock_EmailSubject" xml:space="preserve">
+    <value>Tu cuenta de Yacht Dice se bloqueó por seguridad</value>
+  </data>
 </root>
