@@ -207,7 +207,7 @@ namespace YachtDice.Server.Host
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService, wordFilter)));
 
-            var roomManager = new RoomManager(avatarService)
+            var roomManager = new RoomManager(avatarService, wordFilter)
             {
                 WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
             };

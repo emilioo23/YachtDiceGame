@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using YachtDice.Server.Logic.Friends;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
 
@@ -18,7 +19,9 @@ namespace YachtDice.Server.Tests.Friends
         private const string UnknownRoomCode = "ZZZZZZ";
         private const string UnknownPlayerId = "not-a-player";
 
-        private readonly RoomManager _roomManager = new RoomManager(new InMemoryAvatarLookup());
+        private readonly RoomManager _roomManager = new RoomManager(
+            new InMemoryAvatarLookup(),
+            new OffensiveWordFilter(new string[0]));
         private readonly InMemoryFriendshipService _friendships = new InMemoryFriendshipService();
         private readonly RoomInvitationService _service;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Rooms
@@ -28,10 +29,12 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const int ReadyWaitMinutes = 2;
+        private const int MaxRoomNameLength = 30;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
+        private readonly OffensiveWordFilter _wordFilter;
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, GameRoom> _rooms =
             new Dictionary<string, GameRoom>(StringComparer.OrdinalIgnoreCase);
@@ -40,10 +43,13 @@ namespace YachtDice.Server.Logic.Rooms
         /// Initializes the manager without any room.
         /// </summary>
         /// <param name="avatarLookup">Tells the avatar of each player who enters a room.</param>
-        public RoomManager(IAvatarLookup avatarLookup)
+        /// <param name="wordFilter">Finds the offensive words in the names of the rooms.</param>
+        public RoomManager(IAvatarLookup avatarLookup, OffensiveWordFilter wordFilter)
         {
             _avatarLookup = avatarLookup
                 ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
+            _wordFilter = wordFilter
+                ?? throw new ArgumentNullException(nameof(wordFilter), NullDependencyMessage);
         }
 
         /// <summary>
@@ -157,8 +163,13 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public RoomResult UpdateSettings(RoomMember member, RoomSettings settings)
         {
-            RoomResult result =
-                ExecuteInRoom(member.RoomCode, room => ChangeSettings(room, member.PlayerId, settings));
+            bool hasOffensiveName = settings?.Name != null && _wordFilter.ContainsOffensiveWord(settings.Name);
+            RoomResult result = RoomResult.CreateFailed(RoomStatus.OffensiveRoomName);
+
+            if (!hasOffensiveName)
+            {
+                result = ExecuteInRoom(member.RoomCode, room => ChangeSettings(room, member.PlayerId, settings));
+            }
 
             return result;
         }
@@ -361,7 +372,8 @@ namespace YachtDice.Server.Logic.Rooms
                 {
                     MaxPlayers = settings.MaxPlayers,
                     IsPrivate = settings.IsPrivate,
-                    Speed = settings.Speed
+                    Speed = settings.Speed,
+                    Name = (settings.Name ?? string.Empty).Trim()
                 };
             }
 
@@ -394,8 +406,9 @@ namespace YachtDice.Server.Logic.Rooms
                 && settings.MaxPlayers >= MinCapacity
                 && settings.MaxPlayers <= MaxCapacity;
             bool hasPlaceForPlayers = isWithinCapacity && settings.MaxPlayers >= room.Players.Count;
+            bool hasValidName = settings?.Name == null || settings.Name.Trim().Length <= MaxRoomNameLength;
 
-            return hasPlaceForPlayers && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
+            return hasPlaceForPlayers && hasValidName && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
         }
 
         private static RoomResult ChangeReady(GameRoom room, string playerId, bool isReady)

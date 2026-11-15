@@ -54,6 +54,10 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>A player has not confirmed that they are ready and still has time to do it.</summary>
         [EnumMember]
-        PlayersNotReady
+        PlayersNotReady,
+
+        /// <summary>The name of the room has an offensive word.</summary>
+        [EnumMember]
+        OffensiveRoomName
     }
 }

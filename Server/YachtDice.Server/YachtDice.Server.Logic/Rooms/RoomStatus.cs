@@ -41,6 +41,11 @@
         /// <summary>
         /// A player has not confirmed that they are ready and can still do it.
         /// </summary>
-        PlayersNotReady
+        PlayersNotReady,
+
+        /// <summary>
+        /// The name of the room has an offensive word.
+        /// </summary>
+        OffensiveRoomName
     }
 }

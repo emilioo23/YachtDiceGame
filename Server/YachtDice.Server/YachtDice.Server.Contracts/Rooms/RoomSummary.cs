@@ -44,5 +44,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// </summary>
         [DataMember]
         public GameSpeed Speed { get; set; }
+
+        /// <summary>
+        /// Name that the host gave to the room; empty if the host did not give one.
+        /// </summary>
+        [DataMember]
+        public string Name { get; set; }
     }
 }

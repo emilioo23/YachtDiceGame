@@ -269,7 +269,8 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 MaxPlayers = Settings.MaxPlayers,
                 IsPrivate = Settings.IsPrivate,
-                Speed = Settings.Speed
+                Speed = Settings.Speed,
+                Name = Settings.Name
             };
 
             var details = new RoomDetails
@@ -300,7 +301,8 @@ namespace YachtDice.Server.Logic.Rooms
                 PlayerCount = _players.Count,
                 MaxPlayers = Settings.MaxPlayers,
                 IsPrivate = Settings.IsPrivate,
-                Speed = Settings.Speed
+                Speed = Settings.Speed,
+                Name = Settings.Name
             };
 
             return summary;

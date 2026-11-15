@@ -34,5 +34,10 @@
         /// Gets the pace of the turns of the game.
         /// </summary>
         public GameSpeed Speed { get; internal set; }
+
+        /// <summary>
+        /// Gets the name that the host gave to the room; empty if the host did not give one.
+        /// </summary>
+        public string Name { get; internal set; }
     }
 }

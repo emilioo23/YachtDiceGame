@@ -79,7 +79,8 @@ namespace YachtDice.Server.Services.Mapping
             {
                 MaxPlayers = settings.MaxPlayers,
                 IsPrivate = settings.IsPrivate,
-                Speed = EnumMapper.Map<Contracts.GameSpeed, Logic.Rooms.GameSpeed>(settings.Speed)
+                Speed = EnumMapper.Map<Contracts.GameSpeed, Logic.Rooms.GameSpeed>(settings.Speed),
+                Name = settings.Name
             };
 
             return logicSettings;
@@ -139,7 +140,8 @@ namespace YachtDice.Server.Services.Mapping
             {
                 MaxPlayers = settings.MaxPlayers,
                 IsPrivate = settings.IsPrivate,
-                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed)
+                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(settings.Speed),
+                Name = settings.Name
             };
 
             return contract;
@@ -159,7 +161,8 @@ namespace YachtDice.Server.Services.Mapping
                 PlayerCount = room.PlayerCount,
                 MaxPlayers = room.MaxPlayers,
                 IsPrivate = room.IsPrivate,
-                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(room.Speed)
+                Speed = EnumMapper.Map<Logic.Rooms.GameSpeed, Contracts.GameSpeed>(room.Speed),
+                Name = room.Name
             };
 
             return contract;

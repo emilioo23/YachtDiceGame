@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
 
@@ -25,6 +26,10 @@ namespace YachtDice.Server.Tests.Rooms
         private const int PlayerLevel = 7;
         private const int GuestLevel = 0;
         private const int ThreeMinutes = 3;
+        private const string OffensiveWord = "pendejo";
+        private const string RoomName = "Los del salon 4";
+        private const string OffensiveRoomName = "Sala de pendejos";
+        private const string TooLongRoomName = "Una sala con un nombre demasiado largo para la lista";
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
         private const string ThirdPlayerName = "Ana";
@@ -38,6 +43,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const int PlayerAvatarId = 7;
 
         private readonly InMemoryAvatarLookup _avatars = new InMemoryAvatarLookup();
+        private readonly OffensiveWordFilter _wordFilter = new OffensiveWordFilter(new[] { OffensiveWord });
         private readonly RoomManager _manager;
 
         /// <summary>
@@ -45,7 +51,7 @@ namespace YachtDice.Server.Tests.Rooms
         /// </summary>
         public RoomManagerTests()
         {
-            _manager = new RoomManager(_avatars);
+            _manager = new RoomManager(_avatars, _wordFilter);
         }
 
         [Fact]
@@ -447,6 +453,42 @@ namespace YachtDice.Server.Tests.Rooms
             bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _);
 
             Assert.True(isFound);
+        }
+
+        [Fact]
+        public void UpdateSettings_RoomName_ShowsTheNameInTheListOfRooms()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers, false);
+            settings.Name = RoomName;
+
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomName, _manager.GetOpenRooms().Single().Name);
+        }
+
+        [Fact]
+        public void UpdateSettings_OffensiveRoomName_ReturnsOffensiveRoomName()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers);
+            settings.Name = OffensiveRoomName;
+
+            RoomResult updateResult = _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomStatus.OffensiveRoomName, updateResult.Status);
+        }
+
+        [Fact]
+        public void UpdateSettings_TooLongRoomName_ReturnsInvalidSettings()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers);
+            settings.Name = TooLongRoomName;
+
+            RoomResult updateResult = _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomStatus.InvalidSettings, updateResult.Status);
         }
 
         [Fact]
@@ -1103,7 +1145,7 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void Constructor_NullAvatarLookup_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new RoomManager(null));
+            Assert.Throws<ArgumentNullException>(() => new RoomManager(null, _wordFilter));
         }
 
         private static RoomSettings CreateSettings(int maxPlayers)
