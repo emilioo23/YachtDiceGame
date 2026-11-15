@@ -92,7 +92,7 @@
     <Compile Include="Rooms\RoomManagerTests.cs" />
     <Compile Include="Security\CredentialRulesTests.cs" />
     <Compile Include="Security\NumericCodeGeneratorTests.cs" />
-    <Compile Include="Security\PasswordResetCodeHasherTests.cs" />
+    <Compile Include="Security\PasswordHasherTests.cs" />
     <Compile Include="Security\SecureRandomTests.cs" />
     <Compile Include="Security\SessionRegistryTests.cs" />
     <Compile Include="TwoFactor\EmailVerificationTests.cs" />

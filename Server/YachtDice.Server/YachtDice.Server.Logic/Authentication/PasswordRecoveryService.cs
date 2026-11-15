@@ -145,7 +145,7 @@ namespace YachtDice.Server.Logic.Authentication
         private PasswordResetRequestStatus CreateAndSendCode(Player player, CultureInfo culture)
         {
             string code = NumericCodeGenerator.Generate(CodeLength);
-            string codeHash = PasswordResetCodeHasher.Compute(player.Id, code);
+            string codeHash = PasswordHasher.ComputeResetCodeHash(player.Id, code);
 
             var token = new PwdResetToken
             {
@@ -202,7 +202,7 @@ namespace YachtDice.Server.Logic.Authentication
             PwdResetToken token,
             PasswordResetConfirmation confirmation)
         {
-            string enteredHash = PasswordResetCodeHasher.Compute(playerId, confirmation.Code.Trim());
+            string enteredHash = PasswordHasher.ComputeResetCodeHash(playerId, confirmation.Code.Trim());
             bool isCorrect = string.Equals(enteredHash, token.Token, StringComparison.OrdinalIgnoreCase);
             PasswordResetStatus status;
 

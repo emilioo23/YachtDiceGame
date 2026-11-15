@@ -453,7 +453,7 @@ namespace YachtDice.Server.Tests.Authentication
             return new PwdResetToken
             {
                 PlayerId = PlayerId,
-                Token = PasswordResetCodeHasher.Compute(PlayerId, code),
+                Token = PasswordHasher.ComputeResetCodeHash(PlayerId, code),
                 ExpireDate = expireDate
             };
         }

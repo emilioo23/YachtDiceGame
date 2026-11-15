@@ -6,7 +6,7 @@ namespace YachtDice.Server.Tests.Security
     /// <summary>
     /// Hash saved in the database instead of the password recovery code.
     /// </summary>
-    public class PasswordResetCodeHasherTests
+    public class PasswordHasherTests
     {
         private const int FirstPlayerId = 1;
         private const int SecondPlayerId = 2;
@@ -20,8 +20,8 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_SamePlayerAndCode_ReturnsTheSameHash()
         {
-            string first = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
-            string second = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string first = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
+            string second = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
 
             Assert.Equal(first, second);
         }
@@ -29,8 +29,8 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_SameCodeForTwoPlayers_ReturnsDifferentHashes()
         {
-            string first = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
-            string second = PasswordResetCodeHasher.Compute(SecondPlayerId, Code);
+            string first = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
+            string second = PasswordHasher.ComputeResetCodeHash(SecondPlayerId, Code);
 
             Assert.NotEqual(first, second);
         }
@@ -38,8 +38,8 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_DifferentCodes_ReturnsDifferentHashes()
         {
-            string first = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
-            string second = PasswordResetCodeHasher.Compute(FirstPlayerId, OtherCode);
+            string first = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
+            string second = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, OtherCode);
 
             Assert.NotEqual(first, second);
         }
@@ -47,7 +47,7 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_AnyCode_DoesNotReturnThePlainCode()
         {
-            string hash = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string hash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
 
             Assert.DoesNotContain(Code, hash);
         }
@@ -55,7 +55,7 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_EmptyCode_ReturnsAHash()
         {
-            string hash = PasswordResetCodeHasher.Compute(FirstPlayerId, string.Empty);
+            string hash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, string.Empty);
 
             Assert.NotEmpty(hash);
         }
@@ -63,9 +63,9 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_NullCode_ReturnsTheSameHashAsAnEmptyCode()
         {
-            string emptyCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, string.Empty);
+            string emptyCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, string.Empty);
 
-            string nullCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, null);
+            string nullCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, null);
 
             Assert.Equal(emptyCodeHash, nullCodeHash);
         }
@@ -73,9 +73,9 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_DigitsMovedFromTheCodeToTheIdentifier_ReturnsDifferentHashes()
         {
-            string originalHash = PasswordResetCodeHasher.Compute(FirstPlayerId, ShortCode);
+            string originalHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, ShortCode);
 
-            string shiftedHash = PasswordResetCodeHasher.Compute(TwelfthPlayerId, ShiftedCode);
+            string shiftedHash = PasswordHasher.ComputeResetCodeHash(TwelfthPlayerId, ShiftedCode);
 
             Assert.NotEqual(originalHash, shiftedHash);
         }
@@ -83,9 +83,9 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_SameCodeWithSpacesAround_ReturnsADifferentHash()
         {
-            string trimmedCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string trimmedCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
 
-            string spacedCodeHash = PasswordResetCodeHasher.Compute(FirstPlayerId, " " + Code + " ");
+            string spacedCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, " " + Code + " ");
 
             Assert.NotEqual(trimmedCodeHash, spacedCodeHash);
         }
@@ -93,9 +93,9 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_ZeroIdentifier_ReturnsADifferentHashThanTheFirstPlayer()
         {
-            string firstPlayerHash = PasswordResetCodeHasher.Compute(FirstPlayerId, Code);
+            string firstPlayerHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
 
-            string noPlayerHash = PasswordResetCodeHasher.Compute(NoPlayerId, Code);
+            string noPlayerHash = PasswordHasher.ComputeResetCodeHash(NoPlayerId, Code);
 
             Assert.NotEqual(firstPlayerHash, noPlayerHash);
         }

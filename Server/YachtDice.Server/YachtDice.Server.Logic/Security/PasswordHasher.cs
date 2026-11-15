@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace YachtDice.Server.Logic.Security
     {
         private const string HexByteFormat = "x2";
         private const string EmptyValueMessage = "The value cannot be empty.";
+        private const string SaltedCodeFormat = "{0}:{1}";
 
         /// <summary>
         /// Computes the SHA-256 hash of a plain-text password.
@@ -55,6 +57,20 @@ namespace YachtDice.Server.Logic.Security
             string computedHash = ComputeHash(plainPassword);
 
             return string.Equals(computedHash, storedHash, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Computes the hash that is saved for a password recovery code. Only the hash is saved in the
+        /// database, never the code.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player, used so equal codes of two players differ.</param>
+        /// <param name="code">Recovery code in plain text.</param>
+        /// <returns>The hash as a lowercase hexadecimal string.</returns>
+        public static string ComputeResetCodeHash(int playerId, string code)
+        {
+            string saltedCode = string.Format(CultureInfo.InvariantCulture, SaltedCodeFormat, playerId, code);
+
+            return ComputeHash(saltedCode);
         }
 
         private static string ConvertBytesToHex(byte[] bytes)
