@@ -15,7 +15,6 @@ namespace YachtDice.Server.Data.Repositories
         private const string SaveFailedMessage = "Could not save the recovery code due to a database failure.";
         private const string DeleteFailedMessage = "Could not delete the recovery code due to a database failure.";
         private const string CompleteFailedMessage = "Could not save the new password due to a database failure.";
-        private const string EmptyValueMessage = "The value cannot be empty.";
         private const string NullTokenMessage = "The recovery code cannot be null.";
 
         /// <summary>
@@ -47,10 +46,7 @@ namespace YachtDice.Server.Data.Repositories
                 throw new ArgumentNullException(nameof(token), NullTokenMessage);
             }
 
-            if (string.IsNullOrWhiteSpace(token.Token))
-            {
-                throw new ArgumentException(EmptyValueMessage, nameof(token.Token));
-            }
+            TextGuard.RejectBlank(token.Token, nameof(token.Token));
 
             DatabaseOperation.Save(context => ReplaceToken(context, token), SaveFailedMessage);
         }
@@ -73,10 +69,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The new password could not be saved.</exception>
         public void CompleteReset(int playerId, string newPasswordHash)
         {
-            if (string.IsNullOrWhiteSpace(newPasswordHash))
-            {
-                throw new ArgumentException(EmptyValueMessage, nameof(newPasswordHash));
-            }
+            TextGuard.RejectBlank(newPasswordHash, nameof(newPasswordHash));
 
             DatabaseOperation.Save(
                 context => ApplyNewPassword(context, playerId, newPasswordHash),

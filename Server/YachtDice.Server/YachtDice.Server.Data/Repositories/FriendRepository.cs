@@ -11,7 +11,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class FriendRepository : IFriendRepository
     {
-        private const string EmptyValueMessage = "The value cannot be empty.";
         private const string NullFriendshipMessage = "The friendship cannot be null.";
         private const string QueryFailedMessage = "Database error occurred while querying the friendships.";
         private const string UpdateFailedMessage = "Database error occurred while saving the friendships.";
@@ -65,7 +64,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
         public void Add(Friendship friendship)
         {
-            ValidateFriendship(friendship);
+            if (friendship == null)
+            {
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
 
             Save(context => context.Friendship.Add(friendship));
         }
@@ -79,7 +83,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
         public void UpdateStatus(Friendship friendship)
         {
-            ValidateFriendship(friendship);
+            if (friendship == null)
+            {
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
 
             Save(context => ApplyStatus(context, friendship));
         }
@@ -173,7 +182,8 @@ namespace YachtDice.Server.Data.Repositories
                 .Where(isPendingForPlayer)
                 .Select(friendship => friendship.RequesterId);
 
-            List<Player> requesters = context.Player.Where(player => requesterIds.Contains(player.Id)).ToList();
+            Expression<Func<Player, bool>> isRequester = player => requesterIds.Contains(player.Id);
+            List<Player> requesters = context.Player.Where(isRequester).ToList();
 
             return requesters;
         }
@@ -186,24 +196,6 @@ namespace YachtDice.Server.Data.Repositories
         private static void Save(Action<YachtDiceContext> change)
         {
             DatabaseOperation.Save(change, UpdateFailedMessage);
-        }
-
-        private static void ValidateFriendship(Friendship friendship)
-        {
-            if (friendship == null)
-            {
-                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
-            }
-
-            ValidateText(friendship.Status, nameof(friendship.Status));
-        }
-
-        private static void ValidateText(string value, string parameterName)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException(EmptyValueMessage, parameterName);
-            }
         }
     }
 }

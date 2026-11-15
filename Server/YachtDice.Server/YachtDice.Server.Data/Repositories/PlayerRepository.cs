@@ -16,7 +16,6 @@ namespace YachtDice.Server.Data.Repositories
         private const string ActiveStatus = "Active";
         private const string InactiveStatus = "Inactive";
         private const string NoSecretKey = "";
-        private const string EmptyValueMessage = "The value cannot be empty.";
         private const string NullPlayerMessage = "The player cannot be null.";
         private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
         private const string FindByNameFailedMessage = "Database error occurred while searching player by name.";
@@ -50,7 +49,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Player> FindByEmail(string email)
         {
-            ValidateText(email, nameof(email));
+            TextGuard.RejectBlank(email, nameof(email));
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByEmail(context, email),
@@ -67,7 +66,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Player> FindByName(string name)
         {
-            ValidateText(name, nameof(name));
+            TextGuard.RejectBlank(name, nameof(name));
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByName(context, name),
@@ -84,7 +83,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<Player> FindByUsername(string username)
         {
-            ValidateText(username, nameof(username));
+            TextGuard.RejectBlank(username, nameof(username));
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByUsername(context, username),
@@ -101,7 +100,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public bool EmailExists(string email)
         {
-            ValidateText(email, nameof(email));
+            TextGuard.RejectBlank(email, nameof(email));
 
             bool isRegistered = DatabaseOperation.Query(
                 context => IsEmailRegistered(context, email),
@@ -118,7 +117,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public bool UsernameExists(string username)
         {
-            ValidateText(username, nameof(username));
+            TextGuard.RejectBlank(username, nameof(username));
 
             bool isTaken = DatabaseOperation.Query(
                 context => IsUsernameTaken(context, username),
@@ -393,14 +392,6 @@ namespace YachtDice.Server.Data.Repositories
                 player.Username = username;
                 player.DisplayName = username;
                 player.LastUserChange = DateTime.UtcNow;
-            }
-        }
-
-        private static void ValidateText(string value, string parameterName)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException(EmptyValueMessage, parameterName);
             }
         }
     }
