@@ -31,12 +31,13 @@ namespace YachtDice.Server.Services
             {
                 DisposeClock(member);
 
-                if (!_clocksByRoom.ContainsKey(member.RoomCode))
+                if (!_clocksByRoom.TryGetValue(member.RoomCode, out Dictionary<string, TurnClock> clocks))
                 {
-                    _clocksByRoom[member.RoomCode] = new Dictionary<string, TurnClock>();
+                    clocks = new Dictionary<string, TurnClock>(StringComparer.Ordinal);
+                    _clocksByRoom[member.RoomCode] = clocks;
                 }
 
-                _clocksByRoom[member.RoomCode][member.PlayerId] = clock;
+                clocks[member.PlayerId] = clock;
             }
         }
 
@@ -60,9 +61,9 @@ namespace YachtDice.Server.Services
         {
             lock (_syncRoot)
             {
-                if (_clocksByRoom.ContainsKey(roomCode))
+                if (_clocksByRoom.TryGetValue(roomCode, out Dictionary<string, TurnClock> clocks))
                 {
-                    foreach (TurnClock clock in _clocksByRoom[roomCode].Values)
+                    foreach (TurnClock clock in clocks.Values)
                     {
                         clock.Dispose();
                     }
@@ -74,11 +75,18 @@ namespace YachtDice.Server.Services
 
         private void DisposeClock(LogicRooms.RoomMember member)
         {
-            if (_clocksByRoom.ContainsKey(member.RoomCode)
-                && _clocksByRoom[member.RoomCode].ContainsKey(member.PlayerId))
+            bool hasClock = _clocksByRoom.TryGetValue(member.RoomCode, out Dictionary<string, TurnClock> clocks)
+                && clocks.ContainsKey(member.PlayerId);
+
+            if (hasClock)
             {
-                _clocksByRoom[member.RoomCode][member.PlayerId].Dispose();
-                _clocksByRoom[member.RoomCode].Remove(member.PlayerId);
+                clocks[member.PlayerId].Dispose();
+                clocks.Remove(member.PlayerId);
+            }
+
+            if (hasClock && clocks.Count == 0)
+            {
+                _clocksByRoom.Remove(member.RoomCode);
             }
         }
     }
