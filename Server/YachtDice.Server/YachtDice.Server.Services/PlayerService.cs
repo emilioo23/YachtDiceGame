@@ -176,7 +176,8 @@ namespace YachtDice.Server.Services
         {
             LogicPlayers.UsernameChangeStatus status = _profileService.ChangeUsername(currentName, newUsername);
 
-            return Mapping.EnumMapper.Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
+            return Mapping.EnumMapper
+                .Map<LogicPlayers.UsernameChangeStatus, Contracts.UsernameChangeResultCode>(status);
         }
 
         private Contracts.FlagChangeResultCode ProcessFlagChange(string playerName, string flagCode)

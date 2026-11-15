@@ -17,7 +17,7 @@ namespace YachtDice.Server.Tests.Players
         private const string CurrentUsername = "emilio";
         private const string OtherUsername = "gabriel";
         private const string NewUsername = "emilio_23";
-        private const string UnknownName = "nobody";
+        private const string UnknownName = "ramiro_lopez";
         private const string BlankName = "  ";
         private const string PaddedNewUsername = "  emilio_23  ";
         private const string InvalidUsername = "emilio 23!";
@@ -29,7 +29,7 @@ namespace YachtDice.Server.Tests.Players
         private const int FirstWinAchievementId = 2;
         private const int CollectorAchievementId = 22;
         private const int UnknownTitleId = 99;
-        private const int WinningScore = 150;
+        private const int WinningScore = 95;
         private const string SavedTitleText = "2";
         private const string NoTitleText = "";
         private const string MexicoFlagCode = "mx";
@@ -70,7 +70,9 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void Constructor_NullWordFilter_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, new PlayerStatisticsService(_players, _history)));
+            var statistics = new PlayerStatisticsService(_players, _history);
+
+            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, statistics));
         }
 
         [Fact]

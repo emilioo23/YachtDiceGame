@@ -21,7 +21,9 @@ namespace YachtDice.Views
         /// Prepares the notice for an achievement.
         /// </summary>
         /// <param name="achievementId">Identifier of the achievement that was unlocked.</param>
-        /// <param name="position">Position of the notice in the pile, so several notices do not cover each other.</param>
+        /// <param name="position">
+        /// Position of the notice in the pile, so several notices do not cover each other.
+        /// </param>
         public AchievementToastWindow(int achievementId, int position)
         {
             InitializeComponent();

@@ -17,7 +17,9 @@ namespace YachtDice.Server.Tests.Game
         public void MarkResultNotSaved_PlayerWithExperience_TakesAwayTheExperienceAndMarksTheFailure()
         {
             var snapshot = new GameSnapshot();
-            snapshot.Players.Add(new PlayerSnapshot(PlayerId, PlayerName, true) { ExperienceGained = ExperienceGained });
+            var player = new PlayerSnapshot(PlayerId, PlayerName, true) { ExperienceGained = ExperienceGained };
+
+            snapshot.Players.Add(player);
             var expectedSnapshot = new
             {
                 HasResultSaveFailed = true,

@@ -16,7 +16,7 @@ namespace YachtDice.Server.Tests.Players
         private const string PlayerName = "emilio";
         private const string FirstOpponentName = "gabriel";
         private const string SecondOpponentName = "ana";
-        private const string UnknownName = "nobody";
+        private const string UnknownName = "ramiro_lopez";
         private const string BothOpponents = "gabriel, ana";
         private const int PlayerId = 1;
         private const int FirstOpponentId = 2;
@@ -42,7 +42,13 @@ namespace YachtDice.Server.Tests.Players
         public PlayerStatisticsServiceTests()
         {
             _service = new PlayerStatisticsService(_players, _history);
-            _players.Add(new Player { Id = PlayerId, Username = PlayerName, DisplayName = PlayerName, XP = PlayerExperience });
+            _players.Add(new Player
+            {
+                Id = PlayerId,
+                Username = PlayerName,
+                DisplayName = PlayerName,
+                XP = PlayerExperience
+            });
         }
 
         [Fact]
