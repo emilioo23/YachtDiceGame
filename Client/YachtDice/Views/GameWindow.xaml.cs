@@ -50,6 +50,7 @@ namespace YachtDice.Views
         private bool _isLeavingOnClose = true;
         private bool _isClosed;
         private bool _isCloseAllowed;
+        private bool _isAskingToClose;
         private bool _isBusy;
         private bool _isReconnecting;
         private string _hostId;
@@ -690,11 +691,28 @@ namespace YachtDice.Views
         {
             if (!_isCloseAllowed && _state != null && CurrentPhase != TurnPhase.Finished)
             {
-                string message = string.Format(
-                    Strings.Dialogs_CloseWindowDuringMatch,
-                    ReconnectWaitTracker.ReconnectSeconds);
+                e.Cancel = true;
 
-                e.Cancel = !CustomDialogWindow.Confirm(this, message);
+                if (!_isAskingToClose)
+                {
+                    _isAskingToClose = true;
+                    Dispatcher.BeginInvoke(new Action(AskToClose));
+                }
+            }
+        }
+
+        private void AskToClose()
+        {
+            string message = string.Format(
+                Strings.Dialogs_CloseWindowDuringMatch,
+                ReconnectWaitTracker.ReconnectSeconds);
+            bool isConfirmed = CustomDialogWindow.Confirm(this, message);
+
+            _isAskingToClose = false;
+
+            if (isConfirmed && !_isClosed)
+            {
+                WindowNavigator.Close(this);
             }
         }
 
