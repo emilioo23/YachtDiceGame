@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Client.Logic.Players;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -40,6 +42,9 @@ namespace YachtDice.Views
         public MenuWindow(PlayerSession session)
         {
             InitializeComponent();
+            JoinRoomCodeTextBox.MaxLength = RoomListItem.AccessCodeLength;
+            OwnUsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            FriendUsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
 
             _logger = new AppLogger(GetType());
             _session = session;

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -47,6 +48,8 @@ namespace YachtDice.Views
         public SettingsWindow(PlayerSession session, string initialSection = AccountSection)
         {
             InitializeComponent();
+            TwoFactorPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            DeleteAccountPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             _session = session;
             _isInitializing = true;
 

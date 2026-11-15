@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Resources;
 
 namespace YachtDice.Views
@@ -18,6 +19,8 @@ namespace YachtDice.Views
         public PasswordRevealBox()
         {
             InitializeComponent();
+            HiddenPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            VisiblePasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
         }
 
         /// <summary>

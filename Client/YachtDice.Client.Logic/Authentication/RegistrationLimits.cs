@@ -20,5 +20,10 @@
         /// Maximum number of characters of the first name and of the last name.
         /// </summary>
         public const int NameMaxLength = 50;
+
+        /// <summary>
+        /// Maximum number of characters of a password. It is the same limit that the server applies.
+        /// </summary>
+        public const int PasswordMaxLength = 64;
     }
 }
