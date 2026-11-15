@@ -12,7 +12,7 @@ namespace YachtDice.Utils
     public sealed class MusicPlayer
     {
         private const string MusicFolder = "Resources\\Music";
-        private const string TrackExtension = ".wav";
+        private const string TrackExtension = ".mp3";
         private const string MusicFailedLogMessage = "The background music could not be played.";
         private const string NullSettingsMessage = "The audio settings of the music cannot be null.";
 

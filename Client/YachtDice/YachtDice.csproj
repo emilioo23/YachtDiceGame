@@ -721,10 +721,10 @@
     <Resource Include="Resources\Sounds\Score.wav" />
     <Resource Include="Resources\Sounds\Yacht.wav" />
     <Resource Include="Resources\Sounds\YourTurn.wav" />
-    <Content Include="Resources\Music\GameTheme.wav">
+    <Content Include="Resources\Music\GameTheme.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Music\MenuTheme.wav">
+    <Content Include="Resources\Music\MenuTheme.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
