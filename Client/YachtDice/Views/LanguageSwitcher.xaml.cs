@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using YachtDice.Client.Logic.Settings;
+using YachtDice.Navigation;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -65,7 +66,7 @@ namespace YachtDice.Views
             if (currentWindow != null)
             {
                 ReopenWindowFunc.Invoke().Show();
-                currentWindow.Close();
+                WindowNavigator.Close(currentWindow);
             }
         }
 

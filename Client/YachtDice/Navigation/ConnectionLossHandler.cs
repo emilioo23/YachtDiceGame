@@ -108,7 +108,7 @@ namespace YachtDice.Navigation
         {
             foreach (Window window in windows)
             {
-                window.Close();
+                WindowNavigator.Close(window);
             }
         }
     }
