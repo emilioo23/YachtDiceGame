@@ -621,6 +621,24 @@
   <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
     <value>If you close the window, your match keeps going and you will have {0} seconds to come back. If you do not return in time, you lose it. Close anyway?</value>
   </data>
+  <data name="Settings_Audio_Music" xml:space="preserve">
+    <value>Background music</value>
+  </data>
+  <data name="Settings_Audio_MusicSub" xml:space="preserve">
+    <value>Turn the game music on or mute it</value>
+  </data>
+  <data name="Settings_Audio_MusicVolume" xml:space="preserve">
+    <value>Music volume</value>
+  </data>
+  <data name="Game_Sidebar_ButtonMuteMusic" xml:space="preserve">
+    <value>Mute music</value>
+  </data>
+  <data name="Game_Sidebar_ButtonUnmuteMusic" xml:space="preserve">
+    <value>Unmute music</value>
+  </data>
+  <data name="Game_Sidebar_MusicVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>Are you sure you want to remove this friend?</value>
   </data>

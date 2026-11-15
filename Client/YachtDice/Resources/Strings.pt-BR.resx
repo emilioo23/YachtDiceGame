@@ -621,6 +621,24 @@
   <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
     <value>Se você fechar a janela, sua partida continua e você terá {0} segundos para voltar. Se não voltar a tempo, você a perderá. Fechar mesmo assim?</value>
   </data>
+  <data name="Settings_Audio_Music" xml:space="preserve">
+    <value>Música de fundo</value>
+  </data>
+  <data name="Settings_Audio_MusicSub" xml:space="preserve">
+    <value>Ativa ou silencia a música do jogo</value>
+  </data>
+  <data name="Settings_Audio_MusicVolume" xml:space="preserve">
+    <value>Volume da música</value>
+  </data>
+  <data name="Game_Sidebar_ButtonMuteMusic" xml:space="preserve">
+    <value>Silenciar música</value>
+  </data>
+  <data name="Game_Sidebar_ButtonUnmuteMusic" xml:space="preserve">
+    <value>Ativar música</value>
+  </data>
+  <data name="Game_Sidebar_MusicVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>Tem certeza de que quer remover este amigo?</value>
   </data>

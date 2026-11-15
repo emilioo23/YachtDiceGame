@@ -621,6 +621,24 @@
   <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
     <value>如果关闭窗口，你的对局会继续，你有 {0} 秒的时间返回。如果没有及时返回，你将输掉比赛。仍要关闭吗？</value>
   </data>
+  <data name="Settings_Audio_Music" xml:space="preserve">
+    <value>背景音乐</value>
+  </data>
+  <data name="Settings_Audio_MusicSub" xml:space="preserve">
+    <value>开启或静音游戏音乐</value>
+  </data>
+  <data name="Settings_Audio_MusicVolume" xml:space="preserve">
+    <value>音乐音量</value>
+  </data>
+  <data name="Game_Sidebar_ButtonMuteMusic" xml:space="preserve">
+    <value>静音音乐</value>
+  </data>
+  <data name="Game_Sidebar_ButtonUnmuteMusic" xml:space="preserve">
+    <value>开启音乐</value>
+  </data>
+  <data name="Game_Sidebar_MusicVolume" xml:space="preserve">
+    <value>音量</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>确定要删除这位好友吗？</value>
   </data>

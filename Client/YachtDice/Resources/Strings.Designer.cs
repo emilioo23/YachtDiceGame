@@ -439,6 +439,60 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Música de fondo.
+        /// </summary>
+        public static string Settings_Audio_Music {
+            get {
+                return ResourceManager.GetString("Settings_Audio_Music", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activa o silencia la música del juego.
+        /// </summary>
+        public static string Settings_Audio_MusicSub {
+            get {
+                return ResourceManager.GetString("Settings_Audio_MusicSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Volumen de la música.
+        /// </summary>
+        public static string Settings_Audio_MusicVolume {
+            get {
+                return ResourceManager.GetString("Settings_Audio_MusicVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Silenciar música.
+        /// </summary>
+        public static string Game_Sidebar_ButtonMuteMusic {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_ButtonMuteMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activar música.
+        /// </summary>
+        public static string Game_Sidebar_ButtonUnmuteMusic {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_ButtonUnmuteMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Volumen.
+        /// </summary>
+        public static string Game_Sidebar_MusicVolume {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_MusicVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Demasiados intentos fallidos. Factor bloqueado por 15 min..
         /// </summary>
         public static string Dialogs_TooManyAttempts {
