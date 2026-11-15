@@ -7,6 +7,7 @@ using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
+using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.TwoFactorManagementServiceReference;
 using YachtDice.Utils;
@@ -33,6 +34,8 @@ namespace YachtDice.Views
 
         private readonly PlayerSession _session;
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
+        private readonly PlayerGateway _playerGateway = new PlayerGateway();
+        private readonly AppLogger _logger = new AppLogger(typeof(SettingsWindow));
         private bool _isInitializing;
         private bool _isTwoFactorEnabled;
 
@@ -276,9 +279,36 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new ProfileWindow(_session));
         }
 
-        private void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            CustomDialogWindow.ShowMessage(this, Strings.Settings_FeatureNotImplementedMessage);
+            bool isConfirmed = CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FirstConfirmation)
+                && CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FinalConfirmation);
+
+            if (isConfirmed)
+            {
+                var button = (Button)sender;
+
+                button.IsEnabled = false;
+                await GatewayCallRunner.RunAsync(this, _logger, DeleteAccountAsync);
+                button.IsEnabled = true;
+            }
+        }
+
+        private async Task DeleteAccountAsync()
+        {
+            AccountDeletionResultCode result = await _playerGateway.DeleteAccountAsync(_session.DisplayName);
+
+            if (result == AccountDeletionResultCode.Success)
+            {
+                await Task.Run(() => _session.Presence.Disconnect());
+
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_DoneMessage);
+                WindowNavigator.SwitchTo(this, new LoginWindow());
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_Error);
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
