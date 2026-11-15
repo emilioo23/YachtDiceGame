@@ -53,7 +53,7 @@ namespace YachtDice.Server.Logic.Players
         /// <exception cref="DataAccessException">The new username could not be saved.</exception>
         public UsernameChangeStatus ChangeUsername(string currentName, string newUsername)
         {
-            Player player = FindPlayer(currentName);
+            Player player = FindPlayers(currentName).FirstOrDefault();
             string username = newUsername?.Trim() ?? string.Empty;
             UsernameChangeStatus status = UsernameChangeStatus.PlayerNotFound;
 
@@ -103,7 +103,7 @@ namespace YachtDice.Server.Logic.Players
         /// <exception cref="DataAccessException">The title could not be saved.</exception>
         public TitleChangeStatus ChangeTitle(string playerName, int titleId)
         {
-            Player player = FindPlayer(playerName);
+            Player player = FindPlayers(playerName).FirstOrDefault();
             TitleChangeStatus status = TitleChangeStatus.PlayerNotFound;
 
             if (player != null)
@@ -145,7 +145,7 @@ namespace YachtDice.Server.Logic.Players
         /// <exception cref="DataAccessException">The flag could not be saved.</exception>
         public FlagChangeStatus ChangeFlag(string playerName, string flagCode)
         {
-            Player player = FindPlayer(playerName);
+            Player player = FindPlayers(playerName).FirstOrDefault();
             string code = flagCode?.Trim().ToLowerInvariant() ?? string.Empty;
             FlagChangeStatus status = FlagChangeStatus.PlayerNotFound;
 
@@ -171,7 +171,7 @@ namespace YachtDice.Server.Logic.Players
         /// <exception cref="DataAccessException">The account could not be deleted.</exception>
         public AccountDeletionStatus DeleteAccount(string playerName)
         {
-            Player player = FindPlayer(playerName);
+            Player player = FindPlayers(playerName).FirstOrDefault();
             AccountDeletionStatus status = AccountDeletionStatus.PlayerNotFound;
 
             if (player != null)
@@ -219,7 +219,7 @@ namespace YachtDice.Server.Logic.Players
             return owners.Any(isAnotherPlayer);
         }
 
-        private Player FindPlayer(string name)
+        private List<Player> FindPlayers(string name)
         {
             var matches = new List<Player>();
 
@@ -228,7 +228,7 @@ namespace YachtDice.Server.Logic.Players
                 matches = _playerRepository.FindByName(name);
             }
 
-            return matches.FirstOrDefault();
+            return matches;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace YachtDice.Server.Logic.Avatars
         /// <returns>The identifier of the avatar, or the default avatar if the player is not registered.</returns>
         public int GetAvatarId(string displayName)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
 
             return player == null ? AvatarCatalog.DefaultAvatarId : player.AvatarId;
         }
@@ -52,7 +52,7 @@ namespace YachtDice.Server.Logic.Avatars
         /// <returns>The profile; a profile with the default values if the player does not exist.</returns>
         public PlayerProfile GetProfile(string displayName)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             var profile = new PlayerProfile
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
@@ -85,7 +85,7 @@ namespace YachtDice.Server.Logic.Avatars
         /// <returns>The result of the change.</returns>
         public AvatarChangeStatus ChangeAvatar(string displayName, int avatarId)
         {
-            Player player = FindPlayer(displayName);
+            Player player = FindPlayers(displayName).FirstOrDefault();
             AvatarChangeStatus status = AvatarChangeStatus.PlayerNotFound;
 
             if (player != null)
@@ -124,7 +124,7 @@ namespace YachtDice.Server.Logic.Avatars
             return status;
         }
 
-        private Player FindPlayer(string displayName)
+        private List<Player> FindPlayers(string displayName)
         {
             var matches = new List<Player>();
 
@@ -133,7 +133,7 @@ namespace YachtDice.Server.Logic.Avatars
                 matches = _playerRepository.FindByName(displayName);
             }
 
-            return matches.FirstOrDefault();
+            return matches;
         }
     }
 }
