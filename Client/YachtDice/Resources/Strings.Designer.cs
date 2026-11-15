@@ -2338,6 +2338,69 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Rápidos.
+        /// </summary>
+        public static string Game_Chat_ButtonQuick {
+            get {
+                return ResourceManager.GetString("Game_Chat_ButtonQuick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enviar un mensaje rápido.
+        /// </summary>
+        public static string Game_Chat_QuickTooltip {
+            get {
+                return ResourceManager.GetString("Game_Chat_QuickTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Suerte a todos!.
+        /// </summary>
+        public static string Game_Chat_Quick_GoodLuck {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_GoodLuck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Buena jugada!.
+        /// </summary>
+        public static string Game_Chat_Quick_NicePlay {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_NicePlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Uy, casi!.
+        /// </summary>
+        public static string Game_Chat_Quick_SoClose {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_SoClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Te toca, apúrate.
+        /// </summary>
+        public static string Game_Chat_Quick_YourTurn {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_YourTurn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buena partida, gracias.
+        /// </summary>
+        public static string Game_Chat_Quick_GoodGame {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_GoodGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esperando jugador....
         /// </summary>
         public static string Lobby_WaitingPlayer {

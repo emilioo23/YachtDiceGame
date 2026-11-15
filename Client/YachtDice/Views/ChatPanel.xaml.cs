@@ -30,6 +30,15 @@ namespace YachtDice.Views
         private const int AvatarSize = 20;
         private const int AvatarGap = 6;
 
+        private static readonly string[] QuickMessageKeys =
+        {
+            "Game_Chat_Quick_GoodLuck",
+            "Game_Chat_Quick_NicePlay",
+            "Game_Chat_Quick_SoClose",
+            "Game_Chat_Quick_YourTurn",
+            "Game_Chat_Quick_GoodGame"
+        };
+
         private ChatGateway _gateway;
         private string _playerId;
         private bool _isSubscribed;
@@ -133,6 +142,7 @@ namespace YachtDice.Views
         {
             MessageTextBox.IsEnabled = false;
             SendButton.IsEnabled = false;
+            QuickMessagesButton.IsEnabled = false;
         }
 
         private void ShowChatMessage(ChatMessage message)
@@ -314,6 +324,30 @@ namespace YachtDice.Views
         private void CollapsedBar_Click(object sender, MouseButtonEventArgs e)
         {
             Expand();
+        }
+
+        private void QuickMessagesButton_Click(object sender, RoutedEventArgs e)
+        {
+            var menu = new ContextMenu { PlacementTarget = QuickMessagesButton };
+
+            foreach (string key in QuickMessageKeys)
+            {
+                string text = Strings.ResourceManager.GetString(key, Strings.Culture);
+                var item = new MenuItem { Header = text };
+
+                item.Click += (itemSender, itemArgs) => SendQuickMessage(text);
+                menu.Items.Add(item);
+            }
+
+            menu.IsOpen = true;
+        }
+
+        private void SendQuickMessage(string text)
+        {
+            if (_isSubscribed)
+            {
+                _ = SendMessageAsync(text);
+            }
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)

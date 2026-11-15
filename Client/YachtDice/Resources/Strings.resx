@@ -2298,4 +2298,25 @@
   <data name="Lobby_Difficulty_Hard" xml:space="preserve">
     <value>Difícil</value>
   </data>
+  <data name="Game_Chat_ButtonQuick" xml:space="preserve">
+    <value>Rápidos</value>
+  </data>
+  <data name="Game_Chat_QuickTooltip" xml:space="preserve">
+    <value>Enviar un mensaje rápido</value>
+  </data>
+  <data name="Game_Chat_Quick_GoodLuck" xml:space="preserve">
+    <value>¡Suerte a todos!</value>
+  </data>
+  <data name="Game_Chat_Quick_NicePlay" xml:space="preserve">
+    <value>¡Buena jugada!</value>
+  </data>
+  <data name="Game_Chat_Quick_SoClose" xml:space="preserve">
+    <value>¡Uy, casi!</value>
+  </data>
+  <data name="Game_Chat_Quick_YourTurn" xml:space="preserve">
+    <value>Te toca, apúrate</value>
+  </data>
+  <data name="Game_Chat_Quick_GoodGame" xml:space="preserve">
+    <value>Buena partida, gracias</value>
+  </data>
 </root>
