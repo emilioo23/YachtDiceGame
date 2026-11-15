@@ -46,6 +46,7 @@
     <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
+    <Compile Include="Connection\ReconnectLoopTests.cs" />
     <Compile Include="Connection\ReconnectPolicyTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
