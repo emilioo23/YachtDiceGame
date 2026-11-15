@@ -41,7 +41,7 @@ namespace YachtDice.Server.Tests.Players
         private const int MountainExperience = 5000;
 
         [Fact]
-        public void GetAll_ReturnsEveryAchievement()
+        public void GetAll_Always_ReturnsEveryAchievement()
         {
             Assert.Equal(AchievementCount, AchievementRules.GetAll().Count);
         }

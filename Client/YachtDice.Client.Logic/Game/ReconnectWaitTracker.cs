@@ -64,7 +64,9 @@ namespace YachtDice.Client.Logic.Game
         /// <returns>The identifiers of the absent players who still have time.</returns>
         public IReadOnlyList<string> GetWaitingPlayerIds()
         {
-            return _secondsLeft.Where(entry => entry.Value > NoSeconds).Select(entry => entry.Key).ToList();
+            Func<KeyValuePair<string, int>, bool> hasTimeLeft = entry => entry.Value > NoSeconds;
+
+            return _secondsLeft.Where(hasTimeLeft).Select(entry => entry.Key).ToList();
         }
 
         /// <summary>
@@ -84,8 +86,10 @@ namespace YachtDice.Client.Logic.Game
         /// <returns>The identifiers of the players who did not come back in time.</returns>
         public IReadOnlyList<string> TakeExpiredPlayerIds()
         {
+            Func<KeyValuePair<string, int>, bool> isExpiredAndNotReported =
+                entry => entry.Value <= ExpiredToleranceSeconds && !_reported.Contains(entry.Key);
             List<string> expired = _secondsLeft
-                .Where(entry => entry.Value <= ExpiredToleranceSeconds && !_reported.Contains(entry.Key))
+                .Where(isExpiredAndNotReported)
                 .Select(entry => entry.Key)
                 .ToList();
 

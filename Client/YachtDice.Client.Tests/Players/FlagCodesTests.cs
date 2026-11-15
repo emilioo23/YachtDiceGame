@@ -15,7 +15,7 @@ namespace YachtDice.Client.Tests.Players
         private const int CountryCount = 249;
 
         [Fact]
-        public void GetAll_ReturnsEveryCountry()
+        public void GetAll_Always_ReturnsEveryCountry()
         {
             Assert.Equal(CountryCount, FlagCodes.GetAll().Count);
         }
