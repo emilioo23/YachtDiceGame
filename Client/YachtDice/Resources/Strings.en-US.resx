@@ -2217,4 +2217,7 @@
   <data name="History_GuestOpponent" xml:space="preserve">
     <value>a guest</value>
   </data>
+  <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
+    <value>Shortcuts: Space rolls the dice and the keys 1 to 5 hold or release a die.</value>
+  </data>
 </root>

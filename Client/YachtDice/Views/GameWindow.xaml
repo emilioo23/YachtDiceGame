@@ -11,7 +11,8 @@
         Width="1280"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
-        FontFamily="{StaticResource FontBody}">
+        FontFamily="{StaticResource FontBody}"
+        PreviewKeyDown="GameWindow_PreviewKeyDown">
 
     <Window.Resources>
         <RadialGradientBrush x:Key="BrushTableFelt"
@@ -310,6 +311,7 @@
                         <Button
                             x:Name="RollButton"
                             Style="{StaticResource BtnPrimary}"
+                            ToolTip="{x:Static properties:Strings.Game_Dice_ShortcutsHint}"
                             HorizontalAlignment="Center"
                             FontSize="20"
                             Padding="40,12"

@@ -1051,6 +1051,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Atajos: Espacio tira los dados y las teclas 1 a 5 apartan o sueltan un dado.
+        /// </summary>
+        public static string Game_Dice_ShortcutsHint {
+            get {
+                return ResourceManager.GetString("Game_Dice_ShortcutsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

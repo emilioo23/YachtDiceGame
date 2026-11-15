@@ -2217,4 +2217,7 @@
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
     <value>Você já tem o máximo de solicitações sem resposta. Espere uma resposta para enviar outra.</value>
   </data>
+  <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
+    <value>Atalhos: Espaço rola os dados e as teclas 1 a 5 guardam ou soltam um dado.</value>
+  </data>
 </root>

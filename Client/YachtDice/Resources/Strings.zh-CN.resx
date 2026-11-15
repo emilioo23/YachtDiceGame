@@ -2217,4 +2217,7 @@
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
     <value>你未回复的请求已达上限。请等待回复后再发送。</value>
   </data>
+  <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
+    <value>快捷键：空格键掷骰子，数字键1到5保留或放开一个骰子。</value>
+  </data>
 </root>

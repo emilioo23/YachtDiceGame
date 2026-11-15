@@ -2217,4 +2217,7 @@
   <data name="History_GuestOpponent" xml:space="preserve">
     <value>Invitado</value>
   </data>
+  <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
+    <value>Atajos: Espacio tira los dados y las teclas 1 a 5 apartan o sueltan un dado.</value>
+  </data>
 </root>

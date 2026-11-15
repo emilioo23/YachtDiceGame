@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Threading;
 using YachtDice.Client.Logic.Game;
 using YachtDice.Client.Logic.Rooms;
@@ -439,6 +440,30 @@ namespace YachtDice.Views
             if (_state != null && _heldDice.Toggle(index, CanHold))
             {
                 RenderDice();
+            }
+        }
+
+        private void GameWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            bool isTyping = Keyboard.FocusedElement is TextBoxBase;
+
+            if (!isTyping)
+            {
+                HandleShortcut(e);
+            }
+        }
+
+        private void HandleShortcut(KeyEventArgs e)
+        {
+            if (e.Key == Key.Space && RollButton.IsEnabled)
+            {
+                RollButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                e.Handled = true;
+            }
+            else if (GameKeyboard.TryGetDieIndex(e.Key, out int dieIndex))
+            {
+                HandleDieClick(dieIndex);
+                e.Handled = true;
             }
         }
 
