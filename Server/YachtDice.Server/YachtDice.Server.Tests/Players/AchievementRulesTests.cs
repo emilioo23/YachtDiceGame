@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 using YachtDice.Server.Logic.Players;
 
@@ -215,26 +214,17 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void IsUnlocked_NoValueForTheMetric_ReturnsFalse()
         {
-            var goal = new AchievementGoal(AchievementMetric.GamesPlayed, OneGame);
-            var rule = new AchievementRule(FirstGameAchievementId, goal, true);
+            var rule = new AchievementRule(FirstGameAchievementId, AchievementMetric.GamesPlayed, OneGame);
 
             Assert.False(AchievementRules.IsUnlocked(rule, new PlayerStatistics { GamesPlayed = NoValue }));
         }
 
         [Fact]
-        public void Constructor_NullGoal_ThrowsArgumentNullException()
+        public void Constructor_NewRule_UnlocksATitle()
         {
-            Assert.Throws<ArgumentNullException>(() => new AchievementRule(FirstGameAchievementId, null, true));
-        }
+            var rule = new AchievementRule(FirstWinAchievementId, AchievementMetric.Wins, OneGame);
 
-        [Fact]
-        public void Constructor_GoalOfWins_KeepsTheMetricAndTheValue()
-        {
-            var goal = new AchievementGoal(AchievementMetric.Wins, OneGame);
-
-            var rule = new AchievementRule(FirstWinAchievementId, goal, true);
-
-            Assert.Equivalent(new { Metric = AchievementMetric.Wins, RequiredValue = OneGame }, rule.Goal);
+            Assert.True(rule.HasTitle);
         }
     }
 }
