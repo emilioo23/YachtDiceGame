@@ -18,6 +18,12 @@ namespace YachtDice.Server.Contracts.Players
         /// There is no player with that name.
         /// </summary>
         [EnumMember]
-        PlayerNotFound
+        PlayerNotFound,
+
+        /// <summary>
+        /// The password that the player typed to confirm the deletion is not the password of the account.
+        /// </summary>
+        [EnumMember]
+        WrongPassword
     }
 }

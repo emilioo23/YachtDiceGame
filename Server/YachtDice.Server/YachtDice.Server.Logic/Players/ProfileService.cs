@@ -168,14 +168,19 @@ namespace YachtDice.Server.Logic.Players
         /// and game history. It cannot be undone.
         /// </summary>
         /// <param name="playerName">Name of the player whose account is deleted.</param>
+        /// <param name="password">Password that the player typed to confirm the deletion.</param>
         /// <returns>The result of the deletion.</returns>
         /// <exception cref="DataAccessException">The account could not be deleted.</exception>
-        public AccountDeletionStatus DeleteAccount(string playerName)
+        public AccountDeletionStatus DeleteAccount(string playerName, string password)
         {
             Player player = FindPlayers(playerName).FirstOrDefault();
             AccountDeletionStatus status = AccountDeletionStatus.PlayerNotFound;
 
-            if (player != null)
+            if (player != null && !PasswordHasher.Verify(password ?? string.Empty, player.PwdHash))
+            {
+                status = AccountDeletionStatus.WrongPassword;
+            }
+            else if (player != null)
             {
                 _playerRepository.Delete(player.Id);
                 status = AccountDeletionStatus.Success;

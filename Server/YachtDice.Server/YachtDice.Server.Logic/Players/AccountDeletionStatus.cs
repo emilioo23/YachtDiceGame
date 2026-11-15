@@ -13,6 +13,11 @@
         /// <summary>
         /// There is no player with that name.
         /// </summary>
-        PlayerNotFound
+        PlayerNotFound,
+
+        /// <summary>
+        /// The password that the player typed to confirm the deletion is not the password of the account.
+        /// </summary>
+        WrongPassword
     }
 }

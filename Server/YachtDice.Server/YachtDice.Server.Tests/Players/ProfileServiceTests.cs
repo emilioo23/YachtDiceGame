@@ -5,6 +5,7 @@ using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Players;
+using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Tests.InMemory;
 
 namespace YachtDice.Server.Tests.Players
@@ -26,6 +27,8 @@ namespace YachtDice.Server.Tests.Players
         private const string InvalidUsername = "emilio 23!";
         private const string OffensiveWord = "badword";
         private const string UpperCaseCurrentUsername = "EMILIO";
+        private const string CurrentPassword = "Secret123!";
+        private const string WrongPassword = "Wrong123!";
         private const int CurrentPlayerId = 1;
         private const int OtherPlayerId = 2;
         private const int FirstGameAchievementId = 1;
@@ -409,7 +412,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_ExistingPlayer_ReturnsSuccess()
         {
-            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername);
+            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername, CurrentPassword);
 
             Assert.Equal(AccountDeletionStatus.Success, status);
         }
@@ -417,7 +420,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_ExistingPlayer_RemovesThePlayer()
         {
-            _service.DeleteAccount(CurrentUsername);
+            _service.DeleteAccount(CurrentUsername, CurrentPassword);
 
             Assert.Empty(_players.FindByUsername(CurrentUsername));
         }
@@ -425,7 +428,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_ExistingPlayer_KeepsTheOtherPlayers()
         {
-            _service.DeleteAccount(CurrentUsername);
+            _service.DeleteAccount(CurrentUsername, CurrentPassword);
 
             Assert.Single(_players.FindByUsername(OtherUsername));
         }
@@ -433,7 +436,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_UsernameInUpperCase_RemovesThePlayer()
         {
-            _service.DeleteAccount(UpperCaseCurrentUsername);
+            _service.DeleteAccount(UpperCaseCurrentUsername, CurrentPassword);
 
             Assert.Empty(_players.FindByUsername(CurrentUsername));
         }
@@ -441,7 +444,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_UnknownPlayer_ReturnsPlayerNotFound()
         {
-            AccountDeletionStatus status = _service.DeleteAccount(UnknownName);
+            AccountDeletionStatus status = _service.DeleteAccount(UnknownName, CurrentPassword);
 
             Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
         }
@@ -449,7 +452,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_UnknownPlayer_KeepsEveryPlayer()
         {
-            _service.DeleteAccount(UnknownName);
+            _service.DeleteAccount(UnknownName, CurrentPassword);
 
             Assert.Equal(TwoPlayers, _players.Players.Count);
         }
@@ -457,17 +460,33 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void DeleteAccount_BlankName_ReturnsPlayerNotFound()
         {
-            AccountDeletionStatus status = _service.DeleteAccount(BlankName);
+            AccountDeletionStatus status = _service.DeleteAccount(BlankName, CurrentPassword);
 
             Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
         }
 
         [Fact]
+        public void DeleteAccount_WrongPassword_ReturnsWrongPassword()
+        {
+            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername, WrongPassword);
+
+            Assert.Equal(AccountDeletionStatus.WrongPassword, status);
+        }
+
+        [Fact]
+        public void DeleteAccount_WrongPassword_KeepsThePlayer()
+        {
+            _service.DeleteAccount(CurrentUsername, WrongPassword);
+
+            Assert.Equal(TwoPlayers, _players.Players.Count);
+        }
+
+        [Fact]
         public void DeleteAccount_CalledTwice_ReturnsPlayerNotFoundTheSecondTime()
         {
-            _service.DeleteAccount(CurrentUsername);
+            _service.DeleteAccount(CurrentUsername, CurrentPassword);
 
-            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername);
+            AccountDeletionStatus status = _service.DeleteAccount(CurrentUsername, CurrentPassword);
 
             Assert.Equal(AccountDeletionStatus.PlayerNotFound, status);
         }
@@ -486,7 +505,8 @@ namespace YachtDice.Server.Tests.Players
             {
                 Id = id,
                 Username = username,
-                DisplayName = username
+                DisplayName = username,
+                PwdHash = PasswordHasher.ComputeHash(CurrentPassword)
             };
 
             return player;

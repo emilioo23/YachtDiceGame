@@ -140,11 +140,12 @@ namespace YachtDice.Server.Services
         /// Deletes the account of a player with all its data.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Password that the player typed to confirm the deletion.</param>
         /// <returns>The result of the deletion.</returns>
-        public Contracts.AccountDeletionResultCode DeleteAccount(string sessionToken)
+        public Contracts.AccountDeletionResultCode DeleteAccount(string sessionToken, string password)
         {
             Contracts.AccountDeletionResultCode result =
-                ExecuteForPlayer(sessionToken, ProcessAccountDeletion);
+                ExecuteForPlayer(sessionToken, playerName => ProcessAccountDeletion(playerName, password));
 
             return result;
         }
@@ -195,9 +196,9 @@ namespace YachtDice.Server.Services
             return Mapping.EnumMapper.Map<LogicPlayers.FlagChangeStatus, Contracts.FlagChangeResultCode>(status);
         }
 
-        private Contracts.AccountDeletionResultCode ProcessAccountDeletion(string playerName)
+        private Contracts.AccountDeletionResultCode ProcessAccountDeletion(string playerName, string password)
         {
-            LogicPlayers.AccountDeletionStatus status = _profileService.DeleteAccount(playerName);
+            LogicPlayers.AccountDeletionStatus status = _profileService.DeleteAccount(playerName, password);
 
             if (status == LogicPlayers.AccountDeletionStatus.Success)
             {

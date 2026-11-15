@@ -106,9 +106,10 @@ namespace YachtDice.Server.Contracts.Players
         /// Deletes the account of a player with all its data. It cannot be undone.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Password that the player typed to confirm the deletion.</param>
         /// <returns>The result of the deletion.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        AccountDeletionResultCode DeleteAccount(string sessionToken);
+        AccountDeletionResultCode DeleteAccount(string sessionToken, string password);
     }
 }
