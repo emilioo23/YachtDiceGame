@@ -20,11 +20,13 @@ namespace YachtDice.Server.Logic.Authentication
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
         private const string NullDependencyMessage = "A dependency of the login service cannot be null.";
+        private const string LockedLoginLogMessage = "Login attempt while the account is locked by wrong passwords.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
+        private readonly LoginAttemptTracker _attemptTracker = new LoginAttemptTracker();
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -103,16 +105,61 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = Reject(LoginStatus.EmailNotRegistered, UnknownEmailLogMessage);
             }
+            else
+            {
+                result = CheckPassword(player, credentials);
+            }
+
+            return result;
+        }
+
+        private LoginResult CheckPassword(Player player, LoginCredentials credentials)
+        {
+            DateTime now = DateTime.UtcNow;
+            LoginLock currentLock = _attemptTracker.GetLock(player.Id, now);
+            LoginResult result;
+
+            if (currentLock != LoginLock.None)
+            {
+                result = RejectLocked(currentLock);
+            }
             else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            {
+                result = RejectWrongPassword(player.Id, now);
+            }
+            else
+            {
+                _attemptTracker.RegisterSuccess(player.Id);
+                result = CompleteLogin(player, credentials.Culture);
+            }
+
+            return result;
+        }
+
+        private LoginResult RejectWrongPassword(int playerId, DateTime now)
+        {
+            LoginLock newLock = _attemptTracker.RegisterFailure(playerId, now);
+            LoginResult result;
+
+            if (newLock == LoginLock.None)
             {
                 result = Reject(LoginStatus.InvalidPassword, WrongPasswordLogMessage);
             }
             else
             {
-                result = CompleteLogin(player, credentials.Culture);
+                result = RejectLocked(newLock);
             }
 
             return result;
+        }
+
+        private LoginResult RejectLocked(LoginLock currentLock)
+        {
+            LoginStatus status = currentLock == LoginLock.Daily
+                ? LoginStatus.LockedForTheDay
+                : LoginStatus.TemporarilyLocked;
+
+            return Reject(status, LockedLoginLogMessage);
         }
 
         private LoginResult CompleteLogin(Player player, CultureInfo culture)

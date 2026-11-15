@@ -36,6 +36,12 @@
         CodeSendFailed,
 
         /// <summary>The credentials are correct and the player has no two-step verification.</summary>
-        LoggedIn
+        LoggedIn,
+
+        /// <summary>Three wrong passwords in a row locked the account for five minutes.</summary>
+        TemporarilyLocked,
+
+        /// <summary>Ten wrong passwords in the same day locked the account for twenty-four hours.</summary>
+        LockedForTheDay
     }
 }

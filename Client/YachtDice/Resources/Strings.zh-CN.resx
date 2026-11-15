@@ -2238,4 +2238,10 @@
   <data name="Lobby_ClosedMessage" xml:space="preserve">
     <value>房间已关闭，因为15分钟内没有开始游戏。</value>
   </data>
+  <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
+    <value>你连续3次输错密码。请等待5分钟后再试。</value>
+  </data>
+  <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
+    <value>你今天输错密码10次，账号已被锁定24小时。</value>
+  </data>
 </root>

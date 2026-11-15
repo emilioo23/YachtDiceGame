@@ -2238,4 +2238,10 @@
   <data name="Lobby_ClosedMessage" xml:space="preserve">
     <value>A sala foi fechada porque passaram 15 minutos sem iniciar a partida.</value>
   </data>
+  <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
+    <value>Você digitou uma senha errada 3 vezes seguidas. Espere 5 minutos para tentar de novo.</value>
+  </data>
+  <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
+    <value>Sua conta foi bloqueada por 24 horas porque você digitou uma senha errada 10 vezes hoje.</value>
+  </data>
 </root>

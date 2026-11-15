@@ -717,6 +717,12 @@
   <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
     <value>The username must have 3 to 20 characters and can only use letters without accents, digits, dots and underscores.</value>
   </data>
+  <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
+    <value>You typed a wrong password 3 times in a row. Wait 5 minutes to try again.</value>
+  </data>
+  <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
+    <value>Your account was locked for 24 hours because you typed a wrong password 10 times today.</value>
+  </data>
   <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
     <value>The username cannot contain offensive words. Choose another name.</value>
   </data>

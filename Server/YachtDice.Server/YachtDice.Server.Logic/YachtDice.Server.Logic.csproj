@@ -52,6 +52,9 @@
     <Compile Include="Authentication\IRegistrationService.cs" />
     <Compile Include="Authentication\IVerificationService.cs" />
     <Compile Include="Authentication\LoginCredentials.cs" />
+    <Compile Include="Authentication\LoginLock.cs" />
+    <Compile Include="Authentication\LoginAttempts.cs" />
+    <Compile Include="Authentication\LoginAttemptTracker.cs" />
     <Compile Include="Authentication\LoginResult.cs" />
     <Compile Include="Authentication\LoginService.cs" />
     <Compile Include="Authentication\LoginStatus.cs" />

@@ -41,6 +41,12 @@ namespace YachtDice.Utils
                 case LoginResultCode.CodeSendFailed:
                     message = Strings.TwoFactor_ErrorSendFailed;
                     break;
+                case LoginResultCode.TemporarilyLocked:
+                    message = Strings.Auth_ErrorTemporarilyLocked;
+                    break;
+                case LoginResultCode.LockedForTheDay:
+                    message = Strings.Auth_ErrorLockedForTheDay;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

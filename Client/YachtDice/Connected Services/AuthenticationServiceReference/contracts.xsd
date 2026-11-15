@@ -42,6 +42,8 @@
       <xs:enumeration value="VerificationLocked" />
       <xs:enumeration value="CodeSendFailed" />
       <xs:enumeration value="LoggedIn" />
+      <xs:enumeration value="TemporarilyLocked" />
+      <xs:enumeration value="LockedForTheDay" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="LoginResultCode" nillable="true" type="tns:LoginResultCode" />

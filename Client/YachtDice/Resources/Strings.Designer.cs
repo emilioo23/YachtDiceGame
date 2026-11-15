@@ -133,6 +133,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se bloqueó por 24 horas porque escribiste mal la contraseña 10 veces en el día.
+        /// </summary>
+        public static string Auth_ErrorLockedForTheDay {
+            get {
+                return ResourceManager.GetString("Auth_ErrorLockedForTheDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribiste mal la contraseña 3 veces seguidas. Espera 5 minutos para volver a intentarlo.
+        /// </summary>
+        public static string Auth_ErrorTemporarilyLocked {
+            get {
+                return ResourceManager.GetString("Auth_ErrorTemporarilyLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
         /// </summary>
         public static string Auth_ErrorInvalidUsername {

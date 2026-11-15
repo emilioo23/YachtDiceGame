@@ -70,6 +70,31 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
+        public void LoginPlayer_ThirdWrongPasswordInARow_ReturnsTemporarilyLocked()
+        {
+            LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
+            _service.LoginPlayer(credentials);
+            _service.LoginPlayer(credentials);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.TemporarilyLocked, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_RightPasswordWhileLocked_ReturnsTemporarilyLocked()
+        {
+            LoginCredentials wrongCredentials = CreateCredentials(Email, WrongPassword);
+            _service.LoginPlayer(wrongCredentials);
+            _service.LoginPlayer(wrongCredentials);
+            _service.LoginPlayer(wrongCredentials);
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Email, Password));
+
+            Assert.Equal(LoginStatus.TemporarilyLocked, loginResult.Status);
+        }
+
+        [Fact]
         public void LoginPlayer_UnknownEmail_ReturnsEmailNotRegistered()
         {
             LoginCredentials credentials = CreateCredentials(UnknownEmail, Password);

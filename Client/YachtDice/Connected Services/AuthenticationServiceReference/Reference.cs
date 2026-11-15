@@ -213,6 +213,12 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LoggedIn = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TemporarilyLocked = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LockedForTheDay = 10,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
