@@ -169,7 +169,7 @@
     <value>Todos os campos são obrigatórios.</value>
   </data>
   <data name="Auth_SuccessRegister" xml:space="preserve">
-    <value>Cadastro realizado com sucesso.</value>
+    <value>Cadastro realizado com sucesso. Na primeira vez que entrar enviaremos um código ao seu e-mail para confirmá-lo; se não confirmar em 48 horas, a conta é apagada.</value>
   </data>
   <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>O e-mail é obrigatório.</value>

@@ -286,7 +286,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Registro exitoso..
+        ///   Busca una cadena traducida similar a Registro exitoso. La primera vez que inicies sesión te mandaremos un código.
         /// </summary>
         public static string Auth_SuccessRegister {
             get {

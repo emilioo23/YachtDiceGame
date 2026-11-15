@@ -169,7 +169,7 @@
     <value>所有字段均为必填项。</value>
   </data>
   <data name="Auth_SuccessRegister" xml:space="preserve">
-    <value>注册成功。</value>
+    <value>注册成功。首次登录时我们会向你的邮箱发送验证码以确认邮箱；如果48小时内未确认，账号将被删除。</value>
   </data>
   <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>请输入邮箱。</value>

@@ -169,7 +169,7 @@
     <value>All fields are required.</value>
   </data>
   <data name="Auth_SuccessRegister" xml:space="preserve">
-    <value>Registration successful.</value>
+    <value>Registration successful. The first time you log in we will send a code to your email to confirm it; if you do not confirm it in 48 hours, the account is deleted.</value>
   </data>
   <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>Email is required.</value>

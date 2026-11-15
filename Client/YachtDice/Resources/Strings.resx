@@ -169,7 +169,7 @@
     <value>Todos los campos son obligatorios.</value>
   </data>
   <data name="Auth_SuccessRegister" xml:space="preserve">
-    <value>Registro exitoso.</value>
+    <value>Registro exitoso. La primera vez que inicies sesión te mandaremos un código a tu correo para confirmarlo; si no lo confirmas en 48 horas, la cuenta se borra.</value>
   </data>
   <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
     <value>El correo electrónico es requerido.</value>
