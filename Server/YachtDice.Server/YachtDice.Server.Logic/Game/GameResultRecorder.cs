@@ -66,7 +66,9 @@ namespace YachtDice.Server.Logic.Game
             };
             var savedPlayerIds = new HashSet<int>();
 
-            foreach (PlayerSnapshot player in snapshot.Players)
+            Func<PlayerSnapshot, bool> isPerson = candidate => !candidate.IsComputer;
+
+            foreach (PlayerSnapshot player in snapshot.Players.Where(isPerson))
             {
                 AddIfRegistered(result, savedPlayerIds, player);
             }

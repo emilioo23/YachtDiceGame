@@ -134,6 +134,36 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
+        /// Plays one move of a computer player: the first roll, another roll keeping the dice of the value
+        /// that repeats the most, or the points in the best box when no rolls are left or the dice are worth
+        /// keeping (see <see cref="AutoPlayChooser"/>).
+        /// </summary>
+        /// <returns>The outcome of the action.</returns>
+        public GameActionStatus PlayComputerMove()
+        {
+            GameActionStatus status;
+
+            if (Status == GameStatus.Finished)
+            {
+                status = GameActionStatus.GameFinished;
+            }
+            else if (!IsComputerTurn())
+            {
+                status = GameActionStatus.NotYourTurn;
+            }
+            else if (ShouldComputerRoll())
+            {
+                status = RollIfAllowed(AutoPlayChooser.ChooseHeldDice(_dice));
+            }
+            else
+            {
+                status = ApplyScore(ChooseBestCategory());
+            }
+
+            return status;
+        }
+
+        /// <summary>
         /// Marks that a player is not connected. If it was the turn of that player, the turn passes on.
         /// </summary>
         /// <param name="playerId">Player who left.</param>
@@ -196,6 +226,7 @@ namespace YachtDice.Server.Logic.Game
                 Version = _version,
                 Status = Status,
                 CurrentPlayerId = GetCurrentPlayerId(),
+                IsComputerTurn = IsComputerTurn(),
                 TurnNumber = TurnNumber,
                 Round = GetCurrentRound(),
                 RollsLeft = RollsPerTurn - _rollsMade,
@@ -212,6 +243,7 @@ namespace YachtDice.Server.Logic.Game
         {
             var snapshot = new PlayerSnapshot(player.PlayerId, player.Name, player.IsPresent)
             {
+                IsComputer = player.IsComputer,
                 UpperSubtotal = player.Card.UpperSubtotal,
                 UpperBonus = player.Card.UpperBonus,
                 YachtBonus = player.Card.YachtBonus,
@@ -445,6 +477,20 @@ namespace YachtDice.Server.Logic.Game
             {
                 AdvanceTurn();
             }
+        }
+
+        private bool IsComputerTurn()
+        {
+            return _turnIndex != NoPlayerIndex && _players[_turnIndex].IsComputer;
+        }
+
+        private bool ShouldComputerRoll()
+        {
+            bool hasRolled = _rollsMade > NoRolls;
+            bool hasRollsLeft = _rollsMade < RollsPerTurn;
+
+            return !hasRolled
+                || (hasRollsLeft && !AutoPlayChooser.IsWorthKeeping(_players[_turnIndex].Card.GetOptions(_dice)));
         }
 
         private string GetCurrentPlayerId()

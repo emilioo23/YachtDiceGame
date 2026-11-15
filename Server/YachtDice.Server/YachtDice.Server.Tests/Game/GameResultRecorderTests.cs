@@ -129,6 +129,19 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void Record_ComputerAndRegisteredPlayer_LeavesTheComputerOut()
+        {
+            GameResultRecord savedResultExpected = CreateExpectedResult(BetoId);
+            savedResultExpected.Players.Add(CreateResult(BetoId, LoserTotal, PlayerResultStatus.Completed));
+            PlayerSnapshot computer = CreateWinner(AnaName, WinnerTotal, true);
+            computer.IsComputer = true;
+
+            _recorder.Record(_settings, CreateSnapshot(computer, CreatePlayer(BetoName, LoserTotal, true)));
+
+            Assert.Equivalent(new[] { savedResultExpected }, _history.SavedResults, strict: true);
+        }
+
+        [Fact]
         public void Record_OnlyGuests_SavesNothing()
         {
             GameSnapshot snapshot = CreateSnapshot(

@@ -51,6 +51,13 @@ namespace YachtDice.Server.Logic.Game
         GameActionResult AutoPlay(GameTurn turn);
 
         /// <summary>
+        /// Plays one move of the computer player whose turn it is, if the turn did not change meanwhile.
+        /// </summary>
+        /// <param name="turn">Room and number of the turn of the computer player.</param>
+        /// <returns>The state after the move, or the reason why the move was not played.</returns>
+        GameActionResult PlayComputerMove(GameTurn turn);
+
+        /// <summary>
         /// Marks that a player is not connected to the game.
         /// </summary>
         /// <param name="member">Room and identifier of the player who left.</param>

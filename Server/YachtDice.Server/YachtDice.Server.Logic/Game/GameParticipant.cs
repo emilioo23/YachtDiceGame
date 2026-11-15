@@ -25,5 +25,10 @@
         /// Gets the name that the screens show for the player.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of this participant.
+        /// </summary>
+        public bool IsComputer { get; set; }
     }
 }

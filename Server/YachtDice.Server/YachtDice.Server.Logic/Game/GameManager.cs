@@ -74,7 +74,20 @@ namespace YachtDice.Server.Logic.Game
                 throw new ArgumentNullException(nameof(turn), NullTurnMessage);
             }
 
-            return Execute(turn.RoomCode, game => AutoPlayIfSameTurn(game, turn.TurnNumber));
+            return Execute(turn.RoomCode, game => PlayIfSameTurn(game, turn.TurnNumber, game.AutoPlay));
+        }
+
+        /// <inheritdoc />
+        public GameActionResult PlayComputerMove(GameTurn turn)
+        {
+            if (turn == null)
+            {
+                throw new ArgumentNullException(nameof(turn), NullTurnMessage);
+            }
+
+            return Execute(
+                turn.RoomCode,
+                game => PlayIfSameTurn(game, turn.TurnNumber, game.PlayComputerMove));
         }
 
         /// <inheritdoc />
@@ -126,13 +139,16 @@ namespace YachtDice.Server.Logic.Game
             return status;
         }
 
-        private static GameActionStatus AutoPlayIfSameTurn(YachtGame game, int turnNumber)
+        private static GameActionStatus PlayIfSameTurn(
+            YachtGame game,
+            int turnNumber,
+            Func<GameActionStatus> play)
         {
             GameActionStatus status;
 
             if (game.TurnNumber == turnNumber)
             {
-                status = game.AutoPlay();
+                status = play();
             }
             else
             {

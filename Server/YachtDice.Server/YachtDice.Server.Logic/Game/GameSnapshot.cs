@@ -38,6 +38,11 @@ namespace YachtDice.Server.Logic.Game
         public string CurrentPlayerId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the turn belongs to a computer player.
+        /// </summary>
+        public bool IsComputerTurn { get; set; }
+
+        /// <summary>
         /// Gets or sets the number of the turn. It grows each time the turn passes to another player.
         /// </summary>
         public int TurnNumber { get; set; }

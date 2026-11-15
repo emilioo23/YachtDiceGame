@@ -5,7 +5,7 @@ using YachtDice.Server.Logic.Game;
 namespace YachtDice.Server.Tests.Game
 {
     /// <summary>
-    /// Choice of the box when the time of a turn is over.
+    /// Choice of the box when the time of a turn is over, and of the dice that a computer player keeps.
     /// </summary>
     public class AutoPlayChooserTests
     {
@@ -16,6 +16,10 @@ namespace YachtDice.Server.Tests.Game
         private const int TiedPoints = 20;
         private const int YachtOfSixesUpperPoints = 30;
         private const int YachtPoints = 50;
+        private const int StraightPoints = 30;
+
+        private static readonly int[] ThreeFives = { 2, 5, 5, 1, 5 };
+        private static readonly int[] PairOfThreesAndPairOfSixes = { 3, 3, 6, 6, 1 };
 
         [Fact]
         public void Choose_OptionsWithDifferentPoints_ReturnsTheBoxWithMorePoints()
@@ -85,6 +89,55 @@ namespace YachtDice.Server.Tests.Game
             var category = AutoPlayChooser.Choose(options);
 
             Assert.Equal(ScoreCategory.Yacht, category);
+        }
+
+        [Fact]
+        public void ChooseHeldDice_ThreeOfTheSameValue_HoldsThoseThreeDice()
+        {
+            bool[] heldDiceExpected = { false, true, true, false, true };
+
+            bool[] heldDiceResult = AutoPlayChooser.ChooseHeldDice(ThreeFives);
+
+            Assert.Equal(heldDiceExpected, heldDiceResult);
+        }
+
+        [Fact]
+        public void ChooseHeldDice_TwoPairs_HoldsTheHigherPair()
+        {
+            bool[] heldDiceExpected = { false, false, true, true, false };
+
+            bool[] heldDiceResult = AutoPlayChooser.ChooseHeldDice(PairOfThreesAndPairOfSixes);
+
+            Assert.Equal(heldDiceExpected, heldDiceResult);
+        }
+
+        [Fact]
+        public void IsWorthKeeping_BigStraightIsTheBestBox_ReturnsTrue()
+        {
+            var options = new List<ScoreEntry>
+            {
+                new ScoreEntry(ScoreCategory.BigStraight, StraightPoints),
+                new ScoreEntry(ScoreCategory.Choice, TiedPoints)
+            };
+
+            bool isWorthKeeping = AutoPlayChooser.IsWorthKeeping(options);
+
+            Assert.True(isWorthKeeping);
+        }
+
+        [Fact]
+        public void IsWorthKeeping_ChoiceIsTheBestBox_ReturnsFalse()
+        {
+            var options = new List<ScoreEntry>
+            {
+                new ScoreEntry(ScoreCategory.Sixes, SixesPoints),
+                new ScoreEntry(ScoreCategory.Choice, ChoicePoints),
+                new ScoreEntry(ScoreCategory.Yacht, NoPoints)
+            };
+
+            bool isWorthKeeping = AutoPlayChooser.IsWorthKeeping(options);
+
+            Assert.False(isWorthKeeping);
         }
     }
 }

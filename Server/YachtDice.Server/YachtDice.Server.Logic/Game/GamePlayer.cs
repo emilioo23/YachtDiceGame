@@ -14,6 +14,7 @@
         {
             PlayerId = participant.PlayerId;
             Name = participant.Name;
+            IsComputer = participant.IsComputer;
             Card = card;
             IsPresent = true;
         }
@@ -27,6 +28,8 @@
         /// Gets the name that the screens show for the player.
         /// </summary>
         public string Name { get; }
+
+        public bool IsComputer { get; }
 
         /// <summary>
         /// Gets the scorecard of the player.

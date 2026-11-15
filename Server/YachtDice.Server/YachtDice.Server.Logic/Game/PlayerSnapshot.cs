@@ -37,6 +37,11 @@ namespace YachtDice.Server.Logic.Game
         public bool IsPresent { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of the player.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
         /// Gets or sets the points of the upper section.
         /// </summary>
         public int UpperSubtotal { get; set; }
