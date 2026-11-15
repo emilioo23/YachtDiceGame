@@ -39,6 +39,12 @@ namespace YachtDice.Models
         public bool IsGuest { get; }
 
         /// <summary>
+        /// Gets or sets the secret token that the server gave when the player logged in. The gateways send it
+        /// instead of the name in the operations that change the data of the player. It is empty for a guest.
+        /// </summary>
+        public string SessionToken { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets the connection of the player to the presence service, shared by all the windows.
         /// </summary>
         public PresenceGateway Presence { get; }

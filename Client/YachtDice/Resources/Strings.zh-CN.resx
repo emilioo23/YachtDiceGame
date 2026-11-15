@@ -2271,4 +2271,7 @@
   <data name="ResetPassword_ErrorPasswordUsedBefore" xml:space="preserve">
     <value>不能使用当前密码或之前的两个密码。</value>
   </data>
+  <data name="Dialogs_SessionExpired" xml:space="preserve">
+    <value>你的会话已结束。请重新登录。</value>
+  </data>
 </root>

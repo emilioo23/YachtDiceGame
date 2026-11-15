@@ -63,21 +63,21 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server to change the avatar of a player.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="avatarId">Identifier of the avatar that the player wants to use.</param>
         /// <returns>The outcome of the change.</returns>
-        public async Task<AvatarChangeResultCode> ChangeAvatarAsync(string displayName, int avatarId)
+        public async Task<AvatarChangeResultCode> ChangeAvatarAsync(string sessionToken, int avatarId)
         {
-            AvatarChangeResultCode result = await ExecuteAsync(client => client.ChangeAvatar(displayName, avatarId));
+            AvatarChangeResultCode result = await ExecuteAsync(client => client.ChangeAvatar(sessionToken, avatarId));
 
             return result;
         }
 
         /// <inheritdoc />
-        public async Task<UsernameChangeResultCode> ChangeUsernameAsync(string currentName, string newUsername)
+        public async Task<UsernameChangeResultCode> ChangeUsernameAsync(string sessionToken, string newUsername)
         {
             UsernameChangeResultCode result =
-                await ExecuteAsync(client => client.ChangeUsername(currentName, newUsername));
+                await ExecuteAsync(client => client.ChangeUsername(sessionToken, newUsername));
 
             return result;
         }
@@ -89,9 +89,9 @@ namespace YachtDice.Gateway
             return achievements.ToList();
         }
 
-        public async Task<TitleChangeResultCode> ChangeTitleAsync(string playerName, int titleId)
+        public async Task<TitleChangeResultCode> ChangeTitleAsync(string sessionToken, int titleId)
         {
-            TitleChangeResultCode result = await ExecuteAsync(client => client.ChangeTitle(playerName, titleId));
+            TitleChangeResultCode result = await ExecuteAsync(client => client.ChangeTitle(sessionToken, titleId));
 
             return result;
         }
@@ -103,16 +103,16 @@ namespace YachtDice.Gateway
             return games.ToList();
         }
 
-        public async Task<FlagChangeResultCode> ChangeFlagAsync(string playerName, string flagCode)
+        public async Task<FlagChangeResultCode> ChangeFlagAsync(string sessionToken, string flagCode)
         {
-            FlagChangeResultCode result = await ExecuteAsync(client => client.ChangeFlag(playerName, flagCode));
+            FlagChangeResultCode result = await ExecuteAsync(client => client.ChangeFlag(sessionToken, flagCode));
 
             return result;
         }
 
-        public async Task<AccountDeletionResultCode> DeleteAccountAsync(string playerName)
+        public async Task<AccountDeletionResultCode> DeleteAccountAsync(string sessionToken)
         {
-            AccountDeletionResultCode result = await ExecuteAsync(client => client.DeleteAccount(playerName));
+            AccountDeletionResultCode result = await ExecuteAsync(client => client.DeleteAccount(sessionToken));
 
             return result;
         }

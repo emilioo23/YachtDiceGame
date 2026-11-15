@@ -168,7 +168,10 @@ namespace YachtDice.Views
             };
 
             LoginData loginData = await _gateway.LoginAsync(credentials);
-            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false);
+            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false)
+            {
+                SessionToken = loginData.SessionToken ?? string.Empty
+            };
 
             if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {

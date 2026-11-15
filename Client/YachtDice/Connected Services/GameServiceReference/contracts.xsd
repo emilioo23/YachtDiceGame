@@ -146,6 +146,7 @@
       <xs:enumeration value="UnexpectedError" />
       <xs:enumeration value="DatabaseUnavailable" />
       <xs:enumeration value="ValidationFailed" />
+      <xs:enumeration value="SessionExpired" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />

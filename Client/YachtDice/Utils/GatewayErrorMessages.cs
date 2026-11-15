@@ -28,6 +28,9 @@ namespace YachtDice.Utils
                 case GatewayErrorCode.ValidationFailed:
                     message = Strings.Dialogs_InvalidData;
                     break;
+                case GatewayErrorCode.SessionExpired:
+                    message = Strings.Dialogs_SessionExpired;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

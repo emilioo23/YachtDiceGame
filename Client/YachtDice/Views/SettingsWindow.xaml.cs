@@ -324,7 +324,7 @@ namespace YachtDice.Views
 
         private async Task DeleteAccountAsync()
         {
-            AccountDeletionResultCode result = await _playerGateway.DeleteAccountAsync(_session.DisplayName);
+            AccountDeletionResultCode result = await _playerGateway.DeleteAccountAsync(_session.SessionToken);
 
             if (result == AccountDeletionResultCode.Success)
             {

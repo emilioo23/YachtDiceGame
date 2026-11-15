@@ -1222,6 +1222,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Tu sesión terminó. Vuelve a iniciar sesión.
+        /// </summary>
+        public static string Dialogs_SessionExpired {
+            get {
+                return ResourceManager.GetString("Dialogs_SessionExpired", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

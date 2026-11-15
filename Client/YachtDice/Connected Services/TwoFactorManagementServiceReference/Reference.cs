@@ -86,6 +86,9 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

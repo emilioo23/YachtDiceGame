@@ -227,6 +227,9 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

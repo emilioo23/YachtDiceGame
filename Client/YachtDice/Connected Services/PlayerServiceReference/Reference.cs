@@ -320,6 +320,9 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -955,11 +958,11 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatar", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeAvatarResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeAvatarServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId);
+        YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string sessionToken, int avatarId);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeUsername", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeUsernameServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername);
+        YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string sessionToken, string newUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetAchievements", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault", Name="ServiceFault")]
@@ -967,7 +970,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId);
+        YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string sessionToken, int titleId);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault", Name="ServiceFault")]
@@ -975,11 +978,11 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode);
+        YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/DeleteAccount", ReplyAction="urn:yachtdice:contracts/IPlayerService/DeleteAccountResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/DeleteAccountServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string playerName);
+        YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1025,32 +1028,32 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.GetAvatarCatalog();
         }
         
-        public YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string displayName, int avatarId) {
-            return base.Channel.ChangeAvatar(displayName, avatarId);
+        public YachtDice.PlayerServiceReference.AvatarChangeResultCode ChangeAvatar(string sessionToken, int avatarId) {
+            return base.Channel.ChangeAvatar(sessionToken, avatarId);
         }
         
-        public YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string currentName, string newUsername) {
-            return base.Channel.ChangeUsername(currentName, newUsername);
+        public YachtDice.PlayerServiceReference.UsernameChangeResultCode ChangeUsername(string sessionToken, string newUsername) {
+            return base.Channel.ChangeUsername(sessionToken, newUsername);
         }
         
         public YachtDice.PlayerServiceReference.AchievementInfo[] GetAchievements(string playerName) {
             return base.Channel.GetAchievements(playerName);
         }
         
-        public YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string playerName, int titleId) {
-            return base.Channel.ChangeTitle(playerName, titleId);
+        public YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string sessionToken, int titleId) {
+            return base.Channel.ChangeTitle(sessionToken, titleId);
         }
         
         public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName) {
             return base.Channel.GetGameHistory(playerName);
         }
         
-        public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode) {
-            return base.Channel.ChangeFlag(playerName, flagCode);
+        public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode) {
+            return base.Channel.ChangeFlag(sessionToken, flagCode);
         }
         
-        public YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string playerName) {
-            return base.Channel.DeleteAccount(playerName);
+        public YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken) {
+            return base.Channel.DeleteAccount(sessionToken);
         }
     }
 }

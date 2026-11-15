@@ -293,7 +293,7 @@ namespace YachtDice.Views
         private async Task SaveAvatarAsync()
         {
             AvatarChangeResultCode result =
-                await _playerGateway.ChangeAvatarAsync(_session.DisplayName, _selectedAvatarId);
+                await _playerGateway.ChangeAvatarAsync(_session.SessionToken, _selectedAvatarId);
 
             if (result == AvatarChangeResultCode.Success)
             {
@@ -376,7 +376,7 @@ namespace YachtDice.Views
         private async Task SaveTitleAsync(bool isSavedMessageShown)
         {
             int titleId = GetSelectedTitleId();
-            TitleChangeResultCode result = await _playerGateway.ChangeTitleAsync(_session.DisplayName, titleId);
+            TitleChangeResultCode result = await _playerGateway.ChangeTitleAsync(_session.SessionToken, titleId);
 
             if (result == TitleChangeResultCode.Success)
             {
@@ -396,7 +396,7 @@ namespace YachtDice.Views
         private async Task SaveFlagAsync(bool isSavedMessageShown)
         {
             string flagCode = GetSelectedFlagCode();
-            FlagChangeResultCode result = await _playerGateway.ChangeFlagAsync(_session.DisplayName, flagCode);
+            FlagChangeResultCode result = await _playerGateway.ChangeFlagAsync(_session.SessionToken, flagCode);
 
             if (result == FlagChangeResultCode.Success)
             {
@@ -416,7 +416,7 @@ namespace YachtDice.Views
         private async Task SaveUsernameAsync(string newUsername, bool isSavedMessageShown)
         {
             UsernameChangeResultCode result =
-                await _playerGateway.ChangeUsernameAsync(_session.DisplayName, newUsername);
+                await _playerGateway.ChangeUsernameAsync(_session.SessionToken, newUsername);
 
             if (result == UsernameChangeResultCode.Success)
             {
@@ -430,7 +430,10 @@ namespace YachtDice.Views
 
         private void ReopenWithNewUsername(string newUsername, bool isSavedMessageShown)
         {
-            var renamedSession = new PlayerSession(newUsername, _session.FirstName, _session.IsGuest);
+            var renamedSession = new PlayerSession(newUsername, _session.FirstName, _session.IsGuest)
+            {
+                SessionToken = _session.SessionToken
+            };
 
             _session.Presence.Disconnect();
 

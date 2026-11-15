@@ -2271,4 +2271,7 @@
   <data name="ResetPassword_ErrorPasswordUsedBefore" xml:space="preserve">
     <value>Você não pode usar sua senha atual nem nenhuma das duas anteriores.</value>
   </data>
+  <data name="Dialogs_SessionExpired" xml:space="preserve">
+    <value>Sua sessão terminou. Entre novamente.</value>
+  </data>
 </root>

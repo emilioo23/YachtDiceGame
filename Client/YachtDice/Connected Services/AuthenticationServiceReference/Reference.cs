@@ -111,6 +111,9 @@ namespace YachtDice.AuthenticationServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -169,6 +172,19 @@ namespace YachtDice.AuthenticationServiceReference {
                 if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
                     this.FirstNameField = value;
                     this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
                 }
             }
         }
@@ -294,6 +310,9 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
