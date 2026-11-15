@@ -43,10 +43,13 @@ namespace YachtDice.Views
         private readonly TurnCountdown _countdown = new TurnCountdown();
         private readonly ReconnectWaitTracker _reconnectWait = new ReconnectWaitTracker();
         private readonly DispatcherTimer _clock = new DispatcherTimer();
+        private readonly GameConnectionRecovery _connectionRecovery;
+        private readonly Func<Task<bool>> _recoverConnection;
 
         private bool _isLeavingOnClose = true;
         private bool _isClosed;
         private bool _isBusy;
+        private bool _isReconnecting;
         private string _hostId;
         private List<MatchParticipant> _presentPlayers;
         private List<MatchPlayer> _matchPlayers;
@@ -65,6 +68,8 @@ namespace YachtDice.Views
             _chat = chat;
             _playerId = roomGateway.PlayerId;
             _gameGateway = new GameGateway(new RoomMembership(_playerId, roomGateway.CurrentRoom.Code));
+            _connectionRecovery = new GameConnectionRecovery(roomGateway, chat, _gameGateway);
+            _recoverConnection = RecoverConnectionAsync;
             _diceBoard = new DiceBoard(DiceCanvas, this);
             _scorecard = new ScorecardGrid(CategoriesPanel, this);
             _celebration = new YachtCelebration(CelebrationCanvas, this);
@@ -84,7 +89,7 @@ namespace YachtDice.Views
 
         private bool IsLocalTurn => _state != null && CurrentPhase == TurnPhase.LocalTurn;
 
-        private bool CanAct => IsLocalTurn && !_isBusy;
+        private bool CanAct => IsLocalTurn && !_isBusy && !_isReconnecting;
 
         private bool CanRoll => CanAct && _state.RollsLeft > NoRolls;
 
@@ -109,6 +114,9 @@ namespace YachtDice.Views
         {
             _gameGateway.GameChanged += HandleGameChanged;
             ConnectionLossHandler.Watch(_gameGateway);
+            _connectionRecovery.AttemptStarted += HandleRecoveryAttempt;
+            _connectionRecovery.Restored += HandleConnectionRestored;
+            ConnectionLossHandler.UseRecovery(_recoverConnection);
             _clock.Interval = TimeSpan.FromSeconds(ClockIntervalSeconds);
             _clock.Tick += HandleClockTick;
             RollButton.IsEnabled = false;
@@ -325,6 +333,42 @@ namespace YachtDice.Views
             return state.Players.Where(isAbsent).Select(getId).ToList();
         }
 
+        private async Task<bool> RecoverConnectionAsync()
+        {
+            _isReconnecting = true;
+            RollButton.IsEnabled = false;
+
+            bool isRecovered = await _connectionRecovery.RecoverAsync();
+
+            _isReconnecting = false;
+
+            if (!_isClosed)
+            {
+                LinkBanner.Visibility = Visibility.Collapsed;
+                RenderRollButtonIfStateKnown();
+            }
+
+            return isRecovered;
+        }
+
+        private void HandleRecoveryAttempt(int attempt)
+        {
+            if (!_isClosed)
+            {
+                LinkTextBlock.Text = string.Format(Strings.Game_Link_ReconnectingFormat, attempt);
+                LinkBanner.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void HandleConnectionRestored(GameState state)
+        {
+            if (!_isClosed)
+            {
+                AcceptState(state);
+                AddNotice(Strings.Game_Chat_ConnectionRestored);
+            }
+        }
+
         private void RenderReconnectBanner()
         {
             IReadOnlyList<string> waiting = _reconnectWait.GetWaitingPlayerIds();
@@ -363,6 +407,14 @@ namespace YachtDice.Views
             return isHeld;
         }
 
+        private void RenderRollButtonIfStateKnown()
+        {
+            if (_state != null)
+            {
+                RenderRollButton();
+            }
+        }
+
         private void RenderRollButton()
         {
             RollButton.Content = string.Format(Strings.Game_Dice_ButtonRoll, MaxRolls - _state.RollsLeft);
@@ -392,7 +444,7 @@ namespace YachtDice.Views
 
         private async Task RunActionAsync(Func<Task<GameResultCode>> action)
         {
-            if (!_isBusy)
+            if (!_isBusy && !_isReconnecting)
             {
                 _isBusy = true;
                 RollButton.IsEnabled = false;
@@ -627,6 +679,7 @@ namespace YachtDice.Views
         {
             _isClosed = true;
             _clock.Stop();
+            ConnectionLossHandler.ReleaseRecovery(_recoverConnection);
             ChatPanelControl.Detach();
             _roomGateway.RoomChanged -= HandleRoomChanged;
             _gameGateway.GameChanged -= HandleGameChanged;

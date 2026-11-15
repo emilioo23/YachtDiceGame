@@ -96,6 +96,19 @@
                         </Grid>
                     </Border>
 
+                    <Border x:Name="LinkBanner"
+                            Visibility="Collapsed"
+                            Background="{StaticResource BrushWood}"
+                            CornerRadius="8"
+                            Padding="12,6"
+                            Margin="0,0,0,10">
+                        <TextBlock x:Name="LinkTextBlock"
+                                   Foreground="{StaticResource BrushGold}"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
                     <Border x:Name="ReconnectBanner"
                             Visibility="Collapsed"
                             Background="{StaticResource BrushWood}"
