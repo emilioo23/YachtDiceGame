@@ -17,7 +17,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int HoursToVerifyEmail = 48;
         private const int InitialExperience = 0;
         private const int InitialLevel = 1;
-        private const int NameMaxLength = 50;
         private const string RegisteredLogMessage = "Player registered successfully.";
         private const string NullPlayerMessage = "The new player cannot be null.";
         private const string NullRepositoryMessage = "The player repository cannot be null.";
@@ -102,6 +101,10 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RegistrationResult.OffensiveUsername;
             }
+            else if (!HasValidNames(player))
+            {
+                result = RegistrationResult.InvalidName;
+            }
             else if (!EmailAddressValidator.IsValid(player.Email.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
@@ -123,6 +126,12 @@ namespace YachtDice.Server.Logic.Authentication
             return hasNames && hasCredentials && !string.IsNullOrWhiteSpace(player.Email);
         }
 
+        private static bool HasValidNames(Player player)
+        {
+            return CredentialRules.IsValidPersonName(player.FirstName.Trim())
+                && CredentialRules.IsValidPersonName(player.LastName.Trim());
+        }
+
         private static bool HasValidLengths(Player player)
         {
             int usernameLength = player.Username?.Trim().Length ?? 0;
@@ -130,7 +139,8 @@ namespace YachtDice.Server.Logic.Authentication
             int firstNameLength = player.FirstName?.Trim().Length ?? 0;
             int lastNameLength = player.LastName?.Trim().Length ?? 0;
 
-            bool hasValidNameLengths = firstNameLength <= NameMaxLength && lastNameLength <= NameMaxLength;
+            bool hasValidNameLengths = firstNameLength <= CredentialRules.NameMaxLength
+                && lastNameLength <= CredentialRules.NameMaxLength;
 
             return hasValidNameLengths
                 && usernameLength <= CredentialRules.UsernameMaxLength

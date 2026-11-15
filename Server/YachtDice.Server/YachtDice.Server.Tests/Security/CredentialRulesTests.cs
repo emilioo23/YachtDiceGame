@@ -24,6 +24,60 @@ namespace YachtDice.Server.Tests.Security
         }
 
         [Theory]
+        [InlineData("Gabriel")]
+        [InlineData("María José")]
+        [InlineData("Anne-Marie")]
+        [InlineData("O'Brien")]
+        [InlineData("Hernández")]
+        [InlineData("李明")]
+        public void IsValidPersonName_LettersWithSpacesHyphensAndApostrophes_ReturnsTrue(string name)
+        {
+            bool isValid = CredentialRules.IsValidPersonName(name);
+
+            Assert.True(isValid);
+        }
+
+        [Theory]
+        [InlineData("Gabriel2")]
+        [InlineData("1234")]
+        [InlineData("Gab!el")]
+        [InlineData("<script>")]
+        [InlineData("'; DROP TABLE Player;--")]
+        [InlineData("Ana  Lopez")]
+        [InlineData("-Ana")]
+        [InlineData("Ana-")]
+        [InlineData(" Ana")]
+        [InlineData("A")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void IsValidPersonName_DigitsSymbolsBadSeparatorsOrTooShort_ReturnsFalse(string name)
+        {
+            bool isValid = CredentialRules.IsValidPersonName(name);
+
+            Assert.False(isValid);
+        }
+
+        [Fact]
+        public void IsValidPersonName_NameOfExactlyTheMaximum_ReturnsTrue()
+        {
+            string name = new string(FillLetter, CredentialRules.NameMaxLength);
+
+            bool isValid = CredentialRules.IsValidPersonName(name);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void IsValidPersonName_NameLongerThanTheMaximum_ReturnsFalse()
+        {
+            string name = new string(FillLetter, CredentialRules.NameMaxLength + 1);
+
+            bool isValid = CredentialRules.IsValidPersonName(name);
+
+            Assert.False(isValid);
+        }
+
+        [Theory]
         [InlineData("ab")]
         [InlineData("gabriel hm")]
         [InlineData("josé")]

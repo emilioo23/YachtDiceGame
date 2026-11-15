@@ -35,13 +35,44 @@ namespace YachtDice.Server.Logic.Security
         /// </summary>
         public const int EmailMaxLength = 100;
 
+        /// <summary>
+        /// Minimum number of characters of a first name or a last name.
+        /// </summary>
+        public const int NameMinLength = 2;
+
+        /// <summary>
+        /// Maximum number of characters of a first name or a last name. It is the size of the column in the
+        /// database.
+        /// </summary>
+        public const int NameMaxLength = 50;
+
         private const string UsernameCharactersPattern = "^[A-Za-z0-9._]+$";
+        private const string PersonNamePattern = @"^\p{L}+([ '\-]\p{L}+)*$";
         private const int UsernameRegexTimeoutMilliseconds = 100;
 
         private static readonly Regex UsernameCharacters = new Regex(
             UsernameCharactersPattern,
             RegexOptions.Compiled,
             TimeSpan.FromMilliseconds(UsernameRegexTimeoutMilliseconds));
+
+        private static readonly Regex PersonNameCharacters = new Regex(
+            PersonNamePattern,
+            RegexOptions.Compiled,
+            TimeSpan.FromMilliseconds(UsernameRegexTimeoutMilliseconds));
+
+        /// <summary>
+        /// Indicates whether a first name or a last name has a valid length and is made only of letters, with
+        /// single spaces, hyphens or apostrophes between the words (for example "María José", "Anne-Marie" or
+        /// "O'Brien"). Digits and symbols are not allowed.
+        /// </summary>
+        /// <param name="name">Name already trimmed.</param>
+        /// <returns>True if the name can be used.</returns>
+        public static bool IsValidPersonName(string name)
+        {
+            bool hasValidLength = name != null && name.Length >= NameMinLength && name.Length <= NameMaxLength;
+
+            return hasValidLength && PersonNameCharacters.IsMatch(name);
+        }
 
         /// <summary>
         /// Indicates whether the username has a valid length and only uses letters without accents, digits,

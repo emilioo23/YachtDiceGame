@@ -30,6 +30,9 @@
         WeakPassword,
 
         /// <summary>The username contains an offensive word.</summary>
-        OffensiveUsername
+        OffensiveUsername,
+
+        /// <summary>The first name or the last name has digits, symbols or is too short.</summary>
+        InvalidName
     }
 }

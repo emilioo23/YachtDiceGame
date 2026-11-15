@@ -228,6 +228,54 @@ namespace YachtDice.Server.Tests.Authentication
             Assert.Equal(RegistrationResult.FieldTooLong, registrationResult);
         }
 
+        [Theory]
+        [InlineData("Gabriel2")]
+        [InlineData("<script>")]
+        [InlineData("G")]
+        public void RegisterPlayer_FirstNameWithDigitsSymbolsOrTooShort_ReturnsInvalidName(string firstName)
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.FirstName = firstName;
+
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Equal(RegistrationResult.InvalidName, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_LastNameWithDigits_ReturnsInvalidName()
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.LastName = "Hernandez3";
+
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Equal(RegistrationResult.InvalidName, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_NamesWithAccentsAndSeparators_ReturnsSuccess()
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.FirstName = "José María";
+            newPlayer.LastName = "O'Brien-Núñez";
+
+            RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Equal(RegistrationResult.Success, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_InvalidName_SavesNothing()
+        {
+            Player newPlayer = CreatePlayer(Username, Email);
+            newPlayer.FirstName = "Gabriel2";
+
+            _service.RegisterPlayer(newPlayer, Password);
+
+            Assert.Empty(_players.Players);
+        }
+
         [Fact]
         public void RegisterPlayer_FieldLongerThanTheLimit_SavesNothing()
         {

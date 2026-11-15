@@ -44,6 +44,10 @@ namespace YachtDice.Server.Contracts.Players
         /// The username contains an offensive word.
         /// </summary>
         [EnumMember]
-        OffensiveUsername
+        OffensiveUsername,
+
+        /// <summary>The first name or the last name has digits, symbols or is too short.</summary>
+        [EnumMember]
+        InvalidName
     }
 }
