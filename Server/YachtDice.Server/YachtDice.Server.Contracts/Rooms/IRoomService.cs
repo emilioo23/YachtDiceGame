@@ -100,6 +100,15 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode TransferHost(RoomMember host, string newHostId);
 
         /// <summary>
+        /// Adds a computer player to the room and tells everyone. Only the host can do it, before the game.
+        /// </summary>
+        /// <param name="host">Room and identifier of the host.</param>
+        /// <returns>Outcome of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        RoomResultCode AddComputer(RoomMember host);
+
+        /// <summary>
         /// Looks for a game in progress that the player left and can still join again, by using the name of
         /// the player.
         /// </summary>

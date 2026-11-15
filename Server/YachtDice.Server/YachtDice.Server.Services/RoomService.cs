@@ -167,6 +167,19 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Adds a computer player to the room and tells everyone. Only the host can do it, before the game.
+        /// </summary>
+        /// <param name="host">Room and identifier of the host.</param>
+        /// <returns>Outcome of the change.</returns>
+        public Contracts.RoomResultCode AddComputer(Contracts.RoomMember host)
+        {
+            LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessAddComputer(member));
+
+            return result;
+        }
+
+        /// <summary>
         /// Looks for a game in progress that the player left and can still join again, by using the name of
         /// the player.
         /// </summary>
@@ -268,6 +281,18 @@ namespace YachtDice.Server.Services
                 TellLeftOutPlayers(result);
                 _gameCoordinator.StartGame(result.Room);
                 Broadcast(result.Room, Contracts.RoomEventType.GameStarted);
+            }
+
+            return Mapping.RoomMapper.ToResultCode(result.Status);
+        }
+
+        private Contracts.RoomResultCode ProcessAddComputer(LogicRooms.RoomMember member)
+        {
+            LogicRooms.RoomResult result = _roomManager.AddComputer(member);
+
+            if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                Broadcast(result.Room, Contracts.RoomEventType.PlayerJoined);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);

@@ -180,7 +180,8 @@ namespace YachtDice.Server.Services.Mapping
                 Id = player.Id,
                 DisplayName = player.DisplayName,
                 AvatarId = player.AvatarId,
-                IsReady = player.IsReady
+                IsReady = player.IsReady,
+                IsComputer = player.IsComputer
             };
 
             return contract;

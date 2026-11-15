@@ -26,6 +26,8 @@ namespace YachtDice.Server.Services
         /// </summary>
         public const int ReconnectSeconds = 60;
 
+        private const int ComputerMoveSeconds = 2;
+
         private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
         private const string NullDependencyMessage = "A dependency of the game coordinator cannot be null.";
 
@@ -41,6 +43,7 @@ namespace YachtDice.Server.Services
             new CallbackRegistry<Contracts.IGameCallback>();
 
         private readonly TurnTimer _timer;
+        private readonly TurnTimer _computerTimer;
         private readonly ReconnectTimer _reconnectTimer = new ReconnectTimer();
         private readonly LogicLogging.AppLogger _logger;
 
@@ -56,6 +59,7 @@ namespace YachtDice.Server.Services
             _resultRecorder = resultRecorder
                 ?? throw new ArgumentNullException(nameof(resultRecorder), NullDependencyMessage);
             _timer = new TurnTimer(HandleTurnExpired);
+            _computerTimer = new TurnTimer(HandleComputerMove);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -71,7 +75,10 @@ namespace YachtDice.Server.Services
         public void StartGame(LogicRooms.RoomDetails room)
         {
             var participants = room.Players
-                .Select(player => new LogicGame.GameParticipant(player.Id, player.DisplayName))
+                .Select(player => new LogicGame.GameParticipant(player.Id, player.DisplayName)
+                {
+                    IsComputer = player.IsComputer
+                })
                 .ToList();
             LogicGame.GameSnapshot snapshot = _gameManager.Start(room.Code, participants, room.Settings.Speed);
 
@@ -188,6 +195,7 @@ namespace YachtDice.Server.Services
         public void EndGame(string roomCode)
         {
             _timer.Stop(roomCode);
+            _computerTimer.Stop(roomCode);
             _reconnectTimer.CancelRoom(roomCode);
             _gameManager.End(roomCode);
             _roomSettings.TryRemove(roomCode, out _);
@@ -285,6 +293,20 @@ namespace YachtDice.Server.Services
             {
                 _timer.Start(turn, snapshot.TurnSeconds);
             }
+
+            SyncComputerTimer(turn, hasTurn && snapshot.IsComputerTurn);
+        }
+
+        private void SyncComputerTimer(LogicGame.GameTurn turn, bool isComputerTurn)
+        {
+            if (isComputerTurn)
+            {
+                _computerTimer.Start(turn, ComputerMoveSeconds);
+            }
+            else
+            {
+                _computerTimer.Stop(turn.RoomCode);
+            }
         }
 
         private void HandleReconnectExpired(LogicRooms.RoomMember member)
@@ -299,6 +321,21 @@ namespace YachtDice.Server.Services
             {
                 ReconnectTimeExpired?.Invoke(member);
             }
+        }
+
+        private void HandleComputerMove(LogicGame.GameTurn turn)
+        {
+            LogicGame.GameActionResult result = _gameManager.PlayComputerMove(turn);
+            bool isSameTurn = result.Status == LogicGame.GameActionStatus.Success
+                && result.Snapshot.TurnNumber == turn.TurnNumber;
+            Contracts.GameEventType eventType = Contracts.GameEventType.CategoryScored;
+
+            if (isSameTurn)
+            {
+                eventType = Contracts.GameEventType.DiceRolled;
+            }
+
+            CompleteTurn(turn.RoomCode, result, eventType);
         }
 
         private void HandleTurnExpired(LogicGame.GameTurn turn)
