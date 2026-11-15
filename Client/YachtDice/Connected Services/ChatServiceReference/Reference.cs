@@ -113,6 +113,9 @@ namespace YachtDice.ChatServiceReference {
         private string ContentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsInfractionNoticeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime TimestampField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -186,6 +189,19 @@ namespace YachtDice.ChatServiceReference {
                 if ((object.ReferenceEquals(this.ContentField, value) != true)) {
                     this.ContentField = value;
                     this.RaisePropertyChanged("Content");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsInfractionNotice {
+            get {
+                return this.IsInfractionNoticeField;
+            }
+            set {
+                if ((this.IsInfractionNoticeField.Equals(value) != true)) {
+                    this.IsInfractionNoticeField = value;
+                    this.RaisePropertyChanged("IsInfractionNotice");
                 }
             }
         }

@@ -2250,4 +2250,7 @@
   <data name="Lobby_Result_OffensiveRoomName" xml:space="preserve">
     <value>房间名称包含不允许的词语。</value>
   </data>
+  <data name="Game_Chat_InfractionNotice" xml:space="preserve">
+    <value>仅你可见：{0} 已发送 3 条含有违禁词的消息。你可以将其移出房间。</value>
+  </data>
 </root>

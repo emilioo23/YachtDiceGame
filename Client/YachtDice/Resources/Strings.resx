@@ -2250,4 +2250,7 @@
   <data name="Lobby_Result_OffensiveRoomName" xml:space="preserve">
     <value>El nombre de la sala tiene una palabra que no está permitida.</value>
   </data>
+  <data name="Game_Chat_InfractionNotice" xml:space="preserve">
+    <value>Solo tú ves esto: {0} ya escribió 3 mensajes con palabras prohibidas. Puedes expulsarlo de la sala.</value>
+  </data>
 </root>

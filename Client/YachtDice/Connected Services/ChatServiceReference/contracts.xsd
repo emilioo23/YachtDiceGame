@@ -63,6 +63,7 @@
       <xs:element minOccurs="0" name="AuthorLevel" type="xs:int" />
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="Content" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsInfractionNotice" type="xs:boolean" />
       <xs:element minOccurs="0" name="Timestamp" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>

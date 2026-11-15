@@ -137,6 +137,25 @@ namespace YachtDice.Views
 
         private void ShowChatMessage(ChatMessage message)
         {
+            if (message.IsInfractionNotice)
+            {
+                ShowInfractionNotice(message.Author);
+            }
+            else
+            {
+                ShowPlayerMessage(message);
+            }
+        }
+
+        private void ShowInfractionNotice(string offenderName)
+        {
+            string notice = string.Format(Strings.Game_Chat_InfractionNotice, offenderName);
+
+            AddMessage(Strings.Game_Chat_SystemName, notice, ChatMessageKind.System);
+        }
+
+        private void ShowPlayerMessage(ChatMessage message)
+        {
             ChatMessageKind kind = message.AuthorId == _playerId ? ChatMessageKind.Own : ChatMessageKind.Other;
 
             AddMessage(new ChatEntry

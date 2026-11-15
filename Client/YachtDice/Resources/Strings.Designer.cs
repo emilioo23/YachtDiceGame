@@ -1159,6 +1159,15 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Solo tú ves esto: {0} ya escribió 3 mensajes con palabras prohibidas.
+        /// </summary>
+        public static string Game_Chat_InfractionNotice {
+            get {
+                return ResourceManager.GetString("Game_Chat_InfractionNotice", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {
