@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -31,6 +32,12 @@ namespace YachtDice.Views
         private const double FifthDieLeft = 250;
         private const double FifthDieTop = 230;
         private const double FifthDieAngle = -12;
+        private const int TumblingFrames = 9;
+        private const int FaceCount = 6;
+        private const int FirstFace = 1;
+        private const int MaxTumblingTilt = 40;
+        private const double LandingScale = 1.12;
+        private const int LandingMilliseconds = 120;
 
         private static readonly (double left, double top, double angle)[] DicePositions =
         {
@@ -41,8 +48,13 @@ namespace YachtDice.Views
             (FifthDieLeft, FifthDieTop, FifthDieAngle)
         };
 
+        private static readonly TimeSpan LandingDuration = TimeSpan.FromMilliseconds(LandingMilliseconds);
+
         private readonly Canvas _canvas;
         private readonly FrameworkElement _resources;
+        private readonly DiceRollAnimation _rollAnimation = new DiceRollAnimation();
+        private readonly ElementAnimator _animator = new ElementAnimator();
+        private readonly SecureRandom _random = new SecureRandom();
 
         /// <summary>
         /// Initializes the board inside a canvas.
@@ -67,13 +79,57 @@ namespace YachtDice.Views
         /// <param name="isHeld">Tells if a die is held, given its position.</param>
         public void Render(IReadOnlyList<int> values, Func<int, bool> isHeld)
         {
+            _rollAnimation.Stop();
             _canvas.Children.Clear();
 
             for (var index = 0; index < DiceCount; index++)
             {
-                int value = index < values.Count ? values[index] : NoValue;
+                _canvas.Children.Add(CreateDie(index, ReadValue(values, index), isHeld(index)));
+            }
+        }
 
-                _canvas.Children.Add(CreateDie(index, value, isHeld(index)));
+        public void Roll(IReadOnlyList<int> values, Func<int, bool> isHeld)
+        {
+            _rollAnimation.Play(
+                TumblingFrames,
+                () => ShowTumblingFrame(values, isHeld),
+                () => Land(values, isHeld));
+        }
+
+        private static int ReadValue(IReadOnlyList<int> values, int index)
+        {
+            return index < values.Count ? values[index] : NoValue;
+        }
+
+        private void ShowTumblingFrame(IReadOnlyList<int> values, Func<int, bool> isHeld)
+        {
+            _canvas.Children.Clear();
+
+            for (var index = 0; index < DiceCount; index++)
+            {
+                bool isRolling = !isHeld(index);
+                int value = isRolling ? _random.Next(FaceCount) + FirstFace : ReadValue(values, index);
+                Border die = CreateDie(index, value, isHeld(index));
+
+                if (isRolling)
+                {
+                    ((RotateTransform)die.RenderTransform).Angle += _random.Next(MaxTumblingTilt) - MaxTumblingTilt / 2;
+                }
+
+                _canvas.Children.Add(die);
+            }
+        }
+
+        private void Land(IReadOnlyList<int> values, Func<int, bool> isHeld)
+        {
+            Render(values, isHeld);
+
+            for (var index = 0; index < DiceCount; index++)
+            {
+                if (!isHeld(index))
+                {
+                    _animator.Pulse(_canvas.Children[index], LandingScale, LandingDuration);
+                }
             }
         }
 

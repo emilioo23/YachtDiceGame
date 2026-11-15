@@ -227,6 +227,7 @@ namespace YachtDice.Views
         private void ShowState(GameState state)
         {
             var isNewTurn = _state == null || _state.TurnNumber != state.TurnNumber;
+            bool isNewRoll = !isNewTurn && state.RollsLeft < _state.RollsLeft;
 
             _state = state;
 
@@ -238,6 +239,11 @@ namespace YachtDice.Views
             _countdown.Reset(state.TurnSecondsLeft);
             _reconnectWait.Update(FindAbsentPlayerIds(state));
             RenderState();
+
+            if (isNewRoll)
+            {
+                _diceBoard.Roll(_state.Dice, IsDieHeld);
+            }
 
             if (isNewTurn && IsLocalTurn)
             {
