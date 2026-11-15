@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using YachtDice.Navigation;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -16,6 +17,7 @@ namespace YachtDice.Views
         public SplashWindow()
         {
             InitializeComponent();
+            App.Music.Play(MusicTrack.MenuTheme);
         }
 
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
