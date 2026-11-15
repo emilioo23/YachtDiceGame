@@ -26,6 +26,8 @@ namespace YachtDice.Server.Tests.Rooms
         private const int PlayerLevel = 7;
         private const int GuestLevel = 0;
         private const int ThreeMinutes = 3;
+        private const int ThreeInfractions = 3;
+        private const int NoInfractions = 0;
         private const string OffensiveWord = "pendejo";
         private const string RoomName = "Los del salon 4";
         private const string OffensiveRoomName = "Sala de pendejos";
@@ -453,6 +455,40 @@ namespace YachtDice.Server.Tests.Rooms
             bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _);
 
             Assert.True(isFound);
+        }
+
+        [Fact]
+        public void RegisterChatInfraction_ThirdInfraction_ReturnsThree()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            var writer = new RoomMember(host.Room.Code, player.PlayerId);
+
+            _manager.RegisterChatInfraction(writer);
+            _manager.RegisterChatInfraction(writer);
+            int infractions = _manager.RegisterChatInfraction(writer);
+
+            Assert.Equal(ThreeInfractions, infractions);
+        }
+
+        [Fact]
+        public void RegisterChatInfraction_PlayerNotInside_ReturnsZero()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            int infractions = _manager.RegisterChatInfraction(new RoomMember(host.Room.Code, UnknownPlayerId));
+
+            Assert.Equal(NoInfractions, infractions);
+        }
+
+        [Fact]
+        public void TryGetHost_ExistingRoom_ReturnsTheHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            _manager.TryGetHost(host.Room.Code, out RoomPlayer foundHost);
+
+            Assert.Equal(host.PlayerId, foundHost.Id);
         }
 
         [Fact]

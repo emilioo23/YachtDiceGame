@@ -92,6 +92,21 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult SetReady(RoomMember member, bool isReady);
 
         /// <summary>
+        /// Counts one more chat message with offensive words written by a player of a room.
+        /// </summary>
+        /// <param name="member">Room and identifier of the player who wrote the message.</param>
+        /// <returns>The infractions of the player in the room, or zero if the room or the player do not exist.</returns>
+        int RegisterChatInfraction(RoomMember member);
+
+        /// <summary>
+        /// Finds the host of a room.
+        /// </summary>
+        /// <param name="roomCode">Code of the room.</param>
+        /// <param name="host">The host, when the room exists.</param>
+        /// <returns>True if the room exists.</returns>
+        bool TryGetHost(string roomCode, out RoomPlayer host);
+
+        /// <summary>
         /// Takes another player out of the room for good, also during the game. Only the host can do it. The
         /// expelled player cannot come back to a game in progress.
         /// </summary>

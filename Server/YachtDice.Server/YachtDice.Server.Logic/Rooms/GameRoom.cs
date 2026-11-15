@@ -17,6 +17,7 @@ namespace YachtDice.Server.Logic.Rooms
 
         private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
         private readonly List<RoomPlayer> _absentPlayers = new List<RoomPlayer>();
+        private readonly Dictionary<string, int> _chatInfractions = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly HashSet<string> _expelledNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -95,6 +96,20 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return player;
+        }
+
+        /// <summary>
+        /// Counts one more chat message with offensive words written by a player in this room.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who wrote the message.</param>
+        /// <returns>The infractions that the player has in this room, counting this one.</returns>
+        public int RegisterChatInfraction(string playerId)
+        {
+            _chatInfractions.TryGetValue(playerId, out int infractions);
+            infractions++;
+            _chatInfractions[playerId] = infractions;
+
+            return infractions;
         }
 
         /// <summary>

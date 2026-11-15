@@ -17,6 +17,7 @@ namespace YachtDice.Server.Services
     public class ChatService : ServiceBase, Contracts.IChatService
     {
         private const int MaxMessageLength = 200;
+        private const int InfractionsToWarnHost = 3;
         private const int FirstCharacterIndex = 0;
         private const string IgnoredMessageLogMessage =
             "A chat message was ignored because it is empty or its author is not inside the room.";
@@ -73,6 +74,7 @@ namespace YachtDice.Server.Services
                 Contracts.ChatMessage delivered = CreateDeliveredMessage(writer, content);
 
                 _callbacks.Notify(member.RoomCode, callback => callback.MessageReceived(delivered));
+                RegisterInfraction(member, writer, content);
             }
             else
             {
@@ -92,6 +94,42 @@ namespace YachtDice.Server.Services
             if (hasPlayer && !string.IsNullOrWhiteSpace(leaving.RoomCode))
             {
                 _callbacks.Remove(leaving);
+            }
+        }
+
+        private void RegisterInfraction(LogicRooms.RoomMember member, LogicRooms.RoomPlayer writer, string content)
+        {
+            bool hasOffensiveWord = _wordFilter.Censor(content) != content;
+
+            if (hasOffensiveWord)
+            {
+                int infractions = _roomManager.RegisterChatInfraction(member);
+
+                if (infractions == InfractionsToWarnHost)
+                {
+                    WarnHost(member.RoomCode, writer);
+                }
+            }
+        }
+
+        private void WarnHost(string roomCode, LogicRooms.RoomPlayer offender)
+        {
+            bool hasHost = _roomManager.TryGetHost(roomCode, out LogicRooms.RoomPlayer host);
+
+            if (hasHost && host.Id != offender.Id)
+            {
+                var notice = new Contracts.ChatMessage
+                {
+                    AuthorId = offender.Id,
+                    Author = offender.DisplayName,
+                    Content = string.Empty,
+                    IsInfractionNotice = true,
+                    Timestamp = DateTime.UtcNow
+                };
+
+                _callbacks.NotifyPlayer(
+                    new LogicRooms.RoomMember(roomCode, host.Id),
+                    callback => callback.MessageReceived(notice));
             }
         }
 

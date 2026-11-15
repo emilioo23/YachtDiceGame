@@ -30,6 +30,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MinPlayersToStart = 2;
         private const int ReadyWaitMinutes = 2;
         private const int MaxRoomNameLength = 30;
+        private const int NoInfractions = 0;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
@@ -189,6 +190,42 @@ namespace YachtDice.Server.Logic.Rooms
             RoomResult result = ExecuteInRoom(member.RoomCode, room => ChangeReady(room, member.PlayerId, isReady));
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public int RegisterChatInfraction(RoomMember member)
+        {
+            var infractions = NoInfractions;
+
+            lock (_syncRoot)
+            {
+                bool isInside = TryGetRoom(member.RoomCode, out GameRoom room) && room.HasPlayer(member.PlayerId);
+
+                if (isInside)
+                {
+                    infractions = room.RegisterChatInfraction(member.PlayerId);
+                }
+            }
+
+            return infractions;
+        }
+
+        /// <inheritdoc />
+        public bool TryGetHost(string roomCode, out RoomPlayer host)
+        {
+            var isFound = false;
+
+            host = null;
+
+            lock (_syncRoot)
+            {
+                if (TryGetRoom(roomCode, out GameRoom room))
+                {
+                    isFound = room.TryGetPlayer(room.HostId, out host);
+                }
+            }
+
+            return isFound;
         }
 
         /// <inheritdoc />

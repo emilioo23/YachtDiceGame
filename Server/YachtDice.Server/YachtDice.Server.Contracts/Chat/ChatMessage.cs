@@ -31,6 +31,9 @@ namespace YachtDice.Server.Contracts.Chat
         [DataMember]
         public int AuthorLevel { get; set; }
 
+        [DataMember]
+        public bool IsInfractionNotice { get; set; }
+
         /// <summary>
         /// Text of the message.
         /// </summary>
