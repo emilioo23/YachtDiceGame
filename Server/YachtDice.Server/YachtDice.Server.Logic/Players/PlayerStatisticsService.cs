@@ -59,20 +59,24 @@ namespace YachtDice.Server.Logic.Players
         }
 
         /// <summary>
-        /// Gets the players with the most points, from the first place downwards.
+        /// Gets the players with the most points, from the first place downwards. A tie in points is broken by
+        /// the wins, and players who also have the same wins share the position. The player who asks always sees
+        /// the own position: when it is not among the best players, it is added at the end.
         /// </summary>
+        /// <param name="viewerName">Name of the player who looks at the leaderboard.</param>
         /// <returns>The entries of the leaderboard, in order.</returns>
         /// <exception cref="DataAccessException">The ranking could not be read.</exception>
-        public List<LeaderboardEntry> GetTopPlayers()
+        public List<LeaderboardEntry> GetTopPlayers(string viewerName)
         {
-            List<PlayerRankingRecord> records = _gameHistoryRepository.GetRanking(MaxLeaderboardEntries);
-            Func<PlayerRankingRecord, int, LeaderboardEntry> createLeaderboardEntry = CreateLeaderboardEntry;
+            List<LeaderboardEntry> ranking = AssignPositions(_gameHistoryRepository.GetRanking());
+            List<LeaderboardEntry> visibleEntries = ranking.Take(MaxLeaderboardEntries).ToList();
+            Func<LeaderboardEntry, bool> isViewer =
+                entry => string.Equals(entry.DisplayName, viewerName, StringComparison.OrdinalIgnoreCase);
+            List<LeaderboardEntry> viewerOutsideTop = ranking.Skip(MaxLeaderboardEntries).Where(isViewer).ToList();
 
-            List<LeaderboardEntry> entries = records
-                .Select(createLeaderboardEntry)
-                .ToList();
+            visibleEntries.AddRange(viewerOutsideTop);
 
-            return entries;
+            return visibleEntries;
         }
 
         /// <summary>
@@ -123,15 +127,47 @@ namespace YachtDice.Server.Logic.Players
             return summary;
         }
 
-        private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int index)
+        private static List<LeaderboardEntry> AssignPositions(List<PlayerRankingRecord> records)
+        {
+            List<PlayerRankingRecord> ordered = records
+                .OrderByDescending(record => record.TotalPoints)
+                .ThenByDescending(record => record.Wins)
+                .ThenBy(record => record.DisplayName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            var entries = new List<LeaderboardEntry>();
+            int position = FirstPosition;
+
+            for (int index = 0; index < ordered.Count; index++)
+            {
+                bool isTiedWithPrevious = index > 0 && IsTied(ordered[index - 1], ordered[index]);
+
+                if (!isTiedWithPrevious)
+                {
+                    position = index + FirstPosition;
+                }
+
+                entries.Add(CreateLeaderboardEntry(ordered[index], position));
+            }
+
+            return entries;
+        }
+
+        private static bool IsTied(PlayerRankingRecord previous, PlayerRankingRecord current)
+        {
+            return previous.TotalPoints == current.TotalPoints && previous.Wins == current.Wins;
+        }
+
+        private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int position)
         {
             var entry = new LeaderboardEntry
             {
-                Position = index + FirstPosition,
+                Position = position,
                 DisplayName = record.DisplayName,
                 AvatarId = record.AvatarId,
                 TotalPoints = record.TotalPoints,
-                Wins = record.Wins
+                Wins = record.Wins,
+                GamesPlayed = record.GamesPlayed,
+                Level = record.Level
             };
 
             return entry;

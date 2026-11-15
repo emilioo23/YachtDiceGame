@@ -11,11 +11,10 @@ namespace YachtDice.Server.Tests.InMemory
     /// </summary>
     internal sealed class InMemoryGameHistoryRepository : IGameHistoryRepository
     {
-        private const string NotSupportedMessage = "No test needs this operation of the game history.";
-
         private readonly List<GameResultRecord> _savedResults = new List<GameResultRecord>();
         private readonly List<GameHistoryPlayer> _entries = new List<GameHistoryPlayer>();
         private readonly List<PlayedGameRecord> _playedGames = new List<PlayedGameRecord>();
+        private readonly List<PlayerRankingRecord> _rankingRecords = new List<PlayerRankingRecord>();
 
         /// <summary>
         /// Gets the results saved so far, in the order in which they were saved.
@@ -68,9 +67,18 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public List<PlayerRankingRecord> GetRanking(int maxEntries)
+        public List<PlayerRankingRecord> GetRanking()
         {
-            throw new NotSupportedException(NotSupportedMessage);
+            return _rankingRecords.ToList();
+        }
+
+        /// <summary>
+        /// Adds the totals of a player, so the player appears in the ranking.
+        /// </summary>
+        /// <param name="record">Totals of the player.</param>
+        public void AddRankingRecord(PlayerRankingRecord record)
+        {
+            _rankingRecords.Add(record);
         }
 
         /// <inheritdoc />

@@ -220,7 +220,7 @@ namespace YachtDice.Server.Services
 
         private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
         {
-            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers();
+            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers(string.Empty);
 
             return Mapping.LeaderboardMapper.ToContracts(entries);
         }

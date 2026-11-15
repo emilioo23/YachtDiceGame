@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -29,6 +31,17 @@ namespace YachtDice.Server.Tests.Players
         private const int PlayerExperience = 740;
         private const int ThreeDaysAgo = -3;
         private const int OneDayAgo = -1;
+        private const int RankingPoints = 500;
+        private const int LowerRankingPoints = 120;
+        private const int ManyWins = 4;
+        private const int FewWins = 1;
+        private const int FirstPlace = 1;
+        private const int ThirdPlace = 3;
+        private const int TopSize = 100;
+        private const int TwoEntries = 2;
+        private const int RankingGames = 9;
+        private const int RankingLevel = 4;
+        private const string RankedPlayerNameFormat = "jugador_{0}";
 
         private static readonly DateTime EndDate = DateTime.UtcNow;
 
@@ -176,6 +189,99 @@ namespace YachtDice.Server.Tests.Players
             };
 
             return record;
+        }
+
+        [Fact]
+        public void GetTopPlayers_SamePointsDifferentWins_PutsTheOneWithMoreWinsFirst()
+        {
+            AddRanking(FirstOpponentName, RankingPoints, FewWins);
+            AddRanking(SecondOpponentName, RankingPoints, ManyWins);
+            var expectedNames = new List<string> { SecondOpponentName, FirstOpponentName };
+
+            List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
+
+            Assert.Equal(expectedNames, entries.Select(entry => entry.DisplayName).ToList());
+        }
+
+        [Fact]
+        public void GetTopPlayers_SamePointsAndWins_SharesThePosition()
+        {
+            AddRanking(PlayerName, RankingPoints, ManyWins);
+            AddRanking(FirstOpponentName, RankingPoints, ManyWins);
+            AddRanking(SecondOpponentName, LowerRankingPoints, ManyWins);
+            var expectedPositions = new List<int> { FirstPlace, FirstPlace, ThirdPlace };
+
+            List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
+
+            Assert.Equal(expectedPositions, entries.Select(entry => entry.Position).ToList());
+        }
+
+        [Fact]
+        public void GetTopPlayers_ViewerOutsideTheTop_AddsTheViewerAtTheEnd()
+        {
+            AddPlayersAbove(TopSize);
+            AddRanking(PlayerName, LowerRankingPoints, FewWins);
+            var expectedLastEntry = new { DisplayName = PlayerName, Position = TopSize + 1 };
+
+            List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
+
+            Assert.Equivalent(expectedLastEntry, entries.Last());
+        }
+
+        [Fact]
+        public void GetTopPlayers_ViewerInsideTheTop_DoesNotRepeatTheViewer()
+        {
+            AddRanking(PlayerName, RankingPoints, ManyWins);
+            AddRanking(FirstOpponentName, LowerRankingPoints, FewWins);
+
+            List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
+
+            Assert.Equal(TwoEntries, entries.Count);
+        }
+
+        [Fact]
+        public void GetTopPlayers_MoreThanTheTop_ShowsOnlyTheTop()
+        {
+            AddPlayersAbove(TopSize + 1);
+
+            List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
+
+            Assert.Equal(TopSize, entries.Count);
+        }
+
+        [Fact]
+        public void GetTopPlayers_AnyPlayer_KeepsTheLevelAndTheGamesPlayed()
+        {
+            _history.AddRankingRecord(new PlayerRankingRecord
+            {
+                DisplayName = PlayerName,
+                TotalPoints = RankingPoints,
+                Wins = ManyWins,
+                GamesPlayed = RankingGames,
+                Level = RankingLevel
+            });
+            var expected = new { GamesPlayed = RankingGames, Level = RankingLevel };
+
+            LeaderboardEntry entry = _service.GetTopPlayers(PlayerName).Single();
+
+            Assert.Equivalent(expected, entry);
+        }
+
+        private void AddRanking(string name, int totalPoints, int wins)
+        {
+            var record = new PlayerRankingRecord { DisplayName = name, TotalPoints = totalPoints, Wins = wins };
+
+            _history.AddRankingRecord(record);
+        }
+
+        private void AddPlayersAbove(int count)
+        {
+            for (int number = 0; number < count; number++)
+            {
+                string name = string.Format(CultureInfo.InvariantCulture, RankedPlayerNameFormat, number);
+
+                AddRanking(name, RankingPoints + number, ManyWins);
+            }
         }
     }
 }

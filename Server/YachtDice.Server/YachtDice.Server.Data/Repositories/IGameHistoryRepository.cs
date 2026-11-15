@@ -17,11 +17,10 @@ namespace YachtDice.Server.Data.Repositories
         List<GameHistoryPlayer> FindByPlayerId(int playerId);
 
         /// <summary>
-        /// Gets the players with the most accumulated points, from highest to lowest.
+        /// Gets the totals of every player who finished at least one game, so each player has a position.
         /// </summary>
-        /// <param name="maxEntries">Maximum number of players to return.</param>
-        /// <returns>The ranking, or an empty list if there are no games played.</returns>
-        List<PlayerRankingRecord> GetRanking(int maxEntries);
+        /// <returns>The totals of the players, or an empty list if there are no games played.</returns>
+        List<PlayerRankingRecord> GetRanking();
 
         /// <summary>
         /// Saves the result of a game that just finished, with the players who took part in it, and updates

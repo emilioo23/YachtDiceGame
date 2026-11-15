@@ -24,5 +24,15 @@
         /// Number of games won by the player.
         /// </summary>
         public int Wins { get; set; }
+
+        /// <summary>
+        /// Number of games that the player finished.
+        /// </summary>
+        public int GamesPlayed { get; set; }
+
+        /// <summary>
+        /// Current level of the player.
+        /// </summary>
+        public int Level { get; set; }
     }
 }

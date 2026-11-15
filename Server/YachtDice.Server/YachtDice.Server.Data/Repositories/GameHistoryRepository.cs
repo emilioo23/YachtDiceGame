@@ -16,6 +16,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string FindByPlayerFailedMessage =
             "Database error occurred while fetching game history by player ID.";
 
+        private const int FirstLevel = 1;
         private const string RankingFailedMessage = "Database error occurred while calculating player rankings.";
         private const string SaveFailedMessage = "Database error occurred while saving the result of a game.";
         private const string NullResultMessage = "The result of the game cannot be null.";
@@ -39,16 +40,13 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
-        /// Gets the players with the most accumulated points, from highest to lowest.
+        /// Gets the totals of every player who finished at least one game, so each player has a position.
         /// </summary>
-        /// <param name="maxEntries">Maximum number of players to return.</param>
-        /// <returns>The ranking, or an empty list if there are no games played.</returns>
+        /// <returns>The totals of the players, or an empty list if there are no games played.</returns>
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
-        public List<PlayerRankingRecord> GetRanking(int maxEntries)
+        public List<PlayerRankingRecord> GetRanking()
         {
-            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(
-                context => QueryRanking(context, maxEntries),
-                RankingFailedMessage);
+            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(QueryRanking, RankingFailedMessage);
 
             return ranking;
         }
@@ -183,7 +181,7 @@ namespace YachtDice.Server.Data.Repositories
             return code;
         }
 
-        private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context, int maxEntries)
+        private static List<PlayerRankingRecord> QueryRanking(YachtDiceContext context)
         {
             List<PlayerRankingRecord> ranking = context.GameHistoryPlayer
                 .GroupBy(entry => entry.PlayerId)
@@ -191,7 +189,8 @@ namespace YachtDice.Server.Data.Repositories
                 {
                     PlayerId = group.Key,
                     TotalPoints = group.Sum(entry => entry.FinalScore),
-                    Wins = group.Count(entry => entry.IsWinner == true)
+                    Wins = group.Count(entry => entry.IsWinner == true),
+                    GamesPlayed = group.Count()
                 })
                 .Join(
                     context.Player,
@@ -202,11 +201,10 @@ namespace YachtDice.Server.Data.Repositories
                         DisplayName = player.DisplayName,
                         AvatarId = player.AvatarId,
                         TotalPoints = totals.TotalPoints,
-                        Wins = totals.Wins
+                        Wins = totals.Wins,
+                        GamesPlayed = totals.GamesPlayed,
+                        Level = player.Level ?? FirstLevel
                     })
-                .OrderByDescending(record => record.TotalPoints)
-                .ThenBy(record => record.DisplayName)
-                .Take(maxEntries)
                 .ToList();
 
             return ranking;
