@@ -274,6 +274,7 @@
     <Compile Include="Utils\PreferencesStore.cs" />
     <Compile Include="Utils\MusicTrack.cs" />
     <Compile Include="Utils\SoundEffect.cs" />
+    <Compile Include="Utils\TaskbarAlert.cs" />
     <Compile Include="Utils\SoundEffectPlayer.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />

@@ -32,6 +32,8 @@ namespace YachtDice.Views
         private const int NoWaitingPlayers = 0;
         private const string NameSeparator = ", ";
         private const int ClockIntervalSeconds = 1;
+        private const double TurnPulseScale = 1.15;
+        private const int TurnPulseMilliseconds = 400;
 
         private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
@@ -45,6 +47,7 @@ namespace YachtDice.Views
         private readonly TurnCountdown _countdown = new TurnCountdown();
         private readonly ReconnectWaitTracker _reconnectWait = new ReconnectWaitTracker();
         private readonly SoundEffectPlayer _sounds = new SoundEffectPlayer();
+        private readonly ElementAnimator _animator = new ElementAnimator();
         private readonly DispatcherTimer _clock = new DispatcherTimer();
         private readonly GameConnectionRecovery _connectionRecovery;
         private readonly Func<Task<bool>> _recoverConnection;
@@ -247,13 +250,20 @@ namespace YachtDice.Views
 
             if (isNewTurn && IsLocalTurn)
             {
-                _sounds.Play(SoundEffect.YourTurn);
+                AnnounceLocalTurn();
             }
 
             if (CurrentPhase == TurnPhase.Finished)
             {
                 GoToResultsWindow();
             }
+        }
+
+        private void AnnounceLocalTurn()
+        {
+            _sounds.Play(SoundEffect.YourTurn);
+            _animator.Pulse(TurnTextBlock, TurnPulseScale, TimeSpan.FromMilliseconds(TurnPulseMilliseconds));
+            TaskbarAlert.FlashIfInactive(this);
         }
 
         private void RenderState()
