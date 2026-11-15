@@ -1086,6 +1086,12 @@
   <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
     <value>正在等待 {0} 回到对局：{1} 秒</value>
   </data>
+  <data name="Game_Link_ReconnectingFormat" xml:space="preserve">
+    <value>与服务器的连接已中断。正在重新连接…（第 {0} 次尝试）</value>
+  </data>
+  <data name="Game_Chat_ConnectionRestored" xml:space="preserve">
+    <value>已恢复与服务器的连接。</value>
+  </data>
   <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
     <value>{0} 未能及时回来，已被移出对局。</value>
   </data>

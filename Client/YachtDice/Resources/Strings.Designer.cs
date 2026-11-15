@@ -844,6 +844,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. Reconectando… (intento {0}).
+        /// </summary>
+        public static string Game_Link_ReconnectingFormat {
+            get {
+                return ResourceManager.GetString("Game_Link_ReconnectingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se recuperó la conexión con el servidor..
+        /// </summary>
+        public static string Game_Chat_ConnectionRestored {
+            get {
+                return ResourceManager.GetString("Game_Chat_ConnectionRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a {0} fue expulsado de la partida..
         /// </summary>
         public static string Game_Chat_PlayerKicked {

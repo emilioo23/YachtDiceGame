@@ -1086,6 +1086,12 @@
   <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
     <value>Esperando que {0} vuelva a la partida: {1} s</value>
   </data>
+  <data name="Game_Link_ReconnectingFormat" xml:space="preserve">
+    <value>Se perdió la conexión con el servidor. Reconectando… (intento {0})</value>
+  </data>
+  <data name="Game_Chat_ConnectionRestored" xml:space="preserve">
+    <value>Se recuperó la conexión con el servidor.</value>
+  </data>
   <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
     <value>{0} no volvió a tiempo y quedó fuera de la partida.</value>
   </data>
