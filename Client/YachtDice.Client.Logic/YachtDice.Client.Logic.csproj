@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\AudioSettings.cs" />
     <Compile Include="Authentication\EmailMask.cs" />
     <Compile Include="Authentication\RegistrationLimits.cs" />
     <Compile Include="Authentication\ResendCodeInput.cs" />
