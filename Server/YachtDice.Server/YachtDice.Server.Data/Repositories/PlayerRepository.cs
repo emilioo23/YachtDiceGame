@@ -37,7 +37,10 @@ namespace YachtDice.Server.Data.Repositories
         private const string TitleQueryFailedMessage = "Could not read the title due to a database failure.";
         private const string TitleUpdateFailedMessage = "Could not save the title due to a database failure.";
         private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
+        private const string DeleteFailedMessage = "Could not delete the player due to a database failure.";
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
+
+        private readonly AccountEraser _accountEraser = new AccountEraser();
 
         /// <summary>
         /// Finds a list of players matching the given email address.
@@ -247,6 +250,16 @@ namespace YachtDice.Server.Data.Repositories
             DatabaseOperation.Save(
                 context => GetOrCreateSettings(context, playerId).FlagCode = flagCode,
                 FlagUpdateFailedMessage);
+        }
+
+        /// <summary>
+        /// Deletes the player and everything that belongs to the player, in a single transaction.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player to delete.</param>
+        /// <exception cref="DataAccessException">The player could not be deleted.</exception>
+        public void Delete(int playerId)
+        {
+            DatabaseOperation.Save(context => _accountEraser.Erase(context, playerId), DeleteFailedMessage);
         }
 
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)

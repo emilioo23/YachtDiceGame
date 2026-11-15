@@ -108,5 +108,13 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="flagCode">Code of the country, or an empty text to remove the flag.</param>
         /// <exception cref="DataAccessException">The flag could not be saved.</exception>
         void SaveFlagCode(int playerId, string flagCode);
+
+        /// <summary>
+        /// Deletes the player and everything that belongs to the player: settings, security data, friendships,
+        /// invitations, scorecards and game history. The games that other players also played are kept.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player to delete.</param>
+        /// <exception cref="DataAccessException">The player could not be deleted.</exception>
+        void Delete(int playerId);
     }
 }

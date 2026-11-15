@@ -135,6 +135,15 @@ namespace YachtDice.Server.Tests.InMemory
             _flagCodes[playerId] = flagCode;
         }
 
+        /// <inheritdoc />
+        public void Delete(int playerId)
+        {
+            _players.RemoveAll(player => player.Id == playerId);
+            _playersWithTwoFactor.Remove(playerId);
+            _titles.Remove(playerId);
+            _flagCodes.Remove(playerId);
+        }
+
         private static bool IsSameText(string firstText, string secondText)
         {
             return string.Equals(firstText, secondText, StringComparison.OrdinalIgnoreCase);

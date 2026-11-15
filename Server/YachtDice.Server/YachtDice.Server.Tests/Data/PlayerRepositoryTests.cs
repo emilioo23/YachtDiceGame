@@ -61,6 +61,12 @@ namespace YachtDice.Server.Tests.Data
             Assert.Throws<DataAccessException>(() => _repository.SaveAvatar(PlayerId, AvatarId));
         }
 
+        [Fact]
+        public void Delete_WithoutConnectionString_ThrowsDataAccessException()
+        {
+            Assert.Throws<DataAccessException>(() => _repository.Delete(PlayerId));
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]

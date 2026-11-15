@@ -92,6 +92,7 @@
     <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\AccountEraser.cs" />
     <Compile Include="Repositories\DatabaseConnection.cs" />
     <Compile Include="Repositories\DatabaseOperation.cs" />
     <Compile Include="Repositories\FriendRepository.cs" />
