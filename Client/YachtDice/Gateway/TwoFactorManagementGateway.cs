@@ -86,6 +86,20 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to change the password of the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>Outcome of the request.</returns>
+        public async Task<PasswordChangeResultCode> ChangePasswordAsync(string sessionToken, PasswordChange change)
+        {
+            PasswordChangeResultCode result =
+                await ExecuteAsync(client => client.ChangePassword(sessionToken, change));
+
+            return result;
+        }
+
+        /// <summary>
         /// Translates the WCF fault exception into a specific gateway error code.
         /// </summary>
         /// <param name="fault">The exception thrown by the service.</param>

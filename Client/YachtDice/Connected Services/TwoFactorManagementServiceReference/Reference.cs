@@ -347,6 +347,90 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         PlayerNotFound = 4,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordChange", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasswordChange : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CurrentPasswordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NewPasswordField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CurrentPassword {
+            get {
+                return this.CurrentPasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CurrentPasswordField, value) != true)) {
+                    this.CurrentPasswordField = value;
+                    this.RaisePropertyChanged("CurrentPassword");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NewPassword {
+            get {
+                return this.NewPasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NewPasswordField, value) != true)) {
+                    this.NewPasswordField = value;
+                    this.RaisePropertyChanged("NewPassword");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordChangeResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasswordChangeResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WrongCurrentPassword = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidNewPassword = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordUsedBefore = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TooManyAttempts = 5,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="TwoFactorChangeResultCode", Namespace="urn:yachtdice:contracts")]
     public enum TwoFactorChangeResultCode : int {
@@ -391,6 +475,11 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/DisableTwoFactorServiceFaultF" +
             "ault", Name="ServiceFault")]
         YachtDice.TwoFactorManagementServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ChangePassword", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ChangePasswordResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ChangePasswordServiceFaultFa" +
+            "ult", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasswordChangeResultCode ChangePassword(string sessionToken, YachtDice.TwoFactorManagementServiceReference.PasswordChange change);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -438,6 +527,10 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         
         public YachtDice.TwoFactorManagementServiceReference.TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password) {
             return base.Channel.DisableTwoFactor(sessionToken, password);
+        }
+        
+        public YachtDice.TwoFactorManagementServiceReference.PasswordChangeResultCode ChangePassword(string sessionToken, YachtDice.TwoFactorManagementServiceReference.PasswordChange change) {
+            return base.Channel.ChangePassword(sessionToken, change);
         }
     }
 }
