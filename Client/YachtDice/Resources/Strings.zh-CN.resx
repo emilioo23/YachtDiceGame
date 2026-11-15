@@ -2280,4 +2280,10 @@
   <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
     <value>密码不正确。账号未被删除。</value>
   </data>
+  <data name="Lobby_ButtonAddComputer" xml:space="preserve">
+    <value>添加电脑玩家</value>
+  </data>
+  <data name="Lobby_ComputerPlayer" xml:space="preserve">
+    <value>电脑</value>
+  </data>
 </root>

@@ -77,7 +77,7 @@ namespace YachtDice.Views
 
             for (int slotIndex = room.Players.Length; slotIndex < room.Settings.MaxPlayers; slotIndex++)
             {
-                slots.Add(new LobbySlot { Name = string.Empty, IsEmpty = true });
+                slots.Add(new LobbySlot { Name = string.Empty, IsEmpty = true, CanAddComputer = isLocalPlayerHost });
             }
 
             return slots;
@@ -93,6 +93,7 @@ namespace YachtDice.Views
                 IsHost = isHost,
                 IsReady = player.IsReady && !isHost,
                 CanManage = canManage,
+                IsComputer = player.IsComputer,
                 IsEmpty = false
             };
 
@@ -403,6 +404,11 @@ namespace YachtDice.Views
             string newHostId = ReadTag(sender);
 
             await RunHostActionAsync(() => _roomGateway.TransferHostAsync(newHostId));
+        }
+
+        private async void AddComputerButton_Click(object sender, RoutedEventArgs e)
+        {
+            await RunHostActionAsync(_roomGateway.AddComputerAsync);
         }
 
         private async void NormalMode_Click(object sender, MouseButtonEventArgs e)

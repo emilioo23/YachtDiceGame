@@ -2280,4 +2280,10 @@
   <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
     <value>A senha não está correta. A conta não foi apagada.</value>
   </data>
+  <data name="Lobby_ButtonAddComputer" xml:space="preserve">
+    <value>Adicionar computador</value>
+  </data>
+  <data name="Lobby_ComputerPlayer" xml:space="preserve">
+    <value>Computador</value>
+  </data>
 </root>

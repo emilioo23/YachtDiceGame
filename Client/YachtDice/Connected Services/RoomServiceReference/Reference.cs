@@ -311,6 +311,9 @@ namespace YachtDice.RoomServiceReference {
         private string IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsComputerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsReadyField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -358,6 +361,19 @@ namespace YachtDice.RoomServiceReference {
                 if ((object.ReferenceEquals(this.IdField, value) != true)) {
                     this.IdField = value;
                     this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsComputer {
+            get {
+                return this.IsComputerField;
+            }
+            set {
+                if ((this.IsComputerField.Equals(value) != true)) {
+                    this.IsComputerField = value;
+                    this.RaisePropertyChanged("IsComputer");
                 }
             }
         }
@@ -936,6 +952,10 @@ namespace YachtDice.RoomServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/TransferHostServiceFaultFault", Name="ServiceFault")]
         YachtDice.RoomServiceReference.RoomResultCode TransferHost(YachtDice.RoomServiceReference.RoomMember host, string newHostId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/AddComputer", ReplyAction="urn:yachtdice:contracts/IRoomService/AddComputerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/AddComputerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/FindPendingRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/FindPendingRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/FindPendingRoomServiceFaultFault", Name="ServiceFault")]
         string FindPendingRoom(string displayName);
@@ -1014,6 +1034,10 @@ namespace YachtDice.RoomServiceReference {
         
         public YachtDice.RoomServiceReference.RoomResultCode TransferHost(YachtDice.RoomServiceReference.RoomMember host, string newHostId) {
             return base.Channel.TransferHost(host, newHostId);
+        }
+        
+        public YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host) {
+            return base.Channel.AddComputer(host);
         }
         
         public string FindPendingRoom(string displayName) {

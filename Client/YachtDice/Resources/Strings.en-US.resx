@@ -2280,4 +2280,10 @@
   <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
     <value>The password is not correct. The account was not deleted.</value>
   </data>
+  <data name="Lobby_ButtonAddComputer" xml:space="preserve">
+    <value>Add computer</value>
+  </data>
+  <data name="Lobby_ComputerPlayer" xml:space="preserve">
+    <value>Computer</value>
+  </data>
 </root>

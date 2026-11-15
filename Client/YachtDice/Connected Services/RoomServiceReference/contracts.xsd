@@ -43,6 +43,7 @@
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsComputer" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsReady" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
@@ -250,6 +251,20 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="TransferHostResult" type="tns:RoomResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddComputer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddComputerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AddComputerResult" type="tns:RoomResultCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

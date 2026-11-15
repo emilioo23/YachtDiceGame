@@ -2284,6 +2284,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Agregar computadora.
+        /// </summary>
+        public static string Lobby_ButtonAddComputer {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonAddComputer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Computadora.
+        /// </summary>
+        public static string Lobby_ComputerPlayer {
+            get {
+                return ResourceManager.GetString("Lobby_ComputerPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esperando jugador....
         /// </summary>
         public static string Lobby_WaitingPlayer {

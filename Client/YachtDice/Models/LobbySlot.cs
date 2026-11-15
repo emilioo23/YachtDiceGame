@@ -42,6 +42,22 @@
         public bool IsEmpty { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of the player in the place.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the person who looks at the room can put a computer player
+        /// in this free place, which only the host can do.
+        /// </summary>
+        public bool CanAddComputer { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the player in the place can become the host. A computer cannot.
+        /// </summary>
+        public bool CanBecomeHost => CanManage && !IsComputer;
+
+        /// <summary>
         /// Gets a value indicating whether a player is in the place.
         /// </summary>
         public bool IsOccupied => !IsEmpty;

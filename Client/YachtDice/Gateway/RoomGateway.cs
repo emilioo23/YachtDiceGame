@@ -161,6 +161,20 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to add a computer player to the room. Only the host can do it, before the game
+        /// starts. When it is done, the server tells every player of the room.
+        /// </summary>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> AddComputerAsync()
+        {
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.AddComputer(host));
+
+            return result;
+        }
+
+        /// <summary>
         /// Takes the player out of the room and closes the connection. If the connection was already lost, the
         /// server took the player out when it noticed, so there is nothing to do.
         /// </summary>
