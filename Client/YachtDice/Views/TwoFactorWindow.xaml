@@ -96,6 +96,7 @@
                 </StackPanel>
 
                 <Button
+                        IsDefault="True"
                         Content="{x:Static properties:Strings.TwoFactor_ButtonVerify}"
                         Style="{StaticResource BtnPrimary}"
                         HorizontalAlignment="Stretch"
