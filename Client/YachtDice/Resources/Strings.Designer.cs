@@ -430,6 +430,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Si cierras la ventana, tu partida sigue en curso y tendrás {0} segundos para volver. Si no vuelves a tiempo, la perderás. ¿Cerrar de todos modos?.
+        /// </summary>
+        public static string Dialogs_CloseWindowDuringMatch {
+            get {
+                return ResourceManager.GetString("Dialogs_CloseWindowDuringMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Demasiados intentos fallidos. Factor bloqueado por 15 min..
         /// </summary>
         public static string Dialogs_TooManyAttempts {

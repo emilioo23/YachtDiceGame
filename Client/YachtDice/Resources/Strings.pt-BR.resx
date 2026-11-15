@@ -618,6 +618,9 @@
   <data name="Dialogs_LeaveMatch" xml:space="preserve">
     <value>Tem certeza de que quer sair da partida? Os outros jogadores serão avisados e você poderá voltar enquanto ela continuar em andamento.</value>
   </data>
+  <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
+    <value>Se você fechar a janela, sua partida continua e você terá {0} segundos para voltar. Se não voltar a tempo, você a perderá. Fechar mesmo assim?</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>Tem certeza de que quer remover este amigo?</value>
   </data>

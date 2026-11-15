@@ -618,6 +618,9 @@
   <data name="Dialogs_LeaveMatch" xml:space="preserve">
     <value>Are you sure you want to leave the match? The other players will be told and you can come back while it is still going.</value>
   </data>
+  <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
+    <value>If you close the window, your match keeps going and you will have {0} seconds to come back. If you do not return in time, you lose it. Close anyway?</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>Are you sure you want to remove this friend?</value>
   </data>

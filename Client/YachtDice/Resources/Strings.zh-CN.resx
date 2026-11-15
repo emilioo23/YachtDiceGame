@@ -618,6 +618,9 @@
   <data name="Dialogs_LeaveMatch" xml:space="preserve">
     <value>确定要离开对局吗？其他玩家会收到通知，对局进行期间你可以回来。</value>
   </data>
+  <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
+    <value>如果关闭窗口，你的对局会继续，你有 {0} 秒的时间返回。如果没有及时返回，你将输掉比赛。仍要关闭吗？</value>
+  </data>
   <data name="Dialogs_DeleteFriend" xml:space="preserve">
     <value>确定要删除这位好友吗？</value>
   </data>
