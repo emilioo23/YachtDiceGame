@@ -32,7 +32,11 @@ namespace YachtDice.Server.Host
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
         private const string TurnSecondsKeyFormat = "TurnSeconds.{0}";
-        private const string InvalidTurnSecondsFormat = "The setting {0} is missing or is not a number of seconds.";
+        private const string InvalidNumberFormat = "The setting {0} is missing or is not a positive whole number.";
+        private const string MaxFriendsKey = "Friends.MaxFriends";
+        private const string MaxPendingRequestsKey = "Friends.MaxPendingRequests";
+        private const string RoomWaitingMinutesKey = "Rooms.WaitingMinutes";
+        private const int SmallestAllowedNumber = 1;
         private const string LevelExperienceKey = "LevelExperience";
         private const string OffensiveWordsPath = "Resources\\OffensiveWords.txt";
         private const char LevelExperienceSeparator = ',';
@@ -117,19 +121,37 @@ namespace YachtDice.Server.Host
             foreach (GameSpeed speed in Enum.GetValues(typeof(GameSpeed)))
             {
                 string key = string.Format(CultureInfo.InvariantCulture, TurnSecondsKeyFormat, speed);
-                string configuredSeconds = ConfigurationManager.AppSettings[key];
 
-                if (!int.TryParse(configuredSeconds, NumberStyles.None, CultureInfo.InvariantCulture, out int seconds))
-                {
-                    string message = string.Format(CultureInfo.InvariantCulture, InvalidTurnSecondsFormat, key);
-
-                    throw new InvalidOperationException(message);
-                }
-
-                secondsBySpeed[speed] = seconds;
+                secondsBySpeed[speed] = ReadPositiveNumber(key);
             }
 
             return new TurnDuration(secondsBySpeed);
+        }
+
+        /// <summary>
+        /// Reads from the configuration a whole number greater than zero, such as a limit or a time of a rule.
+        /// </summary>
+        /// <param name="key">Key of the setting.</param>
+        /// <returns>The configured number.</returns>
+        /// <exception cref="InvalidOperationException">The setting is missing or is not a positive whole
+        /// number.</exception>
+        private static int ReadPositiveNumber(string key)
+        {
+            string configuredValue = ConfigurationManager.AppSettings[key];
+            bool isNumber = int.TryParse(
+                configuredValue,
+                NumberStyles.None,
+                CultureInfo.InvariantCulture,
+                out int value);
+
+            if (!isNumber || value < SmallestAllowedNumber)
+            {
+                string message = string.Format(CultureInfo.InvariantCulture, InvalidNumberFormat, key);
+
+                throw new InvalidOperationException(message);
+            }
+
+            return value;
         }
 
         /// <summary>
@@ -185,7 +207,10 @@ namespace YachtDice.Server.Host
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
             serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService, wordFilter)));
 
-            var roomManager = new RoomManager(avatarService);
+            var roomManager = new RoomManager(avatarService)
+            {
+                WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
+            };
             var resultRecorder = new GameResultRecorder(
                 new PlayerRepository(),
                 new GameHistoryRepository(),
@@ -307,7 +332,11 @@ namespace YachtDice.Server.Host
         /// <returns>A fully configured instance of FriendService.</returns>
         private static FriendService CreateFriendService(IPlayerNotifier notifier, IRoomManager roomManager)
         {
-            var friendshipService = new FriendshipService(new PlayerRepository(), new FriendRepository());
+            var friendshipService = new FriendshipService(new PlayerRepository(), new FriendRepository())
+            {
+                MaxFriends = ReadPositiveNumber(MaxFriendsKey),
+                MaxPendingRequests = ReadPositiveNumber(MaxPendingRequestsKey)
+            };
             var invitationService = new RoomInvitationService(roomManager, friendshipService);
 
             return new FriendService(friendshipService, invitationService, notifier);

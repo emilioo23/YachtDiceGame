@@ -16,6 +16,11 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     public class RoomManager : IRoomManager
     {
+        /// <summary>
+        /// Minutes that a room waits to start its game when the server does not configure another time.
+        /// </summary>
+        public const int DefaultWaitingMinutes = 15;
+
         private const int CodeLength = 6;
         private const int FirstAlphabetIndex = 0;
         private const string CodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -23,7 +28,6 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
-        private const int MaxWaitingMinutes = 15;
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
@@ -40,6 +44,12 @@ namespace YachtDice.Server.Logic.Rooms
             _avatarLookup = avatarLookup
                 ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
         }
+
+        /// <summary>
+        /// Gets or sets the minutes that a room waits to start its game before it is closed. The server reads it
+        /// from its configuration.
+        /// </summary>
+        public int WaitingMinutes { get; set; } = DefaultWaitingMinutes;
 
         /// <inheritdoc />
         public RoomResult CreateRoom(string hostName)
@@ -164,7 +174,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public List<RoomDetails> CloseExpiredRooms(DateTime now)
         {
-            DateTime oldestAllowed = now.AddMinutes(-MaxWaitingMinutes);
+            DateTime oldestAllowed = now.AddMinutes(-WaitingMinutes);
             Func<GameRoom, bool> isExpired = room => !room.IsStarted && room.CreatedAt <= oldestAllowed;
             List<RoomDetails> closedRooms;
 

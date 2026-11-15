@@ -12,14 +12,14 @@ namespace YachtDice.Server.Logic.Friends
     public class FriendshipService : IFriendshipService
     {
         /// <summary>
-        /// Most friends that a player can have.
+        /// Most friends that a player can have when the server does not configure another limit.
         /// </summary>
-        public const int MaxFriends = 100;
+        public const int DefaultMaxFriends = 100;
 
         /// <summary>
-        /// Most friend requests that a player can have waiting for an answer at the same time.
+        /// Most friend requests waiting for an answer when the server does not configure another limit.
         /// </summary>
-        public const int MaxPendingRequests = 5;
+        public const int DefaultMaxPendingRequests = 5;
 
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
@@ -39,6 +39,17 @@ namespace YachtDice.Server.Logic.Friends
             _friendRepository = friendRepository
                 ?? throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
         }
+
+        /// <summary>
+        /// Gets or sets the most friends that a player can have. The server reads it from its configuration.
+        /// </summary>
+        public int MaxFriends { get; set; } = DefaultMaxFriends;
+
+        /// <summary>
+        /// Gets or sets the most friend requests that a player can have waiting for an answer at the same time.
+        /// The server reads it from its configuration.
+        /// </summary>
+        public int MaxPendingRequests { get; set; } = DefaultMaxPendingRequests;
 
         /// <summary>
         /// Sends a friend request to the player who owns the username.

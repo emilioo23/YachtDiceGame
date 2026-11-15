@@ -22,6 +22,7 @@ namespace YachtDice.Server.Tests.Friends
         private const string UnknownUsername = "CarlosRamirez";
         private const string UnknownRequesterName = "LuisHernandez";
         private const int FirstOtherPlayerId = 100;
+        private const int ConfiguredMaxFriends = 2;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
@@ -48,7 +49,7 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void SendRequest_FivePendingRequestsAlready_ReturnsTooManyPendingRequests()
         {
-            AddFriendships(RequesterId, FriendshipService.MaxPendingRequests, FriendshipStatus.Pending);
+            AddFriendships(RequesterId, _service.MaxPendingRequests, FriendshipStatus.Pending);
 
             FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
 
@@ -58,7 +59,7 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void SendRequest_RequesterWithAHundredFriends_ReturnsFriendLimitReached()
         {
-            AddFriendships(RequesterId, FriendshipService.MaxFriends, FriendshipStatus.Accepted);
+            AddFriendships(RequesterId, _service.MaxFriends, FriendshipStatus.Accepted);
 
             FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
 
@@ -66,10 +67,27 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void SendRequest_ConfiguredLimitOfTwoFriendsReached_ReturnsFriendLimitReached()
+        {
+            _service.MaxFriends = ConfiguredMaxFriends;
+            AddFriendships(RequesterId, ConfiguredMaxFriends, FriendshipStatus.Accepted);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.FriendLimitReached, requestResult.Status);
+        }
+
+        [Fact]
+        public void MaxFriends_NewService_UsesTheDefaultLimit()
+        {
+            Assert.Equal(FriendshipService.DefaultMaxFriends, _service.MaxFriends);
+        }
+
+        [Fact]
         public void RespondToRequest_AddresseeWithAHundredFriends_ReturnsFriendLimitReached()
         {
             _service.SendRequest(RequesterName, TargetUsername);
-            AddFriendships(TargetId, FriendshipService.MaxFriends, FriendshipStatus.Accepted);
+            AddFriendships(TargetId, _service.MaxFriends, FriendshipStatus.Accepted);
             var answer = new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true };
 
             FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, answer);

@@ -21,6 +21,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const string SecondLowercaseGuestName = "invitado 2";
         private const int SixteenMinutes = 16;
         private const int TenMinutes = 10;
+        private const int ConfiguredWaitingMinutes = 5;
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
         private const string UnknownRoomCode = "ZZZZZZ";
@@ -784,6 +785,17 @@ namespace YachtDice.Server.Tests.Rooms
                 IsFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _)
             };
             Assert.Equal(expectedClosedRoom, actualClosedRoom);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_ConfiguredWaitOfFiveMinutesPassed_ClosesTheRoom()
+        {
+            _manager.WaitingMinutes = ConfiguredWaitingMinutes;
+            _manager.CreateRoom(HostName);
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(TenMinutes));
+
+            Assert.Single(closedRooms);
         }
 
         [Fact]
