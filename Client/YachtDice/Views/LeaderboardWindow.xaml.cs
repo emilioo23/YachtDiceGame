@@ -110,11 +110,11 @@ namespace YachtDice.Views
             return medal;
         }
 
-        private static StackPanel CreateNameCell(LeaderboardEntry entry, TextBlock nameLabel)
+        private static StackPanel CreateNameCell(LeaderboardEntry leaderboardEntry, TextBlock nameLabel)
         {
             var avatar = new Image
             {
-                Source = AvatarImages.Get(entry.AvatarId),
+                Source = AvatarImages.Get(leaderboardEntry.AvatarId),
                 Width = AvatarSize,
                 Height = AvatarSize,
                 Margin = new Thickness(NoSpacing, NoSpacing, AvatarGap, NoSpacing)
@@ -162,35 +162,35 @@ namespace YachtDice.Views
             {
                 _session.DisplayName
             };
-            Func<LeaderboardEntry, bool> isAllowed = entry => allowedNames.Contains(entry.Name);
+            Func<LeaderboardEntry, bool> isAllowed = leaderboardEntry => allowedNames.Contains(leaderboardEntry.Name);
 
             RenderRanking(_ranking.Where(isAllowed).ToList());
         }
 
         private void RenderRanking(List<LeaderboardEntry> ranking)
         {
-            int viewerRank = NoRank;
+            int viewerPosition = NoRank;
 
             RankingPanel.Children.Clear();
 
-            foreach (LeaderboardEntry entry in ranking)
+            foreach (LeaderboardEntry leaderboardEntry in ranking)
             {
-                bool isViewer = IsViewer(entry);
+                bool isViewer = IsViewer(leaderboardEntry);
 
-                AddRankingRow(entry, isViewer);
+                AddRankingRow(leaderboardEntry, isViewer);
 
                 if (isViewer)
                 {
-                    viewerRank = entry.Position;
+                    viewerPosition = leaderboardEntry.Position;
                 }
             }
 
-            YourPositionTextBlock.Text = string.Format(Strings.Leaderboard_YourPosition, viewerRank);
+            YourPositionTextBlock.Text = string.Format(Strings.Leaderboard_YourPosition, viewerPosition);
         }
 
-        private bool IsViewer(LeaderboardEntry entry)
+        private bool IsViewer(LeaderboardEntry leaderboardEntry)
         {
-            return string.Equals(entry.Name, _session.DisplayName, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(leaderboardEntry.Name, _session.DisplayName, StringComparison.OrdinalIgnoreCase);
         }
 
         private TextBlock CreateCellLabel(string text, Brush textBrush)
@@ -207,12 +207,12 @@ namespace YachtDice.Views
             return label;
         }
 
-        private void AddRankingRow(LeaderboardEntry entry, bool isViewer)
+        private void AddRankingRow(LeaderboardEntry leaderboardEntry, bool isViewer)
         {
             string textBrushKey = isViewer ? ViewerTextBrushKey : ThemeResourceKeys.TextBrushKey;
             var textBrush = (Brush)FindResource(textBrushKey);
             var row = new Grid { Margin = new Thickness(NoSpacing, NoSpacing, NoSpacing, RowBottomMargin) };
-            TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
+            TextBlock nameLabel = CreateCellLabel(leaderboardEntry.Name, textBrush);
 
             nameLabel.FontWeight = FontWeights.SemiBold;
 
@@ -223,12 +223,12 @@ namespace YachtDice.Views
 
             var cells = new List<UIElement>
             {
-                CreateMedalLabel(entry, textBrush),
-                CreateNameCell(entry, nameLabel),
-                CreateCellLabel(entry.Level.ToString(), textBrush),
-                CreateCellLabel(entry.Points.ToString(PointsFormat), textBrush),
-                CreateCellLabel(entry.Wins.ToString(), textBrush),
-                CreateCellLabel(entry.GamesPlayed.ToString(), textBrush)
+                CreateMedalLabel(leaderboardEntry, textBrush),
+                CreateNameCell(leaderboardEntry, nameLabel),
+                CreateCellLabel(leaderboardEntry.Level.ToString(), textBrush),
+                CreateCellLabel(leaderboardEntry.Points.ToString(PointsFormat), textBrush),
+                CreateCellLabel(leaderboardEntry.Wins.ToString(), textBrush),
+                CreateCellLabel(leaderboardEntry.GamesPlayed.ToString(), textBrush)
             };
 
             for (int column = 0; column < cells.Count; column++)
@@ -241,11 +241,11 @@ namespace YachtDice.Views
             RankingPanel.Children.Add(row);
         }
 
-        private TextBlock CreateMedalLabel(LeaderboardEntry entry, Brush textBrush)
+        private TextBlock CreateMedalLabel(LeaderboardEntry leaderboardEntry, Brush textBrush)
         {
             return new TextBlock
             {
-                Text = entry.Medal,
+                Text = leaderboardEntry.Medal,
                 FontSize = MedalFontSize,
                 Foreground = textBrush,
                 Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, NoSpacing, CellVerticalPadding)
