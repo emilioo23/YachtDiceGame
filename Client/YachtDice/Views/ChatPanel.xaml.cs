@@ -26,6 +26,7 @@ namespace YachtDice.Views
         private const int EmptyLength = 0;
         private const int MessageMarginBottom = 4;
         private const int MaxMessageLength = 200;
+        private const int NoLevel = 0;
         private const int AvatarSize = 20;
         private const int AvatarGap = 6;
 
@@ -143,7 +144,8 @@ namespace YachtDice.Views
                 Author = message.Author,
                 Content = message.Content,
                 Kind = kind,
-                AvatarId = message.AvatarId
+                AvatarId = message.AvatarId,
+                Level = message.AuthorLevel
             });
         }
 
@@ -177,7 +179,7 @@ namespace YachtDice.Views
                 textBlock.Inlines.Add(CreateAvatarInline(entry.AvatarId));
             }
 
-            textBlock.Inlines.Add(new Run(entry.Author + Strings.Game_Chat_AuthorSeparator)
+            textBlock.Inlines.Add(new Run(FormatAuthor(entry) + Strings.Game_Chat_AuthorSeparator)
             {
                 FontWeight = FontWeights.Bold,
                 Foreground = GetAuthorBrush(entry.Kind)
@@ -189,6 +191,18 @@ namespace YachtDice.Views
             });
 
             return textBlock;
+        }
+
+        private static string FormatAuthor(ChatEntry entry)
+        {
+            string author = entry.Author;
+
+            if (entry.Level > NoLevel)
+            {
+                author = string.Format(Strings.Game_Chat_AuthorLevelFormat, entry.Author, entry.Level);
+            }
+
+            return author;
         }
 
         private Brush GetAuthorBrush(ChatMessageKind kind)

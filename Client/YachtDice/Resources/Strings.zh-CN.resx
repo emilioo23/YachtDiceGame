@@ -2229,4 +2229,7 @@
   <data name="Results_BreakdownFormat" xml:space="preserve">
     <value>上半区 {0} · 奖励 {1} · 下半区 {2} · Yacht 奖励 {3}</value>
   </data>
+  <data name="Game_Chat_AuthorLevelFormat" xml:space="preserve">
+    <value>{0}（等级 {1}）</value>
+  </data>
 </root>

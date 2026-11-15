@@ -1087,6 +1087,15 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} (Nv. {1}).
+        /// </summary>
+        public static string Game_Chat_AuthorLevelFormat {
+            get {
+                return ResourceManager.GetString("Game_Chat_AuthorLevelFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

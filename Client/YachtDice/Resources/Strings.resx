@@ -2229,4 +2229,7 @@
   <data name="Results_BreakdownFormat" xml:space="preserve">
     <value>Superior {0} · Bono {1} · Inferior {2} · Bono Yacht {3}</value>
   </data>
+  <data name="Game_Chat_AuthorLevelFormat" xml:space="preserve">
+    <value>{0} (Nv. {1})</value>
+  </data>
 </root>

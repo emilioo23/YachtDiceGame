@@ -29,5 +29,10 @@
         /// Gets or sets the identifier of the avatar of the author, or <see cref="NoAvatar"/>.
         /// </summary>
         public int AvatarId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the level of the author; zero for a guest or a notice of the game, which show no level.
+        /// </summary>
+        public int Level { get; set; }
     }
 }
