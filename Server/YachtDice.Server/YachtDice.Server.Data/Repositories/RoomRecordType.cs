@@ -1,7 +1,7 @@
 ﻿namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
-    /// Visibility of a room, as it is stored in the database.
+    /// Kind of a room, as it is stored in the database.
     /// </summary>
     public enum RoomRecordType
     {
@@ -13,6 +13,11 @@
         /// <summary>
         /// Only the players who know the code of the room can join it.
         /// </summary>
-        Private
+        Private,
+
+        /// <summary>
+        /// At least one computer player took part in the game, so its results are counted apart.
+        /// </summary>
+        Computer
     }
 }

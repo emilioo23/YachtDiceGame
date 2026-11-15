@@ -38,6 +38,18 @@ namespace YachtDice.Server.Contracts.Players
         [DataMember]
         public int Level { get; set; }
 
+        /// <summary>
+        /// Games played against at least one computer player.
+        /// </summary>
+        [DataMember]
+        public int GamesAgainstComputer { get; set; }
+
+        /// <summary>
+        /// Games against the computer that the player won.
+        /// </summary>
+        [DataMember]
+        public int WinsAgainstComputer { get; set; }
+
         [DataMember]
         public int Experience { get; set; }
     }

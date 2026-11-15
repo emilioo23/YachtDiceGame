@@ -34,5 +34,15 @@
         /// Total experience points earned by the player.
         /// </summary>
         public int Experience { get; set; }
+
+        /// <summary>
+        /// Gets or sets the games that the player played against at least one computer player.
+        /// </summary>
+        public int GamesAgainstComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the games against the computer that the player won.
+        /// </summary>
+        public int WinsAgainstComputer { get; set; }
     }
 }

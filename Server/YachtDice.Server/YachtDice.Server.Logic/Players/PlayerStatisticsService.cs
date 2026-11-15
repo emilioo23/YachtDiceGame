@@ -52,7 +52,10 @@ namespace YachtDice.Server.Logic.Players
             if (player != null)
             {
                 List<GameHistoryPlayer> history = _gameHistoryRepository.FindByPlayerId(player.Id);
+                List<GameHistoryPlayer> computerGames = _gameHistoryRepository.FindComputerGames(player.Id);
                 statistics = BuildStatistics(player, history);
+                statistics.GamesAgainstComputer = computerGames.Count;
+                statistics.WinsAgainstComputer = CountWins(computerGames);
             }
 
             return statistics;
@@ -179,8 +182,7 @@ namespace YachtDice.Server.Logic.Players
         private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
         {
             int gamesPlayed = history.Count;
-            Func<GameHistoryPlayer, bool> isWinner = historyPlayer => historyPlayer.IsWinner == true;
-            int wins = history.Count(isWinner);
+            int wins = CountWins(history);
 
             var statistics = new PlayerStatistics
             {
@@ -193,6 +195,13 @@ namespace YachtDice.Server.Logic.Players
             };
 
             return statistics;
+        }
+
+        private static int CountWins(List<GameHistoryPlayer> history)
+        {
+            Func<GameHistoryPlayer, bool> isWinner = historyPlayer => historyPlayer.IsWinner == true;
+
+            return history.Count(isWinner);
         }
 
         private static int FindBestScore(List<GameHistoryPlayer> history)

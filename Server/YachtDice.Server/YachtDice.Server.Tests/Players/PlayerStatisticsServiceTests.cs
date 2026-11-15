@@ -35,6 +35,8 @@ namespace YachtDice.Server.Tests.Players
         private const int LowerRankingPoints = 120;
         private const int ManyWins = 4;
         private const int FewWins = 1;
+        private const int TwoGames = 2;
+        private const int OneWin = 1;
         private const int FirstPlace = 1;
         private const int ThirdPlace = 3;
         private const int TopSize = 100;
@@ -82,6 +84,19 @@ namespace YachtDice.Server.Tests.Players
             PlayerStatistics statistics = _service.GetStatistics(PlayerName);
 
             Assert.Equal(PlayerExperience, statistics.Experience);
+        }
+
+        [Fact]
+        public void GetStatistics_TwoGamesAgainstTheComputer_CountsTheGamesAndTheWinsApart()
+        {
+            _history.AddComputerGame(PlayerId, PlayerScore, true);
+            _history.AddComputerGame(PlayerId, LowerOpponentScore, false);
+            var computerStatisticsExpected = new { GamesAgainstComputer = TwoGames, WinsAgainstComputer = OneWin };
+
+            PlayerStatistics statistics = _service.GetStatistics(PlayerName);
+
+            var computerStatisticsResult = new { statistics.GamesAgainstComputer, statistics.WinsAgainstComputer };
+            Assert.Equal(computerStatisticsExpected, computerStatisticsResult);
         }
 
         [Fact]

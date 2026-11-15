@@ -17,6 +17,14 @@ namespace YachtDice.Server.Data.Repositories
         List<GameHistoryPlayer> FindByPlayerId(int playerId);
 
         /// <summary>
+        /// Gets the result of every game that a player played against at least one computer player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The results of the player, or an empty list if there are none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        List<GameHistoryPlayer> FindComputerGames(int playerId);
+
+        /// <summary>
         /// Gets the totals of every player who finished at least one game, so each player has a position.
         /// </summary>
         /// <returns>The totals of the players, or an empty list if there are no games played.</returns>

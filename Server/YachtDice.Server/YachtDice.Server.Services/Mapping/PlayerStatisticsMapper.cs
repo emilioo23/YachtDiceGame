@@ -26,7 +26,9 @@ namespace YachtDice.Server.Services.Mapping
                 BestScore = statistics.BestScore,
                 WinRatePercentage = statistics.WinRatePercentage,
                 Level = statistics.Level,
-                Experience = statistics.Experience
+                Experience = statistics.Experience,
+                GamesAgainstComputer = statistics.GamesAgainstComputer,
+                WinsAgainstComputer = statistics.WinsAgainstComputer
             };
 
             return contract;

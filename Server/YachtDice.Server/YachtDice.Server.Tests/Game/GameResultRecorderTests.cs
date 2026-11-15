@@ -133,6 +133,7 @@ namespace YachtDice.Server.Tests.Game
         {
             GameResultRecord savedResultExpected = CreateExpectedResult(BetoId);
             savedResultExpected.Players.Add(CreateResult(BetoId, LoserTotal, PlayerResultStatus.Completed));
+            savedResultExpected.HasComputer = true;
             PlayerSnapshot computer = CreateWinner(AnaName, WinnerTotal, true);
             computer.IsComputer = true;
 

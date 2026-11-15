@@ -31,6 +31,11 @@ namespace YachtDice.Server.Data.Repositories
         public bool IsPrivate { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether a computer player took part in the game.
+        /// </summary>
+        public bool HasComputer { get; set; }
+
+        /// <summary>
         /// Gets the result of each registered player of the game.
         /// </summary>
         public IList<PlayerResultRecord> Players { get; }

@@ -62,7 +62,8 @@ namespace YachtDice.Server.Logic.Game
             var result = new GameResultRecord
             {
                 MaxPlayers = settings.MaxPlayers,
-                IsPrivate = settings.IsPrivate
+                IsPrivate = settings.IsPrivate,
+                HasComputer = snapshot.Players.Any(player => player.IsComputer)
             };
             var savedPlayerIds = new HashSet<int>();
 

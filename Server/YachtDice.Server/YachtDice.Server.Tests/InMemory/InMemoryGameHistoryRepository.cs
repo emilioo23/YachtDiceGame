@@ -13,6 +13,7 @@ namespace YachtDice.Server.Tests.InMemory
     {
         private readonly List<GameResultRecord> _savedResults = new List<GameResultRecord>();
         private readonly List<GameHistoryPlayer> _entries = new List<GameHistoryPlayer>();
+        private readonly List<GameHistoryPlayer> _computerGames = new List<GameHistoryPlayer>();
         private readonly List<PlayedGameRecord> _playedGames = new List<PlayedGameRecord>();
         private readonly List<PlayerRankingRecord> _rankingRecords = new List<PlayerRankingRecord>();
 
@@ -41,6 +42,21 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public List<GameHistoryPlayer> FindComputerGames(int playerId)
+        {
+            Func<GameHistoryPlayer, bool> belongsToPlayer = historyPlayer => historyPlayer.PlayerId == playerId;
+
+            return _computerGames.Where(belongsToPlayer).ToList();
+        }
+
+        public void AddComputerGame(int playerId, int finalScore, bool isWinner)
+        {
+            var historyPlayer = new GameHistoryPlayer { PlayerId = playerId, FinalScore = finalScore, IsWinner = isWinner };
+
+            _entries.Add(historyPlayer);
+            _computerGames.Add(historyPlayer);
+        }
+
         public List<PlayedGameRecord> FindRecentGames(int playerId, int maxGames)
         {
             Func<PlayedGameRecord, bool> belongsToPlayer = record => record.PlayerId == playerId;

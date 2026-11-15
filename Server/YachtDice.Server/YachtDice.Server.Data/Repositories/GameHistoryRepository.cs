@@ -23,6 +23,8 @@ namespace YachtDice.Server.Data.Repositories
         private const string ArchivedRoomName = "Partida";
         private const string RoomCodeFormat = "N";
         private const int RoomCodeLength = 6;
+        private const string ComputerGamesFailedMessage =
+            "Database error occurred while reading the games against the computer.";
 
         /// <summary>
         /// Gets the result of every game played by a player.
@@ -35,6 +37,16 @@ namespace YachtDice.Server.Data.Repositories
             List<GameHistoryPlayer> history = DatabaseOperation.Query(
                 context => SelectByPlayerId(context, playerId),
                 FindByPlayerFailedMessage);
+
+            return history;
+        }
+
+        /// <inheritdoc />
+        public List<GameHistoryPlayer> FindComputerGames(int playerId)
+        {
+            List<GameHistoryPlayer> history = DatabaseOperation.Query(
+                context => SelectComputerGames(context, playerId),
+                ComputerGamesFailedMessage);
 
             return history;
         }
@@ -124,10 +136,38 @@ namespace YachtDice.Server.Data.Repositories
             return history;
         }
 
+        private static List<GameHistoryPlayer> SelectComputerGames(YachtDiceContext context, int playerId)
+        {
+            string computerType = RoomRecordType.Computer.ToString();
+            Expression<Func<GameHistoryPlayer, bool>> isComputerGameOfPlayer =
+                historyPlayer => historyPlayer.PlayerId == playerId
+                    && historyPlayer.GameHistory.Room.RoomType == computerType;
+
+            return context.GameHistoryPlayer
+                .Where(isComputerGameOfPlayer)
+                .ToList();
+        }
+
+        private static RoomRecordType ChooseRoomType(GameResultRecord result)
+        {
+            RoomRecordType roomType = RoomRecordType.Public;
+
+            if (result.HasComputer)
+            {
+                roomType = RoomRecordType.Computer;
+            }
+            else if (result.IsPrivate)
+            {
+                roomType = RoomRecordType.Private;
+            }
+
+            return roomType;
+        }
+
         private static void AddResult(YachtDiceContext context, GameResultRecord result)
         {
             DateTime now = DateTime.UtcNow;
-            RoomRecordType roomType = result.IsPrivate ? RoomRecordType.Private : RoomRecordType.Public;
+            RoomRecordType roomType = ChooseRoomType(result);
             var room = new Room
             {
                 HostPlayerId = result.HostPlayerId,
