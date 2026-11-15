@@ -22,6 +22,13 @@ namespace YachtDice.Utils
             return rooms.Select(CreateItem).ToList();
         }
 
+        private static string CreateTitle(RoomSummary room)
+        {
+            return string.IsNullOrWhiteSpace(room.Name)
+                ? string.Format(Strings.Rooms_TitleFormat, room.HostName)
+                : room.Name;
+        }
+
         private static RoomListItem CreateItem(RoomSummary room)
         {
             var item = new RoomListItem
@@ -29,7 +36,7 @@ namespace YachtDice.Utils
                 RoomId = room.RoomId,
                 HostName = room.HostName,
                 Initial = InitialLetter.From(room.HostName, Strings.Global_UnknownInitial),
-                Title = string.Format(Strings.Rooms_TitleFormat, room.HostName),
+                Title = CreateTitle(room),
                 Details = string.Format(
                     Strings.Rooms_DetailsFormat,
                     room.PlayerCount,

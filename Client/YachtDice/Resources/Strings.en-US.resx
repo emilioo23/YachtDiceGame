@@ -2244,4 +2244,10 @@
   <data name="Lobby_Result_PlayersNotReady" xml:space="preserve">
     <value>Some players have not confirmed that they are ready. Wait for them or up to 2 minutes to start without them.</value>
   </data>
+  <data name="Lobby_RoomName" xml:space="preserve">
+    <value>Room name</value>
+  </data>
+  <data name="Lobby_Result_OffensiveRoomName" xml:space="preserve">
+    <value>The name of the room has a word that is not allowed.</value>
+  </data>
 </root>

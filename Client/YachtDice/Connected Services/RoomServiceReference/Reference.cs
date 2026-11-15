@@ -215,6 +215,9 @@ namespace YachtDice.RoomServiceReference {
         private int MaxPlayersField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private YachtDice.RoomServiceReference.GameSpeed SpeedField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -249,6 +252,19 @@ namespace YachtDice.RoomServiceReference {
                 if ((this.MaxPlayersField.Equals(value) != true)) {
                     this.MaxPlayersField = value;
                     this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }
@@ -571,6 +587,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayersNotReady = 11,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OffensiveRoomName = 12,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -590,6 +609,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int MaxPlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int PlayerCountField;
@@ -645,6 +667,19 @@ namespace YachtDice.RoomServiceReference {
                 if ((this.MaxPlayersField.Equals(value) != true)) {
                     this.MaxPlayersField = value;
                     this.RaisePropertyChanged("MaxPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }

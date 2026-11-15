@@ -47,8 +47,11 @@ namespace YachtDice.Client.Logic.Rooms
 
         private static bool MatchesName(RoomListItem room, string search)
         {
-            return search.Length == EmptyLength
-                || room.HostName.IndexOf(search, StringComparison.OrdinalIgnoreCase) > NotFoundIndex;
+            bool isInHostName = room.HostName.IndexOf(search, StringComparison.OrdinalIgnoreCase) > NotFoundIndex;
+            bool isInTitle = (room.Title ?? string.Empty).IndexOf(search, StringComparison.OrdinalIgnoreCase)
+                > NotFoundIndex;
+
+            return search.Length == EmptyLength || isInHostName || isInTitle;
         }
     }
 }

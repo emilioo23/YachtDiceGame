@@ -169,6 +169,11 @@ namespace YachtDice.Views
             PrivacyComboBox.SelectedItem = settings.IsPrivate ? PrivateOptionItem : PublicOptionItem;
             SelectMaxPlayers(settings.MaxPlayers);
 
+            if (!RoomNameTextBox.IsKeyboardFocused)
+            {
+                RoomNameTextBox.Text = settings.Name ?? string.Empty;
+            }
+
             if (settings.Speed == GameSpeed.Fast)
             {
                 SelectModeBorder(FastModeBorder, NormalModeBorder);
@@ -193,6 +198,7 @@ namespace YachtDice.Views
         private void ApplyHostPermissions(bool isHost)
         {
             PrivacyComboBox.IsEnabled = isHost;
+            RoomNameTextBox.IsReadOnly = !isHost;
             MaxPlayersComboBox.IsEnabled = isHost;
             NormalModeBorder.IsHitTestVisible = isHost;
             FastModeBorder.IsHitTestVisible = isHost;
@@ -234,7 +240,8 @@ namespace YachtDice.Views
             {
                 IsPrivate = PrivacyComboBox.SelectedItem == PrivateOptionItem,
                 MaxPlayers = ParseMaxPlayers((ComboBoxItem)MaxPlayersComboBox.SelectedItem),
-                Speed = speed
+                Speed = speed,
+                Name = RoomNameTextBox.Text.Trim()
             };
 
             return settings;
@@ -434,6 +441,31 @@ namespace YachtDice.Views
             }
 
             CustomDialogWindow.ShowMessage(this, message);
+        }
+
+        private async void RoomNameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            await SaveRoomNameAsync();
+        }
+
+        private async void RoomNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                await SaveRoomNameAsync();
+            }
+        }
+
+        private async Task SaveRoomNameAsync()
+        {
+            RoomSettings current = _roomGateway.CurrentRoom.Settings;
+            bool isHost = _roomGateway.CurrentRoom.HostId == _roomGateway.PlayerId;
+            bool hasChanged = !string.Equals(RoomNameTextBox.Text.Trim(), current.Name ?? string.Empty);
+
+            if (isHost && hasChanged)
+            {
+                await SendSettingsAsync(ReadSettings(current.Speed));
+            }
         }
 
         private async void StartGameButton_Click(object sender, RoutedEventArgs e)

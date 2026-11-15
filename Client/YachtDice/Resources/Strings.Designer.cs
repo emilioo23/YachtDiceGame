@@ -1141,6 +1141,24 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Nombre de la sala.
+        /// </summary>
+        public static string Lobby_RoomName {
+            get {
+                return ResourceManager.GetString("Lobby_RoomName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de la sala tiene una palabra que no está permitida..
+        /// </summary>
+        public static string Lobby_Result_OffensiveRoomName {
+            get {
+                return ResourceManager.GetString("Lobby_Result_OffensiveRoomName", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

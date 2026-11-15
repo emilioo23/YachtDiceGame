@@ -14,6 +14,8 @@ namespace YachtDice.Client.Tests.Rooms
         private const string FirstHost = "Emilio";
         private const string SecondHost = "Gabriel";
         private const string ThirdHost = "Carlos";
+        private const string RoomName = "Los del salon 4";
+        private const string RoomNameSearch = "salon";
 
         private readonly List<RoomListItem> _rooms = new List<RoomListItem>
         {
@@ -75,6 +77,19 @@ namespace YachtDice.Client.Tests.Rooms
             List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "gab");
 
             Assert.Equivalent(expectedFilteredRooms, filteredRooms, strict: true);
+        }
+
+        [Fact]
+        public void Apply_TextInTheNameOfTheRoom_KeepsThatRoom()
+        {
+            RoomListItem namedRoom = CreateRoom("4", ThirdHost, false);
+            namedRoom.Title = RoomName;
+            var rooms = new List<RoomListItem> { namedRoom };
+
+            List<RoomListItem> filteredRooms =
+                RoomListItemFilter.Apply(rooms, new RoomSearch(RoomPrivacyFilter.All, RoomNameSearch));
+
+            Assert.Single(filteredRooms);
         }
 
         [Fact]

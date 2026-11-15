@@ -2244,4 +2244,10 @@
   <data name="Lobby_Result_PlayersNotReady" xml:space="preserve">
     <value>还有玩家没有确认准备。请等待他们确认，或等待2分钟后不带他们开始。</value>
   </data>
+  <data name="Lobby_RoomName" xml:space="preserve">
+    <value>房间名称</value>
+  </data>
+  <data name="Lobby_Result_OffensiveRoomName" xml:space="preserve">
+    <value>房间名称包含不允许的词语。</value>
+  </data>
 </root>

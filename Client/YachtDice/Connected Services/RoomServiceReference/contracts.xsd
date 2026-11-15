@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:yachtdice:contracts" elementFormDefault="qualified" targetNamespace="urn:yachtdice:contracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="CreateRoom">
     <xs:complexType>
@@ -51,6 +51,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="IsPrivate" type="xs:boolean" />
       <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Speed" type="tns:GameSpeed" />
     </xs:sequence>
   </xs:complexType>
@@ -114,6 +115,7 @@
       <xs:enumeration value="InvalidTarget" />
       <xs:enumeration value="PlayerExpelled" />
       <xs:enumeration value="PlayersNotReady" />
+      <xs:enumeration value="OffensiveRoomName" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomResultCode" nillable="true" type="tns:RoomResultCode" />
@@ -140,6 +142,7 @@
       <xs:element minOccurs="0" name="HostName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsPrivate" type="xs:boolean" />
       <xs:element minOccurs="0" name="MaxPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PlayerCount" type="xs:int" />
       <xs:element minOccurs="0" name="RoomId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Speed" type="tns:GameSpeed" />
