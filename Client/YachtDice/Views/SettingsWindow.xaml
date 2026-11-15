@@ -367,6 +367,58 @@
                             </Border>
                         </Grid>
 
+                        <Grid Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+
+                                <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Audio_Music}"
+                                           FontWeight="Bold"
+                                           FontSize="22"/>
+
+                                <TextBlock Text="{x:Static properties:Strings.Settings_Audio_MusicSub}"
+                                           FontSize="18"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
+                            </StackPanel>
+
+                            <Border x:Name="MusicToggle"
+                                    Width="46"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="{StaticResource BrushFeltLight}"
+                                    Cursor="Hand"
+                                    Grid.Column="1"
+                                    MouseLeftButtonUp="MusicToggle_Click">
+
+                                <Border x:Name="MusicToggleKnob"
+                                        Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="White"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,3,0"/>
+
+                            </Border>
+                        </Grid>
+
+                        <TextBlock Foreground="{StaticResource BrushText}" Text="{x:Static properties:Strings.Settings_Audio_MusicVolume}"
+                                   FontWeight="Bold"
+                                   FontSize="22"
+                                   Margin="0,20,0,6"/>
+
+                        <Slider x:Name="MusicVolumeSlider"
+                                Minimum="0"
+                                Maximum="100"
+                                TickFrequency="10"
+                                IsSnapToTickEnabled="False"
+                                Width="320"
+                                HorizontalAlignment="Left"
+                                ValueChanged="MusicVolumeSlider_ValueChanged"/>
+
                     </StackPanel>
 
                     <StackPanel x:Name="PreferencesPanel"

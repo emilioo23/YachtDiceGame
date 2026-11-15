@@ -54,6 +54,8 @@ namespace YachtDice.Views
             LanguageComboBox.SelectedIndex = LanguageCatalog.IndexOf(App.CurrentCultureCode);
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
             ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
+            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !App.Audio.IsMusicMuted);
+            MusicVolumeSlider.Value = App.Audio.MusicVolume;
 
             ShowSection(initialSection);
             _isInitializing = false;
@@ -284,6 +286,20 @@ namespace YachtDice.Views
         {
             App.Audio.SetEffectsEnabled(!App.Audio.AreEffectsEnabled);
             ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
+        }
+
+        private void MusicToggle_Click(object sender, MouseButtonEventArgs e)
+        {
+            App.Audio.SetMusicMuted(!App.Audio.IsMusicMuted);
+            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !App.Audio.IsMusicMuted);
+        }
+
+        private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_isInitializing)
+            {
+                App.Audio.SetMusicVolume((int)e.NewValue);
+            }
         }
 
         private void EditProfileButton_Click(object sender, RoutedEventArgs e)
