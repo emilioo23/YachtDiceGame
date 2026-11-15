@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Tests.InMemory;
 
 namespace YachtDice.Server.Tests.Authentication
 {
@@ -18,7 +19,16 @@ namespace YachtDice.Server.Tests.Authentication
 
         private static readonly DateTime Start = DateTime.UtcNow;
 
-        private readonly LoginAttemptTracker _tracker = new LoginAttemptTracker();
+        private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
+        private readonly LoginAttemptTracker _tracker;
+
+        /// <summary>
+        /// Prepares a tracker whose locks are saved in memory.
+        /// </summary>
+        public LoginAttemptTrackerTests()
+        {
+            _tracker = new LoginAttemptTracker(_players);
+        }
 
         [Fact]
         public void RegisterFailure_TwoWrongPasswords_DoesNotLock()
@@ -106,6 +116,33 @@ namespace YachtDice.Server.Tests.Authentication
             LoginLock currentLock = _tracker.GetLock(OtherPlayerId, Start);
 
             Assert.Equal(LoginLock.None, currentLock);
+        }
+
+        [Fact]
+        public void GetLock_LockSavedBeforeTheServerRestarted_KeepsTheAccountLocked()
+        {
+            FailTimes(PlayerId, LoginAttemptTracker.FailuresForTemporaryLock, Start);
+            var restartedTracker = new LoginAttemptTracker(_players);
+
+            LoginLock lockResult = restartedTracker.GetLock(PlayerId, Start.AddMinutes(FourMinutes));
+
+            Assert.Equal(LoginLock.Temporary, lockResult);
+        }
+
+        [Fact]
+        public void GetLock_SavedLockAlreadyEnded_ReturnsNone()
+        {
+            _players.SaveLock(PlayerId, LoginLock.Daily.ToString(), Start);
+
+            LoginLock lockResult = _tracker.GetLock(PlayerId, Start.AddMinutes(TenMinutes));
+
+            Assert.Equal(LoginLock.None, lockResult);
+        }
+
+        [Fact]
+        public void Constructor_NullRepository_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new LoginAttemptTracker(null));
         }
 
         private void FailTimes(int playerId, int failures, DateTime moment)

@@ -135,5 +135,22 @@ namespace YachtDice.Server.Data.Repositories
         /// <returns>How many accounts were deleted.</returns>
         /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
         int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore);
+
+        /// <summary>
+        /// Finds the lock that wrong passwords put on the login of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved lock, or an empty list if the account was never locked.</returns>
+        /// <exception cref="Exceptions.DataAccessException">The database could not be queried.</exception>
+        List<AccountLock> FindLocks(int playerId);
+
+        /// <summary>
+        /// Saves the lock of the login of a player, replacing the previous one, so it lasts after a restart.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="lockType">Kind of lock.</param>
+        /// <param name="lockedUntil">Moment, in UTC, when the lock ends.</param>
+        /// <exception cref="Exceptions.DataAccessException">The lock could not be saved.</exception>
+        void SaveLock(int playerId, string lockType, DateTime lockedUntil);
     }
 }

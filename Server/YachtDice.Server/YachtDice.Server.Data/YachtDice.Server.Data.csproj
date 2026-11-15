@@ -57,6 +57,9 @@
     <Compile Include="Avatar.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="AccountLock.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="BackupCode.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>

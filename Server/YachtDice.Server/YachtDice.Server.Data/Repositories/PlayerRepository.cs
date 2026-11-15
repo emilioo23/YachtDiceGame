@@ -40,6 +40,8 @@ namespace YachtDice.Server.Data.Repositories
         private const string StateUpdateFailedMessage =
             "Could not save the state of the account due to a database failure.";
         private const int NoAccounts = 0;
+        private const string LockQueryFailedMessage = "Could not read the login lock due to a database failure.";
+        private const string LockUpdateFailedMessage = "Could not save the login lock due to a database failure.";
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
         private readonly AccountEraser _accountEraser = new AccountEraser();
@@ -292,6 +294,44 @@ namespace YachtDice.Server.Data.Repositories
                 DeleteFailedMessage);
 
             return removedCount;
+        }
+
+        /// <inheritdoc />
+        public List<AccountLock> FindLocks(int playerId)
+        {
+            Expression<Func<AccountLock, bool>> isSamePlayer = accountLock => accountLock.PlayerId == playerId;
+
+            return DatabaseOperation.Query(
+                context => context.AccountLock.Where(isSamePlayer).ToList(),
+                LockQueryFailedMessage);
+        }
+
+        /// <inheritdoc />
+        public void SaveLock(int playerId, string lockType, DateTime lockedUntil)
+        {
+            DatabaseOperation.Save(
+                context => ApplyLock(context, new AccountLock
+                {
+                    PlayerId = playerId,
+                    LockType = lockType,
+                    LockedUntil = lockedUntil
+                }),
+                LockUpdateFailedMessage);
+        }
+
+        private static void ApplyLock(YachtDiceContext context, AccountLock newLock)
+        {
+            AccountLock savedLock = context.AccountLock.Find(newLock.PlayerId);
+
+            if (savedLock == null)
+            {
+                context.AccountLock.Add(newLock);
+            }
+            else
+            {
+                savedLock.LockType = newLock.LockType;
+                savedLock.LockedUntil = newLock.LockedUntil;
+            }
         }
 
         private static void ApplyState(YachtDiceContext context, int playerId, string state)

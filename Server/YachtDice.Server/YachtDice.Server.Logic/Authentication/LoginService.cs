@@ -27,7 +27,7 @@ namespace YachtDice.Server.Logic.Authentication
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
-        private readonly LoginAttemptTracker _attemptTracker = new LoginAttemptTracker();
+        private readonly LoginAttemptTracker _attemptTracker;
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -46,6 +46,7 @@ namespace YachtDice.Server.Logic.Authentication
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _attemptTracker = new LoginAttemptTracker(playerRepository);
             _logger = new AppLogger(GetType());
         }
 

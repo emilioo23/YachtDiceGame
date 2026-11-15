@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using YachtDice.Server.Data;
+using YachtDice.Server.Data.Repositories;
 
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
     /// Counts the wrong passwords of each account and locks it: three in a row lock it for five minutes, and
     /// ten in the same twenty-four hours lock it for a whole day. The counts live in the memory of the server,
-    /// shared by every login, so each change happens inside the lock.
+    /// shared by every login, so each change happens inside the lock. The lock itself is saved in the database,
+    /// so a restart of the server does not open a locked account.
     /// </summary>
     public sealed class LoginAttemptTracker
     {
@@ -31,28 +35,38 @@ namespace YachtDice.Server.Logic.Authentication
         public const int DailyLockHours = 24;
 
         private const int NoFailures = 0;
+        private const string NullRepositoryMessage = "The data access of the players cannot be null.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<int, LoginAttempts> _attemptsByPlayer = new Dictionary<int, LoginAttempts>();
+        private readonly IPlayerRepository _playerRepository;
+
+        /// <summary>
+        /// Initializes the tracker with the data access where the locks are saved.
+        /// </summary>
+        /// <param name="playerRepository">Data access of the players, which keeps their locks.</param>
+        public LoginAttemptTracker(IPlayerRepository playerRepository)
+        {
+            _playerRepository = playerRepository
+                ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
+        }
 
         /// <summary>
         /// Tells whether an account is locked at a moment.
         /// </summary>
-        /// <param name="playerId">Identifier of the account.</param>
+        /// <param name="playerId">Identifier of the player.</param>
         /// <param name="now">Current moment, in UTC.</param>
         /// <returns>The lock that is still running, or <see cref="LoginLock.None"/>.</returns>
+        /// <exception cref="Data.Exceptions.DataAccessException">The saved lock could not be read.</exception>
         public LoginLock GetLock(int playerId, DateTime now)
         {
             LoginLock currentLock = LoginLock.None;
+            AccountLock savedLock = _playerRepository.FindLocks(playerId).FirstOrDefault();
+            bool isRunning = savedLock != null && savedLock.LockedUntil > now;
 
-            lock (_syncRoot)
+            if (isRunning && Enum.TryParse(savedLock.LockType, out LoginLock savedType))
             {
-                bool hasAttempts = _attemptsByPlayer.TryGetValue(playerId, out LoginAttempts attempts);
-
-                if (hasAttempts && attempts.LockedUntil > now)
-                {
-                    currentLock = attempts.Lock;
-                }
+                currentLock = savedType;
             }
 
             return currentLock;
@@ -61,9 +75,10 @@ namespace YachtDice.Server.Logic.Authentication
         /// <summary>
         /// Counts a wrong password and locks the account when it reaches a limit.
         /// </summary>
-        /// <param name="playerId">Identifier of the account.</param>
-        /// <param name="now">Moment of the wrong password, in UTC.</param>
-        /// <returns>The lock that the failure started, or <see cref="LoginLock.None"/>.</returns>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="now">Current moment, in UTC.</param>
+        /// <returns>The lock that starts with this wrong password, or <see cref="LoginLock.None"/>.</returns>
+        /// <exception cref="Data.Exceptions.DataAccessException">The new lock could not be saved.</exception>
         public LoginLock RegisterFailure(int playerId, DateTime now)
         {
             LoginLock newLock;
@@ -81,17 +96,22 @@ namespace YachtDice.Server.Logic.Authentication
 
                 if (newLock != LoginLock.None)
                 {
-                    StartLock(attempts, newLock, now);
+                    ResetCounts(attempts, newLock);
                 }
+            }
+
+            if (newLock != LoginLock.None)
+            {
+                _playerRepository.SaveLock(playerId, newLock.ToString(), CalculateEnd(newLock, now));
             }
 
             return newLock;
         }
 
         /// <summary>
-        /// Forgets the wrong passwords in a row after a correct one. The failures of the day are kept.
+        /// Forgets the wrong passwords in a row after a correct password.
         /// </summary>
-        /// <param name="playerId">Identifier of the account.</param>
+        /// <param name="playerId">Identifier of the player.</param>
         public void RegisterSuccess(int playerId)
         {
             lock (_syncRoot)
@@ -119,20 +139,26 @@ namespace YachtDice.Server.Logic.Authentication
             return newLock;
         }
 
-        private static void StartLock(LoginAttempts attempts, LoginLock newLock, DateTime now)
+        private static void ResetCounts(LoginAttempts attempts, LoginLock newLock)
         {
-            attempts.Lock = newLock;
             attempts.ConsecutiveFailures = NoFailures;
 
             if (newLock == LoginLock.Daily)
             {
-                attempts.LockedUntil = now.AddHours(DailyLockHours);
                 attempts.FailureTimes.Clear();
             }
-            else
+        }
+
+        private static DateTime CalculateEnd(LoginLock newLock, DateTime now)
+        {
+            DateTime lockedUntil = now.AddMinutes(TemporaryLockMinutes);
+
+            if (newLock == LoginLock.Daily)
             {
-                attempts.LockedUntil = now.AddMinutes(TemporaryLockMinutes);
+                lockedUntil = now.AddHours(DailyLockHours);
             }
+
+            return lockedUntil;
         }
 
         private LoginAttempts FindOrCreate(int playerId)

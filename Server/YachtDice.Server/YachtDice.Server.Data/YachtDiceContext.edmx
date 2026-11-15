@@ -129,6 +129,14 @@
           <Property Name="PwdHash" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="ChangeDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="AccountLock">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="LockType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="LockedUntil" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
             <PropertyRef Name="Id" />
@@ -585,6 +593,7 @@
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountLock" EntityType="Self.AccountLock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Room" EntityType="Self.Room" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" Schema="dbo" store:Type="Tables" />
@@ -881,6 +890,14 @@
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ChangeDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountLock">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="LockType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LockedUntil" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -1358,6 +1375,7 @@
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" />
           <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" />
+          <EntitySet Name="AccountLock" EntityType="Self.AccountLock" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" />
           <EntitySet Name="Room" EntityType="Self.Room" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" />
@@ -1624,6 +1642,15 @@
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
                 <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountLock">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.AccountLock">
+              <MappingFragment StoreEntitySet="AccountLock">
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="LockType" ColumnName="LockType" />
+                <ScalarProperty Name="LockedUntil" ColumnName="LockedUntil" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

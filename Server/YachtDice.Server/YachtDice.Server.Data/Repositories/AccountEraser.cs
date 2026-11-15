@@ -70,6 +70,7 @@ namespace YachtDice.Server.Data.Repositories
             Expression<Func<TwoFactorAuth, bool>> isPlayerMethod = method => method.PlayerId == playerId;
             Expression<Func<PlayerSettings, bool>> isPlayerSettings = settings => settings.PlayerId == playerId;
             Expression<Func<PasswordHistory, bool>> isPlayerPassword = password => password.PlayerId == playerId;
+            Expression<Func<AccountLock, bool>> isPlayerLock = accountLock => accountLock.PlayerId == playerId;
 
             RemoveWhere(context.BackupCode, isPlayerCode);
             RemoveWhere(context.Passkey, isPlayerKey);
@@ -77,6 +78,7 @@ namespace YachtDice.Server.Data.Repositories
             RemoveWhere(context.TwoFactorAuth, isPlayerMethod);
             RemoveWhere(context.PlayerSettings, isPlayerSettings);
             RemoveWhere(context.PasswordHistory, isPlayerPassword);
+            RemoveWhere(context.AccountLock, isPlayerLock);
         }
 
         private static void RemoveSocialData(YachtDiceContext context, int playerId)

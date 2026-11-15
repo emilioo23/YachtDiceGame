@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// The wrong passwords of one account and the lock that they caused. It is not thread-safe:
+    /// The wrong passwords of one account. The lock that they cause is saved in the database. It is not
+    /// thread-safe:
     /// <see cref="LoginAttemptTracker"/> only uses it while it holds its lock.
     /// </summary>
     internal sealed class LoginAttempts
@@ -15,7 +16,6 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginAttempts()
         {
             FailureTimes = new List<DateTime>();
-            Lock = LoginLock.None;
         }
 
         /// <summary>
@@ -27,15 +27,5 @@ namespace YachtDice.Server.Logic.Authentication
         /// Gets the moments, in UTC, of the wrong passwords of the last twenty-four hours.
         /// </summary>
         public List<DateTime> FailureTimes { get; }
-
-        /// <summary>
-        /// Gets or sets the kind of the last lock.
-        /// </summary>
-        public LoginLock Lock { get; set; }
-
-        /// <summary>
-        /// Gets or sets the moment, in UTC, when the last lock ends.
-        /// </summary>
-        public DateTime LockedUntil { get; set; }
     }
 }

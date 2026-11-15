@@ -18,6 +18,7 @@ namespace YachtDice.Server.Tests.InMemory
         private readonly HashSet<int> _playersWithTwoFactor = new HashSet<int>();
         private readonly Dictionary<int, string> _titles = new Dictionary<int, string>();
         private readonly Dictionary<int, string> _flagCodes = new Dictionary<int, string>();
+        private readonly Dictionary<int, AccountLock> _locks = new Dictionary<int, AccountLock>();
 
         /// <summary>
         /// Gets the players saved so far.
@@ -114,6 +115,23 @@ namespace YachtDice.Server.Tests.InMemory
             player.Username = username;
             player.DisplayName = username;
             player.LastUserChange = DateTime.UtcNow;
+        }
+
+        public List<AccountLock> FindLocks(int playerId)
+        {
+            var locks = new List<AccountLock>();
+
+            if (_locks.TryGetValue(playerId, out AccountLock savedLock))
+            {
+                locks.Add(savedLock);
+            }
+
+            return locks;
+        }
+
+        public void SaveLock(int playerId, string lockType, DateTime lockedUntil)
+        {
+            _locks[playerId] = new AccountLock { PlayerId = playerId, LockType = lockType, LockedUntil = lockedUntil };
         }
 
         public string FindTitle(int playerId)
