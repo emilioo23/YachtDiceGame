@@ -8,6 +8,7 @@ namespace YachtDice.Server.Services
     using Contracts = YachtDice.Server.Contracts;
     using DataExceptions = YachtDice.Server.Data.Exceptions;
     using LogicLogging = YachtDice.Server.Logic.Logging;
+    using LogicSecurity = YachtDice.Server.Logic.Security;
 
     /// <summary>
     /// Common behavior of the services: it runs each operation and converts any failure into a
@@ -22,6 +23,7 @@ namespace YachtDice.Server.Services
         private const string DatabaseLogFormat = "Database error while processing {0}.";
         private const string InvalidDataLogFormat = "Invalid data was received in {0}.";
         private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
+        private const string SessionExpiredMessage = "The session ended. Log in again.";
 
         private readonly LogicLogging.AppLogger _logger;
 
@@ -78,6 +80,34 @@ namespace YachtDice.Server.Services
         /// Writes an informative line in the log of the server.
         /// </summary>
         /// <param name="message">Text to write. It must not include passwords or codes.</param>
+        /// <summary>
+        /// Gets or sets the sessions of the players. The host gives the same registry to every service, so a token
+        /// that the authentication service created works in all of them.
+        /// </summary>
+        public LogicSecurity.SessionRegistry Sessions { get; set; } = new LogicSecurity.SessionRegistry();
+
+        /// <summary>
+        /// Runs an operation for the player who owns the session token. A token that is unknown or that ended is
+        /// rejected with a fault, so nobody can act in the name of another player.
+        /// </summary>
+        /// <typeparam name="TResult">Type of the result.</typeparam>
+        /// <param name="sessionToken">Token that the client received when the player logged in.</param>
+        /// <param name="operation">Operation that receives the name of the player of the session.</param>
+        /// <param name="operationName">Name of the operation, for the log.</param>
+        /// <returns>The result of the operation.</returns>
+        protected TResult ExecuteForPlayer<TResult>(
+            string sessionToken,
+            Func<string, TResult> operation,
+            [CallerMemberName] string operationName = "")
+        {
+            if (!Sessions.TryGetPlayerName(sessionToken, out string playerName))
+            {
+                throw CreateFault(Contracts.ServiceErrorCode.SessionExpired, SessionExpiredMessage);
+            }
+
+            return Run(() => operation(playerName), operationName);
+        }
+
         protected void LogInfo(string message)
         {
             _logger.Info(message);

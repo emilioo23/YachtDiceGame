@@ -31,5 +31,12 @@ namespace YachtDice.Server.Contracts.Authentication
         /// </summary>
         [DataMember]
         public string ChallengeId { get; set; }
+
+        /// <summary>
+        /// Secret token of the session. The client sends it instead of the name in the operations that change the
+        /// data of the player. When a code is needed, the token works only after the code is confirmed.
+        /// </summary>
+        [DataMember]
+        public string SessionToken { get; set; }
     }
 }

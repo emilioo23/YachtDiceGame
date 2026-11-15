@@ -16,6 +16,7 @@ using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
+using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Services;
 
@@ -198,14 +199,23 @@ namespace YachtDice.Server.Host
 
         private static void OpenServiceHosts(List<ServiceHost> serviceHosts)
         {
-            serviceHosts.Add(new ServiceHost(CreateAuthenticationService()));
-            serviceHosts.Add(new ServiceHost(CreateTwoFactorManagementService()));
+            var sessions = new SessionRegistry();
+            AuthenticationService authenticationService = CreateAuthenticationService();
+            TwoFactorManagementService twoFactorService = CreateTwoFactorManagementService();
+
+            authenticationService.Sessions = sessions;
+            twoFactorService.Sessions = sessions;
+            serviceHosts.Add(new ServiceHost(authenticationService));
+            serviceHosts.Add(new ServiceHost(twoFactorService));
             OffensiveWordFilter wordFilter = CreateOffensiveWordFilter();
             serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService(wordFilter)));
 
             LevelTable levelTable = CreateLevelTable();
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
-            serviceHosts.Add(new ServiceHost(CreatePlayerService(avatarService, wordFilter)));
+            PlayerService playerService = CreatePlayerService(avatarService, wordFilter);
+
+            playerService.Sessions = sessions;
+            serviceHosts.Add(new ServiceHost(playerService));
 
             var roomManager = new RoomManager(avatarService, wordFilter)
             {
@@ -223,7 +233,10 @@ namespace YachtDice.Server.Host
 
             var presenceService = new PresenceService();
             serviceHosts.Add(new ServiceHost(presenceService));
-            serviceHosts.Add(new ServiceHost(CreateFriendService(presenceService, roomManager)));
+            FriendService friendService = CreateFriendService(presenceService, roomManager);
+
+            friendService.Sessions = sessions;
+            serviceHosts.Add(new ServiceHost(friendService));
 
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
         }

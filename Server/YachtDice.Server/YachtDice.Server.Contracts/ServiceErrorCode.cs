@@ -18,6 +18,10 @@ namespace YachtDice.Server.Contracts
 
         /// <summary>The operation encountered invalid or missing data.</summary>
         [EnumMember]
-        ValidationFailed
+        ValidationFailed,
+
+        /// <summary>The token of the session is unknown or the session ended, so the player must log in again.</summary>
+        [EnumMember]
+        SessionExpired
     }
 }

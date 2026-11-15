@@ -125,10 +125,27 @@ namespace YachtDice.Server.Services
                 ChallengeId = logicResult.ChallengeId,
                 DisplayName = logicResult.DisplayName,
                 FirstName = logicResult.FirstName,
-                Code = Mapping.EnumMapper.Map<LogicAuth.LoginStatus, Contracts.LoginResultCode>(logicResult.Status)
+                Code = Mapping.EnumMapper.Map<LogicAuth.LoginStatus, Contracts.LoginResultCode>(logicResult.Status),
+                SessionToken = StartSession(logicResult)
             };
 
             return loginData;
+        }
+
+        private string StartSession(LogicAuth.LoginResult logicResult)
+        {
+            string sessionToken = string.Empty;
+
+            if (logicResult.Status == LogicAuth.LoginStatus.LoggedIn)
+            {
+                sessionToken = Sessions.Start(logicResult.DisplayName);
+            }
+            else if (logicResult.Status == LogicAuth.LoginStatus.VerificationCodeSent)
+            {
+                sessionToken = Sessions.StartPending(logicResult.DisplayName, logicResult.ChallengeId);
+            }
+
+            return sessionToken;
         }
 
         private TwoFactorContracts.VerificationResultCode ProcessCodeVerification(
@@ -143,6 +160,11 @@ namespace YachtDice.Server.Services
 
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
                 _verificationService.VerifyPlayerCode(email, logicCode);
+
+            if (logicResult == LogicTwoFactor.TwoFactorValidationStatus.Valid)
+            {
+                Sessions.Activate(verificationCode.ChallengeId);
+            }
 
             return Mapping.EnumMapper.Map<
                 LogicTwoFactor.TwoFactorValidationStatus,
