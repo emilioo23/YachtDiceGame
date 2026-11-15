@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
+[assembly: InternalsVisibleTo("YachtDice.Server.Tests")]
+
 [assembly: Guid("41804ae3-e254-4b5c-a192-c5251948a887")]
 
 [assembly: AssemblyVersion("1.0.0.0")]

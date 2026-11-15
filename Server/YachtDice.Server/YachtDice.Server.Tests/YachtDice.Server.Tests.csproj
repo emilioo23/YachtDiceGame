@@ -56,6 +56,8 @@
     <Compile Include="Friends\FriendshipServiceTests.cs" />
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
     <Compile Include="Game\AutoPlayChooserTests.cs" />
+    <Compile Include="Game\ReconnectTimerTests.cs" />
+    <Compile Include="Game\TurnClockTests.cs" />
     <Compile Include="Game\DiceHandTests.cs" />
     <Compile Include="Game\GameManagerTests.cs" />
     <Compile Include="Game\GameSnapshotTests.cs" />
@@ -107,6 +109,10 @@
     <ProjectReference Include="..\YachtDice.Server.Logic\YachtDice.Server.Logic.csproj">
       <Project>{3cadccef-83a9-4432-a1df-af32c9c53072}</Project>
       <Name>YachtDice.Server.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YachtDice.Server.Services\YachtDice.Server.Services.csproj">
+      <Project>{41804ae3-e254-4b5c-a192-c5251948a887}</Project>
+      <Name>YachtDice.Server.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
