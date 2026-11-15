@@ -108,11 +108,11 @@ namespace YachtDice.Server.Tests.Players
         public void GetAchievements_PlayerWhoWonOneGame_UnlocksTheFirstGameAndTheFirstWin()
         {
             _history.AddPlayedGame(CurrentPlayerId, WinningScore, true);
-            var expectedIds = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
+            var idsExpected = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
 
             List<int> unlockedIds = FindUnlockedIds();
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]

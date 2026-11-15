@@ -18,11 +18,11 @@ namespace YachtDice.Server.Tests.Moderation
         [Theory]
         [InlineData(MessageWithFullLink, CensoredFullLink)]
         [InlineData(MessageWithShortLink, CensoredShortLink)]
-        public void Censor_MessageWithLink_ReplacesTheLinkWithAsterisks(string message, string expectedMessage)
+        public void Censor_MessageWithLink_ReplacesTheLinkWithAsterisks(string message, string messageExpected)
         {
             string censoredMessage = LinkCensor.Censor(message);
 
-            Assert.Equal(expectedMessage, censoredMessage);
+            Assert.Equal(messageExpected, censoredMessage);
         }
 
         [Fact]

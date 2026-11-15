@@ -51,12 +51,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
-            InvitationResult expectedInvitationResult = new InvitationResult(InvitationStatus.Allowed, HostName);
+            InvitationResult invitationResultExpected = new InvitationResult(InvitationStatus.Allowed, HostName);
 
             InvitationResult invitationResult =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, host.PlayerId), FriendName);
 
-            Assert.Equivalent(expectedInvitationResult, invitationResult);
+            Assert.Equivalent(invitationResultExpected, invitationResult);
         }
 
         [Fact]
@@ -77,12 +77,12 @@ namespace YachtDice.Server.Tests.Friends
             RoomResult guest = _roomManager.Join(host.Room.Code, StrangerName);
             _friendships.AddFriends(StrangerName, FriendName);
 
-            InvitationResult expectedInvitationResult = new InvitationResult(InvitationStatus.Allowed, StrangerName);
+            InvitationResult invitationResultExpected = new InvitationResult(InvitationStatus.Allowed, StrangerName);
 
             InvitationResult invitationResult =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, guest.PlayerId), FriendName);
 
-            Assert.Equivalent(expectedInvitationResult, invitationResult);
+            Assert.Equivalent(invitationResultExpected, invitationResult);
         }
 
         [Fact]
@@ -101,12 +101,12 @@ namespace YachtDice.Server.Tests.Friends
         {
             RoomResult host = _roomManager.CreateRoom(HostName);
 
-            InvitationResult expectedInvitationResult = new InvitationResult(InvitationStatus.NotInRoom, string.Empty);
+            InvitationResult invitationResultExpected = new InvitationResult(InvitationStatus.NotInRoom, string.Empty);
 
             InvitationResult invitationResult =
                 _service.CheckInvitation(new RoomMember(host.Room.Code, UnknownPlayerId), FriendName);
 
-            Assert.Equivalent(expectedInvitationResult, invitationResult);
+            Assert.Equivalent(invitationResultExpected, invitationResult);
         }
 
         [Fact]

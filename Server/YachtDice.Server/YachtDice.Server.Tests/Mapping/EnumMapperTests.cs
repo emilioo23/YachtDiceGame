@@ -112,13 +112,13 @@ namespace YachtDice.Server.Tests.Mapping
         [Fact]
         public void Map_EveryInvitationStatus_OnlyMissesAllowedBecauseTheServiceDecidesIt()
         {
-            var expectedNames = new List<string> { nameof(Logic.Friends.InvitationStatus.Allowed) };
+            var namesExpected = new List<string> { nameof(Logic.Friends.InvitationStatus.Allowed) };
 
             List<string> missingNames = FindMissingNames<
                 Logic.Friends.InvitationStatus,
                 Contracts.Friends.InvitationResultCode>();
 
-            Assert.Equal(expectedNames, missingNames);
+            Assert.Equal(namesExpected, missingNames);
         }
 
         [Fact]

@@ -20,7 +20,7 @@ namespace YachtDice.Server.Tests.Game
             var player = new PlayerSnapshot(PlayerId, PlayerName, true) { ExperienceGained = ExperienceGained };
 
             snapshot.Players.Add(player);
-            var expectedSnapshot = new
+            var snapshotExpected = new
             {
                 HasResultSaveFailed = true,
                 Players = new[] { new { ExperienceGained = NoExperience } }
@@ -28,7 +28,7 @@ namespace YachtDice.Server.Tests.Game
 
             snapshot.MarkResultNotSaved();
 
-            Assert.Equivalent(expectedSnapshot, snapshot);
+            Assert.Equivalent(snapshotExpected, snapshot);
         }
     }
 }

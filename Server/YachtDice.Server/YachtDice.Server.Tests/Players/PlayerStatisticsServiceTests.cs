@@ -196,11 +196,11 @@ namespace YachtDice.Server.Tests.Players
         {
             AddRanking(FirstOpponentName, RankingPoints, FewWins);
             AddRanking(SecondOpponentName, RankingPoints, ManyWins);
-            var expectedNames = new List<string> { SecondOpponentName, FirstOpponentName };
+            var namesExpected = new List<string> { SecondOpponentName, FirstOpponentName };
 
             List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
 
-            Assert.Equal(expectedNames, entries.Select(leaderboardEntry => leaderboardEntry.DisplayName).ToList());
+            Assert.Equal(namesExpected, entries.Select(leaderboardEntry => leaderboardEntry.DisplayName).ToList());
         }
 
         [Fact]
@@ -209,11 +209,11 @@ namespace YachtDice.Server.Tests.Players
             AddRanking(PlayerName, RankingPoints, ManyWins);
             AddRanking(FirstOpponentName, RankingPoints, ManyWins);
             AddRanking(SecondOpponentName, LowerRankingPoints, ManyWins);
-            var expectedPositions = new List<int> { FirstPlace, FirstPlace, ThirdPlace };
+            var positionsExpected = new List<int> { FirstPlace, FirstPlace, ThirdPlace };
 
             List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
 
-            Assert.Equal(expectedPositions, entries.Select(leaderboardEntry => leaderboardEntry.Position).ToList());
+            Assert.Equal(positionsExpected, entries.Select(leaderboardEntry => leaderboardEntry.Position).ToList());
         }
 
         [Fact]
@@ -221,11 +221,11 @@ namespace YachtDice.Server.Tests.Players
         {
             AddPlayersAbove(TopSize);
             AddRanking(PlayerName, LowerRankingPoints, FewWins);
-            var expectedLastEntry = new { DisplayName = PlayerName, Position = TopSize + 1 };
+            var lastEntryExpected = new { DisplayName = PlayerName, Position = TopSize + 1 };
 
             List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
 
-            Assert.Equivalent(expectedLastEntry, entries.Last());
+            Assert.Equivalent(lastEntryExpected, entries.Last());
         }
 
         [Fact]

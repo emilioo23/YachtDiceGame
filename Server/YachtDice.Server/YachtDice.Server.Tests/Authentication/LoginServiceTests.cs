@@ -51,22 +51,22 @@ namespace YachtDice.Server.Tests.Authentication
         public void LoginPlayer_ValidCredentials_ReturnsLoggedInWithTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, Password);
-            LoginResult expectedLoginResult = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equivalent(expectedLoginResult, loginResult);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
-            LoginResult expectedLoginResult = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equivalent(expectedLoginResult, loginResult);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]

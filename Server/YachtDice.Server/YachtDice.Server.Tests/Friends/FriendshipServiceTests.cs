@@ -185,7 +185,7 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
         {
-            var expectedSavedRequest = new
+            var savedRequestExpected = new
             {
                 RequesterId = RequesterId,
                 AddresseeId = TargetId,
@@ -195,7 +195,7 @@ namespace YachtDice.Server.Tests.Friends
             _service.SendRequest(RequesterName, TargetUsername);
 
             Friendship savedRequest = _friends.Friendships.Single();
-            Assert.Equivalent(expectedSavedRequest, savedRequest);
+            Assert.Equivalent(savedRequestExpected, savedRequest);
         }
 
         [Fact]
@@ -265,31 +265,31 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void RespondToRequest_AcceptedRequest_ReturnsSuccessAndSavesTheFriendshipAsAccepted()
         {
-            var expectedFriendship = new
+            var friendshipExpected = new
             {
                 RequesterId = RequesterId,
                 AddresseeId = TargetId,
                 Status = FriendshipStatus.Accepted
             };
-            var expectedOutcome = new { Status = FriendActionStatus.Success, Friendship = expectedFriendship };
+            var outcomeExpected = new { Status = FriendActionStatus.Success, Friendship = friendshipExpected };
             _service.SendRequest(RequesterName, TargetUsername);
 
             FriendActionStatus status = RespondAsTarget(RequesterName, true);
 
-            var actualOutcome = new { Status = status, Friendship = _friends.Friendships.Single() };
-            Assert.Equivalent(expectedOutcome, actualOutcome);
+            var outcomeResult = new { Status = status, Friendship = _friends.Friendships.Single() };
+            Assert.Equivalent(outcomeExpected, outcomeResult);
         }
 
         [Fact]
         public void RespondToRequest_RejectedRequest_ReturnsSuccessAndRemovesTheRequest()
         {
-            var expectedOutcome = new { Status = FriendActionStatus.Success, SavedFriendships = NoFriendships };
+            var outcomeExpected = new { Status = FriendActionStatus.Success, SavedFriendships = NoFriendships };
             _service.SendRequest(RequesterName, TargetUsername);
 
             FriendActionStatus status = RespondAsTarget(RequesterName, false);
 
-            var actualOutcome = new { Status = status, SavedFriendships = _friends.Friendships.Count };
-            Assert.Equal(expectedOutcome, actualOutcome);
+            var outcomeResult = new { Status = status, SavedFriendships = _friends.Friendships.Count };
+            Assert.Equal(outcomeExpected, outcomeResult);
         }
 
         [Fact]

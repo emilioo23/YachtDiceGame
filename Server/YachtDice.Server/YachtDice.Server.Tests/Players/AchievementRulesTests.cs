@@ -58,18 +58,18 @@ namespace YachtDice.Server.Tests.Players
         public void GetUnlockedIds_OneGameAndOneWin_UnlocksTheFirstGameAndTheFirstWin()
         {
             var statistics = new PlayerStatistics { GamesPlayed = OneGame, Wins = OneWin };
-            var expectedIds = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
+            var idsExpected = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]
         public void GetUnlockedIds_BestScoreOfThreeHundred_UnlocksTheFourScoreAchievements()
         {
             var statistics = new PlayerStatistics { GamesPlayed = OneGame, BestScore = HighestScore };
-            var expectedIds = new List<int>
+            var idsExpected = new List<int>
             {
                 FirstGameAchievementId,
                 WellStartedAchievementId,
@@ -80,7 +80,7 @@ namespace YachtDice.Server.Tests.Players
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace YachtDice.Server.Tests.Players
                 Wins = FiveWins,
                 WinRatePercentage = PerfectWinRate
             };
-            var expectedIds = new List<int>
+            var idsExpected = new List<int>
             {
                 FirstGameAchievementId,
                 FirstWinAchievementId,
@@ -102,7 +102,7 @@ namespace YachtDice.Server.Tests.Players
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace YachtDice.Server.Tests.Players
                 Wins = SixWins,
                 WinRatePercentage = DominantWinRate
             };
-            var expectedIds = new List<int>
+            var idsExpected = new List<int>
             {
                 FirstGameAchievementId,
                 FirstWinAchievementId,
@@ -126,14 +126,14 @@ namespace YachtDice.Server.Tests.Players
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]
         public void GetUnlockedIds_TopLevel_UnlocksTheFourLevelAchievements()
         {
             var statistics = new PlayerStatistics { Level = TopLevel };
-            var expectedIds = new List<int>
+            var idsExpected = new List<int>
             {
                 ApprenticeAchievementId,
                 ExperiencedAchievementId,
@@ -143,18 +143,18 @@ namespace YachtDice.Server.Tests.Players
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]
         public void GetUnlockedIds_FiveThousandExperience_UnlocksTheTwoExperienceAchievements()
         {
             var statistics = new PlayerStatistics { Experience = MountainExperience };
-            var expectedIds = new List<int> { CollectorAchievementId, MountainAchievementId };
+            var idsExpected = new List<int> { CollectorAchievementId, MountainAchievementId };
 
             List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
 
-            Assert.Equal(expectedIds, unlockedIds);
+            Assert.Equal(idsExpected, unlockedIds);
         }
 
         [Fact]

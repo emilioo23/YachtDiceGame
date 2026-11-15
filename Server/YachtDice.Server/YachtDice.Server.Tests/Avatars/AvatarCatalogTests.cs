@@ -20,23 +20,23 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
         {
-            var expectedSearch = new { IsFound = true, IsFree = true };
+            var searchExpected = new { IsFound = true, IsFree = true };
 
             bool isFound = AvatarCatalog.TryFind(AvatarCatalog.DefaultAvatarId, out UnlockableAvatar avatar);
 
-            var actualSearch = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
-            Assert.Equal(expectedSearch, actualSearch);
+            var searchResult = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            Assert.Equal(searchExpected, searchResult);
         }
 
         [Fact]
         public void TryFind_UnknownIdentifier_ReturnsFalse()
         {
-            var expectedSearch = new { IsFound = false, HasAvatar = false };
+            var searchExpected = new { IsFound = false, HasAvatar = false };
 
             bool isFound = AvatarCatalog.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
 
-            var actualSearch = new { IsFound = isFound, HasAvatar = avatar != null };
-            Assert.Equal(expectedSearch, actualSearch);
+            var searchResult = new { IsFound = isFound, HasAvatar = avatar != null };
+            Assert.Equal(searchExpected, searchResult);
         }
 
         [Fact]
@@ -75,13 +75,13 @@ namespace YachtDice.Server.Tests.Avatars
         public void GetAll_Always_HasConsecutiveIdentifiersFromTheDefaultAvatar()
         {
             Func<UnlockableAvatar, int> readId = avatar => avatar.Id;
-            List<int> expectedIdentifiers = Enumerable
+            List<int> identifiersExpected = Enumerable
                 .Range(AvatarCatalog.DefaultAvatarId, AvatarCatalog.GetAll().Count)
                 .ToList();
 
             List<int> identifiers = AvatarCatalog.GetAll().Select(readId).ToList();
 
-            Assert.Equal(expectedIdentifiers, identifiers);
+            Assert.Equal(identifiersExpected, identifiers);
         }
 
         [Fact]

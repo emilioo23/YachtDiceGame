@@ -42,7 +42,7 @@ namespace YachtDice.Server.Tests.Game
         public void Score_OpenCategory_WritesThePointsAndAddsThemToTheTotal()
         {
             ScoreCard card = CreateCard();
-            var expectedScore = new
+            var scoreExpected = new
             {
                 Status = GameActionStatus.Success,
                 Points = NoCombinationChoicePoints,
@@ -51,8 +51,8 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionStatus status = card.Score(ScoreCategory.Choice, NoCombination);
 
-            var actualScore = new { Status = status, Points = card.GetScore(ScoreCategory.Choice), card.Total };
-            Assert.Equal(expectedScore, actualScore);
+            var scoreResult = new { Status = status, Points = card.GetScore(ScoreCategory.Choice), card.Total };
+            Assert.Equal(scoreExpected, scoreResult);
         }
 
         [Fact]
@@ -60,50 +60,50 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Choice, NoCombination);
-            var expectedScore = new { Status = GameActionStatus.CategoryFilled, Points = NoCombinationChoicePoints };
+            var scoreExpected = new { Status = GameActionStatus.CategoryFilled, Points = NoCombinationChoicePoints };
 
             GameActionStatus status = card.Score(ScoreCategory.Choice, YachtOfSixes);
 
-            var actualScore = new { Status = status, Points = card.GetScore(ScoreCategory.Choice) };
-            Assert.Equal(expectedScore, actualScore);
+            var scoreResult = new { Status = status, Points = card.GetScore(ScoreCategory.Choice) };
+            Assert.Equal(scoreExpected, scoreResult);
         }
 
         [Fact]
         public void GetScore_OpenCategory_ReturnsZeroAndKeepsItOpen()
         {
             ScoreCard card = CreateCard();
-            var expectedCategory = new { Points = NoPoints, IsFilled = false };
+            var categoryExpected = new { Points = NoPoints, IsFilled = false };
 
-            var actualCategory = new
+            var categoryResult = new
             {
                 Points = card.GetScore(ScoreCategory.Sixes),
                 IsFilled = card.IsFilled(ScoreCategory.Sixes)
             };
 
-            Assert.Equal(expectedCategory, actualCategory);
+            Assert.Equal(categoryExpected, categoryResult);
         }
 
         [Fact]
         public void Score_ZeroPoints_StillFillsTheCategory()
         {
             ScoreCard card = CreateCard();
-            var expectedCategory = new { IsFilled = true, Points = NoPoints };
+            var categoryExpected = new { IsFilled = true, Points = NoPoints };
 
             card.Score(ScoreCategory.Yacht, NoCombination);
 
-            var actualCategory = new
+            var categoryResult = new
             {
                 IsFilled = card.IsFilled(ScoreCategory.Yacht),
                 Points = card.GetScore(ScoreCategory.Yacht)
             };
-            Assert.Equal(expectedCategory, actualCategory);
+            Assert.Equal(categoryExpected, categoryResult);
         }
 
         [Fact]
         public void UpperBonus_UpperSectionReachesSixtyThree_AddsThirtyFivePoints()
         {
             ScoreCard card = CreateCard();
-            var expectedCard = new
+            var cardExpected = new
             {
                 UpperSubtotal = UpperBonusThreshold,
                 UpperBonus = UpperBonusPoints,
@@ -112,18 +112,18 @@ namespace YachtDice.Server.Tests.Game
 
             ScoreThreeOfEachUpperValue(card);
 
-            Assert.Equivalent(expectedCard, card);
+            Assert.Equivalent(cardExpected, card);
         }
 
         [Fact]
         public void UpperBonus_UpperSectionBelowSixtyThree_IsZero()
         {
             ScoreCard fewerSixes = CreateCard();
-            var expectedCard = new { UpperSubtotal = UpperSubtotalWithTwoSixes, UpperBonus = NoPoints };
+            var cardExpected = new { UpperSubtotal = UpperSubtotalWithTwoSixes, UpperBonus = NoPoints };
 
             ScoreUpperWithTwoSixes(fewerSixes);
 
-            Assert.Equivalent(expectedCard, fewerSixes);
+            Assert.Equivalent(cardExpected, fewerSixes);
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfFours);
-            var expectedBonus = new
+            var bonusExpected = new
             {
                 YachtBonus = YachtBonusPoints,
                 SixesPoints = YachtOfSixesSixesPoints,
@@ -140,8 +140,8 @@ namespace YachtDice.Server.Tests.Game
 
             card.Score(ScoreCategory.Sixes, YachtOfSixes);
 
-            var actualBonus = new { card.YachtBonus, SixesPoints = card.GetScore(ScoreCategory.Sixes), card.Total };
-            Assert.Equal(expectedBonus, actualBonus);
+            var bonusResult = new { card.YachtBonus, SixesPoints = card.GetScore(ScoreCategory.Sixes), card.Total };
+            Assert.Equal(bonusExpected, bonusResult);
         }
 
         [Fact]
@@ -170,17 +170,17 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Choice, NoCombination);
-            var expectedOptions = new { OptionCount = OpenCategoriesAfterOneScore, OffersChoice = false };
+            var optionsExpected = new { OptionCount = OpenCategoriesAfterOneScore, OffersChoice = false };
 
             IReadOnlyList<ScoreEntry> options = card.GetOptions(NoCombination);
             Func<ScoreEntry, bool> isSameCategory = option => option.Category == ScoreCategory.Choice;
 
-            var actualOptions = new
+            var optionsResult = new
             {
                 OptionCount = options.Count,
                 OffersChoice = options.Any(isSameCategory)
             };
-            Assert.Equal(expectedOptions, actualOptions);
+            Assert.Equal(optionsExpected, optionsResult);
         }
 
         [Fact]
@@ -188,11 +188,11 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
-            ScoreEntry[] expectedOptions = { new ScoreEntry(ScoreCategory.Fours, YachtOfFoursPoints) };
+            ScoreEntry[] optionsExpected = { new ScoreEntry(ScoreCategory.Fours, YachtOfFoursPoints) };
 
             IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
 
-            Assert.Equivalent(expectedOptions, options);
+            Assert.Equivalent(optionsExpected, options);
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace YachtDice.Server.Tests.Game
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
             card.Score(ScoreCategory.Fours, NoCombination);
-            var expectedOptions = new
+            var optionsExpected = new
             {
                 OffersUpperBox = false,
                 OptionCount = OpenLowerBoxesWithJoker,
@@ -211,7 +211,7 @@ namespace YachtDice.Server.Tests.Game
 
             IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
 
-            var actualOptions = new
+            var optionsResult = new
             {
                 OffersUpperBox =
                     options.Any(option => ScoreCategories.IsUpper(option.Category)),
@@ -219,7 +219,7 @@ namespace YachtDice.Server.Tests.Game
                 BigStraightPoints = FindOption(options, ScoreCategory.BigStraight).Points,
                 ChoicePoints = FindOption(options, ScoreCategory.Choice).Points
             };
-            Assert.Equal(expectedOptions, actualOptions);
+            Assert.Equal(optionsExpected, optionsResult);
         }
 
         [Fact]
@@ -228,19 +228,19 @@ namespace YachtDice.Server.Tests.Game
             ScoreCard card = CreateCard();
             FillLowerSection(card);
             card.Score(ScoreCategory.Fours, NoCombination);
-            var expectedOptions = new { OptionCount = OpenUpperBoxesWithJoker, IsAllUpper = true, HasOnlyZeros = true };
+            var optionsExpected = new { OptionCount = OpenUpperBoxesWithJoker, IsAllUpper = true, HasOnlyZeros = true };
 
             IReadOnlyList<ScoreEntry> options = card.GetOptions(YachtOfFours);
             Func<ScoreEntry, bool> hasNoPoints = option => option.Points == NoPoints;
 
-            var actualOptions = new
+            var optionsResult = new
             {
                 OptionCount = options.Count,
                 IsAllUpper =
                     options.All(option => ScoreCategories.IsUpper(option.Category)),
                 HasOnlyZeros = options.All(hasNoPoints)
             };
-            Assert.Equal(expectedOptions, actualOptions);
+            Assert.Equal(optionsExpected, optionsResult);
         }
 
         [Fact]
@@ -248,27 +248,27 @@ namespace YachtDice.Server.Tests.Game
         {
             ScoreCard card = CreateCard();
             card.Score(ScoreCategory.Yacht, YachtOfSixes);
-            var expectedScore = new { Status = GameActionStatus.CategoryNotAllowed, IsFilled = false };
+            var scoreExpected = new { Status = GameActionStatus.CategoryNotAllowed, IsFilled = false };
 
             GameActionStatus status = card.Score(ScoreCategory.Choice, YachtOfFours);
 
-            var actualScore = new { Status = status, IsFilled = card.IsFilled(ScoreCategory.Choice) };
-            Assert.Equal(expectedScore, actualScore);
+            var scoreResult = new { Status = status, IsFilled = card.IsFilled(ScoreCategory.Choice) };
+            Assert.Equal(scoreExpected, scoreResult);
         }
 
         [Fact]
         public void IsComplete_AllCategoriesFilled_ReturnsTrueWithoutOpenCategories()
         {
             ScoreCard card = CreateCard();
-            var expectedCompletion = new { IsComplete = true, OpenCategoryCount = NoOpenCategories };
+            var completionExpected = new { IsComplete = true, OpenCategoryCount = NoOpenCategories };
 
             foreach (ScoreCategory category in ScoreCategories.All)
             {
                 card.Score(category, NoCombination);
             }
 
-            var actualCompletion = new { card.IsComplete, OpenCategoryCount = card.GetOpenCategories().Count };
-            Assert.Equal(expectedCompletion, actualCompletion);
+            var completionResult = new { card.IsComplete, OpenCategoryCount = card.GetOpenCategories().Count };
+            Assert.Equal(completionExpected, completionResult);
         }
 
         [Fact]

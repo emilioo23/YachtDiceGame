@@ -69,7 +69,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_RegisteredEmail_SavesTheHashOfTheCodeAndSendsTheEmail()
         {
-            var expectedRecovery = new
+            var recoveryExpected = new
             {
                 TokenCount = OneToken,
                 TokenLength = HashLength,
@@ -80,14 +80,14 @@ namespace YachtDice.Server.Tests.Authentication
             _service.RequestReset(Email, CultureInfo.InvariantCulture);
 
             PwdResetToken savedToken = _resets.Tokens.First();
-            var actualRecovery = new
+            var recoveryResult = new
             {
                 TokenCount = _resets.Tokens.Count,
                 TokenLength = savedToken.Token.Length,
                 IsStillValid = savedToken.ExpireDate > DateTime.UtcNow,
                 Recipients = _emailService.Recipients.ToArray()
             };
-            Assert.Equivalent(expectedRecovery, actualRecovery);
+            Assert.Equivalent(recoveryExpected, recoveryResult);
         }
 
         [Fact]
@@ -101,16 +101,16 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_UnknownEmail_DoesNotSaveOrSendAnything()
         {
-            var expectedRecovery = new { TokenCount = NoTokens, RecipientCount = NoRecipients };
+            var recoveryExpected = new { TokenCount = NoTokens, RecipientCount = NoRecipients };
 
             _service.RequestReset(UnknownEmail, CultureInfo.InvariantCulture);
 
-            var actualRecovery = new
+            var recoveryResult = new
             {
                 TokenCount = _resets.Tokens.Count,
                 RecipientCount = _emailService.Recipients.Count
             };
-            Assert.Equal(expectedRecovery, actualRecovery);
+            Assert.Equal(recoveryExpected, recoveryResult);
         }
 
         [Fact]
@@ -181,16 +181,16 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_CorrectCode_ChangesThePasswordAndDeletesTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expectedReset = new { HasNewPassword = true, TokenCount = NoTokens };
+            var resetExpected = new { HasNewPassword = true, TokenCount = NoTokens };
 
             _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
 
-            var actualReset = new
+            var resetResult = new
             {
                 HasNewPassword = IsCurrentPassword(NewPassword),
                 TokenCount = _resets.Tokens.Count
             };
-            Assert.Equal(expectedReset, actualReset);
+            Assert.Equal(resetExpected, resetResult);
         }
 
         [Fact]
@@ -264,16 +264,16 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_WrongCode_KeepsThePasswordAndTheCode()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            var expectedReset = new { HasOldPassword = true, TokenCount = OneToken };
+            var resetExpected = new { HasOldPassword = true, TokenCount = OneToken };
 
             _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
 
-            var actualReset = new
+            var resetResult = new
             {
                 HasOldPassword = IsCurrentPassword(OldPassword),
                 TokenCount = _resets.Tokens.Count
             };
-            Assert.Equal(expectedReset, actualReset);
+            Assert.Equal(resetExpected, resetResult);
         }
 
         [Fact]

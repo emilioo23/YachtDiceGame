@@ -107,17 +107,17 @@ namespace YachtDice.Server.Tests.Authentication
         public void RegisterPlayer_ValidData_SavesThePlayerWithTheHashedPassword()
         {
             Player newPlayer = CreatePlayer(Username, Email);
-            var expectedSavedPassword = new { IsPlainText = false, MatchesThePassword = true };
+            var savedPasswordExpected = new { IsPlainText = false, MatchesThePassword = true };
 
             _service.RegisterPlayer(newPlayer, Password);
 
             Player savedPlayer = _players.Players.Single();
-            var actualSavedPassword = new
+            var savedPasswordResult = new
             {
                 IsPlainText = savedPlayer.PwdHash == Password,
                 MatchesThePassword = PasswordHasher.Verify(Password, savedPlayer.PwdHash)
             };
-            Assert.Equal(expectedSavedPassword, actualSavedPassword);
+            Assert.Equal(savedPasswordExpected, savedPasswordResult);
         }
 
         [Fact]

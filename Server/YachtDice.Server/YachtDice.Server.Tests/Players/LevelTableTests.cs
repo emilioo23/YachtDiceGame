@@ -28,13 +28,13 @@ namespace YachtDice.Server.Tests.Players
         [InlineData(BelowSecondLevelExperience, FirstLevel)]
         [InlineData(SecondLevelExperience, SecondLevel)]
         [InlineData(ThirdLevelExperience, ThirdLevel)]
-        public void GetLevel_Experience_ReturnsTheHighestLevelReached(int experience, int expectedLevel)
+        public void GetLevel_Experience_ReturnsTheHighestLevelReached(int experience, int levelExpected)
         {
             var levelTable = new LevelTable(Thresholds);
 
             int level = levelTable.GetLevel(experience);
 
-            Assert.Equal(expectedLevel, level);
+            Assert.Equal(levelExpected, level);
         }
 
         [Fact]
@@ -59,26 +59,26 @@ namespace YachtDice.Server.Tests.Players
         [InlineData(FirstLevel, NoExperience)]
         [InlineData(SecondLevel, SecondLevelExperience)]
         [InlineData(AboveLastLevel, ThirdLevelExperience)]
-        public void GetLevelStart_Level_ReturnsTheExperienceThatTheLevelNeeds(int level, int expectedExperience)
+        public void GetLevelStart_Level_ReturnsTheExperienceThatTheLevelNeeds(int level, int experienceExpected)
         {
             var levelTable = new LevelTable(Thresholds);
 
             int levelStart = levelTable.GetLevelStart(level);
 
-            Assert.Equal(expectedExperience, levelStart);
+            Assert.Equal(experienceExpected, levelStart);
         }
 
         [Theory]
         [InlineData(FirstLevel, SecondLevelExperience)]
         [InlineData(SecondLevel, ThirdLevelExperience)]
         [InlineData(ThirdLevel, ThirdLevelExperience)]
-        public void GetNextLevelStart_Level_ReturnsTheExperienceOfTheNextLevel(int level, int expectedExperience)
+        public void GetNextLevelStart_Level_ReturnsTheExperienceOfTheNextLevel(int level, int experienceExpected)
         {
             var levelTable = new LevelTable(Thresholds);
 
             int nextLevelStart = levelTable.GetNextLevelStart(level);
 
-            Assert.Equal(expectedExperience, nextLevelStart);
+            Assert.Equal(experienceExpected, nextLevelStart);
         }
 
         [Fact]

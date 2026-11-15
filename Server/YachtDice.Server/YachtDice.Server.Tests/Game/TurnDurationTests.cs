@@ -18,13 +18,13 @@ namespace YachtDice.Server.Tests.Game
         [Theory]
         [InlineData(GameSpeed.Normal, LongerTurnSeconds)]
         [InlineData(GameSpeed.Fast, ShorterTurnSeconds)]
-        public void GetSeconds_ConfiguredSpeed_ReturnsItsSeconds(GameSpeed speed, int expectedSeconds)
+        public void GetSeconds_ConfiguredSpeed_ReturnsItsSeconds(GameSpeed speed, int secondsExpected)
         {
             var turnDuration = new TurnDuration(CreateSecondsBySpeed());
 
             int seconds = turnDuration.GetSeconds(speed);
 
-            Assert.Equal(expectedSeconds, seconds);
+            Assert.Equal(secondsExpected, seconds);
         }
 
         [Fact]

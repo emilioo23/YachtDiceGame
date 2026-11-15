@@ -63,12 +63,12 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendPlayerCode_KnownEmail_SendsTheCodeToThatEmail()
         {
-            var expectedOutcome = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
+            var outcomeExpected = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
 
             ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, CreateDelivery());
 
-            var actualOutcome = new { Status = status, Recipient = _emailService.Recipients.First() };
-            Assert.Equal(expectedOutcome, actualOutcome);
+            var outcomeResult = new { Status = status, Recipient = _emailService.Recipients.First() };
+            Assert.Equal(outcomeExpected, outcomeResult);
         }
 
         [Fact]
@@ -88,12 +88,12 @@ namespace YachtDice.Server.Tests.TwoFactor
         [Fact]
         public void ResendActivationCode_KnownPlayer_SendsTheCodeToTheEmailOfThePlayer()
         {
-            var expectedOutcome = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
+            var outcomeExpected = new { Status = ResendCodeStatus.CodeSent, Recipient = Email };
 
             ResendCodeStatus status = _settingsService.ResendActivationCode(DisplayName, CreateDelivery());
 
-            var actualOutcome = new { Status = status, Recipient = _emailService.Recipients.First() };
-            Assert.Equal(expectedOutcome, actualOutcome);
+            var outcomeResult = new { Status = status, Recipient = _emailService.Recipients.First() };
+            Assert.Equal(outcomeExpected, outcomeResult);
         }
 
         private static CodeDelivery CreateDelivery()

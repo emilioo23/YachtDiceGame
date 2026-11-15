@@ -100,7 +100,7 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void GetProfile_RegisteredPlayer_ReturnsAvatarLevelAndExperience()
         {
-            PlayerProfile expectedProfile = new PlayerProfile
+            PlayerProfile profileExpected = new PlayerProfile
             {
                 AvatarId = CurrentAvatarId,
                 Level = PlayerLevel,
@@ -112,13 +112,13 @@ namespace YachtDice.Server.Tests.Avatars
 
             PlayerProfile profile = _service.GetProfile(PlayerName);
 
-            Assert.Equivalent(expectedProfile, profile);
+            Assert.Equivalent(profileExpected, profile);
         }
 
         [Fact]
         public void GetProfile_UnknownPlayer_ReturnsTheProfileOfANewPlayer()
         {
-            PlayerProfile expectedProfile = new PlayerProfile
+            PlayerProfile profileExpected = new PlayerProfile
             {
                 AvatarId = AvatarCatalog.DefaultAvatarId,
                 Level = NewPlayerLevel,
@@ -130,7 +130,7 @@ namespace YachtDice.Server.Tests.Avatars
 
             PlayerProfile profile = _service.GetProfile(UnknownName);
 
-            Assert.Equivalent(expectedProfile, profile);
+            Assert.Equivalent(profileExpected, profile);
         }
 
         [Fact]
@@ -144,11 +144,11 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_UnlockedAvatar_SavesTheNewAvatar()
         {
-            Player expectedSavedPlayer = CreatePlayer(PlayerLevel, UnlockedAvatarId);
+            Player savedPlayerExpected = CreatePlayer(PlayerLevel, UnlockedAvatarId);
 
             _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
-            Assert.Equivalent(expectedSavedPlayer, _players.Players.Single());
+            Assert.Equivalent(savedPlayerExpected, _players.Players.Single());
         }
 
         [Fact]
@@ -164,11 +164,11 @@ namespace YachtDice.Server.Tests.Avatars
         [InlineData(UnknownAvatarId)]
         public void ChangeAvatar_AvatarThatCannotBeChosen_KeepsTheCurrentOne(int avatarId)
         {
-            Player expectedSavedPlayer = CreatePlayer(PlayerLevel, CurrentAvatarId);
+            Player savedPlayerExpected = CreatePlayer(PlayerLevel, CurrentAvatarId);
 
             _service.ChangeAvatar(PlayerName, avatarId);
 
-            Assert.Equivalent(expectedSavedPlayer, _players.Players.Single());
+            Assert.Equivalent(savedPlayerExpected, _players.Players.Single());
         }
 
         [Fact]
