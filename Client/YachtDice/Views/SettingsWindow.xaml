@@ -347,13 +347,17 @@
 
                             </StackPanel>
 
-                            <Border Width="46"
+                            <Border x:Name="SoundsToggle"
+                                    Width="46"
                                     Height="24"
                                     CornerRadius="12"
                                     Background="{StaticResource BrushFeltLight}"
-                                    Grid.Column="1">
+                                    Cursor="Hand"
+                                    Grid.Column="1"
+                                    MouseLeftButtonUp="SoundsToggle_Click">
 
-                                <Border Width="18"
+                                <Border x:Name="SoundsToggleKnob"
+                                        Width="18"
                                         Height="18"
                                         CornerRadius="9"
                                         Background="White"

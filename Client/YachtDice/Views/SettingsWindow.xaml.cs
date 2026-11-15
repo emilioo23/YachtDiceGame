@@ -53,6 +53,7 @@ namespace YachtDice.Views
             AccountUsernameTextBlock.Text = session.DisplayName;
             LanguageComboBox.SelectedIndex = LanguageCatalog.IndexOf(App.CurrentCultureCode);
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.AreSoundsEnabled);
 
             ShowSection(initialSection);
             _isInitializing = false;
@@ -86,17 +87,22 @@ namespace YachtDice.Views
 
         private void ApplyDarkThemeToggleVisual(bool isDark)
         {
-            if (isDark)
+            ApplyToggleVisual(DarkThemeToggle, DarkThemeToggleKnob, isDark);
+        }
+
+        private void ApplyToggleVisual(Border toggle, Border knob, bool isOn)
+        {
+            if (isOn)
             {
-                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.FeltLightBrushKey);
-                DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Right;
-                DarkThemeToggleKnob.Margin = new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin);
+                toggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.FeltLightBrushKey);
+                knob.HorizontalAlignment = HorizontalAlignment.Right;
+                knob.Margin = new Thickness(NoMargin, NoMargin, ToggleKnobMargin, NoMargin);
             }
             else
             {
-                DarkThemeToggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.BorderBrushKey);
-                DarkThemeToggleKnob.HorizontalAlignment = HorizontalAlignment.Left;
-                DarkThemeToggleKnob.Margin = new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
+                toggle.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.BorderBrushKey);
+                knob.HorizontalAlignment = HorizontalAlignment.Left;
+                knob.Margin = new Thickness(ToggleKnobMargin, NoMargin, NoMargin, NoMargin);
             }
         }
 
@@ -272,6 +278,12 @@ namespace YachtDice.Views
         {
             App.SetTheme(!App.IsDarkTheme);
             ReopenSettingsWindow(AppearanceSection);
+        }
+
+        private void SoundsToggle_Click(object sender, MouseButtonEventArgs e)
+        {
+            App.SetSoundsEnabled(!App.AreSoundsEnabled);
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.AreSoundsEnabled);
         }
 
         private void EditProfileButton_Click(object sender, RoutedEventArgs e)
