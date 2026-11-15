@@ -4,7 +4,7 @@
   <xs:element name="SendFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="targetUsername" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -51,7 +51,7 @@
   <xs:element name="RespondToFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="answer" nillable="true" type="tns:FriendRequestAnswer" />
       </xs:sequence>
     </xs:complexType>
@@ -83,7 +83,7 @@
   <xs:element name="RemoveFriend">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="friendName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -98,7 +98,7 @@
   <xs:element name="BlockPlayer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="blockedName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

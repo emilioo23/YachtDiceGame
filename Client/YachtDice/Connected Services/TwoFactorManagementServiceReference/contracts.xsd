@@ -33,7 +33,7 @@
   <xs:element name="StartTwoFactorActivation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="culture" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -66,7 +66,7 @@
   <xs:element name="ConfirmTwoFactorActivation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="verificationCode" nillable="true" type="tns:VerificationCode" />
       </xs:sequence>
     </xs:complexType>
@@ -97,7 +97,7 @@
   <xs:element name="ResendActivationCode">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="delivery" nillable="true" type="tns:CodeDelivery" />
       </xs:sequence>
     </xs:complexType>
@@ -129,7 +129,7 @@
   <xs:element name="DisableTwoFactor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

@@ -134,7 +134,7 @@ namespace YachtDice.Views
         private async Task StartTwoFactorActivationAsync()
         {
             TwoFactorActivationData data = await _twoFactorGateway.StartTwoFactorActivationAsync(
-                _session.DisplayName,
+                _session.SessionToken,
                 App.CurrentCultureCode);
 
             if (data.Code == TwoFactorActivationResultCode.CodeSent)
@@ -162,7 +162,7 @@ namespace YachtDice.Views
         private async Task DisableTwoFactorAsync()
         {
             TwoFactorChangeResultCode result = await _twoFactorGateway.DisableTwoFactorAsync(
-                _session.DisplayName,
+                _session.SessionToken,
                 TwoFactorPasswordBox.Password);
 
             if (result == TwoFactorChangeResultCode.Success)

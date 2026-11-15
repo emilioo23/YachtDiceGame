@@ -132,7 +132,7 @@ namespace YachtDice.Views
                 if (_isActivation)
                 {
                     TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(
-                        _session.DisplayName,
+                        _session.SessionToken,
                         new ResendCodeInput(_challengeId, App.CurrentCultureCode));
 
                     HandleResendResult((AuthResendResult)(int)result);
@@ -182,7 +182,7 @@ namespace YachtDice.Views
                 {
                     var verificationCode = new TwoFactorVerificationCode { Code = code, ChallengeId = _challengeId };
                     TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(
-                        _session.DisplayName,
+                        _session.SessionToken,
                         verificationCode);
 
                     HandleVerificationResult((AuthVerificationResult)(int)result);

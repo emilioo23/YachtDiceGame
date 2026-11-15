@@ -15,13 +15,13 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Sends a friend request to the player who owns the username.
         /// </summary>
-        /// <param name="displayName">Name of the player who sends the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
-        public async Task<FriendRequestResultCode> SendRequestAsync(string displayName, string targetUsername)
+        public async Task<FriendRequestResultCode> SendRequestAsync(string sessionToken, string targetUsername)
         {
             FriendRequestResultCode result =
-                await ExecuteAsync(client => client.SendFriendRequest(displayName, targetUsername));
+                await ExecuteAsync(client => client.SendFriendRequest(sessionToken, targetUsername));
 
             return result;
         }
@@ -29,13 +29,13 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
-        /// <param name="displayName">Name of the player who answers the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
-        public async Task<FriendActionResultCode> RespondAsync(string displayName, FriendRequestAnswer answer)
+        public async Task<FriendActionResultCode> RespondAsync(string sessionToken, FriendRequestAnswer answer)
         {
             FriendActionResultCode result =
-                await ExecuteAsync(client => client.RespondToFriendRequest(displayName, answer));
+                await ExecuteAsync(client => client.RespondToFriendRequest(sessionToken, answer));
 
             return result;
         }
@@ -43,12 +43,12 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Removes a friend from the list of the player.
         /// </summary>
-        /// <param name="displayName">Name of the player who removes the friend.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="friendName">Name of the friend to remove.</param>
         /// <returns>Outcome of the removal.</returns>
-        public async Task<FriendActionResultCode> RemoveFriendAsync(string displayName, string friendName)
+        public async Task<FriendActionResultCode> RemoveFriendAsync(string sessionToken, string friendName)
         {
-            FriendActionResultCode result = await ExecuteAsync(client => client.RemoveFriend(displayName, friendName));
+            FriendActionResultCode result = await ExecuteAsync(client => client.RemoveFriend(sessionToken, friendName));
 
             return result;
         }
@@ -56,12 +56,12 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Blocks another player: they stop being friends and cannot send requests to each other again.
         /// </summary>
-        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="blockedName">Name of the player who is blocked.</param>
         /// <returns>Outcome of the block.</returns>
-        public async Task<FriendActionResultCode> BlockPlayerAsync(string displayName, string blockedName)
+        public async Task<FriendActionResultCode> BlockPlayerAsync(string sessionToken, string blockedName)
         {
-            FriendActionResultCode result = await ExecuteAsync(client => client.BlockPlayer(displayName, blockedName));
+            FriendActionResultCode result = await ExecuteAsync(client => client.BlockPlayer(sessionToken, blockedName));
 
             return result;
         }

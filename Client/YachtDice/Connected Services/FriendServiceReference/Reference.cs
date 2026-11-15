@@ -294,19 +294,19 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/SendFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/SendFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/SendFriendRequestServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
+        YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string sessionToken, string targetUsername);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequest", ReplyAction="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RespondToFriendRequestServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer);
+        YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string sessionToken, YachtDice.FriendServiceReference.FriendRequestAnswer answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/RemoveFriend", ReplyAction="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName);
+        YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string sessionToken, string friendName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/BlockPlayer", ReplyAction="urn:yachtdice:contracts/IFriendService/BlockPlayerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/BlockPlayerServiceFaultFault", Name="ServiceFault")]
-        YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string displayName, string blockedName);
+        YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string sessionToken, string blockedName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault", Name="ServiceFault")]
@@ -352,20 +352,20 @@ namespace YachtDice.FriendServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername) {
-            return base.Channel.SendFriendRequest(displayName, targetUsername);
+        public YachtDice.FriendServiceReference.FriendRequestResultCode SendFriendRequest(string sessionToken, string targetUsername) {
+            return base.Channel.SendFriendRequest(sessionToken, targetUsername);
         }
         
-        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string displayName, YachtDice.FriendServiceReference.FriendRequestAnswer answer) {
-            return base.Channel.RespondToFriendRequest(displayName, answer);
+        public YachtDice.FriendServiceReference.FriendActionResultCode RespondToFriendRequest(string sessionToken, YachtDice.FriendServiceReference.FriendRequestAnswer answer) {
+            return base.Channel.RespondToFriendRequest(sessionToken, answer);
         }
         
-        public YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string displayName, string friendName) {
-            return base.Channel.RemoveFriend(displayName, friendName);
+        public YachtDice.FriendServiceReference.FriendActionResultCode RemoveFriend(string sessionToken, string friendName) {
+            return base.Channel.RemoveFriend(sessionToken, friendName);
         }
         
-        public YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string displayName, string blockedName) {
-            return base.Channel.BlockPlayer(displayName, blockedName);
+        public YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string sessionToken, string blockedName) {
+            return base.Channel.BlockPlayer(sessionToken, blockedName);
         }
         
         public YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName) {

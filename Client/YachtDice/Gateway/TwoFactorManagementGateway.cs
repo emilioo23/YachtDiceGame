@@ -29,13 +29,13 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server to send the code that confirms the activation of the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
-        public async Task<TwoFactorActivationData> StartTwoFactorActivationAsync(string displayName, string culture)
+        public async Task<TwoFactorActivationData> StartTwoFactorActivationAsync(string sessionToken, string culture)
         {
             TwoFactorActivationData activation =
-                await ExecuteAsync(client => client.StartTwoFactorActivation(displayName, culture));
+                await ExecuteAsync(client => client.StartTwoFactorActivation(sessionToken, culture));
 
             return activation;
         }
@@ -43,15 +43,15 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Sends the code entered by the player to turn on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         public async Task<VerificationResultCode> ConfirmActivationAsync(
-            string displayName,
+            string sessionToken,
             VerificationCode verificationCode)
         {
             VerificationResultCode result =
-                await ExecuteAsync(client => client.ConfirmTwoFactorActivation(displayName, verificationCode));
+                await ExecuteAsync(client => client.ConfirmTwoFactorActivation(sessionToken, verificationCode));
 
             return result;
         }
@@ -59,11 +59,11 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server to send a new code while the player turns on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="input">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         /// <exception cref="ArgumentNullException">The input is null.</exception>
-        public async Task<ResendResultCode> ResendActivationCodeAsync(string displayName, ResendInput input)
+        public async Task<ResendResultCode> ResendActivationCodeAsync(string sessionToken, ResendInput input)
         {
             if (input == null)
             {
@@ -71,7 +71,7 @@ namespace YachtDice.Gateway
             }
 
             var delivery = new CodeDelivery { ChallengeId = input.ChallengeId, Culture = input.Culture };
-            ResendResultCode result = await ExecuteAsync(client => client.ResendActivationCode(displayName, delivery));
+            ResendResultCode result = await ExecuteAsync(client => client.ResendActivationCode(sessionToken, delivery));
 
             return result;
         }
@@ -79,13 +79,13 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server to turn off the two-step verification of the player.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
-        public async Task<TwoFactorChangeResultCode> DisableTwoFactorAsync(string displayName, string password)
+        public async Task<TwoFactorChangeResultCode> DisableTwoFactorAsync(string sessionToken, string password)
         {
             TwoFactorChangeResultCode result =
-                await ExecuteAsync(client => client.DisableTwoFactor(displayName, password));
+                await ExecuteAsync(client => client.DisableTwoFactor(sessionToken, password));
 
             return result;
         }

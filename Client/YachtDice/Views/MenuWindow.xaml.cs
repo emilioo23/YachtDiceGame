@@ -270,7 +270,7 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.BlockPlayerAsync(_session.DisplayName, playerName);
+                await _friendGateway.BlockPlayerAsync(_session.SessionToken, playerName);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)
@@ -284,7 +284,7 @@ namespace YachtDice.Views
             try
             {
                 FriendRequestResultCode result =
-                    await _friendGateway.SendRequestAsync(_session.DisplayName, FriendUsernameTextBox.Text);
+                    await _friendGateway.SendRequestAsync(_session.SessionToken, FriendUsernameTextBox.Text);
 
                 CustomDialogWindow.ShowMessage(this, FriendRequestMessages.GetMessage(result));
 
@@ -306,7 +306,7 @@ namespace YachtDice.Views
             {
                 var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
 
-                FriendActionResultCode result = await _friendGateway.RespondAsync(_session.DisplayName, answer);
+                FriendActionResultCode result = await _friendGateway.RespondAsync(_session.SessionToken, answer);
 
                 if (result == FriendActionResultCode.FriendLimitReached)
                 {
@@ -325,7 +325,7 @@ namespace YachtDice.Views
         {
             try
             {
-                await _friendGateway.RemoveFriendAsync(_session.DisplayName, friendName);
+                await _friendGateway.RemoveFriendAsync(_session.SessionToken, friendName);
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)
