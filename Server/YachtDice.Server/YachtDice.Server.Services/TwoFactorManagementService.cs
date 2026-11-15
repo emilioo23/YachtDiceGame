@@ -41,13 +41,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Starts turning on the two-step verification by sending a code to the player's email.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
-        public Contracts.TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture)
+        public Contracts.TwoFactorActivationData StartTwoFactorActivation(string sessionToken, string culture)
         {
             Contracts.TwoFactorActivationData activation =
-                Execute(displayName, () => ProcessActivationStart(displayName, culture));
+                ExecuteForPlayer(sessionToken, playerName => ProcessActivationStart(playerName, culture));
 
             return activation;
         }
@@ -55,15 +55,15 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         public Contracts.VerificationResultCode ConfirmTwoFactorActivation(
-            string displayName,
+            string sessionToken,
             Contracts.VerificationCode verificationCode)
         {
             Contracts.VerificationResultCode result =
-                Execute(verificationCode, () => ProcessActivationConfirmation(displayName, verificationCode));
+                ExecuteForPlayer(sessionToken, playerName => ProcessActivationConfirmation(playerName, verificationCode));
 
             return result;
         }
@@ -71,13 +71,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Sends a new code while the player is turning on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="delivery">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendActivationCode(string displayName, Contracts.CodeDelivery delivery)
+        public Contracts.ResendResultCode ResendActivationCode(string sessionToken, Contracts.CodeDelivery delivery)
         {
             Contracts.ResendResultCode result =
-                Execute(delivery, () => ProcessActivationResend(displayName, delivery));
+                ExecuteForPlayer(sessionToken, playerName => ProcessActivationResend(playerName, delivery));
 
             return result;
         }
@@ -85,13 +85,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Turns off the two-step verification after checking the player's password.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
-        public Contracts.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password)
+        public Contracts.TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password)
         {
             Contracts.TwoFactorChangeResultCode result =
-                Execute(displayName, () => ProcessDisable(displayName, password));
+                ExecuteForPlayer(sessionToken, playerName => ProcessDisable(playerName, password));
 
             return result;
         }

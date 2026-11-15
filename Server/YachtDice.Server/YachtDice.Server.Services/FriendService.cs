@@ -43,13 +43,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Sends a friend request to the player who owns the username.
         /// </summary>
-        /// <param name="displayName">Name of the player who sends the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
-        public Contracts.FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername)
+        public Contracts.FriendRequestResultCode SendFriendRequest(string sessionToken, string targetUsername)
         {
             Contracts.FriendRequestResultCode result =
-                Execute(displayName, () => ProcessRequest(displayName, targetUsername));
+                ExecuteForPlayer(sessionToken, playerName => ProcessRequest(playerName, targetUsername));
 
             return result;
         }
@@ -57,15 +57,15 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
-        /// <param name="displayName">Name of the player who answers the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
         public Contracts.FriendActionResultCode RespondToFriendRequest(
-            string displayName,
+            string sessionToken,
             Contracts.FriendRequestAnswer answer)
         {
             Contracts.FriendActionResultCode result =
-                Execute(answer, () => ProcessResponse(displayName, answer));
+                ExecuteForPlayer(sessionToken, playerName => ProcessResponse(playerName, answer));
 
             return result;
         }
@@ -73,13 +73,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Removes a friend from the list of the player.
         /// </summary>
-        /// <param name="displayName">Name of the player who removes the friend.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="friendName">Name of the friend to remove.</param>
         /// <returns>Outcome of the removal.</returns>
-        public Contracts.FriendActionResultCode RemoveFriend(string displayName, string friendName)
+        public Contracts.FriendActionResultCode RemoveFriend(string sessionToken, string friendName)
         {
             Contracts.FriendActionResultCode result =
-                Execute(displayName, () => ProcessRemoval(displayName, friendName));
+                ExecuteForPlayer(sessionToken, playerName => ProcessRemoval(playerName, friendName));
 
             return result;
         }
@@ -87,13 +87,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Blocks another player and updates the friend list of the blocked player if they were friends.
         /// </summary>
-        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="blockedName">Name of the player who is blocked.</param>
         /// <returns>Outcome of the block.</returns>
-        public Contracts.FriendActionResultCode BlockPlayer(string displayName, string blockedName)
+        public Contracts.FriendActionResultCode BlockPlayer(string sessionToken, string blockedName)
         {
             Contracts.FriendActionResultCode result =
-                Execute(displayName, () => ProcessBlock(displayName, blockedName));
+                ExecuteForPlayer(sessionToken, playerName => ProcessBlock(playerName, blockedName));
 
             return result;
         }

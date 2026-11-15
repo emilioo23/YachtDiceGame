@@ -13,42 +13,42 @@ namespace YachtDice.Server.Contracts.Friends
         /// <summary>
         /// Sends a friend request to the player who owns the username.
         /// </summary>
-        /// <param name="displayName">Name of the player who sends the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
+        FriendRequestResultCode SendFriendRequest(string sessionToken, string targetUsername);
 
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
-        /// <param name="displayName">Name of the player who answers the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode RespondToFriendRequest(string displayName, FriendRequestAnswer answer);
+        FriendActionResultCode RespondToFriendRequest(string sessionToken, FriendRequestAnswer answer);
 
         /// <summary>
         /// Removes a friend from the list of the player.
         /// </summary>
-        /// <param name="displayName">Name of the player who removes the friend.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="friendName">Name of the friend to remove.</param>
         /// <returns>Outcome of the removal.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode RemoveFriend(string displayName, string friendName);
+        FriendActionResultCode RemoveFriend(string sessionToken, string friendName);
 
         /// <summary>
         /// Blocks another player: they stop being friends and cannot send requests to each other again.
         /// </summary>
-        /// <param name="displayName">Name of the player who blocks.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="blockedName">Name of the player who is blocked.</param>
         /// <returns>Outcome of the block.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode BlockPlayer(string displayName, string blockedName);
+        FriendActionResultCode BlockPlayer(string sessionToken, string blockedName);
 
         /// <summary>
         /// Invites a friend who is online to join the room where the player is.

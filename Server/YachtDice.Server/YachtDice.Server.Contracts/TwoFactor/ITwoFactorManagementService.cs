@@ -20,41 +20,41 @@ namespace YachtDice.Server.Contracts.TwoFactor
         /// <summary>
         /// Starts turning on the two-step verification by sending a code to the player's email.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture);
+        TwoFactorActivationData StartTwoFactorActivation(string sessionToken, string culture);
 
         /// <summary>
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode ConfirmTwoFactorActivation(string displayName, VerificationCode verificationCode);
+        VerificationResultCode ConfirmTwoFactorActivation(string sessionToken, VerificationCode verificationCode);
 
         /// <summary>
         /// Sends a new code while the player is turning on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="delivery">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        ResendResultCode ResendActivationCode(string displayName, CodeDelivery delivery);
+        ResendResultCode ResendActivationCode(string sessionToken, CodeDelivery delivery);
 
         /// <summary>
         /// Turns off the two-step verification after checking the player's password.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password);
+        TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password);
     }
 }
