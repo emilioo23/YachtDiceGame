@@ -18,6 +18,10 @@ namespace YachtDice.Server.Contracts.Friends
 
         /// <summary>There is no pending request or friendship between the players.</summary>
         [EnumMember]
-        RelationNotFound
+        RelationNotFound,
+
+        /// <summary>One of the two players already has the most friends allowed.</summary>
+        [EnumMember]
+        FriendLimitReached
     }
 }

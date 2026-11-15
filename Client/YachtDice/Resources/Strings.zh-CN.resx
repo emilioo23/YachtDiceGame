@@ -2244,4 +2244,10 @@
   <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
     <value>你今天输错密码10次，账号已被锁定24小时。</value>
   </data>
+  <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
+    <value>你们其中一人已有100位好友，已达上限。</value>
+  </data>
+  <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
+    <value>你已有5个未回复的请求。请等待回复后再发送。</value>
+  </data>
 </root>

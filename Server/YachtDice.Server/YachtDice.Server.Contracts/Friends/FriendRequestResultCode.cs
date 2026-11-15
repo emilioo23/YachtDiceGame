@@ -38,6 +38,14 @@ namespace YachtDice.Server.Contracts.Friends
 
         /// <summary>The player who sends the request does not exist.</summary>
         [EnumMember]
-        PlayerNotFound
+        PlayerNotFound,
+
+        /// <summary>One of the two players already has the most friends allowed.</summary>
+        [EnumMember]
+        FriendLimitReached,
+
+        /// <summary>The requester already has the most pending requests allowed.</summary>
+        [EnumMember]
+        TooManyPendingRequests
     }
 }

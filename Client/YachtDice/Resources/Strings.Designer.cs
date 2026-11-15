@@ -619,6 +619,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ya tienes 5 solicitudes sin respuesta. Espera a que te respondan para enviar otra.
+        /// </summary>
+        public static string Friends_Result_TooManyPendingRequests {
+            get {
+                return ResourceManager.GetString("Friends_Result_TooManyPendingRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Uno de los dos ya tiene 100 amigos, que es el máximo permitido.
+        /// </summary>
+        public static string Friends_Result_FriendLimitReached {
+            get {
+                return ResourceManager.GetString("Friends_Result_FriendLimitReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ya le enviaste una solicitud a este jugador..
         /// </summary>
         public static string Friends_Result_AlreadyRequested {

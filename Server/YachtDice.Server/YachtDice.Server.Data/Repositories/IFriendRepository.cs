@@ -30,6 +30,20 @@ namespace YachtDice.Server.Data.Repositories
         List<Player> FindPendingRequesters(int playerId);
 
         /// <summary>
+        /// Counts the friends of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The number of accepted friendships of the player.</returns>
+        int CountFriends(int playerId);
+
+        /// <summary>
+        /// Counts the friend requests that a player sent and that are still waiting for an answer.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who sent the requests.</param>
+        /// <returns>The number of pending requests sent by the player.</returns>
+        int CountPendingSent(int playerId);
+
+        /// <summary>
         /// Saves a new friendship.
         /// </summary>
         /// <param name="friendship">Friendship to save, with the two players and its status.</param>

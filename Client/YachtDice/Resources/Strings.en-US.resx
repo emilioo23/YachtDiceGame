@@ -771,6 +771,12 @@
   <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
     <value>You already sent a request to this player.</value>
   </data>
+  <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
+    <value>One of you already has 100 friends, which is the most allowed.</value>
+  </data>
+  <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
+    <value>You already have 5 requests without an answer. Wait for an answer to send another one.</value>
+  </data>
   <data name="Lobby_RoomCodeFormat" xml:space="preserve">
     <value>Code: {0}</value>
   </data>

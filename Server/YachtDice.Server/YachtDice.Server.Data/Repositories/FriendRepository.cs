@@ -56,6 +56,32 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
+        /// Counts the friends of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The number of accepted friendships of the player.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public int CountFriends(int playerId)
+        {
+            int friendCount = Query(context => CountAcceptedFriendships(context, playerId));
+
+            return friendCount;
+        }
+
+        /// <summary>
+        /// Counts the friend requests that a player sent and that are still waiting for an answer.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who sent the requests.</param>
+        /// <returns>The number of pending requests sent by the player.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public int CountPendingSent(int playerId)
+        {
+            int pendingCount = Query(context => CountPendingRequestsSent(context, playerId));
+
+            return pendingCount;
+        }
+
+        /// <summary>
         /// Saves a new friendship.
         /// </summary>
         /// <param name="friendship">Friendship to save, with the two players and its status.</param>
@@ -186,6 +212,23 @@ namespace YachtDice.Server.Data.Repositories
             List<Player> requesters = context.Player.Where(isRequester).ToList();
 
             return requesters;
+        }
+
+        private static int CountAcceptedFriendships(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isAcceptedWithPlayer = friendship =>
+                (friendship.RequesterId == playerId || friendship.AddresseeId == playerId)
+                && friendship.Status == FriendshipStatus.Accepted;
+
+            return context.Friendship.Count(isAcceptedWithPlayer);
+        }
+
+        private static int CountPendingRequestsSent(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isPendingFromPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Pending;
+
+            return context.Friendship.Count(isPendingFromPlayer);
         }
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)

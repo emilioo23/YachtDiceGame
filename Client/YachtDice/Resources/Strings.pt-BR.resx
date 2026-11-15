@@ -2244,4 +2244,10 @@
   <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
     <value>Sua conta foi bloqueada por 24 horas porque você digitou uma senha errada 10 vezes hoje.</value>
   </data>
+  <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
+    <value>Um de vocês já tem 100 amigos, que é o máximo permitido.</value>
+  </data>
+  <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
+    <value>Você já tem 5 solicitações sem resposta. Espere uma resposta para enviar outra.</value>
+  </data>
 </root>

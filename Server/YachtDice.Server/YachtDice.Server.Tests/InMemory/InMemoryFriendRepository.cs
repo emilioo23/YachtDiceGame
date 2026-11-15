@@ -41,6 +41,24 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public int CountFriends(int playerId)
+        {
+            Func<Friendship, bool> isAcceptedWithPlayer = friendship =>
+                IsWithPlayer(friendship, playerId) && friendship.Status == FriendshipStatus.Accepted;
+
+            return _friendships.Count(isAcceptedWithPlayer);
+        }
+
+        /// <inheritdoc />
+        public int CountPendingSent(int playerId)
+        {
+            Func<Friendship, bool> isPendingFromPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Pending;
+
+            return _friendships.Count(isPendingFromPlayer);
+        }
+
+        /// <inheritdoc />
         public void Add(Friendship friendship)
         {
             _friendships.Add(friendship);
@@ -74,6 +92,11 @@ namespace YachtDice.Server.Tests.InMemory
             bool isReceived = friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId;
 
             return isRequested || isReceived;
+        }
+
+        private static bool IsWithPlayer(Friendship friendship, int playerId)
+        {
+            return friendship.RequesterId == playerId || friendship.AddresseeId == playerId;
         }
     }
 }

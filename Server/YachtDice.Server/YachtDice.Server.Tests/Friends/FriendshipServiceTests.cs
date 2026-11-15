@@ -21,6 +21,7 @@ namespace YachtDice.Server.Tests.Friends
         private const string TargetDisplayName = "Gabriel";
         private const string UnknownUsername = "CarlosRamirez";
         private const string UnknownRequesterName = "LuisHernandez";
+        private const int FirstOtherPlayerId = 100;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
@@ -42,6 +43,38 @@ namespace YachtDice.Server.Tests.Friends
             FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
 
             Assert.Equal(FriendRequestStatus.RequestSent, requestResult.Status);
+        }
+
+        [Fact]
+        public void SendRequest_FivePendingRequestsAlready_ReturnsTooManyPendingRequests()
+        {
+            AddFriendships(RequesterId, FriendshipService.MaxPendingRequests, FriendshipStatus.Pending);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.TooManyPendingRequests, requestResult.Status);
+        }
+
+        [Fact]
+        public void SendRequest_RequesterWithAHundredFriends_ReturnsFriendLimitReached()
+        {
+            AddFriendships(RequesterId, FriendshipService.MaxFriends, FriendshipStatus.Accepted);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.FriendLimitReached, requestResult.Status);
+        }
+
+        [Fact]
+        public void RespondToRequest_AddresseeWithAHundredFriends_ReturnsFriendLimitReached()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+            AddFriendships(TargetId, FriendshipService.MaxFriends, FriendshipStatus.Accepted);
+            var answer = new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true };
+
+            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, answer);
+
+            Assert.Equal(FriendActionStatus.FriendLimitReached, status);
         }
 
         [Fact]
@@ -182,6 +215,19 @@ namespace YachtDice.Server.Tests.Friends
             var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
 
             return _service.RespondToRequest(TargetDisplayName, answer);
+        }
+
+        private void AddFriendships(int playerId, int count, string status)
+        {
+            for (int friendIndex = 0; friendIndex < count; friendIndex++)
+            {
+                _friends.Add(new Friendship
+                {
+                    RequesterId = playerId,
+                    AddresseeId = FirstOtherPlayerId + friendIndex,
+                    Status = status
+                });
+            }
         }
     }
 }

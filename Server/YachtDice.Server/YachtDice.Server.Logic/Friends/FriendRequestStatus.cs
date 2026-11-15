@@ -27,6 +27,12 @@
         AlreadyRequested,
 
         /// <summary>The player who sends the request does not exist.</summary>
-        PlayerNotFound
+        PlayerNotFound,
+
+        /// <summary>One of the two players already has the most friends allowed.</summary>
+        FriendLimitReached,
+
+        /// <summary>The requester already has the most pending requests allowed.</summary>
+        TooManyPendingRequests
     }
 }

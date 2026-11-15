@@ -771,6 +771,12 @@
   <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
     <value>Ya le enviaste una solicitud a este jugador.</value>
   </data>
+  <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
+    <value>Uno de los dos ya tiene 100 amigos, que es el máximo permitido.</value>
+  </data>
+  <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
+    <value>Ya tienes 5 solicitudes sin respuesta. Espera a que te respondan para enviar otra.</value>
+  </data>
   <data name="Lobby_RoomCodeFormat" xml:space="preserve">
     <value>Código: {0}</value>
   </data>

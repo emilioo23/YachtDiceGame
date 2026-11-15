@@ -11,6 +11,16 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class FriendshipService : IFriendshipService
     {
+        /// <summary>
+        /// Most friends that a player can have.
+        /// </summary>
+        public const int MaxFriends = 100;
+
+        /// <summary>
+        /// Most friend requests that a player can have waiting for an answer at the same time.
+        /// </summary>
+        public const int MaxPendingRequests = 5;
+
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
@@ -199,15 +209,7 @@ namespace YachtDice.Server.Logic.Friends
 
             if (existing == null)
             {
-                var pendingFriendship = new Friendship
-                {
-                    RequesterId = requester.Id,
-                    AddresseeId = target.Id,
-                    Status = FriendshipStatus.Pending
-                };
-
-                _friendRepository.Add(pendingFriendship);
-                status = FriendRequestStatus.RequestSent;
+                status = AddRequestIfAllowed(requester, target);
             }
             else if (existing.Status == FriendshipStatus.Accepted)
             {
@@ -225,11 +227,56 @@ namespace YachtDice.Server.Logic.Friends
             return status;
         }
 
+        private FriendRequestStatus AddRequestIfAllowed(Player requester, Player target)
+        {
+            FriendRequestStatus status;
+
+            if (_friendRepository.CountPendingSent(requester.Id) >= MaxPendingRequests)
+            {
+                status = FriendRequestStatus.TooManyPendingRequests;
+            }
+            else if (HasMaxFriends(requester.Id) || HasMaxFriends(target.Id))
+            {
+                status = FriendRequestStatus.FriendLimitReached;
+            }
+            else
+            {
+                var pendingFriendship = new Friendship
+                {
+                    RequesterId = requester.Id,
+                    AddresseeId = target.Id,
+                    Status = FriendshipStatus.Pending
+                };
+
+                _friendRepository.Add(pendingFriendship);
+                status = FriendRequestStatus.RequestSent;
+            }
+
+            return status;
+        }
+
+        private bool HasEitherMaxFriends(Friendship friendRequest)
+        {
+            return HasMaxFriends(friendRequest.RequesterId) || HasMaxFriends(friendRequest.AddresseeId);
+        }
+
+        private bool HasMaxFriends(int playerId)
+        {
+            return _friendRepository.CountFriends(playerId) >= MaxFriends;
+        }
+
         private FriendActionStatus AnswerRequest(Friendship friendRequest, bool isAccepted)
         {
             FriendActionStatus status = FriendActionStatus.RelationNotFound;
 
-            if (friendRequest != null && isAccepted)
+            bool isAcceptedRequest = friendRequest != null && isAccepted;
+            bool isOverLimit = isAcceptedRequest && HasEitherMaxFriends(friendRequest);
+
+            if (isOverLimit)
+            {
+                status = FriendActionStatus.FriendLimitReached;
+            }
+            else if (isAcceptedRequest)
             {
                 friendRequest.Status = FriendshipStatus.Accepted;
                 _friendRepository.UpdateStatus(friendRequest);

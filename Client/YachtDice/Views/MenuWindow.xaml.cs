@@ -12,6 +12,7 @@ using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using FriendActionResultCode = YachtDice.FriendServiceReference.FriendActionResultCode;
 using FriendRequestAnswer = YachtDice.FriendServiceReference.FriendRequestAnswer;
 using FriendRequestResultCode = YachtDice.FriendServiceReference.FriendRequestResultCode;
 
@@ -282,7 +283,13 @@ namespace YachtDice.Views
             {
                 var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
 
-                await _friendGateway.RespondAsync(_session.DisplayName, answer);
+                FriendActionResultCode result = await _friendGateway.RespondAsync(_session.DisplayName, answer);
+
+                if (result == FriendActionResultCode.FriendLimitReached)
+                {
+                    CustomDialogWindow.ShowMessage(this, Strings.Friends_Result_FriendLimitReached);
+                }
+
                 await LoadFriendsAsync();
             }
             catch (GatewayException ex)

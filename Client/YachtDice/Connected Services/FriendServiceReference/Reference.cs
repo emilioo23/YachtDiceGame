@@ -40,6 +40,12 @@ namespace YachtDice.FriendServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerNotFound = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendLimitReached = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TooManyPendingRequests = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -190,6 +196,9 @@ namespace YachtDice.FriendServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         RelationNotFound = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FriendLimitReached = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

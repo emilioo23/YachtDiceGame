@@ -26,6 +26,8 @@
       <xs:enumeration value="AlreadyFriends" />
       <xs:enumeration value="AlreadyRequested" />
       <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="FriendLimitReached" />
+      <xs:enumeration value="TooManyPendingRequests" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendRequestResultCode" nillable="true" type="tns:FriendRequestResultCode" />
@@ -71,6 +73,7 @@
       <xs:enumeration value="Success" />
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="RelationNotFound" />
+      <xs:enumeration value="FriendLimitReached" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendActionResultCode" nillable="true" type="tns:FriendActionResultCode" />
