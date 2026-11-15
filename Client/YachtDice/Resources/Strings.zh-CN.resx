@@ -2235,4 +2235,7 @@
   <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
     <value>房主已将你移出此房间，你不能再进入。</value>
   </data>
+  <data name="Lobby_ClosedMessage" xml:space="preserve">
+    <value>房间已关闭，因为15分钟内没有开始游戏。</value>
+  </data>
 </root>

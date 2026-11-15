@@ -262,6 +262,12 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }
 
+        private void LeaveBecauseClosed()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_ClosedMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
         private void AnnounceHostChange(RoomState room)
         {
             Func<RoomPlayer, bool> isSameId = player => player.Id == room.HostId;
@@ -283,6 +289,10 @@ namespace YachtDice.Views
             if (eventType == RoomEventType.PlayerKicked && !IsInside(room))
             {
                 LeaveBecauseKicked();
+            }
+            else if (eventType == RoomEventType.RoomClosed)
+            {
+                LeaveBecauseClosed();
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -98,6 +99,13 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="newHostId">Identifier of the player who becomes the host.</param>
         /// <returns>Outcome of the change and the state of the room after it.</returns>
         RoomResult TransferHost(RoomMember member, string newHostId);
+
+        /// <summary>
+        /// Closes the rooms that waited fifteen minutes or more without starting their game.
+        /// </summary>
+        /// <param name="now">Current moment, in UTC.</param>
+        /// <returns>The rooms that were closed, with the players who were inside, or an empty list.</returns>
+        List<RoomDetails> CloseExpiredRooms(DateTime now);
 
         /// <summary>
         /// Looks for a player inside a room.

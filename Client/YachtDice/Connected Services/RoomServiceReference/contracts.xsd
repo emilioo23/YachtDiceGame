@@ -276,6 +276,7 @@
       <xs:enumeration value="HostChanged" />
       <xs:enumeration value="PlayerDisconnected" />
       <xs:enumeration value="PlayerReturned" />
+      <xs:enumeration value="RoomClosed" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RoomEventType" nillable="true" type="tns:RoomEventType" />

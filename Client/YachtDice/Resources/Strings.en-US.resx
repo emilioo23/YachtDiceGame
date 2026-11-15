@@ -1014,6 +1014,9 @@
   <data name="Lobby_KickedMessage" xml:space="preserve">
     <value>The host kicked you out of the room.</value>
   </data>
+  <data name="Lobby_ClosedMessage" xml:space="preserve">
+    <value>The room was closed because 15 minutes passed without starting the game.</value>
+  </data>
   <data name="Lobby_Chat_NewHost" xml:space="preserve">
     <value>{0} is now the host of the room.</value>
   </data>

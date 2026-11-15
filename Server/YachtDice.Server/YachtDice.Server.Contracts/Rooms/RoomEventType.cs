@@ -38,6 +38,12 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>A player who had left the game in progress came back.</summary>
         [EnumMember]
-        PlayerReturned
+        PlayerReturned,
+
+        /// <summary>
+        /// The room closed because it waited fifteen minutes without starting the game.
+        /// </summary>
+        [EnumMember]
+        RoomClosed
     }
 }

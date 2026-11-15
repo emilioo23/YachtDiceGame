@@ -24,12 +24,14 @@ namespace YachtDice.Server.Logic.Rooms
         /// </summary>
         /// <param name="code">Code of the room.</param>
         /// <param name="settings">Options of the room.</param>
-        public GameRoom(string code, RoomSettings settings)
+        /// <param name="createdAt">Moment, in UTC, when the room was created.</param>
+        public GameRoom(string code, RoomSettings settings, DateTime createdAt)
         {
             Id = Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture);
             Code = code;
             HostId = string.Empty;
             Settings = settings;
+            CreatedAt = createdAt;
         }
 
         /// <summary>
@@ -57,6 +59,11 @@ namespace YachtDice.Server.Logic.Rooms
         /// Gets or sets a value indicating whether the game already started.
         /// </summary>
         public bool IsStarted { get; set; }
+
+        /// <summary>
+        /// Gets the moment, in UTC, when the room was created.
+        /// </summary>
+        public DateTime CreatedAt { get; }
 
         /// <summary>
         /// Gets the players inside the room, in the order in which they entered.

@@ -767,6 +767,9 @@ namespace YachtDice.RoomServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerReturned = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RoomClosed = 8,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

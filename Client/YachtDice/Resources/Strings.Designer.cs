@@ -1852,6 +1852,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a La sala se cerró porque pasaron 15 minutos sin iniciar la partida.
+        /// </summary>
+        public static string Lobby_ClosedMessage {
+            get {
+                return ResourceManager.GetString("Lobby_ClosedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El anfitrión te expulsó de la sala..
         /// </summary>
         public static string Lobby_KickedMessage {

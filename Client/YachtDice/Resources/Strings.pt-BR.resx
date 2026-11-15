@@ -2235,4 +2235,7 @@
   <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
     <value>O anfitrião expulsou você desta sala, então você não pode entrar nela de novo.</value>
   </data>
+  <data name="Lobby_ClosedMessage" xml:space="preserve">
+    <value>A sala foi fechada porque passaram 15 minutos sem iniciar a partida.</value>
+  </data>
 </root>

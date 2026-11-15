@@ -1014,6 +1014,9 @@
   <data name="Lobby_KickedMessage" xml:space="preserve">
     <value>El anfitrión te expulsó de la sala.</value>
   </data>
+  <data name="Lobby_ClosedMessage" xml:space="preserve">
+    <value>La sala se cerró porque pasaron 15 minutos sin iniciar la partida.</value>
+  </data>
   <data name="Lobby_Chat_NewHost" xml:space="preserve">
     <value>{0} es ahora el anfitrión de la sala.</value>
   </data>

@@ -23,6 +23,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
+        private const int MaxWaitingMinutes = 15;
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
@@ -49,7 +50,7 @@ namespace YachtDice.Server.Logic.Rooms
 
             lock (_syncRoot)
             {
-                var room = new GameRoom(CreateUniqueCode(), CreateDefaultSettings());
+                var room = new GameRoom(CreateUniqueCode(), CreateDefaultSettings(), DateTime.UtcNow);
                 RoomPlayer host = room.AddPlayer(applicant.Name, applicant.AvatarId);
 
                 _rooms[room.Code] = room;
@@ -158,6 +159,28 @@ namespace YachtDice.Server.Logic.Rooms
                 ExecuteInRoom(member.RoomCode, room => StartRoomGame(room, member.PlayerId));
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public List<RoomDetails> CloseExpiredRooms(DateTime now)
+        {
+            DateTime oldestAllowed = now.AddMinutes(-MaxWaitingMinutes);
+            Func<GameRoom, bool> isExpired = room => !room.IsStarted && room.CreatedAt <= oldestAllowed;
+            List<RoomDetails> closedRooms;
+
+            lock (_syncRoot)
+            {
+                List<GameRoom> expiredRooms = _rooms.Values.Where(isExpired).ToList();
+
+                foreach (GameRoom room in expiredRooms)
+                {
+                    _rooms.Remove(room.Code);
+                }
+
+                closedRooms = expiredRooms.Select(room => room.ToDetails()).ToList();
+            }
+
+            return closedRooms;
         }
 
         /// <inheritdoc />

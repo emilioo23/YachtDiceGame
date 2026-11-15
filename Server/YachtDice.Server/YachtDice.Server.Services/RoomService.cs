@@ -16,6 +16,9 @@ namespace YachtDice.Server.Services
     public class RoomService : ServiceBase, Contracts.IRoomService
     {
         private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
+        private const int ExpiredRoomsCheckSeconds = 60;
+        private const int NoTurnNumber = 0;
+        private const string ClosedRoomLogFormat = "Room {0} was closed because it waited too long to start.";
         private const string NullDependencyMessage = "A dependency of the room service cannot be null.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
@@ -23,6 +26,8 @@ namespace YachtDice.Server.Services
 
         private readonly CallbackRegistry<Contracts.IRoomCallback> _callbacks =
             new CallbackRegistry<Contracts.IRoomCallback>();
+
+        private TurnClock _expiredRoomsCheck;
 
         /// <summary>
         /// Initializes a new instance of the RoomService class.
@@ -36,6 +41,7 @@ namespace YachtDice.Server.Services
             _gameCoordinator = gameCoordinator
                 ?? throw new ArgumentNullException(nameof(gameCoordinator), NullDependencyMessage);
             _gameCoordinator.ReconnectTimeExpired += ForgetPlayerWhoDidNotReturn;
+            _expiredRoomsCheck = StartExpiredRoomsCheck();
         }
 
         /// <summary>
@@ -357,6 +363,34 @@ namespace YachtDice.Server.Services
             if (result.HasReturned)
             {
                 _gameCoordinator.PlayerReturned(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
+            }
+        }
+
+        private TurnClock StartExpiredRoomsCheck()
+        {
+            return new TurnClock(NoTurnNumber, ExpiredRoomsCheckSeconds, CloseExpiredRooms);
+        }
+
+        private void CloseExpiredRooms()
+        {
+            try
+            {
+                foreach (LogicRooms.RoomDetails room in _roomManager.CloseExpiredRooms(DateTime.UtcNow))
+                {
+                    Broadcast(room, Contracts.RoomEventType.RoomClosed);
+
+                    foreach (LogicRooms.RoomPlayer player in room.Players)
+                    {
+                        _callbacks.Remove(new LogicRooms.RoomMember(room.Code, player.Id));
+                    }
+
+                    LogInfo(string.Format(CultureInfo.InvariantCulture, ClosedRoomLogFormat, room.Code));
+                }
+            }
+            finally
+            {
+                _expiredRoomsCheck.Dispose();
+                _expiredRoomsCheck = StartExpiredRoomsCheck();
             }
         }
 

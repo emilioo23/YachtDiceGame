@@ -19,6 +19,8 @@ namespace YachtDice.Server.Tests.Rooms
         private const string ThirdGuestName = "Invitado 3";
         private const string LowercaseGuestName = "invitado";
         private const string SecondLowercaseGuestName = "invitado 2";
+        private const int SixteenMinutes = 16;
+        private const int TenMinutes = 10;
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
         private const string UnknownRoomCode = "ZZZZZZ";
@@ -766,6 +768,44 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult joinAttempt = _manager.Join(secondHost.Room.Code, PlayerName);
 
             Assert.Equal(RoomStatus.Success, joinAttempt.Status);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_RoomWaitingMoreThanFifteenMinutes_ClosesTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            var expectedClosedRoom = new { host.Room.Code, IsFound = false };
+
+            RoomDetails closedRoom = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(SixteenMinutes)).Single();
+
+            var actualClosedRoom = new
+            {
+                closedRoom.Code,
+                IsFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _)
+            };
+            Assert.Equal(expectedClosedRoom, actualClosedRoom);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_RecentRoom_KeepsTheRoom()
+        {
+            _manager.CreateRoom(HostName);
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(TenMinutes));
+
+            Assert.Empty(closedRooms);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_StartedGame_KeepsTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(SixteenMinutes));
+
+            Assert.Empty(closedRooms);
         }
 
         [Fact]
