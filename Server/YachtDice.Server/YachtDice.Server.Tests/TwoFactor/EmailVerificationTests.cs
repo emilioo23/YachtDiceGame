@@ -20,6 +20,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         private const string Password = "Secret123!";
         private const string DisplayName = "analopez";
         private const string ChallengeId = "challenge-1";
+        private const string OtherChallengeId = "challenge-2";
         private const string CultureName = "es-MX";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
@@ -70,6 +71,32 @@ namespace YachtDice.Server.Tests.TwoFactor
             _verificationService.VerifyPlayerCode(Email, new VerificationCode { Code = code, ChallengeId = ChallengeId });
 
             Assert.Equal(PlayerState.Active.ToString(), _players.Players.Single().State);
+        }
+
+        [Fact]
+        public void VerifyPlayerCode_CodeOfAnotherChallenge_ReturnsExpired()
+        {
+            string code = _codeService.GenerateCode(Email, ChallengeId);
+            var verificationCode = new VerificationCode { Code = code, ChallengeId = OtherChallengeId };
+
+            TwoFactorValidationStatus status = _verificationService.VerifyPlayerCode(Email, verificationCode);
+
+            Assert.Equal(TwoFactorValidationStatus.Expired, status);
+        }
+
+        [Fact]
+        public void VerifyPlayerCode_CodeOfAnotherChallenge_DoesNotDiscardTheCodeOfTheRightChallenge()
+        {
+            string code = _codeService.GenerateCode(Email, ChallengeId);
+            _verificationService.VerifyPlayerCode(
+                Email,
+                new VerificationCode { Code = code, ChallengeId = OtherChallengeId });
+
+            TwoFactorValidationStatus status = _verificationService.VerifyPlayerCode(
+                Email,
+                new VerificationCode { Code = code, ChallengeId = ChallengeId });
+
+            Assert.Equal(TwoFactorValidationStatus.Valid, status);
         }
     }
 }

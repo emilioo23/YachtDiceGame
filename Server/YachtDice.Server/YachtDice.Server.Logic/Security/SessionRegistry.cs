@@ -84,6 +84,27 @@ namespace YachtDice.Server.Logic.Security
         }
 
         /// <summary>
+        /// Finds the player that a verification challenge was issued to, while the verification is pending.
+        /// </summary>
+        /// <param name="challengeId">Identifier of the challenge that the client sent.</param>
+        /// <param name="playerName">Name of the player, when the challenge is pending; empty otherwise.</param>
+        /// <returns>True if the server issued the challenge and it was not completed yet.</returns>
+        public bool TryGetPendingPlayerName(string challengeId, out string playerName)
+        {
+            bool isFound;
+
+            lock (_syncRoot)
+            {
+                isFound = _pendingByChallenge.TryGetValue(
+                    challengeId ?? string.Empty,
+                    out KeyValuePair<string, string> pending);
+                playerName = isFound ? pending.Value : string.Empty;
+            }
+
+            return isFound;
+        }
+
+        /// <summary>
         /// Finds the player of a session that works.
         /// </summary>
         /// <param name="sessionToken">Token that the client sent.</param>

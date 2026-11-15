@@ -55,6 +55,35 @@ namespace YachtDice.Server.Tests.Security
         }
 
         [Fact]
+        public void TryGetPendingPlayerName_PendingChallenge_ReturnsThePlayer()
+        {
+            _sessions.StartPending(PlayerName, ChallengeId);
+
+            _sessions.TryGetPendingPlayerName(ChallengeId, out string playerName);
+
+            Assert.Equal(PlayerName, playerName);
+        }
+
+        [Fact]
+        public void TryGetPendingPlayerName_ChallengeThatWasNotIssued_ReturnsFalse()
+        {
+            bool isFound = _sessions.TryGetPendingPlayerName(ChallengeId, out _);
+
+            Assert.False(isFound);
+        }
+
+        [Fact]
+        public void TryGetPendingPlayerName_CompletedChallenge_ReturnsFalse()
+        {
+            _sessions.StartPending(PlayerName, ChallengeId);
+            _sessions.Activate(ChallengeId);
+
+            bool isFound = _sessions.TryGetPendingPlayerName(ChallengeId, out _);
+
+            Assert.False(isFound);
+        }
+
+        [Fact]
         public void Start_SecondLogin_EndsTheFirstSession()
         {
             string firstToken = _sessions.Start(PlayerName);

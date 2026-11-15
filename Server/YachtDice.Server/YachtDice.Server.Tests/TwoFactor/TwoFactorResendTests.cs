@@ -53,11 +53,40 @@ namespace YachtDice.Server.Tests.TwoFactor
         }
 
         [Fact]
-        public void ResendPlayerCode_UnknownEmail_ReturnsPlayerNotFound()
+        public void ResendPlayerCode_UnknownEmail_ReturnsCodeSentWithoutSendingAnything()
         {
+            var outcomeExpected = new { Status = ResendCodeStatus.CodeSent, SentCount = 0 };
+
             ResendCodeStatus status = _verificationService.ResendPlayerCode(UnknownEmail, CreateDelivery());
 
-            Assert.Equal(ResendCodeStatus.PlayerNotFound, status);
+            var outcomeResult = new { Status = status, SentCount = _emailService.Recipients.Count };
+            Assert.Equal(outcomeExpected, outcomeResult);
+        }
+
+        [Fact]
+        public void ResendPlayerCode_ChallengeOfAnotherPlayer_ReturnsCodeSentWithoutSendingAnything()
+        {
+            var outcomeExpected = new { Status = ResendCodeStatus.CodeSent, SentCount = 0 };
+            CodeDelivery delivery = CreateDelivery();
+            delivery.OwnerName = UnknownDisplayName;
+
+            ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, delivery);
+
+            var outcomeResult = new { Status = status, SentCount = _emailService.Recipients.Count };
+            Assert.Equal(outcomeExpected, outcomeResult);
+        }
+
+        [Fact]
+        public void ResendPlayerCode_ChallengeNotIssuedByTheServer_ReturnsCodeSentWithoutSendingAnything()
+        {
+            var outcomeExpected = new { Status = ResendCodeStatus.CodeSent, SentCount = 0 };
+            CodeDelivery delivery = CreateDelivery();
+            delivery.OwnerName = string.Empty;
+
+            ResendCodeStatus status = _verificationService.ResendPlayerCode(Email, delivery);
+
+            var outcomeResult = new { Status = status, SentCount = _emailService.Recipients.Count };
+            Assert.Equal(outcomeExpected, outcomeResult);
         }
 
         [Fact]
@@ -98,7 +127,7 @@ namespace YachtDice.Server.Tests.TwoFactor
 
         private static CodeDelivery CreateDelivery()
         {
-            return new CodeDelivery { ChallengeId = ChallengeId, CultureName = CultureName };
+            return new CodeDelivery { ChallengeId = ChallengeId, CultureName = CultureName, OwnerName = DisplayName };
         }
     }
 }

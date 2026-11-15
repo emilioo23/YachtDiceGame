@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
@@ -91,7 +90,11 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// </summary>
         /// <param name="email">The player's email address.</param>
         /// <param name="delivery">The session challenge and the culture name for email localization.</param>
-        /// <returns>Result status of the resend process.</returns>
+        /// <returns>
+        /// Result status of the resend process. A code is only sent when the challenge was issued to that email;
+        /// for any other email the answer is the same as for a sent code, so the screen cannot be used to find
+        /// out which emails have an account (section 8.8 of the standard).
+        /// </returns>
         /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
         public ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery)
         {
@@ -100,15 +103,29 @@ namespace YachtDice.Server.Logic.TwoFactor
                 throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
             }
 
-            List<Player> matches = _playerRepository.FindByEmail(email);
-            Player player = matches.FirstOrDefault();
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            ResendCodeStatus status = ResendCodeStatus.CodeSent;
+
+            if (IsOwnerOfTheChallenge(player, delivery))
+            {
+                status = ResendTo(player, delivery);
+            }
+
+            return status;
+        }
+
+        private static bool IsOwnerOfTheChallenge(Player player, CodeDelivery delivery)
+        {
+            return player != null
+                && !string.IsNullOrEmpty(delivery.OwnerName)
+                && string.Equals(player.DisplayName, delivery.OwnerName, StringComparison.Ordinal);
+        }
+
+        private ResendCodeStatus ResendTo(Player player, CodeDelivery delivery)
+        {
             ResendCodeStatus status;
 
-            if (player == null)
-            {
-                status = ResendCodeStatus.PlayerNotFound;
-            }
-            else if (_codeService.IsLocked(player.Email))
+            if (_codeService.IsLocked(player.Email))
             {
                 status = ResendCodeStatus.VerificationLocked;
             }

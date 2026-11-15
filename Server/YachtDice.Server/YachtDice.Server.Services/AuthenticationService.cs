@@ -176,10 +176,13 @@ namespace YachtDice.Server.Services
             string email,
             TwoFactorContracts.CodeDelivery delivery)
         {
+            Sessions.TryGetPendingPlayerName(delivery.ChallengeId, out string ownerName);
+
             var logicDelivery = new LogicTwoFactor.CodeDelivery
             {
                 ChallengeId = delivery.ChallengeId,
-                CultureName = delivery.Culture
+                CultureName = delivery.Culture,
+                OwnerName = ownerName
             };
 
             LogicTwoFactor.ResendCodeStatus logicResult =

@@ -84,7 +84,9 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Expired;
 
-            if (_entries.TryGetValue(email, out TwoFactorCode issuedCode))
+            bool isIssued = _entries.TryGetValue(email, out TwoFactorCode issuedCode);
+
+            if (isIssued && issuedCode.ChallengeId == verificationCode.ChallengeId)
             {
                 status = EvaluateIssuedCode(issuedCode, verificationCode);
 
@@ -139,11 +141,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorValidationStatus status;
             DateTime now = DateTime.UtcNow;
 
-            if (issuedCode.ChallengeId != verificationCode.ChallengeId)
-            {
-                status = TwoFactorValidationStatus.Incorrect;
-            }
-            else if (issuedCode.LockedUntil > now)
+            if (issuedCode.LockedUntil > now)
             {
                 status = TwoFactorValidationStatus.Locked;
             }
