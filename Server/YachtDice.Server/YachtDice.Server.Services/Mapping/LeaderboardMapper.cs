@@ -30,19 +30,19 @@ namespace YachtDice.Server.Services.Mapping
         /// <summary>
         /// Converts a row of the leaderboard into the version that travels to the clients.
         /// </summary>
-        /// <param name="entry">Row of the leaderboard in the logic layer.</param>
+        /// <param name="leaderboardEntry">Row of the leaderboard in the logic layer.</param>
         /// <returns>The row for the clients.</returns>
-        private static Contracts.LeaderboardEntry ToContract(Logic.Players.LeaderboardEntry entry)
+        private static Contracts.LeaderboardEntry ToContract(Logic.Players.LeaderboardEntry leaderboardEntry)
         {
             var contract = new Contracts.LeaderboardEntry
             {
-                Position = entry.Position,
-                DisplayName = entry.DisplayName,
-                AvatarId = entry.AvatarId,
-                TotalPoints = entry.TotalPoints,
-                Wins = entry.Wins,
-                GamesPlayed = entry.GamesPlayed,
-                Level = entry.Level
+                Position = leaderboardEntry.Position,
+                DisplayName = leaderboardEntry.DisplayName,
+                AvatarId = leaderboardEntry.AvatarId,
+                TotalPoints = leaderboardEntry.TotalPoints,
+                Wins = leaderboardEntry.Wins,
+                GamesPlayed = leaderboardEntry.GamesPlayed,
+                Level = leaderboardEntry.Level
             };
 
             return contract;

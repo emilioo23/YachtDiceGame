@@ -86,13 +86,13 @@ namespace YachtDice.Server.Services.Mapping
             return scorecard;
         }
 
-        private static Contracts.CategoryScore ToContract(LogicGame.ScoreEntry entry)
+        private static Contracts.CategoryScore ToContract(LogicGame.ScoreEntry scoreEntry)
         {
             return new Contracts.CategoryScore
             {
-                Category = EnumMapper.Map<LogicGame.ScoreCategory, Contracts.ScoreCategory>(entry.Category),
-                IsFilled = entry.IsFilled,
-                Points = entry.Points
+                Category = EnumMapper.Map<LogicGame.ScoreCategory, Contracts.ScoreCategory>(scoreEntry.Category),
+                IsFilled = scoreEntry.IsFilled,
+                Points = scoreEntry.Points
             };
         }
 

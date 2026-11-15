@@ -71,7 +71,10 @@ namespace YachtDice.Server.Logic.Players
             List<LeaderboardEntry> ranking = AssignPositions(_gameHistoryRepository.GetRanking());
             List<LeaderboardEntry> visibleEntries = ranking.Take(MaxLeaderboardEntries).ToList();
             Func<LeaderboardEntry, bool> isViewer =
-                entry => string.Equals(entry.DisplayName, viewerName, StringComparison.OrdinalIgnoreCase);
+                leaderboardEntry => string.Equals(
+                    leaderboardEntry.DisplayName,
+                    viewerName,
+                    StringComparison.OrdinalIgnoreCase);
             List<LeaderboardEntry> viewerOutsideTop = ranking.Skip(MaxLeaderboardEntries).Where(isViewer).ToList();
 
             visibleEntries.AddRange(viewerOutsideTop);
@@ -159,7 +162,7 @@ namespace YachtDice.Server.Logic.Players
 
         private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int position)
         {
-            var entry = new LeaderboardEntry
+            var leaderboardEntry = new LeaderboardEntry
             {
                 Position = position,
                 DisplayName = record.DisplayName,
@@ -170,13 +173,13 @@ namespace YachtDice.Server.Logic.Players
                 Level = record.Level
             };
 
-            return entry;
+            return leaderboardEntry;
         }
 
         private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
         {
             int gamesPlayed = history.Count;
-            Func<GameHistoryPlayer, bool> isWinner = entry => entry.IsWinner == true;
+            Func<GameHistoryPlayer, bool> isWinner = historyPlayer => historyPlayer.IsWinner == true;
             int wins = history.Count(isWinner);
 
             var statistics = new PlayerStatistics
@@ -198,7 +201,7 @@ namespace YachtDice.Server.Logic.Players
 
             if (history.Count > EmptyCount)
             {
-                bestScore = history.Max(entry => entry.FinalScore);
+                bestScore = history.Max(historyPlayer => historyPlayer.FinalScore);
             }
 
             return bestScore;

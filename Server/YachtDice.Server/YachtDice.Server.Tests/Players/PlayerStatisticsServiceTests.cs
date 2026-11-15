@@ -200,7 +200,7 @@ namespace YachtDice.Server.Tests.Players
 
             List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
 
-            Assert.Equal(expectedNames, entries.Select(entry => entry.DisplayName).ToList());
+            Assert.Equal(expectedNames, entries.Select(leaderboardEntry => leaderboardEntry.DisplayName).ToList());
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace YachtDice.Server.Tests.Players
 
             List<LeaderboardEntry> entries = _service.GetTopPlayers(PlayerName);
 
-            Assert.Equal(expectedPositions, entries.Select(entry => entry.Position).ToList());
+            Assert.Equal(expectedPositions, entries.Select(leaderboardEntry => leaderboardEntry.Position).ToList());
         }
 
         [Fact]
@@ -262,9 +262,9 @@ namespace YachtDice.Server.Tests.Players
             });
             var expected = new { GamesPlayed = RankingGames, Level = RankingLevel };
 
-            LeaderboardEntry entry = _service.GetTopPlayers(PlayerName).Single();
+            LeaderboardEntry leaderboardEntry = _service.GetTopPlayers(PlayerName).Single();
 
-            Assert.Equivalent(expected, entry);
+            Assert.Equivalent(expected, leaderboardEntry);
         }
 
         private void AddRanking(string name, int totalPoints, int wins)

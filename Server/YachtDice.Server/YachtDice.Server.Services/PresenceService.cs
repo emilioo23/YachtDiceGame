@@ -155,9 +155,9 @@ namespace YachtDice.Server.Services
 
         private bool RemoveEntry(string displayName, OnlinePlayer player)
         {
-            var entry = new KeyValuePair<string, OnlinePlayer>(displayName, player);
+            var namedPlayer = new KeyValuePair<string, OnlinePlayer>(displayName, player);
 
-            return ((ICollection<KeyValuePair<string, OnlinePlayer>>)_players).Remove(entry);
+            return ((ICollection<KeyValuePair<string, OnlinePlayer>>)_players).Remove(namedPlayer);
         }
 
         private void Broadcast(string displayName, Contracts.PresenceEventType eventType)

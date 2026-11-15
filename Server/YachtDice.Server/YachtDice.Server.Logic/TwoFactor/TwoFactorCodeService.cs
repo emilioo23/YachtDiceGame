@@ -84,9 +84,9 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Expired;
 
-            if (_entries.TryGetValue(email, out TwoFactorCode entry))
+            if (_entries.TryGetValue(email, out TwoFactorCode issuedCode))
             {
-                status = EvaluateEntry(entry, verificationCode);
+                status = EvaluateIssuedCode(issuedCode, verificationCode);
 
                 if (status == TwoFactorValidationStatus.Valid || status == TwoFactorValidationStatus.Expired)
                 {
@@ -106,9 +106,9 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             var isLocked = false;
 
-            if (_entries.TryGetValue(email, out TwoFactorCode entry))
+            if (_entries.TryGetValue(email, out TwoFactorCode issuedCode))
             {
-                isLocked = entry.LockedUntil > DateTime.UtcNow;
+                isLocked = issuedCode.LockedUntil > DateTime.UtcNow;
             }
 
             return isLocked;
@@ -124,52 +124,54 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             var isAllowed = true;
 
-            if (_entries.TryGetValue(email, out TwoFactorCode entry) && entry.ChallengeId == challengeId)
+            if (_entries.TryGetValue(email, out TwoFactorCode issuedCode) && issuedCode.ChallengeId == challengeId)
             {
-                isAllowed = DateTime.UtcNow >= entry.CreatedAt.AddSeconds(ResendCooldownSeconds);
+                isAllowed = DateTime.UtcNow >= issuedCode.CreatedAt.AddSeconds(ResendCooldownSeconds);
             }
 
             return isAllowed;
         }
 
-        private static TwoFactorValidationStatus EvaluateEntry(TwoFactorCode entry, VerificationCode verificationCode)
+        private static TwoFactorValidationStatus EvaluateIssuedCode(
+            TwoFactorCode issuedCode,
+            VerificationCode verificationCode)
         {
             TwoFactorValidationStatus status;
             DateTime now = DateTime.UtcNow;
 
-            if (entry.ChallengeId != verificationCode.ChallengeId)
+            if (issuedCode.ChallengeId != verificationCode.ChallengeId)
             {
                 status = TwoFactorValidationStatus.Incorrect;
             }
-            else if (entry.LockedUntil > now)
+            else if (issuedCode.LockedUntil > now)
             {
                 status = TwoFactorValidationStatus.Locked;
             }
-            else if (entry.ExpiresAt < now)
+            else if (issuedCode.ExpiresAt < now)
             {
                 status = TwoFactorValidationStatus.Expired;
             }
-            else if (entry.Code == verificationCode.Code)
+            else if (issuedCode.Code == verificationCode.Code)
             {
                 status = TwoFactorValidationStatus.Valid;
             }
             else
             {
-                status = RegisterFailedAttempt(entry, now);
+                status = RegisterFailedAttempt(issuedCode, now);
             }
 
             return status;
         }
 
-        private static TwoFactorValidationStatus RegisterFailedAttempt(TwoFactorCode entry, DateTime now)
+        private static TwoFactorValidationStatus RegisterFailedAttempt(TwoFactorCode issuedCode, DateTime now)
         {
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
-            entry.FailedAttempts++;
+            issuedCode.FailedAttempts++;
 
-            if (entry.FailedAttempts >= MaxFailedAttempts)
+            if (issuedCode.FailedAttempts >= MaxFailedAttempts)
             {
-                entry.FailedAttempts = NoFailedAttempts;
-                entry.LockedUntil = now.AddMinutes(LockMinutes);
+                issuedCode.FailedAttempts = NoFailedAttempts;
+                issuedCode.LockedUntil = now.AddMinutes(LockMinutes);
                 status = TwoFactorValidationStatus.Locked;
             }
 

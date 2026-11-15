@@ -36,8 +36,8 @@ namespace YachtDice.Server.Logic.Game
         /// Gets the sum of the points of the upper section.
         /// </summary>
         public int UpperSubtotal => _scores
-            .Where(entry => ScoreCategories.IsUpper(entry.Key))
-            .Sum(entry => entry.Value);
+            .Where(scoredCategory => ScoreCategories.IsUpper(scoredCategory.Key))
+            .Sum(scoredCategory => scoredCategory.Value);
 
         /// <summary>
         /// Gets the bonus of the upper section, which is earned with sixty-three points or more.
