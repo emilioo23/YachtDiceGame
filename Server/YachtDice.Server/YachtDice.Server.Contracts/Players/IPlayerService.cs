@@ -19,12 +19,13 @@ namespace YachtDice.Server.Contracts.Players
         PlayerStatistics GetPlayerStatistics(Player player);
 
         /// <summary>
-        /// Gets the ranking of the best players.
+        /// Gets the ranking of the best players and, when it is not among them, the position of the player who asks.
         /// </summary>
+        /// <param name="displayName">Name of the player who looks at the ranking.</param>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<LeaderboardEntry> GetLeaderboard();
+        List<LeaderboardEntry> GetLeaderboard(string displayName);
 
         /// <summary>
         /// Gets the avatar, level and experience of a player.

@@ -26,12 +26,13 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Gets the leaderboard ranking entries.
+        /// Gets the leaderboard ranking entries and, when the player is not among the best ones, the own position.
         /// </summary>
+        /// <param name="displayName">Name of the player who looks at the leaderboard.</param>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
+        public async Task<List<LeaderboardEntry>> GetLeaderboardAsync(string displayName)
         {
-            LeaderboardEntry[] entries = await ExecuteAsync(client => client.GetLeaderboard());
+            LeaderboardEntry[] entries = await ExecuteAsync(client => client.GetLeaderboard(displayName));
 
             return entries.ToList();
         }

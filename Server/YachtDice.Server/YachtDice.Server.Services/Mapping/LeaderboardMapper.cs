@@ -40,7 +40,9 @@ namespace YachtDice.Server.Services.Mapping
                 DisplayName = entry.DisplayName,
                 AvatarId = entry.AvatarId,
                 TotalPoints = entry.TotalPoints,
-                Wins = entry.Wins
+                Wins = entry.Wins,
+                GamesPlayed = entry.GamesPlayed,
+                Level = entry.Level
             };
 
             return contract;

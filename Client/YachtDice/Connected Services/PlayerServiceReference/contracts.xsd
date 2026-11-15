@@ -52,7 +52,9 @@
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
   <xs:element name="GetLeaderboard">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetLeaderboardResponse">
@@ -72,6 +74,8 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
+      <xs:element minOccurs="0" name="Level" type="xs:int" />
       <xs:element minOccurs="0" name="Position" type="xs:int" />
       <xs:element minOccurs="0" name="TotalPoints" type="xs:int" />
       <xs:element minOccurs="0" name="Wins" type="xs:int" />

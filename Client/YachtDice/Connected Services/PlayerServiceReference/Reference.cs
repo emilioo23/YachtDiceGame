@@ -338,6 +338,12 @@ namespace YachtDice.PlayerServiceReference {
         private string DisplayNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GamesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LevelField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int PositionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -378,6 +384,32 @@ namespace YachtDice.PlayerServiceReference {
                 if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
                     this.DisplayNameField = value;
                     this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GamesPlayed {
+            get {
+                return this.GamesPlayedField;
+            }
+            set {
+                if ((this.GamesPlayedField.Equals(value) != true)) {
+                    this.GamesPlayedField = value;
+                    this.RaisePropertyChanged("GamesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Level {
+            get {
+                return this.LevelField;
+            }
+            set {
+                if ((this.LevelField.Equals(value) != true)) {
+                    this.LevelField = value;
+                    this.RaisePropertyChanged("Level");
                 }
             }
         }
@@ -908,7 +940,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboard", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetLeaderboardResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetLeaderboardServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard();
+        YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard(string displayName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetProfile", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetProfileResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetProfileServiceFaultFault", Name="ServiceFault")]
@@ -978,8 +1010,8 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.GetPlayerStatistics(player);
         }
         
-        public YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard() {
-            return base.Channel.GetLeaderboard();
+        public YachtDice.PlayerServiceReference.LeaderboardEntry[] GetLeaderboard(string displayName) {
+            return base.Channel.GetLeaderboard(displayName);
         }
         
         public YachtDice.PlayerServiceReference.PlayerProfile GetProfile(string displayName) {

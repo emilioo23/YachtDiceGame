@@ -51,12 +51,13 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Gets the ranking of the best players.
+        /// Gets the ranking of the best players and, when it is not among them, the position of the player who asks.
         /// </summary>
+        /// <param name="displayName">Name of the player who looks at the ranking.</param>
         /// <returns>The ranking, from the player with most points to the one with least.</returns>
-        public List<Contracts.LeaderboardEntry> GetLeaderboard()
+        public List<Contracts.LeaderboardEntry> GetLeaderboard(string displayName)
         {
-            return Execute(ProcessLeaderboard);
+            return Execute(displayName, () => ProcessLeaderboard(displayName));
         }
 
         /// <summary>
@@ -218,9 +219,9 @@ namespace YachtDice.Server.Services
             return Mapping.EnumMapper.Map<LogicPlayers.TitleChangeStatus, Contracts.TitleChangeResultCode>(status);
         }
 
-        private List<Contracts.LeaderboardEntry> ProcessLeaderboard()
+        private List<Contracts.LeaderboardEntry> ProcessLeaderboard(string displayName)
         {
-            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers(string.Empty);
+            List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers(displayName);
 
             return Mapping.LeaderboardMapper.ToContracts(entries);
         }

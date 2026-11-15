@@ -133,7 +133,7 @@ namespace YachtDice.Views
 
         private async Task LoadRankingAsync()
         {
-            List<ServerLeaderboardEntry> leaderboardData = await _playerGateway.GetLeaderboardAsync();
+            List<ServerLeaderboardEntry> leaderboardData = await _playerGateway.GetLeaderboardAsync(_session.DisplayName);
 
             _ranking = leaderboardData.Select(CreateEntry).ToList();
             RenderRanking(_ranking);
