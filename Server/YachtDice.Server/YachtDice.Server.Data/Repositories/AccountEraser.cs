@@ -43,44 +43,59 @@ namespace YachtDice.Server.Data.Repositories
 
         private static void RemoveGameData(YachtDiceContext context, int playerId)
         {
+            Expression<Func<Scorecard, bool>> isPlayerCard = card => card.PlayerId == playerId;
             List<int> scorecardIds = context.Scorecard
-                .Where(card => card.PlayerId == playerId)
+                .Where(isPlayerCard)
                 .Select(card => card.Id)
                 .ToList();
+            Expression<Func<ScorecardEntry, bool>> isEntryOfCard = entry => scorecardIds.Contains(entry.ScorecardId);
+            Expression<Func<TurnState, bool>> isPlayerTurn = turn => turn.PlayerId == playerId;
+            Expression<Func<GameHistoryPlayer, bool>> isPlayerInHistory = entry => entry.PlayerId == playerId;
+            Expression<Func<RoomPlayer, bool>> isPlayerInRoom = entry => entry.PlayerId == playerId;
 
-            RemoveWhere(context.ScorecardEntry, entry => scorecardIds.Contains(entry.ScorecardId));
-            RemoveWhere(context.Scorecard, card => card.PlayerId == playerId);
-            RemoveWhere(context.TurnState, turn => turn.PlayerId == playerId);
-            RemoveWhere(context.GameHistoryPlayer, entry => entry.PlayerId == playerId);
-            RemoveWhere(context.RoomPlayer, entry => entry.PlayerId == playerId);
+            RemoveWhere(context.ScorecardEntry, isEntryOfCard);
+            RemoveWhere(context.Scorecard, isPlayerCard);
+            RemoveWhere(context.TurnState, isPlayerTurn);
+            RemoveWhere(context.GameHistoryPlayer, isPlayerInHistory);
+            RemoveWhere(context.RoomPlayer, isPlayerInRoom);
         }
 
         private static void RemoveSecurityData(YachtDiceContext context, int playerId)
         {
-            RemoveWhere(context.BackupCode, code => code.PlayerId == playerId);
-            RemoveWhere(context.Passkey, key => key.PlayerId == playerId);
-            RemoveWhere(context.PwdResetToken, token => token.PlayerId == playerId);
-            RemoveWhere(context.TwoFactorAuth, method => method.PlayerId == playerId);
-            RemoveWhere(context.PlayerSettings, settings => settings.PlayerId == playerId);
+            Expression<Func<BackupCode, bool>> isPlayerCode = code => code.PlayerId == playerId;
+            Expression<Func<Passkey, bool>> isPlayerKey = key => key.PlayerId == playerId;
+            Expression<Func<PwdResetToken, bool>> isPlayerToken = token => token.PlayerId == playerId;
+            Expression<Func<TwoFactorAuth, bool>> isPlayerMethod = method => method.PlayerId == playerId;
+            Expression<Func<PlayerSettings, bool>> isPlayerSettings = settings => settings.PlayerId == playerId;
+
+            RemoveWhere(context.BackupCode, isPlayerCode);
+            RemoveWhere(context.Passkey, isPlayerKey);
+            RemoveWhere(context.PwdResetToken, isPlayerToken);
+            RemoveWhere(context.TwoFactorAuth, isPlayerMethod);
+            RemoveWhere(context.PlayerSettings, isPlayerSettings);
         }
 
         private static void RemoveSocialData(YachtDiceContext context, int playerId)
         {
-            RemoveWhere(
-                context.Friendship,
-                friendship => friendship.RequesterId == playerId || friendship.AddresseeId == playerId);
-            RemoveWhere(context.KickLog, kick => kick.HostId == playerId || kick.TargetId == playerId);
-            RemoveWhere(
-                context.RoomInvite,
-                invite => invite.InviterId == playerId || invite.InvitedId == playerId);
-            RemoveWhere(
-                context.PlayerReport,
-                report => report.ReporterId == playerId || report.ReportedId == playerId);
+            Expression<Func<Friendship, bool>> hasPlayerInFriendship =
+                friendship => friendship.RequesterId == playerId || friendship.AddresseeId == playerId;
+            Expression<Func<KickLog, bool>> hasPlayerInKick =
+                kick => kick.HostId == playerId || kick.TargetId == playerId;
+            Expression<Func<RoomInvite, bool>> hasPlayerInInvite =
+                invite => invite.InviterId == playerId || invite.InvitedId == playerId;
+            Expression<Func<PlayerReport, bool>> hasPlayerInReport =
+                report => report.ReporterId == playerId || report.ReportedId == playerId;
+
+            RemoveWhere(context.Friendship, hasPlayerInFriendship);
+            RemoveWhere(context.KickLog, hasPlayerInKick);
+            RemoveWhere(context.RoomInvite, hasPlayerInInvite);
+            RemoveWhere(context.PlayerReport, hasPlayerInReport);
         }
 
         private static void PassHostedRooms(YachtDiceContext context, int playerId)
         {
-            List<Room> hostedRooms = context.Room.Where(room => room.HostPlayerId == playerId).ToList();
+            Expression<Func<Room, bool>> isHostedByPlayer = room => room.HostPlayerId == playerId;
+            List<Room> hostedRooms = context.Room.Where(isHostedByPlayer).ToList();
 
             foreach (Room room in hostedRooms)
             {
@@ -99,8 +114,10 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<int> FindOtherParticipants(YachtDiceContext context, int roomId, int playerId)
         {
+            Expression<Func<GameHistoryPlayer, bool>> isOtherParticipant =
+                entry => entry.GameHistory.RoomId == roomId && entry.PlayerId != playerId;
             List<int> participants = context.GameHistoryPlayer
-                .Where(entry => entry.GameHistory.RoomId == roomId && entry.PlayerId != playerId)
+                .Where(isOtherParticipant)
                 .Select(entry => entry.PlayerId)
                 .ToList();
 
@@ -110,27 +127,48 @@ namespace YachtDice.Server.Data.Repositories
         private static void RemoveRoom(YachtDiceContext context, Room room)
         {
             int roomId = room.Id;
+            Expression<Func<GameHistory, bool>> isGameOfRoom = game => game.RoomId == roomId;
             List<int> gameIds = context.GameHistory
-                .Where(game => game.RoomId == roomId)
+                .Where(isGameOfRoom)
                 .Select(game => game.Id)
                 .ToList();
+            Expression<Func<Scorecard, bool>> isCardOfGame = card => gameIds.Contains(card.GameId);
             List<int> scorecardIds = context.Scorecard
-                .Where(card => gameIds.Contains(card.GameId))
+                .Where(isCardOfGame)
                 .Select(card => card.Id)
                 .ToList();
 
-            RemoveWhere(context.ScorecardEntry, entry => scorecardIds.Contains(entry.ScorecardId));
-            RemoveWhere(context.Scorecard, card => gameIds.Contains(card.GameId));
-            RemoveWhere(context.TurnState, turn => gameIds.Contains(turn.GameId));
-            RemoveWhere(context.GameHistoryPlayer, entry => gameIds.Contains(entry.GameId));
-            RemoveWhere(
-                context.PlayerReport,
-                report => report.RoomId == roomId || (report.GameId != null && gameIds.Contains(report.GameId.Value)));
-            RemoveWhere(context.GameHistory, game => game.RoomId == roomId);
-            RemoveWhere(context.KickLog, kick => kick.RoomId == roomId);
-            RemoveWhere(context.RoomInvite, invite => invite.RoomId == roomId);
-            RemoveWhere(context.RoomPlayer, entry => entry.RoomId == roomId);
+            RemoveRoomGames(context, gameIds, scorecardIds);
+            RemoveRoomRecords(context, roomId, gameIds);
+            RemoveWhere(context.GameHistory, isGameOfRoom);
             context.Room.Remove(room);
+        }
+
+        private static void RemoveRoomGames(YachtDiceContext context, List<int> gameIds, List<int> scorecardIds)
+        {
+            Expression<Func<ScorecardEntry, bool>> isEntryOfCard = entry => scorecardIds.Contains(entry.ScorecardId);
+            Expression<Func<Scorecard, bool>> isCardOfGame = card => gameIds.Contains(card.GameId);
+            Expression<Func<TurnState, bool>> isTurnOfGame = turn => gameIds.Contains(turn.GameId);
+            Expression<Func<GameHistoryPlayer, bool>> isPlayerOfGame = entry => gameIds.Contains(entry.GameId);
+
+            RemoveWhere(context.ScorecardEntry, isEntryOfCard);
+            RemoveWhere(context.Scorecard, isCardOfGame);
+            RemoveWhere(context.TurnState, isTurnOfGame);
+            RemoveWhere(context.GameHistoryPlayer, isPlayerOfGame);
+        }
+
+        private static void RemoveRoomRecords(YachtDiceContext context, int roomId, List<int> gameIds)
+        {
+            Expression<Func<PlayerReport, bool>> isReportOfRoom = report =>
+                report.RoomId == roomId || (report.GameId != null && gameIds.Contains(report.GameId.Value));
+            Expression<Func<KickLog, bool>> isKickOfRoom = kick => kick.RoomId == roomId;
+            Expression<Func<RoomInvite, bool>> isInviteOfRoom = invite => invite.RoomId == roomId;
+            Expression<Func<RoomPlayer, bool>> isPlayerOfRoom = entry => entry.RoomId == roomId;
+
+            RemoveWhere(context.PlayerReport, isReportOfRoom);
+            RemoveWhere(context.KickLog, isKickOfRoom);
+            RemoveWhere(context.RoomInvite, isInviteOfRoom);
+            RemoveWhere(context.RoomPlayer, isPlayerOfRoom);
         }
     }
 }
