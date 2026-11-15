@@ -2302,6 +2302,42 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Dificultad de la computadora:.
+        /// </summary>
+        public static string Lobby_ComputerDifficulty {
+            get {
+                return ResourceManager.GetString("Lobby_ComputerDifficulty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Fácil.
+        /// </summary>
+        public static string Lobby_Difficulty_Easy {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Easy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Normal.
+        /// </summary>
+        public static string Lobby_Difficulty_Normal {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Difícil.
+        /// </summary>
+        public static string Lobby_Difficulty_Hard {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Hard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esperando jugador....
         /// </summary>
         public static string Lobby_WaitingPlayer {

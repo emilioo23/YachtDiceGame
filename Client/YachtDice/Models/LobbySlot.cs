@@ -47,6 +47,11 @@
         public bool IsComputer { get; set; }
 
         /// <summary>
+        /// Gets or sets the label of a computer player with its difficulty. It is empty for a person.
+        /// </summary>
+        public string ComputerLabel { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the person who looks at the room can put a computer player
         /// in this free place, which only the host can do.
         /// </summary>

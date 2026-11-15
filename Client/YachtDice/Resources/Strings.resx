@@ -2286,4 +2286,16 @@
   <data name="Lobby_ComputerPlayer" xml:space="preserve">
     <value>Computadora</value>
   </data>
+  <data name="Lobby_ComputerDifficulty" xml:space="preserve">
+    <value>Dificultad de la computadora:</value>
+  </data>
+  <data name="Lobby_Difficulty_Easy" xml:space="preserve">
+    <value>Fácil</value>
+  </data>
+  <data name="Lobby_Difficulty_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Lobby_Difficulty_Hard" xml:space="preserve">
+    <value>Difícil</value>
+  </data>
 </root>

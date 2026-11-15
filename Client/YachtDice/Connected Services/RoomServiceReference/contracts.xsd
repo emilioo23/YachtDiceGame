@@ -41,6 +41,7 @@
   <xs:complexType name="RoomPlayer">
     <xs:sequence>
       <xs:element minOccurs="0" name="AvatarId" type="xs:int" />
+      <xs:element minOccurs="0" name="Difficulty" type="tns:ComputerDifficulty" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsComputer" type="xs:boolean" />
@@ -57,6 +58,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RoomSettings" nillable="true" type="tns:RoomSettings" />
+  <xs:simpleType name="ComputerDifficulty">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Easy" />
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Hard" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ComputerDifficulty" nillable="true" type="tns:ComputerDifficulty" />
   <xs:simpleType name="GameSpeed">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Normal" />
@@ -258,6 +267,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="host" nillable="true" type="tns:RoomMember" />
+        <xs:element minOccurs="0" name="difficulty" type="tns:ComputerDifficulty" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

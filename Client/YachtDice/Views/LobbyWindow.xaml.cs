@@ -26,6 +26,8 @@ namespace YachtDice.Views
         private const int EmptyLength = 0;
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
+        private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
+        private const string ComputerLabelFormat = "{0} · {1}";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
@@ -45,6 +47,7 @@ namespace YachtDice.Views
         public LobbyWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             InitializeComponent();
+            FillComputerDifficulties();
 
             _roomGateway = roomGateway;
             _chat = chat;
@@ -94,10 +97,47 @@ namespace YachtDice.Views
                 IsReady = player.IsReady && !isHost,
                 CanManage = canManage,
                 IsComputer = player.IsComputer,
+                ComputerLabel = CreateComputerLabel(player),
                 IsEmpty = false
             };
 
             return slot;
+        }
+
+        private static string GetDifficultyName(ComputerDifficulty difficulty)
+        {
+            return Strings.ResourceManager.GetString(DifficultyKeyPrefix + difficulty, Strings.Culture);
+        }
+
+        private static string CreateComputerLabel(RoomPlayer player)
+        {
+            string label = string.Empty;
+
+            if (player.IsComputer)
+            {
+                label = string.Format(
+                    CultureInfo.CurrentCulture,
+                    ComputerLabelFormat,
+                    Strings.Lobby_ComputerPlayer,
+                    GetDifficultyName(player.Difficulty));
+            }
+
+            return label;
+        }
+
+        private void FillComputerDifficulties()
+        {
+            foreach (ComputerDifficulty difficulty in Enum.GetValues(typeof(ComputerDifficulty)))
+            {
+                var item = new ComboBoxItem { Content = GetDifficultyName(difficulty), Tag = difficulty };
+
+                ComputerDifficultyComboBox.Items.Add(item);
+
+                if (difficulty == ComputerDifficulty.Normal)
+                {
+                    ComputerDifficultyComboBox.SelectedItem = item;
+                }
+            }
         }
 
         private static string ReadTag(object sender)
@@ -199,6 +239,7 @@ namespace YachtDice.Views
         private void ApplyHostPermissions(bool isHost)
         {
             PrivacyComboBox.IsEnabled = isHost;
+            ComputerDifficultyPanel.Visibility = isHost ? Visibility.Visible : Visibility.Collapsed;
             RoomNameTextBox.IsReadOnly = !isHost;
             MaxPlayersComboBox.IsEnabled = isHost;
             NormalModeBorder.IsHitTestVisible = isHost;
@@ -408,7 +449,9 @@ namespace YachtDice.Views
 
         private async void AddComputerButton_Click(object sender, RoutedEventArgs e)
         {
-            await RunHostActionAsync(_roomGateway.AddComputerAsync);
+            var difficulty = (ComputerDifficulty)((ComboBoxItem)ComputerDifficultyComboBox.SelectedItem).Tag;
+
+            await RunHostActionAsync(() => _roomGateway.AddComputerAsync(difficulty));
         }
 
         private async void NormalMode_Click(object sender, MouseButtonEventArgs e)

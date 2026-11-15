@@ -164,12 +164,13 @@ namespace YachtDice.Gateway
         /// Asks the server to add a computer player to the room. Only the host can do it, before the game
         /// starts. When it is done, the server tells every player of the room.
         /// </summary>
+        /// <param name="difficulty">How well the computer player plays.</param>
         /// <returns>Outcome of the change.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task<RoomResultCode> AddComputerAsync()
+        public async Task<RoomResultCode> AddComputerAsync(ComputerDifficulty difficulty)
         {
             RoomMember host = CreateMember();
-            RoomResultCode result = await ExecuteAsync(client => client.AddComputer(host));
+            RoomResultCode result = await ExecuteAsync(client => client.AddComputer(host, difficulty));
 
             return result;
         }

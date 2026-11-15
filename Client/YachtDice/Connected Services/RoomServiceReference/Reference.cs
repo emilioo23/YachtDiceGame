@@ -311,6 +311,9 @@ namespace YachtDice.RoomServiceReference {
         private string IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.RoomServiceReference.ComputerDifficulty DifficultyField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsComputerField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -366,6 +369,19 @@ namespace YachtDice.RoomServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.RoomServiceReference.ComputerDifficulty Difficulty {
+            get {
+                return this.DifficultyField;
+            }
+            set {
+                if ((this.DifficultyField.Equals(value) != true)) {
+                    this.DifficultyField = value;
+                    this.RaisePropertyChanged("Difficulty");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsComputer {
             get {
                 return this.IsComputerField;
@@ -399,6 +415,20 @@ namespace YachtDice.RoomServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ComputerDifficulty", Namespace="urn:yachtdice:contracts")]
+    public enum ComputerDifficulty : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Easy = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Normal = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Hard = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -954,7 +984,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/AddComputer", ReplyAction="urn:yachtdice:contracts/IRoomService/AddComputerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/AddComputerServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host);
+        YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host, YachtDice.RoomServiceReference.ComputerDifficulty difficulty);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/FindPendingRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/FindPendingRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/FindPendingRoomServiceFaultFault", Name="ServiceFault")]
@@ -1036,8 +1066,8 @@ namespace YachtDice.RoomServiceReference {
             return base.Channel.TransferHost(host, newHostId);
         }
         
-        public YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host) {
-            return base.Channel.AddComputer(host);
+        public YachtDice.RoomServiceReference.RoomResultCode AddComputer(YachtDice.RoomServiceReference.RoomMember host, YachtDice.RoomServiceReference.ComputerDifficulty difficulty) {
+            return base.Channel.AddComputer(host, difficulty);
         }
         
         public string FindPendingRoom(string displayName) {
