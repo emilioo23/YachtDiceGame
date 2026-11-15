@@ -23,11 +23,10 @@ namespace YachtDice.Views
         private const int TopRankSilver = 2;
         private const int TopRankBronze = 3;
         private const int RankColumnWidth = 60;
-        private const int StandardColumnWidth = 120;
-        private const int MedalColumnIndex = 0;
-        private const int NameColumnIndex = 1;
-        private const int PointsColumnIndex = 2;
-        private const int WinsColumnIndex = 3;
+        private const int LevelColumnWidth = 80;
+        private const int PointsColumnWidth = 110;
+        private const int WinsColumnWidth = 90;
+        private const int GamesColumnWidth = 100;
         private const int RowBottomMargin = 2;
         private const int MedalFontSize = 16;
         private const int MedalLeftPadding = 14;
@@ -39,6 +38,18 @@ namespace YachtDice.Views
         private const int AvatarSize = 28;
         private const int AvatarGap = 8;
         private const string PointsFormat = "N0";
+        private const string ViewerRowBrushKey = "BrushGoldButton";
+        private const string ViewerTextBrushKey = "BrushFeltDark";
+
+        private static readonly GridLength[] ColumnWidths =
+        {
+            new GridLength(RankColumnWidth),
+            new GridLength(NameColumnWeight, GridUnitType.Star),
+            new GridLength(LevelColumnWidth),
+            new GridLength(PointsColumnWidth),
+            new GridLength(WinsColumnWidth),
+            new GridLength(GamesColumnWidth)
+        };
 
         private readonly PlayerSession _session;
         private readonly FriendGateway _friendGateway = new FriendGateway();
@@ -124,16 +135,21 @@ namespace YachtDice.Views
         {
             return new LeaderboardEntry
             {
+                Position = serverEntry.Position,
+                Medal = GetMedalForRank(serverEntry.Position),
                 Name = serverEntry.DisplayName,
                 AvatarId = serverEntry.AvatarId,
                 Points = serverEntry.TotalPoints,
-                Wins = serverEntry.Wins
+                Wins = serverEntry.Wins,
+                GamesPlayed = serverEntry.GamesPlayed,
+                Level = serverEntry.Level
             };
         }
 
         private async Task LoadRankingAsync()
         {
-            List<ServerLeaderboardEntry> leaderboardData = await _playerGateway.GetLeaderboardAsync(_session.DisplayName);
+            List<ServerLeaderboardEntry> leaderboardData =
+                await _playerGateway.GetLeaderboardAsync(_session.DisplayName);
 
             _ranking = leaderboardData.Select(CreateEntry).ToList();
             RenderRanking(_ranking);
@@ -153,24 +169,28 @@ namespace YachtDice.Views
 
         private void RenderRanking(List<LeaderboardEntry> ranking)
         {
-            int currentRank = NoRank;
             int viewerRank = NoRank;
 
             RankingPanel.Children.Clear();
 
             foreach (LeaderboardEntry entry in ranking)
             {
-                currentRank++;
-                entry.Medal = GetMedalForRank(currentRank);
-                AddRankingRow(entry);
+                bool isViewer = IsViewer(entry);
 
-                if (entry.Name == _session.DisplayName)
+                AddRankingRow(entry, isViewer);
+
+                if (isViewer)
                 {
-                    viewerRank = currentRank;
+                    viewerRank = entry.Position;
                 }
             }
 
             YourPositionTextBlock.Text = string.Format(Strings.Leaderboard_YourPosition, viewerRank);
+        }
+
+        private bool IsViewer(LeaderboardEntry entry)
+        {
+            return string.Equals(entry.Name, _session.DisplayName, StringComparison.OrdinalIgnoreCase);
         }
 
         private TextBlock CreateCellLabel(string text, Brush textBrush)
@@ -187,42 +207,49 @@ namespace YachtDice.Views
             return label;
         }
 
-        private void AddRankingRow(LeaderboardEntry entry)
+        private void AddRankingRow(LeaderboardEntry entry, bool isViewer)
         {
+            string textBrushKey = isViewer ? ViewerTextBrushKey : ThemeResourceKeys.TextBrushKey;
+            var textBrush = (Brush)FindResource(textBrushKey);
             var row = new Grid { Margin = new Thickness(NoSpacing, NoSpacing, NoSpacing, RowBottomMargin) };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(RankColumnWidth) });
-            row.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = new GridLength(NameColumnWeight, GridUnitType.Star)
-            });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(StandardColumnWidth) });
+            TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
 
-            var textBrush = (Brush)FindResource(ThemeResourceKeys.TextBrushKey);
-            var medalLabel = new TextBlock
+            nameLabel.FontWeight = FontWeights.SemiBold;
+
+            if (isViewer)
+            {
+                row.Background = (Brush)FindResource(ViewerRowBrushKey);
+            }
+
+            var cells = new List<UIElement>
+            {
+                CreateMedalLabel(entry, textBrush),
+                CreateNameCell(entry, nameLabel),
+                CreateCellLabel(entry.Level.ToString(), textBrush),
+                CreateCellLabel(entry.Points.ToString(PointsFormat), textBrush),
+                CreateCellLabel(entry.Wins.ToString(), textBrush),
+                CreateCellLabel(entry.GamesPlayed.ToString(), textBrush)
+            };
+
+            for (int column = 0; column < cells.Count; column++)
+            {
+                row.ColumnDefinitions.Add(new ColumnDefinition { Width = ColumnWidths[column] });
+                Grid.SetColumn(cells[column], column);
+                row.Children.Add(cells[column]);
+            }
+
+            RankingPanel.Children.Add(row);
+        }
+
+        private TextBlock CreateMedalLabel(LeaderboardEntry entry, Brush textBrush)
+        {
+            return new TextBlock
             {
                 Text = entry.Medal,
                 FontSize = MedalFontSize,
                 Foreground = textBrush,
                 Padding = new Thickness(MedalLeftPadding, CellVerticalPadding, NoSpacing, CellVerticalPadding)
             };
-            TextBlock nameLabel = CreateCellLabel(entry.Name, textBrush);
-            nameLabel.FontWeight = FontWeights.SemiBold;
-            StackPanel nameCell = CreateNameCell(entry, nameLabel);
-            TextBlock pointsLabel = CreateCellLabel(entry.Points.ToString(PointsFormat), textBrush);
-            TextBlock winsLabel = CreateCellLabel(entry.Wins.ToString(), textBrush);
-
-            Grid.SetColumn(medalLabel, MedalColumnIndex);
-            Grid.SetColumn(nameCell, NameColumnIndex);
-            Grid.SetColumn(pointsLabel, PointsColumnIndex);
-            Grid.SetColumn(winsLabel, WinsColumnIndex);
-
-            row.Children.Add(medalLabel);
-            row.Children.Add(nameCell);
-            row.Children.Add(pointsLabel);
-            row.Children.Add(winsLabel);
-
-            RankingPanel.Children.Add(row);
         }
     }
 }

@@ -2220,4 +2220,10 @@
   <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
     <value>Atalhos: Espaço rola os dados e as teclas 1 a 5 guardam ou soltam um dado.</value>
   </data>
+  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
+    <value>Nível</value>
+  </data>
+  <data name="Leaderboard_ColumnGames" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
 </root>

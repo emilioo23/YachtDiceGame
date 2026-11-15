@@ -2220,4 +2220,10 @@
   <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
     <value>Atajos: Espacio tira los dados y las teclas 1 a 5 apartan o sueltan un dado.</value>
   </data>
+  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="Leaderboard_ColumnGames" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
 </root>

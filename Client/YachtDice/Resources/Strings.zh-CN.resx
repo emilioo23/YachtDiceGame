@@ -2220,4 +2220,10 @@
   <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
     <value>快捷键：空格键掷骰子，数字键1到5保留或放开一个骰子。</value>
   </data>
+  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="Leaderboard_ColumnGames" xml:space="preserve">
+    <value>场数</value>
+  </data>
 </root>

@@ -54,16 +54,22 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="120"/>
-                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{x:Static res:Strings.Leaderboard_ColumnRank}"
                                        FontSize="15" FontWeight="Bold" Foreground="White" Padding="14,10"/>
                                 <TextBlock Grid.Column="1" Text="{x:Static res:Strings.Leaderboard_ColumnPlayer}"
                                        FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static res:Strings.Leaderboard_ColumnPoints}"
+                                <TextBlock Grid.Column="2" Text="{x:Static res:Strings.Leaderboard_ColumnLevel}"
                                        FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
-                                <TextBlock Grid.Column="3" Text="{x:Static res:Strings.Leaderboard_ColumnWins}"
+                                <TextBlock Grid.Column="3" Text="{x:Static res:Strings.Leaderboard_ColumnPoints}"
+                                       FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
+                                <TextBlock Grid.Column="4" Text="{x:Static res:Strings.Leaderboard_ColumnWins}"
+                                       FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
+                                <TextBlock Grid.Column="5" Text="{x:Static res:Strings.Leaderboard_ColumnGames}"
                                        FontSize="15" FontWeight="Bold" Foreground="White" Padding="0,10"/>
                             </Grid>
 

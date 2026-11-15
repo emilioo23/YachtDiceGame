@@ -1060,6 +1060,24 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Partidas.
+        /// </summary>
+        public static string Leaderboard_ColumnGames {
+            get {
+                return ResourceManager.GetString("Leaderboard_ColumnGames", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel.
+        /// </summary>
+        public static string Leaderboard_ColumnLevel {
+            get {
+                return ResourceManager.GetString("Leaderboard_ColumnLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

@@ -2220,4 +2220,10 @@
   <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
     <value>Shortcuts: Space rolls the dice and the keys 1 to 5 hold or release a die.</value>
   </data>
+  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="Leaderboard_ColumnGames" xml:space="preserve">
+    <value>Games</value>
+  </data>
 </root>
