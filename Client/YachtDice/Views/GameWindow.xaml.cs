@@ -35,7 +35,7 @@ namespace YachtDice.Views
 
         private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
-        private readonly RoomChat _chat;
+        private readonly ChatGateway _chat;
         private readonly GameGateway _gameGateway;
         private readonly DiceBoard _diceBoard;
         private readonly ScorecardGrid _scorecard;
@@ -65,7 +65,7 @@ namespace YachtDice.Views
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room.</param>
         /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
-        public GameWindow(RoomGateway roomGateway, RoomChat chat)
+        public GameWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             InitializeComponent();
 

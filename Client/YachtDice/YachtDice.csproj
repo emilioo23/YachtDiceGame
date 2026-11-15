@@ -330,7 +330,6 @@
     </Compile>
     <Compile Include="Models\FriendItem.cs" />
     <Compile Include="Models\FriendPresence.cs" />
-    <Compile Include="Models\RoomChat.cs" />
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using YachtDice.Client.Logic.Connection;
 using YachtDice.Gateway;
 using YachtDice.GameServiceReference;
-using YachtDice.Models;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 
@@ -23,7 +22,7 @@ namespace YachtDice.Navigation
         private const string AttemptFailedLogFormat = "An attempt to reconnect to the match failed: {0}.";
 
         private readonly RoomGateway _roomGateway;
-        private readonly RoomChat _chat;
+        private readonly ChatGateway _chat;
         private readonly GameGateway _gameGateway;
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private readonly AppLogger _logger;
@@ -35,7 +34,7 @@ namespace YachtDice.Navigation
         /// <param name="chat">Connection of the player to the chat of the room.</param>
         /// <param name="gameGateway">Connection of the player to the game of the room.</param>
         /// <exception cref="ArgumentNullException">Any of the connections is null.</exception>
-        public GameConnectionRecovery(RoomGateway roomGateway, RoomChat chat, GameGateway gameGateway)
+        public GameConnectionRecovery(RoomGateway roomGateway, ChatGateway chat, GameGateway gameGateway)
         {
             _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullGatewayMessage);
             _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullGatewayMessage);
@@ -104,7 +103,7 @@ namespace YachtDice.Navigation
         private void AbandonConnections()
         {
             _gameGateway.Abandon();
-            _chat.Gateway.Abandon();
+            _chat.Abandon();
             _roomGateway.Abandon();
         }
 
@@ -117,7 +116,7 @@ namespace YachtDice.Navigation
 
             if (roomResult == RoomResultCode.Success)
             {
-                await _chat.Gateway.TryJoinAsync();
+                await _chat.TryJoinAsync();
                 isRestored = await JoinGameAsync();
             }
 

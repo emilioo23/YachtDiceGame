@@ -108,11 +108,11 @@ namespace YachtDice.Navigation
         /// <param name="chat">Chat of the room that the player leaves.</param>
         /// <param name="roomGateway">Connection of the player to the room that the player leaves.</param>
         /// <returns>A task that finishes when the player left or was told the problem.</returns>
-        public static async Task LeaveRoomAsync(RoomChat chat, RoomGateway roomGateway)
+        public static async Task LeaveRoomAsync(ChatGateway chat, RoomGateway roomGateway)
         {
             try
             {
-                await Task.WhenAll(chat.Gateway.LeaveAsync(), roomGateway.LeaveRoomAsync());
+                await Task.WhenAll(chat.LeaveAsync(), roomGateway.LeaveRoomAsync());
             }
             catch (GatewayException ex)
             {
@@ -125,15 +125,14 @@ namespace YachtDice.Navigation
         private static async Task OpenLobbyAsync(Window currentWindow, RoomGateway roomGateway)
         {
             var chatGateway = new ChatGateway(new RoomMembership(roomGateway.PlayerId, roomGateway.CurrentRoom.Code));
-            bool isChatAvailable = await chatGateway.TryJoinAsync();
+            await chatGateway.TryJoinAsync();
 
             ConnectionLossHandler.Watch(roomGateway);
             ConnectionLossHandler.Watch(chatGateway);
-            var chat = new RoomChat(chatGateway, isChatAvailable);
-            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chat));
+            WindowNavigator.SwitchTo(currentWindow, CreateRoomWindow(roomGateway, chatGateway));
         }
 
-        private static Window CreateRoomWindow(RoomGateway roomGateway, RoomChat chat)
+        private static Window CreateRoomWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             Window roomWindow;
 

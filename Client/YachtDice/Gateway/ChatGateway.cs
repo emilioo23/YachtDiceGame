@@ -48,25 +48,30 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Tries to register the player in the chat of the room so the server sends the messages to this
-        /// computer. The game can be played without chat, so a failure is only written in the log.
+        /// Gets a value indicating whether the player is registered in the chat of the room. When it is false,
+        /// the chat panel tells the player that the chat is not available and stops the writing.
         /// </summary>
-        /// <returns>True if the player is registered in the chat; false if the chat is not available.</returns>
-        public async Task<bool> TryJoinAsync()
+        public bool IsJoined { get; private set; }
+
+        /// <summary>
+        /// Tries to register the player in the chat of the room so the server sends the messages to this
+        /// computer. The game can be played without chat, so the error is not thrown: it is written in the log
+        /// and <see cref="IsJoined"/> stays false, which the chat panel shows to the player.
+        /// </summary>
+        /// <returns>A task that finishes when the attempt is over.</returns>
+        public async Task TryJoinAsync()
         {
-            bool isJoined = true;
+            IsJoined = false;
 
             try
             {
                 await ConnectAndExecuteAsync(client => client.JoinChat(_member));
+                IsJoined = true;
             }
             catch (GatewayException)
             {
                 _logger.Warning(JoinFailedLogMessage);
-                isJoined = false;
             }
-
-            return isJoined;
         }
 
         /// <summary>

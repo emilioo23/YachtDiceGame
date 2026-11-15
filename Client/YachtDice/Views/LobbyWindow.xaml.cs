@@ -28,7 +28,7 @@ namespace YachtDice.Views
         private const double UnselectedBorderThickness = 1.5;
 
         private readonly RoomGateway _roomGateway;
-        private readonly RoomChat _chat;
+        private readonly ChatGateway _chat;
         private readonly InvitationListener _invitationListener;
 
         private bool _isShowingRoom = true;
@@ -42,7 +42,7 @@ namespace YachtDice.Views
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room, already inside it.</param>
         /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
-        public LobbyWindow(RoomGateway roomGateway, RoomChat chat)
+        public LobbyWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             InitializeComponent();
 
