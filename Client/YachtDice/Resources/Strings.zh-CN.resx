@@ -2226,4 +2226,7 @@
   <data name="Leaderboard_ColumnGames" xml:space="preserve">
     <value>场数</value>
   </data>
+  <data name="Results_BreakdownFormat" xml:space="preserve">
+    <value>上半区 {0} · 奖励 {1} · 下半区 {2} · Yacht 奖励 {3}</value>
+  </data>
 </root>

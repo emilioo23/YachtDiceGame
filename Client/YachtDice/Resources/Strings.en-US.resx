@@ -2226,4 +2226,7 @@
   <data name="Leaderboard_ColumnGames" xml:space="preserve">
     <value>Games</value>
   </data>
+  <data name="Results_BreakdownFormat" xml:space="preserve">
+    <value>Upper {0} · Bonus {1} · Lower {2} · Yacht bonus {3}</value>
+  </data>
 </root>

@@ -634,7 +634,13 @@ namespace YachtDice.Views
 
         private static StandingEntry CreateStandingEntry(PlayerScorecard card)
         {
-            return new StandingEntry(card.PlayerId, card.Name, card.Total) { ExperienceGained = card.ExperienceGained };
+            return new StandingEntry(card.PlayerId, card.Name, card.Total)
+            {
+                ExperienceGained = card.ExperienceGained,
+                UpperSubtotal = card.UpperSubtotal,
+                UpperBonus = card.UpperBonus,
+                YachtBonus = card.YachtBonus
+            };
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)

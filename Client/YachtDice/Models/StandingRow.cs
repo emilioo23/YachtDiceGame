@@ -26,6 +26,12 @@
         public string ExperienceText { get; set; }
 
         /// <summary>
+        /// Gets or sets the points of each part of the scorecard: upper section, its bonus, lower section and
+        /// the bonus of the extra Yachts.
+        /// </summary>
+        public string BreakdownText { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the player won the game.
         /// </summary>
         public bool IsWinner { get; set; }

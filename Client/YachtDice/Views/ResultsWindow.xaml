@@ -87,10 +87,15 @@
 
                                         <TextBlock Grid.Column="0" Text="{Binding PlaceText}" FontSize="16"
                                                    Foreground="{StaticResource BrushText}"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Name}" ToolTip="{Binding Name}"
-                                                   FontSize="13" FontWeight="SemiBold"
-                                                   Foreground="{StaticResource BrushText}"
-                                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"
+                                                       FontSize="13" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrushText}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding BreakdownText}" FontSize="10"
+                                                       Foreground="{StaticResource BrushTextMuted}"
+                                                       TextWrapping="Wrap"/>
+                                        </StackPanel>
                                         <TextBlock Grid.Column="2" Text="{Binding Total}" FontSize="13"
                                                    FontWeight="Bold" Foreground="{StaticResource BrushFeltLight}"
                                                    VerticalAlignment="Center"/>

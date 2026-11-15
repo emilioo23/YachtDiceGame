@@ -64,6 +64,12 @@ namespace YachtDice.Views
                 Name = standing.Name,
                 Total = standing.Total,
                 ExperienceText = string.Format(Strings.Results_ExperienceGainedFormat, standing.ExperienceGained),
+                BreakdownText = string.Format(
+                    Strings.Results_BreakdownFormat,
+                    standing.UpperSubtotal,
+                    standing.UpperBonus,
+                    standing.LowerTotal,
+                    standing.YachtBonus),
                 IsWinner = standing.IsWinner
             };
         }

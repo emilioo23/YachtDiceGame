@@ -1078,6 +1078,15 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Superior {0} · Bono {1} · Inferior {2} · Bono Yacht {3}.
+        /// </summary>
+        public static string Results_BreakdownFormat {
+            get {
+                return ResourceManager.GetString("Results_BreakdownFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {
