@@ -270,6 +270,8 @@
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
+    <Compile Include="Utils\SoundEffect.cs" />
+    <Compile Include="Utils\SoundEffectPlayer.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
@@ -706,6 +708,11 @@
   <ItemGroup>
     <Resource Include="Resources\Flags\*.png" />
     <Resource Include="Resources\Images\SplashBackground.png" />
+    <Resource Include="Resources\Sounds\DiceRoll.wav" />
+    <Resource Include="Resources\Sounds\GameOver.wav" />
+    <Resource Include="Resources\Sounds\Score.wav" />
+    <Resource Include="Resources\Sounds\Yacht.wav" />
+    <Resource Include="Resources\Sounds\YourTurn.wav" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">

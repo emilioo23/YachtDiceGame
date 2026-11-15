@@ -21,6 +21,11 @@ namespace YachtDice
         public static bool IsDarkTheme { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the sound effects of the game are turned on.
+        /// </summary>
+        public static bool AreSoundsEnabled { get; private set; } = true;
+
+        /// <summary>
         /// Gets the current active culture code, used for internationalization.
         /// </summary>
         public static string CurrentCultureCode { get; private set; }
@@ -52,6 +57,15 @@ namespace YachtDice
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             CurrentCultureCode = cultureCode;
+        }
+
+        /// <summary>
+        /// Turns the sound effects of the game on or off.
+        /// </summary>
+        /// <param name="areEnabled">True to play the sound effects; false to keep the game silent.</param>
+        public static void SetSoundsEnabled(bool areEnabled)
+        {
+            AreSoundsEnabled = areEnabled;
         }
 
         /// <summary>
