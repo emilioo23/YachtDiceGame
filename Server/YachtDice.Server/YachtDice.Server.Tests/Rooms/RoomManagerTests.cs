@@ -22,6 +22,8 @@ namespace YachtDice.Server.Tests.Rooms
         private const int SixteenMinutes = 16;
         private const int TenMinutes = 10;
         private const int ConfiguredWaitingMinutes = 5;
+        private const int PlayerLevel = 7;
+        private const int GuestLevel = 0;
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
         private const string UnknownRoomCode = "ZZZZZZ";
@@ -1017,6 +1019,25 @@ namespace YachtDice.Server.Tests.Rooms
 
             int[] avatarIds = player.Room.Players.Select(member => member.AvatarId).ToArray();
             Assert.Equal(new[] { HostAvatarId, PlayerAvatarId }, avatarIds);
+        }
+
+        [Fact]
+        public void Join_RegisteredPlayerWithLevel_KeepsTheLevelInTheRoom()
+        {
+            _avatars.SetLevel(PlayerName, PlayerLevel);
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(PlayerLevel, player.Room.Players.Last().Level);
+        }
+
+        [Fact]
+        public void CreateRoom_Guest_HasNoLevel()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(GuestName);
+
+            Assert.Equal(GuestLevel, createdRoom.Room.Players.Single().Level);
         }
 
         [Fact]

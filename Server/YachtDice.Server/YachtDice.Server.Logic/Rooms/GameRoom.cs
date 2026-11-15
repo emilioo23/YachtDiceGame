@@ -74,15 +74,17 @@ namespace YachtDice.Server.Logic.Rooms
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another
         /// player already uses the name, a number is added to it so that the names stay different.
         /// </summary>
-        /// <param name="displayName">Name that the player asked for.</param>
-        /// <param name="avatarId">Identifier of the avatar of the player.</param>
+        /// <param name="applicant">Name, avatar and level of the player who enters.</param>
         /// <returns>The player that entered.</returns>
-        public RoomPlayer AddPlayer(string displayName, int avatarId)
+        public RoomPlayer AddPlayer(RoomApplicant applicant)
         {
             var player = new RoomPlayer(
                 Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture),
-                CreateUniqueName(displayName.Trim()),
-                avatarId);
+                CreateUniqueName(applicant.Name.Trim()),
+                applicant.AvatarId)
+            {
+                Level = applicant.Level
+            };
 
             _players.Add(player);
 

@@ -34,5 +34,10 @@
         /// Gets the identifier of the avatar that the player had when entering the room.
         /// </summary>
         public int AvatarId { get; }
+
+        /// <summary>
+        /// Gets or sets the level that the player had when entering the room; zero for a guest.
+        /// </summary>
+        public int Level { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace YachtDice.Server.Logic.Avatars
     /// </summary>
     public class AvatarService : IAvatarLookup
     {
+        private const int GuestLevel = 0;
         private const int DefaultLevel = 1;
         private const int DefaultExperience = 0;
         private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
@@ -42,6 +43,18 @@ namespace YachtDice.Server.Logic.Avatars
             Player player = FindPlayers(displayName).FirstOrDefault();
 
             return player == null ? AvatarCatalog.DefaultAvatarId : player.AvatarId;
+        }
+
+        /// <summary>
+        /// Gets the level of a player, so the room can show it next to the name.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The level of the player, or zero for a guest, who has no level.</returns>
+        public int GetLevel(string displayName)
+        {
+            Player player = FindPlayers(displayName).FirstOrDefault();
+
+            return player == null ? GuestLevel : player.Level ?? DefaultLevel;
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace YachtDice.Server.Tests.Avatars
         private const int LockedAvatarId = 8;
         private const int UnknownAvatarId = 9999;
         private const int NewPlayerLevel = 1;
+        private const int GuestLevel = 0;
         private const string NoFlagCode = "";
         private const int NoExperience = 0;
         private const int SecondLevelExperience = 100;
@@ -54,6 +55,22 @@ namespace YachtDice.Server.Tests.Avatars
         public void Constructor_NullLevelTable_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new AvatarService(_players, null));
+        }
+
+        [Fact]
+        public void GetLevel_RegisteredPlayer_ReturnsTheLevelOfThePlayer()
+        {
+            int level = _service.GetLevel(PlayerName);
+
+            Assert.Equal(PlayerLevel, level);
+        }
+
+        [Fact]
+        public void GetLevel_Guest_ReturnsZero()
+        {
+            int level = _service.GetLevel(UnknownName);
+
+            Assert.Equal(GuestLevel, level);
         }
 
         [Fact]

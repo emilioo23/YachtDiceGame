@@ -11,5 +11,12 @@
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The identifier of the avatar, or the default avatar if the player is not registered.</returns>
         int GetAvatarId(string displayName);
+
+        /// <summary>
+        /// Gets the level of a player, so the room can show it next to the name.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The level of the player, or zero for a guest, who has no level.</returns>
+        int GetLevel(string displayName);
     }
 }

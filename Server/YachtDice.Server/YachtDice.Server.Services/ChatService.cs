@@ -109,6 +109,7 @@ namespace YachtDice.Server.Services
                 AuthorId = author.Id,
                 Author = author.DisplayName,
                 AvatarId = author.AvatarId,
+                AuthorLevel = author.Level,
                 Content = LogicModeration.LinkCensor.Censor(_wordFilter.Censor(text)),
                 Timestamp = DateTime.UtcNow
             };

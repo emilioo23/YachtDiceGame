@@ -11,10 +11,11 @@
         /// </summary>
         /// <param name="name">Name that the player asked for.</param>
         /// <param name="avatarId">Identifier of the avatar of the player.</param>
-        public RoomApplicant(string name, int avatarId)
+        public RoomApplicant(string name, int avatarId, int level)
         {
             Name = name;
             AvatarId = avatarId;
+            Level = level;
         }
 
         /// <summary>
@@ -26,5 +27,7 @@
         /// Gets the identifier of the avatar of the player.
         /// </summary>
         public int AvatarId { get; }
+
+        public int Level { get; }
     }
 }

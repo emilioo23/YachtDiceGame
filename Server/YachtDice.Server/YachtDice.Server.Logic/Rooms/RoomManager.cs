@@ -61,7 +61,7 @@ namespace YachtDice.Server.Logic.Rooms
             lock (_syncRoot)
             {
                 var room = new GameRoom(CreateUniqueCode(), CreateDefaultSettings(), DateTime.UtcNow);
-                RoomPlayer host = room.AddPlayer(applicant.Name, applicant.AvatarId);
+                RoomPlayer host = room.AddPlayer(applicant);
 
                 _rooms[room.Code] = room;
                 result = RoomResult.CreateEntered(room.ToDetails(), host.Id);
@@ -298,7 +298,7 @@ namespace YachtDice.Server.Logic.Rooms
 
             if (status == RoomStatus.Success)
             {
-                RoomPlayer player = room.AddPlayer(applicant.Name, applicant.AvatarId);
+                RoomPlayer player = room.AddPlayer(applicant);
 
                 result = RoomResult.CreateEntered(room.ToDetails(), player.Id);
             }
@@ -486,7 +486,12 @@ namespace YachtDice.Server.Logic.Rooms
 
         private RoomApplicant CreateApplicant(string playerName)
         {
-            return new RoomApplicant(playerName, _avatarLookup.GetAvatarId(playerName.Trim()));
+            string trimmedName = playerName.Trim();
+
+            int avatarId = _avatarLookup.GetAvatarId(trimmedName);
+            int level = _avatarLookup.GetLevel(trimmedName);
+
+            return new RoomApplicant(playerName, avatarId, level);
         }
 
         private RoomResult ExecuteInRoom(string roomCode, Func<GameRoom, RoomResult> operation)

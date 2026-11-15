@@ -12,6 +12,9 @@ namespace YachtDice.Server.Tests.InMemory
         private readonly Dictionary<string, int> _avatars =
             new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, int> _levels =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
         /// <summary>
         /// Saves the avatar that a player uses.
         /// </summary>
@@ -23,6 +26,18 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public void SetLevel(string displayName, int level)
+        {
+            _levels[displayName] = level;
+        }
+
+        public int GetLevel(string displayName)
+        {
+            _levels.TryGetValue(displayName, out int level);
+
+            return level;
+        }
+
         public int GetAvatarId(string displayName)
         {
             int avatarId;

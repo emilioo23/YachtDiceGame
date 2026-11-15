@@ -28,6 +28,9 @@ namespace YachtDice.Server.Contracts.Chat
         [DataMember]
         public int AvatarId { get; set; }
 
+        [DataMember]
+        public int AuthorLevel { get; set; }
+
         /// <summary>
         /// Text of the message.
         /// </summary>
