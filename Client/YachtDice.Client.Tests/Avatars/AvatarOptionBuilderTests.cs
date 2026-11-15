@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using YachtDice.Client.Logic.Avatars;
 
@@ -94,17 +93,41 @@ namespace YachtDice.Client.Tests.Avatars
         }
 
         [Fact]
-        public void Build_CatalogOutOfOrder_ReturnsTheOptionsOrderedByIdentifier()
+        public void Build_CatalogOutOfOrder_ReturnsTheOptionsOrderedByRequiredLevel()
         {
-            List<AvatarRequirement> catalog = CreateCatalog().OrderByDescending(avatar => avatar.Id).ToList();
+            var catalog = new List<AvatarRequirement>
+            {
+                CreateRequirement(FirstAvatarId, FifthLevel),
+                CreateRequirement(SecondAvatarId, FreeLevel),
+                CreateRequirement(ThirdAvatarId, ThirdLevel)
+            };
             AvatarOption[] optionsExpected =
             {
-                CreateOption(CreateRequirement(FirstAvatarId, FreeLevel), true, true),
-                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
-                CreateOption(CreateRequirement(ThirdAvatarId, FifthLevel), true, false)
+                CreateOption(CreateRequirement(SecondAvatarId, FreeLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(FirstAvatarId, FifthLevel), true, true)
             };
 
             List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, FifthLevel, FirstAvatarId);
+
+            Assert.Equivalent(optionsExpected, options, strict: true);
+        }
+
+        [Fact]
+        public void Build_AvatarsWithTheSameLevel_ReturnsThemOrderedByIdentifier()
+        {
+            var catalog = new List<AvatarRequirement>
+            {
+                CreateRequirement(ThirdAvatarId, ThirdLevel),
+                CreateRequirement(SecondAvatarId, ThirdLevel)
+            };
+            AvatarOption[] optionsExpected =
+            {
+                CreateOption(CreateRequirement(SecondAvatarId, ThirdLevel), true, false),
+                CreateOption(CreateRequirement(ThirdAvatarId, ThirdLevel), true, false)
+            };
+
+            List<AvatarOption> options = AvatarOptionBuilder.Build(catalog, ThirdLevel, FirstAvatarId);
 
             Assert.Equivalent(optionsExpected, options, strict: true);
         }

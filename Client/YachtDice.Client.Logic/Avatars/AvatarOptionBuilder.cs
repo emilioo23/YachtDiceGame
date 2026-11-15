@@ -9,7 +9,8 @@ namespace YachtDice.Client.Logic.Avatars
     public static class AvatarOptionBuilder
     {
         /// <summary>
-        /// Builds one option for each avatar of the catalog, ordered by identifier.
+        /// Builds one option for each avatar of the catalog, ordered by the level they
+        /// need, from the lowest to the highest, and by identifier when two need the same level.
         /// </summary>
         /// <param name="avatars">Avatars of the catalog with the level that each one needs.</param>
         /// <param name="playerLevel">Level of the player.</param>
@@ -21,7 +22,8 @@ namespace YachtDice.Client.Logic.Avatars
             int selectedAvatarId)
         {
             List<AvatarOption> options = avatars
-                .OrderBy(avatar => avatar.Id)
+                .OrderBy(avatar => avatar.RequiredLevel)
+                .ThenBy(avatar => avatar.Id)
                 .Select(avatar => CreateOption(avatar, playerLevel, selectedAvatarId))
                 .ToList();
 
