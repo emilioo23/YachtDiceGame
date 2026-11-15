@@ -700,6 +700,9 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UsernameAlreadyTaken = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChangedRecently = 5,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

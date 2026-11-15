@@ -2265,4 +2265,7 @@
   <data name="Friends_Result_Blocked" xml:space="preserve">
     <value>No puedes mandarle solicitud a este jugador.</value>
   </data>
+  <data name="Profile_UsernameChangedRecently" xml:space="preserve">
+    <value>Solo puedes cambiar tu nombre de usuario una vez cada 30 días.</value>
+  </data>
 </root>

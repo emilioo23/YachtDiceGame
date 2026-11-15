@@ -1204,6 +1204,15 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes cambiar tu nombre de usuario una vez cada 30 días.
+        /// </summary>
+        public static string Profile_UsernameChangedRecently {
+            get {
+                return ResourceManager.GetString("Profile_UsernameChangedRecently", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

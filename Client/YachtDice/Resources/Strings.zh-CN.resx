@@ -2265,4 +2265,7 @@
   <data name="Friends_Result_Blocked" xml:space="preserve">
     <value>你不能向该玩家发送请求。</value>
   </data>
+  <data name="Profile_UsernameChangedRecently" xml:space="preserve">
+    <value>用户名每30天只能修改一次。</value>
+  </data>
 </root>

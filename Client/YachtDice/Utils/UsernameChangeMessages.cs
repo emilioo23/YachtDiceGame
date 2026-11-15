@@ -28,6 +28,9 @@ namespace YachtDice.Utils
                 case UsernameChangeResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
                     break;
+                case UsernameChangeResultCode.ChangedRecently:
+                    message = Strings.Profile_UsernameChangedRecently;
+                    break;
             }
 
             return message;
