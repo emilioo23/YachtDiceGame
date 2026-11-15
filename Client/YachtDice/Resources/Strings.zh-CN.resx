@@ -204,9 +204,6 @@
   <data name="Profile_SavedMessage" xml:space="preserve">
     <value>资料保存成功。</value>
   </data>
-  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
-    <value>功能尚未实现。</value>
-  </data>
   <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>验证码已重新发送。</value>
   </data>
@@ -483,21 +480,6 @@
   <data name="Profile_TitleLabel" xml:space="preserve">
     <value>称号</value>
   </data>
-  <data name="Profile_TitleBeginner" xml:space="preserve">
-    <value>Debutante</value>
-  </data>
-  <data name="Profile_TitleExpert" xml:space="preserve">
-    <value>Experto en dados</value>
-  </data>
-  <data name="Profile_TitleChampion" xml:space="preserve">
-    <value>Campeón del Yacht</value>
-  </data>
-  <data name="Profile_TitleShooter" xml:space="preserve">
-    <value>Tirador veloz</value>
-  </data>
-  <data name="Profile_TitleStrategist" xml:space="preserve">
-    <value>Estratega</value>
-  </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
     <value>统计</value>
   </data>
@@ -674,15 +656,6 @@
   </data>
   <data name="Friends_Section_Offline" xml:space="preserve">
     <value>离线</value>
-  </data>
-  <data name="Profile_Achievements_FirstMatch" xml:space="preserve">
-    <value>首场对局</value>
-  </data>
-  <data name="Profile_Achievements_FirstWin" xml:space="preserve">
-    <value>首次胜利</value>
-  </data>
-  <data name="Profile_Achievements_SpeedRoller" xml:space="preserve">
-    <value>神速投手</value>
   </data>
   <data name="Game_Chat_SystemName" xml:space="preserve">
     <value>系统</value>
@@ -1193,9 +1166,6 @@
   </data>
   <data name="Game_Chat_YachtBonus" xml:space="preserve">
     <value>{0} 又掷出了五条，获得100分奖励。</value>
-  </data>
-  <data name="Game_Result_JoinFailed" xml:space="preserve">
-    <value>无法进入对局。</value>
   </data>
   <data name="Results_ColumnRank" xml:space="preserve">
     <value>名次</value>

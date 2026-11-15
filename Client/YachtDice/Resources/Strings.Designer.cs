@@ -1141,15 +1141,6 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a No se pudo entrar a la partida..
-        /// </summary>
-        public static string Game_Result_JoinFailed {
-            get {
-                return ResourceManager.GetString("Game_Result_JoinFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Ya usaste las tres tiradas de este turno..
         /// </summary>
         public static string Game_Result_NoRollsLeft {
@@ -2365,38 +2356,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Primera partida.
-        /// </summary>
-        public static string Profile_Achievements_FirstMatch {
-            get {
-                return ResourceManager.GetString("Profile_Achievements_FirstMatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Primera victoria.
-        /// </summary>
-        public static string Profile_Achievements_FirstWin {
-            get {
-                return ResourceManager.GetString("Profile_Achievements_FirstWin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Logros.
         /// </summary>
         public static string Profile_Achievements_Header {
             get {
                 return ResourceManager.GetString("Profile_Achievements_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Tirador veloz.
-        /// </summary>
-        public static string Profile_Achievements_SpeedRoller {
-            get {
-                return ResourceManager.GetString("Profile_Achievements_SpeedRoller", resourceCulture);
             }
         }
         
@@ -2644,56 +2608,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Debutante.
-        /// </summary>
-        public static string Profile_TitleBeginner {
-            get {
-                return ResourceManager.GetString("Profile_TitleBeginner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Campeón del Yacht.
-        /// </summary>
-        public static string Profile_TitleChampion {
-            get {
-                return ResourceManager.GetString("Profile_TitleChampion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Experto en dados.
-        /// </summary>
-        public static string Profile_TitleExpert {
-            get {
-                return ResourceManager.GetString("Profile_TitleExpert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Título.
         /// </summary>
         public static string Profile_TitleLabel {
             get {
                 return ResourceManager.GetString("Profile_TitleLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Tirador veloz.
-        /// </summary>
-        public static string Profile_TitleShooter {
-            get {
-                return ResourceManager.GetString("Profile_TitleShooter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Estratega.
-        /// </summary>
-        public static string Profile_TitleStrategist {
-            get {
-                return ResourceManager.GetString("Profile_TitleStrategist", resourceCulture);
             }
         }
         
@@ -3162,15 +3081,6 @@ namespace YachtDice.Resources {
         public static string Settings_ButtonChange {
             get {
                 return ResourceManager.GetString("Settings_ButtonChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Característica no implementada..
-        /// </summary>
-        public static string Settings_FeatureNotImplementedMessage {
-            get {
-                return ResourceManager.GetString("Settings_FeatureNotImplementedMessage", resourceCulture);
             }
         }
         

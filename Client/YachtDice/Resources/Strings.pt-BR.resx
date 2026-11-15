@@ -204,9 +204,6 @@
   <data name="Profile_SavedMessage" xml:space="preserve">
     <value>Perfil salvo com sucesso.</value>
   </data>
-  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
-    <value>Recurso não implementado.</value>
-  </data>
   <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>Código reenviado.</value>
   </data>
@@ -483,21 +480,6 @@
   <data name="Profile_TitleLabel" xml:space="preserve">
     <value>Título</value>
   </data>
-  <data name="Profile_TitleBeginner" xml:space="preserve">
-    <value>Debutante</value>
-  </data>
-  <data name="Profile_TitleExpert" xml:space="preserve">
-    <value>Experto en dados</value>
-  </data>
-  <data name="Profile_TitleChampion" xml:space="preserve">
-    <value>Campeón del Yacht</value>
-  </data>
-  <data name="Profile_TitleShooter" xml:space="preserve">
-    <value>Tirador veloz</value>
-  </data>
-  <data name="Profile_TitleStrategist" xml:space="preserve">
-    <value>Estratega</value>
-  </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
     <value>Estatísticas</value>
   </data>
@@ -674,15 +656,6 @@
   </data>
   <data name="Friends_Section_Offline" xml:space="preserve">
     <value>Offline</value>
-  </data>
-  <data name="Profile_Achievements_FirstMatch" xml:space="preserve">
-    <value>Primeira partida</value>
-  </data>
-  <data name="Profile_Achievements_FirstWin" xml:space="preserve">
-    <value>Primeira vitória</value>
-  </data>
-  <data name="Profile_Achievements_SpeedRoller" xml:space="preserve">
-    <value>Lançador veloz</value>
   </data>
   <data name="Game_Chat_SystemName" xml:space="preserve">
     <value>Sistema</value>
@@ -1193,9 +1166,6 @@
   </data>
   <data name="Game_Chat_YachtBonus" xml:space="preserve">
     <value>{0} tirou outro Yacht e ganha 100 pontos de bônus.</value>
-  </data>
-  <data name="Game_Result_JoinFailed" xml:space="preserve">
-    <value>Não foi possível entrar na partida.</value>
   </data>
   <data name="Results_ColumnRank" xml:space="preserve">
     <value>Posição</value>

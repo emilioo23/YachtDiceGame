@@ -204,9 +204,6 @@
   <data name="Profile_SavedMessage" xml:space="preserve">
     <value>Profile saved successfully.</value>
   </data>
-  <data name="Settings_FeatureNotImplementedMessage" xml:space="preserve">
-    <value>Feature not implemented.</value>
-  </data>
   <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>Code resent.</value>
   </data>
@@ -483,21 +480,6 @@
   <data name="Profile_TitleLabel" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="Profile_TitleBeginner" xml:space="preserve">
-    <value>Beginner</value>
-  </data>
-  <data name="Profile_TitleExpert" xml:space="preserve">
-    <value>Dice expert</value>
-  </data>
-  <data name="Profile_TitleChampion" xml:space="preserve">
-    <value>Yacht champion</value>
-  </data>
-  <data name="Profile_TitleShooter" xml:space="preserve">
-    <value>Speed roller</value>
-  </data>
-  <data name="Profile_TitleStrategist" xml:space="preserve">
-    <value>Strategist</value>
-  </data>
   <data name="Profile_StatisticsHeader" xml:space="preserve">
     <value>Statistics</value>
   </data>
@@ -674,15 +656,6 @@
   </data>
   <data name="Friends_Section_Offline" xml:space="preserve">
     <value>Offline</value>
-  </data>
-  <data name="Profile_Achievements_FirstMatch" xml:space="preserve">
-    <value>First match</value>
-  </data>
-  <data name="Profile_Achievements_FirstWin" xml:space="preserve">
-    <value>First win</value>
-  </data>
-  <data name="Profile_Achievements_SpeedRoller" xml:space="preserve">
-    <value>Speed roller</value>
   </data>
   <data name="Game_Chat_SystemName" xml:space="preserve">
     <value>System</value>
@@ -1211,9 +1184,6 @@
   </data>
   <data name="Game_Chat_YachtBonus" xml:space="preserve">
     <value>{0} rolled another Yacht and earns a 100-point bonus.</value>
-  </data>
-  <data name="Game_Result_JoinFailed" xml:space="preserve">
-    <value>The game could not be joined.</value>
   </data>
   <data name="Results_ColumnRank" xml:space="preserve">
     <value>Place</value>
