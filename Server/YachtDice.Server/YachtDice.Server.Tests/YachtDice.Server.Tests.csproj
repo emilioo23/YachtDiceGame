@@ -75,7 +75,9 @@
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
+    <Compile Include="Mapping\CultureParserTests.cs" />
     <Compile Include="Mapping\EnumMapperTests.cs" />
+    <Compile Include="Mapping\GameMapperTests.cs" />
     <Compile Include="Moderation\LinkCensorTests.cs" />
     <Compile Include="Players\AchievementRulesTests.cs" />
     <Compile Include="Players\ExperienceRulesTests.cs" />
