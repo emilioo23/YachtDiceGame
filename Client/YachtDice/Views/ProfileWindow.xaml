@@ -194,6 +194,7 @@
                                 HorizontalAlignment="Right"
                                 Padding="14,6"
                                 FontSize="18"
+                                IsCancel="True"
                                 Click="BackButton_Click"/>
                     </Grid>
 

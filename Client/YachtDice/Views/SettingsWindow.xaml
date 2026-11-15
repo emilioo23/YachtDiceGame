@@ -85,6 +85,7 @@
                     <Button Content="{x:Static properties:Strings.Global_ButtonBack}"
                             Style="{StaticResource BtnBack}"
                             HorizontalAlignment="Stretch"
+                            IsCancel="True"
                             Click="BackButton_Click"/>
 
                 </StackPanel>

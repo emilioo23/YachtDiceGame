@@ -57,6 +57,7 @@
                                 Content="{x:Static res:Strings.Global_ButtonBack}"
                                 Style="{StaticResource BtnBack}"
                                 VerticalAlignment="Center"
+                                IsCancel="True"
                                 Click="BackButton_Click"/>
 
                         <Button x:Name="RefreshButton"

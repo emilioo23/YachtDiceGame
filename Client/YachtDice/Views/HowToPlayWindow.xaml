@@ -101,6 +101,7 @@
                             Content="{x:Static properties:Strings.Global_ButtonBack}"
                             Style="{StaticResource BtnBack}"
                             Margin="0,6,0,14"
+                            IsCancel="True"
                             Click="BackButton_Click"/>
 
                     <ScrollViewer Grid.Row="2"

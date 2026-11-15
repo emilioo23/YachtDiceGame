@@ -30,6 +30,7 @@
                             Style="{StaticResource BtnBack}"
                             HorizontalAlignment="Left"
                             Margin="0,6,0,16"
+                            IsCancel="True"
                             Click="BackButton_Click"/>
                     <TextBlock x:Name="EmptyTextBlock"
                                DockPanel.Dock="Top"
