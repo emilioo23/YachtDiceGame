@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Mail;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Resources;
@@ -60,7 +59,6 @@ namespace YachtDice.Server.Logic.Email
                 throw new ArgumentNullException(nameof(culture), NullArgumentMessage);
             }
 
-            var isSent = false;
             string body = EmailStrings.ResourceManager.GetString(BodyResourceKey, culture);
             var message = new EmailMessage
             {
@@ -69,25 +67,12 @@ namespace YachtDice.Server.Logic.Email
                 Body = string.Format(culture, body, player.DisplayName, LockHours)
             };
 
-            try
-            {
-                _emailService.Send(message);
-                isSent = true;
-                _logger.Info(SentLogMessage);
-            }
-            catch (Exception ex) when (IsDeliveryFailure(ex))
-            {
-                _logger.Error(ex, SendFailedLogMessage);
-            }
+            bool isSent = EmailDelivery.TrySend(_emailService, message, _logger);
+            string logMessage = isSent ? SentLogMessage : SendFailedLogMessage;
+
+            _logger.Info(logMessage);
 
             return isSent;
-        }
-
-        private static bool IsDeliveryFailure(Exception exception)
-        {
-            bool isMailFailure = exception is SmtpException || exception is InvalidOperationException;
-
-            return isMailFailure || exception is FormatException || exception is ArgumentException;
         }
     }
 }

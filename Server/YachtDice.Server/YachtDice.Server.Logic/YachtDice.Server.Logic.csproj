@@ -73,6 +73,7 @@
     <Compile Include="Avatars\PlayerProfile.cs" />
     <Compile Include="Email\AccountLockNotifier.cs" />
     <Compile Include="Email\CodeEmailSender.cs" />
+    <Compile Include="Email\EmailDelivery.cs" />
     <Compile Include="Email\CodeEmailTemplate.cs" />
     <Compile Include="Email\EmailMessage.cs" />
     <Compile Include="Email\EmailService.cs" />
