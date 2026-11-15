@@ -459,6 +459,18 @@
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
     <value>Delete account</value>
   </data>
+  <data name="Settings_DeleteAccount_FirstConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete your account? Your profile, friends, achievements and game history will be erased.</value>
+  </data>
+  <data name="Settings_DeleteAccount_FinalConfirmation" xml:space="preserve">
+    <value>This cannot be undone. Delete your account permanently?</value>
+  </data>
+  <data name="Settings_DeleteAccount_DoneMessage" xml:space="preserve">
+    <value>Your account was deleted. Thanks for playing.</value>
+  </data>
+  <data name="Settings_DeleteAccount_Error" xml:space="preserve">
+    <value>The account could not be deleted. Please try again.</value>
+  </data>
   <data name="Profile_ChooseAvatar" xml:space="preserve">
     <value>Choose your avatar</value>
   </data>

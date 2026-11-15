@@ -459,6 +459,18 @@
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
     <value>Eliminar cuenta</value>
   </data>
+  <data name="Settings_DeleteAccount_FirstConfirmation" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar tu cuenta? Se borrarán tu perfil, tus amigos, tus logros y tu historial de partidas.</value>
+  </data>
+  <data name="Settings_DeleteAccount_FinalConfirmation" xml:space="preserve">
+    <value>Esta acción no se puede deshacer. ¿Eliminar tu cuenta definitivamente?</value>
+  </data>
+  <data name="Settings_DeleteAccount_DoneMessage" xml:space="preserve">
+    <value>Tu cuenta fue eliminada. Gracias por jugar.</value>
+  </data>
+  <data name="Settings_DeleteAccount_Error" xml:space="preserve">
+    <value>No se pudo eliminar la cuenta. Inténtalo de nuevo.</value>
+  </data>
   <data name="Profile_ChooseAvatar" xml:space="preserve">
     <value>Elige tu avatar</value>
   </data>

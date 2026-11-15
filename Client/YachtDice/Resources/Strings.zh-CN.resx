@@ -459,6 +459,18 @@
   <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
     <value>删除账号</value>
   </data>
+  <data name="Settings_DeleteAccount_FirstConfirmation" xml:space="preserve">
+    <value>确定要删除你的账号吗？你的个人资料、好友、成就和对局历史都将被清除。</value>
+  </data>
+  <data name="Settings_DeleteAccount_FinalConfirmation" xml:space="preserve">
+    <value>此操作无法撤销。确定永久删除你的账号吗？</value>
+  </data>
+  <data name="Settings_DeleteAccount_DoneMessage" xml:space="preserve">
+    <value>你的账号已删除。感谢你的游玩。</value>
+  </data>
+  <data name="Settings_DeleteAccount_Error" xml:space="preserve">
+    <value>无法删除账号，请重试。</value>
+  </data>
   <data name="Profile_ChooseAvatar" xml:space="preserve">
     <value>选择你的头像</value>
   </data>

@@ -3220,6 +3220,42 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres eliminar tu cuenta? Se borrarán tu perfil, tus amigos, tus logros y tu historial de partidas..
+        /// </summary>
+        public static string Settings_DeleteAccount_FirstConfirmation {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_FirstConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta acción no se puede deshacer. ¿Eliminar tu cuenta definitivamente?.
+        /// </summary>
+        public static string Settings_DeleteAccount_FinalConfirmation {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_FinalConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta fue eliminada. Gracias por jugar..
+        /// </summary>
+        public static string Settings_DeleteAccount_DoneMessage {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_DoneMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo eliminar la cuenta. Inténtalo de nuevo..
+        /// </summary>
+        public static string Settings_DeleteAccount_Error {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Perfil público.
         /// </summary>
         public static string Settings_Privacy_PublicProfile {
