@@ -110,9 +110,10 @@ namespace YachtDice.Gateway
             return result;
         }
 
-        public async Task<AccountDeletionResultCode> DeleteAccountAsync(string sessionToken)
+        public async Task<AccountDeletionResultCode> DeleteAccountAsync(string sessionToken, string password)
         {
-            AccountDeletionResultCode result = await ExecuteAsync(client => client.DeleteAccount(sessionToken));
+            AccountDeletionResultCode result =
+                await ExecuteAsync(client => client.DeleteAccount(sessionToken, password));
 
             return result;
         }

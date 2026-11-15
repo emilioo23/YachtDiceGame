@@ -293,6 +293,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -307,6 +308,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="Success" />
       <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="WrongPassword" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AccountDeletionResultCode" nillable="true" type="tns:AccountDeletionResultCode" />

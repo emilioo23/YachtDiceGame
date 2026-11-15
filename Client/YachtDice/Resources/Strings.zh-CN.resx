@@ -2274,4 +2274,10 @@
   <data name="Dialogs_SessionExpired" xml:space="preserve">
     <value>你的会话已结束。请重新登录。</value>
   </data>
+  <data name="Settings_DeleteAccount_PasswordLabel" xml:space="preserve">
+    <value>输入密码以删除账号</value>
+  </data>
+  <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
+    <value>密码不正确。账号未被删除。</value>
+  </data>
 </root>

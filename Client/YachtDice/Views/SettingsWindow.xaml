@@ -542,6 +542,19 @@
                                 Background="{StaticResource BrushBorder}"
                                 Margin="0,0,0,20"/>
 
+                        <TextBlock Text="{x:Static properties:Strings.Settings_DeleteAccount_PasswordLabel}"
+                                   FontSize="16"
+                                   Margin="0,0,0,6"
+                                   Foreground="{StaticResource BrushTextMuted}"/>
+
+                        <PasswordBox x:Name="DeleteAccountPasswordBox"
+                                     Style="{StaticResource PasswordBoxRounded}"
+                                     Width="300"
+                                     FontSize="18"
+                                     Padding="12,9"
+                                     Margin="0,0,0,12"
+                                     HorizontalAlignment="Left"/>
+
                         <Button Content="{x:Static properties:Strings.Settings_Privacy_ButtonDeleteAccount}"
                                 Style="{StaticResource BtnOutline}"
                                 Foreground="{StaticResource BrushDanger}"

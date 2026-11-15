@@ -2274,4 +2274,10 @@
   <data name="Dialogs_SessionExpired" xml:space="preserve">
     <value>Sua sessão terminou. Entre novamente.</value>
   </data>
+  <data name="Settings_DeleteAccount_PasswordLabel" xml:space="preserve">
+    <value>Digite sua senha para apagar a conta</value>
+  </data>
+  <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
+    <value>A senha não está correta. A conta não foi apagada.</value>
+  </data>
 </root>

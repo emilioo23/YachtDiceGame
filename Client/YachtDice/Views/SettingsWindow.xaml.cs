@@ -324,7 +324,8 @@ namespace YachtDice.Views
 
         private async Task DeleteAccountAsync()
         {
-            AccountDeletionResultCode result = await _playerGateway.DeleteAccountAsync(_session.SessionToken);
+            AccountDeletionResultCode result =
+                await _playerGateway.DeleteAccountAsync(_session.SessionToken, DeleteAccountPasswordBox.Password);
 
             if (result == AccountDeletionResultCode.Success)
             {
@@ -332,6 +333,10 @@ namespace YachtDice.Views
 
                 CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_DoneMessage);
                 WindowNavigator.SwitchTo(this, new LoginWindow());
+            }
+            else if (result == AccountDeletionResultCode.WrongPassword)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_WrongPassword);
             }
             else
             {

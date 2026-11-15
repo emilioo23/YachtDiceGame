@@ -934,6 +934,9 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerNotFound = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WrongPassword = 2,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -982,7 +985,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/DeleteAccount", ReplyAction="urn:yachtdice:contracts/IPlayerService/DeleteAccountResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/DeleteAccountServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken);
+        YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken, string password);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1052,8 +1055,8 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.ChangeFlag(sessionToken, flagCode);
         }
         
-        public YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken) {
-            return base.Channel.DeleteAccount(sessionToken);
+        public YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string sessionToken, string password) {
+            return base.Channel.DeleteAccount(sessionToken, password);
         }
     }
 }

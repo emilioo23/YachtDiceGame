@@ -1231,6 +1231,24 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña para borrar la cuenta.
+        /// </summary>
+        public static string Settings_DeleteAccount_PasswordLabel {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_PasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña no es correcta. La cuenta no se borró..
+        /// </summary>
+        public static string Settings_DeleteAccount_WrongPassword {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_WrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Tirar ({0}/3).
         /// </summary>
         public static string Game_Dice_ButtonRoll {

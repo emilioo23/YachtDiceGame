@@ -2274,4 +2274,10 @@
   <data name="Dialogs_SessionExpired" xml:space="preserve">
     <value>Tu sesión terminó. Vuelve a iniciar sesión.</value>
   </data>
+  <data name="Settings_DeleteAccount_PasswordLabel" xml:space="preserve">
+    <value>Escribe tu contraseña para borrar la cuenta</value>
+  </data>
+  <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
+    <value>La contraseña no es correcta. La cuenta no se borró.</value>
+  </data>
 </root>
