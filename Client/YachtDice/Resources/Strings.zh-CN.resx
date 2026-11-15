@@ -2203,7 +2203,7 @@
     <value>房主已将你移出此房间，你不能再进入。</value>
   </data>
   <data name="Lobby_ClosedMessage" xml:space="preserve">
-    <value>房间已关闭，因为15分钟内没有开始游戏。</value>
+    <value>等待时间已过且未开始游戏，房间已关闭。</value>
   </data>
   <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
     <value>你连续3次输错密码。请等待5分钟后再试。</value>
@@ -2212,9 +2212,9 @@
     <value>你今天输错密码10次，账号已被锁定24小时。</value>
   </data>
   <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
-    <value>你们其中一人已有100位好友，已达上限。</value>
+    <value>你们其中一人的好友数已达上限。</value>
   </data>
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
-    <value>你已有5个未回复的请求。请等待回复后再发送。</value>
+    <value>你未回复的请求已达上限。请等待回复后再发送。</value>
   </data>
 </root>

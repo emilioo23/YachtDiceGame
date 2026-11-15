@@ -742,10 +742,10 @@
     <value>Ya le enviaste una solicitud a este jugador.</value>
   </data>
   <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
-    <value>Uno de los dos ya tiene 100 amigos, que es el máximo permitido.</value>
+    <value>Uno de los dos ya llegó al máximo de amigos permitido.</value>
   </data>
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
-    <value>Ya tienes 5 solicitudes sin respuesta. Espera a que te respondan para enviar otra.</value>
+    <value>Ya tienes el máximo de solicitudes sin respuesta. Espera a que te respondan para enviar otra.</value>
   </data>
   <data name="Lobby_RoomCodeFormat" xml:space="preserve">
     <value>Código: {0}</value>
@@ -997,7 +997,7 @@
     <value>El anfitrión te expulsó de la sala.</value>
   </data>
   <data name="Lobby_ClosedMessage" xml:space="preserve">
-    <value>La sala se cerró porque pasaron 15 minutos sin iniciar la partida.</value>
+    <value>La sala se cerró porque pasó el tiempo de espera sin iniciar la partida.</value>
   </data>
   <data name="Lobby_Chat_NewHost" xml:space="preserve">
     <value>{0} es ahora el anfitrión de la sala.</value>

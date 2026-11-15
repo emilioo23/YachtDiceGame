@@ -619,7 +619,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Ya tienes 5 solicitudes sin respuesta. Espera a que te respondan para enviar otra.
+        ///   Busca una cadena traducida similar a Ya tienes el máximo de solicitudes sin respuesta. Espera a que te respondan para enviar otra.
         /// </summary>
         public static string Friends_Result_TooManyPendingRequests {
             get {
@@ -628,7 +628,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Uno de los dos ya tiene 100 amigos, que es el máximo permitido.
+        ///   Busca una cadena traducida similar a Uno de los dos ya llegó al máximo de amigos permitido.
         /// </summary>
         public static string Friends_Result_FriendLimitReached {
             get {
@@ -1870,7 +1870,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a La sala se cerró porque pasaron 15 minutos sin iniciar la partida.
+        ///   Busca una cadena traducida similar a La sala se cerró porque pasó el tiempo de espera sin iniciar la partida.
         /// </summary>
         public static string Lobby_ClosedMessage {
             get {

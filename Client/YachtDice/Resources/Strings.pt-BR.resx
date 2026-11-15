@@ -2203,7 +2203,7 @@
     <value>O anfitrião expulsou você desta sala, então você não pode entrar nela de novo.</value>
   </data>
   <data name="Lobby_ClosedMessage" xml:space="preserve">
-    <value>A sala foi fechada porque passaram 15 minutos sem iniciar a partida.</value>
+    <value>A sala foi fechada porque o tempo de espera acabou sem iniciar a partida.</value>
   </data>
   <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
     <value>Você digitou uma senha errada 3 vezes seguidas. Espere 5 minutos para tentar de novo.</value>
@@ -2212,9 +2212,9 @@
     <value>Sua conta foi bloqueada por 24 horas porque você digitou uma senha errada 10 vezes hoje.</value>
   </data>
   <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
-    <value>Um de vocês já tem 100 amigos, que é o máximo permitido.</value>
+    <value>Um de vocês já chegou ao máximo de amigos permitido.</value>
   </data>
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
-    <value>Você já tem 5 solicitações sem resposta. Espere uma resposta para enviar outra.</value>
+    <value>Você já tem o máximo de solicitações sem resposta. Espere uma resposta para enviar outra.</value>
   </data>
 </root>

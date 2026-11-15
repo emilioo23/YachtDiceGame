@@ -742,10 +742,10 @@
     <value>You already sent a request to this player.</value>
   </data>
   <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
-    <value>One of you already has 100 friends, which is the most allowed.</value>
+    <value>One of you already reached the most friends allowed.</value>
   </data>
   <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
-    <value>You already have 5 requests without an answer. Wait for an answer to send another one.</value>
+    <value>You already have the most requests without an answer. Wait for an answer to send another one.</value>
   </data>
   <data name="Lobby_RoomCodeFormat" xml:space="preserve">
     <value>Code: {0}</value>
@@ -997,7 +997,7 @@
     <value>The host kicked you out of the room.</value>
   </data>
   <data name="Lobby_ClosedMessage" xml:space="preserve">
-    <value>The room was closed because 15 minutes passed without starting the game.</value>
+    <value>The room was closed because the waiting time ended without starting the game.</value>
   </data>
   <data name="Lobby_Chat_NewHost" xml:space="preserve">
     <value>{0} is now the host of the room.</value>
