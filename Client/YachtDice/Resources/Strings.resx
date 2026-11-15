@@ -2319,4 +2319,7 @@
   <data name="Game_Chat_Quick_GoodGame" xml:space="preserve">
     <value>Buena partida, gracias</value>
   </data>
+  <data name="MainMenu_Play_StatComputer" xml:space="preserve">
+    <value>Contra la computadora: {0} jugadas, {1} ganadas</value>
+  </data>
 </root>

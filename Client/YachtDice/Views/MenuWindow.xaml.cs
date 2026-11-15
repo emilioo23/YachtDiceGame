@@ -214,6 +214,10 @@ namespace YachtDice.Views
                     Strings.Global_FormatPercentage,
                     statistics.WinRatePercentage);
                 PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, statistics.Level);
+                StatComputerTextBlock.Text = string.Format(
+                    Strings.MainMenu_Play_StatComputer,
+                    statistics.GamesAgainstComputer,
+                    statistics.WinsAgainstComputer);
             }
         }
 

@@ -149,6 +149,12 @@ namespace YachtDice.PlayerServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int WinsField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GamesAgainstComputerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsAgainstComputerField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -220,6 +226,32 @@ namespace YachtDice.PlayerServiceReference {
                 if ((this.WinRatePercentageField.Equals(value) != true)) {
                     this.WinRatePercentageField = value;
                     this.RaisePropertyChanged("WinRatePercentage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GamesAgainstComputer {
+            get {
+                return this.GamesAgainstComputerField;
+            }
+            set {
+                if ((this.GamesAgainstComputerField.Equals(value) != true)) {
+                    this.GamesAgainstComputerField = value;
+                    this.RaisePropertyChanged("GamesAgainstComputer");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int WinsAgainstComputer {
+            get {
+                return this.WinsAgainstComputerField;
+            }
+            set {
+                if ((this.WinsAgainstComputerField.Equals(value) != true)) {
+                    this.WinsAgainstComputerField = value;
+                    this.RaisePropertyChanged("WinsAgainstComputer");
                 }
             }
         }

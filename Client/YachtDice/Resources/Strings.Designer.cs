@@ -2401,6 +2401,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Contra la computadora: {0} jugadas, {1} ganadas.
+        /// </summary>
+        public static string MainMenu_Play_StatComputer {
+            get {
+                return ResourceManager.GetString("MainMenu_Play_StatComputer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esperando jugador....
         /// </summary>
         public static string Lobby_WaitingPlayer {
