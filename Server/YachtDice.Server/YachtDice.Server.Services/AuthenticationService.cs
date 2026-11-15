@@ -14,6 +14,8 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class AuthenticationService : ServiceBase, Contracts.IAuthenticationService
     {
+        private const string NullDependencyMessage = "A dependency of the authentication service cannot be null.";
+
         private readonly LogicAuth.ILoginService _loginService;
         private readonly LogicAuth.IVerificationService _verificationService;
         private readonly LogicAuth.IPasswordRecoveryService _passwordRecoveryService;
@@ -29,10 +31,12 @@ namespace YachtDice.Server.Services
             LogicAuth.IVerificationService verificationService,
             LogicAuth.IPasswordRecoveryService passwordRecoveryService)
         {
-            _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
-            _verificationService = verificationService ?? throw new ArgumentNullException(nameof(verificationService));
+            _loginService = loginService
+                ?? throw new ArgumentNullException(nameof(loginService), NullDependencyMessage);
+            _verificationService = verificationService
+                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _passwordRecoveryService = passwordRecoveryService
-                ?? throw new ArgumentNullException(nameof(passwordRecoveryService));
+                ?? throw new ArgumentNullException(nameof(passwordRecoveryService), NullDependencyMessage);
         }
 
         /// <summary>

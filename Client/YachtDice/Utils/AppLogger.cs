@@ -13,6 +13,8 @@ namespace YachtDice.Utils
     {
         private const int MaxStackLevels = 3;
         private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}";
+        private const string NullOwnerTypeMessage = "The type that owns the logger cannot be null.";
+        private const string NullExceptionMessage = "The exception to log cannot be null.";
 
         private readonly ILog _log;
 
@@ -24,7 +26,7 @@ namespace YachtDice.Utils
         {
             if (ownerType == null)
             {
-                throw new ArgumentNullException(nameof(ownerType));
+                throw new ArgumentNullException(nameof(ownerType), NullOwnerTypeMessage);
             }
 
             _log = LogManager.GetLogger(ownerType);
@@ -48,7 +50,7 @@ namespace YachtDice.Utils
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception));
+                throw new ArgumentNullException(nameof(exception), NullExceptionMessage);
             }
 
             _log.Error(BuildErrorMessage(exception, message));

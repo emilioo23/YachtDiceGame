@@ -12,6 +12,8 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
+        private const string NullDependencyMessage = "A dependency of the two-factor management cannot be null.";
+
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
 
         /// <summary>
@@ -20,7 +22,8 @@ namespace YachtDice.Server.Services
         /// <param name="settingsService">The service that turns the two-factor verification on or off.</param>
         public TwoFactorManagementService(LogicTwoFactor.ITwoFactorSettingsService settingsService)
         {
-            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _settingsService = settingsService
+                ?? throw new ArgumentNullException(nameof(settingsService), NullDependencyMessage);
         }
 
         /// <summary>

@@ -16,6 +16,8 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class FriendService : ServiceBase, Contracts.IFriendService
     {
+        private const string NullDependencyMessage = "A dependency of the friend service cannot be null.";
+
         private readonly LogicFriends.IFriendshipService _friendshipService;
         private readonly LogicFriends.IRoomInvitationService _invitationService;
         private readonly IPlayerNotifier _notifier;
@@ -32,10 +34,10 @@ namespace YachtDice.Server.Services
             IPlayerNotifier notifier)
         {
             _friendshipService = friendshipService
-                ?? throw new ArgumentNullException(nameof(friendshipService));
+                ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
             _invitationService = invitationService
-                ?? throw new ArgumentNullException(nameof(invitationService));
-            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+                ?? throw new ArgumentNullException(nameof(invitationService), NullDependencyMessage);
+            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier), NullDependencyMessage);
         }
 
         /// <summary>

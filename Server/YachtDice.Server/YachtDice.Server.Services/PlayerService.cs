@@ -14,6 +14,8 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
+        private const string NullDependencyMessage = "A dependency of the player service cannot be null.";
+
         private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
         private readonly LogicAvatars.AvatarService _avatarService;
         private readonly LogicPlayers.ProfileService _profileService;
@@ -29,11 +31,11 @@ namespace YachtDice.Server.Services
             LogicPlayers.ProfileService profileService)
         {
             _statisticsService = statisticsService
-                ?? throw new ArgumentNullException(nameof(statisticsService));
+                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
             _avatarService = avatarService
-                ?? throw new ArgumentNullException(nameof(avatarService));
+                ?? throw new ArgumentNullException(nameof(avatarService), NullDependencyMessage);
             _profileService = profileService
-                ?? throw new ArgumentNullException(nameof(profileService));
+                ?? throw new ArgumentNullException(nameof(profileService), NullDependencyMessage);
         }
 
         /// <summary>

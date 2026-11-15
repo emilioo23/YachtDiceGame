@@ -13,6 +13,8 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
+        private const string NullDependencyMessage = "A dependency of the player registration service cannot be null.";
+
         private readonly LogicAuth.IRegistrationService _registrationLogic;
 
         /// <summary>
@@ -21,7 +23,8 @@ namespace YachtDice.Server.Services
         /// <param name="registrationLogic">The registration logic service.</param>
         public PlayerRegistrationService(LogicAuth.IRegistrationService registrationLogic)
         {
-            _registrationLogic = registrationLogic ?? throw new ArgumentNullException(nameof(registrationLogic));
+            _registrationLogic = registrationLogic
+                ?? throw new ArgumentNullException(nameof(registrationLogic), NullDependencyMessage);
         }
 
         /// <summary>

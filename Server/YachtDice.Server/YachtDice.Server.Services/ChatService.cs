@@ -24,6 +24,7 @@ namespace YachtDice.Server.Services
         private const string NotInsideRoomMessage = "A player who is not inside the room cannot join its chat.";
 
         private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the chat service cannot be null.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
         private readonly LogicModeration.OffensiveWordFilter _wordFilter;
@@ -40,7 +41,7 @@ namespace YachtDice.Server.Services
         public ChatService(LogicRooms.IRoomManager roomManager, LogicModeration.OffensiveWordFilter wordFilter)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager));
+                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
             _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }

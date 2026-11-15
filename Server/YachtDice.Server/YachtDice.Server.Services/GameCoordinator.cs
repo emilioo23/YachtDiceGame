@@ -27,6 +27,7 @@ namespace YachtDice.Server.Services
         public const int ReconnectSeconds = 60;
 
         private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
+        private const string NullDependencyMessage = "A dependency of the game coordinator cannot be null.";
 
         private readonly LogicGame.IGameManager _gameManager;
         private readonly LogicGame.IGameResultRecorder _resultRecorder;
@@ -51,9 +52,9 @@ namespace YachtDice.Server.Services
         public GameCoordinator(LogicGame.IGameManager gameManager, LogicGame.IGameResultRecorder resultRecorder)
         {
             _gameManager = gameManager
-                ?? throw new ArgumentNullException(nameof(gameManager));
+                ?? throw new ArgumentNullException(nameof(gameManager), NullDependencyMessage);
             _resultRecorder = resultRecorder
-                ?? throw new ArgumentNullException(nameof(resultRecorder));
+                ?? throw new ArgumentNullException(nameof(resultRecorder), NullDependencyMessage);
             _timer = new TurnTimer(HandleTurnExpired);
             _logger = new LogicLogging.AppLogger(GetType());
         }

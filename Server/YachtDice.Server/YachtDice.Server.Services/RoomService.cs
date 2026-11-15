@@ -16,6 +16,7 @@ namespace YachtDice.Server.Services
     public class RoomService : ServiceBase, Contracts.IRoomService
     {
         private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
+        private const string NullDependencyMessage = "A dependency of the room service cannot be null.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
         private readonly GameCoordinator _gameCoordinator;
@@ -31,9 +32,9 @@ namespace YachtDice.Server.Services
         public RoomService(LogicRooms.IRoomManager roomManager, GameCoordinator gameCoordinator)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager));
+                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
             _gameCoordinator = gameCoordinator
-                ?? throw new ArgumentNullException(nameof(gameCoordinator));
+                ?? throw new ArgumentNullException(nameof(gameCoordinator), NullDependencyMessage);
             _gameCoordinator.ReconnectTimeExpired += ForgetPlayerWhoDidNotReturn;
         }
 
