@@ -368,6 +368,11 @@ namespace YachtDice.Views
             WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }
 
+        private void HowToPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            new HowToPlayWindow(this).ShowDialog();
+        }
+
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
             string roomCode = _roomGateway.CurrentRoom.Code;

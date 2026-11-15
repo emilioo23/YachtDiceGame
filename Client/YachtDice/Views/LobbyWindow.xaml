@@ -28,15 +28,27 @@
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
-            <Button x:Name="BackToMenuButton"
-                    Content="{x:Static properties:Strings.Lobby_ButtonBackToMenu}"
-                    Style="{StaticResource BtnOutline}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Padding="20,10"
-                    FontSize="16"
-                    Panel.ZIndex="99"
-                    Click="BackToMenuButton_Click"/>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Panel.ZIndex="99">
+
+                <Button x:Name="BackToMenuButton"
+                        Content="{x:Static properties:Strings.Lobby_ButtonBackToMenu}"
+                        Style="{StaticResource BtnOutline}"
+                        Padding="20,10"
+                        FontSize="16"
+                        Click="BackToMenuButton_Click"/>
+
+                <Button x:Name="HowToPlayButton"
+                        Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}"
+                        Style="{StaticResource BtnOutline}"
+                        Margin="10,0,0,0"
+                        Padding="20,10"
+                        FontSize="16"
+                        Click="HowToPlayButton_Click"/>
+
+            </StackPanel>
 
             <Grid Width="300"
                   Height="720"
