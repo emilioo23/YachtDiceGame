@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:YachtDice.Resources"
         xmlns:views="clr-namespace:YachtDice.Views"
+        xmlns:utils="clr-namespace:YachtDice.Utils"
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -264,11 +265,13 @@
 
                                     <TextBox x:Name="JoinRoomCodeTextBox"
                                              Grid.Column="0"
+                                             utils:EnterKeySubmit.Button="{Binding ElementName=JoinRoomButton}"
                                              Style="{StaticResource TextBoxRounded}"
                                              CharacterCasing="Upper"
                                              Margin="0,0,8,0"/>
 
-                                    <Button Grid.Column="1"
+                                    <Button x:Name="JoinRoomButton"
+                                            Grid.Column="1"
                                             Content="{x:Static properties:Strings.MainMenu_Play_ButtonJoin}"
                                             Style="{StaticResource BtnPrimary}"
                                             Click="JoinRoomButton_Click"
@@ -423,11 +426,13 @@
 
                         <TextBox x:Name="FriendUsernameTextBox"
                                  Grid.Column="0"
+                                 utils:EnterKeySubmit.Button="{Binding ElementName=AddFriendButton}"
                                  Style="{StaticResource TextBoxRounded}"
                                  Margin="0,0,8,0"
                                  Tag="{x:Static properties:Strings.MainMenu_Friends_UsernamePlaceholder}"/>
 
-                        <Button Grid.Column="1"
+                        <Button x:Name="AddFriendButton"
+                                Grid.Column="1"
                                 Content="{x:Static properties:Strings.MainMenu_Friends_ButtonAdd}"
                                 Style="{StaticResource BtnOutline}"
                                 FontSize="16"

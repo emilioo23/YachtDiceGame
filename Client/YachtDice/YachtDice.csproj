@@ -286,6 +286,7 @@
     <Compile Include="Utils\AvatarImages.cs" />
     <Compile Include="Utils\DiceImages.cs" />
     <Compile Include="Utils\DrawingCatalog.cs" />
+    <Compile Include="Utils\EnterKeySubmit.cs" />
     <Compile Include="Utils\HowToPlayContent.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />

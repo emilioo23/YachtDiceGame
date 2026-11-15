@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:YachtDice.Resources"
         xmlns:views="clr-namespace:YachtDice.Views"
+        xmlns:utils="clr-namespace:YachtDice.Utils"
         mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -205,6 +206,7 @@
                                FontSize="18"/>
 
                     <TextBox x:Name="UsernameTextBox"
+                             utils:EnterKeySubmit.Button="{Binding ElementName=SaveChangesButton}"
                              Style="{StaticResource TextBoxRounded}"
                              Margin="0,0,0,16"/>
 
@@ -348,7 +350,8 @@
                     </StackPanel>
                     </ScrollViewer>
 
-                    <Button Grid.Row="2"
+                    <Button x:Name="SaveChangesButton"
+                            Grid.Row="2"
                             Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
                             Style="{StaticResource BtnPrimary}"
                             HorizontalAlignment="Stretch"
