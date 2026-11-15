@@ -15,6 +15,7 @@
             PlayerId = participant.PlayerId;
             Name = participant.Name;
             IsComputer = participant.IsComputer;
+            Skill = ComputerSkill.For(participant.Difficulty);
             Card = card;
             IsPresent = true;
         }
@@ -30,6 +31,8 @@
         public string Name { get; }
 
         public bool IsComputer { get; }
+
+        public ComputerSkill Skill { get; }
 
         /// <summary>
         /// Gets the scorecard of the player.

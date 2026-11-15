@@ -103,6 +103,24 @@ namespace YachtDice.Server.Tests.Game
         }
 
         [Fact]
+        public void PlayComputerMove_EasyComputerAfterTheFirstRoll_PassesTheTurnToThePerson()
+        {
+            GameManager manager = CreateManager(PairOfSixesThenThreeSixes);
+            var easyComputer = new GameParticipant(ComputerId, ComputerName)
+            {
+                IsComputer = true,
+                Difficulty = ComputerDifficulty.Easy
+            };
+            var participants = new[] { easyComputer, CreatePerson() };
+            var turn = new GameTurn(RoomCode, manager.Start(RoomCode, participants, GameSpeed.Normal).TurnNumber);
+            manager.PlayComputerMove(turn);
+
+            GameActionResult moveResult = manager.PlayComputerMove(turn);
+
+            Assert.Equal(PersonId, moveResult.Snapshot.CurrentPlayerId);
+        }
+
+        [Fact]
         public void PlayComputerMove_TurnOfAPerson_ReturnsNotYourTurn()
         {
             GameManager manager = CreateManager(LittleStraightDice);

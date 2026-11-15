@@ -128,8 +128,9 @@ namespace YachtDice.Server.Logic.Rooms
         /// room has free places. The computer player is always ready.
         /// </summary>
         /// <param name="member">Room and identifier of the host.</param>
+        /// <param name="difficulty">How well the computer player plays.</param>
         /// <returns>Outcome of the change and the state of the room after it.</returns>
-        RoomResult AddComputer(RoomMember member);
+        RoomResult AddComputer(RoomMember member, ComputerDifficulty difficulty);
 
         /// <summary>
         /// Closes the rooms that waited fifteen minutes or more without starting their game.

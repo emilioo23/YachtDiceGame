@@ -27,7 +27,7 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             var computerExpected = new { DisplayName = ComputerName, IsComputer = true, IsReady = true };
 
-            RoomResult addResult = _manager.AddComputer(GetMember(createdRoom));
+            RoomResult addResult = _manager.AddComputer(GetMember(createdRoom), ComputerDifficulty.Normal);
 
             Assert.Equivalent(computerExpected, FindComputer(addResult.Room));
         }
@@ -38,7 +38,7 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomResult joinedRoom = _manager.Join(createdRoom.Room.Code, PlayerName);
 
-            RoomResult addResult = _manager.AddComputer(GetMember(joinedRoom));
+            RoomResult addResult = _manager.AddComputer(GetMember(joinedRoom), ComputerDifficulty.Normal);
 
             Assert.Equal(RoomStatus.NotHost, addResult.Status);
         }
@@ -52,10 +52,10 @@ namespace YachtDice.Server.Tests.Rooms
 
             for (int place = 0; place < freePlaces; place++)
             {
-                _manager.AddComputer(host);
+                _manager.AddComputer(host, ComputerDifficulty.Normal);
             }
 
-            RoomResult addResult = _manager.AddComputer(host);
+            RoomResult addResult = _manager.AddComputer(host, ComputerDifficulty.Normal);
 
             Assert.Equal(RoomStatus.RoomFull, addResult.Status);
         }
@@ -65,7 +65,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
-            _manager.AddComputer(host);
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
 
             RoomResult startResult = _manager.StartGame(host);
 
@@ -77,7 +77,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
-            _manager.AddComputer(host);
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
 
             RoomResult leaveResult = _manager.Leave(host);
 
@@ -89,7 +89,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
-            _manager.AddComputer(host);
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
             _manager.Leave(host);
 
             RoomResult joinResult = _manager.Join(createdRoom.Room.Code, PlayerName);
@@ -102,7 +102,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
-            _manager.AddComputer(host);
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
             RoomResult joinedRoom = _manager.Join(createdRoom.Room.Code, PlayerName);
 
             RoomResult leaveResult = _manager.Leave(host);
@@ -115,7 +115,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
-            RoomPlayer computer = FindComputer(_manager.AddComputer(host).Room);
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
 
             RoomResult transferResult = _manager.TransferHost(host, computer.Id);
 

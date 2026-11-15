@@ -53,6 +53,11 @@ namespace YachtDice.Server.Logic.Rooms
         public bool IsComputer { get; set; }
 
         /// <summary>
+        /// Gets or sets how well the server plays the turns of this player when it is a computer player.
+        /// </summary>
+        public ComputerDifficulty Difficulty { get; set; } = ComputerDifficulty.Normal;
+
+        /// <summary>
         /// Gets or sets the moment in which the player entered the room.
         /// </summary>
         public DateTime JoinedAt { get; set; }

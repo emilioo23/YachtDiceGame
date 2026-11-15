@@ -103,10 +103,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// Adds a computer player to the room and tells everyone. Only the host can do it, before the game.
         /// </summary>
         /// <param name="host">Room and identifier of the host.</param>
+        /// <param name="difficulty">How well the computer player plays.</param>
         /// <returns>Outcome of the change.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        RoomResultCode AddComputer(RoomMember host);
+        RoomResultCode AddComputer(RoomMember host, ComputerDifficulty difficulty);
 
         /// <summary>
         /// Looks for a game in progress that the player left and can still join again, by using the name of

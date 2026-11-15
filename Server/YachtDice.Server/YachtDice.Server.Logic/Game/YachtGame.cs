@@ -134,9 +134,9 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
-        /// Plays one move of a computer player: the first roll, another roll keeping the dice of the value
-        /// that repeats the most, or the points in the best box when no rolls are left or the dice are worth
-        /// keeping (see <see cref="AutoPlayChooser"/>).
+        /// Plays one move of a computer player: the first roll, another roll keeping the dice that its
+        /// difficulty chooses, or the points in the best box when no rolls are left or the dice are worth
+        /// keeping (see <see cref="ComputerSkill"/> and <see cref="AutoPlayChooser"/>).
         /// </summary>
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus PlayComputerMove()
@@ -153,7 +153,7 @@ namespace YachtDice.Server.Logic.Game
             }
             else if (ShouldComputerRoll())
             {
-                status = RollIfAllowed(AutoPlayChooser.ChooseHeldDice(_dice));
+                status = RollIfAllowed(_players[_turnIndex].Skill.ChooseHeldDice(_dice));
             }
             else
             {
@@ -487,7 +487,7 @@ namespace YachtDice.Server.Logic.Game
         private bool ShouldComputerRoll()
         {
             bool hasRolled = _rollsMade > NoRolls;
-            bool hasRollsLeft = _rollsMade < RollsPerTurn;
+            bool hasRollsLeft = _rollsMade < Math.Min(RollsPerTurn, _players[_turnIndex].Skill.MaxRolls);
 
             return !hasRolled
                 || (hasRollsLeft && !AutoPlayChooser.IsWorthKeeping(_players[_turnIndex].Card.GetOptions(_dice)));

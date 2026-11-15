@@ -77,7 +77,8 @@ namespace YachtDice.Server.Services
             var participants = room.Players
                 .Select(player => new LogicGame.GameParticipant(player.Id, player.DisplayName)
                 {
-                    IsComputer = player.IsComputer
+                    IsComputer = player.IsComputer,
+                    Difficulty = player.Difficulty
                 })
                 .ToList();
             LogicGame.GameSnapshot snapshot = _gameManager.Start(room.Code, participants, room.Settings.Speed);

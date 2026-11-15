@@ -181,7 +181,9 @@ namespace YachtDice.Server.Services.Mapping
                 DisplayName = player.DisplayName,
                 AvatarId = player.AvatarId,
                 IsReady = player.IsReady,
-                IsComputer = player.IsComputer
+                IsComputer = player.IsComputer,
+                Difficulty = EnumMapper.Map<Logic.Rooms.ComputerDifficulty, Contracts.ComputerDifficulty>(
+                    player.Difficulty)
             };
 
             return contract;

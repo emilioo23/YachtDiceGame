@@ -170,11 +170,14 @@ namespace YachtDice.Server.Services
         /// Adds a computer player to the room and tells everyone. Only the host can do it, before the game.
         /// </summary>
         /// <param name="host">Room and identifier of the host.</param>
+        /// <param name="difficulty">How well the computer player plays.</param>
         /// <returns>Outcome of the change.</returns>
-        public Contracts.RoomResultCode AddComputer(Contracts.RoomMember host)
+        public Contracts.RoomResultCode AddComputer(Contracts.RoomMember host, Contracts.ComputerDifficulty difficulty)
         {
             LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
-            Contracts.RoomResultCode result = Execute(host, () => ProcessAddComputer(member));
+            var logicDifficulty =
+                Mapping.EnumMapper.Map<Contracts.ComputerDifficulty, LogicRooms.ComputerDifficulty>(difficulty);
+            Contracts.RoomResultCode result = Execute(host, () => ProcessAddComputer(member, logicDifficulty));
 
             return result;
         }
@@ -286,9 +289,11 @@ namespace YachtDice.Server.Services
             return Mapping.RoomMapper.ToResultCode(result.Status);
         }
 
-        private Contracts.RoomResultCode ProcessAddComputer(LogicRooms.RoomMember member)
+        private Contracts.RoomResultCode ProcessAddComputer(
+            LogicRooms.RoomMember member,
+            LogicRooms.ComputerDifficulty difficulty)
         {
-            LogicRooms.RoomResult result = _roomManager.AddComputer(member);
+            LogicRooms.RoomResult result = _roomManager.AddComputer(member, difficulty);
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {

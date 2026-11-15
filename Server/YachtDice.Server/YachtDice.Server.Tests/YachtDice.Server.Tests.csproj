@@ -57,6 +57,7 @@
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
     <Compile Include="Game\AutoPlayChooserTests.cs" />
     <Compile Include="Game\ComputerMoveTests.cs" />
+    <Compile Include="Game\ComputerSkillTests.cs" />
     <Compile Include="Game\ReconnectTimerTests.cs" />
     <Compile Include="Game\TurnClockTests.cs" />
     <Compile Include="Game\DiceHandTests.cs" />

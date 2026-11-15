@@ -34,6 +34,15 @@ namespace YachtDice.Server.Tests.Mapping
         }
 
         [Fact]
+        public void Map_EveryComputerDifficulty_HasAValueInTheContract()
+        {
+            List<string> missingNames =
+                FindMissingNames<Logic.Rooms.ComputerDifficulty, Contracts.Rooms.ComputerDifficulty>();
+
+            Assert.Empty(missingNames);
+        }
+
+        [Fact]
         public void Map_EveryScoreCategory_HasAValueInTheContract()
         {
             List<string> missingNames = FindMissingNames<Logic.Game.ScoreCategory, Contracts.Game.ScoreCategory>();

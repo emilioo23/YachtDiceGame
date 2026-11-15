@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Server.Logic.Game
+﻿using YachtDice.Server.Logic.Rooms;
+
+namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
     /// A player who takes part in a game.
@@ -30,5 +32,10 @@
         /// Gets or sets a value indicating whether the server plays the turns of this participant.
         /// </summary>
         public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets how well the server plays the turns of this participant when it is a computer player.
+        /// </summary>
+        public ComputerDifficulty Difficulty { get; set; } = ComputerDifficulty.Normal;
     }
 }

@@ -272,9 +272,10 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
-        public RoomResult AddComputer(RoomMember member)
+        public RoomResult AddComputer(RoomMember member, ComputerDifficulty difficulty)
         {
-            RoomResult result = ExecuteInRoom(member.RoomCode, room => EnterComputer(room, member.PlayerId));
+            RoomResult result =
+                ExecuteInRoom(member.RoomCode, room => EnterComputer(room, member.PlayerId, difficulty));
 
             return result;
         }
@@ -377,7 +378,7 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private static RoomResult EnterComputer(GameRoom room, string playerId)
+        private static RoomResult EnterComputer(GameRoom room, string playerId, ComputerDifficulty difficulty)
         {
             RoomStatus status = RoomStatus.NotHost;
 
@@ -393,6 +394,7 @@ namespace YachtDice.Server.Logic.Rooms
 
                 computer.IsComputer = true;
                 computer.IsReady = true;
+                computer.Difficulty = difficulty;
             }
 
             return CreateResult(status, room);

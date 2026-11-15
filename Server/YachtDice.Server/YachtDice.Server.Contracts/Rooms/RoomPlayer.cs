@@ -38,5 +38,11 @@ namespace YachtDice.Server.Contracts.Rooms
         /// </summary>
         [DataMember]
         public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// How well the server plays the turns of this player when it is a computer player.
+        /// </summary>
+        [DataMember]
+        public ComputerDifficulty Difficulty { get; set; }
     }
 }
