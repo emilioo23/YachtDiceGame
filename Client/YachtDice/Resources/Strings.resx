@@ -702,6 +702,9 @@
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>La contraseña debe tener de 8 a 64 caracteres, con al menos una letra y un número.</value>
   </data>
+  <data name="Auth_ErrorInvalidName" xml:space="preserve">
+    <value>El nombre y el apellido solo pueden tener letras, espacios, guiones y apóstrofos (de 2 a 50 caracteres).</value>
+  </data>
   <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
     <value>Algún campo es demasiado largo. Usuario: máximo 20 caracteres, correo: 100, nombre y apellido: 50.</value>
   </data>

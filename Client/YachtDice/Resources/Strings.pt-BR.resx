@@ -696,6 +696,9 @@
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>A senha deve ter de 8 a 64 caracteres, com pelo menos uma letra e um número.</value>
   </data>
+  <data name="Auth_ErrorInvalidName" xml:space="preserve">
+    <value>O nome e o sobrenome só podem ter letras, espaços, hífens e apóstrofos (de 2 a 50 caracteres).</value>
+  </data>
   <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
     <value>Algum campo é longo demais. Usuário: máximo de 20 caracteres, e-mail: 100, nome e sobrenome: 50.</value>
   </data>

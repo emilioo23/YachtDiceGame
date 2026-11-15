@@ -150,6 +150,9 @@ namespace YachtDice.Views
                 case RegisterResultCode.OffensiveUsername:
                     message = Strings.Auth_ErrorOffensiveUsername;
                     break;
+                case RegisterResultCode.InvalidName:
+                    message = Strings.Auth_ErrorInvalidName;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

@@ -696,6 +696,9 @@
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>密码必须为8到64个字符，且至少包含一个字母和一个数字。</value>
   </data>
+  <data name="Auth_ErrorInvalidName" xml:space="preserve">
+    <value>名字和姓氏只能包含字母、空格、连字符和撇号（2 到 50 个字符）。</value>
+  </data>
   <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
     <value>有字段过长。用户名：最多20个字符，邮箱：100，名字和姓氏：50。</value>
   </data>

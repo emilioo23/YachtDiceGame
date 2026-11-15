@@ -702,6 +702,9 @@
   <data name="Auth_ErrorWeakPassword" xml:space="preserve">
     <value>The password must have 8 to 64 characters, with at least one letter and one digit.</value>
   </data>
+  <data name="Auth_ErrorInvalidName" xml:space="preserve">
+    <value>First and last names can only have letters, spaces, hyphens and apostrophes (2 to 50 characters).</value>
+  </data>
   <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
     <value>A field is too long. Username: 20 characters max, email: 100, first and last name: 50.</value>
   </data>

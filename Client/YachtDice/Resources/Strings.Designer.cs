@@ -115,6 +115,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El nombre y el apellido solo pueden tener letras, espacios, guiones y apóstrofos (de 2 a 50 caracteres)..
+        /// </summary>
+        public static string Auth_ErrorInvalidName {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Algún campo es demasiado largo. Usuario: máximo 20 caracteres, correo: 100, nombre y apellido: 50..
         /// </summary>
         public static string Auth_ErrorFieldTooLong {

@@ -152,6 +152,9 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OffensiveUsername = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidName = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
