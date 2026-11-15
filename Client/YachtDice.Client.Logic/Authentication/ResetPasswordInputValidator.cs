@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace YachtDice.Client.Logic.Authentication
 {
@@ -13,32 +12,26 @@ namespace YachtDice.Client.Logic.Authentication
         /// </summary>
         public const int CodeLength = 6;
 
-        private const string NullInputMessage = "The input of the password reset cannot be null.";
-
         /// <summary>
         /// Checks the code, the new password and its confirmation.
         /// </summary>
-        /// <param name="input">Texts written by the player.</param>
+        /// <param name="code">Code that the player received by email.</param>
+        /// <param name="newPassword">New password written by the player.</param>
+        /// <param name="confirmation">New password written again by the player.</param>
         /// <returns>The first problem found, or <see cref="ResetPasswordInputStatus.Valid"/>.</returns>
-        /// <exception cref="ArgumentNullException">The input is null.</exception>
-        public static ResetPasswordInputStatus Validate(ResetPasswordInput input)
+        public static ResetPasswordInputStatus Validate(string code, string newPassword, string confirmation)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input), NullInputMessage);
-            }
-
             ResetPasswordInputStatus status = ResetPasswordInputStatus.Valid;
 
-            if (!IsCompleteCode(input.Code))
+            if (!IsCompleteCode(code))
             {
                 status = ResetPasswordInputStatus.IncompleteCode;
             }
-            else if (string.IsNullOrWhiteSpace(input.NewPassword))
+            else if (string.IsNullOrWhiteSpace(newPassword))
             {
                 status = ResetPasswordInputStatus.EmptyPassword;
             }
-            else if (input.NewPassword != input.Confirmation)
+            else if (newPassword != confirmation)
             {
                 status = ResetPasswordInputStatus.PasswordsDoNotMatch;
             }

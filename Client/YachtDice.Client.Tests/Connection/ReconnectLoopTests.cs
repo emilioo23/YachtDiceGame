@@ -86,7 +86,7 @@ namespace YachtDice.Client.Tests.Connection
 
             await loop.RunAsync();
 
-            Assert.Equal(new[] { ReconnectPolicy.RetryIntervalSeconds }, _waits);
+            Assert.Equal(new[] { ReconnectLoop.RetryIntervalSeconds }, _waits);
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace YachtDice.Client.Tests.Connection
             _failuresBeforeSuccess = NeverWorks;
             ReconnectLoop loop = CreateLoop();
             int attemptsInTheTimeOfTheServer = ReconnectWaitTracker.ReconnectSeconds
-                / ReconnectPolicy.RetryIntervalSeconds;
+                / ReconnectLoop.RetryIntervalSeconds;
 
             await loop.RunAsync();
 

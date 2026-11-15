@@ -95,17 +95,9 @@ namespace YachtDice.Client.Tests.Authentication
             Assert.Equal(ResetPasswordInputStatus.PasswordsDoNotMatch, status);
         }
 
-        [Fact]
-        public void Validate_NullInput_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => ResetPasswordInputValidator.Validate(null));
-        }
-
         private static ResetPasswordInputStatus ValidateInput(string code, string newPassword, string confirmation)
         {
-            var input = new ResetPasswordInput(code, newPassword, confirmation);
-
-            return ResetPasswordInputValidator.Validate(input);
+            return ResetPasswordInputValidator.Validate(code, newPassword, confirmation);
         }
     }
 }

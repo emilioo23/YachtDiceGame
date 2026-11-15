@@ -133,7 +133,8 @@ namespace YachtDice.Views
                 {
                     TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(
                         _session.SessionToken,
-                        new ResendCodeInput(_challengeId, App.CurrentCultureCode));
+                        _challengeId,
+                        App.CurrentCultureCode);
 
                     HandleResendResult((AuthResendResult)(int)result);
                 }
@@ -141,7 +142,8 @@ namespace YachtDice.Views
                 {
                     AuthResendResult result = await _authGateway.ResendCodeAsync(
                         _email,
-                        new ResendCodeInput(_challengeId, App.CurrentCultureCode));
+                        _challengeId,
+                        App.CurrentCultureCode);
 
                     HandleResendResult(result);
                 }

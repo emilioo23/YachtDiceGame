@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
+using YachtDice.Client.Logic.Game;
 
 namespace YachtDice.Client.Logic.Connection
 {
     /// <summary>
     /// Tries again and again to get back the connection of a match, waiting between the attempts, until it
-    /// works or the server does not wait for the player anymore. What an attempt does and how the time
+    /// works or the server does not wait for the player anymore (after
+    /// <see cref="ReconnectWaitTracker.ReconnectSeconds"/>). What an attempt does and how the time
     /// passes are given by the caller, so the loop does not depend on the network or on the clock.
     /// </summary>
     public sealed class ReconnectLoop
     {
+        /// <summary>
+        /// Seconds that the client waits between one attempt to reconnect and the next one.
+        /// </summary>
+        public const int RetryIntervalSeconds = 5;
+
         private const int NoAttempts = 0;
         private const int OneAttempt = 1;
         private const string NullDelegateMessage = "The delegate of the reconnect loop cannot be null.";
@@ -47,7 +54,7 @@ namespace YachtDice.Client.Logic.Connection
             var attempt = NoAttempts;
             var isRestored = false;
 
-            while (!isRestored && ReconnectPolicy.CanAttempt(_getElapsedSeconds()))
+            while (!isRestored && _getElapsedSeconds() < ReconnectWaitTracker.ReconnectSeconds)
             {
                 attempt += OneAttempt;
                 AttemptStarted?.Invoke(attempt);
@@ -55,7 +62,7 @@ namespace YachtDice.Client.Logic.Connection
 
                 if (!isRestored)
                 {
-                    await _wait(ReconnectPolicy.RetryIntervalSeconds);
+                    await _wait(RetryIntervalSeconds);
                 }
             }
 

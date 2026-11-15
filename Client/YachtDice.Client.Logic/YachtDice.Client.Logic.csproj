@@ -44,8 +44,6 @@
     <Compile Include="Audio\AudioSettings.cs" />
     <Compile Include="Authentication\EmailMask.cs" />
     <Compile Include="Authentication\RegistrationLimits.cs" />
-    <Compile Include="Authentication\ResendCodeInput.cs" />
-    <Compile Include="Authentication\ResetPasswordInput.cs" />
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
     <Compile Include="Avatars\AvatarOption.cs" />
@@ -55,7 +53,6 @@
     <Compile Include="Chat\ChatLinkDetector.cs" />
     <Compile Include="Connection\ConnectionLossGate.cs" />
     <Compile Include="Connection\ReconnectLoop.cs" />
-    <Compile Include="Connection\ReconnectPolicy.cs" />
     <Compile Include="Dice\DiceRowParser.cs" />
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
@@ -70,7 +67,6 @@
     <Compile Include="Game\TurnPhase.cs" />
     <Compile Include="Game\TurnPhaseResolver.cs" />
     <Compile Include="Game\YachtCelebrationRule.cs" />
-    <Compile Include="Players\AchievementChanges.cs" />
     <Compile Include="Players\FlagCodes.cs" />
     <Compile Include="Players\HistoryDisplay.cs" />
     <Compile Include="Settings\LanguageCatalog.cs" />
@@ -83,7 +79,6 @@
     <Compile Include="Rooms\RoomListItemFilter.cs" />
     <Compile Include="Rooms\RoomListUpdater.cs" />
     <Compile Include="Rooms\RoomMembership.cs" />
-    <Compile Include="Rooms\RoomSearch.cs" />
     <Compile Include="Rooms\RoomPrivacyFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -48,7 +48,6 @@
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Connection\ReconnectLoopTests.cs" />
-    <Compile Include="Connection\ReconnectPolicyTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
     <Compile Include="Game\HeldDiceSelectionTests.cs" />
@@ -58,7 +57,6 @@
     <Compile Include="Game\TurnCountdownTests.cs" />
     <Compile Include="Game\TurnPhaseResolverTests.cs" />
     <Compile Include="Game\YachtCelebrationRuleTests.cs" />
-    <Compile Include="Players\AchievementChangesTests.cs" />
     <Compile Include="Players\FlagCodesTests.cs" />
     <Compile Include="Players\HistoryDisplayTests.cs" />
     <Compile Include="Settings\LanguageCatalogTests.cs" />

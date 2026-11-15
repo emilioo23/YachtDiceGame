@@ -87,7 +87,7 @@ namespace YachtDice.Client.Tests.Rooms
             var rooms = new List<RoomListItem> { namedRoom };
 
             List<RoomListItem> filteredRooms =
-                RoomListItemFilter.Apply(rooms, new RoomSearch(RoomPrivacyFilter.All, RoomNameSearch));
+                RoomListItemFilter.Apply(rooms, RoomPrivacyFilter.All, RoomNameSearch);
 
             Assert.Single(filteredRooms);
         }
@@ -135,16 +135,18 @@ namespace YachtDice.Client.Tests.Rooms
         }
 
         [Fact]
-        public void Apply_NullSearch_ThrowsArgumentNullException()
+        public void Apply_NullSearchText_KeepsEveryRoom()
         {
-            Assert.Throws<ArgumentNullException>(() => RoomListItemFilter.Apply(_rooms, null));
+            List<RoomListItem> filteredRoomsResult = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, null);
+
+            Assert.Equal(_rooms, filteredRoomsResult);
         }
 
         [Fact]
         public void Apply_NoRooms_ReturnsAnEmptyList()
         {
             List<RoomListItem> filteredRooms =
-                RoomListItemFilter.Apply(new List<RoomListItem>(), new RoomSearch(RoomPrivacyFilter.All, NoSearch));
+                RoomListItemFilter.Apply(new List<RoomListItem>(), RoomPrivacyFilter.All, NoSearch);
 
             Assert.Empty(filteredRooms);
         }
@@ -156,7 +158,7 @@ namespace YachtDice.Client.Tests.Rooms
 
         private List<RoomListItem> ApplyFilter(RoomPrivacyFilter privacy, string searchText)
         {
-            return RoomListItemFilter.Apply(_rooms, new RoomSearch(privacy, searchText));
+            return RoomListItemFilter.Apply(_rooms, privacy, searchText);
         }
     }
 }

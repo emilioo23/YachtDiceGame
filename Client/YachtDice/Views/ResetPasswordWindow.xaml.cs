@@ -114,11 +114,10 @@ namespace YachtDice.Views
 
         private async Task ChangePasswordAsync()
         {
-            var input = new ResetPasswordInput(
+            ResetPasswordInputStatus inputStatus = ResetPasswordInputValidator.Validate(
                 CodeTextBox.Text.Trim(),
                 NewPasswordBox.Password,
                 ConfirmPasswordBox.Password);
-            ResetPasswordInputStatus inputStatus = ResetPasswordInputValidator.Validate(input);
 
             if (inputStatus == ResetPasswordInputStatus.Valid)
             {

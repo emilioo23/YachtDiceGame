@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.PlayerServiceReference;
@@ -43,7 +43,7 @@ namespace YachtDice.Utils
 
                 if (_session.KnownAchievementIds != null)
                 {
-                    ShowNotices(AchievementChanges.FindNewlyUnlocked(_session.KnownAchievementIds, currentIds));
+                    ShowNotices(currentIds.Except(_session.KnownAchievementIds).ToList());
                 }
 
                 _session.KnownAchievementIds = currentIds;

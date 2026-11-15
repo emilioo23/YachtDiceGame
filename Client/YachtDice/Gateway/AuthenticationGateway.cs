@@ -3,7 +3,6 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.AuthenticationServiceReference;
 using AuthFault = YachtDice.AuthenticationServiceReference.ServiceFault;
-using ResendInput = YachtDice.Client.Logic.Authentication.ResendCodeInput;
 
 namespace YachtDice.Gateway
 {
@@ -12,8 +11,6 @@ namespace YachtDice.Gateway
     /// </summary>
     public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient, IAuthenticationService>
     {
-        private const string NullResendInputMessage = "The data to resend the code cannot be null.";
-
         /// <summary>
         /// Opens and closes a connection to the server so the first real call does not pay for the start-up.
         /// </summary>
@@ -58,17 +55,15 @@ namespace YachtDice.Gateway
         /// Asks the server to send a new verification code.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="input">Challenge of the login session and culture preferred by the player.</param>
+        /// <param name="challengeId">Challenge whose code is sent again.</param>
+        /// <param name="culture">Culture preferred by the player for the email.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        /// <exception cref="ArgumentNullException">The input is null.</exception>
-        public async Task<ResendResultCode> ResendCodeAsync(string email, ResendInput input)
+        public async Task<ResendResultCode> ResendCodeAsync(
+            string email,
+            string challengeId,
+            string culture)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input), NullResendInputMessage);
-            }
-
-            var delivery = new CodeDelivery { ChallengeId = input.ChallengeId, Culture = input.Culture };
+            var delivery = new CodeDelivery { ChallengeId = challengeId, Culture = culture };
             ResendResultCode result = await ExecuteAsync(client => client.ResendPlayerCode(email, delivery));
 
             return result;
