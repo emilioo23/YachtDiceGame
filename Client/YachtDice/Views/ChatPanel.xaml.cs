@@ -77,16 +77,16 @@ namespace YachtDice.Views
         /// Adds a message at the end of the chat, with the avatar of its author next to the name. If the chat
         /// is hidden and the message was written by another player, it counts as unread and the notice shows it.
         /// </summary>
-        /// <param name="entry">Message to show.</param>
-        public void AddMessage(ChatEntry entry)
+        /// <param name="chatEntry">Message to show.</param>
+        public void AddMessage(ChatEntry chatEntry)
         {
-            MessagesPanel.Children.Add(CreateMessageBlock(entry));
+            MessagesPanel.Children.Add(CreateMessageBlock(chatEntry));
             MessagesScrollViewer.ScrollToEnd();
 
-            if (_isCollapsed && entry.Kind == ChatMessageKind.Other)
+            if (_isCollapsed && chatEntry.Kind == ChatMessageKind.Other)
             {
                 _unreadCount++;
-                ShowUnreadNotice(entry.Author, entry.Content);
+                ShowUnreadNotice(chatEntry.Author, chatEntry.Content);
             }
         }
 
@@ -185,7 +185,7 @@ namespace YachtDice.Views
             }
         }
 
-        private TextBlock CreateMessageBlock(ChatEntry entry)
+        private TextBlock CreateMessageBlock(ChatEntry chatEntry)
         {
             var textBlock = new TextBlock
             {
@@ -193,32 +193,32 @@ namespace YachtDice.Views
                 TextWrapping = TextWrapping.Wrap
             };
 
-            if (entry.AvatarId != ChatEntry.NoAvatar)
+            if (chatEntry.AvatarId != ChatEntry.NoAvatar)
             {
-                textBlock.Inlines.Add(CreateAvatarInline(entry.AvatarId));
+                textBlock.Inlines.Add(CreateAvatarInline(chatEntry.AvatarId));
             }
 
-            textBlock.Inlines.Add(new Run(FormatAuthor(entry) + Strings.Game_Chat_AuthorSeparator)
+            textBlock.Inlines.Add(new Run(FormatAuthor(chatEntry) + Strings.Game_Chat_AuthorSeparator)
             {
                 FontWeight = FontWeights.Bold,
-                Foreground = GetAuthorBrush(entry.Kind)
+                Foreground = GetAuthorBrush(chatEntry.Kind)
             });
 
-            textBlock.Inlines.Add(new Run(entry.Content)
+            textBlock.Inlines.Add(new Run(chatEntry.Content)
             {
-                Foreground = GetContentBrush(entry.Kind)
+                Foreground = GetContentBrush(chatEntry.Kind)
             });
 
             return textBlock;
         }
 
-        private static string FormatAuthor(ChatEntry entry)
+        private static string FormatAuthor(ChatEntry chatEntry)
         {
-            string author = entry.Author;
+            string author = chatEntry.Author;
 
-            if (entry.Level > NoLevel)
+            if (chatEntry.Level > NoLevel)
             {
-                author = string.Format(Strings.Game_Chat_AuthorLevelFormat, entry.Author, entry.Level);
+                author = string.Format(Strings.Game_Chat_AuthorLevelFormat, chatEntry.Author, chatEntry.Level);
             }
 
             return author;

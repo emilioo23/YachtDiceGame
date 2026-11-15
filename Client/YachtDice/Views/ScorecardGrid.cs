@@ -89,13 +89,13 @@ namespace YachtDice.Views
         private static string GetPoints(PlayerScorecard card, ScoreCategory category)
         {
             Func<CategoryScore, bool> isSameCategory = score => score.Category == category;
-            CategoryScore entry = card.Scores.FirstOrDefault(isSameCategory);
+            CategoryScore categoryScore = card.Scores.FirstOrDefault(isSameCategory);
 
             string points = string.Empty;
 
-            if (entry != null && entry.IsFilled)
+            if (categoryScore != null && categoryScore.IsFilled)
             {
-                points = entry.Points.ToString();
+                points = categoryScore.Points.ToString();
             }
 
             return points;
