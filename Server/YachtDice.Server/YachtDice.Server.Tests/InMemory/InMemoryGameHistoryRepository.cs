@@ -51,7 +51,12 @@ namespace YachtDice.Server.Tests.InMemory
 
         public void AddComputerGame(int playerId, int finalScore, bool isWinner)
         {
-            var historyPlayer = new GameHistoryPlayer { PlayerId = playerId, FinalScore = finalScore, IsWinner = isWinner };
+            var historyPlayer = new GameHistoryPlayer
+            {
+                PlayerId = playerId,
+                FinalScore = finalScore,
+                IsWinner = isWinner
+            };
 
             _entries.Add(historyPlayer);
             _computerGames.Add(historyPlayer);
