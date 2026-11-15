@@ -285,6 +285,7 @@
     <Compile Include="Utils\GatewayCallRunner.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />
     <Compile Include="Navigation\ConnectionLossHandler.cs" />
+    <Compile Include="Navigation\GameConnectionRecovery.cs" />
     <Compile Include="Utils\AppLogger.cs" />
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ThemeResourceKeys.cs" />
