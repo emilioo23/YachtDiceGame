@@ -887,6 +887,17 @@ namespace YachtDice.PlayerServiceReference {
         InvalidFlag = 2,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDeletionResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum AccountDeletionResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -930,6 +941,10 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/DeleteAccount", ReplyAction="urn:yachtdice:contracts/IPlayerService/DeleteAccountResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/DeleteAccountServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string playerName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -997,6 +1012,10 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string playerName, string flagCode) {
             return base.Channel.ChangeFlag(playerName, flagCode);
+        }
+        
+        public YachtDice.PlayerServiceReference.AccountDeletionResultCode DeleteAccount(string playerName) {
+            return base.Channel.DeleteAccount(playerName);
         }
     }
 }

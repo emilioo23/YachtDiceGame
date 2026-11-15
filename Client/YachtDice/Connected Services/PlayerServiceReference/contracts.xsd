@@ -283,4 +283,25 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FlagChangeResultCode" nillable="true" type="tns:FlagChangeResultCode" />
+  <xs:element name="DeleteAccount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteAccountResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteAccountResult" type="tns:AccountDeletionResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="AccountDeletionResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PlayerNotFound" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AccountDeletionResultCode" nillable="true" type="tns:AccountDeletionResultCode" />
 </xs:schema>

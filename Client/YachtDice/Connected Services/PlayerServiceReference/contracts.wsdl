@@ -96,6 +96,15 @@
   <wsdl:message name="IPlayerService_ChangeFlag_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IPlayerService_DeleteAccount_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteAccount" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_DeleteAccount_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteAccountResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerService_DeleteAccount_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IPlayerService">
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/GetPlayerStatistics" message="tns:IPlayerService_GetPlayerStatistics_InputMessage" />
@@ -146,6 +155,11 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag" message="tns:IPlayerService_ChangeFlag_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse" message="tns:IPlayerService_ChangeFlag_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_ChangeFlag_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAccount">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IPlayerService/DeleteAccount" message="tns:IPlayerService_DeleteAccount_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IPlayerService/DeleteAccountResponse" message="tns:IPlayerService_DeleteAccount_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IPlayerService/DeleteAccountServiceFaultFault" name="ServiceFaultFault" message="tns:IPlayerService_DeleteAccount_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
