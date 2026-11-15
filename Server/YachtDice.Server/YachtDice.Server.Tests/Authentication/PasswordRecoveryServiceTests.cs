@@ -31,6 +31,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const string DisplayName = "emilio";
         private const string OldPassword = "OldPass123!";
         private const string NewPassword = "NewPass456!";
+        private const string ThirdPassword = "Third789!";
+        private const string FourthPassword = "Fourth012!";
         private const string WeakPassword = "abc";
         private const string CorrectCode = "123456";
         private const string WrongCode = "654321";
@@ -189,6 +191,41 @@ namespace YachtDice.Server.Tests.Authentication
                 TokenCount = _resets.Tokens.Count
             };
             Assert.Equal(expectedReset, actualReset);
+        }
+
+        [Fact]
+        public void ConfirmReset_CurrentPasswordAgain_ReturnsPasswordUsedBefore()
+        {
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+
+            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+
+            Assert.Equal(PasswordResetStatus.PasswordUsedBefore, status);
+        }
+
+        [Fact]
+        public void ConfirmReset_PasswordFromTwoChangesAgo_ReturnsPasswordUsedBefore()
+        {
+            ChangePasswordWithANewCode(NewPassword);
+            ChangePasswordWithANewCode(ThirdPassword);
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+
+            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+
+            Assert.Equal(PasswordResetStatus.PasswordUsedBefore, status);
+        }
+
+        [Fact]
+        public void ConfirmReset_PasswordFromThreeChangesAgo_ReturnsPasswordChanged()
+        {
+            ChangePasswordWithANewCode(NewPassword);
+            ChangePasswordWithANewCode(ThirdPassword);
+            ChangePasswordWithANewCode(FourthPassword);
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+
+            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+
+            Assert.Equal(PasswordResetStatus.PasswordChanged, status);
         }
 
         [Fact]
@@ -373,6 +410,12 @@ namespace YachtDice.Server.Tests.Authentication
         private PasswordRecoveryService CreateService(IEmailService emailService)
         {
             return new PasswordRecoveryService(_players, _resets, emailService);
+        }
+
+        private void ChangePasswordWithANewCode(string newPassword)
+        {
+            SeedCode(CorrectCode, SecondsOutsideCooldown);
+            _service.ConfirmReset(CreateConfirmation(CorrectCode, newPassword));
         }
 
         private bool IsCurrentPassword(string password)

@@ -32,5 +32,13 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="newPasswordHash">Hash of the new password.</param>
         void CompleteReset(int playerId, string newPasswordHash);
+
+        /// <summary>
+        /// Gets the hashes of the last passwords of the player: the current one and the ones before it that are
+        /// still remembered.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The hashes, from the newest to the oldest.</returns>
+        List<string> FindRecentPasswordHashes(int playerId);
     }
 }

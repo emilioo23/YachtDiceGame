@@ -220,11 +220,19 @@ namespace YachtDice.Server.Logic.Authentication
 
         private PasswordResetStatus ChangePassword(int playerId, string newPassword)
         {
-            _resetRepository.CompleteReset(playerId, PasswordHasher.ComputeHash(newPassword));
-            _attempts.Reset(playerId);
-            _logger.Info(ChangedLogMessage);
+            Func<string, bool> isSamePassword = passwordHash => PasswordHasher.Verify(newPassword, passwordHash);
+            bool isUsedBefore = _resetRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
+            PasswordResetStatus status = PasswordResetStatus.PasswordUsedBefore;
 
-            return PasswordResetStatus.PasswordChanged;
+            if (!isUsedBefore)
+            {
+                _resetRepository.CompleteReset(playerId, PasswordHasher.ComputeHash(newPassword));
+                _attempts.Reset(playerId);
+                _logger.Info(ChangedLogMessage);
+                status = PasswordResetStatus.PasswordChanged;
+            }
+
+            return status;
         }
 
         private PasswordResetStatus RegisterWrongCode(int playerId)

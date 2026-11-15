@@ -13,7 +13,10 @@ namespace YachtDice.Server.Tests.InMemory
     internal sealed class InMemoryPasswordResetRepository : IPasswordResetRepository
     {
         private readonly InMemoryPlayerRepository _players;
+        private const int PreviousPasswordsKept = 2;
+
         private readonly List<PwdResetToken> _tokens = new List<PwdResetToken>();
+        private readonly List<string> _previousHashes = new List<string>();
 
         /// <summary>
         /// Initializes the repository with the players whose password can change.
@@ -58,8 +61,19 @@ namespace YachtDice.Server.Tests.InMemory
             Func<Player, bool> isSameId = row => row.Id == playerId;
             Player player = _players.Players.First(isSameId);
 
+            _previousHashes.Insert(0, player.PwdHash);
             player.PwdHash = newPasswordHash;
             Delete(playerId);
+        }
+
+        public List<string> FindRecentPasswordHashes(int playerId)
+        {
+            Func<Player, bool> isSameId = row => row.Id == playerId;
+            var hashes = new List<string> { _players.Players.First(isSameId).PwdHash };
+
+            hashes.AddRange(_previousHashes.Take(PreviousPasswordsKept));
+
+            return hashes;
         }
     }
 }

@@ -21,6 +21,11 @@
         TooManyAttempts,
 
         /// <summary>The new password is too short, too long or does not have a letter and a digit.</summary>
-        WeakPassword
+        WeakPassword,
+
+        /// <summary>
+        /// The new password is the same as the current one or one of the two before it.
+        /// </summary>
+        PasswordUsedBefore
     }
 }

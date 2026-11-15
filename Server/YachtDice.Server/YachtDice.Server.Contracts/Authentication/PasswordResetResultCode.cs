@@ -30,6 +30,12 @@ namespace YachtDice.Server.Contracts.Authentication
 
         /// <summary>The new password is too short, too long or does not have a letter and a digit.</summary>
         [EnumMember]
-        WeakPassword
+        WeakPassword,
+
+        /// <summary>
+        /// The new password is the same as the current one or one of the two before it.
+        /// </summary>
+        [EnumMember]
+        PasswordUsedBefore
     }
 }

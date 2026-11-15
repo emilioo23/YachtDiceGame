@@ -16,6 +16,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string DeleteFailedMessage = "Could not delete the recovery code due to a database failure.";
         private const string CompleteFailedMessage = "Could not save the new password due to a database failure.";
         private const string NullTokenMessage = "The recovery code cannot be null.";
+        private const int PreviousPasswordsKept = 2;
 
         /// <summary>
         /// Looks for the recovery code saved for the player.
@@ -96,13 +97,63 @@ namespace YachtDice.Server.Data.Repositories
             context.PwdResetToken.Add(token);
         }
 
+        /// <summary>
+        /// Gets the hashes of the last passwords of the player: the current one and the ones before it that are
+        /// still remembered.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The hashes, from the newest to the oldest.</returns>
+        /// <exception cref="DataAccessException">The passwords could not be read.</exception>
+        public List<string> FindRecentPasswordHashes(int playerId)
+        {
+            List<string> hashes = DatabaseOperation.Query(
+                context => SelectRecentHashes(context, playerId),
+                FindFailedMessage);
+
+            return hashes;
+        }
+
+        private static List<string> SelectRecentHashes(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
+            Expression<Func<PasswordHistory, bool>> isOfPlayer = row => row.PlayerId == playerId;
+            var hashes = context.Player.Where(isSameId).Select(row => row.PwdHash).ToList();
+
+            hashes.AddRange(context.PasswordHistory
+                .Where(isOfPlayer)
+                .OrderByDescending(row => row.ChangeDate)
+                .Take(PreviousPasswordsKept)
+                .Select(row => row.PwdHash));
+
+            return hashes;
+        }
+
         private static void ApplyNewPassword(YachtDiceContext context, int playerId, string newPasswordHash)
         {
             Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
             Player player = context.Player.First(isSameId);
 
+            RememberPassword(context, playerId, player.PwdHash);
             player.PwdHash = newPasswordHash;
             RemoveTokens(context, playerId);
+        }
+
+        private static void RememberPassword(YachtDiceContext context, int playerId, string oldPasswordHash)
+        {
+            Expression<Func<PasswordHistory, bool>> isOfPlayer = row => row.PlayerId == playerId;
+            List<PasswordHistory> tooOld = context.PasswordHistory
+                .Where(isOfPlayer)
+                .OrderByDescending(row => row.ChangeDate)
+                .Skip(PreviousPasswordsKept - 1)
+                .ToList();
+
+            context.PasswordHistory.RemoveRange(tooOld);
+            context.PasswordHistory.Add(new PasswordHistory
+            {
+                PlayerId = playerId,
+                PwdHash = oldPasswordHash,
+                ChangeDate = DateTime.UtcNow
+            });
         }
     }
 }
