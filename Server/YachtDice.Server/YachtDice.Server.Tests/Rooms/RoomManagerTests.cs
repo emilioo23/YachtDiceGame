@@ -24,8 +24,10 @@ namespace YachtDice.Server.Tests.Rooms
         private const int ConfiguredWaitingMinutes = 5;
         private const int PlayerLevel = 7;
         private const int GuestLevel = 0;
+        private const int ThreeMinutes = 3;
         private const string HostName = "Emilio";
         private const string PlayerName = "Gabriel";
+        private const string ThirdPlayerName = "Ana";
         private const string UnknownRoomCode = "ZZZZZZ";
         private const string UnknownPlayerId = "not-a-player";
         private const int TwoPlayers = 2;
@@ -191,7 +193,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
 
             var expectedRoom = new
             {
@@ -210,7 +212,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
 
             RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
 
@@ -222,7 +224,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
             _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
 
@@ -236,7 +238,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
 
             var expectedReturnedPlayer = new { Status = RoomStatus.Success, HasReturned = true, player.PlayerId };
@@ -251,7 +253,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
 
             var expectedRoom = new
@@ -292,7 +294,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
 
             string code = _manager.FindPendingRoomCode(PlayerName);
@@ -305,7 +307,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
             _manager.ForgetAbsentPlayer(new RoomMember(host.Room.Code, player.PlayerId));
 
@@ -327,7 +329,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
             _manager.Join(host.Room.Code, PlayerName);
 
@@ -507,6 +509,64 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
 
             Assert.Equal(RoomStatus.NotEnoughPlayers, startResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_PlayerNotReady_ReturnsPlayersNotReady()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.PlayersNotReady, startResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_EveryoneReady_StartsTheGame()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult startResult = StartWhenEveryoneIsReady(host);
+
+            Assert.True(startResult.Room.IsStarted);
+        }
+
+        [Fact]
+        public void StartGame_PlayerNotReadyForMoreThanTwoMinutes_LeavesThePlayerOut()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult ready = _manager.Join(host.Room.Code, PlayerName);
+            RoomResult late = _manager.Join(host.Room.Code, ThirdPlayerName);
+            _manager.SetReady(new RoomMember(host.Room.Code, ready.PlayerId), true);
+            late.Room.Players.Last().JoinedAt = DateTime.UtcNow.AddMinutes(-ThreeMinutes);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(new[] { late.PlayerId }, startResult.LeftOutPlayerIds);
+        }
+
+        [Fact]
+        public void StartGame_OnlyGuestNeverReady_ReturnsNotEnoughPlayers()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult late = _manager.Join(host.Room.Code, PlayerName);
+            late.Room.Players.Last().JoinedAt = DateTime.UtcNow.AddMinutes(-ThreeMinutes);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.NotEnoughPlayers, startResult.Status);
+        }
+
+        [Fact]
+        public void SetReady_GameAlreadyStarted_ReturnsGameAlreadyStarted()
+        {
+            RoomResult host = CreateStartedRoom();
+
+            RoomResult readyResult = _manager.SetReady(new RoomMember(host.Room.Code, host.PlayerId), false);
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, readyResult.Status);
         }
 
         [Fact]
@@ -815,7 +875,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
 
             List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(SixteenMinutes));
 
@@ -872,7 +932,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
 
             var expectedKickedPlayer = new { Status = RoomStatus.Success, IsPlaying = false };
 
@@ -893,7 +953,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult host = _manager.CreateRoom(HostName);
             RoomResult player = _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
             _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
 
             RoomResult attempt = _manager.Join(host.Room.Code, PlayerName);
@@ -1088,9 +1148,22 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
 
             _manager.Join(host.Room.Code, PlayerName);
-            _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+            StartWhenEveryoneIsReady(host);
 
             return host;
+        }
+
+        private RoomResult StartWhenEveryoneIsReady(RoomResult host)
+        {
+            string code = host.Room.Code;
+            RoomResult state = _manager.SetReady(new RoomMember(code, host.PlayerId), true);
+
+            foreach (RoomPlayer player in state.Room.Players)
+            {
+                _manager.SetReady(new RoomMember(code, player.Id), true);
+            }
+
+            return _manager.StartGame(new RoomMember(code, host.PlayerId));
         }
     }
 }

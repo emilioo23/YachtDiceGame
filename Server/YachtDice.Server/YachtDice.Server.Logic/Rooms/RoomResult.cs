@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Server.Logic.Rooms
+﻿using System.Collections.Generic;
+
+namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
     /// Outcome of an operation on a room and the state of the room after it.
@@ -37,6 +39,11 @@
         /// operation did not put a player inside a room.
         /// </summary>
         public string PlayerId { get; }
+
+        /// <summary>
+        /// Gets the players who were left out of the game because they never confirmed that they were ready.
+        /// </summary>
+        public IReadOnlyList<string> LeftOutPlayerIds { get; private set; } = new List<string>();
 
         /// <summary>
         /// Creates the result of an operation that could not be done.
@@ -86,6 +93,17 @@
         /// <param name="room">State of the room after the player came back.</param>
         /// <param name="playerId">Identifier that the player had before leaving.</param>
         /// <returns>A successful result that carries the identifier of the player.</returns>
+        /// <summary>
+        /// Creates the result of a game that started, with the players who were left out.
+        /// </summary>
+        /// <param name="room">State of the room with the game started.</param>
+        /// <param name="leftOutPlayerIds">Players who were left out because they were not ready.</param>
+        /// <returns>The result.</returns>
+        public static RoomResult CreateStarted(RoomDetails room, IReadOnlyList<string> leftOutPlayerIds)
+        {
+            return new RoomResult(RoomStatus.Success, room, string.Empty) { LeftOutPlayerIds = leftOutPlayerIds };
+        }
+
         public static RoomResult CreateReturned(RoomDetails room, string playerId)
         {
             return new RoomResult(RoomStatus.Success, room, playerId) { HasReturned = true };

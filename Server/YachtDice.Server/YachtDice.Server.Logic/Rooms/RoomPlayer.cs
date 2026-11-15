@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Server.Logic.Rooms
+﻿using System;
+
+namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
     /// A player inside a room. The server decides the identifier when the player enters and uses it to
@@ -39,5 +41,15 @@
         /// Gets or sets the level that the player had when entering the room; zero for a guest.
         /// </summary>
         public int Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player confirmed that they are ready to start.
+        /// </summary>
+        public bool IsReady { get; set; }
+
+        /// <summary>
+        /// Gets or sets the moment in which the player entered the room.
+        /// </summary>
+        public DateTime JoinedAt { get; set; }
     }
 }

@@ -50,6 +50,10 @@ namespace YachtDice.Server.Contracts.Rooms
 
         /// <summary>The host expelled the player from this room, so the player cannot enter it again.</summary>
         [EnumMember]
-        PlayerExpelled
+        PlayerExpelled,
+
+        /// <summary>A player has not confirmed that they are ready and still has time to do it.</summary>
+        [EnumMember]
+        PlayersNotReady
     }
 }

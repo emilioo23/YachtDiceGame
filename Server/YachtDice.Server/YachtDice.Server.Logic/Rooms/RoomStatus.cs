@@ -36,6 +36,11 @@
         InvalidTarget,
 
         /// <summary>The host expelled the player from this room, so the player cannot enter it again.</summary>
-        PlayerExpelled
+        PlayerExpelled,
+
+        /// <summary>
+        /// A player has not confirmed that they are ready and can still do it.
+        /// </summary>
+        PlayersNotReady
     }
 }

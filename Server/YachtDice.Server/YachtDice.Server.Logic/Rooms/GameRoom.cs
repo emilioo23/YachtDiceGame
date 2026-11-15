@@ -83,7 +83,8 @@ namespace YachtDice.Server.Logic.Rooms
                 CreateUniqueName(applicant.Name.Trim()),
                 applicant.AvatarId)
             {
-                Level = applicant.Level
+                Level = applicant.Level,
+                JoinedAt = DateTime.UtcNow
             };
 
             _players.Add(player);
@@ -94,6 +95,19 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return player;
+        }
+
+        /// <summary>
+        /// Saves whether a player is ready to start the game.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="isReady">True if the player is ready.</param>
+        public void SetReady(string playerId, bool isReady)
+        {
+            if (TryGetPlayer(playerId, out RoomPlayer player))
+            {
+                player.IsReady = isReady;
+            }
         }
 
         /// <summary>
@@ -156,11 +170,6 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
-        /// Moves the player out of the room but keeps the place, so the player can return to a game in
-        /// progress. If the player was the host, the next player becomes the host.
-        /// </summary>
-        /// <param name="playerId">Identifier of the player who left.</param>
-        /// <summary>
         /// Takes a player out of the room and remembers their name, so they cannot enter this room again.
         /// </summary>
         /// <param name="playerId">Identifier of the player to expel.</param>
@@ -183,6 +192,11 @@ namespace YachtDice.Server.Logic.Rooms
             return _expelledNames.Contains(displayName.Trim());
         }
 
+        /// <summary>
+        /// Moves the player out of the room but keeps the place, so the player can return to a game in
+        /// progress. If the player was the host, the next player becomes the host.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who left.</param>
         public void MarkAbsent(string playerId)
         {
             if (TryGetPlayer(playerId, out RoomPlayer player))

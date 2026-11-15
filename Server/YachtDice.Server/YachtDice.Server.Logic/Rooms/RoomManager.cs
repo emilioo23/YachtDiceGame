@@ -27,6 +27,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const int MinCapacity = 2;
         private const int MaxCapacity = 4;
         private const int MinPlayersToStart = 2;
+        private const int ReadyWaitMinutes = 2;
         private const string BlankNameMessage = "The name of the player cannot be empty.";
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
 
@@ -167,6 +168,14 @@ namespace YachtDice.Server.Logic.Rooms
         {
             RoomResult result =
                 ExecuteInRoom(member.RoomCode, room => StartRoomGame(room, member.PlayerId));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult SetReady(RoomMember member, bool isReady)
+        {
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => ChangeReady(room, member.PlayerId, isReady));
 
             return result;
         }
@@ -389,19 +398,63 @@ namespace YachtDice.Server.Logic.Rooms
             return hasPlaceForPlayers && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
         }
 
-        private static RoomResult StartRoomGame(GameRoom room, string playerId)
+        private static RoomResult ChangeReady(GameRoom room, string playerId, bool isReady)
         {
-            RoomStatus status = GetStartStatus(room, playerId);
+            RoomStatus status = RoomStatus.Success;
 
-            if (status == RoomStatus.Success)
+            if (room.IsStarted)
             {
-                room.IsStarted = true;
+                status = RoomStatus.GameAlreadyStarted;
+            }
+            else if (!room.HasPlayer(playerId))
+            {
+                status = RoomStatus.PlayerNotFound;
+            }
+            else
+            {
+                room.SetReady(playerId, isReady);
             }
 
             return CreateResult(status, room);
         }
 
-        private static RoomStatus GetStartStatus(GameRoom room, string playerId)
+        private static RoomResult StartRoomGame(GameRoom room, string playerId)
+        {
+            DateTime waitedEnough = DateTime.UtcNow.AddMinutes(-ReadyWaitMinutes);
+            Func<RoomPlayer, bool> isNotReady = player => !player.IsReady && !room.IsHost(player.Id);
+            Func<RoomPlayer, bool> canStillConfirm = player => player.JoinedAt > waitedEnough;
+            List<RoomPlayer> notReady = room.Players.Where(isNotReady).ToList();
+            int waitedTooLong = notReady.Count(player => !canStillConfirm(player));
+            RoomStatus status = GetStartStatus(room, playerId, waitedTooLong);
+            RoomResult result = RoomResult.CreateFailed(status);
+
+            if (status == RoomStatus.Success && notReady.Any(canStillConfirm))
+            {
+                result = RoomResult.CreateFailed(RoomStatus.PlayersNotReady);
+            }
+            else if (status == RoomStatus.Success)
+            {
+                result = StartWithoutPlayers(room, notReady);
+            }
+
+            return result;
+        }
+
+        private static RoomResult StartWithoutPlayers(GameRoom room, List<RoomPlayer> leftOutPlayers)
+        {
+            List<string> leftOutIds = leftOutPlayers.Select(player => player.Id).ToList();
+
+            foreach (string leftOutId in leftOutIds)
+            {
+                room.RemovePlayer(leftOutId);
+            }
+
+            room.IsStarted = true;
+
+            return RoomResult.CreateStarted(room.ToDetails(), leftOutIds);
+        }
+
+        private static RoomStatus GetStartStatus(GameRoom room, string playerId, int leftOutCount)
         {
             RoomStatus status = RoomStatus.Success;
 
@@ -413,7 +466,7 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 status = RoomStatus.GameAlreadyStarted;
             }
-            else if (room.Players.Count < MinPlayersToStart)
+            else if (room.Players.Count - leftOutCount < MinPlayersToStart)
             {
                 status = RoomStatus.NotEnoughPlayers;
             }

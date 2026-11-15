@@ -84,6 +84,14 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult StartGame(RoomMember member);
 
         /// <summary>
+        /// Saves whether a player is ready to start. It can only change before the game starts.
+        /// </summary>
+        /// <param name="member">Room and identifier of the player.</param>
+        /// <param name="isReady">True if the player is ready.</param>
+        /// <returns>The new state of the room, or why the change was rejected.</returns>
+        RoomResult SetReady(RoomMember member, bool isReady);
+
+        /// <summary>
         /// Takes another player out of the room for good, also during the game. Only the host can do it. The
         /// expelled player cannot come back to a game in progress.
         /// </summary>
