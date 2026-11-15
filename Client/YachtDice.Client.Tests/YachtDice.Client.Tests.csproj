@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
     <Compile Include="Authentication\EmailMaskTests.cs" />
+    <Compile Include="Authentication\PasswordChangeInputValidatorTests.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidatorTests.cs" />
     <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Game\RankedStandingTests.cs" />
     <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
     <Compile Include="Utils\ProgressTextsTests.cs" />
+    <Compile Include="Utils\PasswordChangeMessagesTests.cs" />
     <Compile Include="Utils\UsernameChangeMessagesTests.cs" />
     <Compile Include="Utils\CategoryNamesTests.cs" />
     <Compile Include="Utils\FriendItemFactoryTests.cs" />

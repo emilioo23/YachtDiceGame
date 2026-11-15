@@ -44,6 +44,8 @@
     <Compile Include="Audio\AudioSettings.cs" />
     <Compile Include="Authentication\EmailMask.cs" />
     <Compile Include="Authentication\RegistrationLimits.cs" />
+    <Compile Include="Authentication\PasswordChangeInputStatus.cs" />
+    <Compile Include="Authentication\PasswordChangeInputValidator.cs" />
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
     <Compile Include="Avatars\AvatarOption.cs" />
