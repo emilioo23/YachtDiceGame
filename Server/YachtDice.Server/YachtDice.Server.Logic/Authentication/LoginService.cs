@@ -4,6 +4,7 @@ using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Logic.TwoFactor;
 
@@ -186,7 +187,7 @@ namespace YachtDice.Server.Logic.Authentication
                 _logger.Warning(LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
-            else if (_playerRepository.HasTwoFactorEnabled(player.Id))
+            else if (IsUnverified(player) || _playerRepository.HasTwoFactorEnabled(player.Id))
             {
                 result = SendCode(player, culture);
             }
@@ -196,6 +197,11 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             return result;
+        }
+
+        private static bool IsUnverified(Player player)
+        {
+            return player.State == PlayerState.Unverified.ToString();
         }
 
         private LoginResult Reject(LoginStatus status, string logMessage)

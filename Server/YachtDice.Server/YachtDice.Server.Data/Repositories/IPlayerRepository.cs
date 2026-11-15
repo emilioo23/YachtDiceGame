@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -116,5 +117,23 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player to delete.</param>
         /// <exception cref="DataAccessException">The player could not be deleted.</exception>
         void Delete(int playerId);
+
+        /// <summary>
+        /// Saves the state of the account of a player, for example when the player confirms the email.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="state">New state of the account.</param>
+        /// <exception cref="DataAccessException">The state could not be saved.</exception>
+        void SaveState(int playerId, string state);
+
+        /// <summary>
+        /// Deletes the accounts that never confirmed the email and were registered before a moment, with
+        /// everything that belongs to them.
+        /// </summary>
+        /// <param name="unverifiedState">State that the accounts without a confirmed email have.</param>
+        /// <param name="registeredBefore">Accounts registered before this moment are deleted.</param>
+        /// <returns>How many accounts were deleted.</returns>
+        /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
+        int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore);
     }
 }

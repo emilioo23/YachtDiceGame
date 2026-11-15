@@ -37,6 +37,9 @@ namespace YachtDice.Server.Data.Repositories
         private const string TitleUpdateFailedMessage = "Could not save the title due to a database failure.";
         private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
         private const string DeleteFailedMessage = "Could not delete the player due to a database failure.";
+        private const string StateUpdateFailedMessage =
+            "Could not save the state of the account due to a database failure.";
+        private const int NoAccounts = 0;
         private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
         private readonly AccountEraser _accountEraser = new AccountEraser();
@@ -259,6 +262,60 @@ namespace YachtDice.Server.Data.Repositories
         public void Delete(int playerId)
         {
             DatabaseOperation.Save(context => _accountEraser.Erase(context, playerId), DeleteFailedMessage);
+        }
+
+        /// <summary>
+        /// Saves the state of the account of a player, for example when the player confirms the email.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="state">New state of the account.</param>
+        /// <exception cref="DataAccessException">The state could not be saved.</exception>
+        public void SaveState(int playerId, string state)
+        {
+            DatabaseOperation.Save(context => ApplyState(context, playerId, state), StateUpdateFailedMessage);
+        }
+
+        /// <summary>
+        /// Deletes the accounts that never confirmed the email and were registered before a moment, with
+        /// everything that belongs to them, in a single transaction.
+        /// </summary>
+        /// <param name="unverifiedState">State that the accounts without a confirmed email have.</param>
+        /// <param name="registeredBefore">Accounts registered before this moment are deleted.</param>
+        /// <returns>How many accounts were deleted.</returns>
+        /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
+        public int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore)
+        {
+            var removedCount = NoAccounts;
+
+            DatabaseOperation.Save(
+                context => removedCount = EraseUnverified(context, unverifiedState, registeredBefore),
+                DeleteFailedMessage);
+
+            return removedCount;
+        }
+
+        private static void ApplyState(YachtDiceContext context, int playerId, string state)
+        {
+            Player player = context.Player.Find(playerId);
+
+            if (player != null)
+            {
+                player.State = state;
+            }
+        }
+
+        private int EraseUnverified(YachtDiceContext context, string unverifiedState, DateTime registeredBefore)
+        {
+            Expression<Func<Player, bool>> isExpiredUnverified =
+                player => player.State == unverifiedState && player.RegDate < registeredBefore;
+            List<int> playerIds = context.Player.Where(isExpiredUnverified).Select(player => player.Id).ToList();
+
+            foreach (int playerId in playerIds)
+            {
+                _accountEraser.Erase(context, playerId);
+            }
+
+            return playerIds.Count;
         }
 
         private static List<Player> SelectByEmail(YachtDiceContext context, string email)

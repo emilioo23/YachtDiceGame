@@ -14,6 +14,7 @@ namespace YachtDice.Server.Logic.Authentication
     public class RegistrationService : IRegistrationService
     {
         private const int DefaultAvatarId = 1;
+        private const int HoursToVerifyEmail = 48;
         private const int InitialExperience = 0;
         private const int InitialLevel = 1;
         private const int EmailMaxLength = 100;
@@ -66,6 +67,20 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Deletes the accounts that did not confirm the email in the 48 hours after they were registered, so
+        /// the email can be used again.
+        /// </summary>
+        /// <param name="now">Current moment.</param>
+        /// <returns>How many accounts were deleted.</returns>
+        /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
+        public int RemoveUnverifiedAccounts(DateTime now)
+        {
+            DateTime registeredBefore = now.AddHours(-HoursToVerifyEmail);
+
+            return _playerRepository.RemoveUnverifiedAccounts(PlayerState.Unverified.ToString(), registeredBefore);
         }
 
         private RegistrationResult FindRegistrationProblem(Player player, string plainPassword)
@@ -153,7 +168,7 @@ namespace YachtDice.Server.Logic.Authentication
             player.Username = player.Username.Trim();
             player.Email = player.Email.Trim();
             player.PwdHash = PasswordHasher.ComputeHash(plainPassword);
-            player.State = PlayerState.Active.ToString();
+            player.State = PlayerState.Unverified.ToString();
             player.RegDate = DateTime.UtcNow;
             player.XP = InitialExperience;
             player.Level = InitialLevel;

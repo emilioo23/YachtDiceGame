@@ -9,6 +9,11 @@
         Active,
 
         /// <summary>The player is not connected.</summary>
-        Disconnected
+        Disconnected,
+
+        /// <summary>
+        /// The player registered but has not confirmed the email with the code yet.
+        /// </summary>
+        Unverified
     }
 }

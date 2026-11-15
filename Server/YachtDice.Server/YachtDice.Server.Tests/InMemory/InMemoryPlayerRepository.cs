@@ -137,6 +137,27 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public void SaveState(int playerId, string state)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+
+            _players.First(isSameId).State = state;
+        }
+
+        public int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore)
+        {
+            Func<Player, bool> isExpiredUnverified =
+                player => player.State == unverifiedState && player.RegDate < registeredBefore;
+            List<Player> expired = _players.Where(isExpiredUnverified).ToList();
+
+            foreach (Player player in expired)
+            {
+                Delete(player.Id);
+            }
+
+            return expired.Count;
+        }
+
         public void Delete(int playerId)
         {
             _players.RemoveAll(player => player.Id == playerId);

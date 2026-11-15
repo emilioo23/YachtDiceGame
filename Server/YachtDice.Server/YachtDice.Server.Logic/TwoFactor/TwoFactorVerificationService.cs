@@ -5,6 +5,7 @@ using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -65,7 +66,24 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Result status of the verification process.</returns>
         public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            return _codeService.ValidateCode(email, verificationCode);
+            TwoFactorValidationStatus status = _codeService.ValidateCode(email, verificationCode);
+
+            if (status == TwoFactorValidationStatus.Valid)
+            {
+                ActivateIfUnverified(email);
+            }
+
+            return status;
+        }
+
+        private void ActivateIfUnverified(string email)
+        {
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+
+            if (player != null && player.State == PlayerState.Unverified.ToString())
+            {
+                _playerRepository.SaveState(player.Id, PlayerState.Active.ToString());
+            }
         }
 
         /// <summary>

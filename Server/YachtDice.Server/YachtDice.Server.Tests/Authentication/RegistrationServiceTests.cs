@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Moderation;
@@ -31,6 +33,9 @@ namespace YachtDice.Server.Tests.Authentication
         private const int UsernameMaxLength = 20;
         private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
+        private const int FiftyHours = 50;
+        private const int TenHours = 10;
+        private const int OneAccount = 1;
 
         private static readonly string UsernameAtTheLimit = new string(FillCharacter, UsernameMaxLength);
         private static readonly string TooLongUsername = new string(FillCharacter, UsernameMaxLength + 1);
@@ -57,6 +62,45 @@ namespace YachtDice.Server.Tests.Authentication
             RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
             Assert.Equal(RegistrationResult.Success, registrationResult);
+        }
+
+        [Fact]
+        public void RegisterPlayer_ValidData_SavesTheAccountAsUnverified()
+        {
+            _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+
+            Assert.Equal(PlayerState.Unverified.ToString(), _players.Players.Single().State);
+        }
+
+        [Fact]
+        public void RemoveUnverifiedAccounts_UnverifiedForFiftyHours_DeletesTheAccount()
+        {
+            _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+
+            int removedCount = _service.RemoveUnverifiedAccounts(DateTime.UtcNow.AddHours(FiftyHours));
+
+            Assert.Equal(OneAccount, removedCount);
+        }
+
+        [Fact]
+        public void RemoveUnverifiedAccounts_UnverifiedForTenHours_KeepsTheAccount()
+        {
+            _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+
+            _service.RemoveUnverifiedAccounts(DateTime.UtcNow.AddHours(TenHours));
+
+            Assert.Single(_players.Players);
+        }
+
+        [Fact]
+        public void RemoveUnverifiedAccounts_VerifiedOldAccount_KeepsTheAccount()
+        {
+            _service.RegisterPlayer(CreatePlayer(Username, Email), Password);
+            _players.Players.Single().State = PlayerState.Active.ToString();
+
+            _service.RemoveUnverifiedAccounts(DateTime.UtcNow.AddHours(FiftyHours));
+
+            Assert.Single(_players.Players);
         }
 
         [Fact]
