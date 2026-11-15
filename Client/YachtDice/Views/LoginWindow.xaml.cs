@@ -67,6 +67,7 @@ namespace YachtDice.Views
             LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
             RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
+            EmailTextBox.Focus();
         }
 
         private void RegisterTabButton_Click(object sender, RoutedEventArgs e)
@@ -76,6 +77,7 @@ namespace YachtDice.Views
             RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
             LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
+            FirstNameTextBox.Focus();
         }
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)

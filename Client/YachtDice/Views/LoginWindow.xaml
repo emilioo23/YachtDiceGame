@@ -9,7 +9,8 @@
         Title="{x:Static properties:Strings.Auth_Logo}" Height="800" Width="700"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
-        FontFamily="{StaticResource FontBody}">
+        FontFamily="{StaticResource FontBody}"
+        FocusManager.FocusedElement="{Binding ElementName=EmailTextBox}">
 
     <Viewbox Stretch="Uniform" Margin="0,20,0,20">
         <Grid Width="650">
