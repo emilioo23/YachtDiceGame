@@ -25,7 +25,7 @@ namespace YachtDice.Utils
         /// <param name="effect">Sound effect to play.</param>
         public void Play(SoundEffect effect)
         {
-            if (App.AreSoundsEnabled)
+            if (App.Audio.AreEffectsEnabled)
             {
                 try
                 {

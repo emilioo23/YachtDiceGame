@@ -5,6 +5,7 @@
     /// </summary>
     public enum SoundEffect
     {
+        Click,
         DiceRoll,
         Score,
         Yacht,
