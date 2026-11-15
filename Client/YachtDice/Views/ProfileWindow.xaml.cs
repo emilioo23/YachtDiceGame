@@ -32,6 +32,17 @@ namespace YachtDice.Views
         private const int FlagIconHeight = 18;
         private const int FlagIconGap = 8;
         private const int NotFoundIndex = -1;
+        private const int NoQueryLength = 0;
+        private const double BadgeFontSize = 14;
+        private const double BadgeCornerRadius = 16;
+        private const double BadgeHorizontalPadding = 12;
+        private const double BadgeVerticalPadding = 7;
+        private const double BadgeGap = 8;
+        private const double UnlockedOpacity = 1;
+        private const string UnlockedTextBrushKey = "BrushFeltDark";
+        private const string LockedTextBrushKey = "BrushTextMuted";
+        private const string UnlockedBackgroundBrushKey = "BrushGoldButton";
+        private const string LockedBackgroundBrushKey = "BrushBorder";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -140,23 +151,29 @@ namespace YachtDice.Views
 
         private Border CreateAchievementBadge(AchievementInfo achievement)
         {
+            string textBrushKey = achievement.IsUnlocked ? UnlockedTextBrushKey : LockedTextBrushKey;
+            string backgroundBrushKey = achievement.IsUnlocked ? UnlockedBackgroundBrushKey : LockedBackgroundBrushKey;
             var name = new TextBlock
             {
                 Text = ProgressTexts.GetAchievementName(achievement.Id),
-                FontSize = 14,
+                FontSize = BadgeFontSize,
                 FontWeight = FontWeights.Bold,
-                Foreground = (Brush)FindResource(achievement.IsUnlocked ? "BrushFeltDark" : "BrushTextMuted")
+                Foreground = (Brush)FindResource(textBrushKey)
             };
 
             return new Border
             {
                 Child = name,
-                CornerRadius = new CornerRadius(16),
-                Padding = new Thickness(12, 7, 12, 7),
-                Margin = new Thickness(0, 0, 8, 8),
-                Opacity = achievement.IsUnlocked ? 1 : LockedOpacity,
+                CornerRadius = new CornerRadius(BadgeCornerRadius),
+                Padding = new Thickness(
+                    BadgeHorizontalPadding,
+                    BadgeVerticalPadding,
+                    BadgeHorizontalPadding,
+                    BadgeVerticalPadding),
+                Margin = new Thickness(0, 0, BadgeGap, BadgeGap),
+                Opacity = achievement.IsUnlocked ? UnlockedOpacity : LockedOpacity,
                 ToolTip = ProgressTexts.GetAchievementDescription(achievement.Id),
-                Background = (Brush)FindResource(achievement.IsUnlocked ? "BrushGoldButton" : "BrushBorder")
+                Background = (Brush)FindResource(backgroundBrushKey)
             };
         }
 
@@ -206,7 +223,7 @@ namespace YachtDice.Views
         {
             string query = FlagSearchTextBox.Text.Trim();
 
-            FlagSearchHintTextBlock.Visibility = FlagSearchTextBox.Text.Length == 0
+            FlagSearchHintTextBlock.Visibility = FlagSearchTextBox.Text.Length == NoQueryLength
                 ? Visibility.Visible
                 : Visibility.Collapsed;
 
@@ -215,22 +232,23 @@ namespace YachtDice.Views
                 item.Visibility = IsFlagItemShown(item, query) ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            FlagComboBox.IsDropDownOpen = query.Length > 0;
+            FlagComboBox.IsDropDownOpen = query.Length > NoQueryLength;
         }
 
         private static bool IsFlagItemShown(ComboBoxItem item, string query)
         {
             var code = (string)item.Tag;
+            bool isShown = code == NoFlagCode || query.Length == NoQueryLength;
 
-            if (code == NoFlagCode || query.Length == 0)
+            if (!isShown)
             {
-                return true;
+                CompareOptions ignoreCaseAndAccents = CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace;
+
+                isShown = CultureInfo.CurrentCulture.CompareInfo
+                    .IndexOf(ProgressTexts.GetFlagName(code), query, ignoreCaseAndAccents) != NotFoundIndex;
             }
 
-            CompareOptions ignoreCaseAndAccents = CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace;
-
-            return CultureInfo.CurrentCulture.CompareInfo
-                .IndexOf(ProgressTexts.GetFlagName(code), query, ignoreCaseAndAccents) != NotFoundIndex;
+            return isShown;
         }
 
         private void FlagComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
