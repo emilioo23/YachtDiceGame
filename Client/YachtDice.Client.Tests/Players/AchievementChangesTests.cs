@@ -18,11 +18,11 @@ namespace YachtDice.Client.Tests.Players
         {
             var knownIds = new List<int> { FirstGameId };
             var currentIds = new List<int> { FirstGameId, FirstWinId };
-            var expectedIds = new List<int> { FirstWinId };
+            var idsExpected = new List<int> { FirstWinId };
 
             List<int> newIds = AchievementChanges.FindNewlyUnlocked(knownIds, currentIds);
 
-            Assert.Equal(expectedIds, newIds);
+            Assert.Equal(idsExpected, newIds);
         }
 
         [Fact]

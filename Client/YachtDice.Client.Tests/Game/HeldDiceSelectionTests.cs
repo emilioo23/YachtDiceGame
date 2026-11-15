@@ -21,12 +21,12 @@ namespace YachtDice.Client.Tests.Game
         public void Toggle_FreeDieWhenHoldingIsAllowed_HoldsTheDie()
         {
             var selection = new HeldDiceSelection();
-            var expectedSelection = new { IsChanged = true, IsHeld = true };
+            var selectionExpected = new { IsChanged = true, IsHeld = true };
 
             bool isChanged = selection.Toggle(ThirdDie, true);
 
-            var actualSelection = new { IsChanged = isChanged, IsHeld = selection.IsHeld(ThirdDie) };
-            Assert.Equal(expectedSelection, actualSelection);
+            var selectionResult = new { IsChanged = isChanged, IsHeld = selection.IsHeld(ThirdDie) };
+            Assert.Equal(selectionExpected, selectionResult);
         }
 
         [Fact]
@@ -44,12 +44,12 @@ namespace YachtDice.Client.Tests.Game
         public void Toggle_HoldingNotAllowed_KeepsTheSelection()
         {
             var selection = new HeldDiceSelection();
-            var expectedSelection = new { IsChanged = false, IsHeld = false };
+            var selectionExpected = new { IsChanged = false, IsHeld = false };
 
             bool isChanged = selection.Toggle(FirstDie, false);
 
-            var actualSelection = new { IsChanged = isChanged, IsHeld = selection.IsHeld(FirstDie) };
-            Assert.Equal(expectedSelection, actualSelection);
+            var selectionResult = new { IsChanged = isChanged, IsHeld = selection.IsHeld(FirstDie) };
+            Assert.Equal(selectionExpected, selectionResult);
         }
 
         [Fact]
