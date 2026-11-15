@@ -705,9 +705,6 @@
   <data name="Auth_GuestDisplayName" xml:space="preserve">
     <value>游客</value>
   </data>
-  <data name="Leaderboard_ConnectionError" xml:space="preserve">
-    <value>无法连接到服务器获取排行榜。</value>
-  </data>
   <data name="MainMenu_Friends_UsernamePlaceholder" xml:space="preserve">
     <value>用户名</value>
   </data>

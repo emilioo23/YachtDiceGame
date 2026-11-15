@@ -42,6 +42,8 @@ namespace YachtDice.Views
 
         private readonly PlayerSession _session;
         private readonly FriendGateway _friendGateway = new FriendGateway();
+        private readonly PlayerGateway _playerGateway = new PlayerGateway();
+        private readonly AppLogger _logger = new AppLogger(typeof(LeaderboardWindow));
         private List<LeaderboardEntry> _ranking = new List<LeaderboardEntry>();
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace YachtDice.Views
             _session = session;
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(session);
 
-            _ = LoadRankingAsync();
+            _ = GatewayCallRunner.RunAsync(this, _logger, LoadRankingAsync);
         }
 
         private void GlobalFilterButton_Click(object sender, RoutedEventArgs e)
@@ -69,7 +71,7 @@ namespace YachtDice.Views
             FriendsFilterButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
             GlobalFilterButton.Style = (Style)FindResource(ThemeResourceKeys.OutlineButtonStyleKey);
 
-            await ShowFriendsRankingAsync();
+            await GatewayCallRunner.RunAsync(this, _logger, ShowFriendsRankingAsync);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -118,50 +120,35 @@ namespace YachtDice.Views
             return cell;
         }
 
+        private static LeaderboardEntry CreateEntry(ServerLeaderboardEntry serverEntry)
+        {
+            return new LeaderboardEntry
+            {
+                Name = serverEntry.DisplayName,
+                AvatarId = serverEntry.AvatarId,
+                Points = serverEntry.TotalPoints,
+                Wins = serverEntry.Wins
+            };
+        }
+
         private async Task LoadRankingAsync()
         {
-            try
-            {
-                var gateway = new PlayerGateway();
-                List<ServerLeaderboardEntry> leaderboardData = await gateway.GetLeaderboardAsync();
-                var ranking = new List<LeaderboardEntry>();
+            List<ServerLeaderboardEntry> leaderboardData = await _playerGateway.GetLeaderboardAsync();
 
-                foreach (ServerLeaderboardEntry serverEntry in leaderboardData)
-                {
-                    ranking.Add(new LeaderboardEntry
-                    {
-                        Name = serverEntry.DisplayName,
-                        AvatarId = serverEntry.AvatarId,
-                        Points = serverEntry.TotalPoints,
-                        Wins = serverEntry.Wins
-                    });
-                }
-
-                _ranking = ranking;
-                RenderRanking(_ranking);
-            }
-            catch (GatewayException)
-            {
-                CustomDialogWindow.ShowMessage(this, Strings.Leaderboard_ConnectionError);
-            }
+            _ranking = leaderboardData.Select(CreateEntry).ToList();
+            RenderRanking(_ranking);
         }
 
         private async Task ShowFriendsRankingAsync()
         {
-            try
+            List<string> friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
+            var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase)
             {
-                List<string> friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
-                var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase)
-                {
-                    _session.DisplayName
-                };
+                _session.DisplayName
+            };
+            Func<LeaderboardEntry, bool> isAllowed = entry => allowedNames.Contains(entry.Name);
 
-                RenderRanking(_ranking.Where(entry => allowedNames.Contains(entry.Name)).ToList());
-            }
-            catch (GatewayException)
-            {
-                CustomDialogWindow.ShowMessage(this, Strings.Leaderboard_ConnectionError);
-            }
+            RenderRanking(_ranking.Where(isAllowed).ToList());
         }
 
         private void RenderRanking(List<LeaderboardEntry> ranking)

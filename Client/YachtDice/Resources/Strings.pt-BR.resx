@@ -705,9 +705,6 @@
   <data name="Auth_GuestDisplayName" xml:space="preserve">
     <value>Convidado</value>
   </data>
-  <data name="Leaderboard_ConnectionError" xml:space="preserve">
-    <value>Não foi possível conectar ao servidor para obter o ranking.</value>
-  </data>
   <data name="MainMenu_Friends_UsernamePlaceholder" xml:space="preserve">
     <value>Nome de usuário</value>
   </data>
