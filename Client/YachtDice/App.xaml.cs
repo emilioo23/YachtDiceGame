@@ -17,7 +17,13 @@ namespace YachtDice
     {
         private const string LightThemeSource = "Styles/Theme.xaml";
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
+        private const double PressedScale = 0.94;
+        private const int PressMilliseconds = 80;
+
+        private static readonly TimeSpan PressDuration = TimeSpan.FromMilliseconds(PressMilliseconds);
+
         private readonly SoundEffectPlayer _clickSounds = new SoundEffectPlayer();
+        private readonly ElementAnimator _animator = new ElementAnimator();
         private readonly PreferencesStore _preferencesStore = new PreferencesStore();
 
         /// <summary>
@@ -123,6 +129,7 @@ namespace YachtDice
         private void HandleButtonClick(object sender, RoutedEventArgs e)
         {
             _clickSounds.Play(SoundEffect.Click);
+            _animator.Pulse((UIElement)sender, PressedScale, PressDuration);
         }
     }
 }
