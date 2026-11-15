@@ -110,6 +110,7 @@ namespace YachtDice.Server.Data.Repositories
                 .Select(readGameId)
                 .Take(maxGames)
                 .ToList();
+            string computerType = RoomRecordType.Computer.ToString();
             Expression<Func<GameHistoryPlayer, bool>> isInRecentGames =
                 historyPlayer => gameIds.Contains(historyPlayer.GameId);
             Expression<Func<GameHistoryPlayer, PlayedGameRecord>> createRecord = historyPlayer => new PlayedGameRecord
@@ -119,7 +120,8 @@ namespace YachtDice.Server.Data.Repositories
                 PlayerId = historyPlayer.PlayerId,
                 PlayerName = historyPlayer.Player.DisplayName,
                 FinalScore = historyPlayer.FinalScore,
-                IsWinner = historyPlayer.IsWinner == true
+                IsWinner = historyPlayer.IsWinner == true,
+                IsAgainstComputer = historyPlayer.GameHistory.Room.RoomType == computerType
             };
 
             return context.GameHistoryPlayer.Where(isInRecentGames).Select(createRecord).ToList();

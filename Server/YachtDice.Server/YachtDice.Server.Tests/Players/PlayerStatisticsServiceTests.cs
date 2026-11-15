@@ -200,7 +200,8 @@ namespace YachtDice.Server.Tests.Players
                 PlayerId = playerId,
                 PlayerName = playerName,
                 FinalScore = score,
-                IsWinner = isWinner
+                IsWinner = isWinner,
+                IsAgainstComputer = false
             };
 
             return record;

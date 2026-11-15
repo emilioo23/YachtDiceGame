@@ -127,7 +127,8 @@ namespace YachtDice.Server.Logic.Players
                 IsWin = own.IsWinner,
                 OwnScore = own.FinalScore,
                 BestOpponentScore = opponents.Count > EmptyCount ? opponents.Max(readScore) : EmptyCount,
-                Opponents = string.Join(OpponentSeparator, opponents.Select(readName))
+                Opponents = string.Join(OpponentSeparator, opponents.Select(readName)),
+                IsAgainstComputer = own.IsAgainstComputer
             };
 
             return summary;

@@ -38,5 +38,11 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public string Opponents { get; set; }
+
+        /// <summary>
+        /// True if the game was played against the computer.
+        /// </summary>
+        [DataMember]
+        public bool IsAgainstComputer { get; set; }
     }
 }

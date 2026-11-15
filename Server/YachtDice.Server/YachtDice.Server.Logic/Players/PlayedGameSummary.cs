@@ -31,5 +31,10 @@ namespace YachtDice.Server.Logic.Players
         /// Gets or sets the names of the other players, separated by commas.
         /// </summary>
         public string Opponents { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the game was played against the computer.
+        /// </summary>
+        public bool IsAgainstComputer { get; set; }
     }
 }

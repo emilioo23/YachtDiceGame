@@ -54,7 +54,8 @@ namespace YachtDice.Server.Services.Mapping
                 IsWin = game.IsWin,
                 OwnScore = game.OwnScore,
                 BestOpponentScore = game.BestOpponentScore,
-                Opponents = game.Opponents
+                Opponents = game.Opponents,
+                IsAgainstComputer = game.IsAgainstComputer
             };
 
             return contract;

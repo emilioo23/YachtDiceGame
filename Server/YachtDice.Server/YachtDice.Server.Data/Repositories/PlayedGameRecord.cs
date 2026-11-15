@@ -36,5 +36,10 @@ namespace YachtDice.Server.Data.Repositories
         /// Gets or sets a value indicating whether the player won the game.
         /// </summary>
         public bool IsWinner { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the game was played against the computer.
+        /// </summary>
+        public bool IsAgainstComputer { get; set; }
     }
 }
