@@ -2,6 +2,9 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using YachtDice.Client.Logic.Audio;
+using YachtDice.Utils;
 using YachtDice.Views;
 
 namespace YachtDice
@@ -15,15 +18,22 @@ namespace YachtDice
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
         private const string DefaultCultureCode = "es-MX";
 
+        private readonly SoundEffectPlayer _clickSounds = new SoundEffectPlayer();
+
         /// <summary>
         /// Gets a value indicating whether the dark theme is currently active in the application.
         /// </summary>
         public static bool IsDarkTheme { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the sound effects of the game are turned on.
+        /// Gets what the player chose about the sound effects and the music.
         /// </summary>
-        public static bool AreSoundsEnabled { get; private set; } = true;
+        public static AudioSettings Audio { get; } = new AudioSettings();
+
+        /// <summary>
+        /// Gets the player of the background music, which keeps playing while the windows change.
+        /// </summary>
+        public static MusicPlayer Music { get; private set; }
 
         /// <summary>
         /// Gets the current active culture code, used for internationalization.
@@ -40,6 +50,12 @@ namespace YachtDice
 
             SetCulture(DefaultCultureCode);
             SetTheme(isDark: false);
+
+            Music = new MusicPlayer(Audio);
+            EventManager.RegisterClassHandler(
+                typeof(ButtonBase),
+                ButtonBase.ClickEvent,
+                new RoutedEventHandler(HandleButtonClick));
 
             var splashWindow = new SplashWindow();
             splashWindow.Show();
@@ -60,15 +76,6 @@ namespace YachtDice
         }
 
         /// <summary>
-        /// Turns the sound effects of the game on or off.
-        /// </summary>
-        /// <param name="areEnabled">True to play the sound effects; false to keep the game silent.</param>
-        public static void SetSoundsEnabled(bool areEnabled)
-        {
-            AreSoundsEnabled = areEnabled;
-        }
-
-        /// <summary>
         /// Changes the active visual theme of the application (light or dark).
         /// </summary>
         /// <param name="isDark">True to apply the dark theme; false for the light theme.</param>
@@ -80,6 +87,11 @@ namespace YachtDice
             var themeDictionary = new ResourceDictionary { Source = new Uri(themeSource, UriKind.Relative) };
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(themeDictionary);
+        }
+
+        private void HandleButtonClick(object sender, RoutedEventArgs e)
+        {
+            _clickSounds.Play(SoundEffect.Click);
         }
     }
 }

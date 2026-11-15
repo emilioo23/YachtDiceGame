@@ -270,6 +270,8 @@
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
+    <Compile Include="Utils\MusicPlayer.cs" />
+    <Compile Include="Utils\MusicTrack.cs" />
     <Compile Include="Utils\SoundEffect.cs" />
     <Compile Include="Utils\SoundEffectPlayer.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
@@ -708,11 +710,18 @@
   <ItemGroup>
     <Resource Include="Resources\Flags\*.png" />
     <Resource Include="Resources\Images\SplashBackground.png" />
+    <Resource Include="Resources\Sounds\Click.wav" />
     <Resource Include="Resources\Sounds\DiceRoll.wav" />
     <Resource Include="Resources\Sounds\GameOver.wav" />
     <Resource Include="Resources\Sounds\Score.wav" />
     <Resource Include="Resources\Sounds\Yacht.wav" />
     <Resource Include="Resources\Sounds\YourTurn.wav" />
+    <Content Include="Resources\Music\GameTheme.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\MenuTheme.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Client.Logic\YachtDice.Client.Logic.csproj">

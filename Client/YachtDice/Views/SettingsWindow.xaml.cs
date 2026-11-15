@@ -53,7 +53,7 @@ namespace YachtDice.Views
             AccountUsernameTextBlock.Text = session.DisplayName;
             LanguageComboBox.SelectedIndex = LanguageCatalog.IndexOf(App.CurrentCultureCode);
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
-            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.AreSoundsEnabled);
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
 
             ShowSection(initialSection);
             _isInitializing = false;
@@ -282,8 +282,8 @@ namespace YachtDice.Views
 
         private void SoundsToggle_Click(object sender, MouseButtonEventArgs e)
         {
-            App.SetSoundsEnabled(!App.AreSoundsEnabled);
-            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.AreSoundsEnabled);
+            App.Audio.SetEffectsEnabled(!App.Audio.AreEffectsEnabled);
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
         }
 
         private void EditProfileButton_Click(object sender, RoutedEventArgs e)
