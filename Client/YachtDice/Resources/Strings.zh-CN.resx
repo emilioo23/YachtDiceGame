@@ -1065,12 +1065,6 @@
   <data name="HowToPlay_TipsText" xml:space="preserve">
     <value>保留出现次数最多的骰子。如果某个类别已经没有希望，就在最不划算的类别记0分来放弃它。</value>
   </data>
-  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
-    <value>该邮箱尚未注册。</value>
-  </data>
-  <data name="Dialogs_InvalidPassword" xml:space="preserve">
-    <value>密码不正确。</value>
-  </data>
   <data name="Dialogs_ConfirmLogout" xml:space="preserve">
     <value>确定要退出登录吗？</value>
   </data>

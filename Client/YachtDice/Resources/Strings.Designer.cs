@@ -385,15 +385,6 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Este correo no está registrado..
-        /// </summary>
-        public static string Dialogs_EmailNotRegistered {
-            get {
-                return ResourceManager.GetString("Dialogs_EmailNotRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Este correo ya está registrado..
         /// </summary>
         public static string Dialogs_EmailRegistered {
@@ -426,15 +417,6 @@ namespace YachtDice.Resources {
         public static string Dialogs_InvalidData {
             get {
                 return ResourceManager.GetString("Dialogs_InvalidData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a La contraseña es incorrecta..
-        /// </summary>
-        public static string Dialogs_InvalidPassword {
-            get {
-                return ResourceManager.GetString("Dialogs_InvalidPassword", resourceCulture);
             }
         }
         

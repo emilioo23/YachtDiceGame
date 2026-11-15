@@ -29,12 +29,6 @@ namespace YachtDice.Utils
                 case LoginResultCode.InvalidEmail:
                     message = Strings.Auth_ErrorInvalidEmail;
                     break;
-                case LoginResultCode.EmailNotRegistered:
-                    message = Strings.Dialogs_EmailNotRegistered;
-                    break;
-                case LoginResultCode.InvalidPassword:
-                    message = Strings.Dialogs_InvalidPassword;
-                    break;
                 case LoginResultCode.VerificationLocked:
                     message = Strings.Dialogs_TooManyAttempts;
                     break;

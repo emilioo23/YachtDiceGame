@@ -1065,12 +1065,6 @@
   <data name="HowToPlay_TipsText" xml:space="preserve">
     <value>Mantenha os dados que mais se repetem. Se uma categoria já não parece possível, sacrifique-a marcando 0 na que menos convier.</value>
   </data>
-  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
-    <value>Este e-mail não está cadastrado.</value>
-  </data>
-  <data name="Dialogs_InvalidPassword" xml:space="preserve">
-    <value>A senha está incorreta.</value>
-  </data>
   <data name="Dialogs_ConfirmLogout" xml:space="preserve">
     <value>Tem certeza de que quer sair?</value>
   </data>

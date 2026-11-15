@@ -55,22 +55,6 @@ namespace YachtDice.Client.Tests.Utils
         }
 
         [Fact]
-        public void GetMessage_EmailNotRegistered_ReturnsTheMessageOfThatResult()
-        {
-            string message = LoginResultMessages.GetMessage(LoginResultCode.EmailNotRegistered);
-
-            Assert.Equal(Strings.Dialogs_EmailNotRegistered, message);
-        }
-
-        [Fact]
-        public void GetMessage_InvalidPassword_ReturnsTheMessageOfThatResult()
-        {
-            string message = LoginResultMessages.GetMessage(LoginResultCode.InvalidPassword);
-
-            Assert.Equal(Strings.Dialogs_InvalidPassword, message);
-        }
-
-        [Fact]
         public void GetMessage_CodeSendFailed_ReturnsTheMessageOfThatResult()
         {
             string message = LoginResultMessages.GetMessage(LoginResultCode.CodeSendFailed);

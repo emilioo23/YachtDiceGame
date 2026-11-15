@@ -1083,12 +1083,6 @@
   <data name="HowToPlay_TipsText" xml:space="preserve">
     <value>Keep the dice that repeat the most. If a category is no longer reachable, give it up by scoring 0 in the one that hurts you least.</value>
   </data>
-  <data name="Dialogs_EmailNotRegistered" xml:space="preserve">
-    <value>This email is not registered.</value>
-  </data>
-  <data name="Dialogs_InvalidPassword" xml:space="preserve">
-    <value>The password is incorrect.</value>
-  </data>
   <data name="Dialogs_ConfirmLogout" xml:space="preserve">
     <value>Are you sure you want to log out?</value>
   </data>
