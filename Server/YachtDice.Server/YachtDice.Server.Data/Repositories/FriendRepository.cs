@@ -101,6 +101,16 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
+        /// Deletes the friend requests that are still waiting for an answer and were sent before a moment.
+        /// </summary>
+        /// <param name="sentBefore">Requests sent before this moment are deleted.</param>
+        /// <exception cref="DataAccessException">The requests could not be deleted.</exception>
+        public void RemoveExpiredRequests(DateTime sentBefore)
+        {
+            Save(context => DeleteExpiredRequests(context, sentBefore));
+        }
+
+        /// <summary>
         /// Changes the status of a friendship.
         /// </summary>
         /// <param name="friendship">Friendship that already exists, with its new status.</param>
@@ -229,6 +239,15 @@ namespace YachtDice.Server.Data.Repositories
                 friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Pending;
 
             return context.Friendship.Count(isPendingFromPlayer);
+        }
+
+        private static void DeleteExpiredRequests(YachtDiceContext context, DateTime sentBefore)
+        {
+            Expression<Func<Friendship, bool>> isExpiredRequest = friendship =>
+                friendship.Status == FriendshipStatus.Pending && friendship.CreateDate < sentBefore;
+            List<Friendship> expired = context.Friendship.Where(isExpiredRequest).ToList();
+
+            context.Friendship.RemoveRange(expired);
         }
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)

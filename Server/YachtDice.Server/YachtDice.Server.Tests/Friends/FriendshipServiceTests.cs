@@ -23,6 +23,8 @@ namespace YachtDice.Server.Tests.Friends
         private const string UnknownRequesterName = "LuisHernandez";
         private const int FirstOtherPlayerId = 100;
         private const int ConfiguredMaxFriends = 2;
+        private const int EightDays = 8;
+        private const int FiveRequests = 5;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
@@ -36,6 +38,44 @@ namespace YachtDice.Server.Tests.Friends
             _players.Add(new Player { Id = RequesterId, Username = RequesterName, DisplayName = RequesterName });
             _players.Add(new Player { Id = TargetId, Username = TargetUsername, DisplayName = TargetDisplayName });
             _service = new FriendshipService(_players, _friends);
+        }
+
+        [Fact]
+        public void SendRequest_FiveRequestsOlderThanSevenDays_ReturnsRequestSent()
+        {
+            AddOldPendingRequests(RequesterId, FiveRequests);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.RequestSent, requestResult.Status);
+        }
+
+        [Fact]
+        public void SendRequest_OldRequestToTheSamePlayer_ReturnsRequestSent()
+        {
+            _friends.Add(new Friendship
+            {
+                RequesterId = RequesterId,
+                AddresseeId = TargetId,
+                Status = FriendshipStatus.Pending,
+                CreateDate = DateTime.UtcNow.AddDays(-EightDays)
+            });
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.RequestSent, requestResult.Status);
+        }
+
+        [Fact]
+        public void RespondToRequest_RequestOlderThanSevenDays_ReturnsRelationNotFound()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+            _friends.FindBetween(RequesterId, TargetId).Single().CreateDate = DateTime.UtcNow.AddDays(-EightDays);
+            var answer = new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true };
+
+            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, answer);
+
+            Assert.Equal(FriendActionStatus.RelationNotFound, status);
         }
 
         [Fact]
@@ -145,7 +185,7 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void SendRequest_ExistingUsername_SavesAPendingRequestForTheTarget()
         {
-            var expectedSavedRequest = new Friendship
+            var expectedSavedRequest = new
             {
                 RequesterId = RequesterId,
                 AddresseeId = TargetId,
@@ -225,7 +265,7 @@ namespace YachtDice.Server.Tests.Friends
         [Fact]
         public void RespondToRequest_AcceptedRequest_ReturnsSuccessAndSavesTheFriendshipAsAccepted()
         {
-            var expectedFriendship = new Friendship
+            var expectedFriendship = new
             {
                 RequesterId = RequesterId,
                 AddresseeId = TargetId,
@@ -291,6 +331,20 @@ namespace YachtDice.Server.Tests.Friends
                     RequesterId = playerId,
                     AddresseeId = FirstOtherPlayerId + friendIndex,
                     Status = status
+                });
+            }
+        }
+
+        private void AddOldPendingRequests(int requesterId, int count)
+        {
+            for (int number = 0; number < count; number++)
+            {
+                _friends.Add(new Friendship
+                {
+                    RequesterId = requesterId,
+                    AddresseeId = FirstOtherPlayerId + number,
+                    Status = FriendshipStatus.Pending,
+                    CreateDate = DateTime.UtcNow.AddDays(-EightDays)
                 });
             }
         }

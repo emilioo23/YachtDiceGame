@@ -21,6 +21,7 @@ namespace YachtDice.Server.Logic.Friends
         /// </summary>
         public const int DefaultMaxPendingRequests = 5;
 
+        private const int RequestLifetimeDays = 7;
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
@@ -61,6 +62,8 @@ namespace YachtDice.Server.Logic.Friends
         {
             var result = new FriendRequestResult(FriendRequestStatus.InvalidUsername, string.Empty);
 
+            ForgetExpiredRequests();
+
             if (!string.IsNullOrWhiteSpace(targetUsername))
             {
                 Player requester = _playerRepository.FindByName(displayName).FirstOrDefault();
@@ -86,6 +89,8 @@ namespace YachtDice.Server.Logic.Friends
             {
                 throw new ArgumentNullException(nameof(answer), NullAnswerMessage);
             }
+
+            ForgetExpiredRequests();
 
             Player addressee = _playerRepository.FindByName(displayName).FirstOrDefault();
             Player requester = _playerRepository.FindByName(answer.RequesterName).FirstOrDefault();
@@ -186,6 +191,8 @@ namespace YachtDice.Server.Logic.Friends
         /// <returns>The names of the players who sent a request, or an empty list if there is none.</returns>
         public List<string> GetRequesterNames(string displayName)
         {
+            ForgetExpiredRequests();
+
             var names = new List<string>();
             Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
 
@@ -280,7 +287,8 @@ namespace YachtDice.Server.Logic.Friends
                 {
                     RequesterId = requester.Id,
                     AddresseeId = target.Id,
-                    Status = FriendshipStatus.Pending
+                    Status = FriendshipStatus.Pending,
+                    CreateDate = DateTime.UtcNow
                 };
 
                 _friendRepository.Add(pendingFriendship);
@@ -324,6 +332,11 @@ namespace YachtDice.Server.Logic.Friends
             }
 
             return status;
+        }
+
+        private void ForgetExpiredRequests()
+        {
+            _friendRepository.RemoveExpiredRequests(DateTime.UtcNow.AddDays(-RequestLifetimeDays));
         }
 
         private void SaveBlock(Player player, Player blocked)

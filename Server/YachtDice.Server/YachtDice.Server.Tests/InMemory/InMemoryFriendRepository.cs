@@ -65,6 +65,12 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public void RemoveExpiredRequests(DateTime sentBefore)
+        {
+            _friendships.RemoveAll(friendship => IsExpiredRequest(friendship, sentBefore));
+        }
+
+        /// <inheritdoc />
         public void UpdateStatus(Friendship friendship)
         {
             Friendship stored = _friendships.First(row => IsSamePlayers(row, friendship));
@@ -97,6 +103,11 @@ namespace YachtDice.Server.Tests.InMemory
         private static bool IsWithPlayer(Friendship friendship, int playerId)
         {
             return friendship.RequesterId == playerId || friendship.AddresseeId == playerId;
+        }
+
+        private static bool IsExpiredRequest(Friendship friendship, DateTime sentBefore)
+        {
+            return friendship.Status == FriendshipStatus.Pending && friendship.CreateDate < sentBefore;
         }
     }
 }

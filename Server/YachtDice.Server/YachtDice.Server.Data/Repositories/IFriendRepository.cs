@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -48,6 +49,12 @@ namespace YachtDice.Server.Data.Repositories
         /// </summary>
         /// <param name="friendship">Friendship to save, with the two players and its status.</param>
         void Add(Friendship friendship);
+
+        /// <summary>
+        /// Deletes the friend requests that are still waiting for an answer and were sent before a moment.
+        /// </summary>
+        /// <param name="sentBefore">Requests sent before this moment are deleted.</param>
+        void RemoveExpiredRequests(DateTime sentBefore);
 
         /// <summary>
         /// Changes the status of a friendship.
