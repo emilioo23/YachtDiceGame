@@ -120,6 +120,15 @@
           <Property Name="LangPref" Type="nvarchar" MaxLength="20" />
           <Property Name="FlagCode" Type="nvarchar" MaxLength="2" />
         </EntityType>
+        <EntityType Name="PasswordHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="PwdHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ChangeDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
             <PropertyRef Name="Id" />
@@ -575,6 +584,7 @@
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Room" EntityType="Self.Room" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" Schema="dbo" store:Type="Tables" />
@@ -862,6 +872,15 @@
           <Property Name="LangPref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="FlagCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER_SE__Playe__1BC821DD" FromRole="PlayerSettings" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="PasswordHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ChangeDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -1338,6 +1357,7 @@
           <EntitySet Name="Player" EntityType="Self.Player" />
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" />
+          <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" />
           <EntitySet Name="Room" EntityType="Self.Room" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" />
@@ -1594,6 +1614,16 @@
                 <ScalarProperty Name="ThemePref" ColumnName="ThemePref" />
                 <ScalarProperty Name="LangPref" ColumnName="LangPref" />
                 <ScalarProperty Name="FlagCode" ColumnName="FlagCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PasswordHistory">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.PasswordHistory">
+              <MappingFragment StoreEntitySet="PasswordHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
+                <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
