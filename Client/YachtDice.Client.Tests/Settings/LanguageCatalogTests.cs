@@ -17,6 +17,22 @@ namespace YachtDice.Client.Tests.Settings
         private const int SpanishPosition = 0;
 
         [Fact]
+        public void IsSupported_ChineseCulture_ReturnsTrue()
+        {
+            bool isSupported = LanguageCatalog.IsSupported(ChineseCulture);
+
+            Assert.True(isSupported);
+        }
+
+        [Fact]
+        public void IsSupported_UnknownCulture_ReturnsFalse()
+        {
+            bool isSupported = LanguageCatalog.IsSupported(UnknownCulture);
+
+            Assert.False(isSupported);
+        }
+
+        [Fact]
         public void CultureCodes_Always_ListsTheFourLanguagesInOrder()
         {
             var expected = new[] { SpanishCulture, EnglishCulture, PortugueseCulture, ChineseCulture };

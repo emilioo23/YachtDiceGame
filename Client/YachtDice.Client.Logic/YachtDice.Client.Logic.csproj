@@ -74,6 +74,7 @@
     <Compile Include="Players\FlagCodes.cs" />
     <Compile Include="Players\HistoryDisplay.cs" />
     <Compile Include="Settings\LanguageCatalog.cs" />
+    <Compile Include="Settings\UserPreferences.cs" />
     <Compile Include="Players\InitialLetter.cs" />
     <Compile Include="Players\LevelProgress.cs" />
     <Compile Include="Rooms\MatchParticipant.cs" />

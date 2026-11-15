@@ -8,7 +8,11 @@ namespace YachtDice.Client.Logic.Settings
     /// </summary>
     public static class LanguageCatalog
     {
-        private const string DefaultCultureCode = "es-MX";
+        /// <summary>
+        /// Culture code of the language that the game uses when the player has not chosen another one.
+        /// </summary>
+        public const string DefaultCultureCode = "es-MX";
+
         private const char CultureSeparator = '-';
         private const int NotFoundIndex = -1;
         private const int DefaultIndex = 0;
@@ -53,6 +57,16 @@ namespace YachtDice.Client.Logic.Settings
             string language = cultureCode.Split(CultureSeparator)[DefaultIndex];
 
             return language.ToUpperInvariant();
+        }
+
+        /// <summary>
+        /// Tells whether the game has the texts of a language.
+        /// </summary>
+        /// <param name="cultureCode">Culture code, for example "pt-BR".</param>
+        /// <returns>True if the language is one of the languages of the game.</returns>
+        public static bool IsSupported(string cultureCode)
+        {
+            return cultureCode != null && Array.IndexOf(_cultureCodes, cultureCode) != NotFoundIndex;
         }
 
         /// <summary>
