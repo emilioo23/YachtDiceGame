@@ -17,6 +17,8 @@ namespace YachtDice.Server.Logic.Authentication
     {
         private const string InvalidEmailLogMessage = "Login attempt with a malformed email.";
         private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
+        private const string TooLongPasswordLogMessage = "Login attempt with a password longer than the maximum.";
+        private const string TimingEqualizerPassword = "password-used-only-to-take-the-same-time";
         private const string WrongPasswordLogMessage = "Login attempt with a wrong password.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
@@ -28,6 +30,7 @@ namespace YachtDice.Server.Logic.Authentication
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginAttemptTracker _attemptTracker;
+        private readonly string _timingEqualizerHash;
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -47,6 +50,7 @@ namespace YachtDice.Server.Logic.Authentication
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
+            _timingEqualizerHash = PasswordHasher.ComputeHash(TimingEqualizerPassword);
             _logger = new AppLogger(GetType());
         }
 
@@ -74,6 +78,10 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = new LoginResult(LoginStatus.MissingRequiredField, string.Empty);
             }
+            else if (credentials.Password.Length > CredentialRules.PasswordMaxLength)
+            {
+                result = Reject(LoginStatus.InvalidCredentials, TooLongPasswordLogMessage);
+            }
             else
             {
                 result = Authenticate(credentials);
@@ -83,7 +91,9 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
-        /// Checks the email first and then the password, so the player knows which of the two failed.
+        /// Checks the format of the email and then the account. When the email is not registered and when the
+        /// password is wrong the answer is the same, so the screen cannot be used to find out which emails have
+        /// an account (section 8.8 of the standard).
         /// </summary>
         /// <param name="credentials">The login credentials provided by the user.</param>
         /// <returns>The login result status.</returns>
@@ -111,7 +121,8 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (player == null)
             {
-                result = Reject(LoginStatus.EmailNotRegistered, UnknownEmailLogMessage);
+                PasswordHasher.Verify(credentials.Password, _timingEqualizerHash);
+                result = Reject(LoginStatus.InvalidCredentials, UnknownEmailLogMessage);
             }
             else
             {
@@ -151,7 +162,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (newLock == LoginLock.None)
             {
-                result = Reject(LoginStatus.InvalidPassword, WrongPasswordLogMessage);
+                result = Reject(LoginStatus.InvalidCredentials, WrongPasswordLogMessage);
             }
             else
             {

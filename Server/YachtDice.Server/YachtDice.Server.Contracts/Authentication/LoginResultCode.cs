@@ -23,12 +23,6 @@ namespace YachtDice.Server.Contracts.Authentication
         [EnumMember]
         InvalidEmail,
 
-        [EnumMember]
-        EmailNotRegistered,
-
-        [EnumMember]
-        InvalidPassword,
-
         /// <summary>The two-step verification is locked because of too many failed attempts.</summary>
         [EnumMember]
         VerificationLocked,

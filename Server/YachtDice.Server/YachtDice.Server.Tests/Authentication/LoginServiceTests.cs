@@ -22,6 +22,7 @@ namespace YachtDice.Server.Tests.Authentication
         private const string WrongPassword = "Wrong123!";
         private const string DisplayName = "gabrielhernandez";
         private const string FirstName = "Gabriel";
+        private const char FillCharacter = 'a';
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
@@ -59,10 +60,10 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_WrongPassword_ReturnsInvalidPasswordWithoutTheNamesOfThePlayer()
+        public void LoginPlayer_WrongPassword_ReturnsInvalidCredentialsWithoutTheNamesOfThePlayer()
         {
             LoginCredentials credentials = CreateCredentials(Email, WrongPassword);
-            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPassword, string.Empty);
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidCredentials, string.Empty);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
@@ -95,13 +96,43 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
-        public void LoginPlayer_UnknownEmail_ReturnsEmailNotRegistered()
+        public void LoginPlayer_UnknownEmail_ReturnsInvalidCredentials()
         {
             LoginCredentials credentials = CreateCredentials(UnknownEmail, Password);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.EmailNotRegistered, loginResult.Status);
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UnknownEmailAndWrongPasswordOfARegisteredEmail_ReturnTheSameResult()
+        {
+            LoginResult unknownEmailResult = _service.LoginPlayer(CreateCredentials(UnknownEmail, WrongPassword));
+
+            LoginResult wrongPasswordResult = _service.LoginPlayer(CreateCredentials(Email, WrongPassword));
+
+            Assert.Equivalent(unknownEmailResult, wrongPasswordResult);
+        }
+
+        [Fact]
+        public void LoginPlayer_PasswordLongerThanTheMaximum_ReturnsInvalidCredentials()
+        {
+            string longPassword = new string(FillCharacter, CredentialRules.PasswordMaxLength + 1);
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Email, longPassword));
+
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_EmailLongerThanTheMaximum_ReturnsInvalidEmail()
+        {
+            string longEmail = new string(FillCharacter, CredentialRules.EmailMaxLength) + "@gmail.com";
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(longEmail, Password));
+
+            Assert.Equal(LoginStatus.InvalidEmail, loginResult.Status);
         }
 
         [Theory]

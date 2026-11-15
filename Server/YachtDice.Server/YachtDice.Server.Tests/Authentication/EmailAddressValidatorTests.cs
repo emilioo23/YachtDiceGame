@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Tests.Authentication
 {
@@ -27,6 +28,14 @@ namespace YachtDice.Server.Tests.Authentication
         public void IsValid_EmptyOrMalformedText_ReturnsFalse(string email)
         {
             Assert.False(EmailAddressValidator.IsValid(email));
+        }
+
+        [Fact]
+        public void IsValid_EmailLongerThanTheMaximum_ReturnsFalse()
+        {
+            string longEmail = new string('a', CredentialRules.EmailMaxLength) + "@uv.mx";
+
+            Assert.False(EmailAddressValidator.IsValid(longEmail));
         }
 
         [Fact]

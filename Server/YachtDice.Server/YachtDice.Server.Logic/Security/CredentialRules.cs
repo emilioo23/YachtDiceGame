@@ -30,6 +30,11 @@ namespace YachtDice.Server.Logic.Security
         /// </summary>
         public const int PasswordMaxLength = 64;
 
+        /// <summary>
+        /// Maximum number of characters of an email address. It is the size of the column in the database.
+        /// </summary>
+        public const int EmailMaxLength = 100;
+
         private const string UsernameCharactersPattern = "^[A-Za-z0-9._]+$";
         private const int UsernameRegexTimeoutMilliseconds = 100;
 

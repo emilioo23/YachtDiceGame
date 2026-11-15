@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Authentication
 {
@@ -17,7 +18,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             var isValid = false;
 
-            if (!string.IsNullOrWhiteSpace(email))
+            if (!string.IsNullOrWhiteSpace(email) && email.Length <= CredentialRules.EmailMaxLength)
             {
                 try
                 {

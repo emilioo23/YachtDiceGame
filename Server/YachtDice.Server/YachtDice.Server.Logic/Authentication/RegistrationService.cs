@@ -17,7 +17,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int HoursToVerifyEmail = 48;
         private const int InitialExperience = 0;
         private const int InitialLevel = 1;
-        private const int EmailMaxLength = 100;
         private const int NameMaxLength = 50;
         private const string RegisteredLogMessage = "Player registered successfully.";
         private const string NullPlayerMessage = "The new player cannot be null.";
@@ -135,7 +134,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             return hasValidNameLengths
                 && usernameLength <= CredentialRules.UsernameMaxLength
-                && emailLength <= EmailMaxLength;
+                && emailLength <= CredentialRules.EmailMaxLength;
         }
 
         private RegistrationResult SavePlayer(Player player, string plainPassword)
