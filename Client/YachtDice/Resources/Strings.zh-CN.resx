@@ -2418,4 +2418,13 @@
   <data name="Auth_ErrorSuspendedByReports" xml:space="preserve">
     <value>由于多名玩家举报，你的账号被暂停一天。</value>
   </data>
+  <data name="History_KicksTitle" xml:space="preserve">
+    <value>踢出记录</value>
+  </data>
+  <data name="History_KickedByYouFormat" xml:space="preserve">
+    <value>你将 {0} 踢出了房间 {1}</value>
+  </data>
+  <data name="History_KickedYouFormat" xml:space="preserve">
+    <value>{0} 将你踢出了房间 {1}</value>
+  </data>
 </root>

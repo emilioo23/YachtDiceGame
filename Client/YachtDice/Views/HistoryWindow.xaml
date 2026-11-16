@@ -39,6 +39,7 @@
                                Foreground="{StaticResource BrushTextMuted}"
                                Visibility="Collapsed"/>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
                         <ItemsControl x:Name="HistoryItemsControl">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -97,6 +98,34 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                        <TextBlock x:Name="KicksTitleTextBlock"
+                                   Text="{x:Static res:Strings.History_KicksTitle}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,14,0,10"
+                                   Foreground="{StaticResource BrushText}"
+                                   Visibility="Collapsed"/>
+                        <ItemsControl x:Name="KicksItemsControl">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8"
+                                            CornerRadius="10"
+                                            Padding="16,10"
+                                            Background="{StaticResource BrushCream2}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Text}"
+                                                       FontSize="16"
+                                                       TextWrapping="Wrap"
+                                                       Foreground="{StaticResource BrushText}"/>
+                                            <TextBlock Text="{Binding DateText}"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource BrushTextMuted}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
             </Border>

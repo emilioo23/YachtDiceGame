@@ -10,6 +10,7 @@ using YachtDice.Navigation;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using KickHistoryEntry = YachtDice.RoomServiceReference.KickHistoryEntry;
 
 namespace YachtDice.Views
 {
@@ -44,6 +45,29 @@ namespace YachtDice.Views
 
             HistoryItemsControl.ItemsSource = games.Select(createRow).ToList();
             EmptyTextBlock.Visibility = games.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (!_session.IsGuest)
+            {
+                await LoadKicksAsync();
+            }
+        }
+
+        private async Task LoadKicksAsync()
+        {
+            List<KickHistoryEntry> kicks = await new RoomListGateway().GetKickHistoryAsync(_session.SessionToken);
+            Func<KickHistoryEntry, KickRow> createRow = CreateKickRow;
+
+            KicksItemsControl.ItemsSource = kicks.Select(createRow).ToList();
+            KicksTitleTextBlock.Visibility = kicks.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private KickRow CreateKickRow(KickHistoryEntry kick)
+        {
+            return new KickRow
+            {
+                Text = KickHistoryTexts.Describe(kick, _session.DisplayName),
+                DateText = kick.Date.ToLocalTime().ToString(DateFormat)
+            };
         }
 
         private static HistoryRow CreateRow(GameHistoryEntry game)

@@ -29,6 +29,21 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Gets the latest expulsions where the player was the host or the expelled player.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The expulsions from the newest to the oldest.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<List<KickHistoryEntry>> GetKickHistoryAsync(string sessionToken)
+        {
+            KickHistoryEntry[] history = await ConnectAndExecuteAsync(client => client.GetKickHistory(sessionToken));
+
+            await CloseAsync();
+
+            return history.ToList();
+        }
+
+        /// <summary>
         /// Looks for a match in progress that the player left and can still join again.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

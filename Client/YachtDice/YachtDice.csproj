@@ -270,6 +270,7 @@
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
+    <Compile Include="Utils\KickHistoryTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
     <Compile Include="Utils\PreferencesStore.cs" />
@@ -280,6 +281,7 @@
     <Compile Include="Utils\CategoryNames.cs" />
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
+    <Compile Include="Models\KickRow.cs" />
     <Compile Include="Utils\AchievementNotifier.cs" />
     <Compile Include="Utils\FlagImages.cs" />
     <Compile Include="Utils\ProgressTexts.cs" />

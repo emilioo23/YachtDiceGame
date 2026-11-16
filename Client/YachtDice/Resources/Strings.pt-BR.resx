@@ -2418,4 +2418,13 @@
   <data name="Auth_ErrorSuspendedByReports" xml:space="preserve">
     <value>Sua conta está suspensa por um dia porque vários jogadores a denunciaram.</value>
   </data>
+  <data name="History_KicksTitle" xml:space="preserve">
+    <value>Expulsões</value>
+  </data>
+  <data name="History_KickedByYouFormat" xml:space="preserve">
+    <value>Você expulsou {0} da sala {1}</value>
+  </data>
+  <data name="History_KickedYouFormat" xml:space="preserve">
+    <value>{0} expulsou você da sala {1}</value>
+  </data>
 </root>

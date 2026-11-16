@@ -4100,5 +4100,32 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Auth_ErrorSuspendedByReports", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Expulsiones.
+        /// </summary>
+        public static string History_KicksTitle {
+            get {
+                return ResourceManager.GetString("History_KicksTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Expulsaste a {0} de la sala {1}.
+        /// </summary>
+        public static string History_KickedByYouFormat {
+            get {
+                return ResourceManager.GetString("History_KickedByYouFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} te expulsó de la sala {1}.
+        /// </summary>
+        public static string History_KickedYouFormat {
+            get {
+                return ResourceManager.GetString("History_KickedYouFormat", resourceCulture);
+            }
+        }
     }
 }
