@@ -1,4 +1,6 @@
-﻿namespace YachtDice.Server.Data.Repositories
+﻿using System.Collections.Generic;
+
+namespace YachtDice.Server.Data.Repositories
 {
     /// <summary>
     /// Result of one registered player in a game that just finished.
@@ -29,5 +31,20 @@
         /// Gets or sets the accumulated experience of the player, counting the experience of this game.
         /// </summary>
         public int Experience { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player earned the bonus of the upper section.
+        /// </summary>
+        public bool HasUpperBonus { get; set; }
+
+        /// <summary>
+        /// Gets or sets how many extra Yachts the player scored.
+        /// </summary>
+        public int YachtBonusCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the points of each category of the scorecard of the player.
+        /// </summary>
+        public List<ScoreRecord> Scores { get; set; } = new List<ScoreRecord>();
     }
 }

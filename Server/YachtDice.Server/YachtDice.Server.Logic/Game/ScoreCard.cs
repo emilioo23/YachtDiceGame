@@ -12,7 +12,11 @@ namespace YachtDice.Server.Logic.Game
     {
         private const int UpperBonusThreshold = 63;
         private const int UpperBonusPoints = 35;
-        private const int YachtBonusPoints = 100;
+        /// <summary>
+        /// Points of each extra Yacht scored after the first one.
+        /// </summary>
+        public const int YachtBonusPoints = 100;
+
         private const int NoPoints = 0;
 
         private readonly Dictionary<ScoreCategory, int> _scores = new Dictionary<ScoreCategory, int>();

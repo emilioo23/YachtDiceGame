@@ -47,5 +47,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <returns>One record for each player of each game, or an empty list if the player has no games.</returns>
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         List<PlayedGameRecord> FindRecentGames(int playerId, int maxGames);
+
+        /// <summary>
+        /// Finds the saved scorecards of a game, one for each registered player.
+        /// </summary>
+        /// <param name="gameId">Identifier of the game.</param>
+        /// <returns>The scorecards, or an empty list if the game has none.</returns>
+        List<ScorecardRecord> FindScorecards(int gameId);
     }
 }

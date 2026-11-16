@@ -16,6 +16,12 @@ namespace YachtDice.Server.Contracts.Players
         public DateTime PlayedAt { get; set; }
 
         /// <summary>
+        /// Identifier of the game, to ask for its scorecards.
+        /// </summary>
+        [DataMember]
+        public int GameId { get; set; }
+
+        /// <summary>
         /// True if the player won the game.
         /// </summary>
         [DataMember]

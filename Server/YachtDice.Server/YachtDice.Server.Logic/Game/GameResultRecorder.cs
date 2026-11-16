@@ -21,6 +21,7 @@ namespace YachtDice.Server.Logic.Game
         private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
         private const string NullGameHistoryRepositoryMessage = "The data access of the game history cannot be null.";
         private const int NoExperience = 0;
+        private const int NoBonusPoints = 0;
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -83,6 +84,16 @@ namespace YachtDice.Server.Logic.Game
             }
         }
 
+        private static ScoreRecord ToScoreRecord(ScoreEntry entry)
+        {
+            return new ScoreRecord
+            {
+                CategoryName = entry.Category.ToString(),
+                Points = entry.Points,
+                IsUsed = entry.IsFilled
+            };
+        }
+
         private PlayerResultRecord CreatePlayerResult(Player account, PlayerSnapshot player)
         {
             PlayerResultStatus status = player.IsPresent ? PlayerResultStatus.Completed : PlayerResultStatus.Abandoned;
@@ -94,7 +105,10 @@ namespace YachtDice.Server.Logic.Game
                 FinalScore = player.Total,
                 IsWinner = player.IsWinner && player.IsPresent,
                 Status = status,
-                Experience = experience
+                Experience = experience,
+                HasUpperBonus = player.UpperBonus > NoBonusPoints,
+                YachtBonusCount = player.YachtBonus / ScoreCard.YachtBonusPoints,
+                Scores = player.Scores.Select(ToScoreRecord).ToList()
             };
         }
     }

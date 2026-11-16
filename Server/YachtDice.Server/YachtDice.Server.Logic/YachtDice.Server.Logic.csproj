@@ -135,6 +135,8 @@
     <Compile Include="Players\UsernameChangeStatus.cs" />
     <Compile Include="Players\PlayerStatistics.cs" />
     <Compile Include="Players\PlayerStatisticsService.cs" />
+    <Compile Include="Players\SavedScore.cs" />
+    <Compile Include="Players\SavedScorecard.cs" />
     <Compile Include="Players\ExperienceRules.cs" />
     <Compile Include="Players\LevelTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -112,6 +112,35 @@ namespace YachtDice.Server.Tests.Players
         }
 
         [Fact]
+        public void GetScorecards_PlayerWhoTookPart_ReturnsTheScorecardsOfTheGame()
+        {
+            _history.Scorecards = new List<ScorecardRecord>
+            {
+                CreateScorecard(PlayerName),
+                CreateScorecard(FirstOpponentName)
+            };
+            var scorecardsExpected = new[]
+            {
+                new { PlayerName, Total = PlayerScore },
+                new { PlayerName = FirstOpponentName, Total = PlayerScore }
+            };
+
+            List<SavedScorecard> scorecards = _service.GetScorecards(PlayerName, FirstGameId);
+
+            Assert.Equivalent(scorecardsExpected, scorecards);
+        }
+
+        [Fact]
+        public void GetScorecards_PlayerWhoDidNotTakePart_ReturnsAnEmptyList()
+        {
+            _history.Scorecards = new List<ScorecardRecord> { CreateScorecard(FirstOpponentName) };
+
+            List<SavedScorecard> scorecards = _service.GetScorecards(PlayerName, FirstGameId);
+
+            Assert.Empty(scorecards);
+        }
+
+        [Fact]
         public void GetRecentGames_UnknownPlayer_ReturnsNoGames()
         {
             List<PlayedGameSummary> games = _service.GetRecentGames(UnknownName);
@@ -293,6 +322,11 @@ namespace YachtDice.Server.Tests.Players
             LeaderboardEntry leaderboardEntry = _service.GetTopPlayers(PlayerName).Single();
 
             Assert.Equivalent(leaderboardEntryExpected, leaderboardEntry);
+        }
+
+        private static ScorecardRecord CreateScorecard(string playerName)
+        {
+            return new ScorecardRecord { PlayerName = playerName, Total = PlayerScore };
         }
 
         private static LevelTable CreateLevelTable()

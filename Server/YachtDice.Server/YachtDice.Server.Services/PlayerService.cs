@@ -128,6 +128,16 @@ namespace YachtDice.Server.Services
             return history;
         }
 
+        public List<Contracts.SavedScorecard> GetGameScorecards(string playerName, int gameId)
+        {
+            List<Contracts.SavedScorecard> scorecards = Execute(
+                playerName,
+                () => Mapping.PlayerStatisticsMapper.ToScorecardContracts(
+                    _statisticsService.GetScorecards(playerName, gameId)));
+
+            return scorecards;
+        }
+
         public Contracts.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode)
         {
             Contracts.FlagChangeResultCode result =

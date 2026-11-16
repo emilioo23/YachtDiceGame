@@ -102,6 +102,17 @@ namespace YachtDice.Server.Tests.InMemory
             _rankingRecords.Add(record);
         }
 
+        /// <summary>
+        /// Gets or sets the scorecards that <see cref="FindScorecards"/> returns for any game.
+        /// </summary>
+        public List<ScorecardRecord> Scorecards { get; set; } = new List<ScorecardRecord>();
+
+        /// <inheritdoc />
+        public List<ScorecardRecord> FindScorecards(int gameId)
+        {
+            return Scorecards;
+        }
+
         /// <inheritdoc />
         public void Save(GameResultRecord result)
         {

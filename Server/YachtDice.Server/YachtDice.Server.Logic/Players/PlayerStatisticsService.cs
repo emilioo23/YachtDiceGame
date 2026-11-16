@@ -115,6 +115,47 @@ namespace YachtDice.Server.Logic.Players
             return games.OrderByDescending(readPlayedAt).ToList();
         }
 
+        /// <summary>
+        /// Gets the scorecards of a past game. Only a player who took part in the game can see them.
+        /// </summary>
+        /// <param name="playerName">Name of the player who asks.</param>
+        /// <param name="gameId">Identifier of the game.</param>
+        /// <returns>The scorecards of the registered players; an empty list if the player did not take part.</returns>
+        /// <exception cref="DataAccessException">The scorecards could not be read.</exception>
+        public List<SavedScorecard> GetScorecards(string playerName, int gameId)
+        {
+            List<ScorecardRecord> records = _gameHistoryRepository.FindScorecards(gameId);
+            Func<ScorecardRecord, bool> isOwnScorecard = record =>
+                string.Equals(record.PlayerName, playerName, StringComparison.OrdinalIgnoreCase);
+            var scorecards = new List<SavedScorecard>();
+
+            if (records.Any(isOwnScorecard))
+            {
+                scorecards = records.Select(ToSavedScorecard).ToList();
+            }
+
+            return scorecards;
+        }
+
+        private static SavedScorecard ToSavedScorecard(ScorecardRecord record)
+        {
+            Func<ScoreRecord, SavedScore> toSavedScore = score => new SavedScore
+            {
+                Category = score.CategoryName,
+                Points = score.Points,
+                IsUsed = score.IsUsed
+            };
+
+            return new SavedScorecard
+            {
+                PlayerName = record.PlayerName,
+                Total = record.Total,
+                HasUpperBonus = record.HasUpperBonus,
+                YachtBonusCount = record.YachtBonusCount,
+                Scores = record.Scores.Select(toSavedScore).ToList()
+            };
+        }
+
         private static PlayedGameSummary SummarizeGame(int playerId, List<PlayedGameRecord> game)
         {
             Func<PlayedGameRecord, bool> isOwnRecord = record => record.PlayerId == playerId;
@@ -126,6 +167,7 @@ namespace YachtDice.Server.Logic.Players
 
             var summary = new PlayedGameSummary
             {
+                GameId = own.GameId,
                 PlayedAt = own.EndDate ?? DateTime.MinValue,
                 IsWin = own.IsWinner,
                 OwnScore = own.FinalScore,

@@ -46,11 +46,43 @@ namespace YachtDice.Server.Services.Mapping
             return games.Select(createEntry).ToList();
         }
 
+        /// <summary>
+        /// Converts the scorecards of a past game into the objects that travel to the clients.
+        /// </summary>
+        /// <param name="scorecards">Scorecards of the logic layer.</param>
+        /// <returns>The scorecards for the clients.</returns>
+        public static List<Contracts.SavedScorecard> ToScorecardContracts(List<Logic.Players.SavedScorecard> scorecards)
+        {
+            Func<Logic.Players.SavedScorecard, Contracts.SavedScorecard> createScorecard = ToScorecardContract;
+
+            return scorecards.Select(createScorecard).ToList();
+        }
+
+        private static Contracts.SavedScorecard ToScorecardContract(Logic.Players.SavedScorecard scorecard)
+        {
+            Func<Logic.Players.SavedScore, Contracts.SavedScore> createScore = score => new Contracts.SavedScore
+            {
+                Category = score.Category,
+                Points = score.Points,
+                IsUsed = score.IsUsed
+            };
+
+            return new Contracts.SavedScorecard
+            {
+                PlayerName = scorecard.PlayerName,
+                Total = scorecard.Total,
+                HasUpperBonus = scorecard.HasUpperBonus,
+                YachtBonusCount = scorecard.YachtBonusCount,
+                Scores = scorecard.Scores.Select(createScore).ToList()
+            };
+        }
+
         private static Contracts.GameHistoryEntry ToHistoryContract(Logic.Players.PlayedGameSummary game)
         {
             var contract = new Contracts.GameHistoryEntry
             {
                 PlayedAt = game.PlayedAt,
+                GameId = game.GameId,
                 IsWin = game.IsWin,
                 OwnScore = game.OwnScore,
                 BestOpponentScore = game.BestOpponentScore,

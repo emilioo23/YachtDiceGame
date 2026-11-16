@@ -23,6 +23,9 @@ namespace YachtDice.Server.Data.Repositories
         private const string ArchivedRoomName = "Partida";
         private const string RoomCodeFormat = "N";
         private const int RoomCodeLength = 6;
+        private const int NoYachtBonus = 0;
+        private const string ScorecardsFailedMessage =
+            "Database error occurred while reading the scorecards of a game.";
         private const string ComputerGamesFailedMessage =
             "Database error occurred while reading the games against the computer.";
 
@@ -150,6 +153,82 @@ namespace YachtDice.Server.Data.Repositories
                 .ToList();
         }
 
+        /// <summary>
+        /// Finds the saved scorecards of a game, one for each registered player.
+        /// </summary>
+        /// <param name="gameId">Identifier of the game.</param>
+        /// <returns>The scorecards, or an empty list if the game has none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<ScorecardRecord> FindScorecards(int gameId)
+        {
+            List<ScorecardRecord> scorecards = DatabaseOperation.Query(
+                context => SelectScorecards(context, gameId),
+                ScorecardsFailedMessage);
+
+            return scorecards;
+        }
+
+        private static List<ScorecardRecord> SelectScorecards(YachtDiceContext context, int gameId)
+        {
+            Expression<Func<Scorecard, bool>> isOfGame = scorecard => scorecard.GameId == gameId;
+            List<ScorecardRecord> scorecards = context.Scorecard
+                .Where(isOfGame)
+                .Select(scorecard => new ScorecardRecord
+                {
+                    PlayerName = scorecard.Player.DisplayName,
+                    Total = scorecard.GameHistory.GameHistoryPlayer
+                        .Where(historyPlayer => historyPlayer.PlayerId == scorecard.PlayerId)
+                        .Select(historyPlayer => historyPlayer.FinalScore)
+                        .FirstOrDefault(),
+                    HasUpperBonus = scorecard.UpperBonus == true,
+                    YachtBonusCount = scorecard.YachtBonusCt ?? NoYachtBonus,
+                    Scores = scorecard.ScorecardEntry
+                        .OrderBy(entry => entry.CategoryId)
+                        .Select(entry => new ScoreRecord
+                        {
+                            CategoryName = entry.Category.Name,
+                            Points = entry.Points,
+                            IsUsed = entry.IsUsed == true
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            return scorecards;
+        }
+
+        private static void AddScorecard(
+            YachtDiceContext context,
+            GameHistory game,
+            PlayerResultRecord player)
+        {
+            var scorecard = new Scorecard
+            {
+                PlayerId = player.PlayerId,
+                GameHistory = game,
+                UpperBonus = player.HasUpperBonus,
+                YachtBonusCt = player.YachtBonusCount
+            };
+
+            foreach (ScoreRecord score in player.Scores)
+            {
+                Expression<Func<Category, bool>> isCategory = category => category.Name == score.CategoryName;
+                Category savedCategory = context.Category.FirstOrDefault(isCategory);
+
+                if (savedCategory != null)
+                {
+                    scorecard.ScorecardEntry.Add(new ScorecardEntry
+                    {
+                        Category = savedCategory,
+                        Points = score.Points,
+                        IsUsed = score.IsUsed
+                    });
+                }
+            }
+
+            context.Scorecard.Add(scorecard);
+        }
+
         private static RoomRecordType ChooseRoomType(GameResultRecord result)
         {
             RoomRecordType roomType = RoomRecordType.Public;
@@ -192,6 +271,7 @@ namespace YachtDice.Server.Data.Repositories
                     Status = player.Status.ToString()
                 });
                 UpdateProgress(context, player);
+                AddScorecard(context, game, player);
             }
 
             context.GameHistory.Add(game);

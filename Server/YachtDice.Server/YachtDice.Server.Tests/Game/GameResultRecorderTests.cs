@@ -30,6 +30,8 @@ namespace YachtDice.Server.Tests.Game
         private const int PreviousExperience = 150;
         private const int ExperienceGained = 280;
         private const int ExperienceAfterTheGame = 430;
+        private const int UpperBonusPoints = 35;
+        private const int YachtPoints = 50;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
@@ -71,6 +73,28 @@ namespace YachtDice.Server.Tests.Game
 
             PlayerResultRecord betoResult = _history.SavedResults.Single().Players.Single();
             Assert.Equivalent(betoResultExpected, betoResult);
+        }
+
+        [Fact]
+        public void Record_PlayerWithScores_SavesTheScorecardOfThePlayer()
+        {
+            PlayerSnapshot beto = CreateWinner(BetoName, WinnerTotal, true);
+            beto.UpperBonus = UpperBonusPoints;
+            beto.YachtBonus = ScoreCard.YachtBonusPoints;
+            beto.Scores.Add(new ScoreEntry(ScoreCategory.Yacht, true, YachtPoints));
+            var scorecardExpected = new
+            {
+                HasUpperBonus = true,
+                YachtBonusCount = 1,
+                Scores = new[]
+                {
+                    new { CategoryName = ScoreCategory.Yacht.ToString(), Points = YachtPoints, IsUsed = true }
+                }
+            };
+
+            _recorder.Record(_settings, CreateSnapshot(beto));
+
+            Assert.Equivalent(scorecardExpected, _history.SavedResults.Single().Players.Single());
         }
 
         [Fact]

@@ -124,6 +124,8 @@
     <Compile Include="Repositories\PlayerResultStatus.cs" />
     <Compile Include="Repositories\RoomRecordStatus.cs" />
     <Compile Include="Repositories\RoomRecordType.cs" />
+    <Compile Include="Repositories\ScorecardRecord.cs" />
+    <Compile Include="Repositories\ScoreRecord.cs" />
     <Compile Include="Repositories\TextGuard.cs" />
     <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Room.cs">
@@ -175,6 +177,7 @@
     <None Include="Scripts\AllowComputerRoomType.sql" />
     <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
     <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />
+    <None Include="Scripts\SeedScoreCategories.sql" />
     <None Include="Scripts\WidenBackupCodeHash.sql" />
     <EntityDeploy Include="YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

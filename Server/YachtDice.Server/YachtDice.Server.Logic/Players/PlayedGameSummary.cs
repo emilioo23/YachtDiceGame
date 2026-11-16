@@ -13,6 +13,11 @@ namespace YachtDice.Server.Logic.Players
         public DateTime PlayedAt { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier of the game, to ask for its scorecards.
+        /// </summary>
+        public int GameId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the player won the game.
         /// </summary>
         public bool IsWin { get; set; }
