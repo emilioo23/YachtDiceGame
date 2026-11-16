@@ -523,6 +523,115 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         PlayerNotFound = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SecuritySummary", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class SecuritySummary : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasPasswordChangeField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasRecentLockField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LastPasswordChangeField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LockReasonField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LockedUntilField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasPasswordChange {
+            get {
+                return this.HasPasswordChangeField;
+            }
+            set {
+                if ((this.HasPasswordChangeField.Equals(value) != true)) {
+                    this.HasPasswordChangeField = value;
+                    this.RaisePropertyChanged("HasPasswordChange");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasRecentLock {
+            get {
+                return this.HasRecentLockField;
+            }
+            set {
+                if ((this.HasRecentLockField.Equals(value) != true)) {
+                    this.HasRecentLockField = value;
+                    this.RaisePropertyChanged("HasRecentLock");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LastPasswordChange {
+            get {
+                return this.LastPasswordChangeField;
+            }
+            set {
+                if ((this.LastPasswordChangeField.Equals(value) != true)) {
+                    this.LastPasswordChangeField = value;
+                    this.RaisePropertyChanged("LastPasswordChange");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LockReason {
+            get {
+                return this.LockReasonField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LockReasonField, value) != true)) {
+                    this.LockReasonField = value;
+                    this.RaisePropertyChanged("LockReason");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LockedUntil {
+            get {
+                return this.LockedUntilField;
+            }
+            set {
+                if ((this.LockedUntilField.Equals(value) != true)) {
+                    this.LockedUntilField = value;
+                    this.RaisePropertyChanged("LockedUntil");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="TwoFactorManagementServiceReference.ITwoFactorManagementService")]
     public interface ITwoFactorManagementService {
@@ -568,6 +677,11 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/CountBackupCodesServiceFaultF" +
             "ault", Name="ServiceFault")]
         int CountBackupCodes(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/GetSecuritySummary", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/GetSecuritySummaryResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/GetSecuritySummaryServiceFaul" +
+            "tFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.SecuritySummary GetSecuritySummary(string sessionToken);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -627,6 +741,10 @@ namespace YachtDice.TwoFactorManagementServiceReference {
 
         public int CountBackupCodes(string sessionToken) {
             return base.Channel.CountBackupCodes(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.SecuritySummary GetSecuritySummary(string sessionToken) {
+            return base.Channel.GetSecuritySummary(sessionToken);
         }
     }
 }

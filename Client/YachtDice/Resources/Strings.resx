@@ -2457,4 +2457,16 @@
   <data name="Scorecard_Empty" xml:space="preserve">
     <value>Esta partida no tiene tarjetas guardadas.</value>
   </data>
+  <data name="Settings_Security_PasswordNeverChanged" xml:space="preserve">
+    <value>Todavía no has cambiado tu contraseña.</value>
+  </data>
+  <data name="Settings_Security_PasswordChangedFormat" xml:space="preserve">
+    <value>Último cambio: {0}</value>
+  </data>
+  <data name="Settings_Security_LockByAttemptsFormat" xml:space="preserve">
+    <value>Tu cuenta se bloqueó por contraseñas incorrectas hasta {0}.</value>
+  </data>
+  <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
+    <value>Tu cuenta se suspendió por reportes de otros jugadores hasta {0}.</value>
+  </data>
 </root>

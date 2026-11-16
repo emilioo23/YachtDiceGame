@@ -2457,4 +2457,16 @@
   <data name="Scorecard_Empty" xml:space="preserve">
     <value>This game has no saved scorecards.</value>
   </data>
+  <data name="Settings_Security_PasswordNeverChanged" xml:space="preserve">
+    <value>You have not changed your password yet.</value>
+  </data>
+  <data name="Settings_Security_PasswordChangedFormat" xml:space="preserve">
+    <value>Last change: {0}</value>
+  </data>
+  <data name="Settings_Security_LockByAttemptsFormat" xml:space="preserve">
+    <value>Your account was locked by wrong passwords until {0}.</value>
+  </data>
+  <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
+    <value>Your account was suspended by reports from other players until {0}.</value>
+  </data>
 </root>

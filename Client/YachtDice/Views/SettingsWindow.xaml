@@ -245,6 +245,19 @@
                                     Click="ChangePasswordToggleButton_Click"/>
                         </Grid>
 
+                        <TextBlock x:Name="PasswordChangeTextBlock"
+                                   FontSize="16"
+                                   Margin="0,-8,0,8"
+                                   TextWrapping="Wrap"
+                                   Foreground="{StaticResource BrushTextMuted}"/>
+
+                        <TextBlock x:Name="LockNoticeTextBlock"
+                                   FontSize="16"
+                                   Margin="0,0,0,12"
+                                   TextWrapping="Wrap"
+                                   Foreground="{StaticResource BrushDanger}"
+                                   Visibility="Collapsed"/>
+
                         <StackPanel x:Name="ChangePasswordPanel"
                                     Visibility="Collapsed"
                                     Margin="0,0,0,16">

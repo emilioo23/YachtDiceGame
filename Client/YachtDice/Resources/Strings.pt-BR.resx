@@ -2457,4 +2457,16 @@
   <data name="Scorecard_Empty" xml:space="preserve">
     <value>Esta partida não tem cartelas salvas.</value>
   </data>
+  <data name="Settings_Security_PasswordNeverChanged" xml:space="preserve">
+    <value>Você ainda não alterou sua senha.</value>
+  </data>
+  <data name="Settings_Security_PasswordChangedFormat" xml:space="preserve">
+    <value>Última alteração: {0}</value>
+  </data>
+  <data name="Settings_Security_LockByAttemptsFormat" xml:space="preserve">
+    <value>Sua conta foi bloqueada por senhas incorretas até {0}.</value>
+  </data>
+  <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
+    <value>Sua conta foi suspensa por denúncias de outros jogadores até {0}.</value>
+  </data>
 </root>

@@ -68,6 +68,11 @@ namespace YachtDice.Views
             _isInitializing = false;
 
             _ = LoadTwoFactorStateAsync();
+
+            if (!session.IsGuest)
+            {
+                _ = LoadSecuritySummaryAsync();
+            }
         }
 
         private void ShowSection(string sectionName)
@@ -149,6 +154,23 @@ namespace YachtDice.Views
                 {
                     ShowBackupCodeCount(await _twoFactorGateway.CountBackupCodesAsync(_session.SessionToken));
                 }
+            }
+            catch (GatewayException ex)
+            {
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private async Task LoadSecuritySummaryAsync()
+        {
+            try
+            {
+                SecuritySummary summary = await _twoFactorGateway.GetSecuritySummaryAsync(_session.SessionToken);
+                string lockNotice = SecuritySummaryTexts.DescribeLock(summary);
+
+                PasswordChangeTextBlock.Text = SecuritySummaryTexts.DescribePasswordChange(summary);
+                LockNoticeTextBlock.Text = lockNotice;
+                LockNoticeTextBlock.Visibility = lockNotice.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
             }
             catch (GatewayException ex)
             {

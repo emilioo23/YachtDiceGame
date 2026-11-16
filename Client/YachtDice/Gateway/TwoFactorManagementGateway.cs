@@ -125,6 +125,18 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server for the last change of password and the last lock of the account.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The summary of the security of the account.</returns>
+        public async Task<SecuritySummary> GetSecuritySummaryAsync(string sessionToken)
+        {
+            SecuritySummary summary = await ExecuteAsync(client => client.GetSecuritySummary(sessionToken));
+
+            return summary;
+        }
+
+        /// <summary>
         /// Translates the WCF fault exception into a specific gateway error code.
         /// </summary>
         /// <param name="fault">The exception thrown by the service.</param>

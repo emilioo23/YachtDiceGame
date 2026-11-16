@@ -77,6 +77,7 @@
     <Compile Include="Utils\KickHistoryTextsTests.cs" />
     <Compile Include="Utils\ReportResultMessagesTests.cs" />
     <Compile Include="Utils\SavedScorecardTextsTests.cs" />
+    <Compile Include="Utils\SecuritySummaryTextsTests.cs" />
     <Compile Include="Utils\PasswordChangeMessagesTests.cs" />
     <Compile Include="Utils\UsernameChangeMessagesTests.cs" />
     <Compile Include="Utils\CategoryNamesTests.cs" />

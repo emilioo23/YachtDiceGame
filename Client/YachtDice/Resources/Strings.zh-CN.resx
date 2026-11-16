@@ -2457,4 +2457,16 @@
   <data name="Scorecard_Empty" xml:space="preserve">
     <value>这局没有保存的计分卡。</value>
   </data>
+  <data name="Settings_Security_PasswordNeverChanged" xml:space="preserve">
+    <value>你还没有修改过密码。</value>
+  </data>
+  <data name="Settings_Security_PasswordChangedFormat" xml:space="preserve">
+    <value>上次修改：{0}</value>
+  </data>
+  <data name="Settings_Security_LockByAttemptsFormat" xml:space="preserve">
+    <value>由于密码错误，你的账号被锁定至 {0}。</value>
+  </data>
+  <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
+    <value>由于其他玩家举报，你的账号被暂停至 {0}。</value>
+  </data>
 </root>

@@ -4217,5 +4217,41 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Scorecard_Empty", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no has cambiado tu contraseña..
+        /// </summary>
+        public static string Settings_Security_PasswordNeverChanged {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasswordNeverChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Último cambio: {0}.
+        /// </summary>
+        public static string Settings_Security_PasswordChangedFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasswordChangedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se bloqueó por contraseñas incorrectas hasta {0}..
+        /// </summary>
+        public static string Settings_Security_LockByAttemptsFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_LockByAttemptsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se suspendió por reportes de otros jugadores hasta {0}..
+        /// </summary>
+        public static string Settings_Security_LockByReportsFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_LockByReportsFormat", resourceCulture);
+            }
+        }
     }
 }
