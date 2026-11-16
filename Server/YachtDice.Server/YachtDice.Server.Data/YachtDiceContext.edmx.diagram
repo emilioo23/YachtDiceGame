@@ -23,6 +23,7 @@
         <EntityTypeShape EntityType="YachtDice.Server.Data.Scorecard" Width="1.5" PointX="12.75" PointY="28.375" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDice.Server.Data.ScorecardEntry" Width="1.5" PointX="15" PointY="28.5" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDice.Server.Data.TurnState" Width="1.5" PointX="9.75" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YachtDice.Server.Data.RolledDie" Width="1.5" PointX="12" PointY="33.5" IsExpanded="true" />
         <EntityTypeShape EntityType="YachtDice.Server.Data.TwoFactorAuth" Width="1.5" PointX="5.25" PointY="43.25" IsExpanded="true" />
         <AssociationConnector Association="YachtDice.Server.Data.FK__PLAYER__AvatarId__17036CC0" ManuallyRouted="false" />
         <AssociationConnector Association="YachtDice.Server.Data.FK__BACKUP_CO__Playe__0D7A0286" ManuallyRouted="false" />

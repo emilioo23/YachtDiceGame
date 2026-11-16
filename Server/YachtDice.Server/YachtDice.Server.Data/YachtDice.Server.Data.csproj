@@ -133,6 +133,9 @@
     <Compile Include="ScorecardEntry.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="RolledDie.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="TurnState.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>

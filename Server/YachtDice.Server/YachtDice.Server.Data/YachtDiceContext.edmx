@@ -207,7 +207,15 @@
           <Property Name="GameId" Type="int" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="RollNum" Type="int" />
-          <Property Name="DiceValues" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="RolledDie">
+          <Key>
+            <PropertyRef Name="TurnStateId" />
+            <PropertyRef Name="DiePosition" />
+          </Key>
+          <Property Name="TurnStateId" Type="int" Nullable="false" />
+          <Property Name="DiePosition" Type="int" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -567,6 +575,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RolledDie_TurnState">
+          <End Role="TurnState" Type="Self.TurnState" Multiplicity="1" />
+          <End Role="RolledDie" Type="Self.RolledDie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TurnState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolledDie">
+              <PropertyRef Name="TurnStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__TwoFactor__Playe__2FCF1A8A">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="TwoFactorAuth" Type="Self.TwoFactorAuth" Multiplicity="*" />
@@ -599,6 +619,7 @@
           <EntitySet Name="RoomPlayer" EntityType="Self.RoomPlayer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Scorecard" EntityType="Self.Scorecard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScorecardEntry" EntityType="Self.ScorecardEntry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolledDie" EntityType="Self.RolledDie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurnState" EntityType="Self.TurnState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TwoFactorAuth" EntityType="Self.TwoFactorAuth" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__BackupCod__Playe__14270015" Association="Self.FK__BackupCod__Playe__14270015">
@@ -716,6 +737,10 @@
           <AssociationSet Name="FK__TurnState__Playe__2EDAF651" Association="Self.FK__TurnState__Playe__2EDAF651">
             <End Role="Player" EntitySet="Player" />
             <End Role="TurnState" EntitySet="TurnState" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolledDie_TurnState" Association="Self.FK_RolledDie_TurnState">
+            <End Role="TurnState" EntitySet="TurnState" />
+            <End Role="RolledDie" EntitySet="RolledDie" />
           </AssociationSet>
           <AssociationSet Name="FK__TwoFactor__Playe__2FCF1A8A" Association="Self.FK__TwoFactor__Playe__2FCF1A8A">
             <End Role="Player" EntitySet="Player" />
@@ -985,9 +1010,19 @@
           <Property Name="GameId" Type="Int32" Nullable="false" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="RollNum" Type="Int32" />
-          <Property Name="DiceValues" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__TURN_STAT__GameI__6166761E" FromRole="TurnState" ToRole="GameHistory" />
           <NavigationProperty Name="Player" Relationship="Self.FK__TURN_STAT__Playe__625A9A57" FromRole="TurnState" ToRole="Player" />
+          <NavigationProperty Name="RolledDie" Relationship="Self.FK_RolledDie_TurnState" FromRole="TurnState" ToRole="RolledDie" />
+        </EntityType>
+        <EntityType Name="RolledDie">
+          <Key>
+            <PropertyRef Name="TurnStateId" />
+            <PropertyRef Name="DiePosition" />
+          </Key>
+          <Property Name="TurnStateId" Type="Int32" Nullable="false" />
+          <Property Name="DiePosition" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TurnState" Relationship="Self.FK_RolledDie_TurnState" FromRole="RolledDie" ToRole="TurnState" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -1300,6 +1335,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RolledDie_TurnState">
+          <End Role="TurnState" Type="Self.TurnState" Multiplicity="1" />
+          <End Role="RolledDie" Type="Self.RolledDie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TurnState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolledDie">
+              <PropertyRef Name="TurnStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__TWO_FACTO__Playe__29221CFB">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="TwoFactorAuth" Type="Self.TwoFactorAuth" Multiplicity="*" />
@@ -1380,6 +1427,7 @@
           <EntitySet Name="RoomPlayer" EntityType="Self.RoomPlayer" />
           <EntitySet Name="Scorecard" EntityType="Self.Scorecard" />
           <EntitySet Name="ScorecardEntry" EntityType="Self.ScorecardEntry" />
+          <EntitySet Name="RolledDie" EntityType="Self.RolledDie" />
           <EntitySet Name="TurnState" EntityType="Self.TurnState" />
           <EntitySet Name="TwoFactorAuth" EntityType="Self.TwoFactorAuth" />
           <AssociationSet Name="FK__PLAYER__AvatarId__17036CC0" Association="Self.FK__PLAYER__AvatarId__17036CC0">
@@ -1481,6 +1529,10 @@
           <AssociationSet Name="FK__TURN_STAT__Playe__625A9A57" Association="Self.FK__TURN_STAT__Playe__625A9A57">
             <End Role="Player" EntitySet="Player" />
             <End Role="TurnState" EntitySet="TurnState" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolledDie_TurnState" Association="Self.FK_RolledDie_TurnState">
+            <End Role="TurnState" EntitySet="TurnState" />
+            <End Role="RolledDie" EntitySet="RolledDie" />
           </AssociationSet>
           <AssociationSet Name="FK__TWO_FACTO__Playe__29221CFB" Association="Self.FK__TWO_FACTO__Playe__29221CFB">
             <End Role="Player" EntitySet="Player" />
@@ -1718,6 +1770,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RolledDie">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.RolledDie">
+              <MappingFragment StoreEntitySet="RolledDie">
+                <ScalarProperty Name="TurnStateId" ColumnName="TurnStateId" />
+                <ScalarProperty Name="DiePosition" ColumnName="DiePosition" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TurnState">
             <EntityTypeMapping TypeName="YachtDice.Server.Data.TurnState">
               <MappingFragment StoreEntitySet="TurnState">
@@ -1725,7 +1786,6 @@
                 <ScalarProperty Name="GameId" ColumnName="GameId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="RollNum" ColumnName="RollNum" />
-                <ScalarProperty Name="DiceValues" ColumnName="DiceValues" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -50,6 +50,7 @@ namespace YachtDice.Server.Data.Repositories
                 .ToList();
             Expression<Func<ScorecardEntry, bool>> isEntryOfCard =
                 scorecardEntry => scorecardIds.Contains(scorecardEntry.ScorecardId);
+            Expression<Func<RolledDie, bool>> isDieOfPlayerTurn = rolledDie => rolledDie.TurnState.PlayerId == playerId;
             Expression<Func<TurnState, bool>> isPlayerTurn = turn => turn.PlayerId == playerId;
             Expression<Func<GameHistoryPlayer, bool>> isPlayerInHistory =
                 historyPlayer => historyPlayer.PlayerId == playerId;
@@ -57,6 +58,7 @@ namespace YachtDice.Server.Data.Repositories
 
             RemoveWhere(context.ScorecardEntry, isEntryOfCard);
             RemoveWhere(context.Scorecard, isPlayerCard);
+            RemoveWhere(context.RolledDie, isDieOfPlayerTurn);
             RemoveWhere(context.TurnState, isPlayerTurn);
             RemoveWhere(context.GameHistoryPlayer, isPlayerInHistory);
             RemoveWhere(context.RoomPlayer, isPlayerInRoom);
@@ -155,12 +157,15 @@ namespace YachtDice.Server.Data.Repositories
             Expression<Func<ScorecardEntry, bool>> isEntryOfCard =
                 scorecardEntry => scorecardIds.Contains(scorecardEntry.ScorecardId);
             Expression<Func<Scorecard, bool>> isCardOfGame = card => gameIds.Contains(card.GameId);
+            Expression<Func<RolledDie, bool>> isDieOfGameTurn =
+                rolledDie => gameIds.Contains(rolledDie.TurnState.GameId);
             Expression<Func<TurnState, bool>> isTurnOfGame = turn => gameIds.Contains(turn.GameId);
             Expression<Func<GameHistoryPlayer, bool>> isPlayerOfGame =
                 historyPlayer => gameIds.Contains(historyPlayer.GameId);
 
             RemoveWhere(context.ScorecardEntry, isEntryOfCard);
             RemoveWhere(context.Scorecard, isCardOfGame);
+            RemoveWhere(context.RolledDie, isDieOfGameTurn);
             RemoveWhere(context.TurnState, isTurnOfGame);
             RemoveWhere(context.GameHistoryPlayer, isPlayerOfGame);
         }
