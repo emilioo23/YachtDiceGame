@@ -159,6 +159,7 @@
           <Property Name="PwdHash" Type="nvarchar" MaxLength="255" />
           <Property Name="Status" Type="nvarchar" MaxLength="20" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="GameSpeed" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="RoomInvite">
           <Key>
@@ -218,6 +219,7 @@
           <Property Name="TurnStateId" Type="int" Nullable="false" />
           <Property Name="DiePosition" Type="int" Nullable="false" />
           <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="IsHeld" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -948,6 +950,7 @@
           <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="GameSpeed" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__GAME_HIST__RoomI__10566F31" FromRole="Room" ToRole="GameHistory" />
           <NavigationProperty Name="KickLog" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="Room" ToRole="KickLog" />
           <NavigationProperty Name="Player" Relationship="Self.FK__ROOM__HostPlayer__1DB06A4F" FromRole="Room" ToRole="Player" />
@@ -1026,6 +1029,7 @@
           <Property Name="TurnStateId" Type="Int32" Nullable="false" />
           <Property Name="DiePosition" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="IsHeld" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="TurnState" Relationship="Self.FK_RolledDie_TurnState" FromRole="RolledDie" ToRole="TurnState" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
@@ -1730,6 +1734,7 @@
                 <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="GameSpeed" ColumnName="GameSpeed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1782,6 +1787,7 @@
                 <ScalarProperty Name="TurnStateId" ColumnName="TurnStateId" />
                 <ScalarProperty Name="DiePosition" ColumnName="DiePosition" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="IsHeld" ColumnName="IsHeld" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

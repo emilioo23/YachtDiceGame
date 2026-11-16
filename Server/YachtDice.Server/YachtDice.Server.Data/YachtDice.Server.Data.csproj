@@ -106,7 +106,13 @@
     <Compile Include="Repositories\FriendRepository.cs" />
     <Compile Include="Repositories\FriendshipStatus.cs" />
     <Compile Include="Repositories\GameHistoryRepository.cs" />
+    <Compile Include="Repositories\CheckpointPlayerRecord.cs" />
+    <Compile Include="Repositories\GameCheckpointRecord.cs" />
+    <Compile Include="Repositories\GameCheckpointRepository.cs" />
     <Compile Include="Repositories\GameResultRecord.cs" />
+    <Compile Include="Repositories\IGameCheckpointRepository.cs" />
+    <Compile Include="Repositories\RolledDieRecord.cs" />
+    <Compile Include="Repositories\RoomPlayerRecordStatus.cs" />
     <Compile Include="Repositories\IBackupCodeRepository.cs" />
     <Compile Include="Repositories\IFriendRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
@@ -181,6 +187,7 @@
     <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
     <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
     <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />
+    <None Include="Scripts\SaveGamesInProgress.sql" />
     <None Include="Scripts\SeedScoreCategories.sql" />
     <None Include="Scripts\WidenBackupCodeHash.sql" />
     <EntityDeploy Include="YachtDiceContext.edmx">

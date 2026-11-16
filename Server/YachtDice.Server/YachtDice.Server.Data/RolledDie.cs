@@ -17,6 +17,7 @@ namespace YachtDice.Server.Data
         public int TurnStateId { get; set; }
         public int DiePosition { get; set; }
         public int Value { get; set; }
+        public bool IsHeld { get; set; }
 
         public virtual TurnState TurnState { get; set; }
     }
