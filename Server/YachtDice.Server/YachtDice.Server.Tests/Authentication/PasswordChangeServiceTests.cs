@@ -197,6 +197,33 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Fact]
+        public void GetSecuritySummary_PlayerWhoNeverChangedThePassword_SaysNothingHappened()
+        {
+            var summaryExpected = new { HasPasswordChange = false, HasRecentLock = false };
+
+            SecuritySummary summary = _service.GetSecuritySummary(DisplayName);
+
+            Assert.Equivalent(summaryExpected, summary);
+        }
+
+        [Fact]
+        public void GetSecuritySummary_RecentLock_ShowsTheLockAndItsReason()
+        {
+            DateTime lockedUntil = DateTime.UtcNow.AddHours(1);
+            _players.SaveLock(PlayerId, LoginLock.Daily.ToString(), lockedUntil);
+            var summaryExpected = new
+            {
+                HasRecentLock = true,
+                LockedUntil = lockedUntil,
+                LockReason = LoginLock.Daily.ToString()
+            };
+
+            SecuritySummary summary = _service.GetSecuritySummary(DisplayName);
+
+            Assert.Equivalent(summaryExpected, summary);
+        }
+
+        [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new PasswordChangeService(null, _passwords));

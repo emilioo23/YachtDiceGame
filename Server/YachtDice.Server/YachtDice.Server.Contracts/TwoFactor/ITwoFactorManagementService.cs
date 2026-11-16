@@ -85,5 +85,14 @@ namespace YachtDice.Server.Contracts.TwoFactor
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         int CountBackupCodes(string sessionToken);
+
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The summary of the security of the account.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        SecuritySummary GetSecuritySummary(string sessionToken);
     }
 }

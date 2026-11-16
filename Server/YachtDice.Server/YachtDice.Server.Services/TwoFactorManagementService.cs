@@ -144,6 +144,33 @@ namespace YachtDice.Server.Services
             return codeCount;
         }
 
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The summary of the security of the account.</returns>
+        public Contracts.SecuritySummary GetSecuritySummary(string sessionToken)
+        {
+            Contracts.SecuritySummary summary =
+                ExecuteForPlayer(sessionToken, playerName => ProcessSecuritySummary(playerName));
+
+            return summary;
+        }
+
+        private Contracts.SecuritySummary ProcessSecuritySummary(string displayName)
+        {
+            LogicAuthentication.SecuritySummary summary = _passwordChangeService.GetSecuritySummary(displayName);
+
+            return new Contracts.SecuritySummary
+            {
+                HasPasswordChange = summary.HasPasswordChange,
+                LastPasswordChange = summary.LastPasswordChange,
+                HasRecentLock = summary.HasRecentLock,
+                LockedUntil = summary.LockedUntil,
+                LockReason = summary.LockReason
+            };
+        }
+
         private Contracts.BackupCodesData ProcessBackupCodeCreation(string displayName, string password)
         {
             LogicTwoFactor.BackupCodeCreation creation = _settingsService.CreateBackupCodes(displayName, password);

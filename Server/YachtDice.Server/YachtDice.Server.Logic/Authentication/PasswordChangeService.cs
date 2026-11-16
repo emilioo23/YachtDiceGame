@@ -19,6 +19,7 @@ namespace YachtDice.Server.Logic.Authentication
         private const string WrongPasswordLogMessage = "A wrong current password was typed in a password change.";
         private const string NullDependencyMessage = "A dependency of the password change cannot be null.";
         private const string NullRequestMessage = "The password change request cannot be null.";
+        private const int RecentLockDays = 7;
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IPasswordResetRepository _passwordRepository;
@@ -119,6 +120,41 @@ namespace YachtDice.Server.Logic.Authentication
             Func<string, bool> isSamePassword = passwordHash => PasswordHasher.Verify(newPassword, passwordHash);
 
             return _passwordRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
+        }
+
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The summary; it says that nothing happened if the player does not exist.</returns>
+        public SecuritySummary GetSecuritySummary(string displayName)
+        {
+            Player player = FindPlayer(displayName);
+            var summary = new SecuritySummary { LockReason = string.Empty };
+
+            if (player != null)
+            {
+                List<DateTime> changeDates = _passwordRepository.FindPasswordChangeDates(player.Id);
+                AccountLock lastLock = _playerRepository.FindLocks(player.Id).FirstOrDefault();
+
+                summary.HasPasswordChange = changeDates.Any();
+                summary.LastPasswordChange = changeDates.FirstOrDefault();
+                AddLock(summary, lastLock);
+            }
+
+            return summary;
+        }
+
+        private static void AddLock(SecuritySummary summary, AccountLock lastLock)
+        {
+            DateTime recentLimit = DateTime.UtcNow.AddDays(-RecentLockDays);
+
+            if (lastLock != null && lastLock.LockedUntil >= recentLimit)
+            {
+                summary.HasRecentLock = true;
+                summary.LockedUntil = lastLock.LockedUntil;
+                summary.LockReason = lastLock.LockType;
+            }
         }
 
         private Player FindPlayer(string displayName)

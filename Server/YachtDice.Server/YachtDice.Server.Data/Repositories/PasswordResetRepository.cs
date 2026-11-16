@@ -113,6 +113,32 @@ namespace YachtDice.Server.Data.Repositories
             return hashes;
         }
 
+        /// <summary>
+        /// Gets the moments when the player changed the password, from the newest to the oldest.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The moments in universal time, or an empty list if the password never changed.</returns>
+        /// <exception cref="DataAccessException">The passwords could not be read.</exception>
+        public List<DateTime> FindPasswordChangeDates(int playerId)
+        {
+            List<DateTime> dates = DatabaseOperation.Query(
+                context => SelectChangeDates(context, playerId),
+                FindFailedMessage);
+
+            return dates;
+        }
+
+        private static List<DateTime> SelectChangeDates(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<PasswordHistory, bool>> isOfPlayer = row => row.PlayerId == playerId;
+
+            return context.PasswordHistory
+                .Where(isOfPlayer)
+                .OrderByDescending(row => row.ChangeDate)
+                .Select(row => row.ChangeDate)
+                .ToList();
+        }
+
         private static List<string> SelectRecentHashes(YachtDiceContext context, int playerId)
         {
             Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;

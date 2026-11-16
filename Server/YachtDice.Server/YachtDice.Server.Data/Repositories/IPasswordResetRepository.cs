@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -40,5 +41,12 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <returns>The hashes, from the newest to the oldest.</returns>
         List<string> FindRecentPasswordHashes(int playerId);
+
+        /// <summary>
+        /// Gets the moments when the player changed the password, from the newest to the oldest.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The moments in universal time, or an empty list if the password never changed.</returns>
+        List<DateTime> FindPasswordChangeDates(int playerId);
     }
 }

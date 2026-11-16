@@ -17,6 +17,7 @@ namespace YachtDice.Server.Tests.InMemory
 
         private readonly List<PwdResetToken> _tokens = new List<PwdResetToken>();
         private readonly List<string> _previousHashes = new List<string>();
+        private readonly List<DateTime> _changeDates = new List<DateTime>();
 
         /// <summary>
         /// Initializes the repository with the players whose password can change.
@@ -62,10 +63,17 @@ namespace YachtDice.Server.Tests.InMemory
             Player player = _players.Players.First(isSameId);
 
             _previousHashes.Insert(0, player.PwdHash);
+            _changeDates.Insert(0, DateTime.UtcNow);
             player.PwdHash = newPasswordHash;
             Delete(playerId);
         }
 
+        public List<DateTime> FindPasswordChangeDates(int playerId)
+        {
+            return _changeDates.ToList();
+        }
+
+        /// <inheritdoc />
         public List<string> FindRecentPasswordHashes(int playerId)
         {
             Func<Player, bool> isSameId = row => row.Id == playerId;
