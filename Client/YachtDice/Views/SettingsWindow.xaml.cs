@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -122,6 +123,19 @@ namespace YachtDice.Views
                 : Strings.Settings_Security_ButtonTwoFactorEnable;
             TwoFactorPasswordBox.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
             TwoFactorToggleButton.IsEnabled = true;
+            CreateBackupCodesButton.IsEnabled = isEnabled;
+
+            if (!isEnabled)
+            {
+                BackupCodesStatusTextBlock.Text = Strings.Settings_Security_BackupCodesOff;
+                BackupCodesTextBox.Clear();
+                BackupCodesTextBox.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ShowBackupCodeCount(int codeCount)
+        {
+            BackupCodesStatusTextBlock.Text = string.Format(Strings.Settings_Security_BackupCodesLeft, codeCount);
         }
 
         private async Task LoadTwoFactorStateAsync()
@@ -130,6 +144,11 @@ namespace YachtDice.Views
             {
                 bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_session.DisplayName);
                 ShowTwoFactorState(isEnabled);
+
+                if (isEnabled)
+                {
+                    ShowBackupCodeCount(await _twoFactorGateway.CountBackupCodesAsync(_session.SessionToken));
+                }
             }
             catch (GatewayException ex)
             {
@@ -233,6 +252,53 @@ namespace YachtDice.Views
             {
                 TwoFactorToggleButton.IsEnabled = true;
             }
+        }
+
+        private async void CreateBackupCodesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(TwoFactorPasswordBox.Password))
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_BackupCodesPasswordRequired);
+            }
+            else if (CustomDialogWindow.Confirm(this, Strings.Settings_Security_BackupCodesConfirm))
+            {
+                await CreateBackupCodesAsync();
+            }
+        }
+
+        private async Task CreateBackupCodesAsync()
+        {
+            CreateBackupCodesButton.IsEnabled = false;
+
+            try
+            {
+                BackupCodesData codesData = await _twoFactorGateway.CreateBackupCodesAsync(
+                    _session.SessionToken,
+                    TwoFactorPasswordBox.Password);
+
+                if (codesData.Code == BackupCodesResultCode.Created)
+                {
+                    ShowBackupCodes(codesData.Codes);
+                }
+
+                CustomDialogWindow.ShowMessage(this, BackupCodesMessages.GetMessage(codesData.Code));
+            }
+            catch (GatewayException ex)
+            {
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+            finally
+            {
+                CreateBackupCodesButton.IsEnabled = _isTwoFactorEnabled;
+            }
+        }
+
+        private void ShowBackupCodes(string[] codes)
+        {
+            TwoFactorPasswordBox.Clear();
+            BackupCodesTextBox.Text = string.Join(Environment.NewLine, codes);
+            BackupCodesTextBox.Visibility = Visibility.Visible;
+            ShowBackupCodeCount(codes.Length);
         }
 
         private void ReopenSettingsWindow(string sectionToShow)

@@ -65,7 +65,10 @@ namespace YachtDice.Views
             if (!_isActivation)
             {
                 DestinationEmailTextBlock.Text = EmailMask.Mask(_email);
+                UseBackupCodeLink.Visibility = Visibility.Visible;
             }
+
+            BackupCodeTextBox.MaxLength = BackupCodeInputValidator.BackupCodeLength;
 
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
@@ -109,7 +112,7 @@ namespace YachtDice.Views
             }
             else if (IsCodeComplete())
             {
-                await VerifyCodeAsync();
+                await VerifyCodeAsync(ReadDigits());
             }
         }
 
@@ -117,7 +120,7 @@ namespace YachtDice.Views
         {
             if (IsCodeComplete())
             {
-                await VerifyCodeAsync();
+                await VerifyCodeAsync(ReadDigits());
             }
             else
             {
@@ -154,6 +157,28 @@ namespace YachtDice.Views
             }
         }
 
+        private void UseBackupCodeLink_Click(object sender, MouseButtonEventArgs e)
+        {
+            BackupCodePanel.Visibility = Visibility.Visible;
+            BackupCodeTextBox.Focus();
+        }
+
+        private async void UseBackupCodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            string backupCode = BackupCodeTextBox.Text.Trim();
+
+            if (BackupCodeInputValidator.IsValid(backupCode))
+            {
+                UseBackupCodeButton.IsEnabled = false;
+                await VerifyCodeAsync(backupCode);
+                UseBackupCodeButton.IsEnabled = true;
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorInvalidBackupCode);
+            }
+        }
+
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
             if (_isActivation)
@@ -174,10 +199,13 @@ namespace YachtDice.Views
             return isComplete;
         }
 
-        private async Task VerifyCodeAsync()
+        private string ReadDigits()
         {
-            string code = string.Concat(_digitBoxes.Select(box => box.Text));
+            return string.Concat(_digitBoxes.Select(box => box.Text));
+        }
 
+        private async Task VerifyCodeAsync(string code)
+        {
             try
             {
                 if (_isActivation)

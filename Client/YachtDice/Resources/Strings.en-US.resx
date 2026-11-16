@@ -2343,4 +2343,34 @@
   <data name="MainMenu_Play_StatComputer" xml:space="preserve">
     <value>Against the computer: {0} played, {1} won</value>
   </data>
+  <data name="Settings_Security_BackupCodes" xml:space="preserve">
+    <value>Backup codes</value>
+  </data>
+  <data name="Settings_Security_BackupCodesLeft" xml:space="preserve">
+    <value>You have {0} codes left. Each one works once if you cannot get the email.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesOff" xml:space="preserve">
+    <value>Turn on two-step verification to create your codes.</value>
+  </data>
+  <data name="Settings_Security_ButtonBackupCodes" xml:space="preserve">
+    <value>Create codes</value>
+  </data>
+  <data name="Settings_Security_BackupCodesConfirm" xml:space="preserve">
+    <value>The codes you had will stop working. Do you want to create new codes?</value>
+  </data>
+  <data name="Settings_Security_BackupCodesCreated" xml:space="preserve">
+    <value>Keep these codes in a safe place. They will not be shown again.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesPasswordRequired" xml:space="preserve">
+    <value>Type your current password to create the codes.</value>
+  </data>
+  <data name="TwoFactor_UseBackupCode" xml:space="preserve">
+    <value>Cannot get the email? Use a backup code</value>
+  </data>
+  <data name="TwoFactor_ButtonUseBackupCode" xml:space="preserve">
+    <value>Use code</value>
+  </data>
+  <data name="TwoFactor_ErrorInvalidBackupCode" xml:space="preserve">
+    <value>The backup code must have 8 digits.</value>
+  </data>
 </root>

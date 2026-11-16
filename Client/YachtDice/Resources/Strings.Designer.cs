@@ -3876,5 +3876,94 @@ namespace YachtDice.Resources {
             }
         }
         
+        /// <summary>
+        ///   Busca una cadena traducida similar a Códigos de respaldo.
+        /// </summary>
+        public static string Settings_Security_BackupCodes {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Te quedan {0} códigos. Cada uno sirve una vez si no puedes recibir el correo..
+        /// </summary>
+        public static string Settings_Security_BackupCodesLeft {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activa la verificación en dos pasos para crear tus códigos..
+        /// </summary>
+        public static string Settings_Security_BackupCodesOff {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Crear códigos.
+        /// </summary>
+        public static string Settings_Security_ButtonBackupCodes {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonBackupCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los códigos que tenías dejarán de servir. ¿Quieres crear códigos nuevos?.
+        /// </summary>
+        public static string Settings_Security_BackupCodesConfirm {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Guarda estos códigos en un lugar seguro. No se volverán a mostrar..
+        /// </summary>
+        public static string Settings_Security_BackupCodesCreated {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña actual para crear los códigos..
+        /// </summary>
+        public static string Settings_Security_BackupCodesPasswordRequired {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿No puedes recibir el correo? Usa un código de respaldo.
+        /// </summary>
+        public static string TwoFactor_UseBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_UseBackupCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Usar código.
+        /// </summary>
+        public static string TwoFactor_ButtonUseBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_ButtonUseBackupCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código de respaldo debe tener 8 dígitos..
+        /// </summary>
+        public static string TwoFactor_ErrorInvalidBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorInvalidBackupCode", resourceCulture);
+            }
+        }
     }
 }

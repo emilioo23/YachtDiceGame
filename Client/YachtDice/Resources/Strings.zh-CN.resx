@@ -2343,4 +2343,34 @@
   <data name="MainMenu_Play_StatComputer" xml:space="preserve">
     <value>对战电脑：{0} 局，胜 {1} 局</value>
   </data>
+  <data name="Settings_Security_BackupCodes" xml:space="preserve">
+    <value>备用验证码</value>
+  </data>
+  <data name="Settings_Security_BackupCodesLeft" xml:space="preserve">
+    <value>你还剩 {0} 个验证码。收不到邮件时，每个验证码可使用一次。</value>
+  </data>
+  <data name="Settings_Security_BackupCodesOff" xml:space="preserve">
+    <value>请先开启两步验证，再创建备用验证码。</value>
+  </data>
+  <data name="Settings_Security_ButtonBackupCodes" xml:space="preserve">
+    <value>创建验证码</value>
+  </data>
+  <data name="Settings_Security_BackupCodesConfirm" xml:space="preserve">
+    <value>你之前的验证码将失效。要创建新的验证码吗？</value>
+  </data>
+  <data name="Settings_Security_BackupCodesCreated" xml:space="preserve">
+    <value>请将这些验证码保存在安全的地方。它们不会再次显示。</value>
+  </data>
+  <data name="Settings_Security_BackupCodesPasswordRequired" xml:space="preserve">
+    <value>请输入当前密码以创建验证码。</value>
+  </data>
+  <data name="TwoFactor_UseBackupCode" xml:space="preserve">
+    <value>收不到邮件？使用备用验证码</value>
+  </data>
+  <data name="TwoFactor_ButtonUseBackupCode" xml:space="preserve">
+    <value>使用验证码</value>
+  </data>
+  <data name="TwoFactor_ErrorInvalidBackupCode" xml:space="preserve">
+    <value>备用验证码必须是 8 位数字。</value>
+  </data>
 </root>

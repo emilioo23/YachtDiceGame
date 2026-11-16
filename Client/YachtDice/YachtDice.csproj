@@ -301,6 +301,7 @@
     <Compile Include="Utils\InvitationResultMessages.cs" />
     <Compile Include="Utils\LoginResultMessages.cs" />
     <Compile Include="Utils\MatchPlayerFactory.cs" />
+    <Compile Include="Utils\BackupCodesMessages.cs" />
     <Compile Include="Utils\PasswordChangeMessages.cs" />
     <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />

@@ -100,6 +100,31 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to create new backup codes for the player. The codes created before stop working.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        public async Task<BackupCodesData> CreateBackupCodesAsync(string sessionToken, string password)
+        {
+            BackupCodesData codesData = await ExecuteAsync(client => client.CreateBackupCodes(sessionToken, password));
+
+            return codesData;
+        }
+
+        /// <summary>
+        /// Asks the server how many backup codes the player has not used.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        public async Task<int> CountBackupCodesAsync(string sessionToken)
+        {
+            int codeCount = await ExecuteAsync(client => client.CountBackupCodes(sessionToken));
+
+            return codeCount;
+        }
+
+        /// <summary>
         /// Translates the WCF fault exception into a specific gateway error code.
         /// </summary>
         /// <param name="fault">The exception thrown by the service.</param>

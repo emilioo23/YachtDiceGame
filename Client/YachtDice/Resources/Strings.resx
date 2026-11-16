@@ -2343,4 +2343,34 @@
   <data name="MainMenu_Play_StatComputer" xml:space="preserve">
     <value>Contra la computadora: {0} jugadas, {1} ganadas</value>
   </data>
+  <data name="Settings_Security_BackupCodes" xml:space="preserve">
+    <value>Códigos de respaldo</value>
+  </data>
+  <data name="Settings_Security_BackupCodesLeft" xml:space="preserve">
+    <value>Te quedan {0} códigos. Cada uno sirve una vez si no puedes recibir el correo.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesOff" xml:space="preserve">
+    <value>Activa la verificación en dos pasos para crear tus códigos.</value>
+  </data>
+  <data name="Settings_Security_ButtonBackupCodes" xml:space="preserve">
+    <value>Crear códigos</value>
+  </data>
+  <data name="Settings_Security_BackupCodesConfirm" xml:space="preserve">
+    <value>Los códigos que tenías dejarán de servir. ¿Quieres crear códigos nuevos?</value>
+  </data>
+  <data name="Settings_Security_BackupCodesCreated" xml:space="preserve">
+    <value>Guarda estos códigos en un lugar seguro. No se volverán a mostrar.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesPasswordRequired" xml:space="preserve">
+    <value>Escribe tu contraseña actual para crear los códigos.</value>
+  </data>
+  <data name="TwoFactor_UseBackupCode" xml:space="preserve">
+    <value>¿No puedes recibir el correo? Usa un código de respaldo</value>
+  </data>
+  <data name="TwoFactor_ButtonUseBackupCode" xml:space="preserve">
+    <value>Usar código</value>
+  </data>
+  <data name="TwoFactor_ErrorInvalidBackupCode" xml:space="preserve">
+    <value>El código de respaldo debe tener 8 dígitos.</value>
+  </data>
 </root>
