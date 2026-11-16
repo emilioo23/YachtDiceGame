@@ -17,9 +17,10 @@ namespace YachtDice.Server.Data
         public int Id { get; set; }
         public int HostId { get; set; }
         public int TargetId { get; set; }
-        public int RoomId { get; set; }
+        public Nullable<int> RoomId { get; set; }
         public string Reason { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public string RoomCode { get; set; }
     
         public virtual Player Player { get; set; }
         public virtual Room Room { get; set; }

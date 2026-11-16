@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -23,6 +24,7 @@ namespace YachtDice.Server.Services
 
         private readonly LogicRooms.IRoomManager _roomManager;
         private readonly GameCoordinator _gameCoordinator;
+        private readonly LogicRooms.KickHistoryService _kickHistoryService;
 
         private readonly CallbackRegistry<Contracts.IRoomCallback> _callbacks =
             new CallbackRegistry<Contracts.IRoomCallback>();
@@ -34,12 +36,18 @@ namespace YachtDice.Server.Services
         /// </summary>
         /// <param name="roomManager">The rules and the state of the rooms. It is shared with the chat.</param>
         /// <param name="gameCoordinator">The games of the rooms. It is shared with the game service.</param>
-        public RoomService(LogicRooms.IRoomManager roomManager, GameCoordinator gameCoordinator)
+        /// <param name="kickHistoryService">The history where the expulsions are saved.</param>
+        public RoomService(
+            LogicRooms.IRoomManager roomManager,
+            GameCoordinator gameCoordinator,
+            LogicRooms.KickHistoryService kickHistoryService)
         {
             _roomManager = roomManager
                 ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
             _gameCoordinator = gameCoordinator
                 ?? throw new ArgumentNullException(nameof(gameCoordinator), NullDependencyMessage);
+            _kickHistoryService = kickHistoryService
+                ?? throw new ArgumentNullException(nameof(kickHistoryService), NullDependencyMessage);
             _gameCoordinator.ReconnectTimeExpired += ForgetPlayerWhoDidNotReturn;
             _expiredRoomsCheck = StartExpiredRoomsCheck();
         }
@@ -69,6 +77,19 @@ namespace YachtDice.Server.Services
                 Execute(displayName, () => FinishJoin(_roomManager.Join(roomCode, displayName)));
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the latest expulsions where the player was the host or the expelled player.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The expulsions from the newest to the oldest, or an empty list if there is none.</returns>
+        public List<Contracts.KickHistoryEntry> GetKickHistory(string sessionToken)
+        {
+            List<Contracts.KickHistoryEntry> history =
+                ExecuteForPlayer(sessionToken, playerName => ProcessKickHistory(playerName));
+
+            return history;
         }
 
         /// <summary>
@@ -326,13 +347,41 @@ namespace YachtDice.Server.Services
             }
         }
 
+        private List<Contracts.KickHistoryEntry> ProcessKickHistory(string displayName)
+        {
+            Func<LogicRooms.KickHistoryEntry, Contracts.KickHistoryEntry> toContract = entry =>
+                new Contracts.KickHistoryEntry
+                {
+                    HostName = entry.HostName,
+                    TargetName = entry.TargetName,
+                    RoomCode = entry.RoomCode,
+                    Date = entry.Date
+                };
+
+            return _kickHistoryService.GetHistory(displayName).Select(toContract).ToList();
+        }
+
+        private string ReadDisplayName(LogicRooms.RoomMember member)
+        {
+            string displayName = string.Empty;
+
+            if (_roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer player))
+            {
+                displayName = player.DisplayName;
+            }
+
+            return displayName;
+        }
+
         private Contracts.RoomResultCode ProcessKick(LogicRooms.RoomMember member, string targetPlayerId)
         {
+            var expelled = new LogicRooms.RoomMember(member.RoomCode, targetPlayerId);
+            string hostName = ReadDisplayName(member);
+            string targetName = ReadDisplayName(expelled);
             LogicRooms.RoomResult result = _roomManager.KickPlayer(member, targetPlayerId);
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                var expelled = new LogicRooms.RoomMember(member.RoomCode, targetPlayerId);
 
                 LogInfo(string.Format(
                     CultureInfo.InvariantCulture,
@@ -343,6 +392,7 @@ namespace YachtDice.Server.Services
                 TellRemovedPlayer(result.Room, expelled, Contracts.RoomEventType.PlayerKicked);
                 _gameCoordinator.PlayerRemoved(expelled);
                 Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
+                _kickHistoryService.Record(member.RoomCode, hostName, targetName);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);

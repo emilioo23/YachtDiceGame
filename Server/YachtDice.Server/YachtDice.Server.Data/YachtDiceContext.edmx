@@ -64,9 +64,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HostId" Type="int" Nullable="false" />
           <Property Name="TargetId" Type="int" Nullable="false" />
-          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="100" />
           <Property Name="Date" Type="datetime" />
+          <Property Name="RoomCode" Type="nvarchar" MaxLength="6" />
         </EntityType>
         <EntityType Name="Passkey">
           <Key>
@@ -312,7 +313,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__KickLog__RoomId__1AD3FDA4">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -822,9 +823,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HostId" Type="Int32" Nullable="false" />
           <Property Name="TargetId" Type="Int32" Nullable="false" />
-          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="RoomId" Type="Int32" />
           <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="RoomCode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__KICK_LOG__HostId__1332DBDC" FromRole="KickLog" ToRole="Player" />
           <NavigationProperty Name="Room" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="KickLog" ToRole="Room" />
           <NavigationProperty Name="Player1" Relationship="Self.FK__KICK_LOG__Target__151B244E" FromRole="KickLog" ToRole="Player" />
@@ -1180,7 +1182,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__KICK_LOG__RoomId__14270015">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -1626,6 +1628,7 @@
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="RoomCode" ColumnName="RoomCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

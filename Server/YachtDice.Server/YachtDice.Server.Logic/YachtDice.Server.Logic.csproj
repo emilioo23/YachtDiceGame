@@ -144,6 +144,8 @@
       <DependentUpon>EmailStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Rooms\GameRoom.cs" />
+    <Compile Include="Rooms\KickHistoryEntry.cs" />
+    <Compile Include="Rooms\KickHistoryService.cs" />
     <Compile Include="Rooms\ComputerDifficulty.cs" />
     <Compile Include="Rooms\GameSpeed.cs" />
     <Compile Include="Rooms\IRoomManager.cs" />

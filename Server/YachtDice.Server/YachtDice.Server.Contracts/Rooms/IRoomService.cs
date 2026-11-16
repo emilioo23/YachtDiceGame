@@ -127,5 +127,14 @@ namespace YachtDice.Server.Contracts.Rooms
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         void LeaveRoom(RoomMember member);
+
+        /// <summary>
+        /// Gets the latest expulsions where the player was the host or the expelled player.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The expulsions from the newest to the oldest, or an empty list if there is none.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<KickHistoryEntry> GetKickHistory(string sessionToken);
     }
 }
