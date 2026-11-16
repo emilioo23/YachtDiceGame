@@ -12,6 +12,9 @@ namespace YachtDice.Server.Tests.InMemory
     {
         private const string NotSupportedMessage = "The tests that use this service do not need this operation.";
 
+        private readonly Dictionary<string, int> _playerIds =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
         private readonly Dictionary<string, List<string>> _friendsByPlayer =
             new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
@@ -54,6 +57,22 @@ namespace YachtDice.Server.Tests.InMemory
         public FriendActionStatus BlockPlayer(string displayName, string blockedName)
         {
             throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <inheritdoc />
+        public int FindPlayerId(string displayName)
+        {
+            return _playerIds.TryGetValue(displayName, out int playerId) ? playerId : FriendshipService.NoPlayerId;
+        }
+
+        /// <summary>
+        /// Gives an account identifier to a name, so the invitations of that player can be saved.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="playerId">Identifier of the account.</param>
+        public void AddAccount(string displayName, int playerId)
+        {
+            _playerIds[displayName] = playerId;
         }
 
         /// <inheritdoc />

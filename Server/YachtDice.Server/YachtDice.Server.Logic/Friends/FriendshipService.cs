@@ -24,6 +24,11 @@ namespace YachtDice.Server.Logic.Friends
         /// </summary>
         public const int DefaultMaxPendingRequests = 5;
 
+        /// <summary>
+        /// Identifier returned for a name that does not belong to any account.
+        /// </summary>
+        public const int NoPlayerId = 0;
+
         private const int RequestLifetimeDays = 7;
         private const int ReportWindowHours = 24;
         private const int MaxReportCommentLength = 300;
@@ -193,6 +198,24 @@ namespace YachtDice.Server.Logic.Friends
             }
 
             return status;
+        }
+
+        /// <inheritdoc />
+        public int FindPlayerId(string displayName)
+        {
+            int playerId = NoPlayerId;
+
+            if (!string.IsNullOrWhiteSpace(displayName))
+            {
+                Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
+
+                if (player != null)
+                {
+                    playerId = player.Id;
+                }
+            }
+
+            return playerId;
         }
 
         /// <summary>

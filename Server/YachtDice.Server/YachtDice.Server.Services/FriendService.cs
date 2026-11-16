@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -127,6 +128,19 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Gets the invitations to a room that the player received in the last day, from the newest to the oldest.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The invitations, or an empty list if there is none.</returns>
+        public List<Contracts.ReceivedInvitation> GetReceivedInvitations(string sessionToken)
+        {
+            List<Contracts.ReceivedInvitation> invitations =
+                ExecuteForPlayer(sessionToken, playerName => ProcessReceivedInvitations(playerName));
+
+            return invitations;
+        }
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
@@ -215,6 +229,11 @@ namespace YachtDice.Server.Services
                 };
 
                 code = Deliver(friendName, invitation);
+
+                if (code == Contracts.InvitationResultCode.Sent)
+                {
+                    _invitationService.SaveInvitation(result.SenderName, friendName, sender.RoomCode);
+                }
             }
             else
             {
@@ -223,6 +242,20 @@ namespace YachtDice.Server.Services
             }
 
             return code;
+        }
+
+        private List<Contracts.ReceivedInvitation> ProcessReceivedInvitations(string displayName)
+        {
+            Func<LogicFriends.ReceivedInvitation, Contracts.ReceivedInvitation> toContract = invitation =>
+                new Contracts.ReceivedInvitation
+                {
+                    SenderName = invitation.SenderName,
+                    RoomCode = invitation.RoomCode,
+                    SentAt = invitation.SentAt,
+                    IsRoomOpen = invitation.IsRoomOpen
+                };
+
+            return _invitationService.GetReceivedInvitations(displayName).Select(toContract).ToList();
         }
 
         private Contracts.ReportResultCode ProcessReport(string displayName, Contracts.PlayerReport report)

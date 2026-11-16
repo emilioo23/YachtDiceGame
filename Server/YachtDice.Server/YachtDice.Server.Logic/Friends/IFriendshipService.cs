@@ -51,6 +51,13 @@ namespace YachtDice.Server.Logic.Friends
         ReportStatus ReportPlayer(string displayName, ReportDetails details);
 
         /// <summary>
+        /// Finds the identifier of the account that owns a name.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The identifier, or <see cref="FriendshipService.NoPlayerId"/> if the name has no account.</returns>
+        int FindPlayerId(string displayName);
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

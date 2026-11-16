@@ -80,6 +80,7 @@
     <Compile Include="InMemory\InMemoryKickLogRepository.cs" />
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerReportRepository.cs" />
+    <Compile Include="InMemory\InMemoryRoomInviteRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
     <Compile Include="InMemory\FakeCallbackChannel.cs" />

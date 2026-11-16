@@ -354,7 +354,10 @@ namespace YachtDice.Server.Host
                 MaxFriends = ReadPositiveNumber(MaxFriendsKey),
                 MaxPendingRequests = ReadPositiveNumber(MaxPendingRequestsKey)
             };
-            var invitationService = new RoomInvitationService(roomManager, friendshipService);
+            var invitationService = new RoomInvitationService(
+                roomManager,
+                friendshipService,
+                new RoomInviteRepository());
 
             return new FriendService(friendshipService, invitationService, notifier);
         }

@@ -91,6 +91,7 @@
     <Compile Include="Friends\IRoomInvitationService.cs" />
     <Compile Include="Friends\InvitationResult.cs" />
     <Compile Include="Friends\InvitationStatus.cs" />
+    <Compile Include="Friends\ReceivedInvitation.cs" />
     <Compile Include="Friends\ReportDetails.cs" />
     <Compile Include="Friends\ReportReason.cs" />
     <Compile Include="Friends\ReportStatus.cs" />

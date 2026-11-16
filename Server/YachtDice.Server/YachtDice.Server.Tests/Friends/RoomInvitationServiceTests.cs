@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
+using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Rooms;
@@ -18,11 +20,15 @@ namespace YachtDice.Server.Tests.Friends
         private const string StrangerName = "Carlos";
         private const string UnknownRoomCode = "ZZZZZZ";
         private const string UnknownPlayerId = "not-a-player";
+        private const int HostId = 1;
+        private const int FriendId = 2;
 
         private readonly RoomManager _roomManager = new RoomManager(
             new InMemoryAvatarLookup(),
             new OffensiveWordFilter(new string[0]));
         private readonly InMemoryFriendshipService _friendships = new InMemoryFriendshipService();
+        private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
+        private readonly InMemoryRoomInviteRepository _invites;
         private readonly RoomInvitationService _service;
 
         /// <summary>
@@ -31,19 +37,71 @@ namespace YachtDice.Server.Tests.Friends
         public RoomInvitationServiceTests()
         {
             _friendships.AddFriends(HostName, FriendName);
-            _service = new RoomInvitationService(_roomManager, _friendships);
+            _friendships.AddAccount(HostName, HostId);
+            _friendships.AddAccount(FriendName, FriendId);
+            _players.Add(new Player { Id = HostId, DisplayName = HostName });
+            _invites = new InMemoryRoomInviteRepository(_players);
+            _service = new RoomInvitationService(_roomManager, _friendships, _invites);
+        }
+
+        [Fact]
+        public void GetReceivedInvitations_InvitationToAnOpenRoom_ShowsTheSenderAndThatTheRoomIsOpen()
+        {
+            RoomResult host = _roomManager.CreateRoom(HostName);
+            _service.SaveInvitation(HostName, FriendName, host.Room.Code);
+            var invitationsExpected = new[]
+            {
+                new { SenderName = HostName, RoomCode = host.Room.Code, IsRoomOpen = true }
+            };
+
+            List<ReceivedInvitation> invitations = _service.GetReceivedInvitations(FriendName);
+
+            Assert.Equivalent(invitationsExpected, invitations);
+        }
+
+        [Fact]
+        public void GetReceivedInvitations_RoomThatNoLongerExists_SaysTheRoomIsClosed()
+        {
+            _service.SaveInvitation(HostName, FriendName, UnknownRoomCode);
+            var invitationsExpected = new[] { new { RoomCode = UnknownRoomCode, IsRoomOpen = false } };
+
+            List<ReceivedInvitation> invitations = _service.GetReceivedInvitations(FriendName);
+
+            Assert.Equivalent(invitationsExpected, invitations);
+        }
+
+        [Fact]
+        public void SaveInvitation_GuestWithoutAccount_SavesNothing()
+        {
+            _service.SaveInvitation(StrangerName, FriendName, UnknownRoomCode);
+
+            Assert.Empty(_invites.Invites);
+        }
+
+        [Fact]
+        public void GetReceivedInvitations_PlayerWithoutAccount_ReturnsAnEmptyList()
+        {
+            List<ReceivedInvitation> invitations = _service.GetReceivedInvitations(StrangerName);
+
+            Assert.Empty(invitations);
+        }
+
+        [Fact]
+        public void Constructor_NullInviteRepository_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new RoomInvitationService(_roomManager, _friendships, null));
         }
 
         [Fact]
         public void Constructor_NullRoomManager_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new RoomInvitationService(null, _friendships));
+            Assert.Throws<ArgumentNullException>(() => new RoomInvitationService(null, _friendships, _invites));
         }
 
         [Fact]
         public void Constructor_NullFriendshipService_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new RoomInvitationService(_roomManager, null));
+            Assert.Throws<ArgumentNullException>(() => new RoomInvitationService(_roomManager, null, _invites));
         }
 
         [Fact]

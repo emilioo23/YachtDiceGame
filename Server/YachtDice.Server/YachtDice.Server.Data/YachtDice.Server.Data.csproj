@@ -113,6 +113,9 @@
     <Compile Include="Repositories\IPasswordResetRepository.cs" />
     <Compile Include="Repositories\IKickLogRepository.cs" />
     <Compile Include="Repositories\IPlayerReportRepository.cs" />
+    <Compile Include="Repositories\IRoomInviteRepository.cs" />
+    <Compile Include="Repositories\RoomInviteRecord.cs" />
+    <Compile Include="Repositories\RoomInviteRepository.cs" />
     <Compile Include="Repositories\KickLogRecord.cs" />
     <Compile Include="Repositories\KickLogRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
@@ -175,6 +178,7 @@
     <None Include="Scripts\AddFlagCodeToPlayerSettings.sql" />
     <None Include="Scripts\AddMoreAvatars.sql" />
     <None Include="Scripts\AllowComputerRoomType.sql" />
+    <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
     <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
     <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />
     <None Include="Scripts\SeedScoreCategories.sql" />

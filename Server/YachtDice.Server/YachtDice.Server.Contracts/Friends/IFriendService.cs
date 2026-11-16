@@ -71,6 +71,15 @@ namespace YachtDice.Server.Contracts.Friends
         ReportResultCode ReportPlayer(string sessionToken, PlayerReport report);
 
         /// <summary>
+        /// Gets the invitations to a room that the player received in the last day, from the newest to the oldest.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The invitations, or an empty list if there is none.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<ReceivedInvitation> GetReceivedInvitations(string sessionToken);
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
