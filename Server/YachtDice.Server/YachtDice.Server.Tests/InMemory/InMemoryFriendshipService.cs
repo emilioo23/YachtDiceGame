@@ -57,6 +57,12 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public ReportStatus ReportPlayer(string displayName, ReportDetails details)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <inheritdoc />
         public string GetUsername(string displayName)
         {
             throw new NotSupportedException(NotSupportedMessage);

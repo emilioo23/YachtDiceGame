@@ -41,6 +41,16 @@ namespace YachtDice.Server.Logic.Friends
         FriendActionStatus BlockPlayer(string displayName, string blockedName);
 
         /// <summary>
+        /// Saves a report about another player. A player can only report someone who finished a game with them in
+        /// the last day, and only once a day for the same player.
+        /// </summary>
+        /// <param name="displayName">Name of the player who reports.</param>
+        /// <param name="details">Name of the player who is reported, the reason and an optional comment.</param>
+        /// <returns>Outcome of the report.</returns>
+        /// <exception cref="System.ArgumentNullException">The details are null.</exception>
+        ReportStatus ReportPlayer(string displayName, ReportDetails details);
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

@@ -7,7 +7,8 @@ using YachtDice.Server.Data.Repositories;
 namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
-    /// Rules to add friends, answer friend requests and list the friends of a player.
+    /// Rules of the relations between players: add friends, answer friend requests, list the friends of a player,
+    /// block a player and report a player who behaved badly in a game.
     /// </summary>
     public class FriendshipService : IFriendshipService
     {
@@ -22,23 +23,34 @@ namespace YachtDice.Server.Logic.Friends
         public const int DefaultMaxPendingRequests = 5;
 
         private const int RequestLifetimeDays = 7;
+        private const int ReportWindowHours = 24;
+        private const int MaxReportCommentLength = 300;
+        private const int NoGameId = 0;
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
+        private const string NullReportMessage = "The details of the report cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IFriendRepository _friendRepository;
+        private readonly IPlayerReportRepository _reportRepository;
 
         /// <summary>
         /// Initializes the service with the repositories it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to find the players.</param>
         /// <param name="friendRepository">Repository used to read and save the friendships.</param>
-        public FriendshipService(IPlayerRepository playerRepository, IFriendRepository friendRepository)
+        /// <param name="reportRepository">Repository used to save the reports between players.</param>
+        public FriendshipService(
+            IPlayerRepository playerRepository,
+            IFriendRepository friendRepository,
+            IPlayerReportRepository reportRepository)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _friendRepository = friendRepository
                 ?? throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
+            _reportRepository = reportRepository
+                ?? throw new ArgumentNullException(nameof(reportRepository), NullDependencyMessage);
         }
 
         /// <summary>
@@ -149,6 +161,31 @@ namespace YachtDice.Server.Logic.Friends
             {
                 SaveBlock(player, blocked);
                 status = FriendActionStatus.Success;
+            }
+
+            return status;
+        }
+
+        /// <inheritdoc />
+        public ReportStatus ReportPlayer(string displayName, ReportDetails details)
+        {
+            if (details == null)
+            {
+                throw new ArgumentNullException(nameof(details), NullReportMessage);
+            }
+
+            Player reporter = _playerRepository.FindByName(displayName).FirstOrDefault();
+            Player reported = null;
+            ReportStatus status = ReportStatus.PlayerNotFound;
+
+            if (!string.IsNullOrWhiteSpace(details.ReportedName))
+            {
+                reported = _playerRepository.FindByName(details.ReportedName.Trim()).FirstOrDefault();
+            }
+
+            if (reporter != null && reported != null)
+            {
+                status = SaveReportIfAllowed(reporter, reported, details);
             }
 
             return status;
@@ -332,6 +369,55 @@ namespace YachtDice.Server.Logic.Friends
             }
 
             return status;
+        }
+
+        private ReportStatus SaveReportIfAllowed(Player reporter, Player reported, ReportDetails details)
+        {
+            DateTime since = DateTime.UtcNow.AddHours(-ReportWindowHours);
+            string comment = details.Comment?.Trim() ?? string.Empty;
+            ReportStatus status;
+
+            if (reporter.Id == reported.Id)
+            {
+                status = ReportStatus.CannotReportSelf;
+            }
+            else if (comment.Length > MaxReportCommentLength)
+            {
+                status = ReportStatus.InvalidComment;
+            }
+            else if (_reportRepository.HasReportSince(reporter.Id, reported.Id, since))
+            {
+                status = ReportStatus.AlreadyReported;
+            }
+            else
+            {
+                int gameId = _reportRepository.FindLastSharedGameId(reporter.Id, reported.Id, since);
+                status = gameId == NoGameId ? ReportStatus.NoRecentGame : ReportStatus.Sent;
+
+                if (status == ReportStatus.Sent)
+                {
+                    PlayerReport report = CreateReport(reporter, reported, details);
+                    report.GameId = gameId;
+                    _reportRepository.Add(report);
+                }
+            }
+
+            return status;
+        }
+
+        private static PlayerReport CreateReport(Player reporter, Player reported, ReportDetails details)
+        {
+            string comment = details.Comment?.Trim();
+            var report = new PlayerReport
+            {
+                ReporterId = reporter.Id,
+                ReportedId = reported.Id,
+                Reason = details.Reason.ToString(),
+                Comment = string.IsNullOrEmpty(comment) ? null : comment,
+                ReportDate = DateTime.UtcNow
+            };
+
+            return report;
         }
 
         private void ForgetExpiredRequests()

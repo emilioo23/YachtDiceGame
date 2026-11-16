@@ -55,6 +55,7 @@
     <Compile Include="Avatars\AvatarServiceTests.cs" />
     <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
+    <Compile Include="Friends\PlayerReportTests.cs" />
     <Compile Include="Friends\RoomInvitationServiceTests.cs" />
     <Compile Include="Game\AutoPlayChooserTests.cs" />
     <Compile Include="Game\ComputerMoveTests.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="InMemory\InMemoryFriendshipService.cs" />
     <Compile Include="InMemory\InMemoryBackupCodeRepository.cs" />
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
+    <Compile Include="InMemory\InMemoryPlayerReportRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
     <Compile Include="InMemory\FakeCallbackChannel.cs" />

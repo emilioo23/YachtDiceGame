@@ -113,6 +113,20 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Reports another player who finished a game with the player in the last day.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player who reports.</param>
+        /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>
+        /// <returns>Outcome of the report.</returns>
+        public Contracts.ReportResultCode ReportPlayer(string sessionToken, Contracts.PlayerReport report)
+        {
+            Contracts.ReportResultCode result =
+                ExecuteForPlayer(sessionToken, playerName => ProcessReport(playerName, report));
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
@@ -209,6 +223,21 @@ namespace YachtDice.Server.Services
             }
 
             return code;
+        }
+
+        private Contracts.ReportResultCode ProcessReport(string displayName, Contracts.PlayerReport report)
+        {
+            var details = new LogicFriends.ReportDetails
+            {
+                ReportedName = report?.ReportedName,
+                Reason = Mapping.EnumMapper.Map<Contracts.ReportReason, LogicFriends.ReportReason>(
+                    report?.Reason ?? Contracts.ReportReason.Other),
+                Comment = report?.Comment
+            };
+
+            LogicFriends.ReportStatus status = _friendshipService.ReportPlayer(displayName, details);
+
+            return Mapping.EnumMapper.Map<LogicFriends.ReportStatus, Contracts.ReportResultCode>(status);
         }
 
         private Contracts.InvitationResultCode Deliver(string friendName, PresenceContracts.RoomInvitation invitation)

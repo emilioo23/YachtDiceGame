@@ -345,7 +345,10 @@ namespace YachtDice.Server.Host
         /// <returns>A fully configured instance of FriendService.</returns>
         private static FriendService CreateFriendService(IPlayerNotifier notifier, IRoomManager roomManager)
         {
-            var friendshipService = new FriendshipService(new PlayerRepository(), new FriendRepository())
+            var friendshipService = new FriendshipService(
+                new PlayerRepository(),
+                new FriendRepository(),
+                new PlayerReportRepository())
             {
                 MaxFriends = ReadPositiveNumber(MaxFriendsKey),
                 MaxPendingRequests = ReadPositiveNumber(MaxPendingRequestsKey)

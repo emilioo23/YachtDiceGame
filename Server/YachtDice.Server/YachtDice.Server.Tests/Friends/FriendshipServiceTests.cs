@@ -37,7 +37,7 @@ namespace YachtDice.Server.Tests.Friends
         {
             _players.Add(new Player { Id = RequesterId, Username = RequesterName, DisplayName = RequesterName });
             _players.Add(new Player { Id = TargetId, Username = TargetUsername, DisplayName = TargetDisplayName });
-            _service = new FriendshipService(_players, _friends);
+            _service = new FriendshipService(_players, _friends, new InMemoryPlayerReportRepository());
         }
 
         [Fact]

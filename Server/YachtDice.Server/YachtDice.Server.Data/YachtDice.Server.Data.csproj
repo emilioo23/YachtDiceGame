@@ -111,7 +111,9 @@
     <Compile Include="Repositories\IFriendRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
     <Compile Include="Repositories\IPasswordResetRepository.cs" />
+    <Compile Include="Repositories\IPlayerReportRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
+    <Compile Include="Repositories\PlayerReportRepository.cs" />
     <Compile Include="Repositories\PasswordResetRepository.cs" />
     <Compile Include="Repositories\PlayedGameRecord.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />

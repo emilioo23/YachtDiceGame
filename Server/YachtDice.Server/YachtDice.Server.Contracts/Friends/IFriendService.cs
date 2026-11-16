@@ -61,6 +61,16 @@ namespace YachtDice.Server.Contracts.Friends
         InvitationResultCode InviteToRoom(RoomMember sender, string friendName);
 
         /// <summary>
+        /// Reports another player who finished a game with the player in the last day.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player who reports.</param>
+        /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>
+        /// <returns>Outcome of the report.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        ReportResultCode ReportPlayer(string sessionToken, PlayerReport report);
+
+        /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
