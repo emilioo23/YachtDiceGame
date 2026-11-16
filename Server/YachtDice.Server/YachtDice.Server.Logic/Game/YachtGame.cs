@@ -75,6 +75,27 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
+        /// Creates a game from one that was saved before the server stopped. Every player starts absent, so the
+        /// game waits until someone comes back. The player who had the turn keeps the dice and the rolls made if
+        /// that player is the first to come back.
+        /// </summary>
+        /// <param name="saved">Saved game, with the identifiers that the room gave to the players.</param>
+        /// <param name="dieRoller">Rolls the dice of the game.</param>
+        /// <param name="turnSeconds">Seconds that a player has to play a turn.</param>
+        /// <returns>The restored game.</returns>
+        public static YachtGame Restore(SavedGame saved, IDieRoller dieRoller, int turnSeconds)
+        {
+            IEnumerable<GameParticipant> participants =
+                saved.Players.Select(player => new GameParticipant(player.PlayerId, player.Name));
+            var game = new YachtGame(participants, dieRoller, turnSeconds);
+
+            game.LoadPlayers(saved.Players);
+            game.LoadTurn(saved);
+
+            return game;
+        }
+
+        /// <summary>
         /// Rolls the dice for the player whose turn it is. The first roll of a turn rolls the five dice and
         /// the next rolls only roll the dice that are not held.
         /// </summary>
@@ -244,6 +265,7 @@ namespace YachtDice.Server.Logic.Game
             var snapshot = new PlayerSnapshot(player.PlayerId, player.Name, player.IsPresent)
             {
                 IsComputer = player.IsComputer,
+                HasForfeited = player.HasForfeited,
                 UpperSubtotal = player.Card.UpperSubtotal,
                 UpperBonus = player.Card.UpperBonus,
                 YachtBonus = player.Card.YachtBonus,
@@ -282,6 +304,37 @@ namespace YachtDice.Server.Logic.Game
                 {
                     player.ExperienceGained = ExperienceRules.CalculateGain(player.Total, player.IsWinner);
                 }
+            }
+        }
+
+        private void LoadPlayers(IReadOnlyList<SavedPlayer> savedPlayers)
+        {
+            for (var index = 0; index < _players.Count; index++)
+            {
+                SavedPlayer saved = savedPlayers[index];
+
+                _players[index].Card.Restore(saved.Scores, saved.YachtBonusCount);
+                _players[index].HasForfeited = saved.HasForfeited;
+                _players[index].IsPresent = false;
+                TurnNumber += saved.Scores.Count;
+            }
+        }
+
+        private void LoadTurn(SavedGame saved)
+        {
+            Predicate<GamePlayer> isCurrentPlayer = player => !player.HasForfeited
+                && string.Equals(player.Name, saved.CurrentPlayerName, StringComparison.OrdinalIgnoreCase);
+            _turnIndex = _players.FindIndex(isCurrentPlayer);
+            bool hasDice = _turnIndex != NoPlayerIndex
+                && saved.RollsMade > NoRolls
+                && saved.Dice.Count == DiceHand.DiceCount
+                && saved.HeldDice.Count == DiceHand.DiceCount;
+
+            if (hasDice)
+            {
+                _rollsMade = Math.Min(saved.RollsMade, RollsPerTurn);
+                saved.Dice.CopyTo(_dice, 0);
+                saved.HeldDice.CopyTo(_heldDice, 0);
             }
         }
 

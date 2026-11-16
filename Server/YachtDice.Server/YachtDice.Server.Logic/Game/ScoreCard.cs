@@ -18,6 +18,7 @@ namespace YachtDice.Server.Logic.Game
         public const int YachtBonusPoints = 100;
 
         private const int NoPoints = 0;
+        private const string NullScoresMessage = "The saved boxes cannot be null.";
 
         private readonly Dictionary<ScoreCategory, int> _scores = new Dictionary<ScoreCategory, int>();
         private readonly ScoreCalculator _calculator;
@@ -122,6 +123,27 @@ namespace YachtDice.Server.Logic.Game
 
             return categories.Select(category => new ScoreEntry(category, CalculatePoints(category, dice, isJoker)))
                 .ToList();
+        }
+
+        /// <summary>
+        /// Writes again the boxes of a card that was saved before the server stopped.
+        /// </summary>
+        /// <param name="scores">Boxes that the player already filled, with their points.</param>
+        /// <param name="yachtBonusCount">How many extra yachts the player made.</param>
+        /// <exception cref="ArgumentNullException">The boxes are null.</exception>
+        public void Restore(IEnumerable<ScoreEntry> scores, int yachtBonusCount)
+        {
+            if (scores == null)
+            {
+                throw new ArgumentNullException(nameof(scores), NullScoresMessage);
+            }
+
+            foreach (ScoreEntry score in scores)
+            {
+                _scores[score.Category] = score.Points;
+            }
+
+            YachtBonus = yachtBonusCount * YachtBonusPoints;
         }
 
         /// <summary>

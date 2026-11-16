@@ -19,6 +19,8 @@ namespace YachtDice.Server.Tests.Game
         private const int TotalWithUpperBonus = 98;
         private const int UpperSubtotalWithTwoSixes = 57;
         private const int YachtBonusPoints = 100;
+        private const int YachtPoints = 50;
+        private const int OneYachtBonus = 1;
         private const int YachtOfSixesSixesPoints = 30;
         private const int TotalWithYachtBonus = 180;
         private const int OpenCategoriesAfterOneScore = 11;
@@ -279,6 +281,25 @@ namespace YachtDice.Server.Tests.Game
             card.Score(ScoreCategory.Choice, NoCombination);
 
             Assert.False(card.IsComplete);
+        }
+
+        [Fact]
+        public void Restore_SavedBoxAndAYachtBonus_AddsThemToTheTotal()
+        {
+            ScoreCard card = CreateCard();
+            var savedBoxes = new[] { new ScoreEntry(ScoreCategory.Yacht, true, YachtPoints) };
+
+            card.Restore(savedBoxes, OneYachtBonus);
+
+            Assert.Equal(YachtPoints + YachtBonusPoints, card.Total);
+        }
+
+        [Fact]
+        public void Restore_NullBoxes_ThrowsArgumentNullException()
+        {
+            ScoreCard card = CreateCard();
+
+            Assert.Throws<ArgumentNullException>(() => card.Restore(null, OneYachtBonus));
         }
 
         private static ScoreCard CreateCard()

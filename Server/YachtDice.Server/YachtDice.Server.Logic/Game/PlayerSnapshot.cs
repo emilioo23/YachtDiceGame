@@ -74,6 +74,11 @@ namespace YachtDice.Server.Logic.Game
         public int ExperienceGained { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player is out of the game for not coming back in time.
+        /// </summary>
+        public bool HasForfeited { get; set; }
+
+        /// <summary>
         /// Gets the boxes of the scorecard, in the order of the scorecard.
         /// </summary>
         public IList<ScoreEntry> Scores { get; }

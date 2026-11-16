@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Server.Logic.Game;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -50,6 +51,16 @@ namespace YachtDice.Server.Logic.Rooms
         /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
         /// <exception cref="System.ArgumentException">The name is empty.</exception>
         string FindPendingRoomCode(string playerName);
+
+        /// <summary>
+        /// Puts back the room of a game saved before the server stopped, with the same code. Every player who did
+        /// not lose starts absent, so the menu offers each one to go back to the game. The method gives each saved
+        /// player the identifier that the room and the game use.
+        /// </summary>
+        /// <param name="saved">Saved game.</param>
+        /// <returns>True if the room was restored; false if a room with that code already exists.</returns>
+        /// <exception cref="System.ArgumentNullException">The saved game is null.</exception>
+        bool TryRestoreRoom(SavedGame saved);
 
         /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If

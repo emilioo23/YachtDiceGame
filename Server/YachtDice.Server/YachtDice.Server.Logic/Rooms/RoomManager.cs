@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Security;
 
@@ -35,6 +36,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const string ComputerName = "CPU";
         private const string BlankNameMessage = "The name of the player cannot be empty.";
         private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
+        private const string NullSavedGameMessage = "The saved game cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
         private readonly OffensiveWordFilter _wordFilter;
@@ -145,6 +147,28 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return code;
+        }
+
+        /// <inheritdoc />
+        public bool TryRestoreRoom(SavedGame saved)
+        {
+            if (saved == null)
+            {
+                throw new ArgumentNullException(nameof(saved), NullSavedGameMessage);
+            }
+
+            bool isRestored = false;
+
+            lock (_syncRoot)
+            {
+                if (!_rooms.ContainsKey(saved.RoomCode))
+                {
+                    _rooms[saved.RoomCode] = CreateRestoredRoom(saved);
+                    isRestored = true;
+                }
+            }
+
+            return isRestored;
         }
 
         /// <inheritdoc />
@@ -623,6 +647,23 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 room.RemovePlayer(playerId);
             }
+        }
+
+        private GameRoom CreateRestoredRoom(SavedGame saved)
+        {
+            var room = new GameRoom(saved.RoomCode, saved.Settings, DateTime.UtcNow) { IsStarted = true };
+
+            foreach (SavedPlayer player in saved.Players)
+            {
+                player.PlayerId = GameRoom.CreatePlayerId();
+
+                if (!player.HasForfeited)
+                {
+                    room.AddAbsentPlayer(CreateApplicant(player.Name), player.PlayerId);
+                }
+            }
+
+            return room;
         }
 
         private RoomApplicant CreateApplicant(string playerName)

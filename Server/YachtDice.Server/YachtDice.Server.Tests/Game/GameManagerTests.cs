@@ -34,6 +34,7 @@ namespace YachtDice.Server.Tests.Game
         private const int LongerTurnSeconds = 60;
         private const int ShorterTurnSeconds = 30;
         private const int NoExperience = 0;
+        private const int OneRollMade = 1;
 
         private static readonly int[] LittleStraightDice = { 1, 2, 3, 4, 5 };
         private static readonly int[] LittleStraightThenTwoSixes = { 1, 2, 3, 4, 5, 6, 6 };
@@ -683,6 +684,87 @@ namespace YachtDice.Server.Tests.Game
             GameActionResult state = manager.GetState(new RoomMember(RoomCode, FirstId));
 
             Assert.Equal(GameActionStatus.GameNotFound, state.Status);
+        }
+
+        [Fact]
+        public void Restore_SavedGame_StartsWithEveryPlayerAbsent()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            var playersExpected = new[]
+            {
+                new { PlayerId = FirstId, IsPresent = false },
+                new { PlayerId = SecondId, IsPresent = false }
+            };
+
+            GameSnapshot snapshot = manager.Restore(CreateSavedGame());
+
+            Assert.Equivalent(playersExpected, snapshot.Players);
+        }
+
+        [Fact]
+        public void Restore_SavedScores_KeepsTheTotalOfThePlayer()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+
+            GameSnapshot snapshot = manager.Restore(CreateSavedGame());
+
+            Assert.Equal(LittleStraightPoints, snapshot.Players.First().Total);
+        }
+
+        [Fact]
+        public void Restore_PlayerWithTheTurnComesBack_KeepsTheDiceAndTheRollsLeft()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            manager.Restore(CreateSavedGame());
+            var snapshotExpected = new
+            {
+                CurrentPlayerId = FirstId,
+                RollsLeft = TwoRollsLeft,
+                Dice = LittleStraightDice
+            };
+
+            GameActionResult result = manager.MarkPresent(new RoomMember(RoomCode, FirstId));
+
+            Assert.Equivalent(snapshotExpected, result.Snapshot);
+        }
+
+        [Fact]
+        public void Restore_OtherPlayerComesBackFirst_GivesTheTurnToThatPlayer()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            manager.Restore(CreateSavedGame());
+
+            GameActionResult result = manager.MarkPresent(new RoomMember(RoomCode, SecondId));
+
+            Assert.Equal(SecondId, result.Snapshot.CurrentPlayerId);
+        }
+
+        [Fact]
+        public void Restore_NullSavedGame_ThrowsArgumentNullException()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+
+            Assert.Throws<ArgumentNullException>(() => manager.Restore(null));
+        }
+
+        private static SavedGame CreateSavedGame()
+        {
+            var saved = new SavedGame
+            {
+                RoomCode = RoomCode,
+                Settings = new RoomSettings { Speed = GameSpeed.Normal },
+                CurrentPlayerName = FirstName,
+                RollsMade = OneRollMade
+            };
+            var firstPlayer = new SavedPlayer { PlayerId = FirstId, Name = FirstName };
+
+            firstPlayer.Scores.Add(new ScoreEntry(ScoreCategory.LittleStraight, true, LittleStraightPoints));
+            saved.Players.Add(firstPlayer);
+            saved.Players.Add(new SavedPlayer { PlayerId = SecondId, Name = SecondName });
+            saved.Dice.AddRange(LittleStraightDice);
+            saved.HeldDice.AddRange(NoHeldDice);
+
+            return saved;
         }
 
         private static GameManager CreateManager(int[] dieValues)

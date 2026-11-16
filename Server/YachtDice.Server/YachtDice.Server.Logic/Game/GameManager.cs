@@ -13,6 +13,7 @@ namespace YachtDice.Server.Logic.Game
         private const string NullDieRollerMessage = "The roller of the dice cannot be null.";
         private const string NullTurnMessage = "The turn cannot be null.";
         private const string NullTurnDurationMessage = "The duration of the turns cannot be null.";
+        private const string NullSavedGameMessage = "The saved game cannot be null.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
@@ -112,6 +113,27 @@ namespace YachtDice.Server.Logic.Game
         public GameActionResult Remove(RoomMember member)
         {
             return Execute(member.RoomCode, game => RemovePlayer(game, member.PlayerId));
+        }
+
+        /// <inheritdoc />
+        public GameSnapshot Restore(SavedGame saved)
+        {
+            if (saved == null)
+            {
+                throw new ArgumentNullException(nameof(saved), NullSavedGameMessage);
+            }
+
+            int turnSeconds = _turnDuration.GetSeconds(saved.Settings.Speed);
+            YachtGame game = YachtGame.Restore(saved, _dieRoller, turnSeconds);
+            GameSnapshot snapshot;
+
+            lock (_syncRoot)
+            {
+                _games[saved.RoomCode] = game;
+                snapshot = game.CreateSnapshot();
+            }
+
+            return snapshot;
         }
 
         /// <inheritdoc />

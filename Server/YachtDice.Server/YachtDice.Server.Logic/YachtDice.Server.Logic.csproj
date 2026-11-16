@@ -101,7 +101,11 @@
     <Compile Include="Game\DiceHand.cs" />
     <Compile Include="Game\GameActionResult.cs" />
     <Compile Include="Game\GameActionStatus.cs" />
+    <Compile Include="Game\GameCheckpointService.cs" />
     <Compile Include="Game\GameManager.cs" />
+    <Compile Include="Game\IGameCheckpointService.cs" />
+    <Compile Include="Game\SavedGame.cs" />
+    <Compile Include="Game\SavedPlayer.cs" />
     <Compile Include="Game\GameParticipant.cs" />
     <Compile Include="Game\GameResultRecorder.cs" />
     <Compile Include="Game\GamePlayer.cs" />

@@ -62,9 +62,10 @@ namespace YachtDice.Server.Host
             try
             {
                 WarmUpDatabase(logger);
-                OpenServiceHosts(serviceHosts);
+                GameCoordinator gameCoordinator = OpenServiceHosts(serviceHosts);
                 logger.Info(StartedLogMessage);
                 WaitForExit();
+                gameCoordinator.KeepGamesForRestart();
                 CloseServiceHosts(serviceHosts);
                 logger.Info(StoppedLogMessage);
             }
@@ -197,7 +198,7 @@ namespace YachtDice.Server.Host
             _quitEvent.Set();
         }
 
-        private static void OpenServiceHosts(List<ServiceHost> serviceHosts)
+        private static GameCoordinator OpenServiceHosts(List<ServiceHost> serviceHosts)
         {
             var sessions = new SessionRegistry();
             AuthenticationService authenticationService = CreateAuthenticationService();
@@ -223,7 +224,8 @@ namespace YachtDice.Server.Host
             };
             var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
             var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
-            var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
+            var checkpointService = new GameCheckpointService(new PlayerRepository(), new GameCheckpointRepository());
+            var gameCoordinator = new GameCoordinator(gameManager, resultRecorder, checkpointService);
             var kickHistoryService = new KickHistoryService(new PlayerRepository(), new KickLogRepository());
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator, kickHistoryService)));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
@@ -236,7 +238,10 @@ namespace YachtDice.Server.Host
             friendService.Sessions = sessions;
             serviceHosts.Add(new ServiceHost(friendService));
 
+            gameCoordinator.RestoreSavedGames(roomManager);
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
+
+            return gameCoordinator;
         }
 
         private static void WaitForExit()

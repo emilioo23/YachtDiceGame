@@ -91,5 +91,13 @@ namespace YachtDice.Server.Logic.Game
         /// </summary>
         /// <param name="roomCode">Code of the room.</param>
         void End(string roomCode);
+
+        /// <summary>
+        /// Puts back a game that was saved before the server stopped. Every player starts absent.
+        /// </summary>
+        /// <param name="saved">Saved game, with the identifiers that the room gave to the players.</param>
+        /// <returns>The state of the restored game.</returns>
+        /// <exception cref="System.ArgumentNullException">The saved game is null.</exception>
+        GameSnapshot Restore(SavedGame saved);
     }
 }

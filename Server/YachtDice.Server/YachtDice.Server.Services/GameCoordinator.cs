@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace YachtDice.Server.Services
@@ -26,13 +27,22 @@ namespace YachtDice.Server.Services
         /// </summary>
         public const int ReconnectSeconds = 60;
 
+        /// <summary>
+        /// Seconds that each player of a game restored after a restart of the server has to come back.
+        /// </summary>
+        public const int RestartReconnectSeconds = 300;
+
         private const int ComputerMoveSeconds = 2;
 
         private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
+        private const string CheckpointNotSavedLogMessage = "A game in progress could not be saved for a restart.";
+        private const string GamesNotRestoredLogMessage = "The games in progress could not be restored.";
+        private const string GamesRestoredLogFormat = "Games in progress restored after the restart: {0}.";
         private const string NullDependencyMessage = "A dependency of the game coordinator cannot be null.";
 
         private readonly LogicGame.IGameManager _gameManager;
         private readonly LogicGame.IGameResultRecorder _resultRecorder;
+        private readonly LogicGame.IGameCheckpointService _checkpoints;
 
         private readonly ConcurrentDictionary<string, LogicRooms.RoomSettings> _roomSettings =
             new ConcurrentDictionary<string, LogicRooms.RoomSettings>();
@@ -46,18 +56,25 @@ namespace YachtDice.Server.Services
         private readonly TurnTimer _computerTimer;
         private readonly ReconnectTimer _reconnectTimer = new ReconnectTimer();
         private readonly LogicLogging.AppLogger _logger;
+        private volatile bool _isStopping;
 
         /// <summary>
         /// Initializes a coordinator without games.
         /// </summary>
         /// <param name="gameManager">The rules and the state of the games.</param>
         /// <param name="resultRecorder">Saves the result of each game that finishes.</param>
-        public GameCoordinator(LogicGame.IGameManager gameManager, LogicGame.IGameResultRecorder resultRecorder)
+        /// <param name="checkpoints">Saves the games in progress for a restart of the server.</param>
+        public GameCoordinator(
+            LogicGame.IGameManager gameManager,
+            LogicGame.IGameResultRecorder resultRecorder,
+            LogicGame.IGameCheckpointService checkpoints)
         {
             _gameManager = gameManager
                 ?? throw new ArgumentNullException(nameof(gameManager), NullDependencyMessage);
             _resultRecorder = resultRecorder
                 ?? throw new ArgumentNullException(nameof(resultRecorder), NullDependencyMessage);
+            _checkpoints = checkpoints
+                ?? throw new ArgumentNullException(nameof(checkpoints), NullDependencyMessage);
             _timer = new TurnTimer(HandleTurnExpired);
             _computerTimer = new TurnTimer(HandleComputerMove);
             _logger = new LogicLogging.AppLogger(GetType());
@@ -85,6 +102,7 @@ namespace YachtDice.Server.Services
 
             _roomSettings[room.Code] = room.Settings;
             _savedGames.TryRemove(room.Code, out _);
+            TrackGame(room, snapshot);
             SyncTimer(room.Code, snapshot);
         }
 
@@ -201,6 +219,57 @@ namespace YachtDice.Server.Services
             _gameManager.End(roomCode);
             _roomSettings.TryRemove(roomCode, out _);
             _savedGames.TryRemove(roomCode, out _);
+
+            if (!_isStopping)
+            {
+                UpdateCheckpoint(roomCode, null);
+            }
+        }
+
+        /// <summary>
+        /// Stops saving the games because the server is closing, so the players who get disconnected while it
+        /// closes do not change the saved games, which are restored when the server starts again.
+        /// </summary>
+        public void KeepGamesForRestart()
+        {
+            _isStopping = true;
+        }
+
+        /// <summary>
+        /// Puts back the games that were in progress when the server stopped. Each player has
+        /// <see cref="RestartReconnectSeconds"/> to come back before losing.
+        /// </summary>
+        /// <param name="roomManager">The rooms, where the room of each game is put back.</param>
+        /// <returns>How many games were restored.</returns>
+        /// <exception cref="ArgumentNullException">The room manager is null.</exception>
+        public int RestoreSavedGames(LogicRooms.IRoomManager roomManager)
+        {
+            if (roomManager == null)
+            {
+                throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+            }
+
+            int restoredCount = 0;
+
+            try
+            {
+                foreach (LogicGame.SavedGame saved in _checkpoints.LoadAll())
+                {
+                    if (roomManager.TryRestoreRoom(saved))
+                    {
+                        ResumeSavedGame(saved);
+                        restoredCount++;
+                    }
+                }
+
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, GamesRestoredLogFormat, restoredCount));
+            }
+            catch (DataExceptions.DataAccessException ex)
+            {
+                _logger.Error(ex, GamesNotRestoredLogMessage);
+            }
+
+            return restoredCount;
         }
 
         private static Contracts.GameEventType ChooseTurnEvent(
@@ -278,6 +347,63 @@ namespace YachtDice.Server.Services
             Contracts.GameState state = Mapping.GameMapper.ToContract(snapshot, _timer.GetSecondsLeft(roomCode));
 
             _callbacks.Notify(roomCode, callback => callback.GameChanged(state, eventType));
+
+            if (!_isStopping)
+            {
+                UpdateCheckpoint(roomCode, snapshot);
+            }
+        }
+
+        private void TrackGame(LogicRooms.RoomDetails room, LogicGame.GameSnapshot snapshot)
+        {
+            try
+            {
+                if (_checkpoints.Track(room))
+                {
+                    _checkpoints.Save(room.Code, snapshot);
+                }
+            }
+            catch (DataExceptions.DataAccessException ex)
+            {
+                _logger.Error(ex, CheckpointNotSavedLogMessage);
+            }
+        }
+
+        private void UpdateCheckpoint(string roomCode, LogicGame.GameSnapshot snapshot)
+        {
+            bool isOver = snapshot == null || snapshot.Status == LogicGame.GameStatus.Finished;
+
+            try
+            {
+                if (isOver)
+                {
+                    _checkpoints.Forget(roomCode);
+                }
+                else
+                {
+                    _checkpoints.Save(roomCode, snapshot);
+                }
+            }
+            catch (DataExceptions.DataAccessException ex)
+            {
+                _logger.Error(ex, CheckpointNotSavedLogMessage);
+            }
+        }
+
+        private void ResumeSavedGame(LogicGame.SavedGame saved)
+        {
+            Func<LogicGame.SavedPlayer, bool> isStillPlaying = player => !player.HasForfeited;
+
+            _gameManager.Restore(saved);
+            _roomSettings[saved.RoomCode] = saved.Settings;
+            _savedGames.TryRemove(saved.RoomCode, out _);
+
+            foreach (LogicGame.SavedPlayer player in saved.Players.Where(isStillPlaying))
+            {
+                var member = new LogicRooms.RoomMember(saved.RoomCode, player.PlayerId);
+
+                _reconnectTimer.Start(member, RestartReconnectSeconds, () => HandleReconnectExpired(member));
+            }
         }
 
         private void SyncTimer(string roomCode, LogicGame.GameSnapshot snapshot)

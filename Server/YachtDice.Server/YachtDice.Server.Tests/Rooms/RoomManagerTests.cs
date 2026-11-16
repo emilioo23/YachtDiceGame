@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
@@ -43,6 +44,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const int SingleSlot = 1;
         private const int HostAvatarId = 3;
         private const int PlayerAvatarId = 7;
+        private const string SavedRoomCode = "ABC234";
 
         private readonly InMemoryAvatarLookup _avatars = new InMemoryAvatarLookup();
         private readonly OffensiveWordFilter _wordFilter = new OffensiveWordFilter(new[] { OffensiveWord });
@@ -54,6 +56,57 @@ namespace YachtDice.Server.Tests.Rooms
         public RoomManagerTests()
         {
             _manager = new RoomManager(_avatars, _wordFilter);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_SavedGame_OffersThePlayerToGoBack()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            string roomCode = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(SavedRoomCode, roomCode);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_PlayerWhoLost_IsNotOfferedToGoBack()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(true));
+
+            string roomCode = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, roomCode);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_PlayerComesBack_GetsTheIdentifierThatTheGameUses()
+        {
+            SavedGame saved = CreateSavedGame(false);
+            _manager.TryRestoreRoom(saved);
+
+            RoomResult result = _manager.Join(SavedRoomCode, PlayerName);
+
+            Assert.Equal(saved.Players.Last().PlayerId, result.PlayerId);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_FirstPlayerToComeBackIsNotTheHost_BecomesTheHost()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            RoomResult result = _manager.Join(SavedRoomCode, PlayerName);
+
+            Assert.Equal(result.PlayerId, result.Room.HostId);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_CodeAlreadyUsed_ReturnsFalse()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            bool isRestored = _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            Assert.False(isRestored);
         }
 
         [Fact]
@@ -1242,6 +1295,20 @@ namespace YachtDice.Server.Tests.Rooms
             }
 
             return _manager.StartGame(new RoomMember(code, host.PlayerId));
+        }
+
+        private static SavedGame CreateSavedGame(bool hasPlayerForfeited)
+        {
+            var saved = new SavedGame
+            {
+                RoomCode = SavedRoomCode,
+                Settings = new RoomSettings { MaxPlayers = TwoPlayers }
+            };
+
+            saved.Players.Add(new SavedPlayer { Name = HostName });
+            saved.Players.Add(new SavedPlayer { Name = PlayerName, HasForfeited = hasPlayerForfeited });
+
+            return saved;
         }
     }
 }

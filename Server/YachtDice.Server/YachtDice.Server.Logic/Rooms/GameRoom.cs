@@ -82,7 +82,7 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomPlayer AddPlayer(RoomApplicant applicant)
         {
             var player = new RoomPlayer(
-                Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture),
+                CreatePlayerId(),
                 CreateUniqueName(applicant.Name.Trim()),
                 applicant.AvatarId)
             {
@@ -98,6 +98,38 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return player;
+        }
+
+        /// <summary>
+        /// Creates a new identifier for a player of a room.
+        /// </summary>
+        /// <returns>The identifier.</returns>
+        public static string CreatePlayerId()
+        {
+            return Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Adds a player of a game saved before the server stopped. The player starts absent and can come back
+        /// with the same name. The first one added becomes the host.
+        /// </summary>
+        /// <param name="applicant">Name, avatar and level of the player.</param>
+        /// <param name="playerId">Identifier that the game also uses for the player.</param>
+        public void AddAbsentPlayer(RoomApplicant applicant, string playerId)
+        {
+            var player = new RoomPlayer(playerId, applicant.Name.Trim(), applicant.AvatarId)
+            {
+                Level = applicant.Level,
+                JoinedAt = DateTime.UtcNow,
+                IsReady = true
+            };
+
+            _absentPlayers.Add(player);
+
+            if (string.IsNullOrEmpty(HostId))
+            {
+                HostId = player.Id;
+            }
         }
 
         /// <summary>
@@ -252,6 +284,7 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 _absentPlayers.Remove(player);
                 _players.Add(player);
+                TakeHostIfMissing(player);
             }
 
             return player != null;
@@ -326,6 +359,14 @@ namespace YachtDice.Server.Logic.Rooms
             };
 
             return summary;
+        }
+
+        private void TakeHostIfMissing(RoomPlayer player)
+        {
+            if (!HasPlayer(HostId))
+            {
+                HostId = player.Id;
+            }
         }
 
         private static bool IsSameId(string firstId, string secondId)
