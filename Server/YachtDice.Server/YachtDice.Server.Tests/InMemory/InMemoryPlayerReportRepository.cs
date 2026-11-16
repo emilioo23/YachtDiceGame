@@ -47,6 +47,15 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public int CountReportersSince(int reportedId, DateTime since)
+        {
+            Func<PlayerReport, bool> isRecentAgainstPlayer = report =>
+                report.ReportedId == reportedId && report.ReportDate >= since;
+
+            return _reports.Where(isRecentAgainstPlayer).Select(report => report.ReporterId).Distinct().Count();
+        }
+
+        /// <inheritdoc />
         public int FindLastSharedGameId(int firstPlayerId, int secondPlayerId, DateTime since)
         {
             Func<GameHistory, bool> isRecentWithBoth = game =>

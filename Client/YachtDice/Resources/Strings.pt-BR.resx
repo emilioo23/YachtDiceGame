@@ -2415,4 +2415,7 @@
   <data name="Report_Result_InvalidComment" xml:space="preserve">
     <value>O comentário é muito longo.</value>
   </data>
+  <data name="Auth_ErrorSuspendedByReports" xml:space="preserve">
+    <value>Sua conta está suspensa por um dia porque vários jogadores a denunciaram.</value>
+  </data>
 </root>

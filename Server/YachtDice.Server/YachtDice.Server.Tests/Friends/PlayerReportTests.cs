@@ -2,6 +2,7 @@
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
+using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Tests.InMemory;
 
@@ -26,6 +27,10 @@ namespace YachtDice.Server.Tests.Friends
         private const int TooLongCommentLength = 301;
         private const char CommentCharacter = 'a';
         private const int TwoDaysAgo = -2;
+        private const int SecondReporterId = 4;
+        private const int ThirdReporterId = 5;
+        private const string SecondReporterName = "ana";
+        private const string ThirdReporterName = "beto";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryPlayerReportRepository _reports = new InMemoryPlayerReportRepository();
@@ -136,6 +141,40 @@ namespace YachtDice.Server.Tests.Friends
             ReportStatus status = _service.ReportPlayer(ReporterName, details);
 
             Assert.Equal(ReportStatus.InvalidComment, status);
+        }
+
+        [Fact]
+        public void ReportPlayer_ThirdDifferentReporterInADay_SuspendsTheReportedPlayer()
+        {
+            AddReporterWithGame(SecondReporterId, SecondReporterName);
+            AddReporterWithGame(ThirdReporterId, ThirdReporterName);
+            _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));
+            _service.ReportPlayer(SecondReporterName, CreateDetails(ReportedName));
+
+            _service.ReportPlayer(ThirdReporterName, CreateDetails(ReportedName));
+
+            Assert.Equal(LoginLock.Reported.ToString(), _players.FindLocks(ReportedId).Single().LockType);
+        }
+
+        [Fact]
+        public void ReportPlayer_TwoDifferentReporters_DoesNotSuspendThePlayer()
+        {
+            AddReporterWithGame(SecondReporterId, SecondReporterName);
+            _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));
+
+            _service.ReportPlayer(SecondReporterName, CreateDetails(ReportedName));
+
+            Assert.Empty(_players.FindLocks(ReportedId));
+        }
+
+        private void AddReporterWithGame(int reporterId, string reporterName)
+        {
+            _players.Add(new Player { Id = reporterId, Username = reporterName, DisplayName = reporterName });
+
+            var game = new GameHistory { Id = reporterId, EndDate = DateTime.UtcNow };
+            game.GameHistoryPlayer.Add(new GameHistoryPlayer { GameId = reporterId, PlayerId = reporterId });
+            game.GameHistoryPlayer.Add(new GameHistoryPlayer { GameId = reporterId, PlayerId = ReportedId });
+            _reports.AddGame(game);
         }
 
         private static ReportDetails CreateDetails(string reportedName)

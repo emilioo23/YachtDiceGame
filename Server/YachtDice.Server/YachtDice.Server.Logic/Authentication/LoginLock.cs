@@ -12,6 +12,9 @@
         Temporary,
 
         /// <summary>Ten wrong passwords in the same day: the account waits twenty-four hours.</summary>
-        Daily
+        Daily,
+
+        /// <summary>Several different players reported the player in one day: the account waits a day.</summary>
+        Reported
     }
 }

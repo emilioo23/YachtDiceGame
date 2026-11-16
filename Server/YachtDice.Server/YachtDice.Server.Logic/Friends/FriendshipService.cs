@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Authentication;
 
 namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
     /// Rules of the relations between players: add friends, answer friend requests, list the friends of a player,
-    /// block a player and report a player who behaved badly in a game.
+    /// block a player and report a player who behaved badly in a game. A player reported by three different players
+    /// in one day cannot log in for a day.
     /// </summary>
     public class FriendshipService : IFriendshipService
     {
@@ -26,6 +28,8 @@ namespace YachtDice.Server.Logic.Friends
         private const int ReportWindowHours = 24;
         private const int MaxReportCommentLength = 300;
         private const int NoGameId = 0;
+        private const int ReportersForSuspension = 3;
+        private const int SuspensionHours = 24;
         private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
         private const string NullReportMessage = "The details of the report cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
@@ -399,10 +403,20 @@ namespace YachtDice.Server.Logic.Friends
                     PlayerReport report = CreateReport(reporter, reported, details);
                     report.GameId = gameId;
                     _reportRepository.Add(report);
+                    SuspendIfReportedByMany(reported.Id, since);
                 }
             }
 
             return status;
+        }
+
+        private void SuspendIfReportedByMany(int reportedId, DateTime since)
+        {
+            if (_reportRepository.CountReportersSince(reportedId, since) >= ReportersForSuspension)
+            {
+                DateTime suspendedUntil = DateTime.UtcNow.AddHours(SuspensionHours);
+                _playerRepository.SaveLock(reportedId, LoginLock.Reported.ToString(), suspendedUntil);
+            }
         }
 
         private static PlayerReport CreateReport(Player reporter, Player reported, ReportDetails details)

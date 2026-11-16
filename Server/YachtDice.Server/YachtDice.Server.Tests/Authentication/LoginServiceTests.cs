@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
@@ -68,6 +69,16 @@ namespace YachtDice.Server.Tests.Authentication
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
             Assert.Equivalent(loginResultExpected, loginResult);
+        }
+
+        [Fact]
+        public void LoginPlayer_AccountSuspendedByReports_ReturnsSuspendedByReports()
+        {
+            _players.SaveLock(PlayerId, LoginLock.Reported.ToString(), DateTime.UtcNow.AddDays(1));
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Email, Password));
+
+            Assert.Equal(LoginStatus.SuspendedByReports, loginResult.Status);
         }
 
         [Fact]

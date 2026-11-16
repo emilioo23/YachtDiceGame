@@ -51,6 +51,22 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
+        /// Counts how many different players reported a player after a moment.
+        /// </summary>
+        /// <param name="reportedId">Identifier of the player who is reported.</param>
+        /// <param name="since">Only the reports made after this moment count.</param>
+        /// <returns>The number of different players who reported the player in that time.</returns>
+        /// <exception cref="DataAccessException">The reports could not be read.</exception>
+        public int CountReportersSince(int reportedId, DateTime since)
+        {
+            int reporterCount = DatabaseOperation.Query(
+                context => CountDistinctReporters(context, reportedId, since),
+                QueryFailedMessage);
+
+            return reporterCount;
+        }
+
+        /// <summary>
         /// Finds the last saved game where both players took part, finished after a moment.
         /// </summary>
         /// <param name="firstPlayerId">Identifier of one of the players.</param>
@@ -74,6 +90,18 @@ namespace YachtDice.Server.Data.Repositories
             Expression<Func<PlayerReport, bool>> isRecent = report => report.ReportDate >= since;
 
             return context.PlayerReport.Where(isSamePair).Any(isRecent);
+        }
+
+        private static int CountDistinctReporters(YachtDiceContext context, int reportedId, DateTime since)
+        {
+            Expression<Func<PlayerReport, bool>> isRecentAgainstPlayer = report =>
+                report.ReportedId == reportedId && report.ReportDate >= since;
+
+            return context.PlayerReport
+                .Where(isRecentAgainstPlayer)
+                .Select(report => report.ReporterId)
+                .Distinct()
+                .Count();
         }
 
         private static int SelectLastSharedGameId(

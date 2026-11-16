@@ -41,6 +41,9 @@ namespace YachtDice.Utils
                 case LoginResultCode.LockedForTheDay:
                     message = Strings.Auth_ErrorLockedForTheDay;
                     break;
+                case LoginResultCode.SuspendedByReports:
+                    message = Strings.Auth_ErrorSuspendedByReports;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

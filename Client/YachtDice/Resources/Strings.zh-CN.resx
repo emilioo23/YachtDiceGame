@@ -2415,4 +2415,7 @@
   <data name="Report_Result_InvalidComment" xml:space="preserve">
     <value>备注太长。</value>
   </data>
+  <data name="Auth_ErrorSuspendedByReports" xml:space="preserve">
+    <value>由于多名玩家举报，你的账号被暂停一天。</value>
+  </data>
 </root>

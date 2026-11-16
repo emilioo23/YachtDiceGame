@@ -23,6 +23,14 @@ namespace YachtDice.Server.Data.Repositories
         bool HasReportSince(int reporterId, int reportedId, DateTime since);
 
         /// <summary>
+        /// Counts how many different players reported a player after a moment.
+        /// </summary>
+        /// <param name="reportedId">Identifier of the player who is reported.</param>
+        /// <param name="since">Only the reports made after this moment count.</param>
+        /// <returns>The number of different players who reported the player in that time.</returns>
+        int CountReportersSince(int reportedId, DateTime since);
+
+        /// <summary>
         /// Finds the last saved game where both players took part, finished after a moment.
         /// </summary>
         /// <param name="firstPlayerId">Identifier of one of the players.</param>

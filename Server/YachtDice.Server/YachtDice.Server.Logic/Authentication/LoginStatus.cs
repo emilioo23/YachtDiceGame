@@ -35,6 +35,9 @@
         TemporarilyLocked,
 
         /// <summary>Ten wrong passwords in the same day locked the account for twenty-four hours.</summary>
-        LockedForTheDay
+        LockedForTheDay,
+
+        /// <summary>Several different players reported the player, so the account is suspended for a day.</summary>
+        SuspendedByReports
     }
 }

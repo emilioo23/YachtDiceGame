@@ -183,9 +183,20 @@ namespace YachtDice.Server.Logic.Authentication
 
         private LoginResult RejectLocked(LoginLock currentLock)
         {
-            LoginStatus status = currentLock == LoginLock.Daily
-                ? LoginStatus.LockedForTheDay
-                : LoginStatus.TemporarilyLocked;
+            LoginStatus status;
+
+            switch (currentLock)
+            {
+                case LoginLock.Daily:
+                    status = LoginStatus.LockedForTheDay;
+                    break;
+                case LoginLock.Reported:
+                    status = LoginStatus.SuspendedByReports;
+                    break;
+                default:
+                    status = LoginStatus.TemporarilyLocked;
+                    break;
+            }
 
             return Reject(status, LockedLoginLogMessage);
         }

@@ -21,6 +21,14 @@ namespace YachtDice.Client.Tests.Utils
         }
 
         [Fact]
+        public void GetMessage_SuspendedByReports_ReturnsTheSuspensionMessage()
+        {
+            string message = LoginResultMessages.GetMessage(LoginResultCode.SuspendedByReports);
+
+            Assert.Equal(Strings.Auth_ErrorSuspendedByReports, message);
+        }
+
+        [Fact]
         public void GetMessage_VerificationLocked_ReturnsTheAttemptsMessage()
         {
             string message = LoginResultMessages.GetMessage(LoginResultCode.VerificationLocked);

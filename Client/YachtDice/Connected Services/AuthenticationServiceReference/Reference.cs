@@ -229,6 +229,9 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         LockedForTheDay = 8,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SuspendedByReports = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

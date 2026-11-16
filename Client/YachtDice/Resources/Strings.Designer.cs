@@ -4091,5 +4091,14 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Report_Result_InvalidComment", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta está suspendida por un día porque varios jugadores la reportaron..
+        /// </summary>
+        public static string Auth_ErrorSuspendedByReports {
+            get {
+                return ResourceManager.GetString("Auth_ErrorSuspendedByReports", resourceCulture);
+            }
+        }
     }
 }
