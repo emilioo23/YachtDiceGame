@@ -9,12 +9,14 @@ using YachtDice.Server.Logic.Security;
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Lets a player turn the two-step verification on or off.
+    /// Lets a player turn the two-step verification on or off and create the backup codes that replace the code
+    /// sent by email.
     /// </summary>
     public class TwoFactorSettingsService : ITwoFactorSettingsService
     {
         private const int VisibleLocalPartChars = 2;
         private const int FirstCharacterIndex = 0;
+        private const int NoBackupCodes = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
         private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
@@ -150,17 +152,73 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = TwoFactorChangeStatus.PlayerNotFound;
             }
-            else if (string.IsNullOrEmpty(password) || !PasswordHasher.Verify(password, player.PwdHash))
+            else if (!IsPasswordCorrect(player, password))
             {
                 status = TwoFactorChangeStatus.InvalidPassword;
             }
             else
             {
                 _playerRepository.SaveTwoFactorEnabled(player.Id, false);
+                _verificationService.RemoveBackupCodes(player.Id);
                 status = TwoFactorChangeStatus.Success;
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        public BackupCodeCreation CreateBackupCodes(string displayName, string password)
+        {
+            Player player = FindPlayers(displayName).FirstOrDefault();
+            BackupCodeCreation creation;
+
+            if (player == null)
+            {
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.PlayerNotFound, null);
+            }
+            else if (!IsPasswordCorrect(player, password))
+            {
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.InvalidPassword, null);
+            }
+            else if (!_playerRepository.HasTwoFactorEnabled(player.Id))
+            {
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.TwoFactorDisabled, null);
+            }
+            else
+            {
+                List<string> codes = _verificationService.CreateBackupCodes(player.Id);
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.Created, codes);
+            }
+
+            return creation;
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The number of backup codes left; zero if the player does not exist.</returns>
+        public int CountBackupCodes(string displayName)
+        {
+            Player player = FindPlayers(displayName).FirstOrDefault();
+            int codeCount = NoBackupCodes;
+
+            if (player != null)
+            {
+                codeCount = _verificationService.CountBackupCodes(player.Id);
+            }
+
+            return codeCount;
+        }
+
+        private static bool IsPasswordCorrect(Player player, string password)
+        {
+            return !string.IsNullOrEmpty(password) && PasswordHasher.Verify(password, player.PwdHash);
         }
 
         private static TwoFactorActivationResult CreateFailure(TwoFactorActivationStatus status)

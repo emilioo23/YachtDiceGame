@@ -33,7 +33,7 @@ namespace YachtDice.Server.Tests.Authentication
         /// </summary>
         public LoginServiceTests()
         {
-            var codeService = new TwoFactorCodeService();
+            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
             var deliveryService = new TwoFactorDeliveryService(codeService, _emailService);
             var verificationService = new TwoFactorVerificationService(_players, codeService, deliveryService);
 

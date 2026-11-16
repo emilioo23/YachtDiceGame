@@ -118,6 +118,47 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        public Contracts.BackupCodesData CreateBackupCodes(string sessionToken, string password)
+        {
+            Contracts.BackupCodesData codesData =
+                ExecuteForPlayer(sessionToken, playerName => ProcessBackupCodeCreation(playerName, password));
+
+            return codesData;
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        public int CountBackupCodes(string sessionToken)
+        {
+            int codeCount = ExecuteForPlayer(sessionToken, playerName => _settingsService.CountBackupCodes(playerName));
+
+            return codeCount;
+        }
+
+        private Contracts.BackupCodesData ProcessBackupCodeCreation(string displayName, string password)
+        {
+            LogicTwoFactor.BackupCodeCreation creation = _settingsService.CreateBackupCodes(displayName, password);
+
+            var codesData = new Contracts.BackupCodesData
+            {
+                Code = Mapping.EnumMapper.Map<
+                    LogicTwoFactor.BackupCodeCreationStatus,
+                    Contracts.BackupCodesResultCode>(creation.Status),
+                Codes = creation.Codes
+            };
+
+            return codesData;
+        }
+
         private Contracts.PasswordChangeResultCode ProcessPasswordChange(
             string displayName,
             Contracts.PasswordChange change)

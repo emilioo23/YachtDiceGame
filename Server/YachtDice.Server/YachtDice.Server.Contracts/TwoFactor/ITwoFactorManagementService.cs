@@ -66,5 +66,24 @@ namespace YachtDice.Server.Contracts.TwoFactor
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         PasswordChangeResultCode ChangePassword(string sessionToken, PasswordChange change);
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        BackupCodesData CreateBackupCodes(string sessionToken, string password);
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        int CountBackupCodes(string sessionToken);
     }
 }

@@ -45,5 +45,20 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
         TwoFactorChangeStatus Disable(string displayName, string password);
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        BackupCodeCreation CreateBackupCodes(string displayName, string password);
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The number of backup codes left; zero if the player does not exist.</returns>
+        int CountBackupCodes(string displayName);
     }
 }

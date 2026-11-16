@@ -75,6 +75,7 @@
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />
     <Compile Include="InMemory\InMemoryGameHistoryRepository.cs" />
     <Compile Include="InMemory\InMemoryFriendshipService.cs" />
+    <Compile Include="InMemory\InMemoryBackupCodeRepository.cs" />
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Security\SecureRandomTests.cs" />
     <Compile Include="Security\SessionRegistryTests.cs" />
     <Compile Include="TwoFactor\EmailVerificationTests.cs" />
+    <Compile Include="TwoFactor\BackupCodeTests.cs" />
     <Compile Include="TwoFactor\TwoFactorResendTests.cs" />
   </ItemGroup>
   <ItemGroup>

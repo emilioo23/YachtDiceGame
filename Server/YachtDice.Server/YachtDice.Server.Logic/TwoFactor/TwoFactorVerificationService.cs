@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
@@ -9,7 +10,8 @@ using YachtDice.Server.Logic.Players;
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Validates the verification codes and sends them again when the player asks for it.
+    /// Validates the verification codes and sends them again when the player asks for it. A code with the shape
+    /// of a backup code is checked against the backup codes of the player instead of the code sent by email.
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
@@ -65,11 +67,66 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <returns>Result status of the verification process.</returns>
         public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            TwoFactorValidationStatus status = _codeService.ValidateCode(email, verificationCode);
+            TwoFactorValidationStatus status;
+
+            if (TwoFactorCodeService.IsBackupCodeFormat(verificationCode?.Code))
+            {
+                status = VerifyBackupCode(email, verificationCode);
+            }
+            else
+            {
+                status = _codeService.ValidateCode(email, verificationCode);
+            }
 
             if (status == TwoFactorValidationStatus.Valid)
             {
                 ActivateIfUnverified(email);
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Creates new backup codes for the player. The codes created before stop working.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The new codes, to show them to the player only once.</returns>
+        public List<string> CreateBackupCodes(int playerId)
+        {
+            return _codeService.CreateBackupCodes(playerId);
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        public int CountBackupCodes(int playerId)
+        {
+            return _codeService.CountBackupCodes(playerId);
+        }
+
+        /// <summary>
+        /// Deletes every backup code of the player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        public void RemoveBackupCodes(int playerId)
+        {
+            _codeService.RemoveBackupCodes(playerId);
+        }
+
+        private TwoFactorValidationStatus VerifyBackupCode(string email, VerificationCode verificationCode)
+        {
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            TwoFactorValidationStatus status;
+
+            if (player == null)
+            {
+                status = _codeService.ValidateCode(email, verificationCode);
+            }
+            else
+            {
+                status = _codeService.ValidateBackupCode(email, player.Id, verificationCode);
             }
 
             return status;

@@ -159,6 +159,8 @@
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\SecureRandom.cs" />
     <Compile Include="Security\SessionRegistry.cs" />
+    <Compile Include="TwoFactor\BackupCodeCreation.cs" />
+    <Compile Include="TwoFactor\BackupCodeCreationStatus.cs" />
     <Compile Include="TwoFactor\ITwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\CodeDelivery.cs" />
     <Compile Include="TwoFactor\ResendCodeStatus.cs" />

@@ -18,7 +18,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Category">
@@ -765,7 +765,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__BACKUP_CO__Playe__0D7A0286" FromRole="BackupCode" ToRole="Player" />
         </EntityType>

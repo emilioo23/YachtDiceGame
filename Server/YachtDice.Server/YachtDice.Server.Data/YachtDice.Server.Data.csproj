@@ -99,12 +99,15 @@
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\AccountEraser.cs" />
+    <Compile Include="Repositories\BackupCodeRepository.cs" />
+    <Compile Include="Repositories\BackupCodeStatus.cs" />
     <Compile Include="Repositories\DatabaseConnection.cs" />
     <Compile Include="Repositories\DatabaseOperation.cs" />
     <Compile Include="Repositories\FriendRepository.cs" />
     <Compile Include="Repositories\FriendshipStatus.cs" />
     <Compile Include="Repositories\GameHistoryRepository.cs" />
     <Compile Include="Repositories\GameResultRecord.cs" />
+    <Compile Include="Repositories\IBackupCodeRepository.cs" />
     <Compile Include="Repositories\IFriendRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
     <Compile Include="Repositories\IPasswordResetRepository.cs" />
@@ -166,6 +169,7 @@
     <None Include="Scripts\AddMoreAvatars.sql" />
     <None Include="Scripts\AllowComputerRoomType.sql" />
     <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />
+    <None Include="Scripts\WidenBackupCodeHash.sql" />
     <EntityDeploy Include="YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>

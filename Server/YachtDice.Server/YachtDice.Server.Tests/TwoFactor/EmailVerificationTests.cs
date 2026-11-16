@@ -25,7 +25,7 @@ namespace YachtDice.Server.Tests.TwoFactor
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
-        private readonly TwoFactorCodeService _codeService = new TwoFactorCodeService();
+        private readonly TwoFactorCodeService _codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginService _loginService;
 

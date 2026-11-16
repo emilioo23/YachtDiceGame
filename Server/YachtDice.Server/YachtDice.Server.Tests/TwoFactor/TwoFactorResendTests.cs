@@ -32,7 +32,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         /// </summary>
         public TwoFactorResendTests()
         {
-            var codeService = new TwoFactorCodeService();
+            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
             var deliveryService = new TwoFactorDeliveryService(codeService, _emailService);
 
             _players.Add(new Player

@@ -285,7 +285,7 @@ namespace YachtDice.Server.Host
         private static AuthenticationService CreateAuthenticationService()
         {
             var playerRepository = new PlayerRepository();
-            var codeService = new TwoFactorCodeService();
+            var codeService = new TwoFactorCodeService(new BackupCodeRepository());
             var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
             var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
 
@@ -312,7 +312,7 @@ namespace YachtDice.Server.Host
         private static TwoFactorManagementService CreateTwoFactorManagementService()
         {
             var playerRepository = new PlayerRepository();
-            var codeService = new TwoFactorCodeService();
+            var codeService = new TwoFactorCodeService(new BackupCodeRepository());
             var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
             var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
 
