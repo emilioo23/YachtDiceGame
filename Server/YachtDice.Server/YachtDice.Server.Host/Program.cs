@@ -212,7 +212,7 @@ namespace YachtDice.Server.Host
 
             LevelTable levelTable = CreateLevelTable();
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
-            PlayerService playerService = CreatePlayerService(avatarService, wordFilter);
+            PlayerService playerService = CreatePlayerService(avatarService, wordFilter, levelTable);
 
             playerService.Sessions = sessions;
             serviceHosts.Add(new ServiceHost(playerService));
@@ -221,10 +221,7 @@ namespace YachtDice.Server.Host
             {
                 WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
             };
-            var resultRecorder = new GameResultRecorder(
-                new PlayerRepository(),
-                new GameHistoryRepository(),
-                levelTable);
+            var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
             var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
             var gameCoordinator = new GameCoordinator(gameManager, resultRecorder);
             serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator)));
@@ -363,11 +360,18 @@ namespace YachtDice.Server.Host
         /// </summary>
         /// <param name="avatarService">Service that handles the avatars of the players.</param>
         /// <param name="wordFilter">Filter that rejects the offensive usernames.</param>
+        /// <param name="levelTable">Experience that each level needs.</param>
         /// <returns>A fully configured instance of PlayerService.</returns>
-        private static PlayerService CreatePlayerService(AvatarService avatarService, OffensiveWordFilter wordFilter)
+        private static PlayerService CreatePlayerService(
+            AvatarService avatarService,
+            OffensiveWordFilter wordFilter,
+            LevelTable levelTable)
         {
             var gameHistoryRepository = new GameHistoryRepository();
-            var statisticsService = new PlayerStatisticsService(new PlayerRepository(), gameHistoryRepository);
+            var statisticsService = new PlayerStatisticsService(
+                new PlayerRepository(),
+                gameHistoryRepository,
+                levelTable);
 
             var profileService = new ProfileService(new PlayerRepository(), wordFilter, statisticsService);
 

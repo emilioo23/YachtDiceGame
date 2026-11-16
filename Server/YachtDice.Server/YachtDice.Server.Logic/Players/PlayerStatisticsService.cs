@@ -11,7 +11,6 @@ namespace YachtDice.Server.Logic.Players
     /// </summary>
     public class PlayerStatisticsService
     {
-        private const int DefaultPlayerLevel = 1;
         private const int EmptyCount = 0;
         private const int PercentageFactor = 100;
         private const int FirstPosition = 1;
@@ -22,20 +21,24 @@ namespace YachtDice.Server.Logic.Players
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
+        private readonly LevelTable _levelTable;
 
         /// <summary>
-        /// Initializes the service with the data access it needs.
+        /// Initializes the service with the data access and the table of levels it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="gameHistoryRepository">Repository used to read the game results.</param>
+        /// <param name="levelTable">Experience that each level needs, used to calculate the level.</param>
         public PlayerStatisticsService(
             IPlayerRepository playerRepository,
-            IGameHistoryRepository gameHistoryRepository)
+            IGameHistoryRepository gameHistoryRepository,
+            LevelTable levelTable)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _gameHistoryRepository = gameHistoryRepository
                 ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
+            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullDependencyMessage);
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace YachtDice.Server.Logic.Players
             return summary;
         }
 
-        private static List<LeaderboardEntry> AssignPositions(List<PlayerRankingRecord> records)
+        private List<LeaderboardEntry> AssignPositions(List<PlayerRankingRecord> records)
         {
             List<PlayerRankingRecord> ordered = records
                 .OrderByDescending(record => record.TotalPoints)
@@ -164,7 +167,7 @@ namespace YachtDice.Server.Logic.Players
             return previous.TotalPoints == current.TotalPoints && previous.Wins == current.Wins;
         }
 
-        private static LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int position)
+        private LeaderboardEntry CreateLeaderboardEntry(PlayerRankingRecord record, int position)
         {
             var leaderboardEntry = new LeaderboardEntry
             {
@@ -174,16 +177,17 @@ namespace YachtDice.Server.Logic.Players
                 TotalPoints = record.TotalPoints,
                 Wins = record.Wins,
                 GamesPlayed = record.GamesPlayed,
-                Level = record.Level
+                Level = _levelTable.GetLevel(record.Experience)
             };
 
             return leaderboardEntry;
         }
 
-        private static PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
+        private PlayerStatistics BuildStatistics(Player player, List<GameHistoryPlayer> history)
         {
             int gamesPlayed = history.Count;
             int wins = CountWins(history);
+            int experience = player.XP ?? EmptyCount;
 
             var statistics = new PlayerStatistics
             {
@@ -191,8 +195,8 @@ namespace YachtDice.Server.Logic.Players
                 Wins = wins,
                 BestScore = FindBestScore(history),
                 WinRatePercentage = CalculateWinRate(wins, gamesPlayed),
-                Level = player.Level ?? DefaultPlayerLevel,
-                Experience = player.XP ?? EmptyCount
+                Level = _levelTable.GetLevel(experience),
+                Experience = experience
             };
 
             return statistics;

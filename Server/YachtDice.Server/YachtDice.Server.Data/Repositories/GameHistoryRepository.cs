@@ -16,7 +16,7 @@ namespace YachtDice.Server.Data.Repositories
         private const string FindByPlayerFailedMessage =
             "Database error occurred while fetching game history by player ID.";
 
-        private const int FirstLevel = 1;
+        private const int NoExperience = 0;
         private const string RankingFailedMessage = "Database error occurred while calculating player rankings.";
         private const string SaveFailedMessage = "Database error occurred while saving the result of a game.";
         private const string NullResultMessage = "The result of the game cannot be null.";
@@ -204,7 +204,6 @@ namespace YachtDice.Server.Data.Repositories
             if (account != null)
             {
                 account.XP = player.Experience;
-                account.Level = player.Level;
             }
         }
 
@@ -249,7 +248,7 @@ namespace YachtDice.Server.Data.Repositories
                         TotalPoints = totals.TotalPoints,
                         Wins = totals.Wins,
                         GamesPlayed = totals.GamesPlayed,
-                        Level = player.Level ?? FirstLevel
+                        Experience = player.XP ?? NoExperience
                     })
                 .ToList();
 

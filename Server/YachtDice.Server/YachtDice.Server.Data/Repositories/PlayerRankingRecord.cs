@@ -31,8 +31,8 @@
         public int GamesPlayed { get; set; }
 
         /// <summary>
-        /// Current level of the player.
+        /// Accumulated experience of the player, from which the level is calculated.
         /// </summary>
-        public int Level { get; set; }
+        public int Experience { get; set; }
     }
 }

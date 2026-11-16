@@ -42,7 +42,7 @@ namespace YachtDice.Server.Tests.Avatars
         public AvatarServiceTests()
         {
             _service = new AvatarService(_players, CreateLevelTable());
-            AddPlayer(PlayerLevel);
+            AddPlayer();
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_UnlockedAvatar_SavesTheNewAvatar()
         {
-            Player savedPlayerExpected = CreatePlayer(PlayerLevel, UnlockedAvatarId);
+            Player savedPlayerExpected = CreatePlayer(UnlockedAvatarId);
 
             _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
@@ -164,7 +164,7 @@ namespace YachtDice.Server.Tests.Avatars
         [InlineData(UnknownAvatarId)]
         public void ChangeAvatar_AvatarThatCannotBeChosen_KeepsTheCurrentOne(int avatarId)
         {
-            Player savedPlayerExpected = CreatePlayer(PlayerLevel, CurrentAvatarId);
+            Player savedPlayerExpected = CreatePlayer(CurrentAvatarId);
 
             _service.ChangeAvatar(PlayerName, avatarId);
 
@@ -172,10 +172,10 @@ namespace YachtDice.Server.Tests.Avatars
         }
 
         [Fact]
-        public void ChangeAvatar_LevelEqualToTheRequiredOne_UnlocksTheAvatar()
+        public void ChangeAvatar_ExperienceThatReachesTheRequiredLevel_UnlocksTheAvatar()
         {
             AvatarCatalog.TryFind(UnlockedAvatarId, out UnlockableAvatar avatar);
-            _players.Players.Single().Level = avatar.RequiredLevel;
+            _players.Players.Single().XP = CreateLevelTable().GetLevelStart(avatar.RequiredLevel);
 
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
@@ -183,9 +183,9 @@ namespace YachtDice.Server.Tests.Avatars
         }
 
         [Fact]
-        public void ChangeAvatar_PlayerWithoutLevel_IsTreatedAsLevelOne()
+        public void ChangeAvatar_PlayerWithoutExperience_IsTreatedAsLevelOne()
         {
-            _players.Players.Single().Level = null;
+            _players.Players.Single().XP = null;
 
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
 
@@ -208,7 +208,7 @@ namespace YachtDice.Server.Tests.Avatars
             Assert.Equal(AvatarChangeStatus.PlayerNotFound, status);
         }
 
-        private static Player CreatePlayer(int level, int avatarId)
+        private static Player CreatePlayer(int avatarId)
         {
             var player = new Player
             {
@@ -216,7 +216,6 @@ namespace YachtDice.Server.Tests.Avatars
                 Username = PlayerName,
                 DisplayName = PlayerName,
                 AvatarId = avatarId,
-                Level = level,
                 XP = PlayerExperience
             };
             return player;
@@ -237,9 +236,9 @@ namespace YachtDice.Server.Tests.Avatars
             return new LevelTable(thresholds);
         }
 
-        private void AddPlayer(int level)
+        private void AddPlayer()
         {
-            _players.Add(CreatePlayer(level, CurrentAvatarId));
+            _players.Add(CreatePlayer(CurrentAvatarId));
         }
     }
 }

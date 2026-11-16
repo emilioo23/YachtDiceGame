@@ -46,6 +46,9 @@ namespace YachtDice.Server.Tests.Players
         private const string SymbolFlagCode = "1!";
         private const string NoFlagCode = "";
         private const int TwoPlayers = 2;
+        private const int NoExperience = 0;
+
+        private static readonly LevelTable SingleLevel = new LevelTable(new[] { NoExperience });
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
@@ -59,7 +62,7 @@ namespace YachtDice.Server.Tests.Players
             _service = new ProfileService(
                 _players,
                 new OffensiveWordFilter(new[] { OffensiveWord }),
-                new PlayerStatisticsService(_players, _history));
+                new PlayerStatisticsService(_players, _history, SingleLevel));
             _players.Add(CreatePlayer(CurrentPlayerId, CurrentUsername));
             _players.Add(CreatePlayer(OtherPlayerId, OtherUsername));
         }
@@ -70,13 +73,13 @@ namespace YachtDice.Server.Tests.Players
             Assert.Throws<ArgumentNullException>(() => new ProfileService(
                 null,
                 new OffensiveWordFilter(new string[0]),
-                new PlayerStatisticsService(_players, _history)));
+                new PlayerStatisticsService(_players, _history, SingleLevel)));
         }
 
         [Fact]
         public void Constructor_NullWordFilter_ThrowsArgumentNullException()
         {
-            var statistics = new PlayerStatisticsService(_players, _history);
+            var statistics = new PlayerStatisticsService(_players, _history, SingleLevel);
 
             Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, statistics));
         }

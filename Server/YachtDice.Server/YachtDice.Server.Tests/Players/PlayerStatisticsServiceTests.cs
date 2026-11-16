@@ -43,6 +43,11 @@ namespace YachtDice.Server.Tests.Players
         private const int TwoEntries = 2;
         private const int RankingGames = 9;
         private const int RankingLevel = 4;
+        private const int RankingExperience = 350;
+        private const int NoExperience = 0;
+        private const int SecondLevelExperience = 100;
+        private const int ThirdLevelExperience = 200;
+        private const int FourthLevelExperience = 300;
         private const string RankedPlayerNameFormat = "jugador_{0}";
 
         private static readonly DateTime EndDate = DateTime.UtcNow;
@@ -56,7 +61,7 @@ namespace YachtDice.Server.Tests.Players
         /// </summary>
         public PlayerStatisticsServiceTests()
         {
-            _service = new PlayerStatisticsService(_players, _history);
+            _service = new PlayerStatisticsService(_players, _history, CreateLevelTable());
             _players.Add(new Player
             {
                 Id = PlayerId,
@@ -69,13 +74,20 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PlayerStatisticsService(null, _history));
+            Assert.Throws<ArgumentNullException>(() => new PlayerStatisticsService(null, _history, CreateLevelTable()));
         }
 
         [Fact]
         public void Constructor_NullHistoryRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PlayerStatisticsService(_players, null));
+            Assert.Throws<ArgumentNullException>(
+                () => new PlayerStatisticsService(_players, null, CreateLevelTable()));
+        }
+
+        [Fact]
+        public void Constructor_NullLevelTable_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PlayerStatisticsService(_players, _history, null));
         }
 
         [Fact]
@@ -266,7 +278,7 @@ namespace YachtDice.Server.Tests.Players
         }
 
         [Fact]
-        public void GetTopPlayers_AnyPlayer_KeepsTheLevelAndTheGamesPlayed()
+        public void GetTopPlayers_AnyPlayer_CalculatesTheLevelAndKeepsTheGamesPlayed()
         {
             _history.AddRankingRecord(new PlayerRankingRecord
             {
@@ -274,13 +286,24 @@ namespace YachtDice.Server.Tests.Players
                 TotalPoints = RankingPoints,
                 Wins = ManyWins,
                 GamesPlayed = RankingGames,
-                Level = RankingLevel
+                Experience = RankingExperience
             });
-            var expected = new { GamesPlayed = RankingGames, Level = RankingLevel };
+            var leaderboardEntryExpected = new { GamesPlayed = RankingGames, Level = RankingLevel };
 
             LeaderboardEntry leaderboardEntry = _service.GetTopPlayers(PlayerName).Single();
 
-            Assert.Equivalent(expected, leaderboardEntry);
+            Assert.Equivalent(leaderboardEntryExpected, leaderboardEntry);
+        }
+
+        private static LevelTable CreateLevelTable()
+        {
+            return new LevelTable(new[]
+            {
+                NoExperience,
+                SecondLevelExperience,
+                ThirdLevelExperience,
+                FourthLevelExperience
+            });
         }
 
         private void AddRanking(string name, int totalPoints, int wins)

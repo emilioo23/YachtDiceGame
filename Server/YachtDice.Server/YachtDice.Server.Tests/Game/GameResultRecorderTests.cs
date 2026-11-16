@@ -4,7 +4,6 @@ using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Game;
-using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Tests.InMemory;
 
@@ -13,7 +12,7 @@ namespace YachtDice.Server.Tests.Game
     /// <summary>
     /// Rules to save the result of a finished game: only the registered players are saved, the one who left
     /// is marked as abandoned and cannot win, nothing is saved when no registered player took part, and the
-    /// experience earned is added to the account with the level that matches it.
+    /// experience earned is added to the account.
     /// </summary>
     public class GameResultRecorderTests
     {
@@ -28,10 +27,6 @@ namespace YachtDice.Server.Tests.Game
         private const int LoserTotal = 180;
         private const int RoomMaxPlayers = 3;
         private const int NoExperience = 0;
-        private const int FirstLevel = 1;
-        private const int SecondLevel = 2;
-        private const int SecondLevelExperience = 200;
-        private const int ThirdLevelExperience = 500;
         private const int PreviousExperience = 150;
         private const int ExperienceGained = 280;
         private const int ExperienceAfterTheGame = 430;
@@ -46,7 +41,7 @@ namespace YachtDice.Server.Tests.Game
         /// </summary>
         public GameResultRecorderTests()
         {
-            _recorder = new GameResultRecorder(_players, _history, CreateLevelTable());
+            _recorder = new GameResultRecorder(_players, _history);
             _players.Add(new Player { Id = BetoId, DisplayName = BetoName, Username = BetoName });
             _players.Add(new Player { Id = AnaId, DisplayName = AnaName, Username = AnaUsername });
         }
@@ -54,28 +49,21 @@ namespace YachtDice.Server.Tests.Game
         [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(null, _history, CreateLevelTable()));
+            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(null, _history));
         }
 
         [Fact]
         public void Constructor_NullHistoryRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, null, CreateLevelTable()));
+            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, null));
         }
 
         [Fact]
-        public void Constructor_NullLevelTable_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new GameResultRecorder(_players, _history, null));
-        }
-
-        [Fact]
-        public void Record_PlayerWithExperience_AddsTheGainAndUpdatesTheLevel()
+        public void Record_PlayerWithExperience_AddsTheGainToTheExperience()
         {
             _players.FindByName(BetoName).Single().XP = PreviousExperience;
             PlayerResultRecord betoResultExpected = CreateWinnerResult(BetoId, WinnerTotal);
             betoResultExpected.Experience = ExperienceAfterTheGame;
-            betoResultExpected.Level = SecondLevel;
             PlayerSnapshot beto = CreateWinner(BetoName, WinnerTotal, true);
             beto.ExperienceGained = ExperienceGained;
 
@@ -196,8 +184,7 @@ namespace YachtDice.Server.Tests.Game
                 FinalScore = finalScore,
                 IsWinner = false,
                 Status = status,
-                Experience = NoExperience,
-                Level = FirstLevel
+                Experience = NoExperience
             };
         }
 
@@ -206,11 +193,6 @@ namespace YachtDice.Server.Tests.Game
             PlayerResultRecord winnerResult = CreateResult(playerId, finalScore, PlayerResultStatus.Completed);
             winnerResult.IsWinner = true;
             return winnerResult;
-        }
-
-        private static LevelTable CreateLevelTable()
-        {
-            return new LevelTable(new[] { NoExperience, SecondLevelExperience, ThirdLevelExperience });
         }
 
         private static PlayerSnapshot CreatePlayer(string name, int total, bool isPresent)

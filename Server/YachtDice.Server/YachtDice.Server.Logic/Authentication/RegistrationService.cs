@@ -16,7 +16,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int DefaultAvatarId = 1;
         private const int HoursToVerifyEmail = 48;
         private const int InitialExperience = 0;
-        private const int InitialLevel = 1;
         private const string RegisteredLogMessage = "Player registered successfully.";
         private const string NullPlayerMessage = "The new player cannot be null.";
         private const string NullRepositoryMessage = "The player repository cannot be null.";
@@ -180,7 +179,6 @@ namespace YachtDice.Server.Logic.Authentication
             player.State = PlayerState.Unverified.ToString();
             player.RegDate = DateTime.UtcNow;
             player.XP = InitialExperience;
-            player.Level = InitialLevel;
             player.DisplayName = player.Username;
             player.FirstName = player.FirstName.Trim();
             player.LastName = player.LastName.Trim();

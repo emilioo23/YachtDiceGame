@@ -53,8 +53,14 @@ namespace YachtDice.Server.Logic.Avatars
         public int GetLevel(string displayName)
         {
             Player player = FindPlayers(displayName).FirstOrDefault();
+            int level = GuestLevel;
 
-            return player == null ? GuestLevel : player.Level ?? DefaultLevel;
+            if (player != null)
+            {
+                level = CalculateLevel(player);
+            }
+
+            return level;
         }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace YachtDice.Server.Logic.Avatars
             if (player != null)
             {
                 profile.AvatarId = player.AvatarId;
-                profile.Level = player.Level ?? DefaultLevel;
+                profile.Level = CalculateLevel(player);
                 profile.Experience = player.XP ?? DefaultExperience;
                 profile.TitleId = ReadTitleId(player.Id);
                 profile.FlagCode = _playerRepository.FindFlagCode(player.Id);
@@ -121,7 +127,9 @@ namespace YachtDice.Server.Logic.Avatars
             return isNumber ? titleId : AchievementRules.DefaultTitleId;
         }
 
-        private static AvatarChangeStatus GetChangeStatus(Player player, int avatarId)
+        private int CalculateLevel(Player player) => _levelTable.GetLevel(player.XP ?? DefaultExperience);
+
+        private AvatarChangeStatus GetChangeStatus(Player player, int avatarId)
         {
             AvatarChangeStatus status = AvatarChangeStatus.Success;
 
@@ -129,7 +137,7 @@ namespace YachtDice.Server.Logic.Avatars
             {
                 status = AvatarChangeStatus.AvatarNotFound;
             }
-            else if ((player.Level ?? DefaultLevel) < avatar.RequiredLevel)
+            else if (CalculateLevel(player) < avatar.RequiredLevel)
             {
                 status = AvatarChangeStatus.AvatarLocked;
             }

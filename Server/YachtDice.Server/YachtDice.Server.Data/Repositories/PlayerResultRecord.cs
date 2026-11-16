@@ -29,10 +29,5 @@
         /// Gets or sets the accumulated experience of the player, counting the experience of this game.
         /// </summary>
         public int Experience { get; set; }
-
-        /// <summary>
-        /// Gets or sets the level of the player that matches the accumulated experience.
-        /// </summary>
-        public int Level { get; set; }
     }
 }
