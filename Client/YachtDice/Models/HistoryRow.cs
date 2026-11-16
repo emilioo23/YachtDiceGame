@@ -11,6 +11,11 @@
         public bool IsWin { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier of the game, to ask for its scorecards.
+        /// </summary>
+        public int GameId { get; set; }
+
+        /// <summary>
         /// Gets or sets the text that tells whether the player won or lost.
         /// </summary>
         public string ResultText { get; set; }

@@ -2427,4 +2427,34 @@
   <data name="History_KickedYouFormat" xml:space="preserve">
     <value>{0} te expulsó de la sala {1}</value>
   </data>
+  <data name="History_ButtonScorecard" xml:space="preserve">
+    <value>Ver tarjeta</value>
+  </data>
+  <data name="Scorecard_WindowTitle" xml:space="preserve">
+    <value>Tarjetas de la partida</value>
+  </data>
+  <data name="Scorecard_TitleFormat" xml:space="preserve">
+    <value>{0} — {1} puntos</value>
+  </data>
+  <data name="Scorecard_LineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Scorecard_NotUsed" xml:space="preserve">
+    <value>sin anotar</value>
+  </data>
+  <data name="Scorecard_UpperBonusFormat" xml:space="preserve">
+    <value>Bono superior: {0}</value>
+  </data>
+  <data name="Scorecard_YachtBonusFormat" xml:space="preserve">
+    <value>Yacht extra: {0}</value>
+  </data>
+  <data name="Scorecard_Yes" xml:space="preserve">
+    <value>sí</value>
+  </data>
+  <data name="Scorecard_No" xml:space="preserve">
+    <value>no</value>
+  </data>
+  <data name="Scorecard_Empty" xml:space="preserve">
+    <value>Esta partida no tiene tarjetas guardadas.</value>
+  </data>
 </root>

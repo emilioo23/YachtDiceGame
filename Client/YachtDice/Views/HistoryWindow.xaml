@@ -86,13 +86,21 @@
                                                        VerticalAlignment="Center"
                                                        TextWrapping="Wrap"
                                                        Foreground="{StaticResource BrushText}"/>
-                                            <TextBlock Grid.Column="3"
-                                                       Text="{Binding ScoreText}"
-                                                       FontFamily="{StaticResource FontDisplay}"
-                                                       FontSize="26"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"
-                                                       Foreground="{StaticResource BrushText}"/>
+                                            <StackPanel Grid.Column="3"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0,8">
+                                                <TextBlock Text="{Binding ScoreText}"
+                                                           FontFamily="{StaticResource FontDisplay}"
+                                                           FontSize="26"
+                                                           HorizontalAlignment="Center"
+                                                           Foreground="{StaticResource BrushText}"/>
+                                                <Button Content="{x:Static res:Strings.History_ButtonScorecard}"
+                                                        Style="{StaticResource BtnOutline}"
+                                                        FontSize="12"
+                                                        Padding="8,3"
+                                                        HorizontalAlignment="Center"
+                                                        Click="ScorecardButton_Click"/>
+                                            </StackPanel>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

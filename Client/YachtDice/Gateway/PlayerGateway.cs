@@ -103,6 +103,13 @@ namespace YachtDice.Gateway
             return games.ToList();
         }
 
+        public async Task<List<SavedScorecard>> GetGameScorecardsAsync(string playerName, int gameId)
+        {
+            SavedScorecard[] scorecards = await ExecuteAsync(client => client.GetGameScorecards(playerName, gameId));
+
+            return scorecards.ToList();
+        }
+
         public async Task<FlagChangeResultCode> ChangeFlagAsync(string sessionToken, string flagCode)
         {
             FlagChangeResultCode result = await ExecuteAsync(client => client.ChangeFlag(sessionToken, flagCode));

@@ -271,6 +271,7 @@
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
     <Compile Include="Utils\KickHistoryTexts.cs" />
+    <Compile Include="Utils\SavedScorecardTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
     <Compile Include="Utils\PreferencesStore.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
     <Compile Include="Models\KickRow.cs" />
+    <Compile Include="Models\ScorecardView.cs" />
     <Compile Include="Utils\AchievementNotifier.cs" />
     <Compile Include="Utils\FlagImages.cs" />
     <Compile Include="Utils\ProgressTexts.cs" />
@@ -324,6 +326,9 @@
     <Compile Include="Models\RuleStep.cs" />
     <Compile Include="Views\ChatPanel.xaml.cs">
       <DependentUpon>ChatPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameScorecardsWindow.xaml.cs">
+      <DependentUpon>GameScorecardsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportPlayerWindow.xaml.cs">
       <DependentUpon>ReportPlayerWindow.xaml</DependentUpon>
@@ -423,6 +428,10 @@
     <Page Include="Views\ChatPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameScorecardsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReportPlayerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

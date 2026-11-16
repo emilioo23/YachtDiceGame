@@ -4127,5 +4127,95 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("History_KickedYouFormat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ver tarjeta.
+        /// </summary>
+        public static string History_ButtonScorecard {
+            get {
+                return ResourceManager.GetString("History_ButtonScorecard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tarjetas de la partida.
+        /// </summary>
+        public static string Scorecard_WindowTitle {
+            get {
+                return ResourceManager.GetString("Scorecard_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} — {1} puntos.
+        /// </summary>
+        public static string Scorecard_TitleFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0}: {1}.
+        /// </summary>
+        public static string Scorecard_LineFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_LineFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a sin anotar.
+        /// </summary>
+        public static string Scorecard_NotUsed {
+            get {
+                return ResourceManager.GetString("Scorecard_NotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bono superior: {0}.
+        /// </summary>
+        public static string Scorecard_UpperBonusFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_UpperBonusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Yacht extra: {0}.
+        /// </summary>
+        public static string Scorecard_YachtBonusFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_YachtBonusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a sí.
+        /// </summary>
+        public static string Scorecard_Yes {
+            get {
+                return ResourceManager.GetString("Scorecard_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a no.
+        /// </summary>
+        public static string Scorecard_No {
+            get {
+                return ResourceManager.GetString("Scorecard_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta partida no tiene tarjetas guardadas..
+        /// </summary>
+        public static string Scorecard_Empty {
+            get {
+                return ResourceManager.GetString("Scorecard_Empty", resourceCulture);
+            }
+        }
     }
 }

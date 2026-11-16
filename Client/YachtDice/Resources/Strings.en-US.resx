@@ -2427,4 +2427,34 @@
   <data name="History_KickedYouFormat" xml:space="preserve">
     <value>{0} expelled you from room {1}</value>
   </data>
+  <data name="History_ButtonScorecard" xml:space="preserve">
+    <value>View scorecard</value>
+  </data>
+  <data name="Scorecard_WindowTitle" xml:space="preserve">
+    <value>Scorecards of the game</value>
+  </data>
+  <data name="Scorecard_TitleFormat" xml:space="preserve">
+    <value>{0} — {1} points</value>
+  </data>
+  <data name="Scorecard_LineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Scorecard_NotUsed" xml:space="preserve">
+    <value>not scored</value>
+  </data>
+  <data name="Scorecard_UpperBonusFormat" xml:space="preserve">
+    <value>Upper bonus: {0}</value>
+  </data>
+  <data name="Scorecard_YachtBonusFormat" xml:space="preserve">
+    <value>Extra Yachts: {0}</value>
+  </data>
+  <data name="Scorecard_Yes" xml:space="preserve">
+    <value>yes</value>
+  </data>
+  <data name="Scorecard_No" xml:space="preserve">
+    <value>no</value>
+  </data>
+  <data name="Scorecard_Empty" xml:space="preserve">
+    <value>This game has no saved scorecards.</value>
+  </data>
 </root>

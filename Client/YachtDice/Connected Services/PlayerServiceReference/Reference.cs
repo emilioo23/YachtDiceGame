@@ -845,6 +845,9 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int BestOpponentScoreField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GameIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsAgainstComputerField;
@@ -871,6 +874,19 @@ namespace YachtDice.PlayerServiceReference {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GameId {
+            get {
+                return this.GameIdField;
+            }
+            set {
+                if ((this.GameIdField.Equals(value) != true)) {
+                    this.GameIdField = value;
+                    this.RaisePropertyChanged("GameId");
+                }
+            }
+        }
+
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int BestOpponentScore {
             get {
@@ -987,6 +1003,192 @@ namespace YachtDice.PlayerServiceReference {
         WrongPassword = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SavedScorecard", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class SavedScorecard : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasUpperBonusField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PlayerNameField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.PlayerServiceReference.SavedScore[] ScoresField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int YachtBonusCountField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasUpperBonus {
+            get {
+                return this.HasUpperBonusField;
+            }
+            set {
+                if ((this.HasUpperBonusField.Equals(value) != true)) {
+                    this.HasUpperBonusField = value;
+                    this.RaisePropertyChanged("HasUpperBonus");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PlayerName {
+            get {
+                return this.PlayerNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerNameField, value) != true)) {
+                    this.PlayerNameField = value;
+                    this.RaisePropertyChanged("PlayerName");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.PlayerServiceReference.SavedScore[] Scores {
+            get {
+                return this.ScoresField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ScoresField, value) != true)) {
+                    this.ScoresField = value;
+                    this.RaisePropertyChanged("Scores");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Total {
+            get {
+                return this.TotalField;
+            }
+            set {
+                if ((this.TotalField.Equals(value) != true)) {
+                    this.TotalField = value;
+                    this.RaisePropertyChanged("Total");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int YachtBonusCount {
+            get {
+                return this.YachtBonusCountField;
+            }
+            set {
+                if ((this.YachtBonusCountField.Equals(value) != true)) {
+                    this.YachtBonusCountField = value;
+                    this.RaisePropertyChanged("YachtBonusCount");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SavedScore", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class SavedScore : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CategoryField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsUsedField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PointsField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Category {
+            get {
+                return this.CategoryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CategoryField, value) != true)) {
+                    this.CategoryField = value;
+                    this.RaisePropertyChanged("Category");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsUsed {
+            get {
+                return this.IsUsedField;
+            }
+            set {
+                if ((this.IsUsedField.Equals(value) != true)) {
+                    this.IsUsedField = value;
+                    this.RaisePropertyChanged("IsUsed");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Points {
+            get {
+                return this.PointsField;
+            }
+            set {
+                if ((this.PointsField.Equals(value) != true)) {
+                    this.PointsField = value;
+                    this.RaisePropertyChanged("Points");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="PlayerServiceReference.IPlayerService")]
     public interface IPlayerService {
@@ -1026,6 +1228,10 @@ namespace YachtDice.PlayerServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault", Name="ServiceFault")]
         YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameScorecards", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameScorecardsResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameScorecardsServiceFaultFault", Name="ServiceFault")]
+        YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string playerName, int gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault", Name="ServiceFault")]
@@ -1097,6 +1303,10 @@ namespace YachtDice.PlayerServiceReference {
         
         public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName) {
             return base.Channel.GetGameHistory(playerName);
+        }
+
+        public YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string playerName, int gameId) {
+            return base.Channel.GetGameScorecards(playerName, gameId);
         }
         
         public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode) {

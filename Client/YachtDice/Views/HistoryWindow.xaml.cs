@@ -75,6 +75,7 @@ namespace YachtDice.Views
             return new HistoryRow
             {
                 IsWin = game.IsWin,
+                GameId = game.GameId,
                 ResultText = game.IsWin ? Strings.History_Victory : Strings.History_Defeat,
                 OpponentsText = string.Format(Strings.History_VersusFormat, ReadOpponents(game)),
                 ScoreText = ReadScore(game),
@@ -94,6 +95,24 @@ namespace YachtDice.Views
             return HistoryDisplay.HasRegisteredOpponents(game.Opponents)
                 ? string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore)
                 : game.OwnScore.ToString();
+        }
+
+        private async void ScorecardButton_Click(object sender, RoutedEventArgs e)
+        {
+            var row = (HistoryRow)((FrameworkElement)sender).DataContext;
+
+            await GatewayCallRunner.RunAsync(this, _logger, () => ShowScorecardsAsync(row.GameId));
+        }
+
+        private async Task ShowScorecardsAsync(int gameId)
+        {
+            List<SavedScorecard> scorecards = await _gateway.GetGameScorecardsAsync(_session.DisplayName, gameId);
+            var scorecardsWindow = new GameScorecardsWindow(scorecards)
+            {
+                Owner = this
+            };
+
+            scorecardsWindow.ShowDialog();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
