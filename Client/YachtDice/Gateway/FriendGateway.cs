@@ -80,6 +80,19 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Reports another player who finished a game with the player in the last day.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player who reports.</param>
+        /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>
+        /// <returns>Outcome of the report.</returns>
+        public async Task<ReportResultCode> ReportPlayerAsync(string sessionToken, PlayerReport report)
+        {
+            ReportResultCode result = await ExecuteAsync(client => client.ReportPlayer(sessionToken, report));
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the username that other players use to add the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

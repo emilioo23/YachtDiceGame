@@ -83,6 +83,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" Text="{Binding PlaceText}" FontSize="16"
@@ -102,6 +103,20 @@
                                         <TextBlock Grid.Column="3" Text="{Binding ExperienceText}" FontSize="13"
                                                    Foreground="{StaticResource BrushTextMuted}"
                                                    HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="4"
+                                                Content="{x:Static properties:Strings.Report_ButtonReport}"
+                                                Style="{StaticResource BtnOutline}"
+                                                FontSize="11" Padding="8,3" Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Click="ReportButton_Click">
+                                            <Button.Visibility>
+                                                <Binding Path="CanReport">
+                                                    <Binding.Converter>
+                                                        <BooleanToVisibilityConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </Button.Visibility>
+                                        </Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

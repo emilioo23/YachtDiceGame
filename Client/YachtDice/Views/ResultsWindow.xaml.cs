@@ -48,7 +48,8 @@ namespace YachtDice.Views
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(session, standings, playerId);
 
             ShowWinner(standings);
-            StandingsItemsControl.ItemsSource = standings.Select(CreateRow).ToList();
+            Func<RankedStanding, StandingRow> createRow = standing => CreateRow(standing, playerId);
+            StandingsItemsControl.ItemsSource = standings.Select(createRow).ToList();
 
             if (!session.IsGuest)
             {
@@ -56,8 +57,10 @@ namespace YachtDice.Views
             }
         }
 
-        private static StandingRow CreateRow(RankedStanding standing)
+        private StandingRow CreateRow(RankedStanding standing, string playerId)
         {
+            bool isOpponent = standing.PlayerId != playerId;
+
             return new StandingRow
             {
                 PlaceText = GetPlaceText(standing),
@@ -70,7 +73,8 @@ namespace YachtDice.Views
                     standing.UpperBonus,
                     standing.LowerTotal,
                     standing.YachtBonus),
-                IsWinner = standing.IsWinner
+                IsWinner = standing.IsWinner,
+                CanReport = isOpponent && !_session.IsGuest
             };
         }
 
@@ -149,6 +153,17 @@ namespace YachtDice.Views
 
             ExperienceFillScale.ScaleX = startFraction;
             ExperienceFillScale.BeginAnimation(ScaleTransform.ScaleXProperty, fill);
+        }
+
+        private void ReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            var row = (StandingRow)((FrameworkElement)sender).DataContext;
+            var reportWindow = new ReportPlayerWindow(_session, row.Name)
+            {
+                Owner = this
+            };
+
+            reportWindow.ShowDialog();
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)

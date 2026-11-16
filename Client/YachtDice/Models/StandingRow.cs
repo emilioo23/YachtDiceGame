@@ -35,5 +35,11 @@
         /// Gets or sets a value indicating whether the player won the game.
         /// </summary>
         public bool IsWinner { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the local player can report this player: it is another player
+        /// and the local player has an account.
+        /// </summary>
+        public bool CanReport { get; set; }
     }
 }

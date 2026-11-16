@@ -3965,5 +3965,131 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("TwoFactor_ErrorInvalidBackupCode", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reportar.
+        /// </summary>
+        public static string Report_ButtonReport {
+            get {
+                return ResourceManager.GetString("Report_ButtonReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reportar a {0}.
+        /// </summary>
+        public static string Report_TitleFormat {
+            get {
+                return ResourceManager.GetString("Report_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Motivo.
+        /// </summary>
+        public static string Report_ReasonLabel {
+            get {
+                return ResourceManager.GetString("Report_ReasonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Comentario (opcional).
+        /// </summary>
+        public static string Report_CommentLabel {
+            get {
+                return ResourceManager.GetString("Report_CommentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enviar reporte.
+        /// </summary>
+        public static string Report_ButtonSend {
+            get {
+                return ResourceManager.GetString("Report_ButtonSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Lenguaje ofensivo.
+        /// </summary>
+        public static string Report_Reason_OffensiveLanguage {
+            get {
+                return ResourceManager.GetString("Report_Reason_OffensiveLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Trampa.
+        /// </summary>
+        public static string Report_Reason_Cheating {
+            get {
+                return ResourceManager.GetString("Report_Reason_Cheating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mala conducta.
+        /// </summary>
+        public static string Report_Reason_UnsportingBehavior {
+            get {
+                return ResourceManager.GetString("Report_Reason_UnsportingBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Otro.
+        /// </summary>
+        public static string Report_Reason_Other {
+            get {
+                return ResourceManager.GetString("Report_Reason_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Gracias. Tu reporte se envió..
+        /// </summary>
+        public static string Report_Result_Sent {
+            get {
+                return ResourceManager.GetString("Report_Result_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes reportar a jugadores registrados con quienes terminaste una partida hoy..
+        /// </summary>
+        public static string Report_Result_NotAllowed {
+            get {
+                return ResourceManager.GetString("Report_Result_NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya reportaste a este jugador hoy..
+        /// </summary>
+        public static string Report_Result_AlreadyReported {
+            get {
+                return ResourceManager.GetString("Report_Result_AlreadyReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No puedes reportarte a ti mismo..
+        /// </summary>
+        public static string Report_Result_CannotReportSelf {
+            get {
+                return ResourceManager.GetString("Report_Result_CannotReportSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El comentario es demasiado largo..
+        /// </summary>
+        public static string Report_Result_InvalidComment {
+            get {
+                return ResourceManager.GetString("Report_Result_InvalidComment", resourceCulture);
+            }
+        }
     }
 }

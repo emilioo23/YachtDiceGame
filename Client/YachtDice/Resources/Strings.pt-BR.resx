@@ -2373,4 +2373,46 @@
   <data name="TwoFactor_ErrorInvalidBackupCode" xml:space="preserve">
     <value>O código de backup deve ter 8 dígitos.</value>
   </data>
+  <data name="Report_ButtonReport" xml:space="preserve">
+    <value>Denunciar</value>
+  </data>
+  <data name="Report_TitleFormat" xml:space="preserve">
+    <value>Denunciar {0}</value>
+  </data>
+  <data name="Report_ReasonLabel" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="Report_CommentLabel" xml:space="preserve">
+    <value>Comentário (opcional)</value>
+  </data>
+  <data name="Report_ButtonSend" xml:space="preserve">
+    <value>Enviar denúncia</value>
+  </data>
+  <data name="Report_Reason_OffensiveLanguage" xml:space="preserve">
+    <value>Linguagem ofensiva</value>
+  </data>
+  <data name="Report_Reason_Cheating" xml:space="preserve">
+    <value>Trapaça</value>
+  </data>
+  <data name="Report_Reason_UnsportingBehavior" xml:space="preserve">
+    <value>Mau comportamento</value>
+  </data>
+  <data name="Report_Reason_Other" xml:space="preserve">
+    <value>Outro</value>
+  </data>
+  <data name="Report_Result_Sent" xml:space="preserve">
+    <value>Obrigado. Sua denúncia foi enviada.</value>
+  </data>
+  <data name="Report_Result_NotAllowed" xml:space="preserve">
+    <value>Você só pode denunciar jogadores registrados com quem terminou uma partida hoje.</value>
+  </data>
+  <data name="Report_Result_AlreadyReported" xml:space="preserve">
+    <value>Você já denunciou este jogador hoje.</value>
+  </data>
+  <data name="Report_Result_CannotReportSelf" xml:space="preserve">
+    <value>Você não pode denunciar a si mesmo.</value>
+  </data>
+  <data name="Report_Result_InvalidComment" xml:space="preserve">
+    <value>O comentário é muito longo.</value>
+  </data>
 </root>

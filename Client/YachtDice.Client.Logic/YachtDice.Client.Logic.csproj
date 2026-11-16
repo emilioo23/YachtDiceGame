@@ -46,6 +46,7 @@
     <Compile Include="Authentication\RegistrationLimits.cs" />
     <Compile Include="Authentication\PasswordChangeInputStatus.cs" />
     <Compile Include="Authentication\BackupCodeInputValidator.cs" />
+    <Compile Include="Friends\ReportLimits.cs" />
     <Compile Include="Authentication\PasswordChangeInputValidator.cs" />
     <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
     <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
