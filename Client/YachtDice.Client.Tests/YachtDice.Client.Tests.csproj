@@ -75,6 +75,7 @@
     <Compile Include="Utils\ProgressTextsTests.cs" />
     <Compile Include="Utils\BackupCodesMessagesTests.cs" />
     <Compile Include="Utils\KickHistoryTextsTests.cs" />
+    <Compile Include="Utils\ReceivedInvitationTextsTests.cs" />
     <Compile Include="Utils\ReportResultMessagesTests.cs" />
     <Compile Include="Utils\SavedScorecardTextsTests.cs" />
     <Compile Include="Utils\SecuritySummaryTextsTests.cs" />

@@ -538,6 +538,78 @@
 
                         <StackPanel>
 
+                            <TextBlock x:Name="InvitationsHeaderTextBlock"
+                                       Text="{x:Static properties:Strings.Friends_Section_Invitations}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,0,0,8"
+                                       Visibility="Collapsed"/>
+
+                            <ItemsControl x:Name="ReceivedInvitationsList"
+                                          Margin="0,0,0,16">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Border Background="{StaticResource BrushCream2}"
+                                                CornerRadius="8"
+                                                Padding="10"
+                                                Margin="0,0,0,8">
+
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Grid.Column="0"
+                                                        Width="34"
+                                                        Height="34"
+                                                        CornerRadius="17"
+                                                        Background="{StaticResource BrushWood}"
+                                                        Margin="0,0,10,0">
+
+                                                    <TextBlock Text="{Binding Initial}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"/>
+                                                </Border>
+
+                                                <StackPanel Grid.Column="1"
+                                                            VerticalAlignment="Center">
+
+                                                    <TextBlock Text="{Binding SenderName}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               Foreground="{StaticResource BrushText}"/>
+
+                                                    <TextBlock Text="{Binding DetailText}"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource BrushTextMuted}"/>
+                                                </StackPanel>
+
+                                                <Button Grid.Column="2"
+                                                        Content="{x:Static properties:Strings.Friends_Invitation_Join}"
+                                                        Tag="{Binding RoomCode}"
+                                                        IsEnabled="{Binding CanJoin}"
+                                                        Padding="10,4"
+                                                        VerticalAlignment="Center"
+                                                        Background="{StaticResource BrushFeltLight}"
+                                                        Foreground="White"
+                                                        BorderThickness="0"
+                                                        Click="JoinInvitationButton_Click"/>
+                                            </Grid>
+                                        </Border>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                            </ItemsControl>
+
                             <TextBlock Text="{x:Static properties:Strings.Friends_Section_Requests}"
                                        FontSize="15"
                                        FontWeight="Bold"

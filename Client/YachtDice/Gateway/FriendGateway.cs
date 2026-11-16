@@ -105,6 +105,19 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Gets the invitations to a room that the player received in the last day.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The invitations from the newest to the oldest.</returns>
+        public async Task<List<ReceivedInvitation>> GetReceivedInvitationsAsync(string sessionToken)
+        {
+            ReceivedInvitation[] invitations =
+                await ExecuteAsync(client => client.GetReceivedInvitations(sessionToken));
+
+            return invitations.ToList();
+        }
+
+        /// <summary>
         /// Gets the names of the friends of the player.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,7 @@ using YachtDice.Utils;
 using FriendActionResultCode = YachtDice.FriendServiceReference.FriendActionResultCode;
 using FriendRequestAnswer = YachtDice.FriendServiceReference.FriendRequestAnswer;
 using FriendRequestResultCode = YachtDice.FriendServiceReference.FriendRequestResultCode;
+using ReceivedInvitation = YachtDice.FriendServiceReference.ReceivedInvitation;
 
 namespace YachtDice.Views
 {
@@ -160,7 +162,39 @@ namespace YachtDice.Views
 
                 RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
                 ShowOnlinePlayers();
+                await LoadReceivedInvitationsAsync();
             }
+        }
+
+        private async Task LoadReceivedInvitationsAsync()
+        {
+            List<ReceivedInvitation> invitations =
+                await _friendGateway.GetReceivedInvitationsAsync(_session.SessionToken);
+            List<ReceivedInvitationRow> rows = invitations.Select(ToInvitationRow).ToList();
+
+            ReceivedInvitationsList.ItemsSource = rows;
+            InvitationsHeaderTextBlock.Visibility = rows.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private static ReceivedInvitationRow ToInvitationRow(ReceivedInvitation invitation)
+        {
+            return new ReceivedInvitationRow
+            {
+                SenderName = invitation.SenderName,
+                Initial = InitialLetter.From(invitation.SenderName, Strings.Global_UnknownInitial),
+                DetailText = ReceivedInvitationTexts.Describe(invitation),
+                RoomCode = invitation.RoomCode,
+                CanJoin = invitation.IsRoomOpen
+            };
+        }
+
+        private async void JoinInvitationButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
+            await LobbyNavigator.JoinRoomAndOpenAsync(this, _session, ReadTag(sender));
+            button.IsEnabled = true;
         }
 
         private async Task ShowPlayerStatisticsAsync(string playerName)

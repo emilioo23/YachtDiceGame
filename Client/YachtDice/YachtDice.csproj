@@ -271,6 +271,7 @@
     <Compile Include="Utils\GatewayErrorMessages.cs" />
     <Compile Include="Utils\GameResultMessages.cs" />
     <Compile Include="Utils\KickHistoryTexts.cs" />
+    <Compile Include="Utils\ReceivedInvitationTexts.cs" />
     <Compile Include="Utils\SavedScorecardTexts.cs" />
     <Compile Include="Utils\SecuritySummaryTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
     <Compile Include="Models\KickRow.cs" />
+    <Compile Include="Models\ReceivedInvitationRow.cs" />
     <Compile Include="Models\ScorecardView.cs" />
     <Compile Include="Utils\AchievementNotifier.cs" />
     <Compile Include="Utils\FlagImages.cs" />

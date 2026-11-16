@@ -2469,4 +2469,16 @@
   <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
     <value>由于其他玩家举报，你的账号被暂停至 {0}。</value>
   </data>
+  <data name="Friends_Section_Invitations" xml:space="preserve">
+    <value>收到的邀请</value>
+  </data>
+  <data name="Friends_Invitation_OpenFormat" xml:space="preserve">
+    <value>房间 {0} · {1}</value>
+  </data>
+  <data name="Friends_Invitation_ClosedFormat" xml:space="preserve">
+    <value>房间 {0} 已关闭 · {1}</value>
+  </data>
+  <data name="Friends_Invitation_Join" xml:space="preserve">
+    <value>加入</value>
+  </data>
 </root>

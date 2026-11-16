@@ -4253,5 +4253,41 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Settings_Security_LockByReportsFormat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitaciones recibidas.
+        /// </summary>
+        public static string Friends_Section_Invitations {
+            get {
+                return ResourceManager.GetString("Friends_Section_Invitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala {0} · {1}.
+        /// </summary>
+        public static string Friends_Invitation_OpenFormat {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_OpenFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala {0} cerrada · {1}.
+        /// </summary>
+        public static string Friends_Invitation_ClosedFormat {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_ClosedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Friends_Invitation_Join {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_Join", resourceCulture);
+            }
+        }
     }
 }

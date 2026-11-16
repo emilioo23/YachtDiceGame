@@ -405,6 +405,99 @@ namespace YachtDice.FriendServiceReference {
         InvalidComment = 5,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReceivedInvitation", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class ReceivedInvitation : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsRoomOpenField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RoomCodeField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SenderNameField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime SentAtField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsRoomOpen {
+            get {
+                return this.IsRoomOpenField;
+            }
+            set {
+                if ((this.IsRoomOpenField.Equals(value) != true)) {
+                    this.IsRoomOpenField = value;
+                    this.RaisePropertyChanged("IsRoomOpen");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RoomCode {
+            get {
+                return this.RoomCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoomCodeField, value) != true)) {
+                    this.RoomCodeField = value;
+                    this.RaisePropertyChanged("RoomCode");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SenderName {
+            get {
+                return this.SenderNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SenderNameField, value) != true)) {
+                    this.SenderNameField = value;
+                    this.RaisePropertyChanged("SenderName");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime SentAt {
+            get {
+                return this.SentAtField;
+            }
+            set {
+                if ((this.SentAtField.Equals(value) != true)) {
+                    this.SentAtField = value;
+                    this.RaisePropertyChanged("SentAt");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="FriendServiceReference.IFriendService")]
     public interface IFriendService {
@@ -432,6 +525,10 @@ namespace YachtDice.FriendServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/ReportPlayer", ReplyAction="urn:yachtdice:contracts/IFriendService/ReportPlayerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/ReportPlayerServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.ReportResultCode ReportPlayer(string sessionToken, YachtDice.FriendServiceReference.PlayerReport report);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetReceivedInvitations", ReplyAction="urn:yachtdice:contracts/IFriendService/GetReceivedInvitationsResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetReceivedInvitationsServiceFaultFault", Name="ServiceFault")]
+        YachtDice.FriendServiceReference.ReceivedInvitation[] GetReceivedInvitations(string sessionToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault", Name="ServiceFault")]
@@ -495,6 +592,10 @@ namespace YachtDice.FriendServiceReference {
 
         public YachtDice.FriendServiceReference.ReportResultCode ReportPlayer(string sessionToken, YachtDice.FriendServiceReference.PlayerReport report) {
             return base.Channel.ReportPlayer(sessionToken, report);
+        }
+
+        public YachtDice.FriendServiceReference.ReceivedInvitation[] GetReceivedInvitations(string sessionToken) {
+            return base.Channel.GetReceivedInvitations(sessionToken);
         }
         
         public string GetUsername(string displayName) {

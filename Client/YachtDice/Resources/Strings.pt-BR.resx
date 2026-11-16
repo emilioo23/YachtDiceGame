@@ -2469,4 +2469,16 @@
   <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
     <value>Sua conta foi suspensa por denúncias de outros jogadores até {0}.</value>
   </data>
+  <data name="Friends_Section_Invitations" xml:space="preserve">
+    <value>Convites recebidos</value>
+  </data>
+  <data name="Friends_Invitation_OpenFormat" xml:space="preserve">
+    <value>Sala {0} · {1}</value>
+  </data>
+  <data name="Friends_Invitation_ClosedFormat" xml:space="preserve">
+    <value>Sala {0} fechada · {1}</value>
+  </data>
+  <data name="Friends_Invitation_Join" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
 </root>

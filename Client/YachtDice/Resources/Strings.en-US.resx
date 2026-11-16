@@ -2469,4 +2469,16 @@
   <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
     <value>Your account was suspended by reports from other players until {0}.</value>
   </data>
+  <data name="Friends_Section_Invitations" xml:space="preserve">
+    <value>Received invitations</value>
+  </data>
+  <data name="Friends_Invitation_OpenFormat" xml:space="preserve">
+    <value>Room {0} · {1}</value>
+  </data>
+  <data name="Friends_Invitation_ClosedFormat" xml:space="preserve">
+    <value>Room {0} closed · {1}</value>
+  </data>
+  <data name="Friends_Invitation_Join" xml:space="preserve">
+    <value>Join</value>
+  </data>
 </root>
