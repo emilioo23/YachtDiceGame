@@ -106,7 +106,9 @@ namespace YachtDice.Server.Logic.Rooms
         /// Counts one more chat message with offensive words written by a player of a room.
         /// </summary>
         /// <param name="member">Room and identifier of the player who wrote the message.</param>
-        /// <returns>The infractions of the player in the room, or zero if the room or the player do not exist.</returns>
+        /// <returns>
+        /// The infractions of the player in the room, or zero if the room or the player do not exist.
+        /// </returns>
         int RegisterChatInfraction(RoomMember member);
 
         /// <summary>

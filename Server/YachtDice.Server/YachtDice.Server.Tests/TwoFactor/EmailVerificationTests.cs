@@ -25,7 +25,8 @@ namespace YachtDice.Server.Tests.TwoFactor
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
-        private readonly TwoFactorCodeService _codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
+        private readonly TwoFactorCodeService _codeService =
+            new TwoFactorCodeService(new InMemoryBackupCodeRepository());
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginService _loginService;
 
@@ -68,7 +69,9 @@ namespace YachtDice.Server.Tests.TwoFactor
         {
             string code = _codeService.GenerateCode(Email, ChallengeId);
 
-            _verificationService.VerifyPlayerCode(Email, new VerificationCode { Code = code, ChallengeId = ChallengeId });
+            _verificationService.VerifyPlayerCode(
+                Email,
+                new VerificationCode { Code = code, ChallengeId = ChallengeId });
 
             Assert.Equal(PlayerState.Active.ToString(), _players.Players.Single().State);
         }

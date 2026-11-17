@@ -327,8 +327,7 @@ namespace YachtDice.Server.Logic.Game
             _turnIndex = _players.FindIndex(isCurrentPlayer);
             bool hasDice = _turnIndex != NoPlayerIndex
                 && saved.RollsMade > NoRolls
-                && saved.Dice.Count == DiceHand.DiceCount
-                && saved.HeldDice.Count == DiceHand.DiceCount;
+                && saved.Dice.Count == DiceHand.DiceCount;
 
             if (hasDice)
             {

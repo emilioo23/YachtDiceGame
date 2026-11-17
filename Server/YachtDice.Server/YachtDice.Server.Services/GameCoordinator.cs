@@ -317,9 +317,7 @@ namespace YachtDice.Server.Services
                 SaveResult(roomCode, result.Snapshot);
             }
 
-            Contracts.GameResultCode code = Complete(roomCode, result, chosen);
-
-            return code;
+            return Complete(roomCode, result, chosen);
         }
 
         private void SaveResult(string roomCode, LogicGame.GameSnapshot snapshot)

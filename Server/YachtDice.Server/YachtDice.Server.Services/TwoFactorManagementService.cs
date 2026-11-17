@@ -22,7 +22,9 @@ namespace YachtDice.Server.Services
         /// Initializes a new instance of the TwoFactorManagementService class.
         /// </summary>
         /// <param name="settingsService">The service that turns the two-factor verification on or off.</param>
-        /// <param name="passwordChangeService">The service that changes the password of a player who is logged in.</param>
+        /// <param name="passwordChangeService">
+        /// The service that changes the password of a player who is logged in.
+        /// </param>
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public TwoFactorManagementService(
             LogicTwoFactor.ITwoFactorSettingsService settingsService,
@@ -70,8 +72,9 @@ namespace YachtDice.Server.Services
             string sessionToken,
             Contracts.VerificationCode verificationCode)
         {
-            Contracts.VerificationResultCode result =
-                ExecuteForPlayer(sessionToken, playerName => ProcessActivationConfirmation(playerName, verificationCode));
+            Contracts.VerificationResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => ProcessActivationConfirmation(playerName, verificationCode));
 
             return result;
         }
