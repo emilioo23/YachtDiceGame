@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using System.Threading;
+using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Server.Data.Exceptions;
 using YachtDice.Server.Data.Repositories;
@@ -73,6 +74,10 @@ namespace YachtDice.Server.Host
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
             catch (IOException ex)
+            {
+                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
+            }
+            catch (XmlException ex)
             {
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }

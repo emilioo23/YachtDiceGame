@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using YachtDice.Server.Logic.Players;
+using YachtDice.Server.Tests.Configuration;
 
 namespace YachtDice.Server.Tests.Players
 {
     /// <summary>
     /// Conditions that unlock the achievements and the titles of the players.
     /// </summary>
-    public class AchievementRulesTests
+    public class AchievementCatalogTests
     {
         private const int NoValue = 0;
         private const int FirstGameAchievementId = 1;
@@ -40,16 +42,18 @@ namespace YachtDice.Server.Tests.Players
         private const int TopLevel = 20;
         private const int MountainExperience = 5000;
 
+        private readonly AchievementCatalog _catalog = GameRulesFile.Load().Achievements;
+
         [Fact]
         public void GetAll_Always_ReturnsEveryAchievement()
         {
-            Assert.Equal(AchievementCount, AchievementRules.GetAll().Count);
+            Assert.Equal(AchievementCount, _catalog.GetAll().Count);
         }
 
         [Fact]
         public void GetUnlockedIds_PlayerWithoutGames_ReturnsNoAchievements()
         {
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(new PlayerStatistics());
+            List<int> unlockedIds = _catalog.GetUnlockedIds(new PlayerStatistics());
 
             Assert.Empty(unlockedIds);
         }
@@ -60,7 +64,7 @@ namespace YachtDice.Server.Tests.Players
             var statistics = new PlayerStatistics { GamesPlayed = OneGame, Wins = OneWin };
             var idsExpected = new List<int> { FirstGameAchievementId, FirstWinAchievementId };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -78,7 +82,7 @@ namespace YachtDice.Server.Tests.Players
                 YachtMasterAchievementId
             };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -100,7 +104,7 @@ namespace YachtDice.Server.Tests.Players
                 FifthWinAchievementId
             };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -124,7 +128,7 @@ namespace YachtDice.Server.Tests.Players
                 DominantAchievementId
             };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -141,7 +145,7 @@ namespace YachtDice.Server.Tests.Players
                 GrandMasterAchievementId
             };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -152,7 +156,7 @@ namespace YachtDice.Server.Tests.Players
             var statistics = new PlayerStatistics { Experience = MountainExperience };
             var idsExpected = new List<int> { CollectorAchievementId, MountainAchievementId };
 
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(statistics);
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
 
             Assert.Equal(idsExpected, unlockedIds);
         }
@@ -160,7 +164,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void IsTitleAvailable_DefaultTitle_ReturnsTrueWithoutAchievements()
         {
-            bool isAvailable = AchievementRules.IsTitleAvailable(AchievementRules.DefaultTitleId, new List<int>());
+            bool isAvailable = _catalog.IsTitleAvailable(AchievementCatalog.DefaultTitleId, new List<int>());
 
             Assert.True(isAvailable);
         }
@@ -170,7 +174,7 @@ namespace YachtDice.Server.Tests.Players
         {
             var unlockedIds = new List<int> { FirstWinAchievementId };
 
-            bool isAvailable = AchievementRules.IsTitleAvailable(FirstWinAchievementId, unlockedIds);
+            bool isAvailable = _catalog.IsTitleAvailable(FirstWinAchievementId, unlockedIds);
 
             Assert.True(isAvailable);
         }
@@ -178,7 +182,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void IsTitleAvailable_LockedTitle_ReturnsFalse()
         {
-            bool isAvailable = AchievementRules.IsTitleAvailable(FirstWinAchievementId, new List<int>());
+            bool isAvailable = _catalog.IsTitleAvailable(FirstWinAchievementId, new List<int>());
 
             Assert.False(isAvailable);
         }
@@ -188,7 +192,7 @@ namespace YachtDice.Server.Tests.Players
         {
             var unlockedIds = new List<int> { UnknownTitleId };
 
-            bool isAvailable = AchievementRules.IsTitleAvailable(UnknownTitleId, unlockedIds);
+            bool isAvailable = _catalog.IsTitleAvailable(UnknownTitleId, unlockedIds);
 
             Assert.False(isAvailable);
         }
@@ -196,19 +200,19 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void ExistsTitle_AchievementWithoutTitle_ReturnsFalse()
         {
-            Assert.False(AchievementRules.ExistsTitle(CollectorAchievementId));
+            Assert.False(_catalog.ExistsTitle(CollectorAchievementId));
         }
 
         [Fact]
         public void ExistsTitle_UnknownId_ReturnsFalse()
         {
-            Assert.False(AchievementRules.ExistsTitle(UnknownTitleId));
+            Assert.False(_catalog.ExistsTitle(UnknownTitleId));
         }
 
         [Fact]
         public void ExistsTitle_DefaultTitle_ReturnsTrue()
         {
-            Assert.True(AchievementRules.ExistsTitle(AchievementRules.DefaultTitleId));
+            Assert.True(_catalog.ExistsTitle(AchievementCatalog.DefaultTitleId));
         }
 
         [Fact]
@@ -216,7 +220,36 @@ namespace YachtDice.Server.Tests.Players
         {
             var rule = new AchievementRule(FirstGameAchievementId, AchievementMetric.GamesPlayed, OneGame);
 
-            Assert.False(AchievementRules.IsUnlocked(rule, new PlayerStatistics { GamesPlayed = NoValue }));
+            Assert.False(AchievementCatalog.IsUnlocked(rule, new PlayerStatistics { GamesPlayed = NoValue }));
+        }
+
+        [Fact]
+        public void Constructor_RepeatedIdentifier_ThrowsArgumentException()
+        {
+            var rules = new[]
+            {
+                new AchievementRule(FirstGameAchievementId, AchievementMetric.GamesPlayed, OneGame),
+                new AchievementRule(FirstGameAchievementId, AchievementMetric.Wins, OneWin)
+            };
+
+            Assert.Throws<ArgumentException>(() => new AchievementCatalog(rules));
+        }
+
+        [Fact]
+        public void Constructor_IdentifierOfTheDefaultTitle_ThrowsArgumentException()
+        {
+            var rules = new[]
+            {
+                new AchievementRule(AchievementCatalog.DefaultTitleId, AchievementMetric.GamesPlayed, OneGame)
+            };
+
+            Assert.Throws<ArgumentException>(() => new AchievementCatalog(rules));
+        }
+
+        [Fact]
+        public void Constructor_NullRules_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new AchievementCatalog(null));
         }
 
         [Fact]

@@ -20,29 +20,29 @@ namespace YachtDice.Server.Logic.Players
         private const char LastLetter = 'z';
         private const string NullRepositoryMessage = "The data access of the players cannot be null.";
         private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
-        private const string NullStatisticsMessage = "The service of statistics cannot be null.";
+        private const string NullAchievementsMessage = "The achievements of the players cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly OffensiveWordFilter _wordFilter;
-        private readonly PlayerStatisticsService _statisticsService;
+        private readonly PlayerAchievements _achievements;
 
         /// <summary>
         /// Initializes the service with the data access and the filter it needs.
         /// </summary>
         /// <param name="playerRepository">Data access of the players.</param>
         /// <param name="wordFilter">Filter that detects offensive words.</param>
-        /// <param name="statisticsService">Service that calculates the statistics that unlock achievements.</param>
+        /// <param name="achievements">Achievements and titles that each player has unlocked.</param>
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public ProfileService(
             IPlayerRepository playerRepository,
             OffensiveWordFilter wordFilter,
-            PlayerStatisticsService statisticsService)
+            PlayerAchievements achievements)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
             _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
-            _statisticsService = statisticsService
-                ?? throw new ArgumentNullException(nameof(statisticsService), NullStatisticsMessage);
+            _achievements = achievements
+                ?? throw new ArgumentNullException(nameof(achievements), NullAchievementsMessage);
         }
 
         /// <summary>
@@ -79,20 +79,7 @@ namespace YachtDice.Server.Logic.Players
         /// <exception cref="DataAccessException">The statistics could not be read.</exception>
         public List<AchievementStatus> GetAchievements(string playerName)
         {
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(_statisticsService.GetStatistics(playerName));
-            var achievements = new List<AchievementStatus>();
-
-            foreach (AchievementRule rule in AchievementRules.GetAll())
-            {
-                achievements.Add(new AchievementStatus
-                {
-                    Id = rule.Id,
-                    IsUnlocked = unlockedIds.Contains(rule.Id),
-                    HasTitle = rule.HasTitle
-                });
-            }
-
-            return achievements;
+            return _achievements.GetStatuses(playerName);
         }
 
         /// <summary>
@@ -109,29 +96,12 @@ namespace YachtDice.Server.Logic.Players
 
             if (player != null)
             {
-                status = FindTitleProblem(playerName, titleId);
+                status = _achievements.CheckTitle(playerName, titleId);
             }
 
             if (status == TitleChangeStatus.Success)
             {
                 _playerRepository.SaveTitle(player.Id, titleId.ToString());
-            }
-
-            return status;
-        }
-
-        private TitleChangeStatus FindTitleProblem(string playerName, int titleId)
-        {
-            List<int> unlockedIds = AchievementRules.GetUnlockedIds(_statisticsService.GetStatistics(playerName));
-            TitleChangeStatus status = TitleChangeStatus.Success;
-
-            if (!AchievementRules.ExistsTitle(titleId))
-            {
-                status = TitleChangeStatus.TitleNotFound;
-            }
-            else if (!AchievementRules.IsTitleAvailable(titleId, unlockedIds))
-            {
-                status = TitleChangeStatus.TitleLocked;
             }
 
             return status;

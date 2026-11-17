@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Configuration;
 using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
@@ -74,11 +75,14 @@ namespace YachtDice.Server.Host.Composition
 
         private static void AddSharedComponents(IServiceCollection services)
         {
+            GameRules gameRules = ServerConfiguration.LoadGameRules();
+
             services.AddSingleton<SessionRegistry>();
             services.AddSingleton<TwoFactorCodeService>();
             services.AddSingleton(ServerConfiguration.CreateOffensiveWordFilter());
-            services.AddSingleton(ServerConfiguration.CreateLevelTable());
-            services.AddSingleton(ServerConfiguration.CreateTurnDuration());
+            services.AddSingleton(gameRules.LevelTable);
+            services.AddSingleton(gameRules.TurnDuration);
+            services.AddSingleton(gameRules.Achievements);
         }
 
         private static void AddAccountComponents(IServiceCollection services)
@@ -95,6 +99,7 @@ namespace YachtDice.Server.Host.Composition
             services.AddTransient<AvatarService>();
             services.AddTransient<IAvatarLookup, AvatarService>();
             services.AddTransient<PlayerStatisticsService>();
+            services.AddTransient<PlayerAchievements>();
             services.AddTransient<ProfileService>();
         }
 

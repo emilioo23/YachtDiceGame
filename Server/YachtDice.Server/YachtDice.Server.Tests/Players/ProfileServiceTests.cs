@@ -6,6 +6,7 @@ using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Moderation;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Security;
+using YachtDice.Server.Tests.Configuration;
 using YachtDice.Server.Tests.InMemory;
 
 namespace YachtDice.Server.Tests.Players
@@ -52,6 +53,7 @@ namespace YachtDice.Server.Tests.Players
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryGameHistoryRepository _history = new InMemoryGameHistoryRepository();
+        private readonly AchievementCatalog _catalog = GameRulesFile.Load().Achievements;
         private readonly ProfileService _service;
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace YachtDice.Server.Tests.Players
             _service = new ProfileService(
                 _players,
                 new OffensiveWordFilter(new[] { OffensiveWord }),
-                new PlayerStatisticsService(_players, _history, SingleLevel));
+                CreateAchievements());
             _players.Add(CreatePlayer(CurrentPlayerId, CurrentUsername));
             _players.Add(CreatePlayer(OtherPlayerId, OtherUsername));
         }
@@ -73,19 +75,19 @@ namespace YachtDice.Server.Tests.Players
             Assert.Throws<ArgumentNullException>(() => new ProfileService(
                 null,
                 new OffensiveWordFilter(new string[0]),
-                new PlayerStatisticsService(_players, _history, SingleLevel)));
+                CreateAchievements()));
         }
 
         [Fact]
         public void Constructor_NullWordFilter_ThrowsArgumentNullException()
         {
-            var statistics = new PlayerStatisticsService(_players, _history, SingleLevel);
+            PlayerAchievements achievements = CreateAchievements();
 
-            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, statistics));
+            Assert.Throws<ArgumentNullException>(() => new ProfileService(_players, null, achievements));
         }
 
         [Fact]
-        public void Constructor_NullStatisticsService_ThrowsArgumentNullException()
+        public void Constructor_NullAchievements_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
                 () => new ProfileService(_players, new OffensiveWordFilter(new string[0]), null));
@@ -96,7 +98,7 @@ namespace YachtDice.Server.Tests.Players
         {
             List<AchievementStatus> achievements = _service.GetAchievements(CurrentUsername);
 
-            Assert.Equal(AchievementRules.GetAll().Count, achievements.Count);
+            Assert.Equal(_catalog.GetAll().Count, achievements.Count);
         }
 
         [Fact]
@@ -121,7 +123,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void ChangeTitle_DefaultTitle_ReturnsSuccess()
         {
-            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, AchievementRules.DefaultTitleId);
+            TitleChangeStatus status = _service.ChangeTitle(CurrentUsername, AchievementCatalog.DefaultTitleId);
 
             Assert.Equal(TitleChangeStatus.Success, status);
         }
@@ -181,7 +183,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void ChangeTitle_UnknownPlayer_ReturnsPlayerNotFound()
         {
-            TitleChangeStatus status = _service.ChangeTitle(UnknownName, AchievementRules.DefaultTitleId);
+            TitleChangeStatus status = _service.ChangeTitle(UnknownName, AchievementCatalog.DefaultTitleId);
 
             Assert.Equal(TitleChangeStatus.PlayerNotFound, status);
         }
@@ -513,6 +515,11 @@ namespace YachtDice.Server.Tests.Players
             };
 
             return player;
+        }
+
+        private PlayerAchievements CreateAchievements()
+        {
+            return new PlayerAchievements(new PlayerStatisticsService(_players, _history, SingleLevel), _catalog);
         }
     }
 }

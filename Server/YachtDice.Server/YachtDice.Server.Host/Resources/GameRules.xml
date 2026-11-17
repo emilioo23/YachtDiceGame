@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gameRules>
+	<gameModes>
+		<mode speed="Normal" turnSeconds="60" />
+		<mode speed="Fast" turnSeconds="30" />
+	</gameModes>
+	<levels>
+		<level experience="0" />
+		<level experience="200" />
+		<level experience="500" />
+		<level experience="900" />
+		<level experience="1400" />
+		<level experience="2000" />
+		<level experience="2700" />
+		<level experience="3500" />
+		<level experience="4400" />
+		<level experience="5400" />
+		<level experience="6500" />
+		<level experience="7700" />
+		<level experience="9000" />
+		<level experience="10400" />
+		<level experience="11900" />
+		<level experience="13500" />
+		<level experience="15200" />
+		<level experience="17000" />
+		<level experience="18900" />
+		<level experience="20900" />
+	</levels>
+	<achievements>
+		<achievement id="1" metric="GamesPlayed" requiredValue="1" />
+		<achievement id="2" metric="Wins" requiredValue="1" />
+		<achievement id="3" metric="Wins" requiredValue="3" />
+		<achievement id="4" metric="Wins" requiredValue="5" />
+		<achievement id="5" metric="Wins" requiredValue="10" />
+		<achievement id="6" metric="Wins" requiredValue="25" />
+		<achievement id="7" metric="Wins" requiredValue="50" />
+		<achievement id="8" metric="GamesPlayed" requiredValue="10" />
+		<achievement id="9" metric="GamesPlayed" requiredValue="25" />
+		<achievement id="10" metric="GamesPlayed" requiredValue="50" />
+		<achievement id="11" metric="GamesPlayed" requiredValue="100" />
+		<achievement id="12" metric="BestScore" requiredValue="100" />
+		<achievement id="13" metric="BestScore" requiredValue="200" />
+		<achievement id="14" metric="BestScore" requiredValue="250" />
+		<achievement id="15" metric="BestScore" requiredValue="300" />
+		<achievement id="16" metric="WinRatePercentage" requiredValue="60" minimumGames="10" />
+		<achievement id="17" metric="WinRatePercentage" requiredValue="80" minimumGames="20" />
+		<achievement id="18" metric="Level" requiredValue="5" />
+		<achievement id="19" metric="Level" requiredValue="10" />
+		<achievement id="20" metric="Level" requiredValue="15" />
+		<achievement id="21" metric="Level" requiredValue="20" />
+		<achievement id="22" metric="Experience" requiredValue="1000" hasTitle="false" />
+		<achievement id="23" metric="Experience" requiredValue="5000" />
+	</achievements>
+</gameRules>
