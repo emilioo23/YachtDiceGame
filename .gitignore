@@ -366,6 +366,7 @@ FodyWeavers.xsd
 *.conf
 ConnectionStrings.config
 Secrets.config
+ServerSettings.config
 
 logs/
 
