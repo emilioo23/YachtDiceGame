@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using System.IO;
 using System.ServiceModel;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Server.Data.Exceptions;
 using YachtDice.Server.Data.Repositories;
-using YachtDice.Server.Logic.Authentication;
-using YachtDice.Server.Logic.Avatars;
-using YachtDice.Server.Logic.Email;
-using YachtDice.Server.Logic.Friends;
-using YachtDice.Server.Logic.Game;
+using YachtDice.Server.Host.Composition;
 using YachtDice.Server.Logic.Logging;
-using YachtDice.Server.Logic.Moderation;
-using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
-using YachtDice.Server.Logic.Security;
-using YachtDice.Server.Logic.TwoFactor;
 using YachtDice.Server.Services;
 
 namespace YachtDice.Server.Host
@@ -32,17 +23,6 @@ namespace YachtDice.Server.Host
         private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
-        private const string TurnSecondsKeyFormat = "TurnSeconds.{0}";
-        private const string InvalidNumberFormat = "The setting {0} is missing or is not a positive whole number.";
-        private const string MaxFriendsKey = "Friends.MaxFriends";
-        private const string MaxPendingRequestsKey = "Friends.MaxPendingRequests";
-        private const string RoomWaitingMinutesKey = "Rooms.WaitingMinutes";
-        private const int SmallestAllowedNumber = 1;
-        private const string LevelExperienceKey = "LevelExperience";
-        private const string OffensiveWordsPath = "Resources\\OffensiveWords.txt";
-        private const char LevelExperienceSeparator = ',';
-        private const string InvalidLevelExperienceMessage =
-            "The setting LevelExperience is missing or is not a list of numbers separated by commas.";
         private const string WarmUpEmail = "warm-up@yachtdice.local";
         private const string WarmUpFailedLogMessage =
             "The database could not be warmed up; the first request will be slower.";
@@ -50,19 +30,22 @@ namespace YachtDice.Server.Host
         private static readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
         /// <summary>
-        /// Initializes and opens the service hosts, keeping the application running until stopped.
+        /// Builds the dependency injection container, opens the service hosts and keeps the application running
+        /// until stopped.
         /// </summary>
         private static void Main()
         {
             var logger = new AppLogger(typeof(Program));
             var serviceHosts = new List<ServiceHost>();
+            ServiceProvider provider = null;
 
             Console.CancelKeyPress += HandleCancelKeyPress;
 
             try
             {
-                WarmUpDatabase(logger);
-                GameCoordinator gameCoordinator = OpenServiceHosts(serviceHosts);
+                provider = new ServiceCollection().AddServerComponents().BuildServiceProvider();
+                WarmUpDatabase(provider, logger);
+                GameCoordinator gameCoordinator = OpenServiceHosts(provider, serviceHosts);
                 logger.Info(StartedLogMessage);
                 WaitForExit();
                 gameCoordinator.KeepGamesForRestart();
@@ -96,100 +79,20 @@ namespace YachtDice.Server.Host
             finally
             {
                 AbortServiceHosts(serviceHosts);
+                provider?.Dispose();
             }
         }
 
-        private static void WarmUpDatabase(AppLogger logger)
+        private static void WarmUpDatabase(IServiceProvider provider, AppLogger logger)
         {
             try
             {
-                new PlayerRepository().EmailExists(WarmUpEmail);
+                provider.GetRequiredService<IPlayerRepository>().EmailExists(WarmUpEmail);
             }
             catch (DataAccessException ex)
             {
                 logger.Error(ex, WarmUpFailedLogMessage);
             }
-        }
-
-        /// <summary>
-        /// Reads from the configuration the seconds that a turn lasts for each speed of the game.
-        /// </summary>
-        /// <returns>The durations of the turns.</returns>
-        /// <exception cref="InvalidOperationException">A speed has no valid seconds in the configuration.</exception>
-        private static TurnDuration CreateTurnDuration()
-        {
-            var secondsBySpeed = new Dictionary<GameSpeed, int>();
-
-            foreach (GameSpeed speed in Enum.GetValues(typeof(GameSpeed)))
-            {
-                string key = string.Format(CultureInfo.InvariantCulture, TurnSecondsKeyFormat, speed);
-
-                secondsBySpeed[speed] = ReadPositiveNumber(key);
-            }
-
-            return new TurnDuration(secondsBySpeed);
-        }
-
-        /// <summary>
-        /// Reads from the configuration a whole number greater than zero, such as a limit or a time of a rule.
-        /// </summary>
-        /// <param name="key">Key of the setting.</param>
-        /// <returns>The configured number.</returns>
-        /// <exception cref="InvalidOperationException">The setting is missing or is not a positive whole
-        /// number.</exception>
-        private static int ReadPositiveNumber(string key)
-        {
-            string configuredValue = ConfigurationManager.AppSettings[key];
-            bool isNumber = int.TryParse(
-                configuredValue,
-                NumberStyles.None,
-                CultureInfo.InvariantCulture,
-                out int value);
-
-            if (!isNumber || value < SmallestAllowedNumber)
-            {
-                string message = string.Format(CultureInfo.InvariantCulture, InvalidNumberFormat, key);
-
-                throw new InvalidOperationException(message);
-            }
-
-            return value;
-        }
-
-        /// <summary>
-        /// Reads from the configuration the experience that each level needs, from the first level to the last.
-        /// </summary>
-        /// <returns>The table of levels.</returns>
-        /// <exception cref="InvalidOperationException">The setting is missing or has a value that is not a
-        /// number.</exception>
-        private static LevelTable CreateLevelTable()
-        {
-            string configuredExperience = ConfigurationManager.AppSettings[LevelExperienceKey] ?? string.Empty;
-            var thresholds = new List<int>();
-
-            foreach (string value in configuredExperience.Split(LevelExperienceSeparator))
-            {
-                if (!int.TryParse(value.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out int experience))
-                {
-                    throw new InvalidOperationException(InvalidLevelExperienceMessage);
-                }
-
-                thresholds.Add(experience);
-            }
-
-            return new LevelTable(thresholds);
-        }
-
-        /// <summary>
-        /// Reads the offensive words from the file of the server, once, when the server starts.
-        /// </summary>
-        /// <returns>The filter with the words of the file.</returns>
-        /// <exception cref="IOException">The file could not be read.</exception>
-        private static OffensiveWordFilter CreateOffensiveWordFilter()
-        {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, OffensiveWordsPath);
-
-            return new OffensiveWordFilter(File.ReadAllLines(path));
         }
 
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -198,80 +101,19 @@ namespace YachtDice.Server.Host
             _quitEvent.Set();
         }
 
-        private static GameCoordinator OpenServiceHosts(List<ServiceHost> serviceHosts)
+        private static GameCoordinator OpenServiceHosts(IServiceProvider provider, List<ServiceHost> serviceHosts)
         {
-            var sessions = new SessionRegistry();
-            OffensiveWordFilter wordFilter = CreateOffensiveWordFilter();
+            var gameCoordinator = provider.GetRequiredService<GameCoordinator>();
 
-            AddAccountHosts(serviceHosts, sessions, wordFilter);
-
-            var roomManager = new RoomManager(new AvatarService(new PlayerRepository(), CreateLevelTable()), wordFilter)
+            foreach (Type serviceType in ServiceRegistration.HostedServiceTypes)
             {
-                WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
-            };
-            GameCoordinator gameCoordinator = AddGameHosts(serviceHosts, sessions, roomManager);
+                serviceHosts.Add(new ServiceHost(provider.GetRequiredService(serviceType)));
+            }
 
-            serviceHosts.Add(new ServiceHost(new ChatService(roomManager, wordFilter)));
-            AddFriendHost(serviceHosts, sessions, roomManager);
-
-            gameCoordinator.RestoreSavedGames(roomManager);
+            gameCoordinator.RestoreSavedGames(provider.GetRequiredService<IRoomManager>());
             serviceHosts.ForEach(serviceHost => serviceHost.Open());
 
             return gameCoordinator;
-        }
-
-        private static void AddAccountHosts(
-            List<ServiceHost> serviceHosts,
-            SessionRegistry sessions,
-            OffensiveWordFilter wordFilter)
-        {
-            AuthenticationService authenticationService = CreateAuthenticationService();
-            TwoFactorManagementService twoFactorService = CreateTwoFactorManagementService();
-            LevelTable levelTable = CreateLevelTable();
-            var avatarService = new AvatarService(new PlayerRepository(), levelTable);
-            PlayerService playerService = CreatePlayerService(avatarService, wordFilter, levelTable);
-
-            authenticationService.Sessions = sessions;
-            twoFactorService.Sessions = sessions;
-            playerService.Sessions = sessions;
-            serviceHosts.Add(new ServiceHost(authenticationService));
-            serviceHosts.Add(new ServiceHost(twoFactorService));
-            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService(wordFilter)));
-            serviceHosts.Add(new ServiceHost(playerService));
-        }
-
-        private static GameCoordinator AddGameHosts(
-            List<ServiceHost> serviceHosts,
-            SessionRegistry sessions,
-            RoomManager roomManager)
-        {
-            var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
-            var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
-            var checkpointService = new GameCheckpointService(new PlayerRepository(), new GameCheckpointRepository());
-            var gameCoordinator = new GameCoordinator(gameManager, resultRecorder, checkpointService);
-            var kickHistoryService = new KickHistoryService(new PlayerRepository(), new KickLogRepository());
-            var roomService = new RoomService(roomManager, gameCoordinator, kickHistoryService)
-            {
-                Sessions = sessions
-            };
-
-            serviceHosts.Add(new ServiceHost(roomService));
-            serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
-
-            return gameCoordinator;
-        }
-
-        private static void AddFriendHost(
-            List<ServiceHost> serviceHosts,
-            SessionRegistry sessions,
-            RoomManager roomManager)
-        {
-            var presenceService = new PresenceService();
-            FriendService friendService = CreateFriendService(presenceService, roomManager);
-
-            friendService.Sessions = sessions;
-            serviceHosts.Add(new ServiceHost(presenceService));
-            serviceHosts.Add(new ServiceHost(friendService));
         }
 
         private static void WaitForExit()
@@ -312,112 +154,6 @@ namespace YachtDice.Server.Host
         {
             logger.Error(exception, message);
             Console.ReadLine();
-        }
-
-        /// <summary>
-        /// Creates and configures the authentication service with its required dependencies.
-        /// </summary>
-        /// <returns>A fully configured instance of AuthenticationService.</returns>
-        private static AuthenticationService CreateAuthenticationService()
-        {
-            var playerRepository = new PlayerRepository();
-            var codeService = new TwoFactorCodeService(new BackupCodeRepository());
-            var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
-            var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
-
-            var passwordRecoveryService = new PasswordRecoveryService(
-                playerRepository,
-                new PasswordResetRepository(),
-                new EmailService());
-
-            var loginService = new LoginService(playerRepository, verificationService, deliveryService);
-            var lockNotifier = new AccountLockNotifier(new EmailService());
-
-            loginService.AccountLockedForTheDay += (player, culture) => lockNotifier.Send(player, culture);
-
-            return new AuthenticationService(
-                loginService,
-                verificationService,
-                passwordRecoveryService);
-        }
-
-        /// <summary>
-        /// Creates and configures the two-factor management service with its required dependencies.
-        /// </summary>
-        /// <returns>A fully configured instance of TwoFactorManagementService.</returns>
-        private static TwoFactorManagementService CreateTwoFactorManagementService()
-        {
-            var playerRepository = new PlayerRepository();
-            var codeService = new TwoFactorCodeService(new BackupCodeRepository());
-            var deliveryService = new TwoFactorDeliveryService(codeService, new EmailService());
-            var verificationService = new TwoFactorVerificationService(playerRepository, codeService, deliveryService);
-
-            var passwordChangeService = new PasswordChangeService(playerRepository, new PasswordResetRepository());
-
-            return new TwoFactorManagementService(
-                new TwoFactorSettingsService(playerRepository, verificationService, deliveryService),
-                passwordChangeService);
-        }
-
-        /// <summary>
-        /// Creates and configures the player registration service with its required dependencies.
-        /// </summary>
-        /// <param name="wordFilter">Filter that rejects the usernames with offensive words.</param>
-        /// <returns>A fully configured instance of PlayerRegistrationService.</returns>
-        private static PlayerRegistrationService CreatePlayerRegistrationService(OffensiveWordFilter wordFilter)
-        {
-            var playerRepository = new PlayerRepository();
-
-            var registrationService = new RegistrationService(playerRepository, wordFilter);
-
-            return new PlayerRegistrationService(registrationService);
-        }
-
-        /// <summary>
-        /// Creates and configures the friend service with its required dependencies.
-        /// </summary>
-        /// <param name="notifier">Component that warns the players who are online.</param>
-        /// <param name="roomManager">The rooms, to know who is inside each one.</param>
-        /// <returns>A fully configured instance of FriendService.</returns>
-        private static FriendService CreateFriendService(IPlayerNotifier notifier, IRoomManager roomManager)
-        {
-            var friendshipService = new FriendshipService(
-                new PlayerRepository(),
-                new FriendRepository(),
-                new PlayerReportRepository())
-            {
-                MaxFriends = ReadPositiveNumber(MaxFriendsKey),
-                MaxPendingRequests = ReadPositiveNumber(MaxPendingRequestsKey)
-            };
-            var invitationService = new RoomInvitationService(
-                roomManager,
-                friendshipService,
-                new RoomInviteRepository());
-
-            return new FriendService(friendshipService, invitationService, notifier);
-        }
-
-        /// <summary>
-        /// Creates and configures the player service with its required dependencies.
-        /// </summary>
-        /// <param name="avatarService">Service that handles the avatars of the players.</param>
-        /// <param name="wordFilter">Filter that rejects the offensive usernames.</param>
-        /// <param name="levelTable">Experience that each level needs.</param>
-        /// <returns>A fully configured instance of PlayerService.</returns>
-        private static PlayerService CreatePlayerService(
-            AvatarService avatarService,
-            OffensiveWordFilter wordFilter,
-            LevelTable levelTable)
-        {
-            var gameHistoryRepository = new GameHistoryRepository();
-            var statisticsService = new PlayerStatisticsService(
-                new PlayerRepository(),
-                gameHistoryRepository,
-                levelTable);
-
-            var profileService = new ProfileService(new PlayerRepository(), wordFilter, statisticsService);
-
-            return new PlayerService(statisticsService, avatarService, profileService);
         }
     }
 }
