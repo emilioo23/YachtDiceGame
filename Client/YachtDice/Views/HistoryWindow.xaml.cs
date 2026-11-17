@@ -85,16 +85,30 @@ namespace YachtDice.Views
 
         private static string ReadOpponents(GameHistoryEntry game)
         {
-            return game.IsAgainstComputer
-                ? HistoryDisplay.AddComputer(game.Opponents, Strings.History_ComputerOpponent)
-                : HistoryDisplay.ChooseOpponents(game.Opponents, Strings.History_GuestOpponent);
+            string opponents;
+
+            if (game.IsAgainstComputer)
+            {
+                opponents = HistoryDisplay.AddComputer(game.Opponents, Strings.History_ComputerOpponent);
+            }
+            else
+            {
+                opponents = HistoryDisplay.ChooseOpponents(game.Opponents, Strings.History_GuestOpponent);
+            }
+
+            return opponents;
         }
 
         private static string ReadScore(GameHistoryEntry game)
         {
-            return HistoryDisplay.HasRegisteredOpponents(game.Opponents)
-                ? string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore)
-                : game.OwnScore.ToString();
+            string score = game.OwnScore.ToString();
+
+            if (HistoryDisplay.HasRegisteredOpponents(game.Opponents))
+            {
+                score = string.Format(Strings.History_ScoreFormat, game.OwnScore, game.BestOpponentScore);
+            }
+
+            return score;
         }
 
         private async void ScorecardButton_Click(object sender, RoutedEventArgs e)

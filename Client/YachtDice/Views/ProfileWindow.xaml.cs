@@ -123,12 +123,18 @@ namespace YachtDice.Views
         private static ComboBoxItem CreateTitleItem(int titleId, bool isUnlocked)
         {
             string name = ProgressTexts.GetTitleName(titleId);
+            string content = name;
+
+            if (!isUnlocked)
+            {
+                content = string.Format(Strings.Profile_TitleLocked, name);
+            }
 
             return new ComboBoxItem
             {
                 Tag = titleId,
                 IsEnabled = isUnlocked,
-                Content = isUnlocked ? name : string.Format(Strings.Profile_TitleLocked, name)
+                Content = content
             };
         }
 
@@ -256,8 +262,14 @@ namespace YachtDice.Views
             string code = GetSelectedFlagCode();
             bool hasFlag = FlagCodes.IsKnown(code);
 
-            FlagPreviewImage.Source = hasFlag ? FlagImages.Get(code) : null;
-            FlagPreviewImage.Visibility = hasFlag ? Visibility.Visible : Visibility.Collapsed;
+            FlagPreviewImage.Source = null;
+            FlagPreviewImage.Visibility = Visibility.Collapsed;
+
+            if (hasFlag)
+            {
+                FlagPreviewImage.Source = FlagImages.Get(code);
+                FlagPreviewImage.Visibility = Visibility.Visible;
+            }
         }
 
         private int GetSelectedTitleId()

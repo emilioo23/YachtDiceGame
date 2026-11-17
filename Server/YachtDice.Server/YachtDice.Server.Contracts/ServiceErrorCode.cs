@@ -20,7 +20,7 @@ namespace YachtDice.Server.Contracts
         [EnumMember]
         ValidationFailed,
 
-        /// <summary>The token of the session is unknown or the session ended, so the player must log in again.</summary>
+        /// <summary>The session token is unknown or the session ended, so the player must log in again.</summary>
         [EnumMember]
         SessionExpired
     }

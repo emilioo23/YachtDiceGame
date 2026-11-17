@@ -20,7 +20,7 @@ namespace YachtDice.Views
         /// </summary>
         /// <param name="element">Element to animate.</param>
         /// <param name="peakScale">Size at the middle of the pulse; less than 1 shrinks and more than 1 grows.</param>
-        /// <param name="duration">Time that the element takes to reach the peak; it takes the same to come back.</param>
+        /// <param name="duration">Time to reach the peak; it takes the same to come back.</param>
         public void Pulse(UIElement element, double peakScale, TimeSpan duration)
         {
             ScaleTransform scale = FindOrAddScale(element);

@@ -108,7 +108,13 @@ namespace YachtDice.Views
             for (var index = 0; index < DiceCount; index++)
             {
                 bool isRolling = !isHeld(index);
-                int value = isRolling ? _random.Next(FaceCount) + FirstFace : ReadValue(values, index);
+                int value = ReadValue(values, index);
+
+                if (isRolling)
+                {
+                    value = _random.Next(FaceCount) + FirstFace;
+                }
+
                 Border die = CreateDie(index, value, isHeld(index));
 
                 if (isRolling)

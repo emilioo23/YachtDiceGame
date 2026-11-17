@@ -159,9 +159,12 @@ namespace YachtDice.Server.Logic.Authentication
 
         private Player FindPlayer(string displayName)
         {
-            List<Player> matches = string.IsNullOrWhiteSpace(displayName)
-                ? new List<Player>()
-                : _playerRepository.FindByName(displayName);
+            List<Player> matches = new List<Player>();
+
+            if (!string.IsNullOrWhiteSpace(displayName))
+            {
+                matches = _playerRepository.FindByName(displayName);
+            }
 
             return matches.FirstOrDefault();
         }

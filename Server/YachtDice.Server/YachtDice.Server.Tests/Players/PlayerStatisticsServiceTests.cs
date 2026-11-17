@@ -219,28 +219,25 @@ namespace YachtDice.Server.Tests.Players
 
         private void AddGame(int gameId, DateTime endDate, bool isWinner)
         {
-            _history.AddPlayedGameRecord(CreateRecord(gameId, endDate, PlayerId, PlayerName, PlayerScore, isWinner));
-            _history.AddPlayedGameRecord(
-                CreateRecord(gameId, endDate, FirstOpponentId, FirstOpponentName, BestOpponentScore, !isWinner));
-            _history.AddPlayedGameRecord(
-                CreateRecord(gameId, endDate, SecondOpponentId, SecondOpponentName, LowerOpponentScore, false));
+            AddRecord(CreateRecord(gameId, endDate, isWinner), PlayerId, PlayerName, PlayerScore);
+            AddRecord(CreateRecord(gameId, endDate, !isWinner), FirstOpponentId, FirstOpponentName, BestOpponentScore);
+            AddRecord(CreateRecord(gameId, endDate, false), SecondOpponentId, SecondOpponentName, LowerOpponentScore);
         }
 
-        private static PlayedGameRecord CreateRecord(
-            int gameId,
-            DateTime endDate,
-            int playerId,
-            string playerName,
-            int score,
-            bool isWinner)
+        private void AddRecord(PlayedGameRecord record, int playerId, string playerName, int score)
+        {
+            record.PlayerId = playerId;
+            record.PlayerName = playerName;
+            record.FinalScore = score;
+            _history.AddPlayedGameRecord(record);
+        }
+
+        private static PlayedGameRecord CreateRecord(int gameId, DateTime endDate, bool isWinner)
         {
             var record = new PlayedGameRecord
             {
                 GameId = gameId,
                 EndDate = endDate,
-                PlayerId = playerId,
-                PlayerName = playerName,
-                FinalScore = score,
                 IsWinner = isWinner,
                 IsAgainstComputer = false
             };

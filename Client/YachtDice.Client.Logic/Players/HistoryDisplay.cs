@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="opponents">Names of the rivals that the server sent, separated by commas.</param>
         /// <param name="computerText">Text that names the computer.</param>
-        /// <returns>The names of the rivals followed by the computer, or only the computer if there are no names.</returns>
+        /// <returns>The names of the rivals followed by the computer, or only the computer if there are none.</returns>
         public static string AddComputer(string opponents, string computerText)
         {
             return HasRegisteredOpponents(opponents) ? opponents + NameSeparator + computerText : computerText;

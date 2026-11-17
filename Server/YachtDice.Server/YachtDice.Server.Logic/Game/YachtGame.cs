@@ -320,10 +320,16 @@ namespace YachtDice.Server.Logic.Game
             }
         }
 
+        private static bool IsSavedCurrentPlayer(GamePlayer player, string currentPlayerName)
+        {
+            bool hasSavedName = string.Equals(player.Name, currentPlayerName, StringComparison.OrdinalIgnoreCase);
+
+            return !player.HasForfeited && hasSavedName;
+        }
+
         private void LoadTurn(SavedGame saved)
         {
-            Predicate<GamePlayer> isCurrentPlayer = player => !player.HasForfeited
-                && string.Equals(player.Name, saved.CurrentPlayerName, StringComparison.OrdinalIgnoreCase);
+            Predicate<GamePlayer> isCurrentPlayer = player => IsSavedCurrentPlayer(player, saved.CurrentPlayerName);
             _turnIndex = _players.FindIndex(isCurrentPlayer);
             bool hasDice = _turnIndex != NoPlayerIndex
                 && saved.RollsMade > NoRolls

@@ -1,9 +1,9 @@
--- Permite el tipo de sala Computer en la tabla Room, que es como se guardan las partidas contra la computadora.
--- Quita cualquier CHECK de RoomType que solo acepte Public y Private, y crea uno que tambien acepta Computer.
--- Es seguro correrlo varias veces.
 USE YachtDiceDB;
 GO
 
+-- Permite el tipo de sala Computer en la tabla Room, que es como se guardan las partidas contra la computadora.
+-- Es necesario porque el servidor guarda el resultado de esas partidas y la tabla solo aceptaba Public y Private.
+-- Es seguro de correr varias veces: quita el CHECK de RoomType que exista y deja uno que tambien acepta Computer.
 DECLARE @constraintName SYSNAME;
 DECLARE @dropSql NVARCHAR(MAX);
 
@@ -32,3 +32,6 @@ BEGIN
         ADD CONSTRAINT CK_Room_RoomType CHECK (RoomType IN ('Public', 'Private', 'Computer'));
 END
 GO
+
+-- Comprobacion: debe regresar una fila con el CHECK CK_Room_RoomType que acepta Computer.
+SELECT name, definition FROM sys.check_constraints WHERE name = 'CK_Room_RoomType';

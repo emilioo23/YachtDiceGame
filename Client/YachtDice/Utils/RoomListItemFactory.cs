@@ -24,9 +24,14 @@ namespace YachtDice.Utils
 
         private static string CreateTitle(RoomSummary room)
         {
-            return string.IsNullOrWhiteSpace(room.Name)
-                ? string.Format(Strings.Rooms_TitleFormat, room.HostName)
-                : room.Name;
+            string title = room.Name;
+
+            if (string.IsNullOrWhiteSpace(room.Name))
+            {
+                title = string.Format(Strings.Rooms_TitleFormat, room.HostName);
+            }
+
+            return title;
         }
 
         private static RoomListItem CreateItem(RoomSummary room)

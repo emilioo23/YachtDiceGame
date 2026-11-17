@@ -80,9 +80,16 @@ namespace YachtDice.Server.Logic.Security
                 throw new ArgumentException(EmptyValueMessage, nameof(storedHash));
             }
 
-            bool isValid = IsSalted(storedHash)
-                ? VerifySalted(plainPassword, storedHash)
-                : VerifyLegacy(plainPassword, storedHash);
+            bool isValid;
+
+            if (IsSalted(storedHash))
+            {
+                isValid = VerifySalted(plainPassword, storedHash);
+            }
+            else
+            {
+                isValid = VerifyLegacy(plainPassword, storedHash);
+            }
 
             return isValid;
         }
@@ -113,7 +120,7 @@ namespace YachtDice.Server.Logic.Security
 
             if (parts.Length == PartsCount && TryReadIterations(parts[IterationsPart], out int iterations))
             {
-                isValid = MatchesSaltedKey(plainPassword, parts[SaltPart], parts[KeyPart], iterations);
+                isValid = MatchesSaltedKey(plainPassword, parts, iterations);
             }
 
             return isValid;
@@ -126,14 +133,14 @@ namespace YachtDice.Server.Logic.Security
             return isNumber && iterations > NoIterations;
         }
 
-        private static bool MatchesSaltedKey(string plainPassword, string saltText, string keyText, int iterations)
+        private static bool MatchesSaltedKey(string plainPassword, string[] parts, int iterations)
         {
             bool isValid;
 
             try
             {
-                byte[] salt = Convert.FromBase64String(saltText);
-                byte[] expectedKey = Convert.FromBase64String(keyText);
+                byte[] salt = Convert.FromBase64String(parts[SaltPart]);
+                byte[] expectedKey = Convert.FromBase64String(parts[KeyPart]);
 
                 isValid = AreEqual(DeriveKey(plainPassword, salt, iterations), expectedKey);
             }
@@ -155,10 +162,14 @@ namespace YachtDice.Server.Logic.Security
 
         private static byte[] DeriveKey(string plainPassword, byte[] salt, int iterations)
         {
+            byte[] key;
+
             using (var derivation = new Rfc2898DeriveBytes(plainPassword, salt, iterations, HashAlgorithmName.SHA256))
             {
-                return derivation.GetBytes(KeyBytes);
+                key = derivation.GetBytes(KeyBytes);
             }
+
+            return key;
         }
 
         private static bool AreEqual(byte[] first, byte[] second)

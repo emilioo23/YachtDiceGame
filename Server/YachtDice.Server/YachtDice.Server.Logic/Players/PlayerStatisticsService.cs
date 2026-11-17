@@ -165,13 +165,20 @@ namespace YachtDice.Server.Logic.Players
             PlayedGameRecord own = game.First(isOwnRecord);
             List<PlayedGameRecord> opponents = game.Where(isOpponent).ToList();
 
+            int bestOpponentScore = EmptyCount;
+
+            if (opponents.Count > EmptyCount)
+            {
+                bestOpponentScore = opponents.Max(readScore);
+            }
+
             var summary = new PlayedGameSummary
             {
                 GameId = own.GameId,
                 PlayedAt = own.EndDate ?? DateTime.MinValue,
                 IsWin = own.IsWinner,
                 OwnScore = own.FinalScore,
-                BestOpponentScore = opponents.Count > EmptyCount ? opponents.Max(readScore) : EmptyCount,
+                BestOpponentScore = bestOpponentScore,
                 Opponents = string.Join(OpponentSeparator, opponents.Select(readName)),
                 IsAgainstComputer = own.IsAgainstComputer
             };

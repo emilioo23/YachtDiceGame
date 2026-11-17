@@ -238,8 +238,14 @@ namespace YachtDice.Views
         {
             bool hasFlag = FlagCodes.IsKnown(flagCode);
 
-            PlayerFlagImage.Source = hasFlag ? FlagImages.Get(flagCode) : null;
-            PlayerFlagImage.Visibility = hasFlag ? Visibility.Visible : Visibility.Collapsed;
+            PlayerFlagImage.Source = null;
+            PlayerFlagImage.Visibility = Visibility.Collapsed;
+
+            if (hasFlag)
+            {
+                PlayerFlagImage.Source = FlagImages.Get(flagCode);
+                PlayerFlagImage.Visibility = Visibility.Visible;
+            }
         }
 
         private void ShowStatistics(PlayerStatistics statistics)
