@@ -8,7 +8,7 @@ namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
     /// Saves the games in progress of registered players after every move, so they can go on after a restart of
-    /// the server. Only one game is saved at a time, and an older state never replaces a newer one.
+    /// the server. A state is saved only when it is newer than the last one that was sent to the database.
     /// </summary>
     public sealed class GameCheckpointService : IGameCheckpointService
     {
@@ -75,29 +75,42 @@ namespace YachtDice.Server.Logic.Game
                 throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
             }
 
+            RoomSettings settings;
+            bool mustSave;
+
             lock (_syncRoot)
             {
-                bool isTracked = _trackedRooms.TryGetValue(roomCode, out RoomSettings settings);
-                bool isNewer = isTracked && snapshot.Version > _savedVersions[roomCode];
+                mustSave = _trackedRooms.TryGetValue(roomCode, out settings)
+                    && snapshot.Version > _savedVersions[roomCode]
+                    && snapshot.Status == GameStatus.InProgress;
 
-                if (isNewer && snapshot.Status == GameStatus.InProgress)
+                if (mustSave)
                 {
-                    _checkpointRepository.Save(CreateRecord(roomCode, settings, snapshot));
                     _savedVersions[roomCode] = snapshot.Version;
                 }
+            }
+
+            if (mustSave)
+            {
+                _checkpointRepository.Save(CreateRecord(roomCode, settings, snapshot));
+                RemoveIfForgotten(roomCode);
             }
         }
 
         /// <inheritdoc />
         public void Forget(string roomCode)
         {
+            bool isTracked;
+
             lock (_syncRoot)
             {
-                if (_trackedRooms.Remove(roomCode))
-                {
-                    _savedVersions.Remove(roomCode);
-                    _checkpointRepository.Remove(roomCode);
-                }
+                isTracked = _trackedRooms.Remove(roomCode);
+                _savedVersions.Remove(roomCode);
+            }
+
+            if (isTracked)
+            {
+                _checkpointRepository.Remove(roomCode);
             }
         }
 
@@ -116,6 +129,21 @@ namespace YachtDice.Server.Logic.Game
             }
 
             return games;
+        }
+
+        private void RemoveIfForgotten(string roomCode)
+        {
+            bool isForgotten;
+
+            lock (_syncRoot)
+            {
+                isForgotten = !_trackedRooms.ContainsKey(roomCode);
+            }
+
+            if (isForgotten)
+            {
+                _checkpointRepository.Remove(roomCode);
+            }
         }
 
         private static GameCheckpointRecord CreateRecord(string roomCode, RoomSettings settings, GameSnapshot snapshot)

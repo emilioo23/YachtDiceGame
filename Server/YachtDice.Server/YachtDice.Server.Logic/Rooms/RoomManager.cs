@@ -157,14 +157,16 @@ namespace YachtDice.Server.Logic.Rooms
                 throw new ArgumentNullException(nameof(saved), NullSavedGameMessage);
             }
 
-            bool isRestored = false;
+            GameRoom room = CreateRestoredRoom(saved);
+            bool isRestored;
 
             lock (_syncRoot)
             {
-                if (!_rooms.ContainsKey(saved.RoomCode))
+                isRestored = !_rooms.ContainsKey(saved.RoomCode);
+
+                if (isRestored)
                 {
-                    _rooms[saved.RoomCode] = CreateRestoredRoom(saved);
-                    isRestored = true;
+                    _rooms[saved.RoomCode] = room;
                 }
             }
 
