@@ -9,8 +9,8 @@ namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
     /// Rules of the relations between players: add friends, answer friend requests, list the friends of a player,
-    /// block a player and report a player who behaved badly in a game. A player reported by three different players
-    /// in one day cannot log in for a day.
+    /// block and unblock a player and report a player who behaved badly in a game. A player reported by three
+    /// different players in one day cannot log in for a day.
     /// </summary>
     public class FriendshipService : IFriendshipService
     {
@@ -176,6 +176,21 @@ namespace YachtDice.Server.Logic.Friends
         }
 
         /// <inheritdoc />
+        public FriendActionStatus UnblockPlayer(string displayName, string blockedName)
+        {
+            Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
+            Player blocked = _playerRepository.FindByName(blockedName).FirstOrDefault();
+            FriendActionStatus status = FriendActionStatus.PlayerNotFound;
+
+            if (player != null && blocked != null)
+            {
+                status = DeleteFriendship(FindBlockMadeBy(player, blocked));
+            }
+
+            return status;
+        }
+
+        /// <inheritdoc />
         public ReportStatus ReportPlayer(string displayName, ReportDetails details)
         {
             if (details == null)
@@ -263,6 +278,24 @@ namespace YachtDice.Server.Logic.Friends
             if (player != null)
             {
                 names = ToNames(_friendRepository.FindPendingRequesters(player.Id));
+            }
+
+            return names;
+        }
+
+        /// <summary>
+        /// Gets the names of the players that the player blocked.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The names of the blocked players, or an empty list if there is none.</returns>
+        public List<string> GetBlockedNames(string displayName)
+        {
+            var names = new List<string>();
+            Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
+
+            if (player != null)
+            {
+                names = ToNames(_friendRepository.FindBlockedBy(player.Id));
             }
 
             return names;
@@ -465,8 +498,14 @@ namespace YachtDice.Server.Logic.Friends
         private void SaveBlock(Player player, Player blocked)
         {
             Friendship existing = _friendRepository.FindBetween(player.Id, blocked.Id).FirstOrDefault();
+            bool isAlreadyBlocked = existing != null && existing.Status == FriendshipStatus.Blocked;
 
-            if (existing == null)
+            if (existing != null && !isAlreadyBlocked)
+            {
+                _friendRepository.Remove(existing);
+            }
+
+            if (!isAlreadyBlocked)
             {
                 _friendRepository.Add(new Friendship
                 {
@@ -475,11 +514,14 @@ namespace YachtDice.Server.Logic.Friends
                     Status = FriendshipStatus.Blocked
                 });
             }
-            else
-            {
-                existing.Status = FriendshipStatus.Blocked;
-                _friendRepository.UpdateStatus(existing);
-            }
+        }
+
+        private Friendship FindBlockMadeBy(Player player, Player blocked)
+        {
+            Func<Friendship, bool> isBlockMadeByPlayer =
+                row => row.Status == FriendshipStatus.Blocked && row.RequesterId == player.Id;
+
+            return _friendRepository.FindBetween(player.Id, blocked.Id).FirstOrDefault(isBlockMadeByPlayer);
         }
 
         private FriendActionStatus DeleteFriendship(Friendship friendship)

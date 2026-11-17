@@ -56,6 +56,19 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
+        /// Finds the players that the player blocked.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who blocked them.</param>
+        /// <returns>The blocked players, or an empty list if there is none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<Player> FindBlockedBy(int playerId)
+        {
+            List<Player> blockedPlayers = Query(context => SelectBlockedBy(context, playerId));
+
+            return blockedPlayers;
+        }
+
+        /// <summary>
         /// Counts the friends of a player.
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
@@ -222,6 +235,20 @@ namespace YachtDice.Server.Data.Repositories
             List<Player> requesters = context.Player.Where(isRequester).ToList();
 
             return requesters;
+        }
+
+        private static List<Player> SelectBlockedBy(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isBlockedByPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Blocked;
+            IQueryable<int> blockedIds = context.Friendship
+                .Where(isBlockedByPlayer)
+                .Select(friendship => friendship.AddresseeId);
+
+            Expression<Func<Player, bool>> isBlocked = player => blockedIds.Contains(player.Id);
+            List<Player> blockedPlayers = context.Player.Where(isBlocked).ToList();
+
+            return blockedPlayers;
         }
 
         private static int CountAcceptedFriendships(YachtDiceContext context, int playerId)

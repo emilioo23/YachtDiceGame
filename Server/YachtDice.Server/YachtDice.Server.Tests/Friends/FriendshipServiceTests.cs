@@ -27,7 +27,7 @@ namespace YachtDice.Server.Tests.Friends
         private const int FiveRequests = 5;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
-        private readonly InMemoryFriendRepository _friends = new InMemoryFriendRepository();
+        private readonly InMemoryFriendRepository _friends;
         private readonly FriendshipService _service;
 
         /// <summary>
@@ -37,6 +37,7 @@ namespace YachtDice.Server.Tests.Friends
         {
             _players.Add(new Player { Id = RequesterId, Username = RequesterName, DisplayName = RequesterName });
             _players.Add(new Player { Id = TargetId, Username = TargetUsername, DisplayName = TargetDisplayName });
+            _friends = new InMemoryFriendRepository(_players);
             _service = new FriendshipService(_players, _friends, new InMemoryPlayerReportRepository());
         }
 
@@ -115,6 +116,73 @@ namespace YachtDice.Server.Tests.Friends
             FriendActionStatus status = _service.BlockPlayer(RequesterName, RequesterName);
 
             Assert.Equal(FriendActionStatus.InvalidTarget, status);
+        }
+
+        [Fact]
+        public void UnblockPlayer_PlayerWhoBlocked_LetsTheRequestBeSentAgain()
+        {
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+            _service.UnblockPlayer(TargetDisplayName, RequesterName);
+
+            FriendRequestResult requestResult = _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Equal(FriendRequestStatus.RequestSent, requestResult.Status);
+        }
+
+        [Fact]
+        public void UnblockPlayer_FriendWhoReceivedTheRequestBlocked_ReturnsSuccess()
+        {
+            AcceptRequestBetweenThePlayers();
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            FriendActionStatus status = _service.UnblockPlayer(TargetDisplayName, RequesterName);
+
+            Assert.Equal(FriendActionStatus.Success, status);
+        }
+
+        [Fact]
+        public void UnblockPlayer_PlayerWhoWasBlocked_ReturnsRelationNotFound()
+        {
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            FriendActionStatus status = _service.UnblockPlayer(RequesterName, TargetDisplayName);
+
+            Assert.Equal(FriendActionStatus.RelationNotFound, status);
+        }
+
+        [Fact]
+        public void UnblockPlayer_PlayerWhoIsNotBlocked_ReturnsRelationNotFound()
+        {
+            FriendActionStatus status = _service.UnblockPlayer(TargetDisplayName, RequesterName);
+
+            Assert.Equal(FriendActionStatus.RelationNotFound, status);
+        }
+
+        [Fact]
+        public void UnblockPlayer_UnknownPlayer_ReturnsPlayerNotFound()
+        {
+            FriendActionStatus status = _service.UnblockPlayer(RequesterName, UnknownRequesterName);
+
+            Assert.Equal(FriendActionStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void GetBlockedNames_PlayerWhoBlocked_ReturnsTheBlockedPlayer()
+        {
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+
+            string blockedName = _service.GetBlockedNames(TargetDisplayName).Single();
+
+            Assert.Equal(RequesterName, blockedName);
+        }
+
+        [Fact]
+        public void GetBlockedNames_AfterUnblocking_ReturnsAnEmptyList()
+        {
+            _service.BlockPlayer(TargetDisplayName, RequesterName);
+            _service.UnblockPlayer(TargetDisplayName, RequesterName);
+
+            Assert.Empty(_service.GetBlockedNames(TargetDisplayName));
         }
 
         [Fact]

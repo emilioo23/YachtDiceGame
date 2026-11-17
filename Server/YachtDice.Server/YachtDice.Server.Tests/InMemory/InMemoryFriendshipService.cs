@@ -60,6 +60,18 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public FriendActionStatus UnblockPlayer(string displayName, string blockedName)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <inheritdoc />
+        public List<string> GetBlockedNames(string displayName)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <inheritdoc />
         public int FindPlayerId(string displayName)
         {
             return _playerIds.TryGetValue(displayName, out int playerId) ? playerId : FriendshipService.NoPlayerId;

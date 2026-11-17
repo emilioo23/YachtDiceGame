@@ -41,6 +41,15 @@ namespace YachtDice.Server.Logic.Friends
         FriendActionStatus BlockPlayer(string displayName, string blockedName);
 
         /// <summary>
+        /// Removes a block that the player made. Only the player who blocked can remove it, and the two players
+        /// do not become friends again: one of them has to send a new request.
+        /// </summary>
+        /// <param name="displayName">Name of the player who blocked.</param>
+        /// <param name="blockedName">Name of the player who was blocked.</param>
+        /// <returns>Outcome of the removal of the block.</returns>
+        FriendActionStatus UnblockPlayer(string displayName, string blockedName);
+
+        /// <summary>
         /// Saves a report about another player. A player can only report someone who finished a game with them in
         /// the last day, and only once a day for the same player.
         /// </summary>
@@ -77,5 +86,12 @@ namespace YachtDice.Server.Logic.Friends
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the players who sent a request, or an empty list if there is none.</returns>
         List<string> GetRequesterNames(string displayName);
+
+        /// <summary>
+        /// Gets the names of the players that the player blocked.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The names of the blocked players, or an empty list if there is none.</returns>
+        List<string> GetBlockedNames(string displayName);
     }
 }

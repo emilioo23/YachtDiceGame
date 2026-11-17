@@ -12,6 +12,24 @@ namespace YachtDice.Server.Tests.InMemory
     internal sealed class InMemoryFriendRepository : IFriendRepository
     {
         private readonly List<Friendship> _friendships = new List<Friendship>();
+        private readonly InMemoryPlayerRepository _players;
+
+        /// <summary>
+        /// Initializes the repository without players, for the tests that only count the friendships.
+        /// </summary>
+        public InMemoryFriendRepository()
+            : this(new InMemoryPlayerRepository())
+        {
+        }
+
+        /// <summary>
+        /// Initializes the repository with the players that the friendships point to.
+        /// </summary>
+        /// <param name="players">Players of the test.</param>
+        public InMemoryFriendRepository(InMemoryPlayerRepository players)
+        {
+            _players = players;
+        }
 
         /// <summary>
         /// Gets the friendships saved so far.
@@ -38,6 +56,17 @@ namespace YachtDice.Server.Tests.InMemory
         public List<Player> FindPendingRequesters(int playerId)
         {
             return new List<Player>();
+        }
+
+        /// <inheritdoc />
+        public List<Player> FindBlockedBy(int playerId)
+        {
+            List<int> blockedIds = _friendships
+                .Where(friendship => IsBlockedBy(friendship, playerId))
+                .Select(friendship => friendship.AddresseeId)
+                .ToList();
+
+            return _players.Players.Where(player => blockedIds.Contains(player.Id)).ToList();
         }
 
         /// <inheritdoc />
@@ -98,6 +127,11 @@ namespace YachtDice.Server.Tests.InMemory
             bool isReceived = friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId;
 
             return isRequested || isReceived;
+        }
+
+        private static bool IsBlockedBy(Friendship friendship, int playerId)
+        {
+            return friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Blocked;
         }
 
         private static bool IsWithPlayer(Friendship friendship, int playerId)

@@ -100,6 +100,33 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Removes a block that the player made. The two players do not become friends again.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="blockedName">Name of the player who was blocked.</param>
+        /// <returns>Outcome of the removal of the block.</returns>
+        public Contracts.FriendActionResultCode UnblockPlayer(string sessionToken, string blockedName)
+        {
+            Contracts.FriendActionResultCode result =
+                ExecuteForPlayer(sessionToken, playerName => ProcessUnblock(playerName, blockedName));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the names of the players that the player blocked.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The names of the blocked players, or an empty list if there is none.</returns>
+        public List<string> GetBlockedPlayers(string sessionToken)
+        {
+            List<string> blockedNames =
+                ExecuteForPlayer(sessionToken, playerName => _friendshipService.GetBlockedNames(playerName));
+
+            return blockedNames;
+        }
+
+        /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
         /// <param name="sender">Room and identifier of the player who invites.</param>
@@ -298,6 +325,13 @@ namespace YachtDice.Server.Services
             {
                 _notifier.SendEvent(friendName, displayName, PresenceContracts.PresenceEventType.FriendRemoved);
             }
+
+            return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
+        }
+
+        private Contracts.FriendActionResultCode ProcessUnblock(string displayName, string blockedName)
+        {
+            LogicFriends.FriendActionStatus status = _friendshipService.UnblockPlayer(displayName, blockedName);
 
             return Mapping.EnumMapper.Map<LogicFriends.FriendActionStatus, Contracts.FriendActionResultCode>(status);
         }

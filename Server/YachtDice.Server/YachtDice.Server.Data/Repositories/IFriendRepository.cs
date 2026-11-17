@@ -31,6 +31,13 @@ namespace YachtDice.Server.Data.Repositories
         List<Player> FindPendingRequesters(int playerId);
 
         /// <summary>
+        /// Finds the players that the player blocked.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who blocked them.</param>
+        /// <returns>The blocked players, or an empty list if there is none.</returns>
+        List<Player> FindBlockedBy(int playerId);
+
+        /// <summary>
         /// Counts the friends of a player.
         /// </summary>
         /// <param name="playerId">Identifier of the player.</param>
