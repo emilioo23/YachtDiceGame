@@ -233,6 +233,9 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SessionExpired = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionReplaced = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

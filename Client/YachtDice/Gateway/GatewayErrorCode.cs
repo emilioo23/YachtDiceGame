@@ -20,6 +20,11 @@
         /// <summary>
         /// The session of the player ended, so the player must log in again.
         /// </summary>
-        SessionExpired
+        SessionExpired,
+
+        /// <summary>
+        /// The session of the player ended because the same player logged in again somewhere else.
+        /// </summary>
+        SessionReplaced
     }
 }

@@ -31,6 +31,9 @@ namespace YachtDice.Utils
                 case GatewayErrorCode.SessionExpired:
                     message = Strings.Dialogs_SessionExpired;
                     break;
+                case GatewayErrorCode.SessionReplaced:
+                    message = Strings.Dialogs_SessionReplaced;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

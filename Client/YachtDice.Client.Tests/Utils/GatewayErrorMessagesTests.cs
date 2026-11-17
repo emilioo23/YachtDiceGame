@@ -37,6 +37,14 @@ namespace YachtDice.Client.Tests.Utils
         }
 
         [Fact]
+        public void GetMessage_SessionReplaced_ReturnsTheSessionReplacedMessage()
+        {
+            string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.SessionReplaced);
+
+            Assert.Equal(Strings.Dialogs_SessionReplaced, message);
+        }
+
+        [Fact]
         public void GetMessage_UnexpectedError_ReturnsTheUnexpectedError()
         {
             string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.UnexpectedError);

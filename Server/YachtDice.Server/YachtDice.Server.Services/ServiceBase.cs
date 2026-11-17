@@ -24,6 +24,8 @@ namespace YachtDice.Server.Services
         private const string InvalidDataLogFormat = "Invalid data was received in {0}.";
         private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
         private const string SessionExpiredMessage = "The session ended. Log in again.";
+        private const string SessionReplacedMessage =
+            "The session ended because the player logged in again somewhere else.";
 
         private readonly LogicLogging.AppLogger _logger;
 
@@ -98,7 +100,7 @@ namespace YachtDice.Server.Services
         {
             if (!Sessions.TryGetPlayerName(sessionToken, out string playerName))
             {
-                throw CreateFault(Contracts.ServiceErrorCode.SessionExpired, SessionExpiredMessage);
+                throw CreateSessionFault(sessionToken);
             }
 
             return Run(() => operation(playerName), operationName);
@@ -193,6 +195,19 @@ namespace YachtDice.Server.Services
             _logger.Error(exception, DescribeOperation(UnexpectedLogFormat, operationName));
 
             return CreateFault(Contracts.ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
+        }
+
+        private FaultException<Contracts.ServiceFault> CreateSessionFault(string sessionToken)
+        {
+            FaultException<Contracts.ServiceFault> fault =
+                CreateFault(Contracts.ServiceErrorCode.SessionExpired, SessionExpiredMessage);
+
+            if (Sessions.WasReplaced(sessionToken))
+            {
+                fault = CreateFault(Contracts.ServiceErrorCode.SessionReplaced, SessionReplacedMessage);
+            }
+
+            return fault;
         }
     }
 }

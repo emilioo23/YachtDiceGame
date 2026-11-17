@@ -22,6 +22,10 @@ namespace YachtDice.Server.Contracts
 
         /// <summary>The session token is unknown or the session ended, so the player must log in again.</summary>
         [EnumMember]
-        SessionExpired
+        SessionExpired,
+
+        /// <summary>The session ended because the same player logged in again somewhere else.</summary>
+        [EnumMember]
+        SessionReplaced
     }
 }

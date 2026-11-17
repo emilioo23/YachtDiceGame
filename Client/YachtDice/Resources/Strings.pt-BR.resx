@@ -2295,6 +2295,9 @@
   <data name="Dialogs_SessionExpired" xml:space="preserve">
     <value>Sua sessão terminou. Entre novamente.</value>
   </data>
+  <data name="Dialogs_SessionReplaced" xml:space="preserve">
+    <value>Sua sessão foi encerrada porque você entrou em outro lugar. Entre novamente.</value>
+  </data>
   <data name="Settings_DeleteAccount_PasswordLabel" xml:space="preserve">
     <value>Digite sua senha para apagar a conta</value>
   </data>

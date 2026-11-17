@@ -1220,6 +1220,15 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Dialogs_SessionExpired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu sesión se cerró porque iniciaste sesión en otro lugar. Vuelve a iniciar sesión.
+        /// </summary>
+        public static string Dialogs_SessionReplaced {
+            get {
+                return ResourceManager.GetString("Dialogs_SessionReplaced", resourceCulture);
+            }
+        }
 
         /// <summary>
         ///   Busca una cadena traducida similar a Escribe tu contraseña para borrar la cuenta.

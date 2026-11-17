@@ -127,6 +127,9 @@ namespace YachtDice.FriendServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         SessionExpired = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionReplaced = 4,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

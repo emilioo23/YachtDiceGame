@@ -8,7 +8,8 @@ namespace YachtDice.Server.Logic.Security
     /// <summary>
     /// The sessions of the players who logged in. Each session has a secret token that the client sends instead
     /// of the name of the player, so nobody can act in the name of another player only by knowing the name.
-    /// A player has one session at a time: a new login ends the old one. A session that waits for the code of
+    /// A player has one session at a time: a new login ends the old one, and the registry remembers the tokens
+    /// that ended this way so the old client can be told why. A session that waits for the code of
     /// the two-step verification does not work until the code is confirmed.
     /// </summary>
     public sealed class SessionRegistry
@@ -19,6 +20,7 @@ namespace YachtDice.Server.Logic.Security
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, string> _playerNamesByToken =
             new Dictionary<string, string>(StringComparer.Ordinal);
+        private readonly HashSet<string> _replacedTokens = new HashSet<string>(StringComparer.Ordinal);
         private readonly Dictionary<string, KeyValuePair<string, string>> _pendingByChallenge =
             new Dictionary<string, KeyValuePair<string, string>>(StringComparer.Ordinal);
 
@@ -35,7 +37,7 @@ namespace YachtDice.Server.Logic.Security
 
             lock (_syncRoot)
             {
-                RemoveSessionsOf(playerName);
+                ReplaceSessionsOf(playerName);
                 _playerNamesByToken[token] = playerName;
             }
 
@@ -77,7 +79,7 @@ namespace YachtDice.Server.Logic.Security
                 if (isPending)
                 {
                     _pendingByChallenge.Remove(challengeId);
-                    RemoveSessionsOf(pending.Value);
+                    ReplaceSessionsOf(pending.Value);
                     _playerNamesByToken[pending.Key] = pending.Value;
                 }
             }
@@ -122,6 +124,23 @@ namespace YachtDice.Server.Logic.Security
             }
 
             return isFound;
+        }
+
+        /// <summary>
+        /// Tells whether a token belonged to a session that ended because the same player logged in again.
+        /// </summary>
+        /// <param name="sessionToken">Token that the client sent.</param>
+        /// <returns>True if a later login of the same player replaced the session of the token.</returns>
+        public bool WasReplaced(string sessionToken)
+        {
+            bool wasReplaced;
+
+            lock (_syncRoot)
+            {
+                wasReplaced = sessionToken != null && _replacedTokens.Contains(sessionToken);
+            }
+
+            return wasReplaced;
         }
 
         /// <summary>
@@ -180,6 +199,15 @@ namespace YachtDice.Server.Logic.Security
                 session => string.Equals(session.Value, playerName, StringComparison.OrdinalIgnoreCase);
 
             return _playerNamesByToken.Where(isOfPlayer).Select(session => session.Key).ToList();
+        }
+
+        private void ReplaceSessionsOf(string playerName)
+        {
+            foreach (string token in FindTokensOf(playerName))
+            {
+                _replacedTokens.Add(token);
+                _playerNamesByToken.Remove(token);
+            }
         }
 
         private void RemoveSessionsOf(string playerName)

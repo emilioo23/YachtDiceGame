@@ -94,6 +94,32 @@ namespace YachtDice.Server.Tests.Security
         }
 
         [Fact]
+        public void WasReplaced_TokenOfASessionReplacedByANewLogin_ReturnsTrue()
+        {
+            string firstToken = _sessions.Start(PlayerName);
+
+            _sessions.Start(PlayerName);
+
+            Assert.True(_sessions.WasReplaced(firstToken));
+        }
+
+        [Fact]
+        public void WasReplaced_TokenOfASessionEndedByLogout_ReturnsFalse()
+        {
+            string token = _sessions.Start(PlayerName);
+
+            _sessions.EndFor(PlayerName);
+
+            Assert.False(_sessions.WasReplaced(token));
+        }
+
+        [Fact]
+        public void WasReplaced_UnknownToken_ReturnsFalse()
+        {
+            Assert.False(_sessions.WasReplaced(UnknownToken));
+        }
+
+        [Fact]
         public void EndFor_PlayerWithSession_EndsTheSession()
         {
             string token = _sessions.Start(PlayerName);
