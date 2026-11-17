@@ -183,6 +183,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\AddFlagCodeToPlayerSettings.sql" />
     <None Include="Scripts\AddMoreAvatars.sql" />
+    <None Include="Scripts\AllowBlockedFriendships.sql" />
     <None Include="Scripts\AllowComputerRoomType.sql" />
     <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
     <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
