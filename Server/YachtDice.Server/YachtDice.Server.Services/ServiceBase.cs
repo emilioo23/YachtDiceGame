@@ -36,6 +36,12 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Gets or sets the sessions of the players. The host gives the same registry to every service, so a token
+        /// that the authentication service created works in all of them.
+        /// </summary>
+        public LogicSecurity.SessionRegistry Sessions { get; set; } = new LogicSecurity.SessionRegistry();
+
+        /// <summary>
         /// Runs a synchronous operation and converts any failure into a fault for the client.
         /// </summary>
         /// <typeparam name="TResult">Type of the answer of the operation.</typeparam>
@@ -77,16 +83,6 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Writes an informative line in the log of the server.
-        /// </summary>
-        /// <param name="message">Text to write. It must not include passwords or codes.</param>
-        /// <summary>
-        /// Gets or sets the sessions of the players. The host gives the same registry to every service, so a token
-        /// that the authentication service created works in all of them.
-        /// </summary>
-        public LogicSecurity.SessionRegistry Sessions { get; set; } = new LogicSecurity.SessionRegistry();
-
-        /// <summary>
         /// Runs an operation for the player who owns the session token. A token that is unknown or that ended is
         /// rejected with a fault, so nobody can act in the name of another player.
         /// </summary>
@@ -108,6 +104,10 @@ namespace YachtDice.Server.Services
             return Run(() => operation(playerName), operationName);
         }
 
+        /// <summary>
+        /// Writes an informative line in the log of the server.
+        /// </summary>
+        /// <param name="message">Text to write. It must not include passwords or codes.</param>
         protected void LogInfo(string message)
         {
             _logger.Info(message);

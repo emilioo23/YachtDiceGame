@@ -227,7 +227,11 @@ namespace YachtDice.Server.Host
             var checkpointService = new GameCheckpointService(new PlayerRepository(), new GameCheckpointRepository());
             var gameCoordinator = new GameCoordinator(gameManager, resultRecorder, checkpointService);
             var kickHistoryService = new KickHistoryService(new PlayerRepository(), new KickLogRepository());
-            serviceHosts.Add(new ServiceHost(new RoomService(roomManager, gameCoordinator, kickHistoryService)));
+            var roomService = new RoomService(roomManager, gameCoordinator, kickHistoryService)
+            {
+                Sessions = sessions
+            };
+            serviceHosts.Add(new ServiceHost(roomService));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
             serviceHosts.Add(new ServiceHost(new ChatService(roomManager, wordFilter)));
 
