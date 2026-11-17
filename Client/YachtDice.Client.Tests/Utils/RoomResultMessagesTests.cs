@@ -1,6 +1,6 @@
 ﻿using Xunit;
-using YachtDice.RoomServiceReference;
 using YachtDice.Resources;
+using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 
 namespace YachtDice.Client.Tests.Utils

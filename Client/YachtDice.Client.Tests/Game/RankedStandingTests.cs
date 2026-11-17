@@ -54,11 +54,11 @@ namespace YachtDice.Client.Tests.Game
                 UpperBonus = UpperBonus,
                 YachtBonus = YachtBonus
             };
-            var expected = new { UpperSubtotal, UpperBonus, YachtBonus };
+            var standingExpected = new { UpperSubtotal, UpperBonus, YachtBonus };
 
             var standing = new RankedStanding(SecondRank, standingEntry);
 
-            Assert.Equivalent(expected, standing);
+            Assert.Equivalent(standingExpected, standing);
         }
 
         [Fact]

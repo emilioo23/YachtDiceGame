@@ -114,9 +114,9 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public void Save(GameResultRecord result)
+        public void Save(GameResultRecord record)
         {
-            _savedResults.Add(result);
+            _savedResults.Add(record);
         }
     }
 }

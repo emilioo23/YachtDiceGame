@@ -24,6 +24,7 @@ namespace YachtDice.Views
     public partial class LobbyWindow : Window
     {
         private const int EmptyLength = 0;
+        private const int MaxRoomNameLength = 30;
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
@@ -47,6 +48,7 @@ namespace YachtDice.Views
         public LobbyWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             InitializeComponent();
+            RoomNameTextBox.MaxLength = MaxRoomNameLength;
             FillComputerDifficulties();
 
             _roomGateway = roomGateway;

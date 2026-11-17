@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Players;
@@ -723,9 +723,9 @@ namespace YachtDice.Server.Tests.Game
                 Dice = LittleStraightDice
             };
 
-            GameActionResult result = manager.MarkPresent(new RoomMember(RoomCode, FirstId));
+            GameActionResult markPresentResult = manager.MarkPresent(new RoomMember(RoomCode, FirstId));
 
-            Assert.Equivalent(snapshotExpected, result.Snapshot);
+            Assert.Equivalent(snapshotExpected, markPresentResult.Snapshot);
         }
 
         [Fact]
@@ -734,9 +734,9 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             manager.Restore(CreateSavedGame());
 
-            GameActionResult result = manager.MarkPresent(new RoomMember(RoomCode, SecondId));
+            GameActionResult markPresentResult = manager.MarkPresent(new RoomMember(RoomCode, SecondId));
 
-            Assert.Equal(SecondId, result.Snapshot.CurrentPlayerId);
+            Assert.Equal(SecondId, markPresentResult.Snapshot.CurrentPlayerId);
         }
 
         [Fact]

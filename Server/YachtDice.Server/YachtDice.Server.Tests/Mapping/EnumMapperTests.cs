@@ -18,11 +18,11 @@ namespace YachtDice.Server.Tests.Mapping
         [Fact]
         public void Map_LockedForTheDay_ReturnsTheSameValueOfTheContract()
         {
-            Contracts.Authentication.LoginResultCode result = EnumMapper
+            Contracts.Authentication.LoginResultCode loginResult = EnumMapper
                 .Map<Logic.Authentication.LoginStatus, Contracts.Authentication.LoginResultCode>(
                     Logic.Authentication.LoginStatus.LockedForTheDay);
 
-            Assert.Equal(Contracts.Authentication.LoginResultCode.LockedForTheDay, result);
+            Assert.Equal(Contracts.Authentication.LoginResultCode.LockedForTheDay, loginResult);
         }
 
         [Fact]

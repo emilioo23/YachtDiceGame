@@ -106,7 +106,6 @@
 
                     <TextBox x:Name="RoomNameTextBox"
                              Style="{StaticResource TextBoxRounded}"
-                             MaxLength="30"
                              Margin="0,0,0,16"
                              LostFocus="RoomNameTextBox_LostFocus"
                              KeyDown="RoomNameTextBox_KeyDown"/>

@@ -122,9 +122,9 @@ namespace YachtDice.Server.Tests.Rooms
             Assert.Equal(RoomStatus.InvalidTarget, transferResult.Status);
         }
 
-        private static RoomMember GetMember(RoomResult result)
+        private static RoomMember GetMember(RoomResult roomResult)
         {
-            return new RoomMember(result.Room.Code, result.PlayerId);
+            return new RoomMember(roomResult.Room.Code, roomResult.PlayerId);
         }
 
         private static RoomPlayer FindComputer(RoomDetails room)

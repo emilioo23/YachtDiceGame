@@ -27,11 +27,11 @@ namespace YachtDice.Server.Tests.Mapping
                 ExperienceGained = ExperienceGained
             };
             snapshot.Players.Add(player);
-            var expected = new { Total, IsWinner = true, ExperienceGained };
+            var playerStateExpected = new { Total, IsWinner = true, ExperienceGained };
 
             GameContracts.GameState state = GameMapper.ToContract(snapshot, SecondsLeft);
 
-            Assert.Equivalent(expected, state.Players[0]);
+            Assert.Equivalent(playerStateExpected, state.Players[0]);
         }
 
         [Fact]

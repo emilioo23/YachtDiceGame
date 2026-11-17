@@ -26,11 +26,11 @@ namespace YachtDice.Server.Tests.Email
         public void Send_WorkingEmailService_SendsTheNoticeToThePlayer()
         {
             var notifier = new AccountLockNotifier(_emailService);
-            var expected = new { IsSent = true, Recipients = new List<string> { Email } };
+            var notificationExpected = new { IsSent = true, Recipients = new List<string> { Email } };
 
             bool isSent = notifier.Send(_player, SpanishCulture);
 
-            Assert.Equivalent(expected, new { IsSent = isSent, _emailService.Recipients });
+            Assert.Equivalent(notificationExpected, new { IsSent = isSent, _emailService.Recipients });
         }
 
         [Fact]

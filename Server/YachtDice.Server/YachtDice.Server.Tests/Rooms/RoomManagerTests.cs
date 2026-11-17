@@ -84,9 +84,9 @@ namespace YachtDice.Server.Tests.Rooms
             SavedGame saved = CreateSavedGame(false);
             _manager.TryRestoreRoom(saved);
 
-            RoomResult result = _manager.Join(SavedRoomCode, PlayerName);
+            RoomResult joinResult = _manager.Join(SavedRoomCode, PlayerName);
 
-            Assert.Equal(saved.Players.Last().PlayerId, result.PlayerId);
+            Assert.Equal(saved.Players.Last().PlayerId, joinResult.PlayerId);
         }
 
         [Fact]
@@ -94,9 +94,9 @@ namespace YachtDice.Server.Tests.Rooms
         {
             _manager.TryRestoreRoom(CreateSavedGame(false));
 
-            RoomResult result = _manager.Join(SavedRoomCode, PlayerName);
+            RoomResult joinResult = _manager.Join(SavedRoomCode, PlayerName);
 
-            Assert.Equal(result.PlayerId, result.Room.HostId);
+            Assert.Equal(joinResult.PlayerId, joinResult.Room.HostId);
         }
 
         [Fact]
@@ -380,9 +380,9 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void ForgetAbsentPlayer_UnknownRoom_ReturnsRoomNotFound()
         {
-            RoomResult result = _manager.ForgetAbsentPlayer(new RoomMember(UnknownRoomCode, HostName));
+            RoomResult forgetResult = _manager.ForgetAbsentPlayer(new RoomMember(UnknownRoomCode, HostName));
 
-            Assert.Equal(RoomStatus.RoomNotFound, result.Status);
+            Assert.Equal(RoomStatus.RoomNotFound, forgetResult.Status);
         }
 
         [Fact]

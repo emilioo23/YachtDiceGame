@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
-using YachtDice.Client.Logic.Rooms;
 using YachtDice.ChatServiceReference;
+using YachtDice.Client.Logic.Rooms;
 using YachtDice.Utils;
 using ChatFault = YachtDice.ChatServiceReference.ServiceFault;
 

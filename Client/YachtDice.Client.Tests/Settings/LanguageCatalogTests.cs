@@ -35,9 +35,9 @@ namespace YachtDice.Client.Tests.Settings
         [Fact]
         public void CultureCodes_Always_ListsTheFourLanguagesInOrder()
         {
-            var expected = new[] { SpanishCulture, EnglishCulture, PortugueseCulture, ChineseCulture };
+            var culturesExpected = new[] { SpanishCulture, EnglishCulture, PortugueseCulture, ChineseCulture };
 
-            Assert.Equal(expected, LanguageCatalog.CultureCodes);
+            Assert.Equal(culturesExpected, LanguageCatalog.CultureCodes);
         }
 
         [Fact]

@@ -200,9 +200,10 @@ namespace YachtDice.Server.Tests.Game
 
         private GameSnapshot Roll(RoomDetails room)
         {
-            GameActionResult result = _gameManager.Roll(new RoomMember(room.Code, room.Players.First().Id), NoHeldDice);
+            var member = new RoomMember(room.Code, room.Players.First().Id);
+            GameActionResult rollResult = _gameManager.Roll(member, NoHeldDice);
 
-            return result.Snapshot;
+            return rollResult.Snapshot;
         }
 
         private GameSnapshot StartAndRoll(RoomDetails room)

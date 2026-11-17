@@ -18,11 +18,11 @@ namespace YachtDice.Client.Tests.Settings
         [Fact]
         public void Normalize_NewPreferences_KeepsTheDefaultValues()
         {
-            var expected = new UserPreferences();
+            var defaultPreferencesExpected = new UserPreferences();
 
             UserPreferences normalized = new UserPreferences().Normalize();
 
-            Assert.Equivalent(expected, normalized);
+            Assert.Equivalent(defaultPreferencesExpected, normalized);
         }
 
         [Fact]

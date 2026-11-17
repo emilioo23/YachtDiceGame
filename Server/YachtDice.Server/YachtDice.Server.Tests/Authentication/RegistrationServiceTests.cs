@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Xunit;
-using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Moderation;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Tests.InMemory;
 

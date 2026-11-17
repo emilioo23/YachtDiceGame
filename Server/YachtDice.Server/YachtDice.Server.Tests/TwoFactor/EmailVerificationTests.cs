@@ -59,9 +59,9 @@ namespace YachtDice.Server.Tests.TwoFactor
                 Culture = new CultureInfo(CultureName)
             };
 
-            LoginResult result = _loginService.LoginPlayer(credentials);
+            LoginResult loginResult = _loginService.LoginPlayer(credentials);
 
-            Assert.Equal(LoginStatus.VerificationCodeSent, result.Status);
+            Assert.Equal(LoginStatus.VerificationCodeSent, loginResult.Status);
         }
 
         [Fact]

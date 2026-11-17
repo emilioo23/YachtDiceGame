@@ -201,27 +201,50 @@ namespace YachtDice.Server.Host
         private static GameCoordinator OpenServiceHosts(List<ServiceHost> serviceHosts)
         {
             var sessions = new SessionRegistry();
+            OffensiveWordFilter wordFilter = CreateOffensiveWordFilter();
+
+            AddAccountHosts(serviceHosts, sessions, wordFilter);
+
+            var roomManager = new RoomManager(new AvatarService(new PlayerRepository(), CreateLevelTable()), wordFilter)
+            {
+                WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
+            };
+            GameCoordinator gameCoordinator = AddGameHosts(serviceHosts, sessions, roomManager);
+
+            serviceHosts.Add(new ServiceHost(new ChatService(roomManager, wordFilter)));
+            AddFriendHost(serviceHosts, sessions, roomManager);
+
+            gameCoordinator.RestoreSavedGames(roomManager);
+            serviceHosts.ForEach(serviceHost => serviceHost.Open());
+
+            return gameCoordinator;
+        }
+
+        private static void AddAccountHosts(
+            List<ServiceHost> serviceHosts,
+            SessionRegistry sessions,
+            OffensiveWordFilter wordFilter)
+        {
             AuthenticationService authenticationService = CreateAuthenticationService();
             TwoFactorManagementService twoFactorService = CreateTwoFactorManagementService();
-
-            authenticationService.Sessions = sessions;
-            twoFactorService.Sessions = sessions;
-            serviceHosts.Add(new ServiceHost(authenticationService));
-            serviceHosts.Add(new ServiceHost(twoFactorService));
-            OffensiveWordFilter wordFilter = CreateOffensiveWordFilter();
-            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService(wordFilter)));
-
             LevelTable levelTable = CreateLevelTable();
             var avatarService = new AvatarService(new PlayerRepository(), levelTable);
             PlayerService playerService = CreatePlayerService(avatarService, wordFilter, levelTable);
 
+            authenticationService.Sessions = sessions;
+            twoFactorService.Sessions = sessions;
             playerService.Sessions = sessions;
+            serviceHosts.Add(new ServiceHost(authenticationService));
+            serviceHosts.Add(new ServiceHost(twoFactorService));
+            serviceHosts.Add(new ServiceHost(CreatePlayerRegistrationService(wordFilter)));
             serviceHosts.Add(new ServiceHost(playerService));
+        }
 
-            var roomManager = new RoomManager(avatarService, wordFilter)
-            {
-                WaitingMinutes = ReadPositiveNumber(RoomWaitingMinutesKey)
-            };
+        private static GameCoordinator AddGameHosts(
+            List<ServiceHost> serviceHosts,
+            SessionRegistry sessions,
+            RoomManager roomManager)
+        {
             var resultRecorder = new GameResultRecorder(new PlayerRepository(), new GameHistoryRepository());
             var gameManager = new GameManager(new RandomDieRoller(), CreateTurnDuration());
             var checkpointService = new GameCheckpointService(new PlayerRepository(), new GameCheckpointRepository());
@@ -231,21 +254,24 @@ namespace YachtDice.Server.Host
             {
                 Sessions = sessions
             };
+
             serviceHosts.Add(new ServiceHost(roomService));
             serviceHosts.Add(new ServiceHost(new GameService(gameCoordinator)));
-            serviceHosts.Add(new ServiceHost(new ChatService(roomManager, wordFilter)));
 
+            return gameCoordinator;
+        }
+
+        private static void AddFriendHost(
+            List<ServiceHost> serviceHosts,
+            SessionRegistry sessions,
+            RoomManager roomManager)
+        {
             var presenceService = new PresenceService();
-            serviceHosts.Add(new ServiceHost(presenceService));
             FriendService friendService = CreateFriendService(presenceService, roomManager);
 
             friendService.Sessions = sessions;
+            serviceHosts.Add(new ServiceHost(presenceService));
             serviceHosts.Add(new ServiceHost(friendService));
-
-            gameCoordinator.RestoreSavedGames(roomManager);
-            serviceHosts.ForEach(serviceHost => serviceHost.Open());
-
-            return gameCoordinator;
         }
 
         private static void WaitForExit()

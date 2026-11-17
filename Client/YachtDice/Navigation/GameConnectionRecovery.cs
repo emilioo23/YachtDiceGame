@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using YachtDice.Client.Logic.Connection;
-using YachtDice.Gateway;
 using YachtDice.GameServiceReference;
+using YachtDice.Gateway;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
 
