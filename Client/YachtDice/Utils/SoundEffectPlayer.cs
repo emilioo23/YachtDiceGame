@@ -4,6 +4,7 @@ using System.IO;
 using System.Media;
 using System.Windows;
 using System.Windows.Resources;
+using YachtDice.Client.Logic.Audio;
 
 namespace YachtDice.Utils
 {
@@ -18,6 +19,16 @@ namespace YachtDice.Utils
 
         private readonly Dictionary<SoundEffect, SoundPlayer> _players = new Dictionary<SoundEffect, SoundPlayer>();
         private readonly AppLogger _logger = new AppLogger(typeof(SoundEffectPlayer));
+        private readonly AudioSettings _audio;
+
+        /// <summary>
+        /// Initializes the player of the sound effects.
+        /// </summary>
+        /// <param name="audio">Choices of the player about the sound effects.</param>
+        public SoundEffectPlayer(AudioSettings audio)
+        {
+            _audio = audio;
+        }
 
         /// <summary>
         /// Plays the sound effect, unless the player turned the sounds off.
@@ -25,7 +36,7 @@ namespace YachtDice.Utils
         /// <param name="effect">Sound effect to play.</param>
         public void Play(SoundEffect effect)
         {
-            if (App.Audio.AreEffectsEnabled)
+            if (_audio.AreEffectsEnabled)
             {
                 try
                 {

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -20,16 +21,19 @@ namespace YachtDice.Views
         private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
 
         private readonly AppLogger _logger;
+        private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
         /// Initializes the login and registration window.
         /// </summary>
-        public LoginWindow()
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public LoginWindow(ClientServices services)
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
+            _services = services;
+            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow(services);
             ApplyFieldLimits();
             _ = WarmUpConnectionAsync();
         }
@@ -110,14 +114,17 @@ namespace YachtDice.Views
 
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, isGuest: true);
+            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, _services)
+            {
+                IsGuest = true
+            };
 
             WindowNavigator.SwitchTo(this, new MenuWindow(session));
         }
 
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
-            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
+            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow(_services));
         }
 
         private static string GetRegisterMessage(RegisterResultCode code)
@@ -171,7 +178,7 @@ namespace YachtDice.Views
             };
 
             LoginData loginData = await _gateway.LoginAsync(credentials);
-            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false)
+            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, _services)
             {
                 SessionToken = loginData.SessionToken ?? string.Empty
             };

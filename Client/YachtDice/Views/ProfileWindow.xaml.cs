@@ -442,8 +442,9 @@ namespace YachtDice.Views
 
         private void ReopenWithNewUsername(string newUsername, bool isSavedMessageShown)
         {
-            var renamedSession = new PlayerSession(newUsername, _session.FirstName, _session.IsGuest)
+            var renamedSession = new PlayerSession(newUsername, _session.FirstName, _session.Services)
             {
+                IsGuest = _session.IsGuest,
                 SessionToken = _session.SessionToken
             };
 

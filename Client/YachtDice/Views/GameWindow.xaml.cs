@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using YachtDice.Client.Logic.Game;
 using YachtDice.Client.Logic.Rooms;
+using YachtDice.Composition;
 using YachtDice.GameServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -38,6 +39,7 @@ namespace YachtDice.Views
         private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
+        private readonly ClientServices _services;
         private readonly GameGateway _gameGateway;
         private readonly DiceBoard _diceBoard;
         private readonly ScorecardGrid _scorecard;
@@ -46,7 +48,7 @@ namespace YachtDice.Views
         private readonly StateVersionGate _versionGate = new StateVersionGate();
         private readonly TurnCountdown _countdown = new TurnCountdown();
         private readonly ReconnectWaitTracker _reconnectWait = new ReconnectWaitTracker();
-        private readonly SoundEffectPlayer _sounds = new SoundEffectPlayer();
+        private readonly SoundEffectPlayer _sounds;
         private readonly ElementAnimator _animator = new ElementAnimator();
         private readonly DispatcherTimer _clock = new DispatcherTimer();
         private readonly GameConnectionRecovery _connectionRecovery;
@@ -70,6 +72,8 @@ namespace YachtDice.Views
         /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
         public GameWindow(RoomGateway roomGateway, ChatGateway chat)
         {
+            _services = roomGateway.Session.Services;
+            _sounds = new SoundEffectPlayer(_services.Audio);
             InitializeComponent();
 
             _roomGateway = roomGateway;
@@ -122,16 +126,16 @@ namespace YachtDice.Views
         private void ConnectGame()
         {
             _gameGateway.GameChanged += HandleGameChanged;
-            ConnectionLossHandler.Watch(_gameGateway);
+            _services.ConnectionLoss.Watch(_gameGateway);
             _connectionRecovery.AttemptStarted += HandleRecoveryAttempt;
             _connectionRecovery.Restored += HandleConnectionRestored;
-            ConnectionLossHandler.UseRecovery(_recoverConnection);
+            _services.ConnectionLoss.UseRecovery(_recoverConnection);
             _clock.Interval = TimeSpan.FromSeconds(ClockIntervalSeconds);
             _clock.Tick += HandleClockTick;
             RollButton.IsEnabled = false;
-            MusicVolumeSlider.Value = App.Audio.MusicVolume;
+            MusicVolumeSlider.Value = _services.Audio.MusicVolume;
             RenderMuteMusicButton();
-            App.Music.Play(MusicTrack.GameTheme);
+            _services.Music.Play(MusicTrack.GameTheme);
             Loaded += HandleWindowLoaded;
         }
 
@@ -790,10 +794,10 @@ namespace YachtDice.Views
 
             if (_isLeavingOnClose)
             {
-                App.Music.Play(MusicTrack.MenuTheme);
+                _services.Music.Play(MusicTrack.MenuTheme);
             }
 
-            ConnectionLossHandler.ReleaseRecovery(_recoverConnection);
+            _services.ConnectionLoss.ReleaseRecovery(_recoverConnection);
             ChatPanelControl.Detach();
             _roomGateway.RoomChanged -= HandleRoomChanged;
             _gameGateway.GameChanged -= HandleGameChanged;
@@ -824,18 +828,18 @@ namespace YachtDice.Views
 
         private void MuteMusicButton_Click(object sender, RoutedEventArgs e)
         {
-            App.Audio.SetMusicMuted(!App.Audio.IsMusicMuted);
+            _services.Audio.SetMusicMuted(!_services.Audio.IsMusicMuted);
             RenderMuteMusicButton();
         }
 
         private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            App.Audio.SetMusicVolume((int)e.NewValue);
+            _services.Audio.SetMusicVolume((int)e.NewValue);
         }
 
         private void RenderMuteMusicButton()
         {
-            MuteMusicButton.Content = App.Audio.IsMusicMuted
+            MuteMusicButton.Content = _services.Audio.IsMusicMuted
                 ? Strings.Game_Sidebar_ButtonUnmuteMusic
                 : Strings.Game_Sidebar_ButtonMuteMusic;
         }

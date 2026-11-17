@@ -299,6 +299,8 @@
     <Compile Include="Utils\HowToPlayContent.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />
+    <Compile Include="Composition\ClientServiceRegistration.cs" />
+    <Compile Include="Composition\ClientServices.cs" />
     <Compile Include="Navigation\ConnectionLossHandler.cs" />
     <Compile Include="Navigation\GameConnectionRecovery.cs" />
     <Compile Include="Utils\AppLogger.cs" />

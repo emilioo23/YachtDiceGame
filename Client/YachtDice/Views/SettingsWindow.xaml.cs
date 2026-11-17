@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Audio;
 using YachtDice.Client.Logic.Authentication;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
@@ -35,6 +36,7 @@ namespace YachtDice.Views
         private const int NoMargin = 0;
 
         private readonly PlayerSession _session;
+        private readonly AudioSettings _audio;
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
         private readonly AppLogger _logger = new AppLogger(typeof(SettingsWindow));
@@ -55,14 +57,15 @@ namespace YachtDice.Views
             ConfirmNewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             DeleteAccountPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             _session = session;
+            _audio = session.Services.Audio;
             _isInitializing = true;
 
             AccountUsernameTextBlock.Text = session.DisplayName;
             LanguageComboBox.SelectedIndex = LanguageCatalog.IndexOf(App.CurrentCultureCode);
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
-            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
-            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !App.Audio.IsMusicMuted);
-            MusicVolumeSlider.Value = App.Audio.MusicVolume;
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, _audio.AreEffectsEnabled);
+            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !_audio.IsMusicMuted);
+            MusicVolumeSlider.Value = _audio.MusicVolume;
 
             ShowSection(initialSection);
             _isInitializing = false;
@@ -378,21 +381,21 @@ namespace YachtDice.Views
 
         private void SoundsToggle_Click(object sender, MouseButtonEventArgs e)
         {
-            App.Audio.SetEffectsEnabled(!App.Audio.AreEffectsEnabled);
-            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, App.Audio.AreEffectsEnabled);
+            _audio.SetEffectsEnabled(!_audio.AreEffectsEnabled);
+            ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, _audio.AreEffectsEnabled);
         }
 
         private void MusicToggle_Click(object sender, MouseButtonEventArgs e)
         {
-            App.Audio.SetMusicMuted(!App.Audio.IsMusicMuted);
-            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !App.Audio.IsMusicMuted);
+            _audio.SetMusicMuted(!_audio.IsMusicMuted);
+            ApplyToggleVisual(MusicToggle, MusicToggleKnob, !_audio.IsMusicMuted);
         }
 
         private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!_isInitializing)
             {
-                App.Audio.SetMusicVolume((int)e.NewValue);
+                _audio.SetMusicVolume((int)e.NewValue);
             }
         }
 
@@ -426,7 +429,7 @@ namespace YachtDice.Views
                 await Task.Run(() => _session.Presence.Disconnect());
 
                 CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_DoneMessage);
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_session.Services));
             }
             else if (result == AccountDeletionResultCode.WrongPassword)
             {

@@ -124,7 +124,7 @@ namespace YachtDice.Views
             if (!_session.IsGuest)
             {
                 await _session.Presence.ConnectAsync(playerName);
-                ConnectionLossHandler.Watch(_session.Presence);
+                _session.Services.ConnectionLoss.Watch(_session.Presence);
             }
         }
 
@@ -428,7 +428,7 @@ namespace YachtDice.Views
             {
                 await Task.Run(() => _session.Presence.Disconnect());
 
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_session.Services));
             }
         }
 

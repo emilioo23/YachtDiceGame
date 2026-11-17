@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Navigation;
 using YachtDice.Resources;
@@ -18,20 +19,23 @@ namespace YachtDice.Views
     {
         private readonly string _email;
         private readonly AppLogger _logger;
+        private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
         /// Initializes the window for the account that asked for the recovery code.
         /// </summary>
         /// <param name="email">Email of the account to recover.</param>
-        public ResetPasswordWindow(string email)
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public ResetPasswordWindow(string email, ClientServices services)
         {
             InitializeComponent();
             _email = email;
             _logger = new AppLogger(GetType());
+            _services = services;
             EmailTextBlock.Text = email;
             CodeTextBox.MaxLength = ResetPasswordInputValidator.CodeLength;
-            LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);
             CodeTextBox.Focus();
         }
 
@@ -109,7 +113,7 @@ namespace YachtDice.Views
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)
         {
-            WindowNavigator.SwitchTo(this, new LoginWindow());
+            WindowNavigator.SwitchTo(this, new LoginWindow(_services));
         }
 
         private async Task ChangePasswordAsync()
@@ -143,7 +147,7 @@ namespace YachtDice.Views
             if (result == PasswordResetResultCode.PasswordChanged)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.ResetPassword_SuccessMessage);
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_services));
             }
             else
             {

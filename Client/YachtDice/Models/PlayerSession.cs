@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 
 namespace YachtDice.Models
@@ -13,12 +14,12 @@ namespace YachtDice.Models
         /// </summary>
         /// <param name="displayName">Name that identifies the player in the game.</param>
         /// <param name="firstName">First name of the player, used to greet them. It is empty for a guest.</param>
-        /// <param name="isGuest">Whether the player entered as a guest, without an account.</param>
-        public PlayerSession(string displayName, string firstName, bool isGuest)
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public PlayerSession(string displayName, string firstName, ClientServices services)
         {
             DisplayName = displayName;
             FirstName = firstName;
-            IsGuest = isGuest;
+            Services = services;
             Presence = new PresenceGateway();
             LastOfferedMatchCode = string.Empty;
         }
@@ -34,9 +35,14 @@ namespace YachtDice.Models
         public string FirstName { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the player entered as a guest, without an account.
+        /// Gets or sets a value indicating whether the player entered as a guest, without an account.
         /// </summary>
-        public bool IsGuest { get; }
+        public bool IsGuest { get; set; }
+
+        /// <summary>
+        /// Gets the components that the windows share while the application is open.
+        /// </summary>
+        public ClientServices Services { get; }
 
         /// <summary>
         /// Gets or sets the secret token that the server gave when the player logged in. The gateways send it

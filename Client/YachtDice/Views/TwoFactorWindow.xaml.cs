@@ -187,7 +187,7 @@ namespace YachtDice.Views
             }
             else
             {
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_session.Services));
             }
         }
 

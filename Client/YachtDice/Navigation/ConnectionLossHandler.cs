@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Client.Logic.Connection;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Resources;
 using YachtDice.Utils;
@@ -14,21 +15,31 @@ namespace YachtDice.Navigation
     /// Tells the player that the connection with the server was lost and takes them back to the login window,
     /// without waiting for the server. Several connections can break together, but the player is told once.
     /// While a match is open, the window can register a recovery: the player goes back to the login window
-    /// only if the recovery does not get the connection back.
+    /// only if the recovery does not get the connection back. The application has one instance, shared by the
+    /// windows through <see cref="ClientServices"/>.
     /// </summary>
-    public static class ConnectionLossHandler
+    public sealed class ConnectionLossHandler
     {
-        private static readonly ConnectionLossGate Gate = new ConnectionLossGate();
-        private static readonly ConnectionLossGate RecoveryGate = new ConnectionLossGate();
+        private readonly ConnectionLossGate _gate = new ConnectionLossGate();
+        private readonly ConnectionLossGate _recoveryGate = new ConnectionLossGate();
+        private readonly ClientServices _services;
+        private Func<Task<bool>> _recovery;
 
-        private static Func<Task<bool>> _recovery;
+        /// <summary>
+        /// Initializes the handler of the lost connections.
+        /// </summary>
+        /// <param name="services">Shared components that the login window needs when the player goes back.</param>
+        public ConnectionLossHandler(ClientServices services)
+        {
+            _services = services;
+        }
 
         /// <summary>
         /// Registers what to do when the connection is lost before sending the player to the login window.
         /// Only one recovery can be registered, the one of the window that is open.
         /// </summary>
         /// <param name="recovery">Tries to get the connection back; it tells whether it worked.</param>
-        public static void UseRecovery(Func<Task<bool>> recovery)
+        public void UseRecovery(Func<Task<bool>> recovery)
         {
             _recovery = recovery;
         }
@@ -37,7 +48,7 @@ namespace YachtDice.Navigation
         /// Removes the recovery, unless another window already registered its own one.
         /// </summary>
         /// <param name="recovery">The recovery that the window registered before.</param>
-        public static void ReleaseRecovery(Func<Task<bool>> recovery)
+        public void ReleaseRecovery(Func<Task<bool>> recovery)
         {
             if (_recovery == recovery)
             {
@@ -50,18 +61,18 @@ namespace YachtDice.Navigation
         /// twice to the same connection has no extra effect.
         /// </summary>
         /// <param name="source">Connection to listen to.</param>
-        public static void Watch(IConnectionLossSource source)
+        public void Watch(IConnectionLossSource source)
         {
             source.ConnectionLost -= HandleConnectionLost;
             source.ConnectionLost += HandleConnectionLost;
         }
 
-        private static void HandleConnectionLost()
+        private void HandleConnectionLost()
         {
             Application.Current.Dispatcher.BeginInvoke(new Func<Task>(HandleLossAsync));
         }
 
-        private static async Task HandleLossAsync()
+        private async Task HandleLossAsync()
         {
             Func<Task<bool>> recovery = _recovery;
 
@@ -69,7 +80,7 @@ namespace YachtDice.Navigation
             {
                 ReturnToLogin();
             }
-            else if (RecoveryGate.TryEnter())
+            else if (_recoveryGate.TryEnter())
             {
                 var isRecovered = false;
 
@@ -79,7 +90,7 @@ namespace YachtDice.Navigation
                 }
                 finally
                 {
-                    RecoveryGate.Release();
+                    _recoveryGate.Release();
 
                     if (!isRecovered)
                     {
@@ -89,18 +100,18 @@ namespace YachtDice.Navigation
             }
         }
 
-        private static void ReturnToLogin()
+        private void ReturnToLogin()
         {
             Window[] openWindows = Application.Current.Windows.OfType<Window>().ToArray();
 
-            if (openWindows.Any() && Gate.TryEnter())
+            if (openWindows.Any() && _gate.TryEnter())
             {
                 Window activeWindow = openWindows.FirstOrDefault(window => window.IsActive) ?? openWindows.Last();
 
                 CustomDialogWindow.ShowMessage(activeWindow, Strings.Dialogs_ConnectionLost);
-                new LoginWindow().Show();
+                new LoginWindow(_services).Show();
                 CloseWindows(openWindows);
-                Gate.Release();
+                _gate.Release();
             }
         }
 

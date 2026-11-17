@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Navigation;
 using YachtDice.Resources;
@@ -15,16 +16,19 @@ namespace YachtDice.Views
     public partial class ForgotPasswordWindow : Window
     {
         private readonly AppLogger _logger;
+        private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
 
         /// <summary>
         /// Initializes the password recovery window.
         /// </summary>
-        public ForgotPasswordWindow()
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public ForgotPasswordWindow(ClientServices services)
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow();
+            _services = services;
+            LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow(services);
         }
 
         private static string GetRequestMessage(PasswordResetRequestResultCode code)
@@ -56,7 +60,7 @@ namespace YachtDice.Views
 
         private void BackToLoginLink_Click(object sender, MouseButtonEventArgs e)
         {
-            WindowNavigator.SwitchTo(this, new LoginWindow());
+            WindowNavigator.SwitchTo(this, new LoginWindow(_services));
         }
 
         private async Task RequestCodeAsync()
@@ -68,7 +72,7 @@ namespace YachtDice.Views
             if (result == PasswordResetRequestResultCode.CodeSent)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.ForgotPassword_CodeSentMessage);
-                WindowNavigator.SwitchTo(this, new ResetPasswordWindow(email));
+                WindowNavigator.SwitchTo(this, new ResetPasswordWindow(email, _services));
             }
             else
             {
