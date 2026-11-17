@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,7 @@
     <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
+    <Compile Include="Connection\PinnedServerCertificateValidatorTests.cs" />
     <Compile Include="Connection\ReconnectLoopTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
