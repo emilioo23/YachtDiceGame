@@ -764,6 +764,75 @@
                             <ItemsControl x:Name="OfflineFriendsList"
                                           ItemTemplate="{StaticResource FriendItemTemplate}"/>
 
+                            <TextBlock x:Name="BlockedHeaderTextBlock"
+                                       Text="{x:Static properties:Strings.Friends_Section_Blocked}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextMuted}"
+                                       Margin="0,16,0,8"/>
+
+                            <ItemsControl x:Name="BlockedPlayersList">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Border Background="{StaticResource BrushCream2}"
+                                                CornerRadius="8"
+                                                Padding="10"
+                                                Margin="0,0,0,8">
+
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Grid.Column="0"
+                                                        Width="34"
+                                                        Height="34"
+                                                        CornerRadius="17"
+                                                        Background="{StaticResource BrushWood}"
+                                                        Margin="0,0,10,0">
+
+                                                    <TextBlock Text="{Binding Initial}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"/>
+                                                </Border>
+
+                                                <StackPanel Grid.Column="1"
+                                                            VerticalAlignment="Center">
+
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               Foreground="{StaticResource BrushText}"/>
+
+                                                    <TextBlock Text="{Binding Status}"
+                                                               FontSize="13"
+                                                               Foreground="{StaticResource BrushTextMuted}"/>
+                                                </StackPanel>
+
+                                                <Button Grid.Column="2"
+                                                        Content="{x:Static properties:Strings.Friends_ButtonUnblock}"
+                                                        Tag="{Binding Name}"
+                                                        Padding="10,4"
+                                                        VerticalAlignment="Center"
+                                                        Background="{StaticResource BrushFeltLight}"
+                                                        Foreground="White"
+                                                        BorderThickness="0"
+                                                        Click="UnblockPlayerButton_Click"/>
+                                            </Grid>
+                                        </Border>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                            </ItemsControl>
+
                         </StackPanel>
                     </ScrollViewer>
 

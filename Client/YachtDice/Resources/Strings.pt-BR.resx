@@ -2281,7 +2281,19 @@
     <value>Bloquear</value>
   </data>
   <data name="Dialogs_BlockPlayer" xml:space="preserve">
-    <value>Bloquear {0}? Vocês deixarão de ser amigos e nenhum poderá enviar solicitação ao outro.</value>
+    <value>Bloquear {0}? Vocês deixarão de ser amigos e nenhum poderá enviar solicitação ao outro até que você o desbloqueie.</value>
+  </data>
+  <data name="Friends_Section_Blocked" xml:space="preserve">
+    <value>Bloqueados</value>
+  </data>
+  <data name="Friends_Status_Blocked" xml:space="preserve">
+    <value>Bloqueado por você</value>
+  </data>
+  <data name="Friends_ButtonUnblock" xml:space="preserve">
+    <value>Desbloquear</value>
+  </data>
+  <data name="Dialogs_UnblockPlayer" xml:space="preserve">
+    <value>Desbloquear {0}? Vocês poderão enviar solicitações novamente, mas só serão amigos quando um aceitar uma nova.</value>
   </data>
   <data name="Friends_Result_Blocked" xml:space="preserve">
     <value>Você não pode enviar solicitação a este jogador.</value>

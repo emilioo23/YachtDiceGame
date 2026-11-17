@@ -67,6 +67,32 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Removes a block that the player made. The two players do not become friends again.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="blockedName">Name of the player who was blocked.</param>
+        /// <returns>Outcome of the removal of the block.</returns>
+        public async Task<FriendActionResultCode> UnblockPlayerAsync(string sessionToken, string blockedName)
+        {
+            FriendActionResultCode result =
+                await ExecuteAsync(client => client.UnblockPlayer(sessionToken, blockedName));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the names of the players that the player blocked.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The names of the blocked players, or an empty list if there is none.</returns>
+        public async Task<List<string>> GetBlockedPlayersAsync(string sessionToken)
+        {
+            string[] blockedNames = await ExecuteAsync(client => client.GetBlockedPlayers(sessionToken));
+
+            return blockedNames.ToList();
+        }
+
+        /// <summary>
         /// Invites a friend who is online to join the room where the player is.
         /// </summary>
         /// <param name="sender">Room and identifier of the player who invites.</param>

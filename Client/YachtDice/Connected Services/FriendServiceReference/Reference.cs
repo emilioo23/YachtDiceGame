@@ -521,6 +521,14 @@ namespace YachtDice.FriendServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/BlockPlayerServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string sessionToken, string blockedName);
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/UnblockPlayer", ReplyAction="urn:yachtdice:contracts/IFriendService/UnblockPlayerResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/UnblockPlayerServiceFaultFault", Name="ServiceFault")]
+        YachtDice.FriendServiceReference.FriendActionResultCode UnblockPlayer(string sessionToken, string blockedName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetBlockedPlayers", ReplyAction="urn:yachtdice:contracts/IFriendService/GetBlockedPlayersResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetBlockedPlayersServiceFaultFault", Name="ServiceFault")]
+        string[] GetBlockedPlayers(string sessionToken);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/InviteToRoom", ReplyAction="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault", Name="ServiceFault")]
         YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName);
@@ -587,6 +595,14 @@ namespace YachtDice.FriendServiceReference {
         
         public YachtDice.FriendServiceReference.FriendActionResultCode BlockPlayer(string sessionToken, string blockedName) {
             return base.Channel.BlockPlayer(sessionToken, blockedName);
+        }
+        
+        public YachtDice.FriendServiceReference.FriendActionResultCode UnblockPlayer(string sessionToken, string blockedName) {
+            return base.Channel.UnblockPlayer(sessionToken, blockedName);
+        }
+        
+        public string[] GetBlockedPlayers(string sessionToken) {
+            return base.Channel.GetBlockedPlayers(sessionToken);
         }
         
         public YachtDice.FriendServiceReference.InvitationResultCode InviteToRoom(YachtDice.FriendServiceReference.RoomMember sender, string friendName) {

@@ -1177,11 +1177,47 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a ¿Bloquear a {0}? Dejarán de ser amigos y ninguno podrá mandarle solicitud al otro..
+        ///   Busca una cadena traducida similar a ¿Bloquear a {0}? Dejarán de ser amigos y ninguno podrá mandarle solicitud al otro hasta que lo desbloquees..
         /// </summary>
         public static string Dialogs_BlockPlayer {
             get {
                 return ResourceManager.GetString("Dialogs_BlockPlayer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloqueados.
+        /// </summary>
+        public static string Friends_Section_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Section_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloqueado por ti.
+        /// </summary>
+        public static string Friends_Status_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Status_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Desbloquear.
+        /// </summary>
+        public static string Friends_ButtonUnblock {
+            get {
+                return ResourceManager.GetString("Friends_ButtonUnblock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Desbloquear a {0}? Podrán volver a mandarse solicitudes, pero no serán amigos hasta que uno acepte una nueva..
+        /// </summary>
+        public static string Dialogs_UnblockPlayer {
+            get {
+                return ResourceManager.GetString("Dialogs_UnblockPlayer", resourceCulture);
             }
         }
 

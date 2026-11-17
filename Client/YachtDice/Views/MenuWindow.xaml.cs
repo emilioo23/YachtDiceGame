@@ -163,6 +163,7 @@ namespace YachtDice.Views
                 RequestsList.ItemsSource = FriendItemFactory.Create(requesterNames, requestPresence);
                 ShowOnlinePlayers();
                 await LoadReceivedInvitationsAsync();
+                await LoadBlockedPlayersAsync();
             }
         }
 
@@ -174,6 +175,21 @@ namespace YachtDice.Views
 
             ReceivedInvitationsList.ItemsSource = rows;
             InvitationsHeaderTextBlock.Visibility = rows.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private async Task LoadBlockedPlayersAsync()
+        {
+            List<string> blockedNames = await _friendGateway.GetBlockedPlayersAsync(_session.SessionToken);
+            var blockedPresence = new FriendPresence(Strings.Friends_Status_Blocked, false);
+            Visibility headerVisibility = Visibility.Visible;
+
+            if (blockedNames.Count == 0)
+            {
+                headerVisibility = Visibility.Collapsed;
+            }
+
+            BlockedPlayersList.ItemsSource = FriendItemFactory.Create(blockedNames, blockedPresence);
+            BlockedHeaderTextBlock.Visibility = headerVisibility;
         }
 
         private static ReceivedInvitationRow ToInvitationRow(ReceivedInvitation invitation)
@@ -312,6 +328,29 @@ namespace YachtDice.Views
             if (CustomDialogWindow.Confirm(this, string.Format(Strings.Dialogs_BlockPlayer, friendName)))
             {
                 await BlockPlayerAsync(friendName);
+            }
+        }
+
+        private async void UnblockPlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            string playerName = ReadTag(sender);
+
+            if (CustomDialogWindow.Confirm(this, string.Format(Strings.Dialogs_UnblockPlayer, playerName)))
+            {
+                await UnblockPlayerAsync(playerName);
+            }
+        }
+
+        private async Task UnblockPlayerAsync(string playerName)
+        {
+            try
+            {
+                await _friendGateway.UnblockPlayerAsync(_session.SessionToken, playerName);
+                await LoadFriendsAsync();
+            }
+            catch (GatewayException ex)
+            {
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 
