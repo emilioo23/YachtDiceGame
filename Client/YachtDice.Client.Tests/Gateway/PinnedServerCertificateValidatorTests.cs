@@ -3,9 +3,9 @@ using System.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Xunit;
-using YachtDice.Client.Logic.Connection;
+using YachtDice.Gateway;
 
-namespace YachtDice.Client.Tests.Connection
+namespace YachtDice.Client.Tests.Gateway
 {
     /// <summary>
     /// Rules that accept only the certificate of the game server, identified by its thumbprint.

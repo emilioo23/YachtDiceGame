@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-namespace YachtDice.Client.Logic.Connection
+namespace YachtDice.Gateway
 {
     /// <summary>
     /// Accepts the certificate of the server only when its thumbprint is the one written in the application
