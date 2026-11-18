@@ -9,7 +9,7 @@ namespace YachtDice.Client.Tests.Utils
     /// <summary>
     /// Players shown at the top of the scorecard of a match.
     /// </summary>
-    public class MatchPlayerFactoryTests
+    public class GamePlayerFactoryTests
     {
         private const string LocalId = "local";
         private const string OpponentId = "opponent";
@@ -23,13 +23,13 @@ namespace YachtDice.Client.Tests.Utils
         public void Create_LocalPlayerAfterOpponent_PutsTheLocalPlayerFirstAndMarksIt()
         {
             RoomPlayer[] roomPlayers = { _opponent, _localPlayer };
-            MatchPlayer[] playersExpected =
+            GamePlayer[] playersExpected =
             {
-                CreateMatchPlayer(_localPlayer, true, false),
-                CreateMatchPlayer(_opponent, false, false)
+                CreateGamePlayer(_localPlayer, true, false),
+                CreateGamePlayer(_opponent, false, false)
             };
 
-            List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
+            List<GamePlayer> players = GamePlayerFactory.Create(roomPlayers, LocalId);
 
             Assert.Equivalent(playersExpected, players, strict: true);
         }
@@ -42,13 +42,13 @@ namespace YachtDice.Client.Tests.Utils
                 Players = new[] { _localPlayer },
                 AbsentPlayers = new[] { _opponent }
             };
-            MatchPlayer[] playersExpected =
+            GamePlayer[] playersExpected =
             {
-                CreateMatchPlayer(_localPlayer, true, false),
-                CreateMatchPlayer(_opponent, false, true)
+                CreateGamePlayer(_localPlayer, true, false),
+                CreateGamePlayer(_opponent, false, true)
             };
 
-            List<MatchPlayer> players = MatchPlayerFactory.CreateForRoom(room, LocalId);
+            List<GamePlayer> players = GamePlayerFactory.CreateForRoom(room, LocalId);
 
             Assert.Equivalent(playersExpected, players, strict: true);
         }
@@ -57,21 +57,21 @@ namespace YachtDice.Client.Tests.Utils
         public void UpdatePresence_BothPlayersInside_KeepsEveryonePresent()
         {
             RoomPlayer[] roomPlayers = { _localPlayer, _opponent };
-            List<MatchPlayer> players = MatchPlayerFactory.Create(roomPlayers, LocalId);
-            MatchPlayer[] playersExpected =
+            List<GamePlayer> players = GamePlayerFactory.Create(roomPlayers, LocalId);
+            GamePlayer[] playersExpected =
             {
-                CreateMatchPlayer(_localPlayer, true, false),
-                CreateMatchPlayer(_opponent, false, false)
+                CreateGamePlayer(_localPlayer, true, false),
+                CreateGamePlayer(_opponent, false, false)
             };
 
-            List<MatchPlayer> updated = MatchPlayerFactory.UpdatePresence(players, roomPlayers);
+            List<GamePlayer> updated = GamePlayerFactory.UpdatePresence(players, roomPlayers);
 
             Assert.Equivalent(playersExpected, updated, strict: true);
         }
 
-        private static MatchPlayer CreateMatchPlayer(RoomPlayer roomPlayer, bool isLocalPlayer, bool hasLeft)
+        private static GamePlayer CreateGamePlayer(RoomPlayer roomPlayer, bool isLocalPlayer, bool hasLeft)
         {
-            var player = new MatchPlayer
+            var player = new GamePlayer
             {
                 Id = roomPlayer.Id,
                 Name = roomPlayer.DisplayName,

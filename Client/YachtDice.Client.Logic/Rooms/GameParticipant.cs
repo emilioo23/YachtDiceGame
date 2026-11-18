@@ -4,7 +4,7 @@ namespace YachtDice.Client.Logic.Rooms
     /// <summary>
     /// A player of a match, reduced to what is needed to notice who came and who went.
     /// </summary>
-    public class MatchParticipant
+    public class GameParticipant
     {
         private const string NullValueMessage = "A value that the match participant needs cannot be null.";
 
@@ -13,7 +13,7 @@ namespace YachtDice.Client.Logic.Rooms
         /// </summary>
         /// <param name="id">Identifier that the server gave to the player.</param>
         /// <param name="name">Name that the player shows.</param>
-        public MatchParticipant(string id, string name)
+        public GameParticipant(string id, string name)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id), NullValueMessage);
             Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);

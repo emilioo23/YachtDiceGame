@@ -133,7 +133,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <ItemsControl x:Name="MatchPlayersItemsControl"
+                        <ItemsControl x:Name="GamePlayersItemsControl"
                                       Grid.Column="1"
                                       Focusable="False">
 

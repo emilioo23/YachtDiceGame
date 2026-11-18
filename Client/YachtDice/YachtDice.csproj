@@ -314,7 +314,7 @@
     <Compile Include="Utils\FriendRequestMessages.cs" />
     <Compile Include="Utils\InvitationResultMessages.cs" />
     <Compile Include="Utils\LoginResultMessages.cs" />
-    <Compile Include="Utils\MatchPlayerFactory.cs" />
+    <Compile Include="Utils\GamePlayerFactory.cs" />
     <Compile Include="Utils\BackupCodesMessages.cs" />
     <Compile Include="Utils\PasswordChangeMessages.cs" />
     <Compile Include="Utils\PresenceMessages.cs" />
@@ -329,7 +329,7 @@
     <Compile Include="Models\ChatEntry.cs" />
     <Compile Include="Models\CategoryRule.cs" />
     <Compile Include="Models\LobbySlot.cs" />
-    <Compile Include="Models\MatchPlayer.cs" />
+    <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\StandingRow.cs" />
     <Compile Include="Models\PlayerSession.cs" />
     <Compile Include="Models\RuleStep.cs" />

@@ -60,7 +60,7 @@ namespace YachtDice.Views
         /// <param name="onCategoryClick">Work to run when the player clicks a box.</param>
         public void Render(
             GameState state,
-            IReadOnlyList<MatchPlayer> columns,
+            IReadOnlyList<GamePlayer> columns,
             Func<ScoreCategory, Task> onCategoryClick)
         {
             var context = new RenderContext(state, columns, onCategoryClick);
@@ -120,7 +120,7 @@ namespace YachtDice.Views
 
             for (var index = 0; index < context.Columns.Count; index++)
             {
-                MatchPlayer player = context.Columns[index];
+                GamePlayer player = context.Columns[index];
                 var isFilled = GetPoints(FindCard(context.State, player.Id), category).Length > 0;
 
                 isFilledByLocal |= player.IsLocalPlayer && isFilled;
@@ -133,7 +133,7 @@ namespace YachtDice.Views
             _panel.Children.Add(row);
         }
 
-        private string GetCellText(MatchPlayer player, ScoreCategory category, RenderContext context)
+        private string GetCellText(GamePlayer player, ScoreCategory category, RenderContext context)
         {
             string text = GetPoints(FindCard(context.State, player.Id), category);
             ScoreChoice option = context.FindOption(category);
@@ -251,12 +251,12 @@ namespace YachtDice.Views
             /// <param name="state">State of the game that the server sent.</param>
             /// <param name="columns">Players in the order of the columns.</param>
             /// <param name="onClick">Work to run when the player clicks a box.</param>
-            public RenderContext(GameState state, IReadOnlyList<MatchPlayer> columns, Func<ScoreCategory, Task> onClick)
+            public RenderContext(GameState state, IReadOnlyList<GamePlayer> columns, Func<ScoreCategory, Task> onClick)
             {
                 State = state ?? throw new ArgumentNullException(nameof(state), NullValueMessage);
                 Columns = columns ?? throw new ArgumentNullException(nameof(columns), NullValueMessage);
                 OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick), NullValueMessage);
-                Func<MatchPlayer, bool> isLocalCurrentPlayer =
+                Func<GamePlayer, bool> isLocalCurrentPlayer =
                     player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId;
                 IsLocalTurn = columns.Any(isLocalCurrentPlayer)
                     && state.Status == GameStatus.InProgress;
@@ -270,7 +270,7 @@ namespace YachtDice.Views
             /// <summary>
             /// Gets the players in the order of the columns.
             /// </summary>
-            public IReadOnlyList<MatchPlayer> Columns { get; }
+            public IReadOnlyList<GamePlayer> Columns { get; }
 
             /// <summary>
             /// Gets the work to run when the player clicks a box.

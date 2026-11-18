@@ -3,7 +3,7 @@
     /// <summary>
     /// Player shown at the top of the scorecard of a match.
     /// </summary>
-    public class MatchPlayer
+    public class GamePlayer
     {
         /// <summary>
         /// Gets or sets the identifier that the server gave to the player. Two players can show the same name,

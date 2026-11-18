@@ -20,7 +20,7 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindDeparted_SamePlayers_ReturnsNobody()
         {
-            List<MatchParticipant> players = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> players = CreatePlayers(FirstId, SecondId);
 
             Assert.Empty(PresenceComparer.FindDeparted(players, players));
         }
@@ -28,12 +28,12 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindDeparted_PlayerMissingNow_ReturnsThatPlayer()
         {
-            List<MatchParticipant> before = CreatePlayers(FirstId, SecondId);
-            List<MatchParticipant> after = CreatePlayers(FirstId);
+            List<GameParticipant> before = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> after = CreatePlayers(FirstId);
 
-            MatchParticipant[] departedExpected = { new MatchParticipant(SecondId, SecondName) };
+            GameParticipant[] departedExpected = { new GameParticipant(SecondId, SecondName) };
 
-            List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
+            List<GameParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
             Assert.Equivalent(departedExpected, departed, strict: true);
         }
@@ -41,16 +41,16 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindDeparted_TwoPlayersMissing_ReturnsBothInOrder()
         {
-            List<MatchParticipant> before = CreatePlayers(FirstId, SecondId, ThirdId);
-            List<MatchParticipant> after = CreatePlayers(FirstId);
+            List<GameParticipant> before = CreatePlayers(FirstId, SecondId, ThirdId);
+            List<GameParticipant> after = CreatePlayers(FirstId);
 
-            MatchParticipant[] departedExpected =
+            GameParticipant[] departedExpected =
             {
-                new MatchParticipant(SecondId, SecondName),
-                new MatchParticipant(ThirdId, ThirdName)
+                new GameParticipant(SecondId, SecondName),
+                new GameParticipant(ThirdId, ThirdName)
             };
 
-            List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
+            List<GameParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
             Assert.Equivalent(departedExpected, departed, strict: true);
         }
@@ -58,8 +58,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindDeparted_PlayerArrived_ReturnsNobody()
         {
-            List<MatchParticipant> before = CreatePlayers(FirstId);
-            List<MatchParticipant> after = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> before = CreatePlayers(FirstId);
+            List<GameParticipant> after = CreatePlayers(FirstId, SecondId);
 
             Assert.Empty(PresenceComparer.FindDeparted(before, after));
         }
@@ -67,12 +67,12 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindArrived_PlayerNewInTheRoom_ReturnsThatPlayer()
         {
-            List<MatchParticipant> before = CreatePlayers(FirstId);
-            List<MatchParticipant> after = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> before = CreatePlayers(FirstId);
+            List<GameParticipant> after = CreatePlayers(FirstId, SecondId);
 
-            MatchParticipant[] arrivedExpected = { new MatchParticipant(SecondId, SecondName) };
+            GameParticipant[] arrivedExpected = { new GameParticipant(SecondId, SecondName) };
 
-            List<MatchParticipant> arrived = PresenceComparer.FindArrived(before, after);
+            List<GameParticipant> arrived = PresenceComparer.FindArrived(before, after);
 
             Assert.Equivalent(arrivedExpected, arrived, strict: true);
         }
@@ -80,8 +80,8 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindArrived_PlayerLeft_ReturnsNobody()
         {
-            List<MatchParticipant> before = CreatePlayers(FirstId, SecondId);
-            List<MatchParticipant> after = CreatePlayers(FirstId);
+            List<GameParticipant> before = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> after = CreatePlayers(FirstId);
 
             Assert.Empty(PresenceComparer.FindArrived(before, after));
         }
@@ -89,15 +89,15 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindArrived_NobodyBefore_ReturnsEveryone()
         {
-            List<MatchParticipant> after = CreatePlayers(FirstId, SecondId);
+            List<GameParticipant> after = CreatePlayers(FirstId, SecondId);
 
-            MatchParticipant[] arrivedExpected =
+            GameParticipant[] arrivedExpected =
             {
-                new MatchParticipant(FirstId, FirstName),
-                new MatchParticipant(SecondId, SecondName)
+                new GameParticipant(FirstId, FirstName),
+                new GameParticipant(SecondId, SecondName)
             };
 
-            List<MatchParticipant> arrived = PresenceComparer.FindArrived(new List<MatchParticipant>(), after);
+            List<GameParticipant> arrived = PresenceComparer.FindArrived(new List<GameParticipant>(), after);
 
             Assert.Equivalent(arrivedExpected, arrived, strict: true);
         }
@@ -105,17 +105,17 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void FindDeparted_SameNameDifferentIdentifier_CountsAsDifferentPlayers()
         {
-            var before = new List<MatchParticipant> { new MatchParticipant(FirstId, FirstName) };
-            var after = new List<MatchParticipant> { new MatchParticipant(SecondId, FirstName) };
+            var before = new List<GameParticipant> { new GameParticipant(FirstId, FirstName) };
+            var after = new List<GameParticipant> { new GameParticipant(SecondId, FirstName) };
 
-            MatchParticipant[] departedExpected = { new MatchParticipant(FirstId, FirstName) };
+            GameParticipant[] departedExpected = { new GameParticipant(FirstId, FirstName) };
 
-            List<MatchParticipant> departed = PresenceComparer.FindDeparted(before, after);
+            List<GameParticipant> departed = PresenceComparer.FindDeparted(before, after);
 
             Assert.Equivalent(departedExpected, departed, strict: true);
         }
 
-        private static List<MatchParticipant> CreatePlayers(params string[] ids)
+        private static List<GameParticipant> CreatePlayers(params string[] ids)
         {
             var names = new Dictionary<string, string>
             {
@@ -124,7 +124,7 @@ namespace YachtDice.Client.Tests.Rooms
                 { ThirdId, ThirdName }
             };
 
-            return ids.Select(id => new MatchParticipant(id, names[id])).ToList();
+            return ids.Select(id => new GameParticipant(id, names[id])).ToList();
         }
     }
 }

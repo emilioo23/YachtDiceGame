@@ -91,7 +91,7 @@
     <Compile Include="Utils\HowToPlayContentTests.cs" />
     <Compile Include="Utils\InvitationResultMessagesTests.cs" />
     <Compile Include="Utils\LoginResultMessagesTests.cs" />
-    <Compile Include="Utils\MatchPlayerFactoryTests.cs" />
+    <Compile Include="Utils\GamePlayerFactoryTests.cs" />
     <Compile Include="Utils\PresenceMessagesTests.cs" />
     <Compile Include="Utils\RoomListItemFactoryTests.cs" />
     <Compile Include="Utils\RoomResultMessagesTests.cs" />

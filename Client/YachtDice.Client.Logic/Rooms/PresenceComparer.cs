@@ -16,9 +16,9 @@ namespace YachtDice.Client.Logic.Rooms
         /// <param name="before">Players inside the room before the change.</param>
         /// <param name="after">Players inside the room after the change.</param>
         /// <returns>The players who left, in the order they had.</returns>
-        public static List<MatchParticipant> FindDeparted(
-            IEnumerable<MatchParticipant> before,
-            IEnumerable<MatchParticipant> after)
+        public static List<GameParticipant> FindDeparted(
+            IEnumerable<GameParticipant> before,
+            IEnumerable<GameParticipant> after)
         {
             return FindMissing(before, after);
         }
@@ -29,19 +29,19 @@ namespace YachtDice.Client.Logic.Rooms
         /// <param name="before">Players inside the room before the change.</param>
         /// <param name="after">Players inside the room after the change.</param>
         /// <returns>The players who arrived, in the order they have.</returns>
-        public static List<MatchParticipant> FindArrived(
-            IEnumerable<MatchParticipant> before,
-            IEnumerable<MatchParticipant> after)
+        public static List<GameParticipant> FindArrived(
+            IEnumerable<GameParticipant> before,
+            IEnumerable<GameParticipant> after)
         {
             return FindMissing(after, before);
         }
 
-        private static List<MatchParticipant> FindMissing(
-            IEnumerable<MatchParticipant> source,
-            IEnumerable<MatchParticipant> reference)
+        private static List<GameParticipant> FindMissing(
+            IEnumerable<GameParticipant> source,
+            IEnumerable<GameParticipant> reference)
         {
             var referenceIds = new HashSet<string>(reference.Select(player => player.Id), StringComparer.Ordinal);
-            Func<MatchParticipant, bool> isMissingFromReference = player => !referenceIds.Contains(player.Id);
+            Func<GameParticipant, bool> isMissingFromReference = player => !referenceIds.Contains(player.Id);
 
             return source.Where(isMissingFromReference).ToList();
         }

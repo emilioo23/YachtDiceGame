@@ -62,8 +62,8 @@ namespace YachtDice.Views
         private bool _isBusy;
         private bool _isReconnecting;
         private string _hostId;
-        private List<MatchParticipant> _presentPlayers;
-        private List<MatchPlayer> _matchPlayers;
+        private List<GameParticipant> _presentPlayers;
+        private List<GamePlayer> _gamePlayers;
         private GameState _state;
 
         /// <summary>
@@ -109,15 +109,15 @@ namespace YachtDice.Views
 
         private bool CanHold => CanRoll && _state.RollsLeft < MaxRolls;
 
-        private static List<MatchParticipant> ToParticipants(RoomState room)
+        private static List<GameParticipant> ToParticipants(RoomState room)
         {
-            return room.Players.Select(player => new MatchParticipant(player.Id, player.DisplayName)).ToList();
+            return room.Players.Select(player => new GameParticipant(player.Id, player.DisplayName)).ToList();
         }
 
         private void ShowRoom(RoomState room)
         {
-            _matchPlayers = MatchPlayerFactory.CreateForRoom(room, _playerId);
-            MatchPlayersItemsControl.ItemsSource = _matchPlayers;
+            _gamePlayers = GamePlayerFactory.CreateForRoom(room, _playerId);
+            GamePlayersItemsControl.ItemsSource = _gamePlayers;
             _presentPlayers = ToParticipants(room);
             _hostId = room.HostId;
             ApplyHostControls(room);
@@ -283,7 +283,7 @@ namespace YachtDice.Views
             RenderTimer();
             RenderReconnectBanner();
             RenderDice();
-            _scorecard.Render(_state, _matchPlayers, HandleCategoryClickAsync);
+            _scorecard.Render(_state, _gamePlayers, HandleCategoryClickAsync);
             RenderRollButton();
         }
 
@@ -706,14 +706,14 @@ namespace YachtDice.Views
 
         private void AnnouncePresence(RoomState room, RoomEventType eventType)
         {
-            List<MatchParticipant> currentPlayers = ToParticipants(room);
+            List<GameParticipant> currentPlayers = ToParticipants(room);
 
-            foreach (MatchParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
+            foreach (GameParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
             {
                 AddNotice(PresenceMessages.GetDepartureMessage(eventType, departed.Name));
             }
 
-            foreach (MatchParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
+            foreach (GameParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
             {
                 AddNotice(PresenceMessages.GetReturnMessage(arrived.Name));
             }
@@ -747,8 +747,8 @@ namespace YachtDice.Views
 
         private void ShowRoomPlayers(RoomState room)
         {
-            _matchPlayers = MatchPlayerFactory.UpdatePresence(_matchPlayers, room.Players);
-            MatchPlayersItemsControl.ItemsSource = _matchPlayers;
+            _gamePlayers = GamePlayerFactory.UpdatePresence(_gamePlayers, room.Players);
+            GamePlayersItemsControl.ItemsSource = _gamePlayers;
         }
 
         /// <summary>
@@ -852,8 +852,8 @@ namespace YachtDice.Views
 
         private void KickPlayerButton_Click(object sender, RoutedEventArgs e)
         {
-            Func<MatchPlayer, bool> isActiveOpponent = player => !player.IsLocalPlayer && !player.HasLeft;
-            List<MatchPlayer> candidates = _matchPlayers
+            Func<GamePlayer, bool> isActiveOpponent = player => !player.IsLocalPlayer && !player.HasLeft;
+            List<GamePlayer> candidates = _gamePlayers
                 .Where(isActiveOpponent)
                 .ToList();
 
@@ -867,11 +867,11 @@ namespace YachtDice.Views
             }
         }
 
-        private void ShowKickMenu(IEnumerable<MatchPlayer> candidates)
+        private void ShowKickMenu(IEnumerable<GamePlayer> candidates)
         {
             var menu = new ContextMenu { PlacementTarget = KickPlayerButton, Placement = PlacementMode.Top };
 
-            foreach (MatchPlayer candidate in candidates)
+            foreach (GamePlayer candidate in candidates)
             {
                 var item = new MenuItem { Header = candidate.Name, Tag = candidate.Id };
                 item.Click += KickMenuItem_Click;
