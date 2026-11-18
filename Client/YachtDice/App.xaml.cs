@@ -2,11 +2,14 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Composition;
+using YachtDice.Resources;
 using YachtDice.Utils;
 using YachtDice.Views;
 
@@ -21,11 +24,14 @@ namespace YachtDice
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
         private const double PressedScale = 0.94;
         private const int PressMilliseconds = 80;
+        private const string UnhandledErrorLogMessage = "An error that no window handled reached the application.";
+        private const string UnobservedTaskLogMessage = "A background task failed and nobody observed its error.";
 
         private static readonly TimeSpan PressDuration = TimeSpan.FromMilliseconds(PressMilliseconds);
 
         private readonly ElementAnimator _animator = new ElementAnimator();
         private readonly PreferencesStore _preferencesStore = new PreferencesStore();
+        private readonly AppLogger _logger = new AppLogger(typeof(App));
         private ServiceProvider _provider;
         private ClientServices _services;
         private SoundEffectPlayer _clickSounds;
@@ -49,6 +55,8 @@ namespace YachtDice
         {
             base.OnStartup(e);
 
+            DispatcherUnhandledException += HandleDispatcherUnhandledException;
+            TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
             _provider = new ServiceCollection().AddClientComponents().BuildServiceProvider();
             _services = _provider.GetRequiredService<ClientServices>();
             _clickSounds = new SoundEffectPlayer(_services.Audio);
@@ -97,6 +105,26 @@ namespace YachtDice
             _preferencesStore.Save(CreateCurrentPreferences());
             _provider.Dispose();
             base.OnExit(e);
+        }
+
+        private void HandleDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            _logger.Error(e.Exception, UnhandledErrorLogMessage);
+            e.Handled = true;
+            CustomDialogWindow.ShowMessage(FindActiveWindow(), Strings.Dialogs_UnexpectedError);
+        }
+
+        private void HandleUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            _logger.Error(e.Exception, UnobservedTaskLogMessage);
+            e.SetObserved();
+        }
+
+        private Window FindActiveWindow()
+        {
+            Func<Window, bool> isActive = window => window.IsActive;
+
+            return Windows.OfType<Window>().FirstOrDefault(isActive) ?? MainWindow;
         }
 
         private static bool IsDarkThemeDictionary(ResourceDictionary dictionary)

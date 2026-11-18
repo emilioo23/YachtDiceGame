@@ -12,7 +12,8 @@ namespace YachtDice.Utils
     public class AppLogger
     {
         private const int MaxStackLevels = 3;
-        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}";
+        private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}{5}";
+        private const string CauseFormat = " Cause: {0}: {1}";
         private const string NullOwnerTypeMessage = "The type that owns the logger cannot be null.";
         private const string NullExceptionMessage = "The exception to log cannot be null.";
 
@@ -83,8 +84,26 @@ namespace YachtDice.Utils
                 message,
                 exception.GetType().Name,
                 exception.Message,
+                DescribeRootCause(exception),
                 Environment.NewLine,
                 limitedStack);
+        }
+
+        private static string DescribeRootCause(Exception exception)
+        {
+            Exception rootCause = exception.GetBaseException();
+            string description = string.Empty;
+
+            if (!ReferenceEquals(rootCause, exception))
+            {
+                description = string.Format(
+                    CultureInfo.InvariantCulture,
+                    CauseFormat,
+                    rootCause.GetType().Name,
+                    rootCause.Message);
+            }
+
+            return description;
         }
     }
 }

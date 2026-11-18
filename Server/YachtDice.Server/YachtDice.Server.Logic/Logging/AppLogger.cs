@@ -18,6 +18,7 @@ namespace YachtDice.Server.Logic.Logging
         private const string ErrorMessageFormat = "{0} {1}: {2}{3}{4}{5}";
         private const string CauseFormat = " Cause: {0}: {1}";
         private const string SqlCauseFormat = " Cause: {0} number {1}";
+        private const string SqlNumberFormat = "SQL Server error number {0}";
 
         private readonly ILog _log;
 
@@ -96,10 +97,25 @@ namespace YachtDice.Server.Logic.Logging
                 ErrorMessageFormat,
                 message,
                 exception.GetType().Name,
-                exception.Message,
+                DescribeMessage(exception),
                 DescribeRootCause(exception),
                 Environment.NewLine,
                 limitedStack);
+        }
+
+        private static string DescribeMessage(Exception exception)
+        {
+            string description = exception.Message;
+
+            if (exception is SqlException sqlException)
+            {
+                description = string.Format(
+                    CultureInfo.InvariantCulture,
+                    SqlNumberFormat,
+                    sqlException.Number);
+            }
+
+            return description;
         }
 
         private static string DescribeRootCause(Exception exception)

@@ -25,6 +25,7 @@ namespace YachtDice.Server.Host
         private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
         private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
         private const string WarmUpEmail = "warm-up@yachtdice.local";
+        private const string UnhandledErrorLogMessage = "An error that no service handled is closing the server.";
         private const string WarmUpFailedLogMessage =
             "The database could not be warmed up; the first request will be slower.";
 
@@ -41,6 +42,7 @@ namespace YachtDice.Server.Host
             ServiceProvider provider = null;
 
             Console.CancelKeyPress += HandleCancelKeyPress;
+            AppDomain.CurrentDomain.UnhandledException += HandleUnhandledException;
 
             try
             {
@@ -98,6 +100,13 @@ namespace YachtDice.Server.Host
             {
                 logger.Error(ex, WarmUpFailedLogMessage);
             }
+        }
+
+        private static void HandleUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var logger = new AppLogger(typeof(Program));
+
+            logger.Error((Exception)e.ExceptionObject, UnhandledErrorLogMessage);
         }
 
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
