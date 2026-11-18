@@ -41,7 +41,7 @@ namespace YachtDice.Views
         /// <param name="session">Session of the player who played the game.</param>
         /// <param name="standings">Players ordered from the first place to the last one.</param>
         /// <param name="playerId">Identifier of the local player in the game.</param>
-        public ResultsWindow(PlayerSession session, IReadOnlyList<StandingEntry> standings, string playerId)
+        public ResultsWindow(PlayerSession session, IReadOnlyList<FinalPlace> standings, string playerId)
         {
             if (standings == null)
             {
@@ -59,7 +59,7 @@ namespace YachtDice.Views
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(session, standings, playerId);
 
             ShowWinner(standings);
-            Func<StandingEntry, StandingRow> createRow = standing => CreateRow(standing, playerId);
+            Func<FinalPlace, StandingRow> createRow = standing => CreateRow(standing, playerId);
             StandingsItemsControl.ItemsSource = standings.Select(createRow).ToList();
 
             if (!session.IsGuest)
@@ -68,7 +68,7 @@ namespace YachtDice.Views
             }
         }
 
-        private StandingRow CreateRow(StandingEntry standing, string playerId)
+        private StandingRow CreateRow(FinalPlace standing, string playerId)
         {
             bool isOpponent = standing.PlayerId != playerId;
 
@@ -89,14 +89,14 @@ namespace YachtDice.Views
             };
         }
 
-        private static int FindExperienceGained(IReadOnlyList<StandingEntry> standings, string playerId)
+        private static int FindExperienceGained(IReadOnlyList<FinalPlace> standings, string playerId)
         {
-            Func<StandingEntry, bool> isLocalPlayer = standing => standing.PlayerId == playerId;
+            Func<FinalPlace, bool> isLocalPlayer = standing => standing.PlayerId == playerId;
 
             return standings.Where(isLocalPlayer).Select(standing => standing.ExperienceGained).FirstOrDefault();
         }
 
-        private static string GetPlaceText(StandingEntry standing)
+        private static string GetPlaceText(FinalPlace standing)
         {
             var medals = new Dictionary<int, string>
             {
@@ -114,9 +114,9 @@ namespace YachtDice.Views
             return text;
         }
 
-        private void ShowWinner(IReadOnlyList<StandingEntry> standings)
+        private void ShowWinner(IReadOnlyList<FinalPlace> standings)
         {
-            List<StandingEntry> winners = standings.Where(standing => standing.IsWinner).ToList();
+            List<FinalPlace> winners = standings.Where(standing => standing.IsWinner).ToList();
 
             if (winners.Count == SingleWinner)
             {

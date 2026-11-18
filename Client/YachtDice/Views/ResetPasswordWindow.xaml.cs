@@ -37,24 +37,24 @@ namespace YachtDice.Views
             _logger = new AppLogger(GetType());
             _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             EmailTextBlock.Text = email;
-            CodeTextBox.MaxLength = ResetPasswordInputValidator.CodeLength;
+            CodeTextBox.MaxLength = ResetPasswordValidator.CodeLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);
             CodeTextBox.Focus();
         }
 
-        private static string GetInputMessage(ResetPasswordInputStatus status)
+        private static string GetInputMessage(ResetPasswordStatus status)
         {
             string message;
 
             switch (status)
             {
-                case ResetPasswordInputStatus.IncompleteCode:
+                case ResetPasswordStatus.IncompleteCode:
                     message = Strings.ResetPassword_ErrorIncompleteCode;
                     break;
-                case ResetPasswordInputStatus.EmptyPassword:
+                case ResetPasswordStatus.EmptyPassword:
                     message = Strings.ResetPassword_ErrorEmptyPassword;
                     break;
-                case ResetPasswordInputStatus.PasswordsDoNotMatch:
+                case ResetPasswordStatus.PasswordsDoNotMatch:
                     message = Strings.ResetPassword_ErrorPasswordsDoNotMatch;
                     break;
                 default:
@@ -121,12 +121,12 @@ namespace YachtDice.Views
 
         private async Task ChangePasswordAsync()
         {
-            ResetPasswordInputStatus inputStatus = ResetPasswordInputValidator.Validate(
+            ResetPasswordStatus inputStatus = ResetPasswordValidator.Validate(
                 CodeTextBox.Text.Trim(),
                 NewPasswordBox.Password,
                 ConfirmPasswordBox.Password);
 
-            if (inputStatus == ResetPasswordInputStatus.Valid)
+            if (inputStatus == ResetPasswordStatus.Valid)
             {
                 await SendNewPasswordAsync();
             }

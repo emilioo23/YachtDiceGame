@@ -638,7 +638,7 @@ namespace YachtDice.Views
 
         private void GoToResultsWindow()
         {
-            IEnumerable<StandingEntry> entries = _state.Players.Select(CreateStandingEntry);
+            IEnumerable<FinalPlace> entries = _state.Players.Select(CreateFinalPlace);
 
             if (_state.HasResultSaveFailed)
             {
@@ -653,9 +653,9 @@ namespace YachtDice.Views
                 _playerId));
         }
 
-        private static StandingEntry CreateStandingEntry(PlayerScorecard card)
+        private static FinalPlace CreateFinalPlace(PlayerScorecard card)
         {
-            return new StandingEntry(card.PlayerId, card.Name, card.Total)
+            return new FinalPlace(card.PlayerId, card.Name, card.Total)
             {
                 ExperienceGained = card.ExperienceGained,
                 UpperSubtotal = card.UpperSubtotal,

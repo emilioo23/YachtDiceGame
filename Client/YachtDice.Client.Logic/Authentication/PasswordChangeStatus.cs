@@ -4,7 +4,7 @@
     /// Result of checking what the player wrote to change the password from the settings, before asking the
     /// server.
     /// </summary>
-    public enum PasswordChangeInputStatus
+    public enum PasswordChangeStatus
     {
         /// <summary>Everything the player wrote can be sent to the server.</summary>
         Valid,

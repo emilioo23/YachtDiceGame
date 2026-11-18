@@ -461,12 +461,12 @@ namespace YachtDice.Views
 
         private async Task ChangePasswordAsync()
         {
-            PasswordChangeInputStatus inputStatus = PasswordChangeInputValidator.Validate(
+            PasswordChangeStatus inputStatus = PasswordChangeValidator.Validate(
                 CurrentPasswordBox.Password,
                 NewPasswordBox.Password,
                 ConfirmNewPasswordBox.Password);
 
-            if (inputStatus == PasswordChangeInputStatus.Valid)
+            if (inputStatus == PasswordChangeStatus.Valid)
             {
                 await SendPasswordChangeAsync();
             }
@@ -495,19 +495,19 @@ namespace YachtDice.Views
             }
         }
 
-        private static string GetPasswordInputMessage(PasswordChangeInputStatus status)
+        private static string GetPasswordInputMessage(PasswordChangeStatus status)
         {
             string message = Strings.Dialogs_UnexpectedError;
 
             switch (status)
             {
-                case PasswordChangeInputStatus.EmptyCurrentPassword:
+                case PasswordChangeStatus.EmptyCurrentPassword:
                     message = Strings.Settings_Password_ErrorEmptyCurrent;
                     break;
-                case PasswordChangeInputStatus.EmptyNewPassword:
+                case PasswordChangeStatus.EmptyNewPassword:
                     message = Strings.ResetPassword_ErrorEmptyPassword;
                     break;
-                case PasswordChangeInputStatus.PasswordsDoNotMatch:
+                case PasswordChangeStatus.PasswordsDoNotMatch:
                     message = Strings.ResetPassword_ErrorPasswordsDoNotMatch;
                     break;
             }

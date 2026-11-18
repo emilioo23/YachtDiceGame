@@ -6,7 +6,7 @@ namespace YachtDice.Client.Tests.Authentication
     /// <summary>
     /// Checks made on the three passwords of the password change before calling the server.
     /// </summary>
-    public class PasswordChangeInputValidatorTests
+    public class PasswordChangeValidatorTests
     {
         private const string CurrentPassword = "Old123!";
         private const string NewPassword = "New456!";
@@ -16,10 +16,10 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void Validate_ThreePasswordsWithMatchingConfirmation_ReturnsValid()
         {
-            PasswordChangeInputStatus status =
-                PasswordChangeInputValidator.Validate(CurrentPassword, NewPassword, NewPassword);
+            PasswordChangeStatus status =
+                PasswordChangeValidator.Validate(CurrentPassword, NewPassword, NewPassword);
 
-            Assert.Equal(PasswordChangeInputStatus.Valid, status);
+            Assert.Equal(PasswordChangeStatus.Valid, status);
         }
 
         [Theory]
@@ -27,10 +27,10 @@ namespace YachtDice.Client.Tests.Authentication
         [InlineData(null)]
         public void Validate_EmptyCurrentPassword_ReturnsEmptyCurrentPassword(string currentPassword)
         {
-            PasswordChangeInputStatus status =
-                PasswordChangeInputValidator.Validate(currentPassword, NewPassword, NewPassword);
+            PasswordChangeStatus status =
+                PasswordChangeValidator.Validate(currentPassword, NewPassword, NewPassword);
 
-            Assert.Equal(PasswordChangeInputStatus.EmptyCurrentPassword, status);
+            Assert.Equal(PasswordChangeStatus.EmptyCurrentPassword, status);
         }
 
         [Theory]
@@ -39,28 +39,28 @@ namespace YachtDice.Client.Tests.Authentication
         [InlineData("      ")]
         public void Validate_EmptyNewPassword_ReturnsEmptyNewPassword(string newPassword)
         {
-            PasswordChangeInputStatus status =
-                PasswordChangeInputValidator.Validate(CurrentPassword, newPassword, newPassword);
+            PasswordChangeStatus status =
+                PasswordChangeValidator.Validate(CurrentPassword, newPassword, newPassword);
 
-            Assert.Equal(PasswordChangeInputStatus.EmptyNewPassword, status);
+            Assert.Equal(PasswordChangeStatus.EmptyNewPassword, status);
         }
 
         [Fact]
         public void Validate_ConfirmationDifferentFromTheNewPassword_ReturnsPasswordsDoNotMatch()
         {
-            PasswordChangeInputStatus status =
-                PasswordChangeInputValidator.Validate(CurrentPassword, NewPassword, OtherPassword);
+            PasswordChangeStatus status =
+                PasswordChangeValidator.Validate(CurrentPassword, NewPassword, OtherPassword);
 
-            Assert.Equal(PasswordChangeInputStatus.PasswordsDoNotMatch, status);
+            Assert.Equal(PasswordChangeStatus.PasswordsDoNotMatch, status);
         }
 
         [Fact]
         public void Validate_CurrentPasswordOfOnlySpaces_ReturnsValid()
         {
-            PasswordChangeInputStatus status =
-                PasswordChangeInputValidator.Validate(Spaces, NewPassword, NewPassword);
+            PasswordChangeStatus status =
+                PasswordChangeValidator.Validate(Spaces, NewPassword, NewPassword);
 
-            Assert.Equal(PasswordChangeInputStatus.Valid, status);
+            Assert.Equal(PasswordChangeStatus.Valid, status);
         }
     }
 }

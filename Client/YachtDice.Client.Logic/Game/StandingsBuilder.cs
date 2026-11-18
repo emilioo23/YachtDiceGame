@@ -19,9 +19,9 @@ namespace YachtDice.Client.Logic.Game
         /// </summary>
         /// <param name="entries">Players of the game, in any order.</param>
         /// <returns>The players from the first place to the last. Players that tie keep their order.</returns>
-        public static IReadOnlyList<StandingEntry> Build(IEnumerable<StandingEntry> entries)
+        public static IReadOnlyList<FinalPlace> Build(IEnumerable<FinalPlace> entries)
         {
-            List<StandingEntry> sorted = entries.OrderByDescending(standingEntry => standingEntry.Total).ToList();
+            List<FinalPlace> sorted = entries.OrderByDescending(finalPlace => finalPlace.Total).ToList();
 
             for (var position = 0; position < sorted.Count; position++)
             {
@@ -31,7 +31,7 @@ namespace YachtDice.Client.Logic.Game
             return sorted;
         }
 
-        private static int FindRank(IReadOnlyList<StandingEntry> sorted, int position)
+        private static int FindRank(IReadOnlyList<FinalPlace> sorted, int position)
         {
             var firstWithSameTotal = 0;
 

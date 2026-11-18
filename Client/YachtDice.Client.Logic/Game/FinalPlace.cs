@@ -4,7 +4,7 @@ namespace YachtDice.Client.Logic.Game
     /// <summary>
     /// A player and the points that the player has at the end of a game.
     /// </summary>
-    public sealed class StandingEntry
+    public sealed class FinalPlace
     {
         private const string NullValueMessage = "A value that the standing entry needs cannot be null.";
 
@@ -14,7 +14,7 @@ namespace YachtDice.Client.Logic.Game
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="name">Name that the screens show for the player.</param>
         /// <param name="total">Total points of the player.</param>
-        public StandingEntry(string playerId, string name, int total)
+        public FinalPlace(string playerId, string name, int total)
         {
             PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
             Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);

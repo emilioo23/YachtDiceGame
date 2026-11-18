@@ -6,7 +6,7 @@ namespace YachtDice.Client.Tests.Authentication
     /// <summary>
     /// Shape of the backup code that the player writes instead of the code sent by email.
     /// </summary>
-    public class BackupCodeInputValidatorTests
+    public class BackupCodeValidatorTests
     {
         private const string ValidCode = "12345678";
         private const string ShortCode = "123456";
@@ -15,7 +15,7 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void IsValid_EightDigits_ReturnsTrue()
         {
-            bool isValid = BackupCodeInputValidator.IsValid(ValidCode);
+            bool isValid = BackupCodeValidator.IsValid(ValidCode);
 
             Assert.True(isValid);
         }
@@ -23,7 +23,7 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void IsValid_FewerDigits_ReturnsFalse()
         {
-            bool isValid = BackupCodeInputValidator.IsValid(ShortCode);
+            bool isValid = BackupCodeValidator.IsValid(ShortCode);
 
             Assert.False(isValid);
         }
@@ -31,7 +31,7 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void IsValid_Letters_ReturnsFalse()
         {
-            bool isValid = BackupCodeInputValidator.IsValid(CodeWithLetters);
+            bool isValid = BackupCodeValidator.IsValid(CodeWithLetters);
 
             Assert.False(isValid);
         }
@@ -39,7 +39,7 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void IsValid_Null_ReturnsFalse()
         {
-            bool isValid = BackupCodeInputValidator.IsValid(null);
+            bool isValid = BackupCodeValidator.IsValid(null);
 
             Assert.False(isValid);
         }

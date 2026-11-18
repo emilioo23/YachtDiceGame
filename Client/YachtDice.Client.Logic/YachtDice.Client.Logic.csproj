@@ -46,12 +46,12 @@
     <Compile Include="Audio\AudioSettings.cs" />
     <Compile Include="Authentication\EmailMask.cs" />
     <Compile Include="Authentication\RegistrationLimits.cs" />
-    <Compile Include="Authentication\PasswordChangeInputStatus.cs" />
-    <Compile Include="Authentication\BackupCodeInputValidator.cs" />
+    <Compile Include="Authentication\PasswordChangeStatus.cs" />
+    <Compile Include="Authentication\BackupCodeValidator.cs" />
     <Compile Include="Friends\ReportLimits.cs" />
-    <Compile Include="Authentication\PasswordChangeInputValidator.cs" />
-    <Compile Include="Authentication\ResetPasswordInputStatus.cs" />
-    <Compile Include="Authentication\ResetPasswordInputValidator.cs" />
+    <Compile Include="Authentication\PasswordChangeValidator.cs" />
+    <Compile Include="Authentication\ResetPasswordStatus.cs" />
+    <Compile Include="Authentication\ResetPasswordValidator.cs" />
     <Compile Include="Avatars\AvatarOption.cs" />
     <Compile Include="Avatars\AvatarOptionBuilder.cs" />
     <Compile Include="Avatars\AvatarRequirement.cs" />
@@ -64,7 +64,7 @@
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
     <Compile Include="Game\HeldDiceSelection.cs" />
-    <Compile Include="Game\StandingEntry.cs" />
+    <Compile Include="Game\FinalPlace.cs" />
     <Compile Include="Game\StandingsBuilder.cs" />
     <Compile Include="Game\StateVersionGate.cs" />
     <Compile Include="Game\ReconnectWaitTracker.cs" />

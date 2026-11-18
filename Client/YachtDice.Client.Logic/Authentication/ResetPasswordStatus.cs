@@ -3,7 +3,7 @@
     /// <summary>
     /// Result of checking what the player wrote to reset the password, before asking the server.
     /// </summary>
-    public enum ResetPasswordInputStatus
+    public enum ResetPasswordStatus
     {
         /// <summary>Everything the player wrote can be sent to the server.</summary>
         Valid,

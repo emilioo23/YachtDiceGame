@@ -7,7 +7,7 @@ namespace YachtDice.Client.Tests.Authentication
     /// <summary>
     /// Checks made on the data of the password reset before calling the server.
     /// </summary>
-    public class ResetPasswordInputValidatorTests
+    public class ResetPasswordValidatorTests
     {
         private const string Code = "123456";
         private const string Password = "New456!";
@@ -18,9 +18,9 @@ namespace YachtDice.Client.Tests.Authentication
         [Fact]
         public void Validate_CompleteCodeAndMatchingPasswords_ReturnsValid()
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, Password, Password);
+            ResetPasswordStatus status = ValidateInput(Code, Password, Password);
 
-            Assert.Equal(ResetPasswordInputStatus.Valid, status);
+            Assert.Equal(ResetPasswordStatus.Valid, status);
         }
 
         [Theory]
@@ -31,9 +31,9 @@ namespace YachtDice.Client.Tests.Authentication
         [InlineData(null)]
         public void Validate_CodeThatIsNotSixDigits_ReturnsIncompleteCode(string code)
         {
-            ResetPasswordInputStatus status = ValidateInput(code, Password, Password);
+            ResetPasswordStatus status = ValidateInput(code, Password, Password);
 
-            Assert.Equal(ResetPasswordInputStatus.IncompleteCode, status);
+            Assert.Equal(ResetPasswordStatus.IncompleteCode, status);
         }
 
         [Theory]
@@ -42,62 +42,62 @@ namespace YachtDice.Client.Tests.Authentication
         [InlineData(null)]
         public void Validate_BlankPassword_ReturnsEmptyPassword(string password)
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, password, password);
+            ResetPasswordStatus status = ValidateInput(Code, password, password);
 
-            Assert.Equal(ResetPasswordInputStatus.EmptyPassword, status);
+            Assert.Equal(ResetPasswordStatus.EmptyPassword, status);
         }
 
         [Fact]
         public void Validate_ConfirmationDifferentFromPassword_ReturnsPasswordsDoNotMatch()
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, Password, OtherPassword);
+            ResetPasswordStatus status = ValidateInput(Code, Password, OtherPassword);
 
-            Assert.Equal(ResetPasswordInputStatus.PasswordsDoNotMatch, status);
+            Assert.Equal(ResetPasswordStatus.PasswordsDoNotMatch, status);
         }
 
         [Fact]
         public void Validate_CodeOfSpaces_ReturnsIncompleteCode()
         {
-            ResetPasswordInputStatus status = ValidateInput(SixSpaces, Password, Password);
+            ResetPasswordStatus status = ValidateInput(SixSpaces, Password, Password);
 
-            Assert.Equal(ResetPasswordInputStatus.IncompleteCode, status);
+            Assert.Equal(ResetPasswordStatus.IncompleteCode, status);
         }
 
         [Fact]
         public void Validate_CodeAndPasswordBothWrong_ReportsTheCodeFirst()
         {
-            ResetPasswordInputStatus status = ValidateInput(ShortCode, string.Empty, Password);
+            ResetPasswordStatus status = ValidateInput(ShortCode, string.Empty, Password);
 
-            Assert.Equal(ResetPasswordInputStatus.IncompleteCode, status);
+            Assert.Equal(ResetPasswordStatus.IncompleteCode, status);
         }
 
         [Fact]
         public void Validate_BlankPasswordAndDifferentConfirmation_ReportsTheEmptyPassword()
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, string.Empty, Password);
+            ResetPasswordStatus status = ValidateInput(Code, string.Empty, Password);
 
-            Assert.Equal(ResetPasswordInputStatus.EmptyPassword, status);
+            Assert.Equal(ResetPasswordStatus.EmptyPassword, status);
         }
 
         [Fact]
         public void Validate_NullConfirmation_ReturnsPasswordsDoNotMatch()
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, Password, null);
+            ResetPasswordStatus status = ValidateInput(Code, Password, null);
 
-            Assert.Equal(ResetPasswordInputStatus.PasswordsDoNotMatch, status);
+            Assert.Equal(ResetPasswordStatus.PasswordsDoNotMatch, status);
         }
 
         [Fact]
         public void Validate_ConfirmationWithOtherCase_ReturnsPasswordsDoNotMatch()
         {
-            ResetPasswordInputStatus status = ValidateInput(Code, Password, Password.ToUpperInvariant());
+            ResetPasswordStatus status = ValidateInput(Code, Password, Password.ToUpperInvariant());
 
-            Assert.Equal(ResetPasswordInputStatus.PasswordsDoNotMatch, status);
+            Assert.Equal(ResetPasswordStatus.PasswordsDoNotMatch, status);
         }
 
-        private static ResetPasswordInputStatus ValidateInput(string code, string newPassword, string confirmation)
+        private static ResetPasswordStatus ValidateInput(string code, string newPassword, string confirmation)
         {
-            return ResetPasswordInputValidator.Validate(code, newPassword, confirmation);
+            return ResetPasswordValidator.Validate(code, newPassword, confirmation);
         }
     }
 }

@@ -44,9 +44,9 @@
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
     <Compile Include="Authentication\EmailMaskTests.cs" />
-    <Compile Include="Authentication\BackupCodeInputValidatorTests.cs" />
-    <Compile Include="Authentication\PasswordChangeInputValidatorTests.cs" />
-    <Compile Include="Authentication\ResetPasswordInputValidatorTests.cs" />
+    <Compile Include="Authentication\BackupCodeValidatorTests.cs" />
+    <Compile Include="Authentication\PasswordChangeValidatorTests.cs" />
+    <Compile Include="Authentication\ResetPasswordValidatorTests.cs" />
     <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
-    <Compile Include="Game\StandingEntryTests.cs" />
+    <Compile Include="Game\FinalPlaceTests.cs" />
     <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
     <Compile Include="Utils\ProgressTextsTests.cs" />
     <Compile Include="Utils\BackupCodesMessagesTests.cs" />

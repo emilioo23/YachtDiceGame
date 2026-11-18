@@ -5,7 +5,7 @@ namespace YachtDice.Client.Logic.Authentication
     /// <summary>
     /// Checks the backup code that the player writes instead of the code sent by email, before asking the server.
     /// </summary>
-    public static class BackupCodeInputValidator
+    public static class BackupCodeValidator
     {
         /// <summary>
         /// Number of digits in a backup code. It must match the length that the server creates.

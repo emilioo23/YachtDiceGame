@@ -74,7 +74,7 @@ namespace YachtDice.Views
                 UseBackupCodeLink.Visibility = Visibility.Visible;
             }
 
-            BackupCodeTextBox.MaxLength = BackupCodeInputValidator.BackupCodeLength;
+            BackupCodeTextBox.MaxLength = BackupCodeValidator.BackupCodeLength;
 
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
@@ -173,7 +173,7 @@ namespace YachtDice.Views
         {
             string backupCode = BackupCodeTextBox.Text.Trim();
 
-            if (BackupCodeInputValidator.IsValid(backupCode))
+            if (BackupCodeValidator.IsValid(backupCode))
             {
                 UseBackupCodeButton.IsEnabled = false;
                 await VerifyCodeAsync(backupCode);

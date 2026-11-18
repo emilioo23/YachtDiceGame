@@ -6,7 +6,7 @@ namespace YachtDice.Client.Tests.Game
     /// <summary>
     /// Place and points of a player in the final scoreboard.
     /// </summary>
-    public class StandingEntryTests
+    public class FinalPlaceTests
     {
         private const string PlayerId = "a";
         private const string PlayerName = "Ana";
@@ -21,7 +21,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsWinner_FirstRank_ReturnsTrue()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, Total) { Rank = StandingsBuilder.FirstRank };
+            var entry = new FinalPlace(PlayerId, PlayerName, Total) { Rank = StandingsBuilder.FirstRank };
 
             Assert.True(entry.IsWinner);
         }
@@ -29,7 +29,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsWinner_SecondRank_ReturnsFalse()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, Total) { Rank = SecondRank };
+            var entry = new FinalPlace(PlayerId, PlayerName, Total) { Rank = SecondRank };
 
             Assert.False(entry.IsWinner);
         }
@@ -37,7 +37,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void LowerTotal_EntryWithBreakdown_LeavesOutTheUpperSectionAndTheBonuses()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, FullTotal)
+            var entry = new FinalPlace(PlayerId, PlayerName, FullTotal)
             {
                 UpperSubtotal = UpperSubtotal,
                 UpperBonus = UpperBonus,
@@ -50,7 +50,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void LowerTotal_EntryWithoutBreakdown_IsTheWholeTotal()
         {
-            var entry = new StandingEntry(PlayerId, PlayerName, Total);
+            var entry = new FinalPlace(PlayerId, PlayerName, Total);
 
             Assert.Equal(Total, entry.LowerTotal);
         }
