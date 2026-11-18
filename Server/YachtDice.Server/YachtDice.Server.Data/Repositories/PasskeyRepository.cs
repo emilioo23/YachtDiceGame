@@ -75,6 +75,26 @@ namespace YachtDice.Server.Data.Repositories
             DatabaseOperation.Save(context => UpdateSignCount(context, passkeyId, signCount), UpdateFailedMessage);
         }
 
+        /// <summary>
+        /// Deletes a passkey.
+        /// </summary>
+        /// <param name="passkeyId">Identifier of the passkey.</param>
+        public void Delete(int passkeyId)
+        {
+            DatabaseOperation.Save(context => RemoveEntity(context, passkeyId), UpdateFailedMessage);
+        }
+
+        private static void RemoveEntity(YachtDiceContext context, int passkeyId)
+        {
+            Expression<Func<Passkey, bool>> isPasskey = key => key.Id == passkeyId;
+            Passkey entity = context.Passkey.Where(isPasskey).FirstOrDefault();
+
+            if (entity != null)
+            {
+                context.Passkey.Remove(entity);
+            }
+        }
+
         private static List<PasskeyRecord> SelectByPlayer(YachtDiceContext context, int playerId)
         {
             Expression<Func<Passkey, bool>> isPlayerKey = key => key.PlayerId == playerId;

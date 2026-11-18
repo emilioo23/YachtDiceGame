@@ -10,6 +10,8 @@ namespace YachtDice.Server.Tests.Passkeys
     /// </summary>
     public class AuthenticatorDataTests
     {
+        private const string AuthenticatorDataKey = "authData";
+        private const string ChallengeText = "AA";
         private const int ShortSize = 36;
         private const int FlagsOffset = 32;
         private const int CounterLastOffset = 36;
@@ -43,12 +45,14 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void TryParse_CounterInTheLastByte_ReadsTheSignCount()
         {
+            long signCountExpected = CounterValue;
             byte[] bytes = CreateData(AuthenticatorOptions.PresentAndVerified);
 
             bytes[CounterLastOffset] = CounterValue;
             AuthenticatorData.TryParse(bytes, out AuthenticatorData data);
+            long signCountResult = data.SignCount;
 
-            Assert.Equal(CounterValue, data.SignCount);
+            Assert.Equal(signCountExpected, signCountResult);
         }
 
         [Fact]
@@ -66,15 +70,17 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             using (var authenticator = new FakeAuthenticator())
             {
-                PasskeyChallenge challenge = new PasskeyChallenge(PasskeyStartStatus.Created) { Challenge = "AA" };
+                byte[] credentialIdExpected = authenticator.CredentialId;
+                var challenge = new PasskeyChallenge(PasskeyStartStatus.Created) { Challenge = ChallengeText };
                 PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
                 Base64Url.TryDecode(attestation.AttestationObject, out byte[] attestationObject);
                 int start = IndexOfAuthenticatorData(attestationObject);
                 byte[] bytes = attestationObject.Skip(start).ToArray();
 
                 AuthenticatorData.TryParse(bytes, out AuthenticatorData data);
+                byte[] credentialIdResult = data.CredentialId;
 
-                Assert.Equal(authenticator.CredentialId, data.CredentialId);
+                Assert.Equal(credentialIdExpected, credentialIdResult);
             }
         }
 
@@ -89,7 +95,7 @@ namespace YachtDice.Server.Tests.Passkeys
 
         private static int IndexOfAuthenticatorData(byte[] attestationObject)
         {
-            byte[] marker = Encoding.UTF8.GetBytes("authData");
+            byte[] marker = Encoding.UTF8.GetBytes(AuthenticatorDataKey);
             int markerIndex = Enumerable.Range(0, attestationObject.Length - marker.Length)
                 .First(index => attestationObject.Skip(index).Take(marker.Length).SequenceEqual(marker));
             const int HeaderAfterMarker = 2;

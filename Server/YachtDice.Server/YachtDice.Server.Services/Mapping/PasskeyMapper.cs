@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace YachtDice.Server.Services.Mapping
@@ -30,6 +31,18 @@ namespace YachtDice.Server.Services.Mapping
                 UserName = challenge.UserName,
                 ExcludedCredentialIds = challenge.ExcludedCredentialIds.ToList()
             };
+        }
+
+        /// <summary>
+        /// Converts the passkeys of the logic layer into the contract.
+        /// </summary>
+        /// <param name="summaries">Passkeys of the logic layer.</param>
+        /// <returns>The passkeys for the client.</returns>
+        public static List<Contracts.PasskeyInfoData> ToContract(IEnumerable<LogicPasskeys.PasskeySummary> summaries)
+        {
+            return summaries
+                .Select(summary => new Contracts.PasskeyInfoData { Id = summary.Id, Name = summary.Name })
+                .ToList();
         }
 
         /// <summary>

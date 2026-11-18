@@ -2532,4 +2532,19 @@
   <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
     <value>Adicionar passkey</value>
   </data>
+  <data name="Passkey_Removed" xml:space="preserve">
+    <value>A passkey foi removida.</value>
+  </data>
+  <data name="Passkey_ErrorNotFound" xml:space="preserve">
+    <value>Essa passkey não existe mais.</value>
+  </data>
+  <data name="Settings_Security_ButtonRemovePasskey" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyConfirm" xml:space="preserve">
+    <value>Tem certeza de que quer remover esta passkey? Você não poderá mais entrar com ela.</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyPasswordRequired" xml:space="preserve">
+    <value>Escolha a passkey e digite sua senha atual para removê-la.</value>
+  </data>
 </root>

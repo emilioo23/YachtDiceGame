@@ -108,6 +108,7 @@
     <Compile Include="Passkeys\PasskeyChallengeStoreTests.cs" />
     <Compile Include="Passkeys\PasskeyLoginTests.cs" />
     <Compile Include="Passkeys\PasskeyPublicKeyTests.cs" />
+    <Compile Include="Passkeys\PasskeyRemovalTests.cs" />
     <Compile Include="Passkeys\PasskeyRegistrationTests.cs" />
     <Compile Include="Passkeys\PasskeyTestContext.cs" />
     <Compile Include="Players\AchievementCatalogTests.cs" />

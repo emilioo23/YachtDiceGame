@@ -68,6 +68,34 @@ namespace YachtDice.Utils
         }
 
         /// <summary>
+        /// Gets the message that matches the answer of the server when the player removes a passkey.
+        /// </summary>
+        /// <param name="resultCode">Outcome reported by the server.</param>
+        /// <returns>The text to show to the player.</returns>
+        public static string GetRemovalMessage(PasskeyRemovalResultCode resultCode)
+        {
+            string message;
+
+            switch (resultCode)
+            {
+                case PasskeyRemovalResultCode.Removed:
+                    message = Strings.Passkey_Removed;
+                    break;
+                case PasskeyRemovalResultCode.InvalidPassword:
+                    message = Strings.Dialogs_InvalidCredentials;
+                    break;
+                case PasskeyRemovalResultCode.PasskeyNotFound:
+                    message = Strings.Passkey_ErrorNotFound;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
+                    break;
+            }
+
+            return message;
+        }
+
+        /// <summary>
         /// Gets the message that matches the outcome of the login with a passkey.
         /// </summary>
         /// <param name="resultCode">Outcome reported by the server.</param>

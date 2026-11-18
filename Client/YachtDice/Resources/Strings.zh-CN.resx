@@ -2532,4 +2532,19 @@
   <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
     <value>添加通行密钥</value>
   </data>
+  <data name="Passkey_Removed" xml:space="preserve">
+    <value>已移除该通行密钥。</value>
+  </data>
+  <data name="Passkey_ErrorNotFound" xml:space="preserve">
+    <value>该通行密钥已不存在。</value>
+  </data>
+  <data name="Settings_Security_ButtonRemovePasskey" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyConfirm" xml:space="preserve">
+    <value>确定要移除此通行密钥吗？之后将无法用它登录。</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyPasswordRequired" xml:space="preserve">
+    <value>请选择通行密钥并输入当前密码以移除。</value>
+  </data>
 </root>

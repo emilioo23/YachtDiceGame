@@ -38,6 +38,8 @@ namespace YachtDice.Views
         private const int NoMargin = 0;
         private const string NullSessionMessage = "The session of the player cannot be null.";
         private const string PasskeyFailedLogMessage = "Windows could not create the passkey.";
+        private const int NoSelection = -1;
+        private const int FirstItem = 0;
 
         private readonly PlayerSession _session;
         private readonly AudioSettings _audio;
@@ -57,6 +59,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             TwoFactorPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
+            PasskeyPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             CurrentPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             NewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             ConfirmNewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
@@ -80,7 +83,7 @@ namespace YachtDice.Views
             if (!session.IsGuest)
             {
                 _ = LoadSecuritySummaryAsync();
-                _ = LoadPasskeyCountAsync();
+                _ = LoadPasskeysAsync();
             }
         }
 
@@ -147,11 +150,11 @@ namespace YachtDice.Views
             }
         }
 
-        private async Task LoadPasskeyCountAsync()
+        private async Task LoadPasskeysAsync()
         {
             try
             {
-                ShowPasskeyCount(await _twoFactorGateway.CountPasskeysAsync(_session.SessionToken));
+                ShowPasskeys(await _twoFactorGateway.ListPasskeysAsync(_session.SessionToken));
             }
             catch (GatewayException ex)
             {
@@ -159,14 +162,54 @@ namespace YachtDice.Views
             }
         }
 
-        private void ShowPasskeyCount(int passkeyCount)
+        private void ShowPasskeys(PasskeyInfoData[] passkeys)
         {
             bool isAvailable = _passkeys.IsAvailable();
+            bool hasPasskeys = passkeys.Length > 0;
 
             PasskeysStatusTextBlock.Text = isAvailable
-                ? string.Format(Strings.Settings_Security_PasskeysCount, passkeyCount)
+                ? string.Format(Strings.Settings_Security_PasskeysCount, passkeys.Length)
                 : Strings.Passkey_ErrorUnavailable;
             AddPasskeyButton.IsEnabled = isAvailable;
+            PasskeysComboBox.ItemsSource = passkeys;
+            PasskeysComboBox.SelectedIndex = hasPasskeys ? FirstItem : NoSelection;
+            RemovePasskeyButton.IsEnabled = hasPasskeys;
+        }
+
+        private async void RemovePasskeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isReady = PasskeysComboBox.SelectedValue != null
+                && !string.IsNullOrEmpty(PasskeyPasswordBox.Password);
+
+            if (!isReady)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_Security_RemovePasskeyPasswordRequired);
+            }
+            else if (CustomDialogWindow.Confirm(this, Strings.Settings_Security_RemovePasskeyConfirm))
+            {
+                RemovePasskeyButton.IsEnabled = false;
+
+                try
+                {
+                    await GatewayCallRunner.RunAsync(this, _logger, RemoveSelectedPasskeyAsync);
+                }
+                finally
+                {
+                    RemovePasskeyButton.IsEnabled = PasskeysComboBox.Items.Count > 0;
+                }
+            }
+        }
+
+        private async Task RemoveSelectedPasskeyAsync()
+        {
+            PasskeyRemovalResultCode result = await _twoFactorGateway.RemovePasskeyAsync(
+                _session.SessionToken,
+                (int)PasskeysComboBox.SelectedValue,
+                PasskeyPasswordBox.Password);
+
+            PasskeyPasswordBox.Clear();
+            CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetRemovalMessage(result));
+            ShowPasskeys(await _twoFactorGateway.ListPasskeysAsync(_session.SessionToken));
         }
 
         private async void AddPasskeyButton_Click(object sender, RoutedEventArgs e)
@@ -208,7 +251,7 @@ namespace YachtDice.Views
                     await _twoFactorGateway.CompletePasskeyRegistrationAsync(_session.SessionToken, attestation);
 
                 CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetRegistrationMessage(result));
-                ShowPasskeyCount(await _twoFactorGateway.CountPasskeysAsync(_session.SessionToken));
+                ShowPasskeys(await _twoFactorGateway.ListPasskeysAsync(_session.SessionToken));
             }
         }
 

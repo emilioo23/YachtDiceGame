@@ -9,6 +9,7 @@ namespace YachtDice.Server.Tests.Passkeys
     /// </summary>
     public class PasskeyChallengeStoreTests
     {
+        private const string UnknownId = "unknown";
         private const int PlayerId = 1;
         private const int MinutesAfterExpiration = 1;
         private static readonly DateTime Start = new DateTime(2026, 11, 18, 12, 0, 0, DateTimeKind.Utc);
@@ -69,7 +70,7 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void TryTake_UnknownIdentifier_ReturnsFalse()
         {
-            bool isUsable = _store.TryTake("unknown", PasskeyPurpose.Login, out PendingChallenge pending);
+            bool isUsable = _store.TryTake(UnknownId, PasskeyPurpose.Login, out PendingChallenge pending);
 
             Assert.False(isUsable);
         }

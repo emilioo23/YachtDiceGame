@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace YachtDice.Server.Contracts.TwoFactor
 {
@@ -124,6 +125,26 @@ namespace YachtDice.Server.Contracts.TwoFactor
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         int CountPasskeys(string sessionToken);
+
+        /// <summary>
+        /// Lists the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The passkeys of the player.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<PasskeyInfoData> ListPasskeys(string sessionToken);
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password);
 
         /// <summary>
         /// Gives the challenge to log in with a passkey. The player is not known yet, so no session is needed.

@@ -449,6 +449,34 @@
                                     Click="AddPasskeyButton_Click"/>
                         </Grid>
 
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,12,0,0">
+
+                            <ComboBox x:Name="PasskeysComboBox"
+                                      Width="240"
+                                      FontSize="18"
+                                      Padding="12,9"
+                                      Margin="0,0,12,0"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Id"/>
+
+                            <PasswordBox x:Name="PasskeyPasswordBox"
+                                         utils:EnterKeySubmit.Button="{Binding ElementName=RemovePasskeyButton}"
+                                         Style="{StaticResource PasswordBoxRounded}"
+                                         Width="240"
+                                         FontSize="18"
+                                         Margin="0,0,12,0"
+                                         Padding="12,9"/>
+
+                            <Button x:Name="RemovePasskeyButton"
+                                    Content="{x:Static properties:Strings.Settings_Security_ButtonRemovePasskey}"
+                                    Style="{StaticResource BtnOutline}"
+                                    Padding="22,10"
+                                    FontSize="18"
+                                    IsEnabled="False"
+                                    Click="RemovePasskeyButton_Click"/>
+                        </StackPanel>
+
                     </StackPanel>
 
                     <StackPanel x:Name="NotificationsPanel"

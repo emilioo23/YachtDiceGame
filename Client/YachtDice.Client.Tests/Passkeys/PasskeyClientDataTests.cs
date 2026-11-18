@@ -11,16 +11,22 @@ namespace YachtDice.Client.Tests.Passkeys
     public class PasskeyClientDataTests
     {
         private const string Challenge = "abc-_123";
+        private const string ClientDataFormat =
+            "{{\"type\":\"{0}\",\"challenge\":\"{1}\",\"origin\":\"{2}\",\"crossOrigin\":false}}";
 
         [Fact]
         public void Create_TypeAndChallenge_WritesTheJsonTheServerExpects()
         {
-            byte[] data = PasskeyClientData.Create(PasskeyRules.GetClientDataType, Challenge);
+            string clientDataExpected = string.Format(
+                ClientDataFormat,
+                PasskeyRules.GetClientDataType,
+                Challenge,
+                PasskeyRules.Origin);
 
-            Assert.Equal(
-                "{\"type\":\"webauthn.get\",\"challenge\":\"abc-_123\"," +
-                "\"origin\":\"https://yachtdice.localhost\",\"crossOrigin\":false}",
-                Encoding.UTF8.GetString(data));
+            byte[] clientData = PasskeyClientData.Create(PasskeyRules.GetClientDataType, Challenge);
+            string clientDataResult = Encoding.UTF8.GetString(clientData);
+
+            Assert.Equal(clientDataExpected, clientDataResult);
         }
 
         [Fact]

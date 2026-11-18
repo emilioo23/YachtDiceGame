@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -208,6 +209,38 @@ namespace YachtDice.Server.Services
             int passkeyCount = ExecuteForPlayer(sessionToken, playerName => _passkeyService.CountPasskeys(playerName));
 
             return passkeyCount;
+        }
+
+        /// <summary>
+        /// Lists the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The passkeys of the player.</returns>
+        public List<Contracts.PasskeyInfoData> ListPasskeys(string sessionToken)
+        {
+            List<Contracts.PasskeyInfoData> passkeys = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.ListPasskeys(playerName)));
+
+            return passkeys;
+        }
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        public Contracts.PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password)
+        {
+            Contracts.PasskeyRemovalResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.EnumMapper.Map<
+                    LogicPasskeys.PasskeyRemovalStatus,
+                    Contracts.PasskeyRemovalResultCode>(_passkeyService.RemovePasskey(playerName, passkeyId, password)));
+
+            return result;
         }
 
         /// <summary>

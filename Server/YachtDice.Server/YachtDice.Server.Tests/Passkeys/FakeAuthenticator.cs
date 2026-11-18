@@ -22,6 +22,7 @@ namespace YachtDice.Server.Tests.Passkeys
         private const byte DerSequence = 0x30;
         private const byte DerInteger = 0x02;
         private const byte AttestedCredentialFlag = 0x40;
+        private const int PartsInSignature = 2;
         private const byte ByteStringWithOneByteLength = 0x58;
         private static readonly byte[] CoseKeyStart =
             { 0xA5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20 };
@@ -136,7 +137,7 @@ namespace YachtDice.Server.Tests.Passkeys
         /// <returns>The signature in DER format.</returns>
         public static byte[] ToDer(byte[] fixedSignature)
         {
-            int half = fixedSignature.Length / 2;
+            int half = fixedSignature.Length / PartsInSignature;
             byte[] r = ToDerInteger(fixedSignature.Take(half).ToArray());
             byte[] s = ToDerInteger(fixedSignature.Skip(half).ToArray());
             var der = new MemoryStream();

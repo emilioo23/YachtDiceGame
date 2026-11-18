@@ -4442,5 +4442,50 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Settings_Security_ButtonAddPasskey", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se quitó la passkey..
+        /// </summary>
+        public static string Passkey_Removed {
+            get {
+                return ResourceManager.GetString("Passkey_Removed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa passkey ya no existe..
+        /// </summary>
+        public static string Passkey_ErrorNotFound {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Quitar.
+        /// </summary>
+        public static string Settings_Security_ButtonRemovePasskey {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonRemovePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres quitar esta passkey? Ya no podrás entrar con ella..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyConfirm {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Elige la passkey y escribe tu contraseña actual para quitarla..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyPasswordRequired {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyPasswordRequired", resourceCulture);
+            }
+        }
     }
 }

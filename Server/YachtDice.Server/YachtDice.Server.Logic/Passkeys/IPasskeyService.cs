@@ -1,4 +1,5 @@
-﻿using YachtDice.Server.Logic.Authentication;
+﻿using System.Collections.Generic;
+using YachtDice.Server.Logic.Authentication;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -33,6 +34,22 @@ namespace YachtDice.Server.Logic.Passkeys
         /// Issues the challenge to log in with a passkey. The player is not known yet.
         /// </summary>
         /// <returns>The challenge.</returns>
+        /// <summary>
+        /// Lists the passkeys of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player of the session.</param>
+        /// <returns>The passkeys; empty if the player does not exist.</returns>
+        List<PasskeySummary> ListPasskeys(string displayName);
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="displayName">Name of the player of the session.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        PasskeyRemovalStatus RemovePasskey(string displayName, int passkeyId, string password);
+
         PasskeyChallenge BeginLogin();
 
         /// <summary>

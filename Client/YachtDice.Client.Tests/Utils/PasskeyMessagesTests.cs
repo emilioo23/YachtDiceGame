@@ -13,113 +13,185 @@ namespace YachtDice.Client.Tests.Utils
         [Fact]
         public void GetStartMessage_TooManyPasskeys_ReturnsPasskeyErrorTooMany()
         {
-            string message = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.TooManyPasskeys);
+            string messageExpected = Strings.Passkey_ErrorTooMany;
 
-            Assert.Equal(Strings.Passkey_ErrorTooMany, message);
+            string messageResult = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.TooManyPasskeys);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetStartMessage_Busy_ReturnsPasskeyErrorBusy()
         {
-            string message = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.Busy);
+            string messageExpected = Strings.Passkey_ErrorBusy;
 
-            Assert.Equal(Strings.Passkey_ErrorBusy, message);
+            string messageResult = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.Busy);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetStartMessage_PlayerNotFound_ReturnsDialogsUnexpectedError()
         {
-            string message = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.PlayerNotFound);
+            string messageExpected = Strings.Dialogs_UnexpectedError;
 
-            Assert.Equal(Strings.Dialogs_UnexpectedError, message);
+            string messageResult = PasskeyMessages.GetStartMessage(PasskeyStartResultCode.PlayerNotFound);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_Registered_ReturnsPasskeyRegistered()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.Registered);
+            string messageExpected = Strings.Passkey_Registered;
 
-            Assert.Equal(Strings.Passkey_Registered, message);
+            string messageResult = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.Registered);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_InvalidResponse_ReturnsPasskeyErrorInvalid()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.InvalidResponse);
+            string messageExpected = Strings.Passkey_ErrorInvalid;
 
-            Assert.Equal(Strings.Passkey_ErrorInvalid, message);
+            string messageResult =
+                PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.InvalidResponse);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_ChallengeExpired_ReturnsPasskeyErrorExpired()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.ChallengeExpired);
+            string messageExpected = Strings.Passkey_ErrorExpired;
 
-            Assert.Equal(Strings.Passkey_ErrorExpired, message);
+            string messageResult =
+                PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.ChallengeExpired);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_TooManyPasskeys_ReturnsPasskeyErrorTooMany()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.TooManyPasskeys);
+            string messageExpected = Strings.Passkey_ErrorTooMany;
 
-            Assert.Equal(Strings.Passkey_ErrorTooMany, message);
+            string messageResult =
+                PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.TooManyPasskeys);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_AlreadyRegistered_ReturnsPasskeyErrorAlreadyRegistered()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.AlreadyRegistered);
+            string messageExpected = Strings.Passkey_ErrorAlreadyRegistered;
 
-            Assert.Equal(Strings.Passkey_ErrorAlreadyRegistered, message);
+            string messageResult =
+                PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.AlreadyRegistered);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetRegistrationMessage_PlayerNotFound_ReturnsDialogsUnexpectedError()
         {
-            string message = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.PlayerNotFound);
+            string messageExpected = Strings.Dialogs_UnexpectedError;
 
-            Assert.Equal(Strings.Dialogs_UnexpectedError, message);
+            string messageResult = PasskeyMessages.GetRegistrationMessage(PasskeyRegistrationResultCode.PlayerNotFound);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetLoginMessage_InvalidPasskey_ReturnsPasskeyErrorInvalid()
         {
-            string message = PasskeyMessages.GetLoginMessage(LoginResultCode.InvalidPasskey);
+            string messageExpected = Strings.Passkey_ErrorInvalid;
 
-            Assert.Equal(Strings.Passkey_ErrorInvalid, message);
+            string messageResult = PasskeyMessages.GetLoginMessage(LoginResultCode.InvalidPasskey);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetLoginMessage_TemporarilyLocked_ReturnsAuthErrorTemporarilyLocked()
         {
-            string message = PasskeyMessages.GetLoginMessage(LoginResultCode.TemporarilyLocked);
+            string messageExpected = Strings.Auth_ErrorTemporarilyLocked;
 
-            Assert.Equal(Strings.Auth_ErrorTemporarilyLocked, message);
+            string messageResult = PasskeyMessages.GetLoginMessage(LoginResultCode.TemporarilyLocked);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetLoginMessage_LockedForTheDay_ReturnsAuthErrorLockedForTheDay()
         {
-            string message = PasskeyMessages.GetLoginMessage(LoginResultCode.LockedForTheDay);
+            string messageExpected = Strings.Auth_ErrorLockedForTheDay;
 
-            Assert.Equal(Strings.Auth_ErrorLockedForTheDay, message);
+            string messageResult = PasskeyMessages.GetLoginMessage(LoginResultCode.LockedForTheDay);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetLoginMessage_SuspendedByReports_ReturnsAuthErrorSuspendedByReports()
         {
-            string message = PasskeyMessages.GetLoginMessage(LoginResultCode.SuspendedByReports);
+            string messageExpected = Strings.Auth_ErrorSuspendedByReports;
 
-            Assert.Equal(Strings.Auth_ErrorSuspendedByReports, message);
+            string messageResult = PasskeyMessages.GetLoginMessage(LoginResultCode.SuspendedByReports);
+
+            Assert.Equal(messageExpected, messageResult);
         }
 
         [Fact]
         public void GetLoginMessage_InvalidCredentials_ReturnsDialogsUnexpectedError()
         {
-            string message = PasskeyMessages.GetLoginMessage(LoginResultCode.InvalidCredentials);
+            string messageExpected = Strings.Dialogs_UnexpectedError;
 
-            Assert.Equal(Strings.Dialogs_UnexpectedError, message);
+            string messageResult = PasskeyMessages.GetLoginMessage(LoginResultCode.InvalidCredentials);
+
+            Assert.Equal(messageExpected, messageResult);
+        }
+
+        [Fact]
+        public void GetRemovalMessage_Removed_ReturnsPasskeyRemoved()
+        {
+            string messageExpected = Strings.Passkey_Removed;
+
+            string messageResult = PasskeyMessages.GetRemovalMessage(PasskeyRemovalResultCode.Removed);
+
+            Assert.Equal(messageExpected, messageResult);
+        }
+
+        [Fact]
+        public void GetRemovalMessage_InvalidPassword_ReturnsDialogsInvalidCredentials()
+        {
+            string messageExpected = Strings.Dialogs_InvalidCredentials;
+
+            string messageResult = PasskeyMessages.GetRemovalMessage(PasskeyRemovalResultCode.InvalidPassword);
+
+            Assert.Equal(messageExpected, messageResult);
+        }
+
+        [Fact]
+        public void GetRemovalMessage_PasskeyNotFound_ReturnsPasskeyErrorNotFound()
+        {
+            string messageExpected = Strings.Passkey_ErrorNotFound;
+
+            string messageResult = PasskeyMessages.GetRemovalMessage(PasskeyRemovalResultCode.PasskeyNotFound);
+
+            Assert.Equal(messageExpected, messageResult);
+        }
+
+        [Fact]
+        public void GetRemovalMessage_PlayerNotFound_ReturnsDialogsUnexpectedError()
+        {
+            string messageExpected = Strings.Dialogs_UnexpectedError;
+
+            string messageResult = PasskeyMessages.GetRemovalMessage(PasskeyRemovalResultCode.PlayerNotFound);
+
+            Assert.Equal(messageExpected, messageResult);
         }
     }
 }

@@ -16,17 +16,21 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void Encode_BytesWithPlusAndSlash_UsesUrlCharactersWithoutPadding()
         {
-            string text = Base64Url.Encode(BytesWithSpecialCharacters);
+            string textExpected = UrlText;
 
-            Assert.Equal(UrlText, text);
+            string textResult = Base64Url.Encode(BytesWithSpecialCharacters);
+
+            Assert.Equal(textExpected, textResult);
         }
 
         [Fact]
         public void TryDecode_EncodedBytes_ReturnsTheSameBytes()
         {
-            Base64Url.TryDecode(UrlText, out byte[] bytes);
+            byte[] bytesExpected = BytesWithSpecialCharacters;
 
-            Assert.Equal(BytesWithSpecialCharacters, bytes);
+            Base64Url.TryDecode(UrlText, out byte[] bytesResult);
+
+            Assert.Equal(bytesExpected, bytesResult);
         }
 
         [Fact]

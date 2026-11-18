@@ -13,6 +13,7 @@ namespace YachtDice.Server.Tests.Passkeys
         private const long TwoHundredFiftySix = 256;
         private const long MinusOne = -1;
         private const long MinusSeven = -7;
+        private const long AlgorithmLabel = 3;
         private const string FormatText = "fmt";
         private static readonly byte[] UnsignedBytes = { 0x19, 0x01, 0x00 };
         private static readonly byte[] NegativeBytes = { 0x26 };
@@ -24,33 +25,42 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void ReadItem_UnsignedInteger_ReturnsTheNumber()
         {
-            object item = new CborReader(UnsignedBytes).ReadItem();
+            object itemExpected = TwoHundredFiftySix;
 
-            Assert.Equal(TwoHundredFiftySix, item);
+            object itemResult = new CborReader(UnsignedBytes).ReadItem();
+
+            Assert.Equal(itemExpected, itemResult);
         }
 
         [Fact]
         public void ReadItem_NegativeInteger_ReturnsTheNegativeNumber()
         {
-            object item = new CborReader(NegativeBytes).ReadItem();
+            object itemExpected = MinusSeven;
 
-            Assert.Equal(MinusSeven, item);
+            object itemResult = new CborReader(NegativeBytes).ReadItem();
+
+            Assert.Equal(itemExpected, itemResult);
         }
 
         [Fact]
         public void ReadItem_Text_ReturnsTheText()
         {
-            object item = new CborReader(TextBytes).ReadItem();
+            object itemExpected = FormatText;
 
-            Assert.Equal(FormatText, item);
+            object itemResult = new CborReader(TextBytes).ReadItem();
+
+            Assert.Equal(itemExpected, itemResult);
         }
 
         [Fact]
         public void ReadItem_MapWithIntegerKeys_ReturnsTheValueOfTheKey()
         {
+            object valueExpected = MinusSeven;
             var map = (Dictionary<object, object>)new CborReader(MapBytes).ReadItem();
 
-            Assert.Equal(MinusSeven, map[3L]);
+            object valueResult = map[AlgorithmLabel];
+
+            Assert.Equal(valueExpected, valueResult);
         }
 
         [Fact]

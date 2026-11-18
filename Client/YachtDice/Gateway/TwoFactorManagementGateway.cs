@@ -177,6 +177,36 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server for the passkeys that the player has.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The passkeys of the player.</returns>
+        public async Task<PasskeyInfoData[]> ListPasskeysAsync(string sessionToken)
+        {
+            PasskeyInfoData[] passkeys = await ExecuteAsync(client => client.ListPasskeys(sessionToken));
+
+            return passkeys;
+        }
+
+        /// <summary>
+        /// Asks the server to remove a passkey of the player.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        public async Task<PasskeyRemovalResultCode> RemovePasskeyAsync(
+            string sessionToken,
+            int passkeyId,
+            string password)
+        {
+            PasskeyRemovalResultCode result =
+                await ExecuteAsync(client => client.RemovePasskey(sessionToken, passkeyId, password));
+
+            return result;
+        }
+
+        /// <summary>
         /// Asks the server for the challenge to log in with a passkey.
         /// </summary>
         /// <returns>The challenge.</returns>

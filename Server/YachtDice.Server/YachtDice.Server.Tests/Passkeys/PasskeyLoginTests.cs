@@ -14,6 +14,7 @@ namespace YachtDice.Server.Tests.Passkeys
         private const long NewerCounter = 6;
         private const long OlderCounter = 4;
         private const int OneDay = 1;
+        private const string OtherOrigin = "https://other.example";
         private static readonly byte[] OtherPlayerHandle = { 0, 0, 0, 2 };
 
         private readonly PasskeyTestContext _context = new PasskeyTestContext();
@@ -38,161 +39,174 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void BeginLogin_Always_ReturnsACreatedChallenge()
         {
+            var challengeExpected = new { Status = PasskeyStartStatus.Created };
+
             PasskeyChallenge challenge = _context.Service.BeginLogin();
 
-            Assert.Equal(PasskeyStartStatus.Created, challenge.Status);
+            Assert.Equivalent(challengeExpected, challenge);
         }
 
         [Fact]
-        public void CompleteLogin_ValidAnswer_ReturnsLoggedIn()
+        public void CompleteLogin_ValidAnswer_ReturnsLoggedInWithTheNamesOfThePlayer()
         {
-            LoginResult result = Login(new AuthenticatorOptions { SignCount = NewerCounter });
+            LoginResult loginResultExpected = new LoginResult(
+                LoginStatus.LoggedIn,
+                PasskeyTestContext.DisplayName,
+                PasskeyTestContext.FirstName);
 
-            Assert.Equal(LoginStatus.LoggedIn, result.Status);
-        }
+            LoginResult loginResult = Login(new AuthenticatorOptions { SignCount = NewerCounter });
 
-        [Fact]
-        public void CompleteLogin_ValidAnswer_ReturnsTheNameOfThePlayer()
-        {
-            LoginResult result = Login(new AuthenticatorOptions { SignCount = NewerCounter });
-
-            Assert.Equal(PasskeyTestContext.DisplayName, result.DisplayName);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_ValidAnswer_SavesTheNewCounter()
         {
-            Login(new AuthenticatorOptions { SignCount = NewerCounter });
+            long signCountExpected = NewerCounter;
 
-            Assert.Equal(NewerCounter, _context.Passkeys.Records[0].SignCount);
+            Login(new AuthenticatorOptions { SignCount = NewerCounter });
+            long signCountResult = _context.Passkeys.Records[0].SignCount;
+
+            Assert.Equal(signCountExpected, signCountResult);
         }
 
         [Fact]
         public void CompleteLogin_UserHandleOfThePlayer_ReturnsLoggedIn()
         {
+            LoginStatus loginStatusExpected = LoginStatus.LoggedIn;
             PasskeyChallenge registration = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
             var options = new AuthenticatorOptions { SignCount = NewerCounter, UserHandle = registration.UserHandle };
 
-            LoginResult result = Login(options);
+            LoginStatus loginStatusResult = Login(options).Status;
 
-            Assert.Equal(LoginStatus.LoggedIn, result.Status);
+            Assert.Equal(loginStatusExpected, loginStatusResult);
         }
 
         [Fact]
         public void CompleteLogin_UserHandleOfAnotherPlayer_ReturnsInvalidPasskey()
         {
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
             var options = new AuthenticatorOptions
             {
                 SignCount = NewerCounter,
                 UserHandle = Base64Url.Encode(OtherPlayerHandle)
             };
 
-            LoginResult result = Login(options);
+            LoginResult loginResult = Login(options);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_ChallengeUsedTwice_ReturnsInvalidPasskey()
         {
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
             PasskeyChallenge challenge = _context.Service.BeginLogin();
             PasskeyAssertion assertion = _authenticator.CreateAssertion(
                 challenge,
                 new AuthenticatorOptions { SignCount = NewerCounter });
 
             _context.Service.CompleteLogin(assertion);
-            LoginResult result = _context.Service.CompleteLogin(assertion);
+            LoginResult loginResult = _context.Service.CompleteLogin(assertion);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_ChallengeOfARegistration_ReturnsInvalidPasskey()
         {
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
             PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
             PasskeyAssertion assertion = _authenticator.CreateAssertion(
                 challenge,
                 new AuthenticatorOptions { SignCount = NewerCounter });
 
-            LoginResult result = _context.Service.CompleteLogin(assertion);
+            LoginResult loginResult = _context.Service.CompleteLogin(assertion);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_CredentialThatIsNotRegistered_ReturnsInvalidPasskey()
         {
-            using (var stranger = new FakeAuthenticator())
+            using (FakeAuthenticator stranger = new FakeAuthenticator())
             {
+                LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
                 PasskeyChallenge challenge = _context.Service.BeginLogin();
 
-                LoginResult result = _context.Service.CompleteLogin(
+                LoginResult loginResult = _context.Service.CompleteLogin(
                     stranger.CreateAssertion(challenge, new AuthenticatorOptions()));
 
-                Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+                Assert.Equivalent(loginResultExpected, loginResult);
             }
         }
 
         [Fact]
         public void CompleteLogin_SignatureOfAnotherKeyWithTheSameCredential_ReturnsInvalidPasskey()
         {
-            using (var impostor = new FakeAuthenticator())
+            using (FakeAuthenticator impostor = new FakeAuthenticator())
             {
+                LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
                 PasskeyChallenge challenge = _context.Service.BeginLogin();
                 PasskeyAssertion assertion = impostor.CreateAssertion(
                     challenge,
                     new AuthenticatorOptions { SignCount = NewerCounter });
 
                 assertion.CredentialId = Base64Url.Encode(_authenticator.CredentialId);
-                LoginResult result = _context.Service.CompleteLogin(assertion);
+                LoginResult loginResult = _context.Service.CompleteLogin(assertion);
 
-                Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+                Assert.Equivalent(loginResultExpected, loginResult);
             }
         }
 
         [Fact]
         public void CompleteLogin_UserNotVerified_ReturnsInvalidPasskey()
         {
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
             var options = new AuthenticatorOptions
             {
                 SignCount = NewerCounter,
                 Flags = AuthenticatorOptions.PresentOnly
             };
 
-            LoginResult result = Login(options);
+            LoginResult loginResult = Login(options);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_CounterThatWentBack_ReturnsInvalidPasskey()
         {
-            LoginResult result = Login(new AuthenticatorOptions { SignCount = OlderCounter });
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            LoginResult loginResult = Login(new AuthenticatorOptions { SignCount = OlderCounter });
+
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_ClientDataWithAnotherOrigin_ReturnsInvalidPasskey()
         {
-            var options = new AuthenticatorOptions { SignCount = NewerCounter, Origin = "https://other.example" };
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.InvalidPasskey, string.Empty);
+            var options = new AuthenticatorOptions { SignCount = NewerCounter, Origin = OtherOrigin };
 
-            LoginResult result = Login(options);
+            LoginResult loginResult = Login(options);
 
-            Assert.Equal(LoginStatus.InvalidPasskey, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]
         public void CompleteLogin_AccountSuspendedByReports_ReturnsSuspendedByReports()
         {
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.SuspendedByReports, string.Empty);
             _context.Players.SaveLock(
                 PasskeyTestContext.PlayerId,
                 LoginLock.Reported.ToString(),
                 DateTime.UtcNow.AddDays(OneDay));
 
-            LoginResult result = Login(new AuthenticatorOptions { SignCount = NewerCounter });
+            LoginResult loginResult = Login(new AuthenticatorOptions { SignCount = NewerCounter });
 
-            Assert.Equal(LoginStatus.SuspendedByReports, result.Status);
+            Assert.Equivalent(loginResultExpected, loginResult);
         }
 
         [Fact]

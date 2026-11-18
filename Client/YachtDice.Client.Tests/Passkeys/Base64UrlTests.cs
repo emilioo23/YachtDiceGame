@@ -9,24 +9,30 @@ namespace YachtDice.Client.Tests.Passkeys
     /// </summary>
     public class Base64UrlTests
     {
+        private const string NotBase64 = "***";
+        private const string SpecialText = "-_--";
+        private const string PaddedText = "AQ";
         private static readonly byte[] SpecialBytes = { 0xFB, 0xFF, 0xBE };
         private static readonly byte[] OneByte = { 0x01 };
-        private const string NotBase64 = "***";
 
         [Fact]
         public void Encode_BytesThatUseSpecialCharacters_UsesTheUrlAlphabet()
         {
-            string text = Base64Url.Encode(SpecialBytes);
+            string textExpected = SpecialText;
 
-            Assert.Equal("-_--", text);
+            string textResult = Base64Url.Encode(SpecialBytes);
+
+            Assert.Equal(textExpected, textResult);
         }
 
         [Fact]
         public void Encode_BytesThatNeedPadding_RemovesThePadding()
         {
-            string text = Base64Url.Encode(OneByte);
+            string textExpected = PaddedText;
 
-            Assert.Equal("AQ", text);
+            string textResult = Base64Url.Encode(OneByte);
+
+            Assert.Equal(textExpected, textResult);
         }
 
         [Fact]
@@ -38,9 +44,11 @@ namespace YachtDice.Client.Tests.Passkeys
         [Fact]
         public void TryDecode_TextWithoutPadding_ReturnsTheBytes()
         {
-            Base64Url.TryDecode("AQ", out byte[] data);
+            byte[] dataExpected = OneByte;
 
-            Assert.Equal(OneByte, data);
+            Base64Url.TryDecode(PaddedText, out byte[] dataResult);
+
+            Assert.Equal(dataExpected, dataResult);
         }
 
         [Fact]

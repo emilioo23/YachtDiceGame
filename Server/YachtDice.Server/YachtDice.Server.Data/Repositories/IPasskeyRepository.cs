@@ -33,5 +33,11 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="passkeyId">Identifier of the passkey.</param>
         /// <param name="signCount">New value of the counter.</param>
         void SaveSignCount(int passkeyId, long signCount);
+
+        /// <summary>
+        /// Deletes a passkey.
+        /// </summary>
+        /// <param name="passkeyId">Identifier of the passkey.</param>
+        void Delete(int passkeyId);
     }
 }

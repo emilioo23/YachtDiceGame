@@ -12,168 +12,196 @@ namespace YachtDice.Server.Tests.Passkeys
     {
         private const string UnknownName = "nobody";
         private const string OtherRelyingParty = "other.example";
-        private const string GarbageAttestation = "AAAA";
+        private const string GarbageText = "AAAA";
+        private const int OnePasskey = 1;
+        private static readonly byte[] OtherChallenge = { 1, 2, 3 };
 
         private readonly PasskeyTestContext _context = new PasskeyTestContext();
 
         [Fact]
         public void BeginRegistration_PlayerWithoutPasskeys_ReturnsACreatedChallenge()
         {
+            var challengeExpected = new { Status = PasskeyStartStatus.Created };
+
             PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
 
-            Assert.Equal(PasskeyStartStatus.Created, challenge.Status);
+            Assert.Equivalent(challengeExpected, challenge);
         }
 
         [Fact]
         public void BeginRegistration_UnknownPlayer_ReturnsPlayerNotFound()
         {
+            var challengeExpected = new { Status = PasskeyStartStatus.PlayerNotFound };
+
             PasskeyChallenge challenge = _context.Service.BeginRegistration(UnknownName);
 
-            Assert.Equal(PasskeyStartStatus.PlayerNotFound, challenge.Status);
+            Assert.Equivalent(challengeExpected, challenge);
         }
 
         [Fact]
         public void BeginRegistration_PlayerWithTheMaximumOfPasskeys_ReturnsTooManyPasskeys()
         {
+            var challengeExpected = new { Status = PasskeyStartStatus.TooManyPasskeys };
             RegisterPasskeys(PasskeyRules.MaxPasskeysPerPlayer);
 
             PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
 
-            Assert.Equal(PasskeyStartStatus.TooManyPasskeys, challenge.Status);
+            Assert.Equivalent(challengeExpected, challenge);
         }
 
         [Fact]
         public void BeginRegistration_PlayerWithAPasskey_ExcludesItsCredential()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                var challengeExpected = new
+                {
+                    ExcludedCredentialIds = new[] { Base64Url.Encode(authenticator.CredentialId) }
+                };
                 _context.Register(authenticator, new AuthenticatorOptions());
 
                 PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
 
-                Assert.Equal(Base64Url.Encode(authenticator.CredentialId), challenge.ExcludedCredentialIds.Single());
+                Assert.Equivalent(challengeExpected, challenge);
             }
         }
 
         [Fact]
         public void CompleteRegistration_ValidAnswer_ReturnsRegistered()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                PasskeyRegistrationStatus status = _context.Register(authenticator, new AuthenticatorOptions());
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.Registered;
 
-                Assert.Equal(PasskeyRegistrationStatus.Registered, status);
+                PasskeyRegistrationStatus registrationStatusResult =
+                    _context.Register(authenticator, new AuthenticatorOptions());
+
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_ValidAnswer_SavesThePasskeyOfThePlayer()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                var passkeyExpected = new
+                {
+                    PlayerId = PasskeyTestContext.PlayerId,
+                    CredentialId = Base64Url.Encode(authenticator.CredentialId)
+                };
+
                 _context.Register(authenticator, new AuthenticatorOptions());
 
-                Assert.Equal(PasskeyTestContext.PlayerId, _context.Passkeys.Records.Single().PlayerId);
+                Assert.Equivalent(passkeyExpected, _context.Passkeys.Records.Single());
             }
         }
 
         [Fact]
         public void CompleteRegistration_ChallengeUsedTwice_ReturnsChallengeExpired()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.ChallengeExpired;
                 PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
                 PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
 
                 _context.Service.CompleteRegistration(PasskeyTestContext.DisplayName, attestation);
-                PasskeyRegistrationStatus status =
+                PasskeyRegistrationStatus registrationStatusResult =
                     _context.Service.CompleteRegistration(PasskeyTestContext.DisplayName, attestation);
 
-                Assert.Equal(PasskeyRegistrationStatus.ChallengeExpired, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_ChallengeOfAnotherPlayer_ReturnsChallengeExpired()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.ChallengeExpired;
                 PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.OtherDisplayName);
                 PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
 
-                PasskeyRegistrationStatus status =
+                PasskeyRegistrationStatus registrationStatusResult =
                     _context.Service.CompleteRegistration(PasskeyTestContext.DisplayName, attestation);
 
-                Assert.Equal(PasskeyRegistrationStatus.ChallengeExpired, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_ClientDataWithAnotherChallenge_ReturnsInvalidResponse()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                var options = new AuthenticatorOptions { Challenge = Base64Url.Encode(new byte[] { 1, 2, 3 }) };
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.InvalidResponse;
+                var options = new AuthenticatorOptions { Challenge = Base64Url.Encode(OtherChallenge) };
 
-                PasskeyRegistrationStatus status = _context.Register(authenticator, options);
+                PasskeyRegistrationStatus registrationStatusResult = _context.Register(authenticator, options);
 
-                Assert.Equal(PasskeyRegistrationStatus.InvalidResponse, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_UserNotVerified_ReturnsInvalidResponse()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.InvalidResponse;
                 var options = new AuthenticatorOptions { Flags = AuthenticatorOptions.PresentOnly };
 
-                PasskeyRegistrationStatus status = _context.Register(authenticator, options);
+                PasskeyRegistrationStatus registrationStatusResult = _context.Register(authenticator, options);
 
-                Assert.Equal(PasskeyRegistrationStatus.InvalidResponse, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_OtherRelyingParty_ReturnsInvalidResponse()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.InvalidResponse;
                 var options = new AuthenticatorOptions { RelyingPartyId = OtherRelyingParty };
 
-                PasskeyRegistrationStatus status = _context.Register(authenticator, options);
+                PasskeyRegistrationStatus registrationStatusResult = _context.Register(authenticator, options);
 
-                Assert.Equal(PasskeyRegistrationStatus.InvalidResponse, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
         [Fact]
         public void CompleteRegistration_AttestationThatIsNotCbor_ReturnsInvalidResponse()
         {
+            PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.InvalidResponse;
             PasskeyChallenge challenge = _context.Service.BeginRegistration(PasskeyTestContext.DisplayName);
             var attestation = new PasskeyAttestation
             {
                 ChallengeId = challenge.ChallengeId,
-                ClientDataJson = GarbageAttestation,
-                AttestationObject = GarbageAttestation
+                ClientDataJson = GarbageText,
+                AttestationObject = GarbageText
             };
 
-            PasskeyRegistrationStatus status =
+            PasskeyRegistrationStatus registrationStatusResult =
                 _context.Service.CompleteRegistration(PasskeyTestContext.DisplayName, attestation);
 
-            Assert.Equal(PasskeyRegistrationStatus.InvalidResponse, status);
+            Assert.Equal(registrationStatusExpected, registrationStatusResult);
         }
 
         [Fact]
         public void CompleteRegistration_CredentialAlreadySaved_ReturnsAlreadyRegistered()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.AlreadyRegistered;
                 _context.Register(authenticator, new AuthenticatorOptions());
 
-                PasskeyRegistrationStatus status = _context.Register(authenticator, new AuthenticatorOptions());
+                PasskeyRegistrationStatus registrationStatusResult =
+                    _context.Register(authenticator, new AuthenticatorOptions());
 
-                Assert.Equal(PasskeyRegistrationStatus.AlreadyRegistered, status);
+                Assert.Equal(registrationStatusExpected, registrationStatusResult);
             }
         }
 
@@ -187,13 +215,14 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void CountPasskeys_PlayerWithOnePasskey_ReturnsOne()
         {
-            using (var authenticator = new FakeAuthenticator())
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
+                int passkeyCountExpected = OnePasskey;
                 _context.Register(authenticator, new AuthenticatorOptions());
 
-                int count = _context.Service.CountPasskeys(PasskeyTestContext.DisplayName);
+                int passkeyCountResult = _context.Service.CountPasskeys(PasskeyTestContext.DisplayName);
 
-                Assert.Equal(1, count);
+                Assert.Equal(passkeyCountExpected, passkeyCountResult);
             }
         }
 
@@ -208,7 +237,7 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             for (int index = 0; index < count; index++)
             {
-                using (var authenticator = new FakeAuthenticator())
+                using (FakeAuthenticator authenticator = new FakeAuthenticator())
                 {
                     _context.Register(authenticator, new AuthenticatorOptions());
                 }

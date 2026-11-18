@@ -23,17 +23,26 @@ namespace YachtDice.Server.Logic.Passkeys
 
         private readonly byte[] _coseKey;
         private readonly long _algorithm;
-        private readonly byte[] _first;
-        private readonly byte[] _second;
-        private readonly byte[] _third;
+        private readonly byte[] _modulus;
+        private readonly byte[] _exponent;
+        private readonly byte[] _pointX;
+        private readonly byte[] _pointY;
 
-        private PasskeyPublicKey(byte[] coseKey, long algorithm, byte[][] parts)
+        private PasskeyPublicKey(byte[] coseKey, CoseFields fields)
         {
             _coseKey = coseKey;
-            _algorithm = algorithm;
-            _first = parts[0];
-            _second = parts[1];
-            _third = parts[2];
+            _algorithm = (long)fields.Algorithm;
+
+            if (_algorithm == PasskeyRules.EcdsaAlgorithm)
+            {
+                _pointX = (byte[])fields.XOrExponent;
+                _pointY = (byte[])fields.Y;
+            }
+            else
+            {
+                _modulus = (byte[])fields.CurveOrModulus;
+                _exponent = (byte[])fields.XOrExponent;
+            }
         }
 
         /// <summary>
@@ -106,55 +115,48 @@ namespace YachtDice.Server.Logic.Passkeys
 
         private static PasskeyPublicKey CreateKey(byte[] coseKey, Dictionary<object, object> map)
         {
-            PasskeyPublicKey key = null;
-            object keyType = GetValue(map, KeyTypeLabel);
-            object algorithm = GetValue(map, AlgorithmLabel);
-
-            if (keyType is long && algorithm is long)
+            var fields = new CoseFields
             {
-                key = CreateTypedKey(coseKey, map, (long)keyType, (long)algorithm);
-            }
-
-            return key;
-        }
-
-        private static PasskeyPublicKey CreateTypedKey(
-            byte[] coseKey,
-            Dictionary<object, object> map,
-            long keyType,
-            long algorithm)
-        {
-            PasskeyPublicKey key = null;
-            var parts = new[]
-            {
-                GetValue(map, CurveOrModulusLabel),
-                GetValue(map, XOrExponentLabel),
-                GetValue(map, YLabel)
+                KeyType = GetValue(map, KeyTypeLabel),
+                Algorithm = GetValue(map, AlgorithmLabel),
+                CurveOrModulus = GetValue(map, CurveOrModulusLabel),
+                XOrExponent = GetValue(map, XOrExponentLabel),
+                Y = GetValue(map, YLabel)
             };
+            PasskeyPublicKey key = null;
 
-            if (keyType == EllipticKeyType && algorithm == PasskeyRules.EcdsaAlgorithm && IsValidEllipticKey(parts))
+            if (IsValidEllipticKey(fields) || IsValidRsaKey(fields))
             {
-                key = new PasskeyPublicKey(coseKey, algorithm, new[] { null, (byte[])parts[1], (byte[])parts[2] });
-            }
-            else if (keyType == RsaKeyType && algorithm == PasskeyRules.RsaAlgorithm && IsValidRsaKey(parts))
-            {
-                key = new PasskeyPublicKey(coseKey, algorithm, new[] { (byte[])parts[0], (byte[])parts[1], null });
+                key = new PasskeyPublicKey(coseKey, fields);
             }
 
             return key;
         }
 
-        private static bool IsValidEllipticKey(object[] parts)
+        private static bool IsValidEllipticKey(CoseFields fields)
         {
-            return parts[0] is long && (long)parts[0] == P256Curve
-                && parts[1] is byte[] && ((byte[])parts[1]).Length == P256PartSize
-                && parts[2] is byte[] && ((byte[])parts[2]).Length == P256PartSize;
+            bool isElliptic = fields.KeyType is long && (long)fields.KeyType == EllipticKeyType
+                && fields.Algorithm is long && (long)fields.Algorithm == PasskeyRules.EcdsaAlgorithm;
+
+            return isElliptic
+                && fields.CurveOrModulus is long && (long)fields.CurveOrModulus == P256Curve
+                && HasLength(fields.XOrExponent, P256PartSize)
+                && HasLength(fields.Y, P256PartSize);
         }
 
-        private static bool IsValidRsaKey(object[] parts)
+        private static bool IsValidRsaKey(CoseFields fields)
         {
-            return parts[0] is byte[] && ((byte[])parts[0]).Length > 0
-                && parts[1] is byte[] && ((byte[])parts[1]).Length > 0;
+            bool isRsa = fields.KeyType is long && (long)fields.KeyType == RsaKeyType
+                && fields.Algorithm is long && (long)fields.Algorithm == PasskeyRules.RsaAlgorithm;
+
+            return isRsa
+                && fields.CurveOrModulus is byte[] && ((byte[])fields.CurveOrModulus).Length > 0
+                && fields.XOrExponent is byte[] && ((byte[])fields.XOrExponent).Length > 0;
+        }
+
+        private static bool HasLength(object value, int length)
+        {
+            return value is byte[] && ((byte[])value).Length == length;
         }
 
         private static object GetValue(Dictionary<object, object> map, long label)
@@ -211,7 +213,7 @@ namespace YachtDice.Server.Logic.Passkeys
             var parameters = new ECParameters
             {
                 Curve = ECCurve.NamedCurves.nistP256,
-                Q = new ECPoint { X = _second, Y = _third }
+                Q = new ECPoint { X = _pointX, Y = _pointY }
             };
 
             return ECDsa.Create(parameters);
@@ -219,12 +221,25 @@ namespace YachtDice.Server.Logic.Passkeys
 
         private RSA CreateRsa()
         {
-            var parameters = new RSAParameters { Modulus = _first, Exponent = _second };
+            var parameters = new RSAParameters { Modulus = _modulus, Exponent = _exponent };
             RSA rsa = RSA.Create();
 
             rsa.ImportParameters(parameters);
 
             return rsa;
+        }
+
+        private sealed class CoseFields
+        {
+            public object KeyType { get; set; }
+
+            public object Algorithm { get; set; }
+
+            public object CurveOrModulus { get; set; }
+
+            public object XOrExponent { get; set; }
+
+            public object Y { get; set; }
         }
     }
 }

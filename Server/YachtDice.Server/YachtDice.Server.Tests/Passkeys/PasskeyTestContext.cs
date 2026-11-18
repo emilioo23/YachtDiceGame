@@ -24,6 +24,9 @@ namespace YachtDice.Server.Tests.Passkeys
         /// <summary>Display name of the second player.</summary>
         public const string OtherDisplayName = "emilioalvarez";
 
+        /// <summary>First name of the second player.</summary>
+        public const string OtherFirstName = "Emilio";
+
         /// <summary>
         /// Initializes the service with two players.
         /// </summary>
@@ -32,7 +35,7 @@ namespace YachtDice.Server.Tests.Passkeys
             Players = new InMemoryPlayerRepository();
             Passkeys = new InMemoryPasskeyRepository(Players);
             Players.Add(new Player { Id = PlayerId, DisplayName = DisplayName, FirstName = FirstName });
-            Players.Add(new Player { Id = OtherPlayerId, DisplayName = OtherDisplayName, FirstName = "Emilio" });
+            Players.Add(new Player { Id = OtherPlayerId, DisplayName = OtherDisplayName, FirstName = OtherFirstName });
             Service = new PasskeyService(Players, Passkeys, new PasskeyChallengeStore());
         }
 

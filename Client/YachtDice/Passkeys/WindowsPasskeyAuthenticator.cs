@@ -83,7 +83,7 @@ namespace YachtDice.Passkeys
                     out attestationPointer);
             }
 
-            return ReadAttestation(result, attestationPointer, challenge.ChallengeId, clientDataJson);
+            return ReadAttestation(result, attestationPointer, new Ceremony(challenge.ChallengeId, clientDataJson));
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace YachtDice.Passkeys
                     out assertionPointer);
             }
 
-            return ReadAssertion(result, assertionPointer, challenge.ChallengeId, clientDataJson);
+            return ReadAssertion(result, assertionPointer, new Ceremony(challenge.ChallengeId, clientDataJson));
         }
 
         private static RelyingPartyInfo BuildRelyingParty(NativeScope scope)
@@ -212,11 +212,7 @@ namespace YachtDice.Passkeys
             };
         }
 
-        private static PasskeyAttestationData ReadAttestation(
-            int result,
-            IntPtr pointer,
-            string challengeId,
-            byte[] clientDataJson)
+        private static PasskeyAttestationData ReadAttestation(int result, IntPtr pointer, Ceremony ceremony)
         {
             ThrowIfFailed(result, pointer);
 
@@ -226,8 +222,8 @@ namespace YachtDice.Passkeys
 
                 return new PasskeyAttestationData
                 {
-                    ChallengeId = challengeId,
-                    ClientDataJson = Base64Url.Encode(clientDataJson),
+                    ChallengeId = ceremony.ChallengeId,
+                    ClientDataJson = Base64Url.Encode(ceremony.ClientDataJson),
                     AttestationObject = ToText(native.AttestationObject, native.AttestationObjectSize)
                 };
             }
@@ -237,11 +233,7 @@ namespace YachtDice.Passkeys
             }
         }
 
-        private static PasskeyAssertionData ReadAssertion(
-            int result,
-            IntPtr pointer,
-            string challengeId,
-            byte[] clientDataJson)
+        private static PasskeyAssertionData ReadAssertion(int result, IntPtr pointer, Ceremony ceremony)
         {
             ThrowIfFailed(result, pointer);
 
@@ -251,9 +243,9 @@ namespace YachtDice.Passkeys
 
                 return new PasskeyAssertionData
                 {
-                    ChallengeId = challengeId,
+                    ChallengeId = ceremony.ChallengeId,
                     CredentialId = ToText(native.Credential.Id, native.Credential.IdSize),
-                    ClientDataJson = Base64Url.Encode(clientDataJson),
+                    ClientDataJson = Base64Url.Encode(ceremony.ClientDataJson),
                     AuthenticatorData = ToText(native.AuthenticatorData, native.AuthenticatorDataSize),
                     Signature = ToText(native.Signature, native.SignatureSize),
                     UserHandle = ToText(native.UserId, native.UserIdSize)
@@ -300,6 +292,19 @@ namespace YachtDice.Passkeys
             }
 
             return data;
+        }
+
+        private sealed class Ceremony
+        {
+            public Ceremony(string challengeId, byte[] clientDataJson)
+            {
+                ChallengeId = challengeId;
+                ClientDataJson = clientDataJson;
+            }
+
+            public string ChallengeId { get; }
+
+            public byte[] ClientDataJson { get; }
         }
     }
 }

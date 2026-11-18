@@ -8,6 +8,7 @@ using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -28,6 +29,7 @@ namespace YachtDice.Server.Logic.Passkeys
         private const string BadAssertionLogMessage = "Login attempt with a passkey answer that is not valid.";
         private const string ClonedLogMessage = "Login attempt with a passkey whose counter went back.";
         private const string LockedLogMessage = "Login attempt with a passkey while the account is locked.";
+        private const string WrongPasswordLogMessage = "Passkey removal with a wrong password.";
         private const string DeviceNameFormat = "Passkey {0}";
         private const string DateFormat = "yyyy-MM-dd";
         private const string AttestationAuthDataKey = "authData";
@@ -138,6 +140,56 @@ namespace YachtDice.Server.Logic.Passkeys
         }
 
         /// <summary>
+        /// Lists the passkeys of a player.
+        /// </summary>
+        /// <param name="displayName">Name of the player of the session.</param>
+        /// <returns>The passkeys; empty if the player does not exist.</returns>
+        public List<PasskeySummary> ListPasskeys(string displayName)
+        {
+            Player player = FindPlayer(displayName);
+            var summaries = new List<PasskeySummary>();
+
+            if (player != null)
+            {
+                summaries = _passkeyRepository
+                    .FindByPlayer(player.Id)
+                    .Select(record => new PasskeySummary { Id = record.Id, Name = record.DeviceName })
+                    .ToList();
+            }
+
+            return summaries;
+        }
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="displayName">Name of the player of the session.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        public PasskeyRemovalStatus RemovePasskey(string displayName, int passkeyId, string password)
+        {
+            Player player = FindPlayer(displayName);
+            PasskeyRemovalStatus status;
+
+            if (player == null)
+            {
+                status = PasskeyRemovalStatus.PlayerNotFound;
+            }
+            else if (string.IsNullOrEmpty(password) || !PasswordHasher.Verify(password, player.PwdHash))
+            {
+                _logger.Warning(WrongPasswordLogMessage);
+                status = PasskeyRemovalStatus.InvalidPassword;
+            }
+            else
+            {
+                status = DeletePasskeyOf(player, passkeyId);
+            }
+
+            return status;
+        }
+
+        /// <summary>
         /// Issues the challenge to log in with a passkey. The player is not known yet.
         /// </summary>
         /// <returns>The challenge.</returns>
@@ -198,6 +250,22 @@ namespace YachtDice.Server.Logic.Passkeys
                 && pending.PlayerId == player.Id;
 
             return isUsable;
+        }
+
+        private PasskeyRemovalStatus DeletePasskeyOf(Player player, int passkeyId)
+        {
+            PasskeyRecord record = _passkeyRepository
+                .FindByPlayer(player.Id)
+                .FirstOrDefault(key => key.Id == passkeyId);
+            PasskeyRemovalStatus status = PasskeyRemovalStatus.PasskeyNotFound;
+
+            if (record != null)
+            {
+                _passkeyRepository.Delete(record.Id);
+                status = PasskeyRemovalStatus.Removed;
+            }
+
+            return status;
         }
 
         private Player FindPlayer(string displayName)

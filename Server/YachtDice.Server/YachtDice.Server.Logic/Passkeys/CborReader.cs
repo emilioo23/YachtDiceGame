@@ -14,6 +14,9 @@ namespace YachtDice.Server.Logic.Passkeys
         private const int MaxItems = 64;
         private const int MajorShift = 5;
         private const int AdditionalMask = 0x1F;
+        private const int OneByteCount = 1;
+        private const int TwoByteCount = 2;
+        private const int FourByteCount = 4;
         private const int OneByteLength = 24;
         private const int TwoBytesLength = 25;
         private const int FourBytesLength = 26;
@@ -157,15 +160,15 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else if (additional == OneByteLength)
             {
-                argument = ReadNumber(1);
+                argument = ReadNumber(OneByteCount);
             }
             else if (additional == TwoBytesLength)
             {
-                argument = ReadNumber(2);
+                argument = ReadNumber(TwoByteCount);
             }
             else if (additional == FourBytesLength)
             {
-                argument = ReadNumber(4);
+                argument = ReadNumber(FourByteCount);
             }
             else if (additional == EightBytesLength)
             {

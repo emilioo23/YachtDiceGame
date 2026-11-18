@@ -142,9 +142,11 @@
     <Compile Include="Passkeys\PasskeyPublicKey.cs" />
     <Compile Include="Passkeys\PasskeyPurpose.cs" />
     <Compile Include="Passkeys\PasskeyRegistrationStatus.cs" />
+    <Compile Include="Passkeys\PasskeyRemovalStatus.cs" />
     <Compile Include="Passkeys\PasskeyRules.cs" />
     <Compile Include="Passkeys\PasskeyService.cs" />
     <Compile Include="Passkeys\PasskeyStartStatus.cs" />
+    <Compile Include="Passkeys\PasskeySummary.cs" />
     <Compile Include="Passkeys\PendingChallenge.cs" />
     <Compile Include="Players\AccountDeletionStatus.cs" />
     <Compile Include="Players\AchievementMetric.cs" />

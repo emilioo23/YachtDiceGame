@@ -53,6 +53,12 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
+        public void Delete(int passkeyId)
+        {
+            _records.RemoveAll(record => record.Id == passkeyId);
+        }
+
+        /// <inheritdoc />
         public void SaveSignCount(int passkeyId, long signCount)
         {
             _records.First(record => record.Id == passkeyId).SignCount = signCount;

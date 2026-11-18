@@ -18,9 +18,11 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void TryConvert_DerWithLeadingZero_ReturnsRAndSPaddedToTheSameSize()
         {
-            EcdsaSignatureConverter.TryConvert(DerWithLeadingZero, PartSize, out byte[] fixedSignature);
+            byte[] fixedSignatureExpected = ExpectedFixed;
 
-            Assert.Equal(ExpectedFixed, fixedSignature);
+            EcdsaSignatureConverter.TryConvert(DerWithLeadingZero, PartSize, out byte[] fixedSignatureResult);
+
+            Assert.Equal(fixedSignatureExpected, fixedSignatureResult);
         }
 
         [Fact]

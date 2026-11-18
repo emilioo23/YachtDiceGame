@@ -1149,6 +1149,84 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         InvalidPasskey = 10,
     }
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyRemovalResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasskeyRemovalResultCode : int {
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Removed = 0,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPassword = 1,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasskeyNotFound = 2,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 3,
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyInfoData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasskeyInfoData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="TwoFactorManagementServiceReference.ITwoFactorManagementService")]
     public interface ITwoFactorManagementService {
@@ -1211,6 +1289,14 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeys", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeysResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeysServiceFaultFault", Name="ServiceFault")]
         int CountPasskeys(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/ListPasskeys", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/ListPasskeysResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/ListPasskeysServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasskeyInfoData[] ListPasskeys(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/RemovePasskey", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/RemovePasskeyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/RemovePasskeyServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password);
 
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLogin", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLoginResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLoginServiceFaultFault", Name="ServiceFault")]
@@ -1294,6 +1380,14 @@ namespace YachtDice.TwoFactorManagementServiceReference {
 
         public int CountPasskeys(string sessionToken) {
             return base.Channel.CountPasskeys(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyInfoData[] ListPasskeys(string sessionToken) {
+            return base.Channel.ListPasskeys(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password) {
+            return base.Channel.RemovePasskey(sessionToken, passkeyId, password);
         }
 
         public YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData BeginPasskeyLogin() {
