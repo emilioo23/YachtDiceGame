@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Client.Logic.Game
+﻿using System;
+namespace YachtDice.Client.Logic.Game
 {
     /// <summary>
     /// A player and the points that the player has at the end of a game.
     /// </summary>
     public sealed class StandingEntry
     {
+        private const string NullValueMessage = "A value that the standing entry needs cannot be null.";
+
         /// <summary>
         /// Initializes a new entry.
         /// </summary>
@@ -13,8 +16,8 @@
         /// <param name="total">Total points of the player.</param>
         public StandingEntry(string playerId, string name, int total)
         {
-            PlayerId = playerId;
-            Name = name;
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
             Total = total;
         }
 

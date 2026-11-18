@@ -15,13 +15,15 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
+        private const string NullValueMessage = "A value that the room gateway needs cannot be null.";
+
         /// <summary>
         /// Initializes the gateway for the player.
         /// </summary>
         /// <param name="session">Session of the player who uses the room.</param>
         public RoomGateway(PlayerSession session)
         {
-            Session = session;
+            Session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
         }
 
         /// <summary>

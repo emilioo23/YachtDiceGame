@@ -30,6 +30,7 @@ namespace YachtDice.Views
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
         private const string ComputerLabelFormat = "{0} · {1}";
         private const string CopyFailedLogMessage = "The room code could not be copied to the clipboard.";
+        private const string NullValueMessage = "A value that the lobby window needs cannot be null.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
@@ -53,8 +54,8 @@ namespace YachtDice.Views
             RoomNameTextBox.MaxLength = MaxRoomNameLength;
             FillComputerDifficulties();
 
-            _roomGateway = roomGateway;
-            _chat = chat;
+            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullValueMessage);
+            _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;

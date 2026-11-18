@@ -14,12 +14,19 @@ namespace YachtDice.Views
     /// </summary>
     public partial class GameScorecardsWindow : Window
     {
+        private const string NullValueMessage = "A value that the game scorecards window needs cannot be null.";
+
         /// <summary>
         /// Initializes the dialog with the scorecards that the server sent.
         /// </summary>
         /// <param name="scorecards">Scorecards of the game; it can be empty for old games.</param>
         public GameScorecardsWindow(IReadOnlyList<SavedScorecard> scorecards)
         {
+            if (scorecards == null)
+            {
+                throw new ArgumentNullException(nameof(scorecards), NullValueMessage);
+            }
+
             InitializeComponent();
 
             Func<SavedScorecard, ScorecardView> createView = CreateView;

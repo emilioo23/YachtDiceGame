@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using YachtDice.Composition;
 using YachtDice.Gateway;
 
@@ -9,6 +10,8 @@ namespace YachtDice.Models
     /// </summary>
     public class PlayerSession
     {
+        private const string NullValueMessage = "A value that the player session needs cannot be null.";
+
         /// <summary>
         /// Initializes the session of the player.
         /// </summary>
@@ -17,9 +20,9 @@ namespace YachtDice.Models
         /// <param name="services">Components that the windows share while the application is open.</param>
         public PlayerSession(string displayName, string firstName, ClientServices services)
         {
-            DisplayName = displayName;
-            FirstName = firstName;
-            Services = services;
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullValueMessage);
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName), NullValueMessage);
+            Services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             Presence = new PresenceGateway();
             LastOfferedMatchCode = string.Empty;
         }

@@ -19,6 +19,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class HistoryWindow : Window
     {
+        private const string NullValueMessage = "A value that the history window needs cannot be null.";
+
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -31,7 +33,7 @@ namespace YachtDice.Views
         public HistoryWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new HistoryWindow(session);
 
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadHistoryAsync);

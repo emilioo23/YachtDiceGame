@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Server.Logic.Friends
+﻿using System;
+namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
     /// Result of the request to add a friend by its friend code.
     /// </summary>
     public class FriendRequestResult
     {
+        private const string NullValueMessage = "A value that the friend request result needs cannot be null.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendRequestResult"/> class.
         /// </summary>
@@ -13,7 +16,7 @@
         public FriendRequestResult(FriendRequestStatus status, string friendName)
         {
             Status = status;
-            FriendName = friendName;
+            FriendName = friendName ?? throw new ArgumentNullException(nameof(friendName), NullValueMessage);
         }
 
         /// <summary>

@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Server.Logic.Game
+﻿using System;
+namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
     /// A turn of the game of a room, identified by the code of the room and the number of the turn.
     /// </summary>
     public sealed class GameTurn
     {
+        private const string NullValueMessage = "A value that the game turn needs cannot be null.";
+
         /// <summary>
         /// Initializes the turn.
         /// </summary>
@@ -12,7 +15,7 @@
         /// <param name="turnNumber">Number of the turn inside the game.</param>
         public GameTurn(string roomCode, int turnNumber)
         {
-            RoomCode = roomCode;
+            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullValueMessage);
             TurnNumber = turnNumber;
         }
 

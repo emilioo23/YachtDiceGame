@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using YachtDice.Composition;
 using YachtDice.Navigation;
 using YachtDice.Utils;
@@ -10,6 +11,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class SplashWindow : Window
     {
+        private const string NullValueMessage = "A value that the splash window needs cannot be null.";
+
         private readonly ClientServices _services;
         private bool _hasContinued;
 
@@ -20,7 +23,7 @@ namespace YachtDice.Views
         public SplashWindow(ClientServices services)
         {
             InitializeComponent();
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             _services.Music.Play(MusicTrack.MenuTheme);
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using YachtDice.Models;
 using YachtDice.Navigation;
 using YachtDice.Utils;
@@ -11,6 +12,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class HowToPlayWindow : Window
     {
+        private const string NullValueMessage = "A value that the how to play window needs cannot be null.";
+
         private readonly PlayerSession _session;
         private readonly bool _isDialog;
 
@@ -21,7 +24,7 @@ namespace YachtDice.Views
         public HowToPlayWindow(PlayerSession session)
             : this()
         {
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new HowToPlayWindow(session);
         }
 
@@ -33,7 +36,7 @@ namespace YachtDice.Views
         public HowToPlayWindow(Window owner)
             : this()
         {
-            Owner = owner;
+            Owner = owner ?? throw new ArgumentNullException(nameof(owner), NullValueMessage);
             _isDialog = true;
             LanguageSwitcherControl.Visibility = Visibility.Collapsed;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -7,6 +8,8 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class BackupCodeCreation
     {
+        private const string NullValueMessage = "A value that the backup code creation needs cannot be null.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BackupCodeCreation"/> class.
         /// </summary>
@@ -15,7 +18,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         public BackupCodeCreation(BackupCodeCreationStatus status, List<string> codes)
         {
             Status = status;
-            Codes = codes ?? new List<string>();
+            Codes = codes ?? throw new ArgumentNullException(nameof(codes), NullValueMessage);
         }
 
         /// <summary>

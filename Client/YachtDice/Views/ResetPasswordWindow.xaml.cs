@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ResetPasswordWindow : Window
     {
+        private const string NullValueMessage = "A value that the reset password window needs cannot be null.";
+
         private readonly string _email;
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
@@ -30,9 +33,9 @@ namespace YachtDice.Views
         public ResetPasswordWindow(string email, ClientServices services)
         {
             InitializeComponent();
-            _email = email;
+            _email = email ?? throw new ArgumentNullException(nameof(email), NullValueMessage);
             _logger = new AppLogger(GetType());
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             EmailTextBlock.Text = email;
             CodeTextBox.MaxLength = ResetPasswordInputValidator.CodeLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);

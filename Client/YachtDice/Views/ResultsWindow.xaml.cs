@@ -28,6 +28,7 @@ namespace YachtDice.Views
         private const int SingleWinner = 1;
         private const double ExperienceDelaySeconds = 0.5;
         private const double ExperienceFillSeconds = 1.4;
+        private const string NullValueMessage = "A value that the results window needs cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -42,8 +43,18 @@ namespace YachtDice.Views
         /// <param name="playerId">Identifier of the local player in the game.</param>
         public ResultsWindow(PlayerSession session, IReadOnlyList<StandingEntry> standings, string playerId)
         {
+            if (standings == null)
+            {
+                throw new ArgumentNullException(nameof(standings), NullValueMessage);
+            }
+
+            if (playerId == null)
+            {
+                throw new ArgumentNullException(nameof(playerId), NullValueMessage);
+            }
+
             InitializeComponent();
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             _experienceGained = FindExperienceGained(standings, playerId);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(session, standings, playerId);
 

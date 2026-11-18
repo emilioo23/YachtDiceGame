@@ -1,4 +1,5 @@
-﻿namespace YachtDice.Server.Logic.Email
+﻿using System;
+namespace YachtDice.Server.Logic.Email
 {
     /// <summary>
     /// Texts of an email that carries a temporary code: the keys of its subject and body in the resources, and
@@ -6,6 +7,8 @@
     /// </summary>
     public sealed class CodeEmailTemplate
     {
+        private const string NullValueMessage = "A value that the code email template needs cannot be null.";
+
         /// <summary>
         /// Initializes the template.
         /// </summary>
@@ -14,8 +17,10 @@
         /// <param name="expirationMinutes">Minutes that the code lasts.</param>
         public CodeEmailTemplate(string subjectResourceKey, string bodyResourceKey, int expirationMinutes)
         {
-            SubjectResourceKey = subjectResourceKey;
-            BodyResourceKey = bodyResourceKey;
+            SubjectResourceKey = subjectResourceKey
+                ?? throw new ArgumentNullException(nameof(subjectResourceKey), NullValueMessage);
+            BodyResourceKey = bodyResourceKey
+                ?? throw new ArgumentNullException(nameof(bodyResourceKey), NullValueMessage);
             ExpirationMinutes = expirationMinutes;
         }
 

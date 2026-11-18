@@ -1,4 +1,5 @@
-﻿namespace YachtDice.Server.Logic.Rooms
+﻿using System;
+namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
     /// A player who asks to enter a room: the name he or she asked for and the avatar already looked up.
@@ -6,6 +7,8 @@
     /// </summary>
     internal sealed class RoomApplicant
     {
+        private const string NullValueMessage = "A value that the room applicant needs cannot be null.";
+
         /// <summary>
         /// Initializes the applicant.
         /// </summary>
@@ -13,7 +16,7 @@
         /// <param name="avatarId">Identifier of the avatar of the player.</param>
         public RoomApplicant(string name, int avatarId, int level)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
             AvatarId = avatarId;
             Level = level;
         }

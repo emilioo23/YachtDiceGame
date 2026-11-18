@@ -43,6 +43,7 @@ namespace YachtDice.Views
         private const string LockedTextBrushKey = "BrushTextMuted";
         private const string UnlockedBackgroundBrushKey = "BrushGoldButton";
         private const string LockedBackgroundBrushKey = "BrushBorder";
+        private const string NullValueMessage = "A value that the profile window needs cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -63,7 +64,7 @@ namespace YachtDice.Views
         public ProfileWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             UsernameTextBox.Text = session.DisplayName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
 

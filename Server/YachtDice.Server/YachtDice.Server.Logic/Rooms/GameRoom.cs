@@ -14,6 +14,7 @@ namespace YachtDice.Server.Logic.Rooms
         private const string IdFormat = "N";
         private const string RepeatedNameFormat = "{0} {1}";
         private const int FirstRepeatedNumber = 2;
+        private const string NullValueMessage = "A value that the game room needs cannot be null.";
 
         private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
         private readonly List<RoomPlayer> _absentPlayers = new List<RoomPlayer>();
@@ -29,9 +30,9 @@ namespace YachtDice.Server.Logic.Rooms
         public GameRoom(string code, RoomSettings settings, DateTime createdAt)
         {
             Id = Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture);
-            Code = code;
+            Code = code ?? throw new ArgumentNullException(nameof(code), NullValueMessage);
             HostId = string.Empty;
-            Settings = settings;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings), NullValueMessage);
             CreatedAt = createdAt;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
@@ -19,6 +20,7 @@ namespace YachtDice.Views
     public partial class LoginWindow : Window
     {
         private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
+        private const string NullValueMessage = "A value that the login window needs cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
@@ -32,7 +34,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow(services);
             ApplyFieldLimits();
             _ = WarmUpConnectionAsync();

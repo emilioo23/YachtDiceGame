@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Client.Logic.Rooms
+﻿using System;
+namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
     /// The player and the room where the player is, which always travel together to use the services of a room.
     /// </summary>
     public sealed class RoomMembership
     {
+        private const string NullValueMessage = "A value that the room membership needs cannot be null.";
+
         /// <summary>
         /// Initializes the membership.
         /// </summary>
@@ -12,8 +15,8 @@
         /// <param name="roomCode">Code of the room where the player is.</param>
         public RoomMembership(string playerId, string roomCode)
         {
-            PlayerId = playerId;
-            RoomCode = roomCode;
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
+            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullValueMessage);
         }
 
         /// <summary>

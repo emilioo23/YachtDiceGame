@@ -34,6 +34,7 @@ namespace YachtDice.Views
         private const string PrivacySection = "Privacy";
         private const int ToggleKnobMargin = 3;
         private const int NoMargin = 0;
+        private const string NullValueMessage = "A value that the settings window needs cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly AudioSettings _audio;
@@ -56,7 +57,7 @@ namespace YachtDice.Views
             NewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             ConfirmNewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             DeleteAccountPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             _audio = session.Services.Audio;
             _isInitializing = true;
 

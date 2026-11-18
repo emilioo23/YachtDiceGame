@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Server.Logic.Friends
+﻿using System;
+namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
     /// Result of checking whether a player can invite a friend to a room.
     /// </summary>
     public class InvitationResult
     {
+        private const string NullValueMessage = "A value that the invitation result needs cannot be null.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InvitationResult"/> class.
         /// </summary>
@@ -13,7 +16,7 @@
         public InvitationResult(InvitationStatus status, string senderName)
         {
             Status = status;
-            SenderName = senderName;
+            SenderName = senderName ?? throw new ArgumentNullException(nameof(senderName), NullValueMessage);
         }
 
         /// <summary>

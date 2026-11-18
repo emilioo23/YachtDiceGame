@@ -179,15 +179,15 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             if (player == null)
             {
-                creation = new BackupCodeCreation(BackupCodeCreationStatus.PlayerNotFound, null);
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.PlayerNotFound, new List<string>());
             }
             else if (!IsPasswordCorrect(player, password))
             {
-                creation = new BackupCodeCreation(BackupCodeCreationStatus.InvalidPassword, null);
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.InvalidPassword, new List<string>());
             }
             else if (!_playerRepository.HasTwoFactorEnabled(player.Id))
             {
-                creation = new BackupCodeCreation(BackupCodeCreationStatus.TwoFactorDisabled, null);
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.TwoFactorDisabled, new List<string>());
             }
             else
             {

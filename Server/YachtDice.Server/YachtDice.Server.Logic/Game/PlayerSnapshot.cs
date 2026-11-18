@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -7,6 +8,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class PlayerSnapshot
     {
+        private const string NullValueMessage = "A value that the player snapshot needs cannot be null.";
+
         /// <summary>
         /// Initializes a new snapshot.
         /// </summary>
@@ -15,8 +18,8 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="isPresent">True if the player is connected to the game.</param>
         public PlayerSnapshot(string playerId, string name, bool isPresent)
         {
-            PlayerId = playerId;
-            Name = name;
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
             IsPresent = isPresent;
             Scores = new List<ScoreEntry>();
         }

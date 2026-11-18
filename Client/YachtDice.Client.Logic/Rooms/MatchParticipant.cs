@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Client.Logic.Rooms
+﻿using System;
+namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
     /// A player of a match, reduced to what is needed to notice who came and who went.
     /// </summary>
     public class MatchParticipant
     {
+        private const string NullValueMessage = "A value that the match participant needs cannot be null.";
+
         /// <summary>
         /// Initializes a participant.
         /// </summary>
@@ -12,8 +15,8 @@
         /// <param name="name">Name that the player shows.</param>
         public MatchParticipant(string id, string name)
         {
-            Id = id;
-            Name = name;
+            Id = id ?? throw new ArgumentNullException(nameof(id), NullValueMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
         }
 
         /// <summary>

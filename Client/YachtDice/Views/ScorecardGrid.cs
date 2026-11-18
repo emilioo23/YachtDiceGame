@@ -36,6 +36,7 @@ namespace YachtDice.Views
         private const string ResourceBrushCream2 = "BrushCream2";
         private const string ResourceBrushFeltLight = "BrushFeltLight";
         private const string ResourceBrushWood = "BrushWood";
+        private const string NullValueMessage = "A value that the scorecard grid needs cannot be null.";
 
         private readonly Panel _panel;
         private readonly FrameworkElement _resources;
@@ -47,8 +48,8 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public ScorecardGrid(Panel panel, FrameworkElement resources)
         {
-            _panel = panel;
-            _resources = resources;
+            _panel = panel ?? throw new ArgumentNullException(nameof(panel), NullValueMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullValueMessage);
         }
 
         /// <summary>
@@ -252,9 +253,9 @@ namespace YachtDice.Views
             /// <param name="onClick">Work to run when the player clicks a box.</param>
             public RenderContext(GameState state, IReadOnlyList<MatchPlayer> columns, Func<ScoreCategory, Task> onClick)
             {
-                State = state;
-                Columns = columns;
-                OnCategoryClick = onClick;
+                State = state ?? throw new ArgumentNullException(nameof(state), NullValueMessage);
+                Columns = columns ?? throw new ArgumentNullException(nameof(columns), NullValueMessage);
+                OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick), NullValueMessage);
                 Func<MatchPlayer, bool> isLocalCurrentPlayer =
                     player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId;
                 IsLocalTurn = columns.Any(isLocalCurrentPlayer)

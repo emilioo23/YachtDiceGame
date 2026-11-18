@@ -53,6 +53,7 @@ namespace YachtDice.Views
         private const string GoldBrushKey = "BrushGold";
         private const string CreamBrushKey = "BrushCream";
         private const string DisplayFontKey = "FontDisplay";
+        private const string NullValueMessage = "A value that the yacht celebration needs cannot be null.";
 
         private static readonly string[] ConfettiBrushKeys =
         {
@@ -76,8 +77,8 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public YachtCelebration(Canvas canvas, FrameworkElement resources)
         {
-            _canvas = canvas;
-            _resources = resources;
+            _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas), NullValueMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullValueMessage);
         }
 
         /// <summary>

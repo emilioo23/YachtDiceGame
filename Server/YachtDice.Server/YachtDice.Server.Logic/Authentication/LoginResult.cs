@@ -1,4 +1,5 @@
-﻿using YachtDice.Server.Data;
+﻿using System;
+using YachtDice.Server.Data;
 
 namespace YachtDice.Server.Logic.Authentication
 {
@@ -7,6 +8,8 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginResult
     {
+        private const string NullValueMessage = "A value that the login result needs cannot be null.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginResult"/> class.
         /// </summary>
@@ -15,7 +18,7 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginResult(LoginStatus status, string displayName)
         {
             Status = status;
-            DisplayName = displayName;
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullValueMessage);
             FirstName = string.Empty;
             ChallengeId = string.Empty;
         }
@@ -28,10 +31,15 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="challengeId">Identifier of the verification challenge; empty if no code was sent.</param>
         public LoginResult(LoginStatus status, Player player, string challengeId)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException(nameof(player), NullValueMessage);
+            }
+
             Status = status;
             DisplayName = player.DisplayName;
             FirstName = player.FirstName;
-            ChallengeId = challengeId;
+            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullValueMessage);
         }
 
         /// <summary>

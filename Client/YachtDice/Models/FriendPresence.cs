@@ -1,10 +1,13 @@
-﻿namespace YachtDice.Models
+﻿using System;
+namespace YachtDice.Models
 {
     /// <summary>
     /// How a friend is shown in a list: the text of its status and whether the friend is online.
     /// </summary>
     public sealed class FriendPresence
     {
+        private const string NullValueMessage = "A value that the friend presence needs cannot be null.";
+
         /// <summary>
         /// Initializes the presence of a friend.
         /// </summary>
@@ -12,7 +15,7 @@
         /// <param name="isOnline">Whether the friend is online.</param>
         public FriendPresence(string status, bool isOnline)
         {
-            Status = status;
+            Status = status ?? throw new ArgumentNullException(nameof(status), NullValueMessage);
             IsOnline = isOnline;
         }
 

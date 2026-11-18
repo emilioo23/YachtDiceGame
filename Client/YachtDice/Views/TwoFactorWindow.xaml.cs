@@ -26,6 +26,7 @@ namespace YachtDice.Views
     {
         private const int MaxDigitsPerBox = 1;
         private const int FirstBoxIndex = 0;
+        private const string NullValueMessage = "A value that the two factor window needs cannot be null.";
 
         private readonly string _email;
         private readonly PlayerSession _session;
@@ -43,6 +44,11 @@ namespace YachtDice.Views
         /// <param name="challenge">Data of the verification code that was sent to the player.</param>
         public TwoFactorWindow(VerificationChallenge challenge)
         {
+            if (challenge == null)
+            {
+                throw new ArgumentNullException(nameof(challenge), NullValueMessage);
+            }
+
             InitializeComponent();
 
             _email = challenge.Email;

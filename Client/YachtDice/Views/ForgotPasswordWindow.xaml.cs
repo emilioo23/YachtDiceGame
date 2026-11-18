@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
@@ -15,6 +16,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
+        private const string NullValueMessage = "A value that the forgot password window needs cannot be null.";
+
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
@@ -27,7 +30,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow(services);
         }
 

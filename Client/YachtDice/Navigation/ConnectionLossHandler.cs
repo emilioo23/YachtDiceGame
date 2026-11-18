@@ -20,6 +20,8 @@ namespace YachtDice.Navigation
     /// </summary>
     public sealed class ConnectionLossHandler
     {
+        private const string NullValueMessage = "A value that the connection loss handler needs cannot be null.";
+
         private readonly ConnectionLossGate _gate = new ConnectionLossGate();
         private readonly ConnectionLossGate _recoveryGate = new ConnectionLossGate();
         private readonly ClientServices _services;
@@ -31,7 +33,7 @@ namespace YachtDice.Navigation
         /// <param name="services">Shared components that the login window needs when the player goes back.</param>
         public ConnectionLossHandler(ClientServices services)
         {
-            _services = services;
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
         }
 
         /// <summary>

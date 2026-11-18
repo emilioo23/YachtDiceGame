@@ -40,6 +40,7 @@ namespace YachtDice.Views
         private const string PointsFormat = "N0";
         private const string ViewerRowBrushKey = "BrushGoldButton";
         private const string ViewerTextBrushKey = "BrushFeltDark";
+        private const string NullValueMessage = "A value that the leaderboard window needs cannot be null.";
 
         private static readonly GridLength[] ColumnWidths =
         {
@@ -64,7 +65,7 @@ namespace YachtDice.Views
         public LeaderboardWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session;
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(session);
 
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadRankingAsync);
