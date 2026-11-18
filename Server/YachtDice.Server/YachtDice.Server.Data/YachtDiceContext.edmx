@@ -76,6 +76,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="PublicKey" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CredentialId" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="SignCount" Type="bigint" Nullable="false" />
           <Property Name="DeviceName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Player">
@@ -841,6 +843,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="PublicKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CredentialId" Type="String" MaxLength="400" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SignCount" Type="Int64" Nullable="false" />
           <Property Name="DeviceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PASSKEY__PlayerI__503BEA1C" FromRole="Passkey" ToRole="Player" />
         </EntityType>
@@ -1644,6 +1648,8 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="PublicKey" ColumnName="PublicKey" />
+                <ScalarProperty Name="CredentialId" ColumnName="CredentialId" />
+                <ScalarProperty Name="SignCount" ColumnName="SignCount" />
                 <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
               </MappingFragment>
             </EntityTypeMapping>

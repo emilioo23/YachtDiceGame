@@ -17,6 +17,8 @@ namespace YachtDice.Server.Data
         public int Id { get; set; }
         public int PlayerId { get; set; }
         public string PublicKey { get; set; }
+        public string CredentialId { get; set; }
+        public long SignCount { get; set; }
         public string DeviceName { get; set; }
     
         public virtual Player Player { get; set; }

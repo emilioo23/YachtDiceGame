@@ -8,6 +8,7 @@ using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Friends;
 using YachtDice.Server.Logic.Game;
+using YachtDice.Server.Logic.Passkeys;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
 using YachtDice.Server.Logic.Security;
@@ -63,6 +64,7 @@ namespace YachtDice.Server.Host.Composition
         {
             services.AddTransient<IPlayerRepository, PlayerRepository>();
             services.AddTransient<IBackupCodeRepository, BackupCodeRepository>();
+            services.AddTransient<IPasskeyRepository, PasskeyRepository>();
             services.AddTransient<IPasswordResetRepository, PasswordResetRepository>();
             services.AddTransient<IGameHistoryRepository, GameHistoryRepository>();
             services.AddTransient<IGameCheckpointRepository, GameCheckpointRepository>();
@@ -79,6 +81,7 @@ namespace YachtDice.Server.Host.Composition
 
             services.AddSingleton<SessionRegistry>();
             services.AddSingleton<TwoFactorCodeService>();
+            services.AddSingleton<PasskeyChallengeStore>();
             services.AddSingleton(ServerConfiguration.CreateOffensiveWordFilter());
             services.AddSingleton(gameRules.LevelTable);
             services.AddSingleton(gameRules.TurnDuration);
@@ -94,6 +97,7 @@ namespace YachtDice.Server.Host.Composition
             services.AddTransient<AccountLockNotifier>();
             services.AddTransient(CreateLoginService);
             services.AddTransient<PasswordChangeService>();
+            services.AddTransient<IPasskeyService, PasskeyService>();
             services.AddTransient<ITwoFactorSettingsService, TwoFactorSettingsService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
             services.AddTransient<AvatarService>();

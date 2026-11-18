@@ -57,6 +57,7 @@
     <Compile Include="Mapping\EnumMapper.cs" />
     <Compile Include="Mapping\GameMapper.cs" />
     <Compile Include="Mapping\LeaderboardMapper.cs" />
+    <Compile Include="Mapping\PasskeyMapper.cs" />
     <Compile Include="Mapping\PlayerStatisticsMapper.cs" />
     <Compile Include="Mapping\RegistrationMapper.cs" />
     <Compile Include="Mapping\RoomMapper.cs" />

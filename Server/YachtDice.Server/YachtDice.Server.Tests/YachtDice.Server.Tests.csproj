@@ -86,6 +86,7 @@
     <Compile Include="InMemory\InMemoryBackupCodeRepository.cs" />
     <Compile Include="InMemory\InMemoryGameCheckpointRepository.cs" />
     <Compile Include="InMemory\InMemoryKickLogRepository.cs" />
+    <Compile Include="InMemory\InMemoryPasskeyRepository.cs" />
     <Compile Include="InMemory\InMemoryPasswordResetRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerReportRepository.cs" />
     <Compile Include="InMemory\InMemoryRoomInviteRepository.cs" />
@@ -96,6 +97,19 @@
     <Compile Include="Mapping\EnumMapperTests.cs" />
     <Compile Include="Mapping\GameMapperTests.cs" />
     <Compile Include="Moderation\LinkCensorTests.cs" />
+    <Compile Include="Passkeys\AuthenticatorDataTests.cs" />
+    <Compile Include="Passkeys\AuthenticatorOptions.cs" />
+    <Compile Include="Passkeys\Base64UrlTests.cs" />
+    <Compile Include="Passkeys\CborReaderTests.cs" />
+    <Compile Include="Passkeys\ClientDataValidatorTests.cs" />
+    <Compile Include="Passkeys\CoseRsaKey.cs" />
+    <Compile Include="Passkeys\EcdsaSignatureConverterTests.cs" />
+    <Compile Include="Passkeys\FakeAuthenticator.cs" />
+    <Compile Include="Passkeys\PasskeyChallengeStoreTests.cs" />
+    <Compile Include="Passkeys\PasskeyLoginTests.cs" />
+    <Compile Include="Passkeys\PasskeyPublicKeyTests.cs" />
+    <Compile Include="Passkeys\PasskeyRegistrationTests.cs" />
+    <Compile Include="Passkeys\PasskeyTestContext.cs" />
     <Compile Include="Players\AchievementCatalogTests.cs" />
     <Compile Include="Configuration\GameRulesFile.cs" />
     <Compile Include="Configuration\GameRulesReaderTests.cs" />

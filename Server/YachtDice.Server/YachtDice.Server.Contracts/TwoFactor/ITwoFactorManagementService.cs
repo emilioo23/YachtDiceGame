@@ -94,5 +94,52 @@ namespace YachtDice.Server.Contracts.TwoFactor
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
         SecuritySummary GetSecuritySummary(string sessionToken);
+
+        /// <summary>
+        /// Gives the challenge to create a passkey for the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The challenge and the data of the player for the authenticator.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyChallengeData BeginPasskeyRegistration(string sessionToken);
+
+        /// <summary>
+        /// Checks the answer of the authenticator and saves the new passkey.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="attestation">Answer of the authenticator.</param>
+        /// <returns>Outcome of the registration.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyRegistrationResultCode CompletePasskeyRegistration(
+            string sessionToken,
+            PasskeyAttestationData attestation);
+
+        /// <summary>
+        /// Counts the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of passkeys.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        int CountPasskeys(string sessionToken);
+
+        /// <summary>
+        /// Gives the challenge to log in with a passkey. The player is not known yet, so no session is needed.
+        /// </summary>
+        /// <returns>The challenge.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyChallengeData BeginPasskeyLogin();
+
+        /// <summary>
+        /// Checks the answer of the authenticator and, if it is valid, logs the player in.
+        /// </summary>
+        /// <param name="assertion">Answer of the authenticator.</param>
+        /// <returns>Outcome of the login and the data of the new session.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        Authentication.LoginData CompletePasskeyLogin(PasskeyAssertionData assertion);
     }
 }

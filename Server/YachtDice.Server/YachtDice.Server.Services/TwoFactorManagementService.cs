@@ -4,7 +4,9 @@ using System.ServiceModel;
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.TwoFactor;
+    using AuthenticationContracts = YachtDice.Server.Contracts.Authentication;
     using LogicAuthentication = YachtDice.Server.Logic.Authentication;
+    using LogicPasskeys = YachtDice.Server.Logic.Passkeys;
     using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
 
     /// <summary>
@@ -17,6 +19,7 @@ namespace YachtDice.Server.Services
 
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
         private readonly LogicAuthentication.PasswordChangeService _passwordChangeService;
+        private readonly LogicPasskeys.IPasskeyService _passkeyService;
 
         /// <summary>
         /// Initializes a new instance of the TwoFactorManagementService class.
@@ -25,15 +28,19 @@ namespace YachtDice.Server.Services
         /// <param name="passwordChangeService">
         /// The service that changes the password of a player who is logged in.
         /// </param>
+        /// <param name="passkeyService">The service that registers the passkeys and logs in with them.</param>
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public TwoFactorManagementService(
             LogicTwoFactor.ITwoFactorSettingsService settingsService,
-            LogicAuthentication.PasswordChangeService passwordChangeService)
+            LogicAuthentication.PasswordChangeService passwordChangeService,
+            LogicPasskeys.IPasskeyService passkeyService)
         {
             _settingsService = settingsService
                 ?? throw new ArgumentNullException(nameof(settingsService), NullDependencyMessage);
             _passwordChangeService = passwordChangeService
                 ?? throw new ArgumentNullException(nameof(passwordChangeService), NullDependencyMessage);
+            _passkeyService = passkeyService
+                ?? throw new ArgumentNullException(nameof(passkeyService), NullDependencyMessage);
         }
 
         /// <summary>
@@ -158,6 +165,108 @@ namespace YachtDice.Server.Services
                 ExecuteForPlayer(sessionToken, playerName => ProcessSecuritySummary(playerName));
 
             return summary;
+        }
+
+        /// <summary>
+        /// Gives the challenge to create a passkey for the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The challenge and the data of the player for the authenticator.</returns>
+        public Contracts.PasskeyChallengeData BeginPasskeyRegistration(string sessionToken)
+        {
+            Contracts.PasskeyChallengeData challenge = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginRegistration(playerName)));
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Checks the answer of the authenticator and saves the new passkey.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="attestation">Answer of the authenticator.</param>
+        /// <returns>Outcome of the registration.</returns>
+        public Contracts.PasskeyRegistrationResultCode CompletePasskeyRegistration(
+            string sessionToken,
+            Contracts.PasskeyAttestationData attestation)
+        {
+            Contracts.PasskeyRegistrationResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => ProcessPasskeyRegistration(playerName, attestation));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Counts the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of passkeys.</returns>
+        public int CountPasskeys(string sessionToken)
+        {
+            int passkeyCount = ExecuteForPlayer(sessionToken, playerName => _passkeyService.CountPasskeys(playerName));
+
+            return passkeyCount;
+        }
+
+        /// <summary>
+        /// Gives the challenge to log in with a passkey. The player is not known yet, so no session is needed.
+        /// </summary>
+        /// <returns>The challenge.</returns>
+        public Contracts.PasskeyChallengeData BeginPasskeyLogin()
+        {
+            Contracts.PasskeyChallengeData challenge =
+                Execute(() => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginLogin()));
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Checks the answer of the authenticator and, if it is valid, logs the player in.
+        /// </summary>
+        /// <param name="assertion">Answer of the authenticator.</param>
+        /// <returns>Outcome of the login and the data of the new session.</returns>
+        public AuthenticationContracts.LoginData CompletePasskeyLogin(Contracts.PasskeyAssertionData assertion)
+        {
+            AuthenticationContracts.LoginData loginData = Execute(assertion, () => ProcessPasskeyLogin(assertion));
+
+            return loginData;
+        }
+
+        private Contracts.PasskeyRegistrationResultCode ProcessPasskeyRegistration(
+            string displayName,
+            Contracts.PasskeyAttestationData attestation)
+        {
+            LogicPasskeys.PasskeyRegistrationStatus status =
+                _passkeyService.CompleteRegistration(displayName, Mapping.PasskeyMapper.ToLogic(attestation));
+
+            return Mapping.EnumMapper.Map<
+                LogicPasskeys.PasskeyRegistrationStatus,
+                Contracts.PasskeyRegistrationResultCode>(status);
+        }
+
+        private AuthenticationContracts.LoginData ProcessPasskeyLogin(Contracts.PasskeyAssertionData assertion)
+        {
+            LogicAuthentication.LoginResult logicResult =
+                _passkeyService.CompleteLogin(Mapping.PasskeyMapper.ToLogic(assertion));
+            var loginData = new AuthenticationContracts.LoginData
+            {
+                Code = Mapping.EnumMapper.Map<
+                    LogicAuthentication.LoginStatus,
+                    AuthenticationContracts.LoginResultCode>(logicResult.Status),
+                DisplayName = logicResult.DisplayName,
+                FirstName = logicResult.FirstName,
+                ChallengeId = logicResult.ChallengeId,
+                SessionToken = string.Empty
+            };
+
+            if (logicResult.Status == LogicAuthentication.LoginStatus.LoggedIn)
+            {
+                loginData.SessionToken = Sessions.Start(logicResult.DisplayName);
+            }
+
+            return loginData;
         }
 
         private Contracts.SecuritySummary ProcessSecuritySummary(string displayName)

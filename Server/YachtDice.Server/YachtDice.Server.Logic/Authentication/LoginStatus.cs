@@ -38,6 +38,9 @@
         LockedForTheDay,
 
         /// <summary>Several different players reported the player, so the account is suspended for a day.</summary>
-        SuspendedByReports
+        SuspendedByReports,
+
+        /// <summary>The passkey is not valid, or the challenge expired.</summary>
+        InvalidPasskey
     }
 }

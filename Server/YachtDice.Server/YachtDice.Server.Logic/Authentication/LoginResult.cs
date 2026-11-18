@@ -9,6 +9,7 @@ namespace YachtDice.Server.Logic.Authentication
     public class LoginResult
     {
         private const string NullDisplayNameMessage = "The name of the player cannot be null.";
+        private const string NullFirstNameMessage = "The first name of the player cannot be null.";
         private const string NullPlayerMessage = "The player cannot be null.";
         private const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
 
@@ -42,6 +43,19 @@ namespace YachtDice.Server.Logic.Authentication
             DisplayName = player.DisplayName;
             FirstName = player.FirstName;
             ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginResult"/> class for a player who proved who they are
+        /// without a password, so no verification code is needed.
+        /// </summary>
+        /// <param name="status">Status of the login.</param>
+        /// <param name="displayName">Player's display name.</param>
+        /// <param name="firstName">Player's first name.</param>
+        public LoginResult(LoginStatus status, string displayName, string firstName)
+            : this(status, displayName)
+        {
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName), NullFirstNameMessage);
         }
 
         /// <summary>

@@ -126,6 +126,9 @@
     <Compile Include="Repositories\KickLogRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
     <Compile Include="Repositories\PlayerReportRepository.cs" />
+    <Compile Include="Repositories\IPasskeyRepository.cs" />
+    <Compile Include="Repositories\PasskeyRecord.cs" />
+    <Compile Include="Repositories\PasskeyRepository.cs" />
     <Compile Include="Repositories\PasswordResetRepository.cs" />
     <Compile Include="Repositories\PlayedGameRecord.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />
@@ -183,6 +186,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\AddFlagCodeToPlayerSettings.sql" />
     <None Include="Scripts\AddMoreAvatars.sql" />
+    <None Include="Scripts\AddPasskeyCredentialData.sql" />
     <None Include="Scripts\AllowBlockedFriendships.sql" />
     <None Include="Scripts\AllowComputerRoomType.sql" />
     <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
