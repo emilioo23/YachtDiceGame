@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
+    <Compile Include="Passkeys\Base64UrlTests.cs" />
+    <Compile Include="Passkeys\PasskeyClientDataTests.cs" />
     <Compile Include="Authentication\EmailMaskTests.cs" />
     <Compile Include="Authentication\BackupCodeValidatorTests.cs" />
     <Compile Include="Authentication\PasswordChangeValidatorTests.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Utils\GatewayErrorMessagesTests.cs" />
     <Compile Include="Utils\HowToPlayContentTests.cs" />
     <Compile Include="Utils\InvitationResultMessagesTests.cs" />
+    <Compile Include="Utils\PasskeyMessagesTests.cs" />
     <Compile Include="Utils\LoginResultMessagesTests.cs" />
     <Compile Include="Utils\GamePlayerFactoryTests.cs" />
     <Compile Include="Utils\PresenceMessagesTests.cs" />

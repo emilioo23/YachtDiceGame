@@ -2496,4 +2496,40 @@
   <data name="Friends_Invitation_Join" xml:space="preserve">
     <value>加入</value>
   </data>
+  <data name="Auth_ButtonPasskey" xml:space="preserve">
+    <value>使用通行密钥登录</value>
+  </data>
+  <data name="Passkey_ErrorUnavailable" xml:space="preserve">
+    <value>此版本的 Windows 不支持通行密钥。</value>
+  </data>
+  <data name="Passkey_ErrorInvalid" xml:space="preserve">
+    <value>无法验证你的通行密钥。请重试，或使用邮箱和密码登录。</value>
+  </data>
+  <data name="Passkey_ErrorWindows" xml:space="preserve">
+    <value>Windows 无法完成通行密钥操作。</value>
+  </data>
+  <data name="Passkey_ErrorBusy" xml:space="preserve">
+    <value>服务器正忙，请稍后再试。</value>
+  </data>
+  <data name="Passkey_ErrorTooMany" xml:space="preserve">
+    <value>你的通行密钥数量已达上限。</value>
+  </data>
+  <data name="Passkey_ErrorAlreadyRegistered" xml:space="preserve">
+    <value>该通行密钥已注册。</value>
+  </data>
+  <data name="Passkey_ErrorExpired" xml:space="preserve">
+    <value>创建通行密钥的时间已过，请重试。</value>
+  </data>
+  <data name="Passkey_Registered" xml:space="preserve">
+    <value>你的通行密钥已保存，现在可以用它登录。</value>
+  </data>
+  <data name="Settings_Security_Passkeys" xml:space="preserve">
+    <value>通行密钥</value>
+  </data>
+  <data name="Settings_Security_PasskeysCount" xml:space="preserve">
+    <value>你有 {0} 个通行密钥。可使用 Windows Hello 或手机登录，无需输入密码。</value>
+  </data>
+  <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
+    <value>添加通行密钥</value>
+  </data>
 </root>

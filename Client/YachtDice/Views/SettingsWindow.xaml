@@ -413,6 +413,42 @@
                                  Padding="12,9"
                                  Margin="0,12,0,0"/>
 
+                        <Border Height="1"
+                                Background="{StaticResource BrushBorder}"
+                                Margin="0,16,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0"
+                                        Margin="0,0,12,0">
+
+                                <TextBlock Foreground="{StaticResource BrushText}"
+                                           Text="{x:Static properties:Strings.Settings_Security_Passkeys}"
+                                           FontWeight="Bold"
+                                           FontSize="22"/>
+
+                                <TextBlock x:Name="PasskeysStatusTextBlock"
+                                           FontSize="18"
+                                           TextWrapping="Wrap"
+                                           Foreground="{StaticResource BrushTextMuted}"/>
+
+                            </StackPanel>
+
+                            <Button x:Name="AddPasskeyButton"
+                                    Grid.Column="1"
+                                    Content="{x:Static properties:Strings.Settings_Security_ButtonAddPasskey}"
+                                    Style="{StaticResource BtnOutline}"
+                                    Padding="22,10"
+                                    FontSize="18"
+                                    VerticalAlignment="Center"
+                                    IsEnabled="False"
+                                    Click="AddPasskeyButton_Click"/>
+                        </Grid>
+
                     </StackPanel>
 
                     <StackPanel x:Name="NotificationsPanel"

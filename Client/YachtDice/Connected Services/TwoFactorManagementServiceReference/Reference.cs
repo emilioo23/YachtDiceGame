@@ -635,6 +635,520 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         }
     }
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyStartResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasskeyStartResultCode : int {
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Created = 0,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 1,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TooManyPasskeys = 2,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Busy = 3,
+    }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyRegistrationResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasskeyRegistrationResultCode : int {
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Registered = 0,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidResponse = 1,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChallengeExpired = 2,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TooManyPasskeys = 3,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AlreadyRegistered = 4,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PlayerNotFound = 5,
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyChallengeData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasskeyChallengeData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.TwoFactorManagementServiceReference.PasskeyStartResultCode CodeField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string[] ExcludedCredentialIdsField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserHandleField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserNameField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Challenge {
+            get {
+                return this.ChallengeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeField, value) != true)) {
+                    this.ChallengeField = value;
+                    this.RaisePropertyChanged("Challenge");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyStartResultCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string[] ExcludedCredentialIds {
+            get {
+                return this.ExcludedCredentialIdsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ExcludedCredentialIdsField, value) != true)) {
+                    this.ExcludedCredentialIdsField = value;
+                    this.RaisePropertyChanged("ExcludedCredentialIds");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserHandle {
+            get {
+                return this.UserHandleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserHandleField, value) != true)) {
+                    this.UserHandleField = value;
+                    this.RaisePropertyChanged("UserHandle");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserName {
+            get {
+                return this.UserNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserNameField, value) != true)) {
+                    this.UserNameField = value;
+                    this.RaisePropertyChanged("UserName");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyAttestationData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasskeyAttestationData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AttestationObjectField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ClientDataJsonField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AttestationObject {
+            get {
+                return this.AttestationObjectField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AttestationObjectField, value) != true)) {
+                    this.AttestationObjectField = value;
+                    this.RaisePropertyChanged("AttestationObject");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ClientDataJson {
+            get {
+                return this.ClientDataJsonField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ClientDataJsonField, value) != true)) {
+                    this.ClientDataJsonField = value;
+                    this.RaisePropertyChanged("ClientDataJson");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasskeyAssertionData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasskeyAssertionData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AuthenticatorDataField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ClientDataJsonField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CredentialIdField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SignatureField;
+
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserHandleField;
+
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AuthenticatorData {
+            get {
+                return this.AuthenticatorDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AuthenticatorDataField, value) != true)) {
+                    this.AuthenticatorDataField = value;
+                    this.RaisePropertyChanged("AuthenticatorData");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ClientDataJson {
+            get {
+                return this.ClientDataJsonField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ClientDataJsonField, value) != true)) {
+                    this.ClientDataJsonField = value;
+                    this.RaisePropertyChanged("ClientDataJson");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CredentialId {
+            get {
+                return this.CredentialIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CredentialIdField, value) != true)) {
+                    this.CredentialIdField = value;
+                    this.RaisePropertyChanged("CredentialId");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Signature {
+            get {
+                return this.SignatureField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SignatureField, value) != true)) {
+                    this.SignatureField = value;
+                    this.RaisePropertyChanged("Signature");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserHandle {
+            get {
+                return this.UserHandleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserHandleField, value) != true)) {
+                    this.UserHandleField = value;
+                    this.RaisePropertyChanged("UserHandle");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class LoginData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private YachtDice.TwoFactorManagementServiceReference.LoginResultCode CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DisplayNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FirstNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public YachtDice.TwoFactorManagementServiceReference.LoginResultCode Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DisplayName {
+            get {
+                return this.DisplayNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
+                    this.DisplayNameField = value;
+                    this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum LoginResultCode : int {
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationCodeSent = 0,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MissingRequiredField = 1,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidCredentials = 2,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidEmail = 3,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        VerificationLocked = 4,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 5,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoggedIn = 6,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TemporarilyLocked = 7,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LockedForTheDay = 8,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SuspendedByReports = 9,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidPasskey = 10,
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="TwoFactorManagementServiceReference.ITwoFactorManagementService")]
     public interface ITwoFactorManagementService {
@@ -685,6 +1199,26 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/GetSecuritySummaryServiceFaul" +
             "tFault", Name="ServiceFault")]
         YachtDice.TwoFactorManagementServiceReference.SecuritySummary GetSecuritySummary(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyRegistration", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyRegistrationResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyRegistrationServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData BeginPasskeyRegistration(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyRegistration", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyRegistrationResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyRegistrationServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasskeyRegistrationResultCode CompletePasskeyRegistration(string sessionToken, YachtDice.TwoFactorManagementServiceReference.PasskeyAttestationData attestation);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeys", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeysResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/CountPasskeysServiceFaultFault", Name="ServiceFault")]
+        int CountPasskeys(string sessionToken);
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLogin", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLoginResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/BeginPasskeyLoginServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData BeginPasskeyLogin();
+
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyLogin", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyLoginResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/CompletePasskeyLoginServiceFaultFault", Name="ServiceFault")]
+        YachtDice.TwoFactorManagementServiceReference.LoginData CompletePasskeyLogin(YachtDice.TwoFactorManagementServiceReference.PasskeyAssertionData assertion);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -748,6 +1282,26 @@ namespace YachtDice.TwoFactorManagementServiceReference {
 
         public YachtDice.TwoFactorManagementServiceReference.SecuritySummary GetSecuritySummary(string sessionToken) {
             return base.Channel.GetSecuritySummary(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData BeginPasskeyRegistration(string sessionToken) {
+            return base.Channel.BeginPasskeyRegistration(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyRegistrationResultCode CompletePasskeyRegistration(string sessionToken, YachtDice.TwoFactorManagementServiceReference.PasskeyAttestationData attestation) {
+            return base.Channel.CompletePasskeyRegistration(sessionToken, attestation);
+        }
+
+        public int CountPasskeys(string sessionToken) {
+            return base.Channel.CountPasskeys(sessionToken);
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData BeginPasskeyLogin() {
+            return base.Channel.BeginPasskeyLogin();
+        }
+
+        public YachtDice.TwoFactorManagementServiceReference.LoginData CompletePasskeyLogin(YachtDice.TwoFactorManagementServiceReference.PasskeyAssertionData assertion) {
+            return base.Channel.CompletePasskeyLogin(assertion);
         }
     }
 }

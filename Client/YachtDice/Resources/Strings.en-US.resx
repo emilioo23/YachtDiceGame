@@ -2496,4 +2496,40 @@
   <data name="Friends_Invitation_Join" xml:space="preserve">
     <value>Join</value>
   </data>
+  <data name="Auth_ButtonPasskey" xml:space="preserve">
+    <value>Log in with a passkey</value>
+  </data>
+  <data name="Passkey_ErrorUnavailable" xml:space="preserve">
+    <value>This version of Windows cannot use passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorInvalid" xml:space="preserve">
+    <value>We could not verify your passkey. Try again or log in with your email and password.</value>
+  </data>
+  <data name="Passkey_ErrorWindows" xml:space="preserve">
+    <value>Windows could not complete the passkey operation.</value>
+  </data>
+  <data name="Passkey_ErrorBusy" xml:space="preserve">
+    <value>The server is busy. Try again in a moment.</value>
+  </data>
+  <data name="Passkey_ErrorTooMany" xml:space="preserve">
+    <value>You already have the maximum number of passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorAlreadyRegistered" xml:space="preserve">
+    <value>That passkey is already registered.</value>
+  </data>
+  <data name="Passkey_ErrorExpired" xml:space="preserve">
+    <value>The time to create the passkey ran out. Try again.</value>
+  </data>
+  <data name="Passkey_Registered" xml:space="preserve">
+    <value>Your passkey was saved. You can now log in with it.</value>
+  </data>
+  <data name="Settings_Security_Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Settings_Security_PasskeysCount" xml:space="preserve">
+    <value>You have {0} passkeys. Log in with Windows Hello or your phone, without typing a password.</value>
+  </data>
+  <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
+    <value>Add a passkey</value>
+  </data>
 </root>

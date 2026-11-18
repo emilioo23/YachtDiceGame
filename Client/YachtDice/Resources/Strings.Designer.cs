@@ -4334,5 +4334,113 @@ namespace YachtDice.Resources {
                 return ResourceManager.GetString("Friends_Invitation_Join", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Entrar con passkey.
+        /// </summary>
+        public static string Auth_ButtonPasskey {
+            get {
+                return ResourceManager.GetString("Auth_ButtonPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta versión de Windows no permite usar passkeys..
+        /// </summary>
+        public static string Passkey_ErrorUnavailable {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No pudimos verificar tu passkey. Intenta de nuevo o entra con tu correo y contraseña..
+        /// </summary>
+        public static string Passkey_ErrorInvalid {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Windows no pudo completar la operación con la passkey..
+        /// </summary>
+        public static string Passkey_ErrorWindows {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor está ocupado. Intenta de nuevo en un momento..
+        /// </summary>
+        public static string Passkey_ErrorBusy {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorBusy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya llegaste al máximo de passkeys..
+        /// </summary>
+        public static string Passkey_ErrorTooMany {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorTooMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa passkey ya está registrada..
+        /// </summary>
+        public static string Passkey_ErrorAlreadyRegistered {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorAlreadyRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El tiempo para crear la passkey terminó. Intenta de nuevo..
+        /// </summary>
+        public static string Passkey_ErrorExpired {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu passkey quedó registrada. Ya puedes entrar con ella..
+        /// </summary>
+        public static string Passkey_Registered {
+            get {
+                return ResourceManager.GetString("Passkey_Registered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Passkeys.
+        /// </summary>
+        public static string Settings_Security_Passkeys {
+            get {
+                return ResourceManager.GetString("Settings_Security_Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tienes {0} passkeys. Entra con Windows Hello o con tu celular, sin escribir contraseña..
+        /// </summary>
+        public static string Settings_Security_PasskeysCount {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasskeysCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Agregar passkey.
+        /// </summary>
+        public static string Settings_Security_ButtonAddPasskey {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonAddPasskey", resourceCulture);
+            }
+        }
     }
 }

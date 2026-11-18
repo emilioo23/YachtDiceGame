@@ -137,6 +137,69 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server for the challenge to create a passkey for the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The challenge and the data of the player for the authenticator.</returns>
+        public async Task<PasskeyChallengeData> BeginPasskeyRegistrationAsync(string sessionToken)
+        {
+            PasskeyChallengeData challenge = await ExecuteAsync(client => client.BeginPasskeyRegistration(sessionToken));
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Sends the new passkey that the authenticator created.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="attestation">Answer of the authenticator.</param>
+        /// <returns>Outcome of the registration.</returns>
+        public async Task<PasskeyRegistrationResultCode> CompletePasskeyRegistrationAsync(
+            string sessionToken,
+            PasskeyAttestationData attestation)
+        {
+            PasskeyRegistrationResultCode result =
+                await ExecuteAsync(client => client.CompletePasskeyRegistration(sessionToken, attestation));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server how many passkeys the player has.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of passkeys.</returns>
+        public async Task<int> CountPasskeysAsync(string sessionToken)
+        {
+            int passkeyCount = await ExecuteAsync(client => client.CountPasskeys(sessionToken));
+
+            return passkeyCount;
+        }
+
+        /// <summary>
+        /// Asks the server for the challenge to log in with a passkey.
+        /// </summary>
+        /// <returns>The challenge.</returns>
+        public async Task<PasskeyChallengeData> BeginPasskeyLoginAsync()
+        {
+            PasskeyChallengeData challenge = await ExecuteAsync(client => client.BeginPasskeyLogin());
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Sends the answer of the authenticator to log in.
+        /// </summary>
+        /// <param name="assertion">Answer of the authenticator.</param>
+        /// <returns>Outcome of the login and the data of the new session.</returns>
+        public async Task<LoginData> CompletePasskeyLoginAsync(PasskeyAssertionData assertion)
+        {
+            LoginData loginData = await ExecuteAsync(client => client.CompletePasskeyLogin(assertion));
+
+            return loginData;
+        }
+
+        /// <summary>
         /// Translates the WCF fault exception into a specific gateway error code.
         /// </summary>
         /// <param name="fault">The exception thrown by the service.</param>

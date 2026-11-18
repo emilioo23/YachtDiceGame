@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using YachtDice.Client.Logic.Audio;
 using YachtDice.Client.Logic.Authentication;
@@ -10,6 +11,7 @@ using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
+using YachtDice.Passkeys;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Resources;
 using YachtDice.TwoFactorManagementServiceReference;
@@ -35,11 +37,13 @@ namespace YachtDice.Views
         private const int ToggleKnobMargin = 3;
         private const int NoMargin = 0;
         private const string NullSessionMessage = "The session of the player cannot be null.";
+        private const string PasskeyFailedLogMessage = "Windows could not create the passkey.";
 
         private readonly PlayerSession _session;
         private readonly AudioSettings _audio;
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
+        private readonly WindowsPasskeyAuthenticator _passkeys = new WindowsPasskeyAuthenticator();
         private readonly AppLogger _logger = new AppLogger(typeof(SettingsWindow));
         private bool _isInitializing;
         private bool _isTwoFactorEnabled;
@@ -76,6 +80,7 @@ namespace YachtDice.Views
             if (!session.IsGuest)
             {
                 _ = LoadSecuritySummaryAsync();
+                _ = LoadPasskeyCountAsync();
             }
         }
 
@@ -140,6 +145,93 @@ namespace YachtDice.Views
                 BackupCodesTextBox.Clear();
                 BackupCodesTextBox.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private async Task LoadPasskeyCountAsync()
+        {
+            try
+            {
+                ShowPasskeyCount(await _twoFactorGateway.CountPasskeysAsync(_session.SessionToken));
+            }
+            catch (GatewayException ex)
+            {
+                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
+        private void ShowPasskeyCount(int passkeyCount)
+        {
+            bool isAvailable = _passkeys.IsAvailable();
+
+            PasskeysStatusTextBlock.Text = isAvailable
+                ? string.Format(Strings.Settings_Security_PasskeysCount, passkeyCount)
+                : Strings.Passkey_ErrorUnavailable;
+            AddPasskeyButton.IsEnabled = isAvailable;
+        }
+
+        private async void AddPasskeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddPasskeyButton.IsEnabled = false;
+
+            try
+            {
+                await GatewayCallRunner.RunAsync(this, _logger, RegisterPasskeyAsync);
+            }
+            finally
+            {
+                AddPasskeyButton.IsEnabled = true;
+            }
+        }
+
+        private async Task RegisterPasskeyAsync()
+        {
+            PasskeyChallengeData challenge =
+                await _twoFactorGateway.BeginPasskeyRegistrationAsync(_session.SessionToken);
+
+            if (challenge.Code == PasskeyStartResultCode.Created)
+            {
+                await SendNewPasskeyAsync(challenge);
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetStartMessage(challenge.Code));
+            }
+        }
+
+        private async Task SendNewPasskeyAsync(PasskeyChallengeData challenge)
+        {
+            PasskeyAttestationData attestation = await AskWindowsForPasskeyAsync(challenge);
+
+            if (attestation != null)
+            {
+                PasskeyRegistrationResultCode result =
+                    await _twoFactorGateway.CompletePasskeyRegistrationAsync(_session.SessionToken, attestation);
+
+                CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetRegistrationMessage(result));
+                ShowPasskeyCount(await _twoFactorGateway.CountPasskeysAsync(_session.SessionToken));
+            }
+        }
+
+        private async Task<PasskeyAttestationData> AskWindowsForPasskeyAsync(PasskeyChallengeData challenge)
+        {
+            IntPtr windowHandle = new WindowInteropHelper(this).Handle;
+            PasskeyAttestationData attestation = null;
+
+            try
+            {
+                attestation = await Task.Run(() => _passkeys.CreateCredential(windowHandle, challenge));
+            }
+            catch (PasskeyException ex)
+            {
+                // A player who closes the Windows dialog is not an error, so nothing is shown.
+                if (!ex.IsCancelled)
+                {
+                    _logger.Error(ex, PasskeyFailedLogMessage);
+                    CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
+                }
+            }
+
+            return attestation;
         }
 
         private void ShowBackupCodeCount(int codeCount)

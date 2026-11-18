@@ -2496,4 +2496,40 @@
   <data name="Friends_Invitation_Join" xml:space="preserve">
     <value>Unirse</value>
   </data>
+  <data name="Auth_ButtonPasskey" xml:space="preserve">
+    <value>Entrar con passkey</value>
+  </data>
+  <data name="Passkey_ErrorUnavailable" xml:space="preserve">
+    <value>Esta versión de Windows no permite usar passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorInvalid" xml:space="preserve">
+    <value>No pudimos verificar tu passkey. Intenta de nuevo o entra con tu correo y contraseña.</value>
+  </data>
+  <data name="Passkey_ErrorWindows" xml:space="preserve">
+    <value>Windows no pudo completar la operación con la passkey.</value>
+  </data>
+  <data name="Passkey_ErrorBusy" xml:space="preserve">
+    <value>El servidor está ocupado. Intenta de nuevo en un momento.</value>
+  </data>
+  <data name="Passkey_ErrorTooMany" xml:space="preserve">
+    <value>Ya llegaste al máximo de passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorAlreadyRegistered" xml:space="preserve">
+    <value>Esa passkey ya está registrada.</value>
+  </data>
+  <data name="Passkey_ErrorExpired" xml:space="preserve">
+    <value>El tiempo para crear la passkey terminó. Intenta de nuevo.</value>
+  </data>
+  <data name="Passkey_Registered" xml:space="preserve">
+    <value>Tu passkey quedó registrada. Ya puedes entrar con ella.</value>
+  </data>
+  <data name="Settings_Security_Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Settings_Security_PasskeysCount" xml:space="preserve">
+    <value>Tienes {0} passkeys. Entra con Windows Hello o con tu celular, sin escribir contraseña.</value>
+  </data>
+  <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
+    <value>Agregar passkey</value>
+  </data>
 </root>

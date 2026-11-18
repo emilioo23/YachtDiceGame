@@ -134,6 +134,16 @@
                                 FontSize="16" Padding="0,11"
                                 Click="AuthSubmitButton_Click"/>
 
+                        <StackPanel x:Name="PasskeyPanel"
+                                    Margin="0,10,0,0">
+                            <Button x:Name="PasskeyButton"
+                                    Content="{x:Static properties:Strings.Auth_ButtonPasskey}"
+                                    Style="{StaticResource BtnOutline}"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="0,10" FontSize="15"
+                                    Click="PasskeyButton_Click"/>
+                        </StackPanel>
+
                         <Grid Margin="0,14,0,14">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

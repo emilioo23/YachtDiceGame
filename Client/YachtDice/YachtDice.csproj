@@ -313,6 +313,11 @@
     <Compile Include="Utils\FriendItemFactory.cs" />
     <Compile Include="Utils\FriendRequestMessages.cs" />
     <Compile Include="Utils\InvitationResultMessages.cs" />
+    <Compile Include="Passkeys\NativeScope.cs" />
+    <Compile Include="Passkeys\PasskeyException.cs" />
+    <Compile Include="Passkeys\WebAuthnNative.cs" />
+    <Compile Include="Passkeys\WindowsPasskeyAuthenticator.cs" />
+    <Compile Include="Utils\PasskeyMessages.cs" />
     <Compile Include="Utils\LoginResultMessages.cs" />
     <Compile Include="Utils\GamePlayerFactory.cs" />
     <Compile Include="Utils\BackupCodesMessages.cs" />
