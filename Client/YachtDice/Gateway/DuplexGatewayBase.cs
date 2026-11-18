@@ -16,10 +16,6 @@ namespace YachtDice.Gateway
     public abstract class DuplexGatewayBase<TClient> : IConnectionLossSource
         where TClient : class, ICommunicationObject
     {
-        private const string FaultLogMessage = "The server reported an error.";
-        private const string UnavailableLogMessage = "The server could not be reached.";
-        private const string FaultMessage = "The server could not complete the request.";
-        private const string UnavailableMessage = "The server is not available.";
         private const string NotConnectedMessage = "There is no connection with the server.";
         private const string ConnectionLostLogMessage = "The connection with the server was lost.";
         private const string CloseFailedLogMessage = "The connection could not be closed normally, so it was aborted.";
@@ -151,20 +147,20 @@ namespace YachtDice.Gateway
             }
             catch (FaultException ex)
             {
-                _logger.Error(ex, FaultLogMessage);
-                throw new GatewayException(GetErrorCode(ex), FaultMessage, ex);
+                _logger.Error(ex, GatewayMessages.FaultLogMessage);
+                throw new GatewayException(GetErrorCode(ex), GatewayMessages.FaultMessage, ex);
             }
             catch (CommunicationException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
             catch (TimeoutException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
 
             return result;

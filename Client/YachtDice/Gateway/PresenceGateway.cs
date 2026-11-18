@@ -19,7 +19,6 @@ namespace YachtDice.Gateway
     public class PresenceGateway : IConnectionLossSource
     {
         private const string UnavailableLogMessage = "The presence service could not be reached.";
-        private const string UnavailableMessage = "The server is not available.";
         private const string CloseFailedLogMessage = "The presence connection could not be closed, so it was aborted.";
 
         private readonly object _syncRoot = new object();
@@ -169,13 +168,13 @@ namespace YachtDice.Gateway
             {
                 client.Abort();
                 _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
             catch (TimeoutException ex)
             {
                 client.Abort();
                 _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
         }
 

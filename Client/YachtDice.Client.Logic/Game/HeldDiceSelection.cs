@@ -7,7 +7,10 @@ namespace YachtDice.Client.Logic.Game
     /// </summary>
     public sealed class HeldDiceSelection
     {
-        private const int DiceCount = 5;
+        /// <summary>
+        /// Number of dice that a player rolls.
+        /// </summary>
+        public const int DiceCount = 5;
 
         private readonly bool[] _held = new bool[DiceCount];
 

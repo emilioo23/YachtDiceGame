@@ -11,7 +11,6 @@ namespace YachtDice.Server.Services
     /// </summary>
     internal sealed class ReconnectTimer
     {
-        private const int NoTurnNumber = 0;
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, Dictionary<string, TurnClock>> _clocksByRoom =
@@ -25,7 +24,7 @@ namespace YachtDice.Server.Services
         /// <param name="onExpired">Action to run if the player does not come back in time.</param>
         public void Start(LogicRooms.RoomMember member, int seconds, Action onExpired)
         {
-            var clock = new TurnClock(NoTurnNumber, seconds, onExpired);
+            var clock = new TurnClock(TurnClock.NoTurnNumber, seconds, onExpired);
 
             lock (_syncRoot)
             {

@@ -171,6 +171,8 @@
     <Compile Include="Rooms\RoomStatus.cs" />
     <Compile Include="Rooms\RoomSummary.cs" />
     <Compile Include="Security\CredentialRules.cs" />
+    <Compile Include="Security\VerificationCodeRules.cs" />
+    <Compile Include="Moderation\ModerationRules.cs" />
     <Compile Include="Security\NumericCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\SecureRandom.cs" />

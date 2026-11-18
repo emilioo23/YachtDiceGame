@@ -17,7 +17,6 @@ namespace YachtDice.Server.Services
         private const string NullDependencyMessage = "A dependency of the player registration service cannot be null.";
 
         private const int CleanupIntervalSeconds = 3600;
-        private const int NoTurnNumber = 0;
         private const string RemovedAccountsLogFormat = "{0} accounts without a confirmed email were deleted.";
 
         private readonly LogicAuth.IRegistrationService _registrationLogic;
@@ -48,7 +47,7 @@ namespace YachtDice.Server.Services
 
         private TurnClock StartCleanupClock()
         {
-            return new TurnClock(NoTurnNumber, CleanupIntervalSeconds, RemoveUnverifiedAccounts);
+            return new TurnClock(TurnClock.NoTurnNumber, CleanupIntervalSeconds, RemoveUnverifiedAccounts);
         }
 
         private void RemoveUnverifiedAccounts()

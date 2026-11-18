@@ -33,8 +33,9 @@ namespace YachtDice.Server.Logic.Game
             }
 
             Func<int, bool> isTooShort = seconds => seconds < MinimumSeconds;
+            bool hasTooShortTurn = secondsBySpeed.Values.Any(isTooShort);
 
-            if (secondsBySpeed.Values.Any(isTooShort))
+            if (hasTooShortTurn)
             {
                 throw new ArgumentOutOfRangeException(nameof(secondsBySpeed), TooShortSecondsMessage);
             }

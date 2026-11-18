@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Game;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -14,7 +15,6 @@ namespace YachtDice.Views
     /// </summary>
     internal sealed class DiceBoard
     {
-        private const int DiceCount = 5;
         private const int NoValue = 0;
         private const double HalfDivisor = 2;
         private const double FirstDieLeft = 150;
@@ -82,7 +82,7 @@ namespace YachtDice.Views
             _rollAnimation.Stop();
             _canvas.Children.Clear();
 
-            for (var index = 0; index < DiceCount; index++)
+            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
             {
                 _canvas.Children.Add(CreateDie(index, ReadValue(values, index), isHeld(index)));
             }
@@ -105,7 +105,7 @@ namespace YachtDice.Views
         {
             _canvas.Children.Clear();
 
-            for (var index = 0; index < DiceCount; index++)
+            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
             {
                 bool isRolling = !isHeld(index);
                 int value = ReadValue(values, index);
@@ -130,7 +130,7 @@ namespace YachtDice.Views
         {
             Render(values, isHeld);
 
-            for (var index = 0; index < DiceCount; index++)
+            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
             {
                 if (!isHeld(index))
                 {

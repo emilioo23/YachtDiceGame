@@ -252,6 +252,7 @@
     <Compile Include="Gateway\DuplexGatewayBase.cs" />
     <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
+    <Compile Include="Gateway\GatewayMessages.cs" />
     <Compile Include="Gateway\GatewayErrorCodeParser.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />
     <Compile Include="Gateway\GatewayException.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Utils\KickHistoryTexts.cs" />
     <Compile Include="Utils\ReceivedInvitationTexts.cs" />
     <Compile Include="Utils\SavedScorecardTexts.cs" />
+    <Compile Include="Utils\DisplayFormats.cs" />
     <Compile Include="Utils\SecuritySummaryTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />

@@ -2,6 +2,7 @@
 using System.Globalization;
 using YachtDice.Server.Data;
 using YachtDice.Server.Logic.Email;
+using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
@@ -16,7 +17,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const string NullArgumentMessage = "The value cannot be null.";
 
         private static readonly CodeEmailTemplate EmailTemplate =
-            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, TwoFactorCodeService.ExpirationMinutes);
+            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, VerificationCodeRules.ExpirationMinutes);
 
         private readonly TwoFactorCodeService _codeService;
         private readonly CodeEmailSender _emailSender;

@@ -13,7 +13,11 @@ namespace YachtDice.Server.Logic.Game
     internal sealed class YachtGame
     {
         private const int NoPlayerIndex = -1;
-        private const int RollsPerTurn = 3;
+        /// <summary>
+        /// Most times that a player can roll the dice in a turn.
+        /// </summary>
+        public const int RollsPerTurn = 3;
+
         private const int NoRolls = 0;
         private const int FirstTurnNumber = 1;
         private const int RoundOffset = 1;
@@ -476,8 +480,9 @@ namespace YachtDice.Server.Logic.Game
         private void FinishIfOnePlayerIsLeft()
         {
             Func<GamePlayer, bool> isStillInGame = candidate => !candidate.HasForfeited;
+            bool isOnePlayerLeft = _players.Count(isStillInGame) <= LastPlayerCount;
 
-            if (_players.Count(isStillInGame) <= LastPlayerCount)
+            if (isOnePlayerLeft)
             {
                 _turnIndex = NoPlayerIndex;
                 _rollsMade = NoRolls;

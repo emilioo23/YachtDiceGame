@@ -15,18 +15,8 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class PasswordRecoveryService : IPasswordRecoveryService
     {
-        /// <summary>
-        /// Number of digits of the recovery code.
-        /// </summary>
-        public const int CodeLength = 6;
 
-        /// <summary>
-        /// Minutes a recovery code stays valid.
-        /// </summary>
-        public const int ExpirationMinutes = 10;
 
-        private const int MaxFailedAttempts = 3;
-        private const int ResendCooldownSeconds = 30;
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
         private const string NullArgumentMessage = "The value cannot be null.";
@@ -35,7 +25,10 @@ namespace YachtDice.Server.Logic.Authentication
         private const string NullDependencyMessage = "A dependency of the password recovery service cannot be null.";
 
         private static readonly CodeEmailTemplate EmailTemplate =
-            new CodeEmailTemplate(EmailSubjectResourceKey, EmailBodyResourceKey, ExpirationMinutes);
+            new CodeEmailTemplate(
+                EmailSubjectResourceKey,
+                EmailBodyResourceKey,
+                VerificationCodeRules.ExpirationMinutes);
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -135,8 +128,8 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (token != null)
             {
-                DateTime createdAt = token.ExpireDate.AddMinutes(-ExpirationMinutes);
-                isRecent = DateTime.UtcNow < createdAt.AddSeconds(ResendCooldownSeconds);
+                DateTime createdAt = token.ExpireDate.AddMinutes(-VerificationCodeRules.ExpirationMinutes);
+                isRecent = DateTime.UtcNow < createdAt.AddSeconds(VerificationCodeRules.ResendCooldownSeconds);
             }
 
             return isRecent;
@@ -144,14 +137,14 @@ namespace YachtDice.Server.Logic.Authentication
 
         private PasswordResetRequestStatus CreateAndSendCode(Player player, CultureInfo culture)
         {
-            string code = NumericCodeGenerator.Generate(CodeLength);
+            string code = NumericCodeGenerator.Generate(VerificationCodeRules.CodeLength);
             string codeHash = PasswordHasher.ComputeResetCodeHash(player.Id, code);
 
             var token = new PwdResetToken
             {
                 PlayerId = player.Id,
                 Token = codeHash,
-                ExpireDate = DateTime.UtcNow.AddMinutes(ExpirationMinutes)
+                ExpireDate = DateTime.UtcNow.AddMinutes(VerificationCodeRules.ExpirationMinutes)
             };
 
             _resetRepository.Save(token);
@@ -239,7 +232,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             PasswordResetStatus status = PasswordResetStatus.IncorrectCode;
 
-            if (_attempts.RegisterFailure(playerId) >= MaxFailedAttempts)
+            if (_attempts.RegisterFailure(playerId) >= VerificationCodeRules.MaxFailedAttempts)
             {
                 _resetRepository.Delete(playerId);
                 _attempts.Reset(playerId);

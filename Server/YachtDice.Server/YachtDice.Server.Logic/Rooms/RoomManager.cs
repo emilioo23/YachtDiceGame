@@ -536,8 +536,9 @@ namespace YachtDice.Server.Logic.Rooms
             int waitedTooLong = notReady.Count(player => !canStillConfirm(player));
             RoomStatus status = GetStartStatus(room, playerId, waitedTooLong);
             RoomResult result = RoomResult.CreateFailed(status);
+            bool isWaitingForSomeone = notReady.Any(canStillConfirm);
 
-            if (status == RoomStatus.Success && notReady.Any(canStillConfirm))
+            if (status == RoomStatus.Success && isWaitingForSomeone)
             {
                 result = RoomResult.CreateFailed(RoomStatus.PlayersNotReady);
             }

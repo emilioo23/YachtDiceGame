@@ -12,6 +12,11 @@ namespace YachtDice.Server.Services
     /// </summary>
     internal sealed class TurnClock : IDisposable
     {
+        /// <summary>
+        /// Turn number of a countdown that does not belong to a game.
+        /// </summary>
+        public const int NoTurnNumber = 0;
+
         private const string ExpiredActionFailedLogMessage = "The action of an expired countdown failed.";
 
         private readonly Timer _timer;

@@ -19,7 +19,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class HistoryWindow : Window
     {
-        private const string DateFormat = "g";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -66,7 +65,7 @@ namespace YachtDice.Views
             return new KickRow
             {
                 Text = KickHistoryTexts.Describe(kick, _session.DisplayName),
-                DateText = kick.Date.ToLocalTime().ToString(DateFormat)
+                DateText = kick.Date.ToLocalTime().ToString(DisplayFormats.ShortDateTime)
             };
         }
 
@@ -79,7 +78,7 @@ namespace YachtDice.Views
                 ResultText = game.IsWin ? Strings.History_Victory : Strings.History_Defeat,
                 OpponentsText = string.Format(Strings.History_VersusFormat, ReadOpponents(game)),
                 ScoreText = ReadScore(game),
-                DateText = game.PlayedAt.ToLocalTime().ToString(DateFormat)
+                DateText = game.PlayedAt.ToLocalTime().ToString(DisplayFormats.ShortDateTime)
             };
         }
 

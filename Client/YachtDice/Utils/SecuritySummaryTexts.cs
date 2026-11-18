@@ -9,7 +9,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class SecuritySummaryTexts
     {
-        private const string DateFormat = "g";
         private const string ReportedLockReason = "Reported";
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace YachtDice.Utils
 
         private static string FormatDate(DateTime universalDate)
         {
-            return universalDate.ToLocalTime().ToString(DateFormat);
+            return universalDate.ToLocalTime().ToString(DisplayFormats.ShortDateTime);
         }
     }
 }

@@ -15,15 +15,7 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorCodeService
     {
-        /// <summary>
-        /// Number of digits in the verification code.
-        /// </summary>
-        public const int CodeLength = 6;
 
-        /// <summary>
-        /// Minutes a code stays valid.
-        /// </summary>
-        public const int ExpirationMinutes = 10;
 
         /// <summary>
         /// Number of digits in a backup code. It is longer than the code sent by email, so both are told apart.
@@ -35,10 +27,8 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// </summary>
         public const int BackupCodeCount = 10;
 
-        private const int MaxFailedAttempts = 3;
         private const int LockMinutes = 15;
         private const int NoFailedAttempts = 0;
-        private const int ResendCooldownSeconds = 30;
         private const string GuidFormat = "N";
         private const string NullCodeMessage = "The verification code cannot be null.";
         private const string NullBackupRepositoryMessage = "The data access of the backup codes cannot be null.";
@@ -64,10 +54,10 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="challengeId">Unique session challenge identifier.</param>
-        /// <returns>Numeric code of <see cref="CodeLength"/> digits.</returns>
+        /// <returns>Numeric code of <see cref="VerificationCodeRules.CodeLength"/> digits.</returns>
         public string GenerateCode(string email, string challengeId)
         {
-            string code = NumericCodeGenerator.Generate(CodeLength);
+            string code = NumericCodeGenerator.Generate(VerificationCodeRules.CodeLength);
             DateTime now = DateTime.UtcNow;
             DateTime lockedUntil = DateTime.MinValue;
 
@@ -81,7 +71,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 Code = code,
                 ChallengeId = challengeId,
                 CreatedAt = now,
-                ExpiresAt = now.AddMinutes(ExpirationMinutes),
+                ExpiresAt = now.AddMinutes(VerificationCodeRules.ExpirationMinutes),
                 FailedAttempts = NoFailedAttempts,
                 LockedUntil = lockedUntil
             };
@@ -222,7 +212,9 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             if (_entries.TryGetValue(email, out TwoFactorCode issuedCode) && issuedCode.ChallengeId == challengeId)
             {
-                isAllowed = DateTime.UtcNow >= issuedCode.CreatedAt.AddSeconds(ResendCooldownSeconds);
+                DateTime allowedAt = issuedCode.CreatedAt.AddSeconds(VerificationCodeRules.ResendCooldownSeconds);
+
+                isAllowed = DateTime.UtcNow >= allowedAt;
             }
 
             return isAllowed;
@@ -289,7 +281,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
             issuedCode.FailedAttempts++;
 
-            if (issuedCode.FailedAttempts >= MaxFailedAttempts)
+            if (issuedCode.FailedAttempts >= VerificationCodeRules.MaxFailedAttempts)
             {
                 issuedCode.FailedAttempts = NoFailedAttempts;
                 issuedCode.LockedUntil = now.AddMinutes(LockMinutes);

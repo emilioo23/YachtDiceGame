@@ -127,9 +127,10 @@ namespace YachtDice.Server.Logic.Players
             List<ScorecardRecord> records = _gameHistoryRepository.FindScorecards(gameId);
             Func<ScorecardRecord, bool> isOwnScorecard = record =>
                 string.Equals(record.PlayerName, playerName, StringComparison.OrdinalIgnoreCase);
+            bool hasPlayedTheGame = records.Any(isOwnScorecard);
             var scorecards = new List<SavedScorecard>();
 
-            if (records.Any(isOwnScorecard))
+            if (hasPlayedTheGame)
             {
                 scorecards = records.Select(ToSavedScorecard).ToList();
             }

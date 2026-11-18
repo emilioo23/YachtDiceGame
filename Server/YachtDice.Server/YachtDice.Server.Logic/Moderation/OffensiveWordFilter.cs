@@ -13,13 +13,11 @@ namespace YachtDice.Server.Logic.Moderation
     /// </summary>
     public sealed class OffensiveWordFilter
     {
-        private const char CensorCharacter = '*';
         private const char PartSeparator = ' ';
         private const int ShortWordLength = 4;
         private const string WordSeparator = "|";
         private const string WholeWordPatternFormat = @"\b({0})\b";
         private const string NeverMatchingPattern = "(?!)";
-        private const int RegexTimeoutMilliseconds = 100;
         private const string NullWordsMessage = "The list of offensive words cannot be null.";
         private const string NullTextMessage = "The text to check cannot be null.";
 
@@ -61,7 +59,7 @@ namespace YachtDice.Server.Logic.Moderation
             _wholeWords = new Regex(
                 CreateWholeWordPattern(_words),
                 RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
-                TimeSpan.FromMilliseconds(RegexTimeoutMilliseconds));
+                TimeSpan.FromMilliseconds(ModerationRules.RegexTimeoutMilliseconds));
         }
 
         /// <summary>
@@ -98,7 +96,7 @@ namespace YachtDice.Server.Logic.Moderation
                 throw new ArgumentNullException(nameof(message), NullTextMessage);
             }
 
-            return _wholeWords.Replace(message, match => new string(CensorCharacter, match.Length));
+            return _wholeWords.Replace(message, match => new string(ModerationRules.CensorCharacter, match.Length));
         }
 
         private static string CreateWholeWordPattern(List<string> words)

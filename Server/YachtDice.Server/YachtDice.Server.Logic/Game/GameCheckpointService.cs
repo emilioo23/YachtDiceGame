@@ -15,7 +15,6 @@ namespace YachtDice.Server.Logic.Game
         private const string NullDependencyMessage = "A dependency of the game checkpoint service cannot be null.";
         private const string NullRoomMessage = "The room cannot be null.";
         private const string NullSnapshotMessage = "The state of the game cannot be null.";
-        private const int RollsPerTurn = 3;
         private const int FirstDiePosition = 1;
         private const int NoPoints = 0;
         private const int NoVersion = 0;
@@ -163,7 +162,7 @@ namespace YachtDice.Server.Logic.Game
             if (currentPlayer != null)
             {
                 record.CurrentPlayerName = currentPlayer.Name;
-                record.RollsMade = RollsPerTurn - snapshot.RollsLeft;
+                record.RollsMade = YachtGame.RollsPerTurn - snapshot.RollsLeft;
                 record.Dice = CreateDice(snapshot);
             }
 

@@ -15,10 +15,6 @@ namespace YachtDice.Gateway
         where TClient : ClientBase<TChannel>, new()
         where TChannel : class
     {
-        private const string FaultLogMessage = "The server reported an error.";
-        private const string UnavailableLogMessage = "The server could not be reached.";
-        private const string FaultMessage = "The server could not complete the request.";
-        private const string UnavailableMessage = "The server is not available.";
 
         private readonly AppLogger _logger;
 
@@ -56,18 +52,18 @@ namespace YachtDice.Gateway
             }
             catch (FaultException ex)
             {
-                _logger.Error(ex, FaultLogMessage);
-                throw new GatewayException(GetErrorCode(ex), FaultMessage, ex);
+                _logger.Error(ex, GatewayMessages.FaultLogMessage);
+                throw new GatewayException(GetErrorCode(ex), GatewayMessages.FaultMessage, ex);
             }
             catch (CommunicationException ex)
             {
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
             catch (TimeoutException ex)
             {
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
             finally
             {

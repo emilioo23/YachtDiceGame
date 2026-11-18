@@ -9,19 +9,17 @@ namespace YachtDice.Server.Logic.Moderation
     /// </summary>
     public static class LinkCensor
     {
-        private const char CensorCharacter = '*';
         private const string LinkPattern =
             @"(https?://|www\.)\S+"
             + @"|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|net|org|edu|gov|mx|io|gg|xyz|me|ly|tv|co|info|es|us|app|dev|link)\b"
             + @"(/\S*)?";
 
-        private const int RegexTimeoutMilliseconds = 100;
         private const string NullMessageMessage = "The message to censor cannot be null.";
 
         private static readonly Regex Links = new Regex(
             LinkPattern,
             RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled,
-            TimeSpan.FromMilliseconds(RegexTimeoutMilliseconds));
+            TimeSpan.FromMilliseconds(ModerationRules.RegexTimeoutMilliseconds));
 
         /// <summary>
         /// Replaces each link of a message with as many asterisks as characters it has.
@@ -36,7 +34,7 @@ namespace YachtDice.Server.Logic.Moderation
                 throw new ArgumentNullException(nameof(message), NullMessageMessage);
             }
 
-            return Links.Replace(message, match => new string(CensorCharacter, match.Length));
+            return Links.Replace(message, match => new string(ModerationRules.CensorCharacter, match.Length));
         }
     }
 }

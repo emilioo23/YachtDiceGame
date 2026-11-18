@@ -18,7 +18,6 @@ namespace YachtDice.Server.Services
     {
         private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
         private const int ExpiredRoomsCheckSeconds = 60;
-        private const int NoTurnNumber = 0;
         private const string ClosedRoomLogFormat = "Room {0} was closed because it waited too long to start.";
         private const string NullDependencyMessage = "A dependency of the room service cannot be null.";
 
@@ -487,7 +486,7 @@ namespace YachtDice.Server.Services
 
         private TurnClock StartExpiredRoomsCheck()
         {
-            return new TurnClock(NoTurnNumber, ExpiredRoomsCheckSeconds, CloseExpiredRooms);
+            return new TurnClock(TurnClock.NoTurnNumber, ExpiredRoomsCheckSeconds, CloseExpiredRooms);
         }
 
         private void CloseExpiredRooms()

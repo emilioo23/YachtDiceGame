@@ -55,8 +55,9 @@ namespace YachtDice.Server.Logic.Game
             }
 
             Func<int, bool> isOutOfRange = value => value < MinimumFaceValue || value > MaximumFaceValue;
+            bool hasInvalidValue = dice.Any(isOutOfRange);
 
-            if (dice.Any(isOutOfRange))
+            if (hasInvalidValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(dice), InvalidValueMessage);
             }
