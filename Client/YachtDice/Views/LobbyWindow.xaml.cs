@@ -29,10 +29,12 @@ namespace YachtDice.Views
         private const double UnselectedBorderThickness = 1.5;
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
         private const string ComputerLabelFormat = "{0} · {1}";
+        private const string CopyFailedLogMessage = "The room code could not be copied to the clipboard.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
         private readonly InvitationListener _invitationListener;
+        private readonly AppLogger _logger = new AppLogger(typeof(LobbyWindow));
 
         private bool _isShowingRoom = true;
         private bool _isLocalPlayerReady;
@@ -486,8 +488,9 @@ namespace YachtDice.Views
                 Clipboard.SetText(roomCode);
                 message = string.Format(Strings.Lobby_NotificationCodeCopied, roomCode);
             }
-            catch (ExternalException)
+            catch (ExternalException ex)
             {
+                _logger.Error(ex, CopyFailedLogMessage);
                 message = Strings.Dialogs_UnexpectedError;
             }
 

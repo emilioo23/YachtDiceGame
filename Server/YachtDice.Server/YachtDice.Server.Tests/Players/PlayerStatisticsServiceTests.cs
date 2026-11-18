@@ -219,30 +219,35 @@ namespace YachtDice.Server.Tests.Players
 
         private void AddGame(int gameId, DateTime endDate, bool isWinner)
         {
-            AddRecord(CreateRecord(gameId, endDate, isWinner), PlayerId, PlayerName, PlayerScore);
-            AddRecord(CreateRecord(gameId, endDate, !isWinner), FirstOpponentId, FirstOpponentName, BestOpponentScore);
-            AddRecord(CreateRecord(gameId, endDate, false), SecondOpponentId, SecondOpponentName, LowerOpponentScore);
-        }
-
-        private void AddRecord(PlayedGameRecord record, int playerId, string playerName, int score)
-        {
-            record.PlayerId = playerId;
-            record.PlayerName = playerName;
-            record.FinalScore = score;
-            _history.AddPlayedGameRecord(record);
-        }
-
-        private static PlayedGameRecord CreateRecord(int gameId, DateTime endDate, bool isWinner)
-        {
-            var record = new PlayedGameRecord
+            AddRecord(gameId, endDate, new PlayedGameRecord
             {
-                GameId = gameId,
-                EndDate = endDate,
-                IsWinner = isWinner,
-                IsAgainstComputer = false
-            };
+                PlayerId = PlayerId,
+                PlayerName = PlayerName,
+                FinalScore = PlayerScore,
+                IsWinner = isWinner
+            });
+            AddRecord(gameId, endDate, new PlayedGameRecord
+            {
+                PlayerId = FirstOpponentId,
+                PlayerName = FirstOpponentName,
+                FinalScore = BestOpponentScore,
+                IsWinner = !isWinner
+            });
+            AddRecord(gameId, endDate, new PlayedGameRecord
+            {
+                PlayerId = SecondOpponentId,
+                PlayerName = SecondOpponentName,
+                FinalScore = LowerOpponentScore,
+                IsWinner = false
+            });
+        }
 
-            return record;
+        private void AddRecord(int gameId, DateTime endDate, PlayedGameRecord record)
+        {
+            record.GameId = gameId;
+            record.EndDate = endDate;
+            record.IsAgainstComputer = false;
+            _history.AddPlayedGameRecord(record);
         }
 
         [Fact]

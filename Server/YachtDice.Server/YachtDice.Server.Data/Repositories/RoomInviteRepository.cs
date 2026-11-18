@@ -41,23 +41,22 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The invitations could not be read.</exception>
         public List<RoomInviteRecord> FindReceived(int invitedId, DateTime since, int maxCount)
         {
+            Expression<Func<RoomInvite, bool>> isRecentForPlayer = invite =>
+                invite.InvitedId == invitedId && invite.SendDate >= since;
             List<RoomInviteRecord> invites = DatabaseOperation.Query(
-                context => SelectReceived(context, invitedId, since, maxCount),
+                context => SelectNewest(context, isRecentForPlayer, maxCount),
                 QueryFailedMessage);
 
             return invites;
         }
 
-        private static List<RoomInviteRecord> SelectReceived(
+        private static List<RoomInviteRecord> SelectNewest(
             YachtDiceContext context,
-            int invitedId,
-            DateTime since,
+            Expression<Func<RoomInvite, bool>> isWantedInvite,
             int maxCount)
         {
-            Expression<Func<RoomInvite, bool>> isRecentForPlayer = invite =>
-                invite.InvitedId == invitedId && invite.SendDate >= since;
             List<RoomInviteRecord> invites = context.RoomInvite
-                .Where(isRecentForPlayer)
+                .Where(isWantedInvite)
                 .OrderByDescending(invite => invite.SendDate)
                 .Take(maxCount)
                 .Select(invite => new RoomInviteRecord

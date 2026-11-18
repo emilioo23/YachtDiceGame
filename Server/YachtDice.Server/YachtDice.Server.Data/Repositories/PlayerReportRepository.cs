@@ -43,8 +43,10 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The reports could not be read.</exception>
         public bool HasReportSince(int reporterId, int reportedId, DateTime since)
         {
+            Expression<Func<PlayerReport, bool>> isRecentReportOfPair = report =>
+                report.ReporterId == reporterId && report.ReportedId == reportedId && report.ReportDate >= since;
             bool hasReport = DatabaseOperation.Query(
-                context => ExistsReport(context, reporterId, reportedId, since),
+                context => ExistsReport(context, isRecentReportOfPair),
                 QueryFailedMessage);
 
             return hasReport;
@@ -76,20 +78,20 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The games could not be read.</exception>
         public int FindLastSharedGameId(int firstPlayerId, int secondPlayerId, DateTime since)
         {
+            Expression<Func<GameHistory, bool>> isRecentSharedGame = game =>
+                game.EndDate >= since
+                && game.GameHistoryPlayer.Any(historyPlayer => historyPlayer.PlayerId == firstPlayerId)
+                && game.GameHistoryPlayer.Any(historyPlayer => historyPlayer.PlayerId == secondPlayerId);
             int gameId = DatabaseOperation.Query(
-                context => SelectLastSharedGameId(context, firstPlayerId, secondPlayerId, since),
+                context => SelectLastGameId(context, isRecentSharedGame),
                 QueryFailedMessage);
 
             return gameId;
         }
 
-        private static bool ExistsReport(YachtDiceContext context, int reporterId, int reportedId, DateTime since)
+        private static bool ExistsReport(YachtDiceContext context, Expression<Func<PlayerReport, bool>> isWantedReport)
         {
-            Expression<Func<PlayerReport, bool>> isSamePair = report =>
-                report.ReporterId == reporterId && report.ReportedId == reportedId;
-            Expression<Func<PlayerReport, bool>> isRecent = report => report.ReportDate >= since;
-
-            return context.PlayerReport.Where(isSamePair).Any(isRecent);
+            return context.PlayerReport.Any(isWantedReport);
         }
 
         private static int CountDistinctReporters(YachtDiceContext context, int reportedId, DateTime since)
@@ -104,19 +106,10 @@ namespace YachtDice.Server.Data.Repositories
                 .Count();
         }
 
-        private static int SelectLastSharedGameId(
-            YachtDiceContext context,
-            int firstPlayerId,
-            int secondPlayerId,
-            DateTime since)
+        private static int SelectLastGameId(YachtDiceContext context, Expression<Func<GameHistory, bool>> isWantedGame)
         {
-            Expression<Func<GameHistory, bool>> isRecent = game => game.EndDate >= since;
-            Expression<Func<GameHistory, bool>> hasBothPlayers = game =>
-                game.GameHistoryPlayer.Any(historyPlayer => historyPlayer.PlayerId == firstPlayerId)
-                && game.GameHistoryPlayer.Any(historyPlayer => historyPlayer.PlayerId == secondPlayerId);
             int gameId = context.GameHistory
-                .Where(isRecent)
-                .Where(hasBothPlayers)
+                .Where(isWantedGame)
                 .OrderByDescending(game => game.EndDate)
                 .Select(game => game.Id)
                 .FirstOrDefault();

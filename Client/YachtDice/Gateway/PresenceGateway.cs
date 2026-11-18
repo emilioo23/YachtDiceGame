@@ -20,6 +20,7 @@ namespace YachtDice.Gateway
     {
         private const string UnavailableLogMessage = "The presence service could not be reached.";
         private const string UnavailableMessage = "The server is not available.";
+        private const string CloseFailedLogMessage = "The presence connection could not be closed, so it was aborted.";
 
         private readonly object _syncRoot = new object();
         private readonly HashSet<string> _onlinePlayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -115,20 +116,22 @@ namespace YachtDice.Gateway
             PlayersChanged?.Invoke();
         }
 
-        private static void CloseClient(PresenceServiceClient client, string displayName)
+        private void CloseClient(PresenceServiceClient client, string displayName)
         {
             try
             {
                 client.Disconnect(displayName);
                 client.Close();
             }
-            catch (CommunicationException)
+            catch (CommunicationException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
-            catch (TimeoutException)
+            catch (TimeoutException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
         }
 

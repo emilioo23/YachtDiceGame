@@ -11,7 +11,7 @@ namespace YachtDice.Server.Services
     /// </summary>
     internal static class CallbackDelivery
     {
-        private const string DeliveryFailedMessage = "A notification could not be delivered to a client: ";
+        private const string DeliveryFailedMessage = "A notification could not be delivered to a client.";
 
         /// <summary>
         /// Makes the call on the channel if it is open. A channel that is closed, broken or too slow counts as a
@@ -39,11 +39,11 @@ namespace YachtDice.Server.Services
                 }
                 catch (CommunicationException ex)
                 {
-                    logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
+                    logger.Warning(ex, DeliveryFailedMessage);
                 }
                 catch (TimeoutException ex)
                 {
-                    logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
+                    logger.Warning(ex, DeliveryFailedMessage);
                 }
             }
 

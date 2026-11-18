@@ -22,6 +22,7 @@ namespace YachtDice.Gateway
         private const string UnavailableMessage = "The server is not available.";
         private const string NotConnectedMessage = "There is no connection with the server.";
         private const string ConnectionLostLogMessage = "The connection with the server was lost.";
+        private const string CloseFailedLogMessage = "The connection could not be closed normally, so it was aborted.";
 
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
@@ -187,19 +188,21 @@ namespace YachtDice.Gateway
             return true;
         }
 
-        private static void CloseGracefully(TClient client)
+        private void CloseGracefully(TClient client)
         {
             try
             {
                 client.Close();
             }
-            catch (CommunicationException)
+            catch (CommunicationException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
-            catch (TimeoutException)
+            catch (TimeoutException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
         }
 

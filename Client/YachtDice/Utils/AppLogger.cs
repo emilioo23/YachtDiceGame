@@ -42,6 +42,21 @@ namespace YachtDice.Utils
         }
 
         /// <summary>
+        /// Logs an unexpected situation that does not stop the execution, with the exception that caused it.
+        /// </summary>
+        /// <param name="exception">Caught exception.</param>
+        /// <param name="message">Context of the situation.</param>
+        public void Warning(Exception exception, string message)
+        {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(exception), NullExceptionMessage);
+            }
+
+            _log.Warn(BuildErrorMessage(exception, message));
+        }
+
+        /// <summary>
         /// Logs a failure that prevented an operation from completing, with the stack trace limited to 3 levels.
         /// </summary>
         /// <param name="exception">Caught exception.</param>
