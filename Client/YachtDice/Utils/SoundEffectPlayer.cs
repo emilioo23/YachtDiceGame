@@ -16,7 +16,7 @@ namespace YachtDice.Utils
     {
         private const string SoundUriFormat = "pack://application:,,,/Resources/Sounds/{0}.wav";
         private const string PlayFailedLogMessage = "A sound effect could not be played.";
-        private const string NullValueMessage = "A value that the sound effect player needs cannot be null.";
+        private const string NullAudioMessage = "The choices about the sound cannot be null.";
 
         private readonly Dictionary<SoundEffect, SoundPlayer> _players = new Dictionary<SoundEffect, SoundPlayer>();
         private readonly AppLogger _logger = new AppLogger(typeof(SoundEffectPlayer));
@@ -28,7 +28,7 @@ namespace YachtDice.Utils
         /// <param name="audio">Choices of the player about the sound effects.</param>
         public SoundEffectPlayer(AudioSettings audio)
         {
-            _audio = audio ?? throw new ArgumentNullException(nameof(audio), NullValueMessage);
+            _audio = audio ?? throw new ArgumentNullException(nameof(audio), NullAudioMessage);
         }
 
         /// <summary>

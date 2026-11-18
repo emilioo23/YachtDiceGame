@@ -9,7 +9,8 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     public class RoomPlayer
     {
-        private const string NullValueMessage = "A value that the room player needs cannot be null.";
+        private const string NullIdMessage = "The identifier of the player cannot be null.";
+        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomPlayer"/> class.
@@ -19,8 +20,8 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="avatarId">Identifier of the avatar that the player uses.</param>
         public RoomPlayer(string id, string displayName, int avatarId)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id), NullValueMessage);
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullValueMessage);
+            Id = id ?? throw new ArgumentNullException(nameof(id), NullIdMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
             AvatarId = avatarId;
         }
 

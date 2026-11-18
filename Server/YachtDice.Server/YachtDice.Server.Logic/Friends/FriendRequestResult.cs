@@ -6,7 +6,7 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class FriendRequestResult
     {
-        private const string NullValueMessage = "A value that the friend request result needs cannot be null.";
+        private const string NullFriendNameMessage = "The name of the friend cannot be null.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendRequestResult"/> class.
@@ -16,7 +16,7 @@ namespace YachtDice.Server.Logic.Friends
         public FriendRequestResult(FriendRequestStatus status, string friendName)
         {
             Status = status;
-            FriendName = friendName ?? throw new ArgumentNullException(nameof(friendName), NullValueMessage);
+            FriendName = friendName ?? throw new ArgumentNullException(nameof(friendName), NullFriendNameMessage);
         }
 
         /// <summary>

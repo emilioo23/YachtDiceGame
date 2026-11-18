@@ -18,7 +18,8 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ResetPasswordWindow : Window
     {
-        private const string NullValueMessage = "A value that the reset password window needs cannot be null.";
+        private const string NullEmailMessage = "The email of the account cannot be null.";
+        private const string NullServicesMessage = "The shared components of the client cannot be null.";
 
         private readonly string _email;
         private readonly AppLogger _logger;
@@ -33,9 +34,9 @@ namespace YachtDice.Views
         public ResetPasswordWindow(string email, ClientServices services)
         {
             InitializeComponent();
-            _email = email ?? throw new ArgumentNullException(nameof(email), NullValueMessage);
+            _email = email ?? throw new ArgumentNullException(nameof(email), NullEmailMessage);
             _logger = new AppLogger(GetType());
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
             EmailTextBlock.Text = email;
             CodeTextBox.MaxLength = ResetPasswordValidator.CodeLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);

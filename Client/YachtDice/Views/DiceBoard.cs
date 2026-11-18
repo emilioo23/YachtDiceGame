@@ -38,7 +38,8 @@ namespace YachtDice.Views
         private const int MaxTumblingTilt = 40;
         private const double LandingScale = 1.12;
         private const int LandingMilliseconds = 120;
-        private const string NullValueMessage = "A value that the dice board needs cannot be null.";
+        private const string NullCanvasMessage = "The canvas where it is drawn cannot be null.";
+        private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
 
         private static readonly (double left, double top, double angle)[] DicePositions =
         {
@@ -64,8 +65,8 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public DiceBoard(Canvas canvas, FrameworkElement resources)
         {
-            _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas), NullValueMessage);
-            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullValueMessage);
+            _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas), NullCanvasMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullResourcesMessage);
         }
 
         /// <summary>

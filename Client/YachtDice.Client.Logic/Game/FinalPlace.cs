@@ -6,7 +6,8 @@ namespace YachtDice.Client.Logic.Game
     /// </summary>
     public sealed class FinalPlace
     {
-        private const string NullValueMessage = "A value that the standing entry needs cannot be null.";
+        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
+        private const string NullNameMessage = "The name of the player cannot be null.";
 
         /// <summary>
         /// Initializes a new entry.
@@ -16,8 +17,8 @@ namespace YachtDice.Client.Logic.Game
         /// <param name="total">Total points of the player.</param>
         public FinalPlace(string playerId, string name, int total)
         {
-            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
             Total = total;
         }
 

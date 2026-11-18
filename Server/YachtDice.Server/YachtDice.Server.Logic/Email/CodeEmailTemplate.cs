@@ -7,7 +7,8 @@ namespace YachtDice.Server.Logic.Email
     /// </summary>
     public sealed class CodeEmailTemplate
     {
-        private const string NullValueMessage = "A value that the code email template needs cannot be null.";
+        private const string NullSubjectResourceKeyMessage = "The resource key of the subject cannot be null.";
+        private const string NullBodyResourceKeyMessage = "The resource key of the body cannot be null.";
 
         /// <summary>
         /// Initializes the template.
@@ -18,9 +19,9 @@ namespace YachtDice.Server.Logic.Email
         public CodeEmailTemplate(string subjectResourceKey, string bodyResourceKey, int expirationMinutes)
         {
             SubjectResourceKey = subjectResourceKey
-                ?? throw new ArgumentNullException(nameof(subjectResourceKey), NullValueMessage);
+                ?? throw new ArgumentNullException(nameof(subjectResourceKey), NullSubjectResourceKeyMessage);
             BodyResourceKey = bodyResourceKey
-                ?? throw new ArgumentNullException(nameof(bodyResourceKey), NullValueMessage);
+                ?? throw new ArgumentNullException(nameof(bodyResourceKey), NullBodyResourceKeyMessage);
             ExpirationMinutes = expirationMinutes;
         }
 

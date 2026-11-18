@@ -15,7 +15,7 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
-        private const string NullValueMessage = "A value that the room gateway needs cannot be null.";
+        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         /// <summary>
         /// Initializes the gateway for the player.
@@ -23,7 +23,7 @@ namespace YachtDice.Gateway
         /// <param name="session">Session of the player who uses the room.</param>
         public RoomGateway(PlayerSession session)
         {
-            Session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
+            Session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
         }
 
         /// <summary>

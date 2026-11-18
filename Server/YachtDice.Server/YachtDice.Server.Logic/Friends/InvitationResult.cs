@@ -6,7 +6,7 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class InvitationResult
     {
-        private const string NullValueMessage = "A value that the invitation result needs cannot be null.";
+        private const string NullSenderNameMessage = "The name of the sender cannot be null.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvitationResult"/> class.
@@ -16,7 +16,7 @@ namespace YachtDice.Server.Logic.Friends
         public InvitationResult(InvitationStatus status, string senderName)
         {
             Status = status;
-            SenderName = senderName ?? throw new ArgumentNullException(nameof(senderName), NullValueMessage);
+            SenderName = senderName ?? throw new ArgumentNullException(nameof(senderName), NullSenderNameMessage);
         }
 
         /// <summary>

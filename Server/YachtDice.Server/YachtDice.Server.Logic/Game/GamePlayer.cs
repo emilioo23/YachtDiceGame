@@ -6,7 +6,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     internal sealed class GamePlayer
     {
-        private const string NullValueMessage = "A value that the game player needs cannot be null.";
+        private const string NullParticipantMessage = "The participant of the game cannot be null.";
+        private const string NullCardMessage = "The scorecard of the player cannot be null.";
 
         /// <summary>
         /// Initializes a player who starts present and with an empty scorecard.
@@ -17,14 +18,14 @@ namespace YachtDice.Server.Logic.Game
         {
             if (participant == null)
             {
-                throw new ArgumentNullException(nameof(participant), NullValueMessage);
+                throw new ArgumentNullException(nameof(participant), NullParticipantMessage);
             }
 
             PlayerId = participant.PlayerId;
             Name = participant.Name;
             IsComputer = participant.IsComputer;
             Skill = ComputerSkill.For(participant.Difficulty);
-            Card = card ?? throw new ArgumentNullException(nameof(card), NullValueMessage);
+            Card = card ?? throw new ArgumentNullException(nameof(card), NullCardMessage);
             IsPresent = true;
         }
 

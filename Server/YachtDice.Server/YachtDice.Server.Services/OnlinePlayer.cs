@@ -8,7 +8,8 @@ namespace YachtDice.Server.Services
     /// </summary>
     internal sealed class OnlinePlayer
     {
-        private const string NullValueMessage = "A value that the online player needs cannot be null.";
+        private const string NullSessionIdMessage = "The identifier of the session cannot be null.";
+        private const string NullCallbackMessage = "The callback channel of the player cannot be null.";
 
         /// <summary>
         /// Initializes the player with its session and callback channel.
@@ -17,8 +18,8 @@ namespace YachtDice.Server.Services
         /// <param name="callback">Callback channel of the player.</param>
         public OnlinePlayer(string sessionId, Contracts.IPresenceCallback callback)
         {
-            SessionId = sessionId ?? throw new ArgumentNullException(nameof(sessionId), NullValueMessage);
-            Callback = callback ?? throw new ArgumentNullException(nameof(callback), NullValueMessage);
+            SessionId = sessionId ?? throw new ArgumentNullException(nameof(sessionId), NullSessionIdMessage);
+            Callback = callback ?? throw new ArgumentNullException(nameof(callback), NullCallbackMessage);
         }
 
         /// <summary>

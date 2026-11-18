@@ -36,7 +36,11 @@ namespace YachtDice.Views
         private const string ResourceBrushCream2 = "BrushCream2";
         private const string ResourceBrushFeltLight = "BrushFeltLight";
         private const string ResourceBrushWood = "BrushWood";
-        private const string NullValueMessage = "A value that the scorecard grid needs cannot be null.";
+        private const string NullPanelMessage = "The panel where it is drawn cannot be null.";
+        private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
+        private const string NullStateMessage = "The state of the game cannot be null.";
+        private const string NullColumnsMessage = "The players of the columns cannot be null.";
+        private const string NullOnClickMessage = "The action of the click cannot be null.";
 
         private readonly Panel _panel;
         private readonly FrameworkElement _resources;
@@ -48,8 +52,8 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public ScorecardGrid(Panel panel, FrameworkElement resources)
         {
-            _panel = panel ?? throw new ArgumentNullException(nameof(panel), NullValueMessage);
-            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullValueMessage);
+            _panel = panel ?? throw new ArgumentNullException(nameof(panel), NullPanelMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullResourcesMessage);
         }
 
         /// <summary>
@@ -253,9 +257,9 @@ namespace YachtDice.Views
             /// <param name="onClick">Work to run when the player clicks a box.</param>
             public RenderContext(GameState state, IReadOnlyList<GamePlayer> columns, Func<ScoreCategory, Task> onClick)
             {
-                State = state ?? throw new ArgumentNullException(nameof(state), NullValueMessage);
-                Columns = columns ?? throw new ArgumentNullException(nameof(columns), NullValueMessage);
-                OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick), NullValueMessage);
+                State = state ?? throw new ArgumentNullException(nameof(state), NullStateMessage);
+                Columns = columns ?? throw new ArgumentNullException(nameof(columns), NullColumnsMessage);
+                OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick), NullOnClickMessage);
                 Func<GamePlayer, bool> isLocalCurrentPlayer =
                     player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId;
                 IsLocalTurn = columns.Any(isLocalCurrentPlayer)

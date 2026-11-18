@@ -28,7 +28,9 @@ namespace YachtDice.Views
         private const int SingleWinner = 1;
         private const double ExperienceDelaySeconds = 0.5;
         private const double ExperienceFillSeconds = 1.4;
-        private const string NullValueMessage = "A value that the results window needs cannot be null.";
+        private const string NullStandingsMessage = "The final places cannot be null.";
+        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
+        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -45,16 +47,16 @@ namespace YachtDice.Views
         {
             if (standings == null)
             {
-                throw new ArgumentNullException(nameof(standings), NullValueMessage);
+                throw new ArgumentNullException(nameof(standings), NullStandingsMessage);
             }
 
             if (playerId == null)
             {
-                throw new ArgumentNullException(nameof(playerId), NullValueMessage);
+                throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
             }
 
             InitializeComponent();
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
             _experienceGained = FindExperienceGained(standings, playerId);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResultsWindow(session, standings, playerId);
 

@@ -8,7 +8,7 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class BackupCodeCreation
     {
-        private const string NullValueMessage = "A value that the backup code creation needs cannot be null.";
+        private const string NullCodesMessage = "The list of backup codes cannot be null.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BackupCodeCreation"/> class.
@@ -18,7 +18,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         public BackupCodeCreation(BackupCodeCreationStatus status, List<string> codes)
         {
             Status = status;
-            Codes = codes ?? throw new ArgumentNullException(nameof(codes), NullValueMessage);
+            Codes = codes ?? throw new ArgumentNullException(nameof(codes), NullCodesMessage);
         }
 
         /// <summary>

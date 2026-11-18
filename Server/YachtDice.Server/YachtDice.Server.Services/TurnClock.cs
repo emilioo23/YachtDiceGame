@@ -18,7 +18,7 @@ namespace YachtDice.Server.Services
         public const int NoTurnNumber = 0;
 
         private const string ExpiredActionFailedLogMessage = "The action of an expired countdown failed.";
-        private const string NullValueMessage = "A value that the turn clock needs cannot be null.";
+        private const string NullOnExpiredMessage = "The action when the time is over cannot be null.";
 
         private readonly Timer _timer;
         private readonly Action _onExpired;
@@ -34,7 +34,7 @@ namespace YachtDice.Server.Services
         {
             TurnNumber = turnNumber;
             Deadline = DateTime.UtcNow.AddSeconds(seconds);
-            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired), NullValueMessage);
+            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired), NullOnExpiredMessage);
             _logger = new LogicLogging.AppLogger(GetType());
             _timer = new Timer(HandleExpired, null, TimeSpan.FromSeconds(seconds), Timeout.InfiniteTimeSpan);
         }

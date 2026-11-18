@@ -6,7 +6,7 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameTurn
     {
-        private const string NullValueMessage = "A value that the game turn needs cannot be null.";
+        private const string NullRoomCodeMessage = "The code of the room cannot be null.";
 
         /// <summary>
         /// Initializes the turn.
@@ -15,7 +15,7 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="turnNumber">Number of the turn inside the game.</param>
         public GameTurn(string roomCode, int turnNumber)
         {
-            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullValueMessage);
+            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullRoomCodeMessage);
             TurnNumber = turnNumber;
         }
 

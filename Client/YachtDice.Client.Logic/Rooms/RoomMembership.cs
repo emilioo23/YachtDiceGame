@@ -6,7 +6,8 @@ namespace YachtDice.Client.Logic.Rooms
     /// </summary>
     public sealed class RoomMembership
     {
-        private const string NullValueMessage = "A value that the room membership needs cannot be null.";
+        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
+        private const string NullRoomCodeMessage = "The code of the room cannot be null.";
 
         /// <summary>
         /// Initializes the membership.
@@ -15,8 +16,8 @@ namespace YachtDice.Client.Logic.Rooms
         /// <param name="roomCode">Code of the room where the player is.</param>
         public RoomMembership(string playerId, string roomCode)
         {
-            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
-            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullValueMessage);
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
+            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullRoomCodeMessage);
         }
 
         /// <summary>

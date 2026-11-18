@@ -19,7 +19,7 @@ namespace YachtDice.Views
     public partial class ReportPlayerWindow : Window
     {
         private const string NullSessionMessage = "The session of the player cannot be null.";
-        private const string NullValueMessage = "A value that the report player window needs cannot be null.";
+        private const string NullReportedNameMessage = "The name of the reported player cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly string _reportedName;
@@ -35,7 +35,8 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
-            _reportedName = reportedName ?? throw new ArgumentNullException(nameof(reportedName), NullValueMessage);
+            _reportedName = reportedName
+                ?? throw new ArgumentNullException(nameof(reportedName), NullReportedNameMessage);
 
             TitleTextBlock.Text = string.Format(Strings.Report_TitleFormat, reportedName);
             CommentTextBox.MaxLength = ReportLimits.CommentMaxLength;

@@ -8,7 +8,9 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginResult
     {
-        private const string NullValueMessage = "A value that the login result needs cannot be null.";
+        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
+        private const string NullPlayerMessage = "The player cannot be null.";
+        private const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginResult"/> class.
@@ -18,7 +20,7 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginResult(LoginStatus status, string displayName)
         {
             Status = status;
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullValueMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
             FirstName = string.Empty;
             ChallengeId = string.Empty;
         }
@@ -33,13 +35,13 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullValueMessage);
+                throw new ArgumentNullException(nameof(player), NullPlayerMessage);
             }
 
             Status = status;
             DisplayName = player.DisplayName;
             FirstName = player.FirstName;
-            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullValueMessage);
+            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
         }
 
         /// <summary>

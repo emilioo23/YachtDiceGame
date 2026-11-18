@@ -6,7 +6,7 @@ namespace YachtDice.Models
     /// </summary>
     public sealed class FriendPresence
     {
-        private const string NullValueMessage = "A value that the friend presence needs cannot be null.";
+        private const string NullStatusMessage = "The status text cannot be null.";
 
         /// <summary>
         /// Initializes the presence of a friend.
@@ -15,7 +15,7 @@ namespace YachtDice.Models
         /// <param name="isOnline">Whether the friend is online.</param>
         public FriendPresence(string status, bool isOnline)
         {
-            Status = status ?? throw new ArgumentNullException(nameof(status), NullValueMessage);
+            Status = status ?? throw new ArgumentNullException(nameof(status), NullStatusMessage);
             IsOnline = isOnline;
         }
 

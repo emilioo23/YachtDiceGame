@@ -29,7 +29,7 @@ namespace YachtDice.Views
     {
         private const int DefaultPlayerLevel = 1;
         private const double LevelBarAnimationSeconds = 0.8;
-        private const string NullValueMessage = "A value that the menu window needs cannot be null.";
+        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -50,7 +50,7 @@ namespace YachtDice.Views
             FriendUsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
 
             _logger = new AppLogger(GetType());
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullValueMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
             PlayerNameTextBlock.Text = session.DisplayName;
             PlayerNameHeadingTextBlock.Text = GetGreetingName(session);
             PlayerInitialTextBlock.Text = InitialLetter.From(session.DisplayName, Strings.Global_UnknownInitial);

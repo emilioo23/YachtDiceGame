@@ -8,7 +8,8 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameParticipant
     {
-        private const string NullValueMessage = "A value that the game participant needs cannot be null.";
+        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
+        private const string NullNameMessage = "The name of the player cannot be null.";
 
         /// <summary>
         /// Initializes a new participant.
@@ -17,8 +18,8 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="name">Name that the screens show for the player.</param>
         public GameParticipant(string playerId, string name)
         {
-            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullValueMessage);
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
         }
 
         /// <summary>

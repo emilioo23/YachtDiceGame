@@ -10,7 +10,7 @@ namespace YachtDice.Utils
     /// </summary>
     internal sealed class DrawingCatalog
     {
-        private const string NullValueMessage = "A value that the drawing catalog needs cannot be null.";
+        private const string NullSourceMessage = "The path of the drawings cannot be null.";
 
         private readonly ResourceDictionary _drawings;
 
@@ -22,7 +22,7 @@ namespace YachtDice.Utils
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source), NullValueMessage);
+                throw new ArgumentNullException(nameof(source), NullSourceMessage);
             }
 
             _drawings = new ResourceDictionary { Source = new Uri(source, UriKind.Relative) };

@@ -26,7 +26,7 @@ namespace YachtDice.Views
     {
         private const int MaxDigitsPerBox = 1;
         private const int FirstBoxIndex = 0;
-        private const string NullValueMessage = "A value that the two factor window needs cannot be null.";
+        private const string NullChallengeMessage = "The verification challenge cannot be null.";
 
         private readonly string _email;
         private readonly PlayerSession _session;
@@ -46,7 +46,7 @@ namespace YachtDice.Views
         {
             if (challenge == null)
             {
-                throw new ArgumentNullException(nameof(challenge), NullValueMessage);
+                throw new ArgumentNullException(nameof(challenge), NullChallengeMessage);
             }
 
             InitializeComponent();

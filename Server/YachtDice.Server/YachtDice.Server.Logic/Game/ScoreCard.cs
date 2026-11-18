@@ -19,7 +19,7 @@ namespace YachtDice.Server.Logic.Game
 
         private const int NoPoints = 0;
         private const string NullScoresMessage = "The saved boxes cannot be null.";
-        private const string NullValueMessage = "A value that the score card needs cannot be null.";
+        private const string NullCalculatorMessage = "The score calculator cannot be null.";
 
         private readonly Dictionary<ScoreCategory, int> _scores = new Dictionary<ScoreCategory, int>();
         private readonly ScoreCalculator _calculator;
@@ -30,7 +30,7 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="calculator">Calculator that gives the points of each box.</param>
         public ScoreCard(ScoreCalculator calculator)
         {
-            _calculator = calculator ?? throw new ArgumentNullException(nameof(calculator), NullValueMessage);
+            _calculator = calculator ?? throw new ArgumentNullException(nameof(calculator), NullCalculatorMessage);
         }
 
         /// <summary>

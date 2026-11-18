@@ -7,7 +7,7 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     internal sealed class RoomApplicant
     {
-        private const string NullValueMessage = "A value that the room applicant needs cannot be null.";
+        private const string NullNameMessage = "The name of the player cannot be null.";
 
         /// <summary>
         /// Initializes the applicant.
@@ -16,7 +16,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="avatarId">Identifier of the avatar of the player.</param>
         public RoomApplicant(string name, int avatarId, int level)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullValueMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
             AvatarId = avatarId;
             Level = level;
         }

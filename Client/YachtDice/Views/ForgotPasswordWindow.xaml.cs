@@ -16,7 +16,7 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
-        private const string NullValueMessage = "A value that the forgot password window needs cannot be null.";
+        private const string NullServicesMessage = "The shared components of the client cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
@@ -30,7 +30,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullValueMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow(services);
         }
 

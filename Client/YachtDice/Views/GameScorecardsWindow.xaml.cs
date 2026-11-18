@@ -14,7 +14,7 @@ namespace YachtDice.Views
     /// </summary>
     public partial class GameScorecardsWindow : Window
     {
-        private const string NullValueMessage = "A value that the game scorecards window needs cannot be null.";
+        private const string NullScorecardsMessage = "The saved scorecards cannot be null.";
 
         /// <summary>
         /// Initializes the dialog with the scorecards that the server sent.
@@ -24,7 +24,7 @@ namespace YachtDice.Views
         {
             if (scorecards == null)
             {
-                throw new ArgumentNullException(nameof(scorecards), NullValueMessage);
+                throw new ArgumentNullException(nameof(scorecards), NullScorecardsMessage);
             }
 
             InitializeComponent();
