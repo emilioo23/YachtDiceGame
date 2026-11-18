@@ -96,20 +96,20 @@ namespace YachtDice.Views
 
         private async Task ShowAchievementsAsync()
         {
-            List<AchievementInfo> achievements = await _playerGateway.GetAchievementsAsync(_session.DisplayName);
+            List<Achievement> achievements = await _playerGateway.GetAchievementsAsync(_session.DisplayName);
 
             ShowTitles(achievements);
             ShowAchievementBadges(achievements);
         }
 
-        private void ShowTitles(List<AchievementInfo> achievements)
+        private void ShowTitles(List<Achievement> achievements)
         {
             TitleComboBox.Items.Clear();
             TitleComboBox.Items.Add(CreateTitleItem(DefaultTitleId, true));
 
-            Func<AchievementInfo, bool> grantsTitle = candidate => candidate.HasTitle;
+            Func<Achievement, bool> grantsTitle = candidate => candidate.HasTitle;
 
-            foreach (AchievementInfo achievement in achievements.Where(grantsTitle))
+            foreach (Achievement achievement in achievements.Where(grantsTitle))
             {
                 TitleComboBox.Items.Add(CreateTitleItem(achievement.Id, achievement.IsUnlocked));
             }
@@ -138,9 +138,9 @@ namespace YachtDice.Views
             };
         }
 
-        private void ShowAchievementBadges(List<AchievementInfo> achievements)
+        private void ShowAchievementBadges(List<Achievement> achievements)
         {
-            Func<AchievementInfo, bool> isUnlocked = candidate => candidate.IsUnlocked;
+            Func<Achievement, bool> isUnlocked = candidate => candidate.IsUnlocked;
             int unlockedCount = achievements.Count(isUnlocked);
 
             AchievementsHeaderTextBlock.Text = string.Format(
@@ -149,13 +149,13 @@ namespace YachtDice.Views
                 string.Format(Strings.Profile_AchievementsFormat, unlockedCount, achievements.Count));
             AchievementsWrapPanel.Children.Clear();
 
-            foreach (AchievementInfo achievement in achievements)
+            foreach (Achievement achievement in achievements)
             {
                 AchievementsWrapPanel.Children.Add(CreateAchievementBadge(achievement));
             }
         }
 
-        private Border CreateAchievementBadge(AchievementInfo achievement)
+        private Border CreateAchievementBadge(Achievement achievement)
         {
             string textBrushKey = achievement.IsUnlocked ? UnlockedTextBrushKey : LockedTextBrushKey;
             string backgroundBrushKey = achievement.IsUnlocked ? UnlockedBackgroundBrushKey : LockedBackgroundBrushKey;

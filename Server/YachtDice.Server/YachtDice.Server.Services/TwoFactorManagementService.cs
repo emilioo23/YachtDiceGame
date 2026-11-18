@@ -193,13 +193,13 @@ namespace YachtDice.Server.Services
             string displayName,
             Contracts.PasswordChange change)
         {
-            var request = new LogicAuthentication.PasswordChangeRequest
+            var logicChange = new LogicAuthentication.PasswordChange
             {
                 CurrentPassword = change?.CurrentPassword,
                 NewPassword = change?.NewPassword
             };
             LogicAuthentication.PasswordChangeStatus status =
-                _passwordChangeService.ChangePassword(displayName, request);
+                _passwordChangeService.ChangePassword(displayName, logicChange);
 
             return Mapping.EnumMapper.Map<
                 LogicAuthentication.PasswordChangeStatus,

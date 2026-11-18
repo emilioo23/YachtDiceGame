@@ -82,9 +82,9 @@ namespace YachtDice.Gateway
             return result;
         }
 
-        public async Task<List<AchievementInfo>> GetAchievementsAsync(string playerName)
+        public async Task<List<Achievement>> GetAchievementsAsync(string playerName)
         {
-            AchievementInfo[] achievements = await ExecuteAsync(client => client.GetAchievements(playerName));
+            Achievement[] achievements = await ExecuteAsync(client => client.GetAchievements(playerName));
 
             return achievements.ToList();
         }

@@ -38,7 +38,7 @@ namespace YachtDice.Utils
         {
             if (!_session.IsGuest)
             {
-                List<AchievementInfo> achievements = await _gateway.GetAchievementsAsync(_session.DisplayName);
+                List<Achievement> achievements = await _gateway.GetAchievementsAsync(_session.DisplayName);
                 List<int> currentIds = FindUnlockedIds(achievements);
 
                 if (_session.KnownAchievementIds != null)
@@ -50,11 +50,11 @@ namespace YachtDice.Utils
             }
         }
 
-        private static List<int> FindUnlockedIds(List<AchievementInfo> achievements)
+        private static List<int> FindUnlockedIds(List<Achievement> achievements)
         {
             var unlockedIds = new List<int>();
 
-            foreach (AchievementInfo achievement in achievements)
+            foreach (Achievement achievement in achievements)
             {
                 if (achievement.IsUnlocked)
                 {

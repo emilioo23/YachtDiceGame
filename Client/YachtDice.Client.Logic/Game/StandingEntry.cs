@@ -52,5 +52,20 @@
         /// Gets or sets the bonus of the extra Yachts.
         /// </summary>
         public int YachtBonus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the place of the player in the final scoreboard. Players with the same total share it.
+        /// </summary>
+        public int Rank { get; set; }
+
+        /// <summary>
+        /// Gets the points of the lower section, without the upper section and the bonuses.
+        /// </summary>
+        public int LowerTotal => Total - UpperSubtotal - UpperBonus - YachtBonus;
+
+        /// <summary>
+        /// Gets a value indicating whether the player finished in the first place.
+        /// </summary>
+        public bool IsWinner => Rank == StandingsBuilder.FirstRank;
     }
 }

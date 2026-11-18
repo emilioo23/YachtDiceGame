@@ -745,9 +745,9 @@ namespace YachtDice.PlayerServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AchievementInfo", Namespace="urn:yachtdice:contracts")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Achievement", Namespace="urn:yachtdice:contracts")]
     [System.SerializableAttribute()]
-    public partial class AchievementInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Achievement : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -1222,7 +1222,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetAchievements", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.AchievementInfo[] GetAchievements(string playerName);
+        YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string playerName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault", Name="ServiceFault")]
@@ -1296,7 +1296,7 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.ChangeUsername(sessionToken, newUsername);
         }
         
-        public YachtDice.PlayerServiceReference.AchievementInfo[] GetAchievements(string playerName) {
+        public YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string playerName) {
             return base.Channel.GetAchievements(playerName);
         }
         

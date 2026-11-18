@@ -105,9 +105,9 @@ namespace YachtDice.Server.Services
             return result;
         }
 
-        public List<Contracts.AchievementInfo> GetAchievements(string playerName)
+        public List<Contracts.Achievement> GetAchievements(string playerName)
         {
-            List<Contracts.AchievementInfo> achievements =
+            List<Contracts.Achievement> achievements =
                 Execute(playerName, () => ProcessAchievements(playerName));
 
             return achievements;
@@ -226,7 +226,7 @@ namespace YachtDice.Server.Services
             return Mapping.PlayerStatisticsMapper.ToHistoryContracts(games);
         }
 
-        private List<Contracts.AchievementInfo> ProcessAchievements(string playerName)
+        private List<Contracts.Achievement> ProcessAchievements(string playerName)
         {
             List<LogicPlayers.AchievementStatus> achievements = _profileService.GetAchievements(playerName);
 

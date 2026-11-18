@@ -6,7 +6,7 @@ namespace YachtDice.Server.Contracts.Players
     /// An achievement of the game and whether the player has unlocked it.
     /// </summary>
     [DataContract(Namespace = ServiceNamespaces.Contracts)]
-    public class AchievementInfo
+    public class Achievement
     {
         /// <summary>
         /// Identifier of the achievement. It is also the identifier of its title.

@@ -17,19 +17,19 @@ namespace YachtDice.Server.Services.Mapping
         /// </summary>
         /// <param name="achievements">Achievements of the logic layer.</param>
         /// <returns>The achievements for the clients.</returns>
-        public static List<Contracts.AchievementInfo> ToContracts(List<Logic.Players.AchievementStatus> achievements)
+        public static List<Contracts.Achievement> ToContracts(List<Logic.Players.AchievementStatus> achievements)
         {
-            Func<Logic.Players.AchievementStatus, Contracts.AchievementInfo> createInfo = ToContract;
-            List<Contracts.AchievementInfo> contracts = achievements
+            Func<Logic.Players.AchievementStatus, Contracts.Achievement> createInfo = ToContract;
+            List<Contracts.Achievement> contracts = achievements
                 .Select(createInfo)
                 .ToList();
 
             return contracts;
         }
 
-        private static Contracts.AchievementInfo ToContract(Logic.Players.AchievementStatus achievement)
+        private static Contracts.Achievement ToContract(Logic.Players.AchievementStatus achievement)
         {
-            var contract = new Contracts.AchievementInfo
+            var contract = new Contracts.Achievement
             {
                 Id = achievement.Id,
                 IsUnlocked = achievement.IsUnlocked,

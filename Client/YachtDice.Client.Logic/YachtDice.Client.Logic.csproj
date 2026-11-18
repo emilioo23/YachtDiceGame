@@ -64,7 +64,6 @@
     <Compile Include="Dice\DieDisplay.cs" />
     <Compile Include="Dice\DieResourceKey.cs" />
     <Compile Include="Game\HeldDiceSelection.cs" />
-    <Compile Include="Game\RankedStanding.cs" />
     <Compile Include="Game\StandingEntry.cs" />
     <Compile Include="Game\StandingsBuilder.cs" />
     <Compile Include="Game\StateVersionGate.cs" />

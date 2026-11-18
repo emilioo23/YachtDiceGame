@@ -3,7 +3,7 @@
     /// <summary>
     /// The two passwords of a password change: the one the player has now and the one the player wants.
     /// </summary>
-    public class PasswordChangeRequest
+    public class PasswordChange
     {
         /// <summary>
         /// Gets or sets the password that the player has now, to prove that the player is the owner.

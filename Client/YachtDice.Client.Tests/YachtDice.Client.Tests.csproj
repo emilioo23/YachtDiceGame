@@ -72,7 +72,7 @@
     <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
     <Compile Include="Rooms\RoomListUpdaterTests.cs" />
-    <Compile Include="Game\RankedStandingTests.cs" />
+    <Compile Include="Game\StandingEntryTests.cs" />
     <Compile Include="Utils\AvatarChangeMessagesTests.cs" />
     <Compile Include="Utils\ProgressTextsTests.cs" />
     <Compile Include="Utils\BackupCodesMessagesTests.cs" />

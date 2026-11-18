@@ -197,24 +197,24 @@
   <xs:element name="GetAchievementsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetAchievementsResult" nillable="true" type="tns:ArrayOfAchievementInfo" />
+        <xs:element minOccurs="0" name="GetAchievementsResult" nillable="true" type="tns:ArrayOfAchievement" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfAchievementInfo">
+  <xs:complexType name="ArrayOfAchievement">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementInfo" nillable="true" type="tns:AchievementInfo" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Achievement" nillable="true" type="tns:Achievement" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfAchievementInfo" nillable="true" type="tns:ArrayOfAchievementInfo" />
-  <xs:complexType name="AchievementInfo">
+  <xs:element name="ArrayOfAchievement" nillable="true" type="tns:ArrayOfAchievement" />
+  <xs:complexType name="Achievement">
     <xs:sequence>
       <xs:element minOccurs="0" name="HasTitle" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="IsUnlocked" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AchievementInfo" nillable="true" type="tns:AchievementInfo" />
+  <xs:element name="Achievement" nillable="true" type="tns:Achievement" />
   <xs:element name="ChangeTitle">
     <xs:complexType>
       <xs:sequence>

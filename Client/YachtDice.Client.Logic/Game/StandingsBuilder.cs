@@ -19,17 +19,16 @@ namespace YachtDice.Client.Logic.Game
         /// </summary>
         /// <param name="entries">Players of the game, in any order.</param>
         /// <returns>The players from the first place to the last. Players that tie keep their order.</returns>
-        public static IReadOnlyList<RankedStanding> Build(IEnumerable<StandingEntry> entries)
+        public static IReadOnlyList<StandingEntry> Build(IEnumerable<StandingEntry> entries)
         {
-            var sorted = entries.OrderByDescending(standingEntry => standingEntry.Total).ToList();
-            var standings = new List<RankedStanding>();
+            List<StandingEntry> sorted = entries.OrderByDescending(standingEntry => standingEntry.Total).ToList();
 
             for (var position = 0; position < sorted.Count; position++)
             {
-                standings.Add(new RankedStanding(FindRank(sorted, position), sorted[position]));
+                sorted[position].Rank = FindRank(sorted, position);
             }
 
-            return standings;
+            return sorted;
         }
 
         private static int FindRank(IReadOnlyList<StandingEntry> sorted, int position)

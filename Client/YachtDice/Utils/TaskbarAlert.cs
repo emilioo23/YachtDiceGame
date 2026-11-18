@@ -25,16 +25,16 @@ namespace YachtDice.Utils
 
             if (!window.IsActive && handle != IntPtr.Zero)
             {
-                var flashInfo = new NativeMethods.FlashInfo
+                var flashSettings = new NativeMethods.FlashSettings
                 {
-                    Size = (uint)Marshal.SizeOf(typeof(NativeMethods.FlashInfo)),
+                    Size = (uint)Marshal.SizeOf(typeof(NativeMethods.FlashSettings)),
                     WindowHandle = handle,
                     Flags = FlashAllUntilForeground,
                     Count = EndlessFlashes,
                     Timeout = DefaultBlinkRate
                 };
 
-                NativeMethods.FlashWindowEx(ref flashInfo);
+                NativeMethods.FlashWindowEx(ref flashSettings);
             }
         }
 
@@ -42,10 +42,10 @@ namespace YachtDice.Utils
         {
             [DllImport("user32.dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool FlashWindowEx(ref FlashInfo flashInfo);
+            public static extern bool FlashWindowEx(ref FlashSettings flashSettings);
 
             [StructLayout(LayoutKind.Sequential)]
-            public struct FlashInfo
+            public struct FlashSettings
             {
                 public uint Size;
                 public IntPtr WindowHandle;

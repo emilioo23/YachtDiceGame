@@ -57,10 +57,16 @@ namespace YachtDice.Server.Host.Composition
         {
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, GameRulesPath);
 
+            GameRules gameRules;
+
             using (XmlReader reader = XmlReader.Create(path))
             {
-                return GameRulesReader.Read(XDocument.Load(reader));
+                XDocument document = XDocument.Load(reader);
+
+                gameRules = GameRulesReader.Read(document);
             }
+
+            return gameRules;
         }
 
         /// <summary>

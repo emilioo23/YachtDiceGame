@@ -71,7 +71,7 @@ namespace YachtDice.Server.Contracts.Players
         /// <returns>The achievements, in the order in which they are shown.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<AchievementInfo> GetAchievements(string playerName);
+        List<Achievement> GetAchievements(string playerName);
 
         /// <summary>
         /// Chooses the title that the player shows in the profile. The player must have unlocked it.

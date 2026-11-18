@@ -92,17 +92,21 @@ namespace YachtDice.Client.Tests.Connection
 
         private static X509Certificate2 CreateCertificate()
         {
+            X509Certificate2 certificate;
+
             using (RSA key = RSA.Create(KeySize))
             {
-                var request = new CertificateRequest(
+                var certificateRequest = new CertificateRequest(
                     SubjectName,
                     key,
                     HashAlgorithmName.SHA256,
                     RSASignaturePadding.Pkcs1);
                 DateTimeOffset now = DateTimeOffset.UtcNow;
 
-                return request.CreateSelfSigned(now, now.AddDays(ValidDays));
+                certificate = certificateRequest.CreateSelfSigned(now, now.AddDays(ValidDays));
             }
+
+            return certificate;
         }
     }
 }

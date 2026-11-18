@@ -32,14 +32,14 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            RankedStanding[] standingsExpected =
+            StandingEntry[] standingsExpected =
             {
-                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
-                new RankedStanding(SecondPlace, new StandingEntry(CesarId, CesarName, MiddleTotal)),
-                new RankedStanding(ThirdPlace, new StandingEntry(AnaId, AnaName, LowTotal))
+                new StandingEntry(BetoId, BetoName, HighTotal) { Rank = FirstPlace },
+                new StandingEntry(CesarId, CesarName, MiddleTotal) { Rank = SecondPlace },
+                new StandingEntry(AnaId, AnaName, LowTotal) { Rank = ThirdPlace }
             };
 
-            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<StandingEntry> standings = StandingsBuilder.Build(entries);
 
             Assert.Equivalent(standingsExpected, standings, strict: true);
         }
@@ -53,14 +53,14 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(BetoId, BetoName, HighTotal),
                 new StandingEntry(CesarId, CesarName, MiddleTotal)
             };
-            RankedStanding[] standingsExpected =
+            StandingEntry[] standingsExpected =
             {
-                new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, HighTotal)),
-                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, HighTotal)),
-                new RankedStanding(ThirdPlace, new StandingEntry(CesarId, CesarName, MiddleTotal))
+                new StandingEntry(AnaId, AnaName, HighTotal) { Rank = FirstPlace },
+                new StandingEntry(BetoId, BetoName, HighTotal) { Rank = FirstPlace },
+                new StandingEntry(CesarId, CesarName, MiddleTotal) { Rank = ThirdPlace }
             };
 
-            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<StandingEntry> standings = StandingsBuilder.Build(entries);
 
             Assert.Equivalent(standingsExpected, standings, strict: true);
         }
@@ -73,13 +73,13 @@ namespace YachtDice.Client.Tests.Game
                 new StandingEntry(AnaId, AnaName, TiedTotal),
                 new StandingEntry(BetoId, BetoName, TiedTotal)
             };
-            RankedStanding[] standingsExpected =
+            StandingEntry[] standingsExpected =
             {
-                new RankedStanding(FirstPlace, new StandingEntry(AnaId, AnaName, TiedTotal)),
-                new RankedStanding(FirstPlace, new StandingEntry(BetoId, BetoName, TiedTotal))
+                new StandingEntry(AnaId, AnaName, TiedTotal) { Rank = FirstPlace },
+                new StandingEntry(BetoId, BetoName, TiedTotal) { Rank = FirstPlace }
             };
 
-            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(entries);
+            IReadOnlyList<StandingEntry> standings = StandingsBuilder.Build(entries);
 
             Assert.Equivalent(standingsExpected, standings, strict: true);
         }
@@ -87,7 +87,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void Build_NoPlayers_ReturnsAnEmptyList()
         {
-            IReadOnlyList<RankedStanding> standings = StandingsBuilder.Build(new StandingEntry[0]);
+            IReadOnlyList<StandingEntry> standings = StandingsBuilder.Build(new StandingEntry[0]);
 
             Assert.Empty(standings);
         }
