@@ -311,6 +311,41 @@ namespace YachtDice.Server.Tests.Authentication
             Assert.Equal(Email, _emailService.Recipients.Single());
         }
 
+        [Fact]
+        public void LoginPlayer_ThirdWrongPasswordInARowWithUsername_ReturnsTemporarilyLocked()
+        {
+            LoginCredentials credentials = CreateCredentials(Username, WrongPassword);
+            _service.LoginPlayer(credentials);
+            _service.LoginPlayer(credentials);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.TemporarilyLocked, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_WrongPasswordsWithUsername_LockTheLoginWithTheEmailToo()
+        {
+            LoginCredentials wrongCredentials = CreateCredentials(Username, WrongPassword);
+            _service.LoginPlayer(wrongCredentials);
+            _service.LoginPlayer(wrongCredentials);
+            _service.LoginPlayer(wrongCredentials);
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Email, Password));
+
+            Assert.Equal(LoginStatus.TemporarilyLocked, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UsernameWithOtherCase_StillFindsThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials(Username.ToUpperInvariant(), Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.LoggedIn, loginResult.Status);
+        }
+
         private static Player CreateKnownPlayer()
         {
             var player = new Player
