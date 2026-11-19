@@ -74,6 +74,7 @@
     <Compile Include="Passkeys\PasskeyClientData.cs" />
     <Compile Include="Passkeys\PasskeyRules.cs" />
     <Compile Include="Game\HeldDiceSelection.cs" />
+    <Compile Include="Logging\ErrorLogFormatter.cs" />
     <Compile Include="Game\FinalPlace.cs" />
     <Compile Include="Game\StandingsBuilder.cs" />
     <Compile Include="Game\StateVersionGate.cs" />

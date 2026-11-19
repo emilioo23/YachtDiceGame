@@ -127,6 +127,7 @@
     <Compile Include="Game\TurnDuration.cs" />
     <Compile Include="Game\YachtGame.cs" />
     <Compile Include="Logging\AppLogger.cs" />
+    <Compile Include="Logging\ErrorLogFormatter.cs" />
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
     <Compile Include="Moderation\LinkCensor.cs" />
     <Compile Include="Passkeys\AuthenticatorData.cs" />
