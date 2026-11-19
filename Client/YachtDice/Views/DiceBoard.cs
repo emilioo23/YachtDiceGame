@@ -21,9 +21,9 @@ namespace YachtDice.Views
     internal sealed class DiceBoard
     {
         private const double ViewportWidth = 413;
-        private const double ViewportHeight = 480;
+        private const double ViewportHeight = 560;
         private const double ViewportOffsetX = -62;
-        private const double ViewportOffsetY = -95;
+        private const double ViewportOffsetY = -135;
         private const double ThrowMilliseconds = 1300;
         private const double GlideMilliseconds = 380;
         private const double GlideStaggerMilliseconds = 45;
