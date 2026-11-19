@@ -159,6 +159,28 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
+        public void Join_SameNameWhileTheServerStillSeesThePlayer_GivesBackTheSameSeat()
+        {
+            RoomMember host = StartGameWithComputer();
+            var seatExpected = new { HasReturned = true, host.PlayerId };
+
+            RoomResult returnResult = _manager.Join(host.RoomCode, HostName);
+
+            var seatResult = new { returnResult.HasReturned, returnResult.PlayerId };
+            Assert.Equivalent(seatExpected, seatResult);
+        }
+
+        [Fact]
+        public void Join_SameNameInARoomThatDidNotStart_DoesNotTakeTheSeat()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+
+            RoomResult joinResult = _manager.Join(createdRoom.Room.Code, HostName);
+
+            Assert.NotEqual(createdRoom.PlayerId, joinResult.PlayerId);
+        }
+
+        [Fact]
         public void Leave_OnlyPersonOfAStartedGame_DeletesTheRoom()
         {
             RoomMember host = StartGameWithComputer();

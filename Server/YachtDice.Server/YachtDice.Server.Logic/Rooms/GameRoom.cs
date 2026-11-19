@@ -245,6 +245,24 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
+        /// Finds a person inside the room by name. A person who lost the network can still look present for the
+        /// server for a while, so the same person asks to come back before the server notices.
+        /// </summary>
+        /// <param name="displayName">Name that the player who wants to come back uses.</param>
+        /// <param name="player">The person with that name, or null if there is none.</param>
+        /// <returns>True if a person with that name is inside the room.</returns>
+        public bool TryFindPerson(string displayName, out RoomPlayer player)
+        {
+            string name = displayName.Trim();
+
+            player = _players.FirstOrDefault(
+                candidate => !candidate.IsComputer
+                    && string.Equals(candidate.DisplayName, name, StringComparison.OrdinalIgnoreCase));
+
+            return player != null;
+        }
+
+        /// <summary>
         /// Tells whether a name belongs to a player who was expelled from this room.
         /// </summary>
         /// <param name="displayName">Name that the player who wants to enter uses.</param>

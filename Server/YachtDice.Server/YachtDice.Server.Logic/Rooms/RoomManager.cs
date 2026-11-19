@@ -385,6 +385,10 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 result = RoomResult.CreateReturned(room.ToDetails(), returned.Id);
             }
+            else if (room.IsStarted && room.TryFindPerson(applicant.Name, out RoomPlayer present))
+            {
+                result = RoomResult.CreateReturned(room.ToDetails(), present.Id);
+            }
             else
             {
                 result = EnterNewPlayer(room, applicant);
