@@ -68,6 +68,7 @@
     <Compile Include="Game\ComputerSkillTests.cs" />
     <Compile Include="Game\ReconnectTimerTests.cs" />
     <Compile Include="Logging\ErrorLogFormatterTests.cs" />
+    <Compile Include="Logging\PlayerLogNameTests.cs" />
     <Compile Include="Game\TurnClockTests.cs" />
     <Compile Include="Game\DiceHandTests.cs" />
     <Compile Include="Game\GameCheckpointServiceTests.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="InMemory\InMemoryPlayerReportRepository.cs" />
     <Compile Include="InMemory\InMemoryRoomInviteRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
+    <Compile Include="InMemory\InMemoryFailingPlayerIdFinder.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
     <Compile Include="InMemory\FakeCallbackChannel.cs" />
     <Compile Include="Mapping\CultureParserTests.cs" />

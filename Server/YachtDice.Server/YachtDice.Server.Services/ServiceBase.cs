@@ -8,6 +8,7 @@ namespace YachtDice.Server.Services
     using Contracts = YachtDice.Server.Contracts;
     using DataExceptions = YachtDice.Server.Data.Exceptions;
     using LogicLogging = YachtDice.Server.Logic.Logging;
+    using LogicFriends = YachtDice.Server.Logic.Friends;
     using LogicSecurity = YachtDice.Server.Logic.Security;
 
     /// <summary>
@@ -43,6 +44,12 @@ namespace YachtDice.Server.Services
         /// that the authentication service created works in all of them.
         /// </summary>
         public LogicSecurity.SessionRegistry Sessions { get; set; } = new LogicSecurity.SessionRegistry();
+
+        /// <summary>
+        /// Gets or sets what finds the identifier of the account of a name, to write who did something in the log.
+        /// The host gives it to every service; without it the log writes a generic player.
+        /// </summary>
+        public LogicFriends.IPlayerIdFinder PlayerIds { get; set; } = new UnknownPlayerIds();
 
         /// <summary>
         /// Runs a synchronous operation and converts any failure into a fault for the client.
@@ -108,6 +115,16 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
+        /// Gets the text that identifies a player in the log: the identifier of the account or a generic text.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The text to write in the log.</returns>
+        protected string DescribePlayer(string displayName)
+        {
+            return PlayerLogName.Describe(PlayerIds, displayName);
+        }
+
+        /// <summary>
         /// Writes an informative line in the log of the server.
         /// </summary>
         /// <param name="message">Text to write. It must not include passwords or codes.</param>
@@ -142,6 +159,14 @@ namespace YachtDice.Server.Services
             };
 
             return new FaultException<Contracts.ServiceFault>(fault, new FaultReason(message));
+        }
+
+        private sealed class UnknownPlayerIds : LogicFriends.IPlayerIdFinder
+        {
+            public int FindPlayerId(string displayName)
+            {
+                return LogicFriends.FriendshipService.NoPlayerId;
+            }
         }
 
         private TResult Run<TResult>(Func<TResult> operation, string operationName)

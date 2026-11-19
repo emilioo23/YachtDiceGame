@@ -121,6 +121,7 @@ namespace YachtDice.Server.Host.Composition
         private static void AddFriendComponents(IServiceCollection services)
         {
             services.AddTransient(CreateFriendshipService);
+            services.AddTransient<IPlayerIdFinder>(provider => provider.GetRequiredService<IFriendshipService>());
             services.AddTransient<IRoomInvitationService, RoomInvitationService>();
             services.AddSingleton<PresenceService>();
             services.AddSingleton<IPlayerNotifier>(GetPresenceService);
@@ -144,6 +145,7 @@ namespace YachtDice.Server.Host.Composition
             TService service = ActivatorUtilities.CreateInstance<TService>(provider);
 
             service.Sessions = provider.GetRequiredService<SessionRegistry>();
+            service.PlayerIds = provider.GetRequiredService<IFriendshipService>();
 
             return service;
         }

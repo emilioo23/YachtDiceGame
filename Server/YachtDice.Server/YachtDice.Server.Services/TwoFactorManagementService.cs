@@ -238,7 +238,8 @@ namespace YachtDice.Server.Services
                 sessionToken,
                 playerName => Mapping.EnumMapper.Map<
                     LogicPasskeys.PasskeyRemovalStatus,
-                    Contracts.PasskeyRemovalResultCode>(_passkeyService.RemovePasskey(playerName, passkeyId, password)));
+                    Contracts.PasskeyRemovalResultCode>(
+                    _passkeyService.RemovePasskey(playerName, passkeyId, password)));
 
             return result;
         }

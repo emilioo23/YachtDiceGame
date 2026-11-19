@@ -90,6 +90,7 @@
     <Compile Include="Friends\FriendRequestStatus.cs" />
     <Compile Include="Friends\FriendshipService.cs" />
     <Compile Include="Friends\IFriendshipService.cs" />
+    <Compile Include="Friends\IPlayerIdFinder.cs" />
     <Compile Include="Friends\IRoomInvitationService.cs" />
     <Compile Include="Friends\InvitationResult.cs" />
     <Compile Include="Friends\InvitationStatus.cs" />

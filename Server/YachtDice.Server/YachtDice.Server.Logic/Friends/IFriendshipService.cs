@@ -5,7 +5,7 @@ namespace YachtDice.Server.Logic.Friends
     /// <summary>
     /// Rules to add friends, answer friend requests and list the friends of a player.
     /// </summary>
-    public interface IFriendshipService
+    public interface IFriendshipService : IPlayerIdFinder
     {
         /// <summary>
         /// Sends a friend request to the player who owns the username.
@@ -58,13 +58,6 @@ namespace YachtDice.Server.Logic.Friends
         /// <returns>Outcome of the report.</returns>
         /// <exception cref="System.ArgumentNullException">The details are null.</exception>
         ReportStatus ReportPlayer(string displayName, ReportDetails details);
-
-        /// <summary>
-        /// Finds the identifier of the account that owns a name.
-        /// </summary>
-        /// <param name="displayName">Name of the player.</param>
-        /// <returns>The identifier, or <see cref="FriendshipService.NoPlayerId"/> if the name has no account.</returns>
-        int FindPlayerId(string displayName);
 
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Presence;
+    using LogicFriends = YachtDice.Server.Logic.Friends;
     using LogicLogging = YachtDice.Server.Logic.Logging;
 
     /// <summary>
@@ -17,19 +19,23 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
-        private const string ConnectedLogMessage = "A player is now online.";
-        private const string DisconnectedLogMessage = "A player is now offline.";
+        private const string NullFinderMessage = "What finds the identifiers of the players cannot be null.";
+        private const string ConnectedLogFormat = "{0} is now online.";
+        private const string DisconnectedLogFormat = "{0} is now offline.";
 
         private readonly ConcurrentDictionary<string, OnlinePlayer> _players =
             new ConcurrentDictionary<string, OnlinePlayer>(StringComparer.OrdinalIgnoreCase);
 
         private readonly LogicLogging.AppLogger _logger;
+        private readonly LogicFriends.IPlayerIdFinder _playerIds;
 
         /// <summary>
         /// Initializes a new instance of the PresenceService class.
         /// </summary>
-        public PresenceService()
+        /// <param name="playerIds">Finds the identifier of the account of a name, to write it in the log.</param>
+        public PresenceService(LogicFriends.IPlayerIdFinder playerIds)
         {
+            _playerIds = playerIds ?? throw new ArgumentNullException(nameof(playerIds), NullFinderMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -50,7 +56,10 @@ namespace YachtDice.Server.Services
                 onlinePlayers = _players.Keys.ToArray();
 
                 WatchChannel(displayName, player.SessionId);
-                _logger.Info(ConnectedLogMessage);
+                _logger.Info(string.Format(
+                    CultureInfo.InvariantCulture,
+                    ConnectedLogFormat,
+                    PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerConnected);
             }
 
@@ -148,7 +157,10 @@ namespace YachtDice.Server.Services
 
             if (isRemoved)
             {
-                _logger.Info(DisconnectedLogMessage);
+                _logger.Info(string.Format(
+                    CultureInfo.InvariantCulture,
+                    DisconnectedLogFormat,
+                    PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
             }
         }

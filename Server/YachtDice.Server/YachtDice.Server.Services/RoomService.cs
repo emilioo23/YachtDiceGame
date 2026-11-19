@@ -19,7 +19,7 @@ namespace YachtDice.Server.Services
         private const string KickLogFormat = "A player was expelled from room {0} by the host.";
         private const int ExpiredRoomsCheckSeconds = 60;
         private const string ClosedRoomLogFormat = "Room {0} was closed because it waited too long to start.";
-        private const string CreatedLogFormat = "Room {0} was created.";
+        private const string CreatedLogFormat = "{0} created room {1}.";
         private const string JoinedLogFormat = "A player entered room {0}.";
         private const string LeftLogFormat = "A player left room {0}.";
         private const string NewHostLogFormat = "A player is now the host of room {0}.";
@@ -269,7 +269,7 @@ namespace YachtDice.Server.Services
             LogicRooms.RoomResult result = _roomManager.CreateRoom(displayName);
 
             Subscribe(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
-            LogInfo(Describe(CreatedLogFormat, result.Room.Code));
+            LogInfo(Describe(CreatedLogFormat, DescribePlayer(displayName), result.Room.Code));
 
             return Mapping.RoomMapper.ToCreateResult(result);
         }
