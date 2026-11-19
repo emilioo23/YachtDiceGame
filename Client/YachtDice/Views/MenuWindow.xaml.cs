@@ -52,6 +52,7 @@ namespace YachtDice.Views
             _logger = new AppLogger(GetType());
             _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
             PlayerNameTextBlock.Text = session.DisplayName;
+            EditProfileButton.IsEnabled = !session.IsGuest;
             PlayerNameHeadingTextBlock.Text = GetGreetingName(session);
             PlayerInitialTextBlock.Text = InitialLetter.From(session.DisplayName, Strings.Global_UnknownInitial);
             PlayerLevelTextBlock.Text = string.Format(Strings.MainMenu_PlayerLevel, DefaultPlayerLevel);

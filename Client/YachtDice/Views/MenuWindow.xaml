@@ -126,7 +126,8 @@
                                 </Border>
                             </Border>
 
-                            <Button Content="{x:Static properties:Strings.MainMenu_ButtonEditProfile}"
+                            <Button x:Name="EditProfileButton"
+                                    Content="{x:Static properties:Strings.MainMenu_ButtonEditProfile}"
                                     Style="{StaticResource BtnOutline}"
                                     FontSize="15"
                                     Padding="0,8"

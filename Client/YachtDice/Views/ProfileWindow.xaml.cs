@@ -68,7 +68,23 @@ namespace YachtDice.Views
             UsernameTextBox.Text = session.DisplayName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
 
+            if (session.IsGuest)
+            {
+                LockEditing();
+            }
+
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadAvatarsAsync);
+        }
+
+        private void LockEditing()
+        {
+            // A guest has no account on the server, so nothing in the profile can be saved.
+            UsernameTextBox.IsEnabled = false;
+            AvatarOptionsItemsControl.IsEnabled = false;
+            TitleComboBox.IsEnabled = false;
+            FlagSearchTextBox.IsEnabled = false;
+            FlagComboBox.IsEnabled = false;
+            SaveChangesButton.IsEnabled = false;
         }
 
         private static AvatarRequirement ToRequirement(UnlockableAvatar avatar)
