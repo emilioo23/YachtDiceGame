@@ -61,7 +61,7 @@
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal">
                             <Border Width="20" Height="14" CornerRadius="2" Margin="0,0,8,0" ClipToBounds="True">
-                                <Image Source="/Resources/Flags/es.png" Stretch="UniformToFill"/>
+                                <Image x:Name="SpanishFlagImage" Tag="es-MX" Stretch="UniformToFill"/>
                             </Border>
                             <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_OptionSpanish}" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -75,7 +75,7 @@
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal">
                             <Border Width="20" Height="14" CornerRadius="2" Margin="0,0,8,0" ClipToBounds="True">
-                                <Image Source="/Resources/Flags/us.png" Stretch="UniformToFill"/>
+                                <Image x:Name="EnglishFlagImage" Tag="en-US" Stretch="UniformToFill"/>
                             </Border>
                             <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_OptionEnglish}" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -89,7 +89,7 @@
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal">
                             <Border Width="20" Height="14" CornerRadius="2" Margin="0,0,8,0" ClipToBounds="True">
-                                <Image Source="/Resources/Flags/br.png" Stretch="UniformToFill"/>
+                                <Image x:Name="PortugueseFlagImage" Tag="pt-BR" Stretch="UniformToFill"/>
                             </Border>
                             <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_OptionPortuguese}" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -103,7 +103,7 @@
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal">
                             <Border Width="20" Height="14" CornerRadius="2" Margin="0,0,8,0" ClipToBounds="True">
-                                <Image Source="/Resources/Flags/cn.png" Stretch="UniformToFill"/>
+                                <Image x:Name="ChineseFlagImage" Tag="zh-CN" Stretch="UniformToFill"/>
                             </Border>
                             <TextBlock Text="{x:Static properties:Strings.Settings_Preferences_OptionChinese}" FontFamily="Inter" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>

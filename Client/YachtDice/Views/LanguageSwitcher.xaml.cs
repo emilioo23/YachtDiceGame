@@ -19,6 +19,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             RefreshCurrentFlagDisplay();
+            LoadOptionFlags();
         }
 
         /// <summary>
@@ -67,6 +68,16 @@ namespace YachtDice.Views
             {
                 ReopenWindowFunc.Invoke().Show();
                 WindowNavigator.Close(currentWindow);
+            }
+        }
+
+        private void LoadOptionFlags()
+        {
+            var optionImages = new[] { SpanishFlagImage, EnglishFlagImage, PortugueseFlagImage, ChineseFlagImage };
+
+            foreach (Image optionImage in optionImages)
+            {
+                optionImage.Source = FlagImages.Get(LanguageCatalog.GetFlagCode((string)optionImage.Tag));
             }
         }
 
