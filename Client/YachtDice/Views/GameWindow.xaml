@@ -316,7 +316,7 @@
                             HorizontalAlignment="Center"
                             FontSize="20"
                             Padding="40,12"
-                            Margin="0,34,0,2"
+                            Margin="0,48,0,2"
                             Click="RollButton_Click"/>
 
                         <TextBlock
@@ -324,7 +324,7 @@
                             FontSize="11"
                             Foreground="{StaticResource BrushCream2}"
                             HorizontalAlignment="Center"
-                            Margin="0,0,0,8"/>
+                            Margin="0,0,0,0"/>
                     </StackPanel>
                 </Border>
 
