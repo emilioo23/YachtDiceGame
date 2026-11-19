@@ -15,7 +15,7 @@ namespace YachtDice.Utils
     /// A set of images saved as PNG files in a folder of the resources of the application, so they do not depend on
     /// the theme that is active. It is shared by the avatars and the dice.
     /// </summary>
-    internal sealed class DrawingCatalog
+    internal sealed class ImageCatalog
     {
         private const string NullFolderMessage = "The folder of the images cannot be null.";
         private const string ResourcePathFormat = "{0}/{1}.png";
@@ -32,7 +32,7 @@ namespace YachtDice.Utils
         /// Prepares the images of a folder of the resources.
         /// </summary>
         /// <param name="folder">Relative path of the folder, for example Resources/Avatars.</param>
-        public DrawingCatalog(string folder)
+        public ImageCatalog(string folder)
         {
             if (folder == null)
             {
@@ -65,7 +65,7 @@ namespace YachtDice.Utils
 
         private static HashSet<string> ReadResourcePaths()
         {
-            Assembly assembly = typeof(DrawingCatalog).Assembly;
+            Assembly assembly = typeof(ImageCatalog).Assembly;
             string resourcesName = assembly.GetName().Name + PackageResourcesSuffix;
             var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 

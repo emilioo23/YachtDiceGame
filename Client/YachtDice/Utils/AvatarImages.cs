@@ -4,19 +4,19 @@ using YachtDice.Client.Logic.Avatars;
 namespace YachtDice.Utils
 {
     /// <summary>
-    /// Gives the drawing of each avatar.
+    /// Gives the image of each avatar.
     /// </summary>
     public static class AvatarImages
     {
-        private const string DrawingsSource = "Resources/Avatars";
+        private const string ImagesFolder = "Resources/Avatars";
 
-        private static readonly DrawingCatalog Catalog = new DrawingCatalog(DrawingsSource);
+        private static readonly ImageCatalog Catalog = new ImageCatalog(ImagesFolder);
 
         /// <summary>
-        /// Gets the drawing of an avatar.
+        /// Gets the image of an avatar.
         /// </summary>
         /// <param name="avatarId">Identifier of the avatar.</param>
-        /// <returns>The drawing; the default avatar if there is no drawing for the identifier.</returns>
+        /// <returns>The image; the default avatar if there is no image for the identifier.</returns>
         public static ImageSource Get(int avatarId)
         {
             return Catalog.Get(
