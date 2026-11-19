@@ -853,7 +853,8 @@ namespace YachtDice.Views
 
         private void KickPlayerButton_Click(object sender, RoutedEventArgs e)
         {
-            Func<GamePlayer, bool> isActiveOpponent = player => !player.IsLocalPlayer && !player.HasLeft;
+            Func<GamePlayer, bool> isActiveOpponent =
+                player => !player.IsLocalPlayer && !player.HasLeft && !player.IsComputer;
             List<GamePlayer> candidates = _gamePlayers
                 .Where(isActiveOpponent)
                 .ToList();

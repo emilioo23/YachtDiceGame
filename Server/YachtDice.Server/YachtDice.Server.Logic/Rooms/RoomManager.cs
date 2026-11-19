@@ -608,7 +608,11 @@ namespace YachtDice.Server.Logic.Rooms
         {
             RoomStatus status = GetHostActionStatus(room, playerId, targetPlayerId);
 
-            if (status == RoomStatus.Success)
+            if (status == RoomStatus.Success && IsComputer(room, targetPlayerId))
+            {
+                status = RoomStatus.InvalidTarget;
+            }
+            else if (status == RoomStatus.Success)
             {
                 room.Expel(targetPlayerId);
             }
@@ -616,12 +620,16 @@ namespace YachtDice.Server.Logic.Rooms
             return CreateResult(status, room);
         }
 
+        private static bool IsComputer(GameRoom room, string playerId)
+        {
+            return room.TryGetPlayer(playerId, out RoomPlayer player) && player.IsComputer;
+        }
+
         private static RoomResult ChangeHost(GameRoom room, string playerId, string newHostId)
         {
             RoomStatus status = GetHostActionStatus(room, playerId, newHostId);
-            bool isComputer = room.TryGetPlayer(newHostId, out RoomPlayer newHost) && newHost.IsComputer;
 
-            if (status == RoomStatus.Success && isComputer)
+            if (status == RoomStatus.Success && IsComputer(room, newHostId))
             {
                 status = RoomStatus.InvalidTarget;
             }

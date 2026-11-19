@@ -30,5 +30,11 @@
         /// Gets or sets a value indicating whether the player already left the room.
         /// </summary>
         public bool HasLeft { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of this player. A computer
+        /// player cannot be expelled.
+        /// </summary>
+        public bool IsComputer { get; set; }
     }
 }

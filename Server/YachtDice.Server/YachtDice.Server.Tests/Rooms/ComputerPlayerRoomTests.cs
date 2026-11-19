@@ -122,6 +122,31 @@ namespace YachtDice.Server.Tests.Rooms
             Assert.Equal(RoomStatus.InvalidTarget, transferResult.Status);
         }
 
+        [Fact]
+        public void KickPlayer_ComputerPlayer_ReturnsInvalidTarget()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
+
+            RoomResult kickResult = _manager.KickPlayer(host, computer.Id);
+
+            Assert.Equal(RoomStatus.InvalidTarget, kickResult.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_ComputerPlayer_KeepsTheComputerInTheRoom()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
+
+            _manager.KickPlayer(host, computer.Id);
+
+            bool isInRoomResult = _manager.TryGetPlayer(new RoomMember(host.RoomCode, computer.Id), out _);
+            Assert.True(isInRoomResult);
+        }
+
         private static RoomMember GetMember(RoomResult roomResult)
         {
             return new RoomMember(roomResult.Room.Code, roomResult.PlayerId);

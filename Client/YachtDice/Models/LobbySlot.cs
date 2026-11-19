@@ -58,6 +58,11 @@
         public bool CanAddComputer { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether the player in the place can be expelled. A computer cannot.
+        /// </summary>
+        public bool CanBeKicked => CanManage && !IsComputer;
+
+        /// <summary>
         /// Gets a value indicating whether the player in the place can become the host. A computer cannot.
         /// </summary>
         public bool CanBecomeHost => CanManage && !IsComputer;

@@ -314,6 +314,8 @@
                                                         Style="{StaticResource BtnCompact}"
                                                         Tag="{Binding PlayerId}"
                                                         Margin="0,0,0,4"
+                                                        Visibility="{Binding CanBeKicked,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         Click="KickButton_Click"/>
                                                 <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
                                                         Style="{StaticResource BtnCompact}"

@@ -68,7 +68,8 @@ namespace YachtDice.Utils
                 Id = roomPlayer.Id,
                 Name = roomPlayer.DisplayName,
                 AvatarId = roomPlayer.AvatarId,
-                IsLocalPlayer = isLocalPlayer
+                IsLocalPlayer = isLocalPlayer,
+                IsComputer = roomPlayer.IsComputer
             };
 
             return player;
@@ -82,6 +83,7 @@ namespace YachtDice.Utils
                 Name = player.Name,
                 AvatarId = player.AvatarId,
                 IsLocalPlayer = player.IsLocalPlayer,
+                IsComputer = player.IsComputer,
                 HasLeft = !presentIds.Contains(player.Id)
             };
 
