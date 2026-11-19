@@ -6,30 +6,27 @@ using YachtDice.Client.Logic.Dice;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// The materials that the dice share: the seven faces (blank and one to six), the gold mark of a die that is
-    /// held and the shadow under each die. They are created once and frozen, so the five dice use the same ones.
+    /// The materials that the dice share: the seven faces (blank and one to six) and the shadow under each die.
+    /// They are created once and frozen, so the five dice use the same ones.
     /// </summary>
     internal sealed class DiceMaterials
     {
         private const string PipBrushKey = "BrushWoodDark";
         private const string EdgeBrushKey = "BrushBorder";
-        private const string GoldBrushKey = "BrushGold";
         private const double FaceSize = 100;
         private const double EdgeThickness = 3;
         private const double PipRadius = 9;
         private const double PipStart = 22;
         private const double PipStep = 28;
         private const byte ShadowAlpha = 120;
-        private const byte MarkerAlpha = 215;
         private const byte Transparent = 0;
         private const int NoValue = 0;
 
         private readonly Material[] _faces;
 
-        private DiceMaterials(Material[] faces, Material marker, Material shadow)
+        private DiceMaterials(Material[] faces, Material shadow)
         {
             _faces = faces;
-            Marker = marker;
             Shadow = shadow;
         }
 
@@ -40,11 +37,6 @@ namespace YachtDice.Views
         {
             get { return _faces[NoValue]; }
         }
-
-        /// <summary>
-        /// Gets the gold material that is drawn under a die that is held.
-        /// </summary>
-        public Material Marker { get; }
 
         /// <summary>
         /// Gets the soft dark material that is drawn under every die.
@@ -60,7 +52,6 @@ namespace YachtDice.Views
         {
             Color pipColor = ReadColor(resources, PipBrushKey);
             Color edgeColor = ReadColor(resources, EdgeBrushKey);
-            Color goldColor = ReadColor(resources, GoldBrushKey);
             var faces = new Material[DiceFaceOrientation.LastFace + 1];
 
             for (var value = NoValue; value <= DiceFaceOrientation.LastFace; value++)
@@ -68,7 +59,7 @@ namespace YachtDice.Views
                 faces[value] = Freeze(new DiffuseMaterial(CreateFaceBrush(value, pipColor, edgeColor)));
             }
 
-            return new DiceMaterials(faces, CreateMarker(goldColor), CreateShadow());
+            return new DiceMaterials(faces, CreateShadow());
         }
 
         /// <summary>
@@ -91,13 +82,6 @@ namespace YachtDice.Views
             material.Freeze();
 
             return material;
-        }
-
-        private static Material CreateMarker(Color goldColor)
-        {
-            Color markerColor = Color.FromArgb(MarkerAlpha, goldColor.R, goldColor.G, goldColor.B);
-
-            return Freeze(new EmissiveMaterial(new SolidColorBrush(markerColor)));
         }
 
         private static Material CreateShadow()

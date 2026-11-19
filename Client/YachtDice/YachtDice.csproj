@@ -372,7 +372,7 @@
     <Compile Include="Views\DiceThrowAnimation.cs" />
     <Compile Include="Views\DiceViewportFactory.cs" />
     <Compile Include="Views\Die3D.cs" />
-    <Compile Include="Views\DieThrow.cs" />
+    <Compile Include="Views\DieMotion.cs" />
     <Compile Include="Views\ElementAnimator.cs" />
     <Compile Include="Views\GameKeyboard.cs" />
     <Compile Include="Views\YachtCelebration.cs" />

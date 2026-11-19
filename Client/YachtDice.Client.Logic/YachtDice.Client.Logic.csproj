@@ -58,6 +58,8 @@
     <Compile Include="Connection\ConnectionLossGate.cs" />
     <Compile Include="Connection\ReconnectLoop.cs" />
     <Compile Include="Dice\DiceFaceOrientation.cs" />
+    <Compile Include="Dice\DiceLanding.cs" />
+    <Compile Include="Dice\DiceLocation.cs" />
     <Compile Include="Dice\DicePipLayout.cs" />
     <Compile Include="Dice\DiceRowParser.cs" />
     <Compile Include="Dice\DiceSlot.cs" />

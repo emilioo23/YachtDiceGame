@@ -5,21 +5,17 @@ using YachtDice.Client.Logic.Dice;
 namespace YachtDice.Views
 {
     /// <summary>
-    /// One die of the table: a cube with a pip face on each side, the shadow under it and the gold mark that it
-    /// has when the player keeps it. It lies in a place of the table and, when it is thrown, it flies to a new
-    /// place. It never decides a value: the board tells it which face must be on top.
+    /// One die of the scene: a cube with a pip face on each side and the soft shadow under it. It lies in a
+    /// place, on the table or in the row under it, and it moves when the board gives it a throw or a glide. It
+    /// never decides a value: the board tells it which face must be on top.
     /// </summary>
     internal sealed class Die3D
     {
-        private const double CubeSize = 1.7;
+        private const double CubeSize = 1.1;
         private const double Half = 0.5;
         private const double RestHeight = CubeSize * Half;
-        private const double HeldLift = 0.45;
-        private const double NoLift = 0;
-        private const double ShadowSize = 2.3;
-        private const double MarkerSize = 2.1;
+        private const double ShadowSize = 1.7;
         private const double ShadowLevel = 0.01;
-        private const double MarkerLevel = 0.02;
         private const double NoTurn = 0;
         private const int FirstFace = DiceFaceOrientation.FirstFace;
         private const int FaceCount = DiceFaceOrientation.LastFace - DiceFaceOrientation.FirstFace + 1;
@@ -35,16 +31,11 @@ namespace YachtDice.Views
         private readonly AxisAngleRotation3D _yaw = new AxisAngleRotation3D(UpAxis, NoTurn);
         private readonly TranslateTransform3D _bodyPosition = new TranslateTransform3D();
         private readonly TranslateTransform3D _shadowPosition = new TranslateTransform3D();
-        private readonly TranslateTransform3D _markerPosition = new TranslateTransform3D();
-        private readonly ModelVisual3D _marker;
-        private readonly GeometryModel3D _markerModel;
 
-        private bool _isHeld;
-        private double _restX;
-        private double _restZ;
-        private double _restYaw;
+        private double _startX;
+        private double _startZ;
         private double _startYaw;
-        private DieThrow _throw;
+        private DieMotion _motion;
 
         /// <summary>
         /// Initializes the die, without a place and with blank faces.
@@ -54,8 +45,6 @@ namespace YachtDice.Views
         {
             _materials = materials ?? throw new ArgumentNullException(nameof(materials));
             Body = new ModelVisual3D { Content = CreateBody(), Transform = CreateBodyTransform() };
-            _markerModel = new GeometryModel3D(DiceMeshFactory.CreateFlatSquare(MarkerSize * Half), materials.Marker);
-            _marker = new ModelVisual3D { Transform = _markerPosition };
 
             var shadow = new ModelVisual3D
             {
@@ -65,7 +54,6 @@ namespace YachtDice.Views
 
             Root = new ModelVisual3D();
             Root.Children.Add(shadow);
-            Root.Children.Add(_marker);
             Root.Children.Add(Body);
         }
 
@@ -75,14 +63,34 @@ namespace YachtDice.Views
         public ModelVisual3D Body { get; }
 
         /// <summary>
-        /// Gets the visual that holds the whole die: the shadow, the mark and the cube.
+        /// Gets the visual that holds the whole die: the shadow and the cube.
         /// </summary>
         public ModelVisual3D Root { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the die is in the air.
+        /// Gets the position of the die to the right of the center of the table.
         /// </summary>
-        public bool IsFlying { get; private set; }
+        public double X { get; private set; }
+
+        /// <summary>
+        /// Gets the position of the die toward the player, from the center of the table.
+        /// </summary>
+        public double Z { get; private set; }
+
+        /// <summary>
+        /// Gets the angle in degrees that the die has around the vertical axis.
+        /// </summary>
+        public double YawDegrees { get; private set; }
+
+        /// <summary>
+        /// Gets the place where the die lies: on the table or in the row under it.
+        /// </summary>
+        public DiceLocation Location { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the die is in the middle of a movement.
+        /// </summary>
+        public bool IsMoving { get; private set; }
 
         /// <summary>
         /// Shows a face on top of the die.
@@ -103,71 +111,62 @@ namespace YachtDice.Views
         }
 
         /// <summary>
-        /// Puts the die still in a place of the table.
+        /// Puts the die still in a place.
         /// </summary>
         /// <param name="slot">Place where the die lies.</param>
         /// <param name="yawDegrees">Angle in degrees that the die has around the vertical axis.</param>
-        public void PlaceAt(DiceSlot slot, double yawDegrees)
+        /// <param name="location">Whether the place is on the table or in the row under it.</param>
+        public void PlaceAt(DiceSlot slot, double yawDegrees, DiceLocation location)
         {
-            _restX = slot.X;
-            _restZ = slot.Z;
-            _restYaw = yawDegrees;
-            IsFlying = false;
+            X = slot.X;
+            Z = slot.Z;
+            YawDegrees = yawDegrees;
+            Location = location;
+            IsMoving = false;
             _tumble.Angle = NoTurn;
             _yaw.Angle = yawDegrees;
-            MoveTo(_restX, RestHeight + GetLift(), _restZ);
+            MoveTo(X, RestHeight, Z);
         }
 
         /// <summary>
-        /// Lifts the die and shows the gold mark under it, or puts it down again.
+        /// Starts a movement from the place where the die is now.
         /// </summary>
-        /// <param name="isHeld">True when the player keeps the die for the next roll.</param>
-        public void SetHeld(bool isHeld)
+        /// <param name="motion">The throw or glide that the die makes.</param>
+        public void Begin(DieMotion motion)
         {
-            _isHeld = isHeld;
-            _marker.Content = isHeld ? _markerModel : null;
+            _motion = motion ?? throw new ArgumentNullException(nameof(motion));
+            _startX = X;
+            _startZ = Z;
+            _startYaw = YawDegrees;
+            IsMoving = true;
+        }
 
-            if (!IsFlying)
+        /// <summary>
+        /// Puts the die where it is a time after the start of the animation.
+        /// </summary>
+        /// <param name="elapsedMilliseconds">Milliseconds that passed since the start of the animation.</param>
+        public void Advance(double elapsedMilliseconds)
+        {
+            double progress = (elapsedMilliseconds - _motion.DelayMilliseconds) / _motion.DurationMilliseconds;
+
+            if (_motion.IsThrow)
             {
-                MoveTo(_restX, RestHeight + GetLift(), _restZ);
+                Fly(progress);
+            }
+            else
+            {
+                Glide(progress);
             }
         }
 
         /// <summary>
-        /// Prepares a throw: the die will leave the place where it lies.
-        /// </summary>
-        /// <param name="plan">Where the die lands and how it turns.</param>
-        public void StartThrow(DieThrow plan)
-        {
-            _throw = plan ?? throw new ArgumentNullException(nameof(plan));
-            _startYaw = _restYaw;
-            IsFlying = true;
-        }
-
-        /// <summary>
-        /// Puts the die in the middle of its throw.
-        /// </summary>
-        /// <param name="progress">Progress of the throw, from zero to one.</param>
-        public void Fly(double progress)
-        {
-            double travel = DiceThrowPath.Travel(progress);
-            double x = _restX + ((_throw.EndX - _restX) * travel);
-            double z = _restZ + ((_throw.EndZ - _restZ) * travel);
-
-            _tumble.Axis = _throw.TumbleAxis;
-            _tumble.Angle = DiceThrowPath.TumbleDegrees(_throw.TumbleDegrees, progress);
-            _yaw.Angle = _startYaw + ((_throw.YawDegrees - _startYaw) * travel);
-            MoveTo(x, DiceThrowPath.Height(progress, RestHeight), z);
-        }
-
-        /// <summary>
-        /// Leaves the die still where its throw ends. It does nothing when the die is not in the air.
+        /// Leaves the die still where its movement ends. It does nothing when the die is not moving.
         /// </summary>
         public void Settle()
         {
-            if (IsFlying)
+            if (IsMoving)
             {
-                PlaceAt(new DiceSlot(_throw.EndX, _throw.EndZ), _throw.YawDegrees);
+                PlaceAt(_motion.End, _motion.YawDegrees, _motion.Location);
             }
         }
 
@@ -176,9 +175,36 @@ namespace YachtDice.Views
             return Math.Abs(normal.X) > Half ? DepthAxis : RightAxis;
         }
 
-        private double GetLift()
+        private static double Blend(double from, double to, double share)
         {
-            return _isHeld ? HeldLift : NoLift;
+            return from + ((to - from) * share);
+        }
+
+        private void Fly(double progress)
+        {
+            double gather = DiceThrowPath.Gather(progress);
+            double scatter = DiceThrowPath.Scatter(progress);
+            double handX = Blend(_startX, _motion.Hand.X, gather);
+            double handZ = Blend(_startZ, _motion.Hand.Z, gather);
+
+            _tumble.Axis = _motion.TumbleAxis;
+            _tumble.Angle = DiceThrowPath.TumbleDegrees(_motion.TumbleDegrees, progress);
+            _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, scatter);
+            MoveTo(
+                Blend(handX, _motion.End.X, scatter),
+                DiceThrowPath.Height(progress, RestHeight),
+                Blend(handZ, _motion.End.Z, scatter));
+        }
+
+        private void Glide(double progress)
+        {
+            double travel = DiceThrowPath.GlideTravel(progress);
+
+            _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, travel);
+            MoveTo(
+                Blend(_startX, _motion.End.X, travel),
+                DiceThrowPath.GlideHeight(progress, RestHeight),
+                Blend(_startZ, _motion.End.Z, travel));
         }
 
         private Model3DGroup CreateBody()
@@ -218,9 +244,6 @@ namespace YachtDice.Views
             _shadowPosition.OffsetX = x;
             _shadowPosition.OffsetY = ShadowLevel;
             _shadowPosition.OffsetZ = z;
-            _markerPosition.OffsetX = x;
-            _markerPosition.OffsetY = MarkerLevel;
-            _markerPosition.OffsetZ = z;
         }
     }
 }

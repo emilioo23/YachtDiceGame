@@ -10,11 +10,11 @@ namespace YachtDice.Views
     /// </summary>
     internal static class DiceViewportFactory
     {
-        private const double CameraHeight = 11;
-        private const double CameraDistance = 3.5;
-        private const double FieldOfView = 38;
+        private const double CameraHeight = 12.6;
+        private const double CameraDistance = 3.6;
+        private const double FieldOfView = 52.5;
         private const double NearPlane = 1;
-        private const double FarPlane = 40;
+        private const double FarPlane = 50;
         private const byte AmbientLevel = 150;
         private const byte SunLevel = 130;
         private const double SunSideways = -0.35;

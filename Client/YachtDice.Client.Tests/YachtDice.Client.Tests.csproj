@@ -55,6 +55,7 @@
     <Compile Include="Gateway\PinnedServerCertificateValidatorTests.cs" />
     <Compile Include="Connection\ReconnectLoopTests.cs" />
     <Compile Include="Dice\DiceFaceOrientationTests.cs" />
+    <Compile Include="Dice\DiceLandingTests.cs" />
     <Compile Include="Dice\DicePipLayoutTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
     <Compile Include="Dice\DiceTableLayoutTests.cs" />

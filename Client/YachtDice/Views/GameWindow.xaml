@@ -293,7 +293,7 @@
                                 CornerRadius="190"
                                 Background="{StaticResource BrushWoodRing}"
                                 Effect="{StaticResource ShadowCard}"
-                                Margin="0,0,0,16">
+                                Margin="0,0,0,60">
 
                             <Border Width="330"
                                     Height="330"
