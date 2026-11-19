@@ -20,6 +20,7 @@ namespace YachtDice.Navigation
         private const int MillisecondsPerSecond = 1000;
         private const string NullGatewayMessage = "The connection of the match cannot be null.";
         private const string AttemptFailedLogFormat = "An attempt to reconnect to the match failed: {0}.";
+        private const string RestoredLogMessage = "The connection with the match was restored.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
@@ -91,6 +92,7 @@ namespace YachtDice.Navigation
             try
             {
                 isRestored = await ConnectAgainAsync();
+                LogRestoration(isRestored);
             }
             catch (GatewayException ex)
             {
@@ -98,6 +100,14 @@ namespace YachtDice.Navigation
             }
 
             return isRestored;
+        }
+
+        private void LogRestoration(bool isRestored)
+        {
+            if (isRestored)
+            {
+                _logger.Info(RestoredLogMessage);
+            }
         }
 
         private void AbandonConnections()

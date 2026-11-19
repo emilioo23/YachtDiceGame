@@ -26,6 +26,8 @@ namespace YachtDice
         private const int PressMilliseconds = 80;
         private const string UnhandledErrorLogMessage = "An error that no window handled reached the application.";
         private const string UnobservedTaskLogMessage = "A background task failed and nobody observed its error.";
+        private const string StartedLogMessage = "The game client started.";
+        private const string ClosedLogMessage = "The game client closed.";
 
         private static readonly TimeSpan PressDuration = TimeSpan.FromMilliseconds(PressMilliseconds);
 
@@ -55,6 +57,7 @@ namespace YachtDice
         {
             base.OnStartup(e);
 
+            _logger.Info(StartedLogMessage);
             DispatcherUnhandledException += HandleDispatcherUnhandledException;
             TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
             _provider = new ServiceCollection().AddClientComponents().BuildServiceProvider();
@@ -104,6 +107,7 @@ namespace YachtDice
         {
             _preferencesStore.Save(CreateCurrentPreferences());
             _provider.Dispose();
+            _logger.Info(ClosedLogMessage);
             base.OnExit(e);
         }
 
