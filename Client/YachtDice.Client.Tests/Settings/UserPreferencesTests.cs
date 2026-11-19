@@ -78,11 +78,11 @@ namespace YachtDice.Client.Tests.Settings
         [Fact]
         public void Normalize_PotentialPointsTurnedOff_KeepsTheChoice()
         {
-            var preferences = new UserPreferences { ShowPotentialPoints = false };
+            var preferences = new UserPreferences { ShowsPotentialPoints = false };
 
             UserPreferences normalized = preferences.Normalize();
 
-            bool showPotentialPointsResult = normalized.ShowPotentialPoints;
+            bool showPotentialPointsResult = normalized.ShowsPotentialPoints;
 
             Assert.False(showPotentialPointsResult);
         }

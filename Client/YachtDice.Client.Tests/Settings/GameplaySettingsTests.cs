@@ -13,7 +13,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             var settings = new GameplaySettings();
 
-            bool showPotentialPointsResult = settings.ShowPotentialPoints;
+            bool showPotentialPointsResult = settings.ShowsPotentialPoints;
 
             Assert.True(showPotentialPointsResult);
         }
@@ -25,7 +25,7 @@ namespace YachtDice.Client.Tests.Settings
 
             settings.SetShowPotentialPoints(false);
 
-            bool showPotentialPointsResult = settings.ShowPotentialPoints;
+            bool showPotentialPointsResult = settings.ShowsPotentialPoints;
 
             Assert.False(showPotentialPointsResult);
         }
@@ -38,7 +38,7 @@ namespace YachtDice.Client.Tests.Settings
             settings.SetShowPotentialPoints(false);
             settings.SetShowPotentialPoints(true);
 
-            bool showPotentialPointsResult = settings.ShowPotentialPoints;
+            bool showPotentialPointsResult = settings.ShowsPotentialPoints;
 
             Assert.True(showPotentialPointsResult);
         }

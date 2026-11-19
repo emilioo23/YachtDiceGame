@@ -105,15 +105,15 @@ namespace YachtDice.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowPotentialPoints
+        public bool ShowsPotentialPoints
         {
             get
             {
-                return ((bool)(this["ShowPotentialPoints"]));
+                return ((bool)(this["ShowsPotentialPoints"]));
             }
             set
             {
-                this["ShowPotentialPoints"] = value;
+                this["ShowsPotentialPoints"] = value;
             }
         }
     }

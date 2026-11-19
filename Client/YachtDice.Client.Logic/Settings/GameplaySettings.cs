@@ -10,7 +10,7 @@
         /// Gets a value indicating whether the points that a category would give are shown before the player
         /// chooses it.
         /// </summary>
-        public bool ShowPotentialPoints { get; private set; } = true;
+        public bool ShowsPotentialPoints { get; private set; } = true;
 
         /// <summary>
         /// Turns on or off the preview of the points of each category.
@@ -18,7 +18,7 @@
         /// <param name="isShown">True to show the points before scoring; false to hide them.</param>
         public void SetShowPotentialPoints(bool isShown)
         {
-            ShowPotentialPoints = isShown;
+            ShowsPotentialPoints = isShown;
         }
     }
 }

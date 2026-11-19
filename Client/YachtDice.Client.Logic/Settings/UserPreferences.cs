@@ -38,7 +38,7 @@ namespace YachtDice.Client.Logic.Settings
         /// <summary>
         /// Gets or sets a value indicating whether the points of each category are shown before scoring.
         /// </summary>
-        public bool ShowPotentialPoints { get; set; } = true;
+        public bool ShowsPotentialPoints { get; set; } = true;
 
         /// <summary>
         /// Creates a copy that the game can use as it is: a language that the game does not have is changed
@@ -58,7 +58,7 @@ namespace YachtDice.Client.Logic.Settings
                 AreEffectsEnabled = AreEffectsEnabled,
                 IsMusicMuted = IsMusicMuted,
                 MusicVolume = Math.Max(AudioSettings.MinVolume, Math.Min(AudioSettings.MaxVolume, MusicVolume)),
-                ShowPotentialPoints = ShowPotentialPoints
+                ShowsPotentialPoints = ShowsPotentialPoints
             };
         }
     }

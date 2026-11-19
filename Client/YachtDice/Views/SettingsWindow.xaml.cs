@@ -77,7 +77,7 @@ namespace YachtDice.Views
             ApplyToggleVisual(
                 PotentialPointsToggle,
                 PotentialPointsToggleKnob,
-                session.Services.Gameplay.ShowPotentialPoints);
+                session.Services.Gameplay.ShowsPotentialPoints);
             MusicVolumeSlider.Value = _audio.MusicVolume;
 
             ShowSection(initialSection);
@@ -554,8 +554,8 @@ namespace YachtDice.Views
         {
             GameplaySettings gameplay = _session.Services.Gameplay;
 
-            gameplay.SetShowPotentialPoints(!gameplay.ShowPotentialPoints);
-            ApplyToggleVisual(PotentialPointsToggle, PotentialPointsToggleKnob, gameplay.ShowPotentialPoints);
+            gameplay.SetShowPotentialPoints(!gameplay.ShowsPotentialPoints);
+            ApplyToggleVisual(PotentialPointsToggle, PotentialPointsToggleKnob, gameplay.ShowsPotentialPoints);
         }
 
         private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

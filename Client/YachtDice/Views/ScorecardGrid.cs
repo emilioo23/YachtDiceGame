@@ -148,7 +148,7 @@ namespace YachtDice.Views
             ScoreChoice option = context.FindOption(category);
             bool isLocalPlayerTurn = player.IsLocalPlayer && context.IsLocalTurn;
             bool isOpenCell = text.Length == 0 && isLocalPlayerTurn;
-            bool canPreviewPoints = isOpenCell && option != null && _gameplay.ShowPotentialPoints;
+            bool canPreviewPoints = isOpenCell && option != null && _gameplay.ShowsPotentialPoints;
 
             if (canPreviewPoints)
             {

@@ -36,7 +36,7 @@ namespace YachtDice.Utils
                     AreEffectsEnabled = saved.AreEffectsEnabled,
                     IsMusicMuted = saved.IsMusicMuted,
                     MusicVolume = saved.MusicVolume,
-                    ShowPotentialPoints = saved.ShowPotentialPoints
+                    ShowsPotentialPoints = saved.ShowsPotentialPoints
                 };
             }
             catch (ConfigurationErrorsException ex)
@@ -62,7 +62,7 @@ namespace YachtDice.Utils
                 saved.AreEffectsEnabled = preferences.AreEffectsEnabled;
                 saved.IsMusicMuted = preferences.IsMusicMuted;
                 saved.MusicVolume = preferences.MusicVolume;
-                saved.ShowPotentialPoints = preferences.ShowPotentialPoints;
+                saved.ShowsPotentialPoints = preferences.ShowsPotentialPoints;
                 saved.Save();
             }
             catch (ConfigurationErrorsException ex)
