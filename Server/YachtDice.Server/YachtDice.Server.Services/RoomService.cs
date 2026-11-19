@@ -16,14 +16,13 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class RoomService : ServiceBase, Contracts.IRoomService
     {
-        private const string KickLogFormat = "Player {0} was expelled from room {1} by the host {2}.";
+        private const string KickLogFormat = "A player was expelled from room {0} by the host.";
         private const int ExpiredRoomsCheckSeconds = 60;
         private const string ClosedRoomLogFormat = "Room {0} was closed because it waited too long to start.";
         private const string CreatedLogFormat = "Room {0} was created.";
-        private const string JoinedLogFormat = "Player {0} entered room {1}.";
-        private const string LeftLogFormat = "Player {0} left room {1}.";
-        private const string StartedLogFormat = "The game of room {0} started.";
-        private const string NewHostLogFormat = "Player {0} is now the host of room {1}.";
+        private const string JoinedLogFormat = "A player entered room {0}.";
+        private const string LeftLogFormat = "A player left room {0}.";
+        private const string NewHostLogFormat = "A player is now the host of room {0}.";
         private const string NullDependencyMessage = "A dependency of the room service cannot be null.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
@@ -281,7 +280,7 @@ namespace YachtDice.Server.Services
             {
                 Subscribe(new LogicRooms.RoomMember(result.Room.Code, result.PlayerId));
                 ResumeGameIfReturned(result);
-                LogInfo(Describe(JoinedLogFormat, result.PlayerId, result.Room.Code));
+                LogInfo(Describe(JoinedLogFormat, result.Room.Code));
                 Broadcast(result.Room, GetJoinEventType(result));
             }
 
@@ -315,7 +314,6 @@ namespace YachtDice.Server.Services
             {
                 TellLeftOutPlayers(result);
                 _gameCoordinator.StartGame(result.Room);
-                LogInfo(Describe(StartedLogFormat, result.Room.Code));
                 Broadcast(result.Room, Contracts.RoomEventType.GameStarted);
             }
 
@@ -395,12 +393,7 @@ namespace YachtDice.Server.Services
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
 
-                LogInfo(string.Format(
-                    CultureInfo.InvariantCulture,
-                    KickLogFormat,
-                    targetPlayerId,
-                    member.RoomCode,
-                    member.PlayerId));
+                LogInfo(Describe(KickLogFormat, member.RoomCode));
                 TellRemovedPlayer(result.Room, expelled, Contracts.RoomEventType.PlayerKicked);
                 _gameCoordinator.PlayerRemoved(expelled);
                 Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
@@ -416,7 +409,7 @@ namespace YachtDice.Server.Services
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                LogInfo(Describe(NewHostLogFormat, newHostId, member.RoomCode));
+                LogInfo(Describe(NewHostLogFormat, member.RoomCode));
                 Broadcast(result.Room, Contracts.RoomEventType.HostChanged);
             }
 
@@ -469,7 +462,7 @@ namespace YachtDice.Server.Services
 
             if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                LogInfo(Describe(LeftLogFormat, member.PlayerId, member.RoomCode));
+                LogInfo(Describe(LeftLogFormat, member.RoomCode));
                 UpdateGameAfterLeave(result, member);
             }
 
