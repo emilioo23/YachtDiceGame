@@ -43,6 +43,12 @@ namespace YachtDice.Client.Logic.Game
         public int ExperienceGained { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player has an account. Only a player with an account can
+        /// be reported.
+        /// </summary>
+        public bool IsRegistered { get; set; }
+
+        /// <summary>
         /// Gets or sets the points of the upper section, before its bonus.
         /// </summary>
         public int UpperSubtotal { get; set; }

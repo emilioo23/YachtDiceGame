@@ -319,6 +319,9 @@ namespace YachtDice.RoomServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsReadyField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsRegisteredField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -403,6 +406,19 @@ namespace YachtDice.RoomServiceReference {
                 if ((this.IsReadyField.Equals(value) != true)) {
                     this.IsReadyField = value;
                     this.RaisePropertyChanged("IsReady");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsRegistered {
+            get {
+                return this.IsRegisteredField;
+            }
+            set {
+                if ((this.IsRegisteredField.Equals(value) != true)) {
+                    this.IsRegisteredField = value;
+                    this.RaisePropertyChanged("IsRegistered");
                 }
             }
         }

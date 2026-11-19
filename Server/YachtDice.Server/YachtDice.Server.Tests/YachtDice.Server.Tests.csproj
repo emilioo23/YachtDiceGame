@@ -99,6 +99,7 @@
     <Compile Include="Mapping\CultureParserTests.cs" />
     <Compile Include="Mapping\EnumMapperTests.cs" />
     <Compile Include="Mapping\GameMapperTests.cs" />
+    <Compile Include="Mapping\RoomMapperTests.cs" />
     <Compile Include="Moderation\LinkCensorTests.cs" />
     <Compile Include="Passkeys\AuthenticatorDataTests.cs" />
     <Compile Include="Passkeys\AuthenticatorOptions.cs" />

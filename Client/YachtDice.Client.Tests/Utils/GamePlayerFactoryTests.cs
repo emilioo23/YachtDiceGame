@@ -88,6 +88,39 @@ namespace YachtDice.Client.Tests.Utils
         }
 
         [Fact]
+        public void Create_RegisteredOpponent_MarksThePlayerAsRegistered()
+        {
+            var registered = new RoomPlayer { Id = OpponentId, DisplayName = OpponentName, IsRegistered = true };
+            RoomPlayer[] roomPlayers = { _localPlayer, registered };
+            GamePlayer[] playersExpected =
+            {
+                CreateGamePlayer(_localPlayer, true, false),
+                CreateGamePlayer(registered, false, false)
+            };
+
+            List<GamePlayer> players = GamePlayerFactory.Create(roomPlayers, LocalId);
+
+            Assert.Equivalent(playersExpected, players, strict: true);
+        }
+
+        [Fact]
+        public void UpdatePresence_RegisteredOpponent_KeepsThePlayerAsRegistered()
+        {
+            var registered = new RoomPlayer { Id = OpponentId, DisplayName = OpponentName, IsRegistered = true };
+            RoomPlayer[] roomPlayers = { _localPlayer, registered };
+            List<GamePlayer> players = GamePlayerFactory.Create(roomPlayers, LocalId);
+            GamePlayer[] playersExpected =
+            {
+                CreateGamePlayer(_localPlayer, true, false),
+                CreateGamePlayer(registered, false, false)
+            };
+
+            List<GamePlayer> updated = GamePlayerFactory.UpdatePresence(players, roomPlayers);
+
+            Assert.Equivalent(playersExpected, updated, strict: true);
+        }
+
+        [Fact]
         public void UpdatePresence_ComputerOpponent_KeepsThePlayerAsComputer()
         {
             var computer = new RoomPlayer { Id = ComputerId, DisplayName = ComputerName, IsComputer = true };
@@ -112,6 +145,7 @@ namespace YachtDice.Client.Tests.Utils
                 Name = roomPlayer.DisplayName,
                 IsLocalPlayer = isLocalPlayer,
                 IsComputer = roomPlayer.IsComputer,
+                IsRegistered = roomPlayer.IsRegistered,
                 HasLeft = hasLeft
             };
             return player;

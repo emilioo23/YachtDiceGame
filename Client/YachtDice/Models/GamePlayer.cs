@@ -36,5 +36,11 @@
         /// player cannot be expelled.
         /// </summary>
         public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player has an account. A guest and a computer player do
+        /// not, so they cannot be reported at the end of the game.
+        /// </summary>
+        public bool IsRegistered { get; set; }
     }
 }

@@ -87,7 +87,7 @@ namespace YachtDice.Views
                     standing.LowerTotal,
                     standing.YachtBonus),
                 IsWinner = standing.IsWinner,
-                CanReport = isOpponent && !_session.IsGuest
+                CanReport = isOpponent && standing.IsRegistered && !_session.IsGuest
             };
         }
 

@@ -40,6 +40,12 @@ namespace YachtDice.Server.Contracts.Rooms
         public bool IsComputer { get; set; }
 
         /// <summary>
+        /// True if the player has an account. A guest and a computer player do not, so nobody can report them.
+        /// </summary>
+        [DataMember]
+        public bool IsRegistered { get; set; }
+
+        /// <summary>
         /// How well the server plays the turns of this player when it is a computer player.
         /// </summary>
         [DataMember]

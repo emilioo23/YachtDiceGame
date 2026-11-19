@@ -11,6 +11,8 @@ namespace YachtDice.Server.Services.Mapping
     /// </summary>
     internal static class RoomMapper
     {
+        private const int GuestLevel = 0;
+
         /// <summary>
         /// Creates the data contract that is sent to the clients.
         /// </summary>
@@ -182,6 +184,7 @@ namespace YachtDice.Server.Services.Mapping
                 AvatarId = player.AvatarId,
                 IsReady = player.IsReady,
                 IsComputer = player.IsComputer,
+                IsRegistered = player.Level > GuestLevel,
                 Difficulty = EnumMapper.Map<Logic.Rooms.ComputerDifficulty, Contracts.ComputerDifficulty>(
                     player.Difficulty)
             };

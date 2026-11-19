@@ -639,7 +639,9 @@ namespace YachtDice.Views
 
         private void GoToResultsWindow()
         {
-            IEnumerable<FinalPlace> entries = _state.Players.Select(CreateFinalPlace);
+            Func<PlayerScorecard, FinalPlace> createFinalPlace =
+                card => CreateFinalPlace(card, IsRegisteredPlayer(card.PlayerId));
+            IEnumerable<FinalPlace> entries = _state.Players.Select(createFinalPlace);
 
             if (_state.HasResultSaveFailed)
             {
@@ -654,10 +656,18 @@ namespace YachtDice.Views
                 _playerId));
         }
 
-        private static FinalPlace CreateFinalPlace(PlayerScorecard card)
+        private bool IsRegisteredPlayer(string playerId)
+        {
+            Func<GamePlayer, bool> isSamePlayer = player => player.Id == playerId;
+
+            return _gamePlayers.Any(player => isSamePlayer(player) && player.IsRegistered);
+        }
+
+        private static FinalPlace CreateFinalPlace(PlayerScorecard card, bool isRegistered)
         {
             return new FinalPlace(card.PlayerId, card.Name, card.Total)
             {
+                IsRegistered = isRegistered,
                 ExperienceGained = card.ExperienceGained,
                 UpperSubtotal = card.UpperSubtotal,
                 UpperBonus = card.UpperBonus,
