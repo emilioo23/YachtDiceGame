@@ -64,7 +64,7 @@ namespace YachtDice.Views
 
         private void ApplyFieldLimits()
         {
-            EmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
+            LoginIdentifierTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
             FirstNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
             LastNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
             UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
@@ -84,7 +84,7 @@ namespace YachtDice.Views
             RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
             PasskeyPanel.Visibility = Visibility.Visible;
             AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
-            EmailTextBox.Focus();
+            LoginIdentifierTextBox.Focus();
         }
 
         private void RegisterTabButton_Click(object sender, RoutedEventArgs e)
@@ -269,7 +269,7 @@ namespace YachtDice.Views
         {
             var credentials = new LoginCredentials
             {
-                Email = EmailTextBox.Text.Trim(),
+                Identifier = LoginIdentifierTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
@@ -282,7 +282,7 @@ namespace YachtDice.Views
 
             if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(credentials.Email, session, loginData.ChallengeId);
+                OpenVerificationWindow(loginData.Email, session, loginData.ChallengeId);
             }
             else if (loginData.Code == LoginResultCode.LoggedIn)
             {

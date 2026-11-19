@@ -113,7 +113,7 @@ namespace YachtDice.Server.Services
         {
             var logicCredentials = new LogicAuth.LoginCredentials
             {
-                Email = credentials.Email,
+                Identifier = credentials.Identifier,
                 Password = credentials.Password,
                 Culture = Mapping.CultureParser.Parse(credentials.CultureName)
             };
@@ -124,6 +124,7 @@ namespace YachtDice.Server.Services
             {
                 ChallengeId = logicResult.ChallengeId,
                 DisplayName = logicResult.DisplayName,
+                Email = logicResult.Email,
                 FirstName = logicResult.FirstName,
                 Code = Mapping.EnumMapper.Map<LogicAuth.LoginStatus, Contracts.LoginResultCode>(logicResult.Status),
                 SessionToken = StartSession(logicResult)

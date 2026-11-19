@@ -17,7 +17,10 @@ namespace YachtDice.Server.Logic.Authentication
     {
         private const string InvalidEmailLogMessage = "Login attempt with a malformed email.";
         private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
+        private const string InvalidUsernameLogMessage = "Login attempt with a malformed username.";
+        private const string UnknownUsernameLogMessage = "Login attempt with a username that is not registered.";
         private const string TooLongPasswordLogMessage = "Login attempt with a password longer than the maximum.";
+        private const char EmailSeparator = '@';
         private const string TimingEqualizerPassword = "password-used-only-to-take-the-same-time";
         private const string WrongPasswordLogFormat = "Login attempt with a wrong password for player {0}.";
         private const string LoggedInLogFormat = "Player {0} logged in.";
@@ -79,7 +82,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             LoginResult result;
 
-            if (string.IsNullOrWhiteSpace(credentials.Email) || string.IsNullOrWhiteSpace(credentials.Password))
+            if (string.IsNullOrWhiteSpace(credentials.Identifier) || string.IsNullOrWhiteSpace(credentials.Password))
             {
                 result = new LoginResult(LoginStatus.MissingRequiredField, string.Empty);
             }
@@ -96,20 +99,39 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
-        /// Checks the format of the email and then the account. When the email is not registered and when the
-        /// password is wrong the answer is the same, so the screen cannot be used to find out which emails have
-        /// an account (section 8.8 of the standard).
+        /// Looks for the account by email when the text has an at sign and by username when it does not, because a
+        /// username cannot have one. When the account is not registered and when the password is wrong the answer is
+        /// the same, so the screen cannot be used to find out which emails or usernames have an account (section 8.8
+        /// of the standard).
         /// </summary>
         /// <param name="credentials">The login credentials provided by the user.</param>
         /// <returns>The login result status.</returns>
         private LoginResult Authenticate(LoginCredentials credentials)
         {
-            string email = credentials.Email.Trim();
+            string identifier = credentials.Identifier.Trim();
+            LoginResult result;
+
+            if (identifier.Contains(EmailSeparator))
+            {
+                result = AuthenticateByEmail(identifier, credentials);
+            }
+            else
+            {
+                result = AuthenticateByUsername(identifier, credentials);
+            }
+
+            return result;
+        }
+
+        private LoginResult AuthenticateByEmail(string email, LoginCredentials credentials)
+        {
             LoginResult result;
 
             if (EmailAddressValidator.IsValid(email))
             {
-                result = CheckPlayer(email, credentials);
+                Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+
+                result = CheckPlayer(player, credentials, UnknownEmailLogMessage);
             }
             else
             {
@@ -119,15 +141,32 @@ namespace YachtDice.Server.Logic.Authentication
             return result;
         }
 
-        private LoginResult CheckPlayer(string email, LoginCredentials credentials)
+        private LoginResult AuthenticateByUsername(string username, LoginCredentials credentials)
         {
-            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            LoginResult result;
+
+            if (CredentialRules.IsValidUsername(username))
+            {
+                Player player = _playerRepository.FindByUsername(username).FirstOrDefault();
+
+                result = CheckPlayer(player, credentials, UnknownUsernameLogMessage);
+            }
+            else
+            {
+                result = Reject(LoginStatus.InvalidCredentials, InvalidUsernameLogMessage);
+            }
+
+            return result;
+        }
+
+        private LoginResult CheckPlayer(Player player, LoginCredentials credentials, string unknownLogMessage)
+        {
             LoginResult result;
 
             if (player == null)
             {
                 PasswordHasher.Verify(credentials.Password, _timingEqualizerHash);
-                result = Reject(LoginStatus.InvalidCredentials, UnknownEmailLogMessage);
+                result = Reject(LoginStatus.InvalidCredentials, unknownLogMessage);
             }
             else
             {

@@ -9,10 +9,10 @@ namespace YachtDice.Server.Contracts.Authentication
     public class LoginCredentials
     {
         /// <summary>
-        /// Player's email address.
+        /// Email address or username of the player.
         /// </summary>
         [DataMember]
-        public string Email { get; set; }
+        public string Identifier { get; set; }
 
         /// <summary>
         /// Password in plain text.

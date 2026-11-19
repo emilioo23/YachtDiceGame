@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
         FontFamily="{StaticResource FontBody}"
-        FocusManager.FocusedElement="{Binding ElementName=EmailTextBox}">
+        FocusManager.FocusedElement="{Binding ElementName=LoginIdentifierTextBox}">
 
     <Viewbox Stretch="Uniform" Margin="0,20,0,20">
         <Grid Width="650">
@@ -56,14 +56,14 @@
                         </Grid>
 
                         <StackPanel x:Name="LoginPanel">
-                            <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
+                            <TextBlock Text="{x:Static properties:Strings.Auth_LoginIdentifier}"
                                        Style="{StaticResource FieldLabel}"
                                        FontSize="15"/>
-                            <TextBox x:Name="EmailTextBox"
+                            <TextBox x:Name="LoginIdentifierTextBox"
                                      Style="{StaticResource TextBoxRounded}"
                                      Margin="0,0,0,12"
                                      FontSize="16" Padding="10,8"
-                                     Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
+                                     Tag="{x:Static properties:Strings.Auth_LoginIdentifierPlaceholder}"/>
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
                                        Style="{StaticResource FieldLabel}"

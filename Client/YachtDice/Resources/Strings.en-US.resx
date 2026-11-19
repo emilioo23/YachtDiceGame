@@ -135,6 +135,12 @@
   <data name="Auth_EmailPlaceholder" xml:space="preserve">
     <value>user@example.com</value>
   </data>
+  <data name="Auth_LoginIdentifier" xml:space="preserve">
+    <value>Email or username</value>
+  </data>
+  <data name="Auth_LoginIdentifierPlaceholder" xml:space="preserve">
+    <value>email@example.com or username</value>
+  </data>
   <data name="Auth_Password" xml:space="preserve">
     <value>Password</value>
   </data>

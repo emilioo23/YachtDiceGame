@@ -115,6 +115,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Correo o usuario.
+        /// </summary>
+        public static string Auth_LoginIdentifier {
+            get {
+                return ResourceManager.GetString("Auth_LoginIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a correo@ejemplo.com o usuario.
+        /// </summary>
+        public static string Auth_LoginIdentifierPlaceholder {
+            get {
+                return ResourceManager.GetString("Auth_LoginIdentifierPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El nombre y el apellido solo pueden tener letras, espacios, guiones y apóstrofos (de 2 a 50 caracteres)..
         /// </summary>
         public static string Auth_ErrorInvalidName {

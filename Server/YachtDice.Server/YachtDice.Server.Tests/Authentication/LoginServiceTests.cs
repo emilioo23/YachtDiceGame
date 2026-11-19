@@ -18,7 +18,9 @@ namespace YachtDice.Server.Tests.Authentication
         private const int PlayerId = 1;
         private const string Email = "gabriel@gmail.com";
         private const string UnknownEmail = "carlos.ramirez@gmail.com";
-        private const string MalformedEmail = "gabriel";
+        private const string MalformedEmail = "gabriel@";
+        private const string Username = "gabriel.h";
+        private const string UnknownUsername = "carlos.ramirez";
         private const string Password = "Secret123!";
         private const string WrongPassword = "Wrong123!";
         private const string DisplayName = "gabrielhernandez";
@@ -42,6 +44,7 @@ namespace YachtDice.Server.Tests.Authentication
             {
                 Id = PlayerId,
                 Email = Email,
+                Username = Username,
                 PwdHash = PasswordHasher.ComputeHash(Password),
                 DisplayName = DisplayName,
                 FirstName = FirstName
@@ -147,9 +150,9 @@ namespace YachtDice.Server.Tests.Authentication
         }
 
         [Theory]
-        [InlineData("gabriel")]
         [InlineData("gabriel@")]
-        [InlineData("gabriel gmail.com")]
+        [InlineData("@gmail.com")]
+        [InlineData("gabriel@gmail .com")]
         public void LoginPlayer_MalformedEmail_ReturnsInvalidEmail(string email)
         {
             LoginCredentials credentials = CreateCredentials(email, Password);
@@ -211,10 +214,108 @@ namespace YachtDice.Server.Tests.Authentication
             Assert.Equal(Email, _emailService.Recipients.Single());
         }
 
+        [Fact]
+        public void LoginPlayer_ValidUsername_ReturnsLoggedInWithTheNamesOfThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials(Username, Password);
+            LoginResult loginResultExpected = new LoginResult(LoginStatus.LoggedIn, CreateKnownPlayer(), string.Empty);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equivalent(loginResultExpected, loginResult);
+        }
+
+        [Fact]
+        public void LoginPlayer_UsernameWithSpacesAround_StillFindsThePlayer()
+        {
+            LoginCredentials credentials = CreateCredentials("  " + Username + "  ", Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.LoggedIn, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UsernameWithWrongPassword_ReturnsInvalidCredentials()
+        {
+            LoginCredentials credentials = CreateCredentials(Username, WrongPassword);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UnknownUsername_ReturnsInvalidCredentials()
+        {
+            LoginCredentials credentials = CreateCredentials(UnknownUsername, Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UnknownUsernameAndWrongPasswordOfARegisteredUsername_ReturnTheSameResult()
+        {
+            LoginResult unknownUsernameResult =
+                _service.LoginPlayer(CreateCredentials(UnknownUsername, WrongPassword));
+
+            LoginResult wrongPasswordResult = _service.LoginPlayer(CreateCredentials(Username, WrongPassword));
+
+            Assert.Equivalent(unknownUsernameResult, wrongPasswordResult);
+        }
+
+        [Theory]
+        [InlineData("gabriel hernandez")]
+        [InlineData("gabriel!")]
+        [InlineData("gabriel\u00e9")]
+        public void LoginPlayer_MalformedUsername_ReturnsInvalidCredentials(string username)
+        {
+            LoginCredentials credentials = CreateCredentials(username, Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_UsernameLongerThanTheMaximum_ReturnsInvalidCredentials()
+        {
+            string longUsername = new string(FillCharacter, CredentialRules.UsernameMaxLength + 1);
+
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(longUsername, Password));
+
+            Assert.Equal(LoginStatus.InvalidCredentials, loginResult.Status);
+        }
+
+        [Fact]
+        public void LoginPlayer_TwoFactorEnabledAndUsername_ReturnsTheEmailOfTheAccount()
+        {
+            _players.SaveTwoFactorEnabled(PlayerId, true);
+            LoginCredentials credentials = CreateCredentials(Username, Password);
+
+            LoginResult loginResult = _service.LoginPlayer(credentials);
+
+            Assert.Equal(Email, loginResult.Email);
+        }
+
+        [Fact]
+        public void LoginPlayer_TwoFactorEnabledAndUsername_SendsTheCodeToTheEmailOfThePlayer()
+        {
+            _players.SaveTwoFactorEnabled(PlayerId, true);
+            LoginCredentials credentials = CreateCredentials(Username, Password);
+
+            _service.LoginPlayer(credentials);
+
+            Assert.Equal(Email, _emailService.Recipients.Single());
+        }
+
         private static Player CreateKnownPlayer()
         {
             var player = new Player
             {
+                Email = Email,
                 DisplayName = DisplayName,
                 FirstName = FirstName
             };
@@ -222,11 +323,11 @@ namespace YachtDice.Server.Tests.Authentication
             return player;
         }
 
-        private static LoginCredentials CreateCredentials(string email, string password)
+        private static LoginCredentials CreateCredentials(string identifier, string password)
         {
             var credentials = new LoginCredentials
             {
-                Email = email,
+                Identifier = identifier,
                 Password = password,
                 Culture = CultureInfo.InvariantCulture
             };

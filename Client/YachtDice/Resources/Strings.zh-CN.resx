@@ -135,6 +135,12 @@
   <data name="Auth_EmailPlaceholder" xml:space="preserve">
     <value>usuario@ejemplo.com</value>
   </data>
+  <data name="Auth_LoginIdentifier" xml:space="preserve">
+    <value>邮箱或用户名</value>
+  </data>
+  <data name="Auth_LoginIdentifierPlaceholder" xml:space="preserve">
+    <value>邮箱地址或用户名</value>
+  </data>
   <data name="Auth_Password" xml:space="preserve">
     <value>密码</value>
   </data>

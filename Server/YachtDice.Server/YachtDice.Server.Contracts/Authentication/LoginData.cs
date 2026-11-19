@@ -21,6 +21,13 @@ namespace YachtDice.Server.Contracts.Authentication
         public string DisplayName { get; set; }
 
         /// <summary>
+        /// Email of the account, so the client can verify the code of the login even when the player typed the
+        /// username; empty if the password was not correct.
+        /// </summary>
+        [DataMember]
+        public string Email { get; set; }
+
+        /// <summary>
         /// First name of the player, used only to greet them.
         /// </summary>
         [DataMember]

@@ -23,6 +23,7 @@ namespace YachtDice.Server.Logic.Authentication
             Status = status;
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
             FirstName = string.Empty;
+            Email = string.Empty;
             ChallengeId = string.Empty;
         }
 
@@ -42,6 +43,7 @@ namespace YachtDice.Server.Logic.Authentication
             Status = status;
             DisplayName = player.DisplayName;
             FirstName = player.FirstName;
+            Email = player.Email ?? string.Empty;
             ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
         }
 
@@ -72,6 +74,11 @@ namespace YachtDice.Server.Logic.Authentication
         /// First name of the player, used only to greet them; empty if the password was not verified.
         /// </summary>
         public string FirstName { get; }
+
+        /// <summary>
+        /// Email of the account; empty if the password was not verified.
+        /// </summary>
+        public string Email { get; }
 
         /// <summary>
         /// Identifier of the verification challenge; empty if no code was sent.

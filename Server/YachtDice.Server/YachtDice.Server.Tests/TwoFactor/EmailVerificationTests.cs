@@ -54,7 +54,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         {
             var credentials = new LoginCredentials
             {
-                Email = Email,
+                Identifier = Email,
                 Password = Password,
                 Culture = new CultureInfo(CultureName)
             };
