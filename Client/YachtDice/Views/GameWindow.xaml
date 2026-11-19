@@ -288,23 +288,23 @@
                     <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
 
-                        <Border Width="380"
-                                Height="380"
-                                CornerRadius="190"
+                        <Border Width="330"
+                                Height="330"
+                                CornerRadius="165"
                                 Background="{StaticResource BrushWoodRing}"
                                 Effect="{StaticResource ShadowCard}"
-                                Margin="0,0,0,60">
+                                Margin="0,0,0,64">
 
-                            <Border Width="330"
-                                    Height="330"
-                                    CornerRadius="165"
+                            <Border Width="290"
+                                    Height="290"
+                                    CornerRadius="145"
                                     Background="{StaticResource BrushTableFelt}"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
 
                                 <Canvas x:Name="DiceCanvas"
-                                        Width="330"
-                                        Height="330"/>
+                                        Width="290"
+                                        Height="290"/>
                             </Border>
                         </Border>
 

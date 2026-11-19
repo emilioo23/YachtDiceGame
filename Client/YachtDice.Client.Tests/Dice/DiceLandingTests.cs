@@ -60,7 +60,8 @@ namespace YachtDice.Client.Tests.Dice
         [Fact]
         public void Choose_NoPlaceIsFree_ReturnsTheFarthestCandidate()
         {
-            var slotExpected = new DiceSlot(CandidateX, CandidateZ);
+            double candidateX = DiceTableLayout.LandingRadius * Math.Sqrt(RadiusUnit);
+            var slotExpected = new DiceSlot(candidateX, CandidateZ);
             var occupied = new List<DiceSlot> { new DiceSlot(CandidateX, CandidateZ) };
 
             DiceSlot slotResult = DiceLanding.Choose(occupied, Cycle(RadiusUnit, AngleUnit));

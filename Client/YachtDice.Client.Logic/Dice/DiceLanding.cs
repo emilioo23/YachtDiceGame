@@ -13,7 +13,7 @@ namespace YachtDice.Client.Logic.Dice
         /// Smallest distance between the centers of two dice on the table. It is a little more than the diagonal
         /// of a cube.
         /// </summary>
-        public const double MinimumGap = 1.6;
+        public const double MinimumGap = 1.9;
 
         private const int MaxAttempts = 60;
         private const double FullTurnRadians = 2 * Math.PI;

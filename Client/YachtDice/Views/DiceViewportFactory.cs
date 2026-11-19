@@ -26,9 +26,10 @@ namespace YachtDice.Views
         /// <summary>
         /// Creates the view with the camera and the lights, without dice.
         /// </summary>
-        /// <param name="size">Width and height of the view in pixels.</param>
+        /// <param name="width">Width of the view in pixels.</param>
+        /// <param name="height">Height of the view in pixels.</param>
         /// <returns>The view that receives the dice.</returns>
-        public static Viewport3D Create(double size)
+        public static Viewport3D Create(double width, double height)
         {
             var camera = new PerspectiveCamera(
                 new Point3D(NoMovement, CameraHeight, CameraDistance),
@@ -47,7 +48,7 @@ namespace YachtDice.Views
                 Color.FromRgb(SunLevel, SunLevel, SunLevel),
                 new Vector3D(SunSideways, SunDown, SunForward)));
 
-            var viewport = new Viewport3D { Width = size, Height = size, Camera = camera };
+            var viewport = new Viewport3D { Width = width, Height = height, Camera = camera };
 
             viewport.Children.Add(new ModelVisual3D { Content = lights });
 

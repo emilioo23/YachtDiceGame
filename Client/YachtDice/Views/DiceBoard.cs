@@ -20,8 +20,10 @@ namespace YachtDice.Views
     /// </summary>
     internal sealed class DiceBoard
     {
-        private const double ViewportSize = 470;
-        private const double ViewportOffset = -70;
+        private const double ViewportWidth = 413;
+        private const double ViewportHeight = 480;
+        private const double ViewportOffsetX = -62;
+        private const double ViewportOffsetY = -95;
         private const double ThrowMilliseconds = 1300;
         private const double GlideMilliseconds = 380;
         private const double GlideStaggerMilliseconds = 45;
@@ -35,6 +37,7 @@ namespace YachtDice.Views
         private const double NoDuration = 0;
         private const double NoYaw = 0;
         private const int NoValue = 0;
+        private const int IdleFaceOffset = 1;
         private const string NullCanvasMessage = "The canvas where it is drawn cannot be null.";
         private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
 
@@ -48,7 +51,8 @@ namespace YachtDice.Views
         /// Initializes the board inside a canvas.
         /// </summary>
         /// <param name="canvas">Canvas of the table; the three-dimensional view is bigger than the canvas, so
-        /// the row under the table fits in it.</param>
+        /// the row under the table fits in it. Before the first roll each die shows a different face only as
+        /// decoration; the real value always comes from the server.</param>
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public DiceBoard(Canvas canvas, FrameworkElement resources)
         {
@@ -58,17 +62,17 @@ namespace YachtDice.Views
                 NullResourcesMessage);
             DiceMaterials materials = DiceMaterials.Create(owner);
 
-            _viewport = DiceViewportFactory.Create(ViewportSize);
+            _viewport = DiceViewportFactory.Create(ViewportWidth, ViewportHeight);
             _viewport.Cursor = Cursors.Hand;
-            Canvas.SetLeft(_viewport, ViewportOffset);
-            Canvas.SetTop(_viewport, ViewportOffset);
+            Canvas.SetLeft(_viewport, ViewportOffsetX);
+            Canvas.SetTop(_viewport, ViewportOffsetY);
 
             for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
             {
                 var die = new Die3D(materials);
 
                 die.PlaceAt(DiceTableLayout.GetRowSlot(index), NoYaw, DiceLocation.Table);
-                die.ShowValue(NoValue);
+                die.ShowValue(ReadValue(Array.Empty<int>(), index));
                 _dice[index] = die;
                 _indexByVisual[die.Body] = index;
                 _viewport.Children.Add(die.Root);
@@ -88,7 +92,8 @@ namespace YachtDice.Views
         /// that are not held lie on the table; a die that changes place does it with a short hop. It stops a
         /// throw that is still running.
         /// </summary>
-        /// <param name="values">Value of each die; a missing or zero value is a die not rolled yet.</param>
+        /// <param name="values">Value of each die; a missing or zero value is a die not rolled yet, which
+        /// shows a decorative face.</param>
         /// <param name="isHeld">Tells if a die is held, given its position.</param>
         public void Render(IReadOnlyList<int> values, Func<int, bool> isHeld)
         {
@@ -148,7 +153,9 @@ namespace YachtDice.Views
 
         private static int ReadValue(IReadOnlyList<int> values, int index)
         {
-            return index < values.Count ? values[index] : NoValue;
+            bool isRolled = index < values.Count && values[index] > NoValue;
+
+            return isRolled ? values[index] : index + IdleFaceOffset;
         }
 
         private static int CountHeld(Func<int, bool> isHeld)

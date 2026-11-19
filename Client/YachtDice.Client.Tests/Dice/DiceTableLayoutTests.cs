@@ -20,7 +20,7 @@ namespace YachtDice.Client.Tests.Dice
         private const int NoDice = 0;
         private const int MiddleDie = 2;
         private const double CenterOfTheTable = 0;
-        private const double HalfSpacing = 0.75;
+        private const double HalfSpacing = 0.85;
 
         [Fact]
         public void GetRowSlot_MiddleDie_IsInTheCenterOfTheTable()

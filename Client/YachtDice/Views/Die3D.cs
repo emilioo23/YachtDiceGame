@@ -11,10 +11,10 @@ namespace YachtDice.Views
     /// </summary>
     internal sealed class Die3D
     {
-        private const double CubeSize = 1.1;
+        private const double CubeSize = 1.3;
         private const double Half = 0.5;
         private const double RestHeight = CubeSize * Half;
-        private const double ShadowSize = 1.7;
+        private const double ShadowSize = 2;
         private const double ShadowLevel = 0.01;
         private const double NoTurn = 0;
         private const int FirstFace = DiceFaceOrientation.FirstFace;

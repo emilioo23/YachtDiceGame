@@ -13,17 +13,17 @@ namespace YachtDice.Client.Logic.Dice
         /// <summary>
         /// Distance from the center of the table to the farthest place where the center of a die can land.
         /// </summary>
-        public const double LandingRadius = 2.6;
+        public const double LandingRadius = 2.3;
 
         /// <summary>
         /// Distance toward the player, from the center of the table, of the row of the dice that are kept.
         /// </summary>
-        public const double RackDepth = 6.1;
+        public const double RackDepth = 6.3;
 
         /// <summary>
         /// Distance between the centers of two dice that are next to each other in a row.
         /// </summary>
-        public const double RowSpacing = 1.5;
+        public const double RowSpacing = 1.7;
 
         private const double Half = 0.5;
         private const double TableCenter = 0;
