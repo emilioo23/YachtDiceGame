@@ -65,7 +65,8 @@ namespace YachtDice.Server.Logic.Passkeys
 
             private bool TryReadSequence()
             {
-                bool isValid = TryReadTag(SequenceTag) && TryReadLength(out int length);
+                int length = 0;
+                bool isValid = TryReadTag(SequenceTag) && TryReadLength(out length);
 
                 if (isValid)
                 {
