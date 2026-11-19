@@ -486,12 +486,13 @@ namespace YachtDice.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (HasUnsavedChanges() && !CustomDialogWindow.Confirm(this, Strings.Profile_DiscardChangesConfirm))
-            {
-                return;
-            }
+            bool canLeave = !HasUnsavedChanges()
+                || CustomDialogWindow.Confirm(this, Strings.Profile_DiscardChangesConfirm);
 
-            WindowNavigator.SwitchTo(this, new MenuWindow(_session));
+            if (canLeave)
+            {
+                WindowNavigator.SwitchTo(this, new MenuWindow(_session));
+            }
         }
     }
 }
