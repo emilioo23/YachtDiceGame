@@ -19,5 +19,10 @@
         /// Attestation object with the authenticator data and the new public key.
         /// </summary>
         public string AttestationObject { get; set; }
+
+        /// <summary>
+        /// Transport code that Windows reported for the authenticator; zero if it did not report one.
+        /// </summary>
+        public int Transport { get; set; }
     }
 }

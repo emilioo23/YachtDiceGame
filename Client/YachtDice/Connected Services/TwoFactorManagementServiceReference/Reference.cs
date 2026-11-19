@@ -818,6 +818,9 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ClientDataJsonField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TransportField;
+
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -863,6 +866,19 @@ namespace YachtDice.TwoFactorManagementServiceReference {
                 if ((object.ReferenceEquals(this.ClientDataJsonField, value) != true)) {
                     this.ClientDataJsonField = value;
                     this.RaisePropertyChanged("ClientDataJson");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Transport {
+            get {
+                return this.TransportField;
+            }
+            set {
+                if ((this.TransportField.Equals(value) != true)) {
+                    this.TransportField = value;
+                    this.RaisePropertyChanged("Transport");
                 }
             }
         }

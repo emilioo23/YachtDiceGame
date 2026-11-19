@@ -98,6 +98,66 @@ namespace YachtDice.Server.Tests.Passkeys
         }
 
         [Fact]
+        public void CompleteRegistration_ComputerTransport_NamesThePasskeyAsWindowsHello()
+        {
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
+            {
+                string nameExpected = PasskeyKinds.WindowsHelloName;
+
+                var options = new AuthenticatorOptions { Transport = PasskeyKinds.InternalTransport };
+
+                _context.Register(authenticator, options);
+
+                Assert.StartsWith(nameExpected, _context.Passkeys.Records.Single().DeviceName);
+            }
+        }
+
+        [Fact]
+        public void CompleteRegistration_PhoneTransport_NamesThePasskeyAsPhone()
+        {
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
+            {
+                string nameExpected = PasskeyKinds.PhoneName;
+
+                var options = new AuthenticatorOptions { Transport = PasskeyKinds.HybridTransport };
+
+                _context.Register(authenticator, options);
+
+                Assert.StartsWith(nameExpected, _context.Passkeys.Records.Single().DeviceName);
+            }
+        }
+
+        [Fact]
+        public void CompleteRegistration_UsbTransport_NamesThePasskeyAsSecurityKey()
+        {
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
+            {
+                string nameExpected = PasskeyKinds.SecurityKeyName;
+
+                var options = new AuthenticatorOptions { Transport = PasskeyKinds.UsbTransport };
+
+                _context.Register(authenticator, options);
+
+                Assert.StartsWith(nameExpected, _context.Passkeys.Records.Single().DeviceName);
+            }
+        }
+
+        [Fact]
+        public void CompleteRegistration_WithoutTransport_NamesThePasskeyAsUnknown()
+        {
+            using (FakeAuthenticator authenticator = new FakeAuthenticator())
+            {
+                string nameExpected = PasskeyKinds.UnknownName;
+
+                var options = new AuthenticatorOptions { Transport = PasskeyKinds.UnknownTransport };
+
+                _context.Register(authenticator, options);
+
+                Assert.StartsWith(nameExpected, _context.Passkeys.Records.Single().DeviceName);
+            }
+        }
+
+        [Fact]
         public void CompleteRegistration_ChallengeUsedTwice_ReturnsChallengeExpired()
         {
             using (FakeAuthenticator authenticator = new FakeAuthenticator())

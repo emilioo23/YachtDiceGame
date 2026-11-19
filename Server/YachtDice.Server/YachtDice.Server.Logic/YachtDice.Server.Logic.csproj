@@ -141,6 +141,7 @@
     <Compile Include="Passkeys\PasskeyAttestation.cs" />
     <Compile Include="Passkeys\PasskeyChallenge.cs" />
     <Compile Include="Passkeys\PasskeyChallengeStore.cs" />
+    <Compile Include="Passkeys\PasskeyKinds.cs" />
     <Compile Include="Passkeys\PasskeyPublicKey.cs" />
     <Compile Include="Passkeys\PasskeyPurpose.cs" />
     <Compile Include="Passkeys\PasskeyRegistrationStatus.cs" />

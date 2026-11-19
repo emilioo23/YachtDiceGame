@@ -62,7 +62,8 @@ namespace YachtDice.Server.Services.Mapping
             {
                 ChallengeId = attestation.ChallengeId,
                 ClientDataJson = attestation.ClientDataJson,
-                AttestationObject = attestation.AttestationObject
+                AttestationObject = attestation.AttestationObject,
+                Transport = attestation.Transport
             };
         }
 

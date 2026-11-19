@@ -238,13 +238,30 @@ namespace YachtDice.Passkeys
                 {
                     ChallengeId = ceremony.ChallengeId,
                     ClientDataJson = Base64Url.Encode(ceremony.ClientDataJson),
-                    AttestationObject = ToText(native.AttestationObject, native.AttestationObjectSize)
+                    AttestationObject = ToText(native.AttestationObject, native.AttestationObjectSize),
+                    Transport = ReadTransport(pointer, native.Version)
                 };
             }
             finally
             {
                 WebAuthNFreeCredentialAttestation(pointer);
             }
+        }
+
+        private static int ReadTransport(IntPtr pointer, uint version)
+        {
+            int transport = UnknownTransport;
+
+            if (version >= TransportAnswerVersion)
+            {
+                var detailed = (AttestationResultWithTransport)Marshal.PtrToStructure(
+                    pointer,
+                    typeof(AttestationResultWithTransport));
+
+                transport = (int)detailed.UsedTransport;
+            }
+
+            return transport;
         }
 
         private static PasskeyAssertionData ReadAssertion(int result, IntPtr pointer, Ceremony ceremony)

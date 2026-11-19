@@ -30,7 +30,7 @@ namespace YachtDice.Server.Logic.Passkeys
         private const string ClonedLogMessage = "Login attempt with a passkey whose counter went back.";
         private const string LockedLogMessage = "Login attempt with a passkey while the account is locked.";
         private const string WrongPasswordLogMessage = "Passkey removal with a wrong password.";
-        private const string DeviceNameFormat = "Passkey {0}";
+        private const string DeviceNameFormat = "{0} {1}";
         private const string RegisteredLogFormat = "Player {0} registered a passkey.";
         private const string RemovedLogFormat = "Player {0} removed a passkey.";
         private const string LoggedInLogFormat = "Player {0} logged in with a passkey.";
@@ -344,38 +344,50 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else
             {
-                status = Store(player, data, key);
+                PasskeyRecord record = BuildRecord(player, data, key);
+
+                record.DeviceName = BuildDeviceName(attestation.Transport);
+                status = Store(player, record);
             }
 
             return status;
         }
 
-        private PasskeyRegistrationStatus Store(Player player, AuthenticatorData data, PasskeyPublicKey key)
+        private static PasskeyRecord BuildRecord(Player player, AuthenticatorData data, PasskeyPublicKey key)
         {
-            string credentialId = Base64Url.Encode(data.CredentialId);
+            return new PasskeyRecord
+            {
+                PlayerId = player.Id,
+                CredentialId = Base64Url.Encode(data.CredentialId),
+                PublicKey = Base64Url.Encode(key.ToBytes()),
+                SignCount = data.SignCount
+            };
+        }
+
+        private static string BuildDeviceName(int transport)
+        {
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                DeviceNameFormat,
+                PasskeyKinds.GetName(transport),
+                DateTime.UtcNow.ToString(DateFormat, CultureInfo.InvariantCulture));
+        }
+
+        private PasskeyRegistrationStatus Store(Player player, PasskeyRecord record)
+        {
             PasskeyRegistrationStatus status;
 
             if (_passkeyRepository.FindByPlayer(player.Id).Count >= PasskeyRules.MaxPasskeysPerPlayer)
             {
                 status = PasskeyRegistrationStatus.TooManyPasskeys;
             }
-            else if (_passkeyRepository.FindByCredentialId(credentialId) != null)
+            else if (_passkeyRepository.FindByCredentialId(record.CredentialId) != null)
             {
                 status = PasskeyRegistrationStatus.AlreadyRegistered;
             }
             else
             {
-                _passkeyRepository.Add(new PasskeyRecord
-                {
-                    PlayerId = player.Id,
-                    CredentialId = credentialId,
-                    PublicKey = Base64Url.Encode(key.ToBytes()),
-                    SignCount = data.SignCount,
-                    DeviceName = string.Format(
-                        CultureInfo.InvariantCulture,
-                        DeviceNameFormat,
-                        DateTime.UtcNow.ToString(DateFormat, CultureInfo.InvariantCulture))
-                });
+                _passkeyRepository.Add(record);
                 status = PasskeyRegistrationStatus.Registered;
                 _logger.Info(string.Format(CultureInfo.InvariantCulture, RegisteredLogFormat, player.Id));
             }

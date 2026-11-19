@@ -25,5 +25,11 @@ namespace YachtDice.Server.Contracts.TwoFactor
         /// </summary>
         [DataMember]
         public string AttestationObject { get; set; }
+
+        /// <summary>
+        /// Transport code that Windows reported for the authenticator; zero if it did not report one.
+        /// </summary>
+        [DataMember]
+        public int Transport { get; set; }
     }
 }

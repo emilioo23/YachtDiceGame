@@ -13,6 +13,12 @@ namespace YachtDice.Passkeys
         /// <summary>Version of the structures that the game writes.</summary>
         public const uint StructureVersion = 1;
 
+        /// <summary>First version of the answer of a new passkey that tells which transport was used.</summary>
+        public const uint TransportAnswerVersion = 3;
+
+        /// <summary>Transport that is reported when Windows does not say which authenticator answered.</summary>
+        public const int UnknownTransport = 0;
+
         /// <summary>Type of the credentials, as Windows names it.</summary>
         public const string PublicKeyType = "public-key";
 
@@ -213,6 +219,29 @@ namespace YachtDice.Passkeys
             public IntPtr AttestationObject;
             public uint CredentialIdSize;
             public IntPtr CredentialId;
+        }
+
+        /// <summary>
+        /// WEBAUTHN_CREDENTIAL_ATTESTATION, version 3: the fields of version 1, the extensions and the transport that
+        /// the authenticator used. It is only read when the answer says that it has this version.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct AttestationResultWithTransport
+        {
+            public uint Version;
+            public IntPtr FormatType;
+            public uint AuthenticatorDataSize;
+            public IntPtr AuthenticatorData;
+            public uint AttestationSize;
+            public IntPtr Attestation;
+            public uint AttestationDecodeType;
+            public IntPtr AttestationDecode;
+            public uint AttestationObjectSize;
+            public IntPtr AttestationObject;
+            public uint CredentialIdSize;
+            public IntPtr CredentialId;
+            public ExtensionList Extensions;
+            public uint UsedTransport;
         }
 
         /// <summary>WEBAUTHN_ASSERTION, version 1.</summary>

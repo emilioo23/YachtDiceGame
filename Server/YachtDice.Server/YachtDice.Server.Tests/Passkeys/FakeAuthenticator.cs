@@ -69,7 +69,8 @@ namespace YachtDice.Server.Tests.Passkeys
             {
                 ChallengeId = challenge.ChallengeId,
                 ClientDataJson = Base64Url.Encode(clientData),
-                AttestationObject = Base64Url.Encode(CreateAttestationObject(authenticatorData))
+                AttestationObject = Base64Url.Encode(CreateAttestationObject(authenticatorData)),
+                Transport = options.Transport
             };
         }
 

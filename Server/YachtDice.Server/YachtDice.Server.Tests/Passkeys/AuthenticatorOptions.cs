@@ -44,6 +44,11 @@ namespace YachtDice.Server.Tests.Passkeys
         public string Challenge { get; set; }
 
         /// <summary>
+        /// Transport code that the client reports when the passkey is created.
+        /// </summary>
+        public int Transport { get; set; }
+
+        /// <summary>
         /// Type written in the client data; null to use the one of the ceremony.
         /// </summary>
         public string ClientDataType { get; set; }
