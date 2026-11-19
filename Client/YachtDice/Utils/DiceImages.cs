@@ -8,7 +8,7 @@ namespace YachtDice.Utils
     /// </summary>
     public static class DiceImages
     {
-        private const string DrawingsSource = "Styles/Dice.xaml";
+        private const string DrawingsSource = "Resources/Dice";
 
         private static readonly DrawingCatalog Catalog = new DrawingCatalog(DrawingsSource);
 

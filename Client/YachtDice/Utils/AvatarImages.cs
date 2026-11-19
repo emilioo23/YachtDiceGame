@@ -8,7 +8,7 @@ namespace YachtDice.Utils
     /// </summary>
     public static class AvatarImages
     {
-        private const string DrawingsSource = "Styles/Avatars.xaml";
+        private const string DrawingsSource = "Resources/Avatars";
 
         private static readonly DrawingCatalog Catalog = new DrawingCatalog(DrawingsSource);
 
