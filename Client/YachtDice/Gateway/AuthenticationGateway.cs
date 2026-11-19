@@ -1,5 +1,4 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.AuthenticationServiceReference;
 using AuthFault = YachtDice.AuthenticationServiceReference.ServiceFault;
@@ -20,7 +19,7 @@ namespace YachtDice.Gateway
         {
             await ExecuteAsync(client =>
             {
-                client.Open();
+                @client.Open();
                 return true;
             });
         }
