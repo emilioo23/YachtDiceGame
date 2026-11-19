@@ -283,6 +283,7 @@
 
                 <Border Grid.Row="0"
                         Style="{StaticResource CardPanel}"
+                        Padding="34,10"
                         Margin="0,0,0,12">
 
                     <StackPanel VerticalAlignment="Center"
@@ -293,7 +294,7 @@
                                 CornerRadius="165"
                                 Background="{StaticResource BrushWoodRing}"
                                 Effect="{StaticResource ShadowCard}"
-                                Margin="0,0,0,56">
+                                Margin="0,0,0,66">
 
                             <Border Width="290"
                                     Height="290"
@@ -315,7 +316,7 @@
                             HorizontalAlignment="Center"
                             FontSize="20"
                             Padding="40,12"
-                            Margin="0,22,0,2"
+                            Margin="0,34,0,2"
                             Click="RollButton_Click"/>
 
                         <TextBlock
