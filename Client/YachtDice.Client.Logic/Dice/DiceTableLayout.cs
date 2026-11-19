@@ -18,7 +18,7 @@ namespace YachtDice.Client.Logic.Dice
         /// <summary>
         /// Distance toward the player, from the center of the table, of the row of the dice that are kept.
         /// </summary>
-        public const double RackDepth = 6.3;
+        public const double RackDepth = 5.5;
 
         /// <summary>
         /// Distance between the centers of two dice that are next to each other in a row.
