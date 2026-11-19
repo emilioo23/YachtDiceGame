@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using YachtDice.Client.Logic.Dice;
 
 namespace YachtDice.Views
 {
@@ -25,64 +25,10 @@ namespace YachtDice.Views
         private const int NoValue = 0;
         private const double UnrolledOpacity = 0.55;
         private const double RolledOpacity = 1;
-        private const int PipIndexZero = 0;
-        private const int PipIndexOne = 1;
-        private const int PipIndexTwo = 2;
-        private const int FaceOne = 1;
-        private const int FaceTwo = 2;
-        private const int FaceThree = 3;
-        private const int FaceFour = 4;
-        private const int FaceFive = 5;
-        private const int FaceSix = 6;
         private const string ResourceBrushBorder = "BrushBorder";
         private const string ResourceShadowSoft = "ShadowSoft";
         private const string ResourceBrushWoodDark = "BrushWoodDark";
         private const string ResourceBrushGold = "BrushGold";
-
-        private static readonly Dictionary<int, (int row, int column)[]> PipLayouts =
-            new Dictionary<int, (int row, int column)[]>
-            {
-                { NoValue, new (int row, int column)[] { } },
-                { FaceOne, new[] { (PipIndexOne, PipIndexOne) } },
-                { FaceTwo, new[] { (PipIndexZero, PipIndexZero), (PipIndexTwo, PipIndexTwo) } },
-                {
-                    FaceThree,
-                    new[] { (PipIndexZero, PipIndexZero), (PipIndexOne, PipIndexOne), (PipIndexTwo, PipIndexTwo) }
-                },
-                {
-                    FaceFour,
-                    new[]
-                    {
-                        (PipIndexZero, PipIndexZero),
-                        (PipIndexZero, PipIndexTwo),
-                        (PipIndexTwo, PipIndexZero),
-                        (PipIndexTwo, PipIndexTwo)
-                    }
-                },
-                {
-                    FaceFive,
-                    new[]
-                    {
-                        (PipIndexZero, PipIndexZero),
-                        (PipIndexZero, PipIndexTwo),
-                        (PipIndexOne, PipIndexOne),
-                        (PipIndexTwo, PipIndexZero),
-                        (PipIndexTwo, PipIndexTwo)
-                    }
-                },
-                {
-                    FaceSix,
-                    new[]
-                    {
-                        (PipIndexZero, PipIndexZero),
-                        (PipIndexZero, PipIndexTwo),
-                        (PipIndexOne, PipIndexZero),
-                        (PipIndexOne, PipIndexTwo),
-                        (PipIndexTwo, PipIndexZero),
-                        (PipIndexTwo, PipIndexTwo)
-                    }
-                }
-            };
 
         /// <summary>
         /// Creates the face of a die.
@@ -126,7 +72,7 @@ namespace YachtDice.Views
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            foreach ((int row, int column) in PipLayouts[value])
+            foreach (PipCell cell in DicePipLayout.GetCells(value))
             {
                 var pip = new Ellipse
                 {
@@ -137,8 +83,8 @@ namespace YachtDice.Views
                     VerticalAlignment = VerticalAlignment.Center
                 };
 
-                Grid.SetRow(pip, row);
-                Grid.SetColumn(pip, column);
+                Grid.SetRow(pip, cell.Row);
+                Grid.SetColumn(pip, cell.Column);
                 grid.Children.Add(pip);
             }
 

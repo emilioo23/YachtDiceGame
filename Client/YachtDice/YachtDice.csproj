@@ -367,7 +367,12 @@
     <Compile Include="Views\DiceRow.cs" />
     <Compile Include="Views\DiceFaceFactory.cs" />
     <Compile Include="Views\DiceBoard.cs" />
-    <Compile Include="Views\DiceRollAnimation.cs" />
+    <Compile Include="Views\DiceMaterials.cs" />
+    <Compile Include="Views\DiceMeshFactory.cs" />
+    <Compile Include="Views\DiceThrowAnimation.cs" />
+    <Compile Include="Views\DiceViewportFactory.cs" />
+    <Compile Include="Views\Die3D.cs" />
+    <Compile Include="Views\DieThrow.cs" />
     <Compile Include="Views\ElementAnimator.cs" />
     <Compile Include="Views\GameKeyboard.cs" />
     <Compile Include="Views\YachtCelebration.cs" />

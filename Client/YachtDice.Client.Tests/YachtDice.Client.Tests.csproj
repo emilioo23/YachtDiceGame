@@ -54,7 +54,12 @@
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Gateway\PinnedServerCertificateValidatorTests.cs" />
     <Compile Include="Connection\ReconnectLoopTests.cs" />
+    <Compile Include="Dice\DiceFaceOrientationTests.cs" />
+    <Compile Include="Dice\DicePipLayoutTests.cs" />
     <Compile Include="Dice\DiceRowParserTests.cs" />
+    <Compile Include="Dice\DiceTableLayoutTests.cs" />
+    <Compile Include="Dice\DiceThrowPathTests.cs" />
+    <Compile Include="Dice\DiceVectorTests.cs" />
     <Compile Include="Dice\DieResourceKeyTests.cs" />
     <Compile Include="Game\HeldDiceSelectionTests.cs" />
     <Compile Include="Game\StandingsBuilderTests.cs" />
