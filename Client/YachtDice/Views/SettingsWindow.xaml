@@ -449,8 +449,15 @@
                                     Click="AddPasskeyButton_Click"/>
                         </Grid>
 
+                        <TextBlock x:Name="PasskeyRemoveHintTextBlock"
+                                   Text="{x:Static properties:Strings.Settings_Security_RemovePasskeyHint}"
+                                   FontSize="16"
+                                   TextWrapping="Wrap"
+                                   Margin="0,12,0,0"
+                                   Foreground="{StaticResource BrushTextMuted}"/>
+
                         <StackPanel Orientation="Horizontal"
-                                    Margin="0,12,0,0">
+                                    Margin="0,6,0,0">
 
                             <ComboBox x:Name="PasskeysComboBox"
                                       Width="240"

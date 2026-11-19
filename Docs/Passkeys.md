@@ -95,7 +95,7 @@ Los retos se guardan en memoria del servidor (`PasskeyChallengeStore`), con tope
 
 ### 3.7 `RelyingPartyId`: `yachtdice.localhost`
 
-WebAuthn exige un identificador de la parte confiable (RP ID). Como no hay dominio, se usa `yachtdice.localhost` y el origen `https://yachtdice.localhost`, el mismo en cliente y servidor. **Esto no está probado contra Windows ni contra un iPhone**; es el punto que más puede necesitar ajuste (ver 5).
+WebAuthn exige un identificador de la parte confiable (RP ID). Como no hay dominio, se usa `yachtdice.localhost` y el origen `https://yachtdice.localhost`, el mismo en cliente y servidor. **Se probó a mano (18/11/2026):** Windows acepta crear la passkey con ese RP ID y el iPhone muestra "Sign in to yachtdice.localhost" y pide Face ID. Es lo que ve el usuario en el celular: iOS siempre muestra el RP ID, no el nombre bonito (`RelyingPartyName`), y el RP ID no admite espacios ni mayúsculas. Se eligió `.localhost` porque es un dominio reservado que nadie puede registrar, así no se mezcla con un sitio web real.
 
 ### 3.8 Quitar una passkey
 
@@ -120,12 +120,13 @@ Cubre computadora, celular, tableta y una llave de repuesto sin permitir un núm
 
 **Probado automáticamente:** lectura de Base64url, CBOR, `authenticatorData`, validación del `clientDataJSON`, almacén de retos (uso único, expiración, tope), `PasskeyService` completo (registro, login, quitar, listar) y los mensajes del cliente.
 
-**No se ha probado en un Windows real:**
+**Probado a mano en un Windows real y un iPhone (18/11/2026):** la llamada a `webauthn.dll`, que Windows y el iPhone acepten `yachtdice.localhost` como RP ID, la conexión del celular por QR con Face ID, y que las ventanas WPF nuevas se muestran y registran la passkey.
 
-1. La llamada a `webauthn.dll` (estructuras escritas según `webauthn.h`, versión 1 de la API).
-2. Que Windows y el iPhone acepten `yachtdice.localhost` como RP ID.
-3. Que el celular se conecte por QR (necesita internet en la PC y en el celular).
-4. Las ventanas WPF nuevas (XAML) y el arranque del host con las clases nuevas.
+**Falta confirmar:**
+
+1. Quitar una passkey de punta a punta con contraseña correcta e incorrecta.
+2. Que las pruebas que firman con ECDSA pasen en Visual Studio.
+3. Iniciar sesión con la passkey en una cuenta con bloqueo activo.
 
 Las pruebas que firman con ECDSA se ejecutan en Visual Studio con .NET Framework 4.7.2; el entorno en que se desarrolló (Mono) no implementa esa parte de la API.
 

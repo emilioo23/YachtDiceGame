@@ -40,6 +40,7 @@ namespace YachtDice.Views
         private const string PasskeyFailedLogMessage = "Windows could not create the passkey.";
         private const int NoSelection = -1;
         private const int FirstItem = 0;
+        private const int SinglePasskey = 1;
 
         private readonly PlayerSession _session;
         private readonly AudioSettings _audio;
@@ -168,12 +169,21 @@ namespace YachtDice.Views
             bool hasPasskeys = passkeys.Length > 0;
 
             PasskeysStatusTextBlock.Text = isAvailable
-                ? string.Format(Strings.Settings_Security_PasskeysCount, passkeys.Length)
+                ? BuildPasskeysCountText(passkeys.Length)
                 : Strings.Passkey_ErrorUnavailable;
             AddPasskeyButton.IsEnabled = isAvailable;
             PasskeysComboBox.ItemsSource = passkeys;
             PasskeysComboBox.SelectedIndex = hasPasskeys ? FirstItem : NoSelection;
             RemovePasskeyButton.IsEnabled = hasPasskeys;
+        }
+
+        private static string BuildPasskeysCountText(int passkeysCount)
+        {
+            string text = passkeysCount == SinglePasskey
+                ? Strings.Settings_Security_PasskeysCountSingle
+                : string.Format(Strings.Settings_Security_PasskeysCount, passkeysCount);
+
+            return text;
         }
 
         private async void RemovePasskeyButton_Click(object sender, RoutedEventArgs e)

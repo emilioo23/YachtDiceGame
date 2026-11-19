@@ -4435,6 +4435,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Tienes 1 passkey. Entra con Windows Hello o con tu celular, sin escribir contraseña..
+        /// </summary>
+        public static string Settings_Security_PasskeysCountSingle {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasskeysCountSingle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Para quitar una passkey, elígela en la lista y escribe tu contraseña actual..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyHint {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Agregar passkey.
         /// </summary>
         public static string Settings_Security_ButtonAddPasskey {

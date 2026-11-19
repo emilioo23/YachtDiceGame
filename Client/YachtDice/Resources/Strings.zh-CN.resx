@@ -2529,6 +2529,12 @@
   <data name="Settings_Security_PasskeysCount" xml:space="preserve">
     <value>你有 {0} 个通行密钥。可使用 Windows Hello 或手机登录，无需输入密码。</value>
   </data>
+  <data name="Settings_Security_PasskeysCountSingle" xml:space="preserve">
+    <value>你有 1 个通行密钥。可使用 Windows Hello 或手机登录，无需输入密码。</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyHint" xml:space="preserve">
+    <value>要移除通行密钥，请在列表中选择它并输入你当前的密码。</value>
+  </data>
   <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
     <value>添加通行密钥</value>
   </data>

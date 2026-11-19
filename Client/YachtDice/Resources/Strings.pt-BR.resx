@@ -2529,6 +2529,12 @@
   <data name="Settings_Security_PasskeysCount" xml:space="preserve">
     <value>Você tem {0} passkeys. Entre com o Windows Hello ou com o celular, sem digitar senha.</value>
   </data>
+  <data name="Settings_Security_PasskeysCountSingle" xml:space="preserve">
+    <value>Você tem 1 passkey. Entre com o Windows Hello ou com o celular, sem digitar senha.</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyHint" xml:space="preserve">
+    <value>Para remover uma passkey, escolha-a na lista e digite sua senha atual.</value>
+  </data>
   <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
     <value>Adicionar passkey</value>
   </data>
