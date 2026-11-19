@@ -96,6 +96,11 @@ namespace YachtDice.Properties
             {
                 return ((int)(this["MusicVolume"]));
             }
+            set
+            {
+                this["MusicVolume"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -109,11 +114,6 @@ namespace YachtDice.Properties
             set
             {
                 this["ShowPotentialPoints"] = value;
-            }
-        }
-            set
-            {
-                this["MusicVolume"] = value;
             }
         }
     }
