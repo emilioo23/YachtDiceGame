@@ -31,6 +31,7 @@ namespace YachtDice.Server.Tests.Game
         private const int OneRollLeft = 1;
         private const int TwoRollsLeft = 2;
         private const int OnePlayerLeft = 1;
+        private const int TwoPlayersLeft = 2;
         private const int LongerTurnSeconds = 60;
         private const int ShorterTurnSeconds = 30;
         private const int NoExperience = 0;
@@ -559,8 +560,8 @@ namespace YachtDice.Server.Tests.Game
         public void Remove_PlayerWithTheTurn_PassesTheTurnAndDropsThePlayer()
         {
             GameManager manager = CreateManager(LittleStraightDice);
-            StartTwoPlayerGame(manager);
-            var turnChangeExpected = new { CurrentPlayerId = SecondId, PlayerCount = OnePlayerLeft };
+            StartThreePlayerGame(manager);
+            var turnChangeExpected = new { CurrentPlayerId = SecondId, PlayerCount = TwoPlayersLeft };
 
             GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, FirstId));
 
@@ -576,8 +577,8 @@ namespace YachtDice.Server.Tests.Game
         public void Remove_PlayerWithoutTheTurn_KeepsTheTurnOfTheCurrentPlayer()
         {
             GameManager manager = CreateManager(LittleStraightDice);
-            StartTwoPlayerGame(manager);
-            var turnChangeExpected = new { CurrentPlayerId = FirstId, PlayerCount = OnePlayerLeft };
+            StartThreePlayerGame(manager);
+            var turnChangeExpected = new { CurrentPlayerId = FirstId, PlayerCount = TwoPlayersLeft };
 
             GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, SecondId));
 
@@ -587,6 +588,24 @@ namespace YachtDice.Server.Tests.Game
                 PlayerCount = removalResult.Snapshot.Players.Count
             };
             Assert.Equal(turnChangeExpected, turnChangeResult);
+        }
+
+        [Fact]
+        public void Remove_PlayerOfATwoPlayerGame_FinishesTheGameWithTheOtherPlayerAsWinner()
+        {
+            GameManager manager = CreateManager(LittleStraightDice);
+            StartTwoPlayerGame(manager);
+            var gameEndExpected = new { Status = GameStatus.Finished, PlayerCount = OnePlayerLeft, FirstWins = true };
+
+            GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, SecondId));
+
+            var gameEndResult = new
+            {
+                removalResult.Snapshot.Status,
+                PlayerCount = removalResult.Snapshot.Players.Count,
+                FirstWins = FindPlayer(removalResult.Snapshot, FirstId).IsWinner
+            };
+            Assert.Equivalent(gameEndExpected, gameEndResult);
         }
 
         [Fact]

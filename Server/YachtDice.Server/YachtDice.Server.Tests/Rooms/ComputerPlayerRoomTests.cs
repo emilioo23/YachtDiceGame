@@ -147,6 +147,64 @@ namespace YachtDice.Server.Tests.Rooms
             Assert.True(isInRoomResult);
         }
 
+        [Fact]
+        public void Disconnect_OnlyPersonOfAStartedGame_LetsThePlayerComeBack()
+        {
+            RoomMember host = StartGameWithComputer();
+
+            _manager.Disconnect(host);
+
+            RoomResult returnResult = _manager.Join(host.RoomCode, HostName);
+            Assert.True(returnResult.HasReturned);
+        }
+
+        [Fact]
+        public void Leave_OnlyPersonOfAStartedGame_DeletesTheRoom()
+        {
+            RoomMember host = StartGameWithComputer();
+
+            _manager.Leave(host);
+
+            RoomResult joinResult = _manager.Join(host.RoomCode, HostName);
+            Assert.Equal(RoomStatus.RoomNotFound, joinResult.Status);
+        }
+
+        [Fact]
+        public void ForgetAbsentPlayer_OnlyPersonOfAStartedGame_DeletesTheRoom()
+        {
+            RoomMember host = StartGameWithComputer();
+            _manager.Disconnect(host);
+
+            _manager.ForgetAbsentPlayer(host);
+
+            RoomResult joinResult = _manager.Join(host.RoomCode, HostName);
+            Assert.Equal(RoomStatus.RoomNotFound, joinResult.Status);
+        }
+
+        [Fact]
+        public void Disconnect_BeforeTheGameStarts_DeletesTheRoom()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
+
+            _manager.Disconnect(host);
+
+            RoomResult joinResult = _manager.Join(host.RoomCode, HostName);
+            Assert.Equal(RoomStatus.RoomNotFound, joinResult.Status);
+        }
+
+        private RoomMember StartGameWithComputer()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+
+            _manager.AddComputer(host, ComputerDifficulty.Normal);
+            _manager.StartGame(host);
+
+            return host;
+        }
+
         private static RoomMember GetMember(RoomResult roomResult)
         {
             return new RoomMember(roomResult.Room.Code, roomResult.PlayerId);

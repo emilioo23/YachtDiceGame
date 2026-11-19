@@ -73,7 +73,15 @@ namespace YachtDice.Server.Logic.Rooms
         /// </summary>
         public IReadOnlyList<RoomPlayer> Players => _players;
 
+        /// <summary>
+        /// Gets a value indicating whether a person is inside the room.
+        /// </summary>
         public bool HasPeople => _players.Any(player => !player.IsComputer);
+
+        /// <summary>
+        /// Gets a value indicating whether a person left the game in progress and still has time to come back.
+        /// </summary>
+        public bool HasAbsentPeople => _absentPlayers.Any(player => !player.IsComputer);
 
         /// <summary>
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another

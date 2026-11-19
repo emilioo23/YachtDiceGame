@@ -176,7 +176,15 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public RoomResult Leave(RoomMember member)
         {
-            RoomResult result = ExecuteInRoom(member.RoomCode, room => TakeOutPlayer(room, member.PlayerId));
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => TakeOutPlayer(room, member.PlayerId, false));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public RoomResult Disconnect(RoomMember member)
+        {
+            RoomResult result = ExecuteInRoom(member.RoomCode, room => TakeOutPlayer(room, member.PlayerId, true));
 
             return result;
         }
@@ -641,9 +649,10 @@ namespace YachtDice.Server.Logic.Rooms
             return CreateResult(status, room);
         }
 
-        private static RoomResult ForgetAbsent(GameRoom room, string playerId)
+        private RoomResult ForgetAbsent(GameRoom room, string playerId)
         {
             room.ForgetAbsentPlayer(playerId);
+            DeleteIfEmpty(room, true);
 
             return CreateResult(RoomStatus.Success, room);
         }
@@ -702,7 +711,7 @@ namespace YachtDice.Server.Logic.Rooms
             return result;
         }
 
-        private RoomResult TakeOutPlayer(GameRoom room, string playerId)
+        private RoomResult TakeOutPlayer(GameRoom room, string playerId, bool isConnectionLoss)
         {
             RoomResult result = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
 
@@ -711,7 +720,7 @@ namespace YachtDice.Server.Logic.Rooms
                 bool isHostLeaving = room.IsHost(playerId);
 
                 RemoveOrMarkAbsent(room, playerId);
-                DeleteIfEmpty(room);
+                DeleteIfEmpty(room, isConnectionLoss);
 
                 RoomDetails details = room.ToDetails();
 
@@ -734,9 +743,11 @@ namespace YachtDice.Server.Logic.Rooms
             return _rooms.TryGetValue(NormalizeCode(roomCode), out room);
         }
 
-        private void DeleteIfEmpty(GameRoom room)
+        private void DeleteIfEmpty(GameRoom room, bool keepForReturn)
         {
-            if (!room.HasPeople)
+            bool isWaitingForReturn = keepForReturn && room.IsStarted && room.HasAbsentPeople;
+
+            if (!room.HasPeople && !isWaitingForReturn)
             {
                 _rooms.Remove(room.Code);
             }

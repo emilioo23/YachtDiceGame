@@ -20,6 +20,8 @@ namespace YachtDice.Navigation
         private const int MillisecondsPerSecond = 1000;
         private const string NullGatewayMessage = "The connection of the match cannot be null.";
         private const string AttemptFailedLogFormat = "An attempt to reconnect to the match failed: {0}.";
+        private const string RoomRefusedLogFormat = "The server did not give back the place in the room: {0}.";
+        private const string GameRefusedLogFormat = "The server did not give back the place in the game: {0}.";
         private const string RestoredLogMessage = "The connection with the match was restored.";
 
         private readonly RoomGateway _roomGateway;
@@ -129,6 +131,10 @@ namespace YachtDice.Navigation
                 await _chat.TryJoinAsync();
                 isRestored = await JoinGameAsync();
             }
+            else
+            {
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, RoomRefusedLogFormat, roomResult));
+            }
 
             return isRestored;
         }
@@ -141,6 +147,10 @@ namespace YachtDice.Navigation
             if (isJoined)
             {
                 Restored?.Invoke(result.State);
+            }
+            else
+            {
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, GameRefusedLogFormat, result.Code));
             }
 
             return isJoined;

@@ -224,7 +224,8 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
-        /// Removes a player for good, for example because the host kicked the player.
+        /// Removes a player for good, for example because the host kicked the player. If only one player is
+        /// left, the game finishes and that player wins, because nobody plays alone.
         /// </summary>
         /// <param name="playerId">Player to remove.</param>
         public void Remove(string playerId)
@@ -235,6 +236,7 @@ namespace YachtDice.Server.Logic.Game
             if (index != NoPlayerIndex)
             {
                 RemoveAt(index);
+                FinishIfOnePlayerIsLeft();
             }
         }
 

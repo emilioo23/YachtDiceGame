@@ -72,6 +72,15 @@ namespace YachtDice.Server.Logic.Rooms
         RoomResult Leave(RoomMember member);
 
         /// <summary>
+        /// Takes out a player whose connection broke. It works like <see cref="Leave"/>, but a game in progress
+        /// is kept while a person is absent, even if only computer players are inside, so the player can come
+        /// back before the waiting time ends.
+        /// </summary>
+        /// <param name="member">Room and identifier of the player whose connection broke.</param>
+        /// <returns>Whether the player was inside and the state of the room after the loss.</returns>
+        RoomResult Disconnect(RoomMember member);
+
+        /// <summary>
         /// Forgets a player who left a game in progress and did not come back in time, so the player cannot
         /// return to that game.
         /// </summary>

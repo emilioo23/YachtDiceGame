@@ -418,7 +418,14 @@ namespace YachtDice.Server.Services
 
         private void ForgetPlayerWhoDidNotReturn(LogicRooms.RoomMember member)
         {
-            _roomManager.ForgetAbsentPlayer(member);
+            LogicRooms.RoomResult result = _roomManager.ForgetAbsentPlayer(member);
+
+            if (result.Status == LogicRooms.RoomStatus.Success
+                && result.Room.IsEmpty
+                && !result.Room.AbsentPlayers.Any())
+            {
+                _gameCoordinator.EndGame(member.RoomCode);
+            }
         }
 
         private void TellRemovedPlayer(
@@ -452,7 +459,35 @@ namespace YachtDice.Server.Services
         {
             if (_callbacks.RemoveIfCurrent(member, callback))
             {
-                ApplyLeave(member);
+                ApplyDisconnect(member);
+            }
+        }
+
+        private void ApplyDisconnect(LogicRooms.RoomMember member)
+        {
+            LogicRooms.RoomResult result = _roomManager.Disconnect(member);
+
+            if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                LogInfo(Describe(LeftLogFormat, member.RoomCode));
+                UpdateGameAfterDisconnect(result, member);
+            }
+
+            if (result.Status == LogicRooms.RoomStatus.Success && !result.Room.IsEmpty)
+            {
+                Broadcast(result.Room, GetLeaveEventType(result));
+            }
+        }
+
+        private void UpdateGameAfterDisconnect(LogicRooms.RoomResult result, LogicRooms.RoomMember member)
+        {
+            if (result.Room.IsStarted)
+            {
+                _gameCoordinator.PlayerLeft(member);
+            }
+            else if (result.Room.IsEmpty)
+            {
+                _gameCoordinator.EndGame(result.Room.Code);
             }
         }
 

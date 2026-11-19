@@ -207,7 +207,7 @@ namespace YachtDice.Server.Services
         {
             _reconnectTimer.Cancel(member);
             _callbacks.Remove(member);
-            Complete(member.RoomCode, _gameManager.Remove(member), Contracts.GameEventType.PlayerRemoved);
+            CompleteTurn(member.RoomCode, _gameManager.Remove(member), Contracts.GameEventType.PlayerRemoved);
         }
 
         /// <summary>
