@@ -127,7 +127,7 @@
                             <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource BrushBorder}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                            <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5"/>
                             <Setter Property="Cursor" Value="Arrow"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
