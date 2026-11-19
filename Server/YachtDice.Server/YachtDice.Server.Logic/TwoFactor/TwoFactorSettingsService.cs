@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
@@ -21,7 +22,12 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const char AtSign = '@';
         private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
         private const string NullDependencyMessage = "A dependency of the two-factor settings cannot be null.";
+        private const string EnabledLogFormat = "Player {0} turned on the two-step verification.";
+        private const string DisabledLogFormat = "Player {0} turned off the two-step verification.";
+        private const string BackupCodesLogFormat = "Player {0} created new backup codes.";
+        private const string WrongPasswordLogFormat = "A wrong password was typed in a security change of player {0}.";
 
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -43,6 +49,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -106,6 +113,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 if (status == TwoFactorValidationStatus.Valid)
                 {
                     _playerRepository.SaveTwoFactorEnabled(player.Id, true);
+                    _logger.Info(Describe(EnabledLogFormat, player));
                 }
             }
 
@@ -154,12 +162,14 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else if (!IsPasswordCorrect(player, password))
             {
+                _logger.Warning(Describe(WrongPasswordLogFormat, player));
                 status = TwoFactorChangeStatus.InvalidPassword;
             }
             else
             {
                 _playerRepository.SaveTwoFactorEnabled(player.Id, false);
                 _verificationService.RemoveBackupCodes(player.Id);
+                _logger.Info(Describe(DisabledLogFormat, player));
                 status = TwoFactorChangeStatus.Success;
             }
 
@@ -183,6 +193,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
             else if (!IsPasswordCorrect(player, password))
             {
+                _logger.Warning(Describe(WrongPasswordLogFormat, player));
                 creation = new BackupCodeCreation(BackupCodeCreationStatus.InvalidPassword, new List<string>());
             }
             else if (!_playerRepository.HasTwoFactorEnabled(player.Id))
@@ -192,6 +203,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             else
             {
                 List<string> codes = _verificationService.CreateBackupCodes(player.Id);
+                _logger.Info(Describe(BackupCodesLogFormat, player));
                 creation = new BackupCodeCreation(BackupCodeCreationStatus.Created, codes);
             }
 
@@ -214,6 +226,11 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             return codeCount;
+        }
+
+        private static string Describe(string logFormat, Player player)
+        {
+            return string.Format(CultureInfo.InvariantCulture, logFormat, player.Id);
         }
 
         private static bool IsPasswordCorrect(Player player, string password)

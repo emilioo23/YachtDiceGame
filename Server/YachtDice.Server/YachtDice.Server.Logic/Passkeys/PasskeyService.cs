@@ -31,6 +31,9 @@ namespace YachtDice.Server.Logic.Passkeys
         private const string LockedLogMessage = "Login attempt with a passkey while the account is locked.";
         private const string WrongPasswordLogMessage = "Passkey removal with a wrong password.";
         private const string DeviceNameFormat = "Passkey {0}";
+        private const string RegisteredLogFormat = "Player {0} registered a passkey.";
+        private const string RemovedLogFormat = "Player {0} removed a passkey.";
+        private const string LoggedInLogFormat = "Player {0} logged in with a passkey.";
         private const string DateFormat = "yyyy-MM-dd";
         private const string AttestationAuthDataKey = "authData";
         private const int HandleSize = 4;
@@ -184,6 +187,7 @@ namespace YachtDice.Server.Logic.Passkeys
             else
             {
                 status = DeletePasskeyOf(player, passkeyId);
+                LogRemoval(status, player);
             }
 
             return status;
@@ -250,6 +254,14 @@ namespace YachtDice.Server.Logic.Passkeys
                 && pending.PlayerId == player.Id;
 
             return isUsable;
+        }
+
+        private void LogRemoval(PasskeyRemovalStatus status, Player player)
+        {
+            if (status == PasskeyRemovalStatus.Removed)
+            {
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, RemovedLogFormat, player.Id));
+            }
         }
 
         private PasskeyRemovalStatus DeletePasskeyOf(Player player, int passkeyId)
@@ -365,6 +377,7 @@ namespace YachtDice.Server.Logic.Passkeys
                         DateTime.UtcNow.ToString(DateFormat, CultureInfo.InvariantCulture))
                 });
                 status = PasskeyRegistrationStatus.Registered;
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, RegisteredLogFormat, player.Id));
             }
 
             return status;
@@ -546,6 +559,7 @@ namespace YachtDice.Server.Logic.Passkeys
             else
             {
                 _passkeyRepository.SaveSignCount(record.Id, data.SignCount);
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LoggedInLogFormat, record.PlayerId));
                 result = new LoginResult(
                     LoginStatus.LoggedIn,
                     record.PlayerDisplayName,

@@ -5,6 +5,7 @@ using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.TwoFactor
@@ -17,7 +18,12 @@ namespace YachtDice.Server.Logic.TwoFactor
     {
         private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
         private const string NullDependencyMessage = "A dependency of the two-factor verification cannot be null.";
+        private const string AcceptedLogMessage = "A verification code was accepted.";
+        private const string WrongLogMessage = "A wrong verification code was typed.";
+        private const string ExpiredLogMessage = "A verification code that expired was typed.";
+        private const string LockedLogMessage = "The verification codes are locked after too many wrong tries.";
 
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -38,6 +44,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -78,6 +85,8 @@ namespace YachtDice.Server.Logic.TwoFactor
                 status = _codeService.ValidateCode(email, verificationCode);
             }
 
+            LogOutcome(status);
+
             if (status == TwoFactorValidationStatus.Valid)
             {
                 ActivateIfUnverified(email);
@@ -113,6 +122,26 @@ namespace YachtDice.Server.Logic.TwoFactor
         public void RemoveBackupCodes(int playerId)
         {
             _codeService.RemoveBackupCodes(playerId);
+        }
+
+        private void LogOutcome(TwoFactorValidationStatus status)
+        {
+            if (status == TwoFactorValidationStatus.Valid)
+            {
+                _logger.Info(AcceptedLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Incorrect)
+            {
+                _logger.Warning(WrongLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Expired)
+            {
+                _logger.Warning(ExpiredLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Locked)
+            {
+                _logger.Warning(LockedLogMessage);
+            }
         }
 
         private TwoFactorValidationStatus VerifyBackupCode(string email, VerificationCode verificationCode)

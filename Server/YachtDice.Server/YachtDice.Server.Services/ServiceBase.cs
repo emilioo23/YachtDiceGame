@@ -23,6 +23,7 @@ namespace YachtDice.Server.Services
         private const string DatabaseLogFormat = "Database error while processing {0}.";
         private const string InvalidDataLogFormat = "Invalid data was received in {0}.";
         private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
+        private const string RejectedSessionLogFormat = "{0} was rejected because the session is not valid.";
         private const string SessionExpiredMessage = "The session ended. Log in again.";
         private const string SessionReplacedMessage =
             "The session ended because the player logged in again somewhere else.";
@@ -100,7 +101,7 @@ namespace YachtDice.Server.Services
         {
             if (!Sessions.TryGetPlayerName(sessionToken, out string playerName))
             {
-                throw CreateSessionFault(sessionToken);
+                throw CreateSessionFault(sessionToken, operationName);
             }
 
             return Run(() => operation(playerName), operationName);
@@ -197,8 +198,10 @@ namespace YachtDice.Server.Services
             return CreateFault(Contracts.ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
         }
 
-        private FaultException<Contracts.ServiceFault> CreateSessionFault(string sessionToken)
+        private FaultException<Contracts.ServiceFault> CreateSessionFault(string sessionToken, string operationName)
         {
+            _logger.Warning(DescribeOperation(RejectedSessionLogFormat, operationName));
+
             FaultException<Contracts.ServiceFault> fault =
                 CreateFault(Contracts.ServiceErrorCode.SessionExpired, SessionExpiredMessage);
 

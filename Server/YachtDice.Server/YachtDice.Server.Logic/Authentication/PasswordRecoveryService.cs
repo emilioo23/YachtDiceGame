@@ -19,6 +19,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
+        private const string RequestedLogMessage = "A password recovery code was requested for an account.";
         private const string NullArgumentMessage = "The value cannot be null.";
         private const string EmailSubjectResourceKey = "PasswordReset_EmailSubject";
         private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
@@ -77,6 +78,7 @@ namespace YachtDice.Server.Logic.Authentication
 
                 if (player != null && !WasCodeSentRecently(player.Id))
                 {
+                    _logger.Info(RequestedLogMessage);
                     status = CreateAndSendCode(player, culture);
                 }
             }

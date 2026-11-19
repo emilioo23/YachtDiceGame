@@ -19,11 +19,16 @@ namespace YachtDice.Server.Logic.Authentication
         private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
         private const string TooLongPasswordLogMessage = "Login attempt with a password longer than the maximum.";
         private const string TimingEqualizerPassword = "password-used-only-to-take-the-same-time";
-        private const string WrongPasswordLogMessage = "Login attempt with a wrong password.";
+        private const string WrongPasswordLogFormat = "Login attempt with a wrong password for player {0}.";
+        private const string LoggedInLogFormat = "Player {0} logged in.";
+        private const string CodeSentLogFormat = "A verification code was sent to player {0}.";
+        private const string DailyLockLogFormat =
+            "The account of player {0} was locked for the day after wrong passwords.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
         private const string NullDependencyMessage = "A dependency of the login service cannot be null.";
-        private const string LockedLoginLogMessage = "Login attempt while the account is locked by wrong passwords.";
+        private const string LockedLoginLogFormat =
+            "Login attempt while the account of player {0} is locked by wrong passwords.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -140,7 +145,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (currentLock != LoginLock.None)
             {
-                result = RejectLocked(currentLock);
+                result = RejectLocked(player, currentLock);
             }
             else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
             {
@@ -162,12 +167,12 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (newLock == LoginLock.None)
             {
-                result = Reject(LoginStatus.InvalidCredentials, WrongPasswordLogMessage);
+                result = Reject(LoginStatus.InvalidCredentials, Describe(WrongPasswordLogFormat, player));
             }
             else
             {
                 NotifyDailyLock(player, culture, newLock);
-                result = RejectLocked(newLock);
+                result = RejectLocked(player, newLock);
             }
 
             return result;
@@ -177,13 +182,19 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (newLock == LoginLock.Daily)
             {
+                _logger.Warning(Describe(DailyLockLogFormat, player));
                 AccountLockedForTheDay?.Invoke(player, culture);
             }
         }
 
-        private LoginResult RejectLocked(LoginLock currentLock)
+        private static string Describe(string logFormat, Player player)
         {
-            return Reject(LockStatusMapper.ToStatus(currentLock), LockedLoginLogMessage);
+            return string.Format(CultureInfo.InvariantCulture, logFormat, player.Id);
+        }
+
+        private LoginResult RejectLocked(Player player, LoginLock currentLock)
+        {
+            return Reject(LockStatusMapper.ToStatus(currentLock), Describe(LockedLoginLogFormat, player));
         }
 
         private LoginResult CompleteLogin(Player player, CultureInfo culture)
@@ -201,6 +212,7 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else
             {
+                _logger.Info(Describe(LoggedInLogFormat, player));
                 result = new LoginResult(LoginStatus.LoggedIn, player, string.Empty);
             }
 
@@ -230,6 +242,11 @@ namespace YachtDice.Server.Logic.Authentication
             string challengeId = _verificationService.CreateChallenge();
             bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
+
+            if (isSent)
+            {
+                _logger.Info(Describe(CodeSentLogFormat, player));
+            }
 
             return new LoginResult(status, player, challengeId);
         }

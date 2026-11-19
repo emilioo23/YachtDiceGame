@@ -38,6 +38,8 @@ namespace YachtDice.Server.Services
         private const string CheckpointNotSavedLogMessage = "A game in progress could not be saved for a restart.";
         private const string GamesNotRestoredLogMessage = "The games in progress could not be restored.";
         private const string GamesRestoredLogFormat = "Games in progress restored after the restart: {0}.";
+        private const string StartedLogFormat = "The game of room {0} started with {1} players.";
+        private const string FinishedLogFormat = "The game of room {0} finished.";
         private const string NullDependencyMessage = "A dependency of the game coordinator cannot be null.";
 
         private readonly LogicGame.IGameManager _gameManager;
@@ -104,6 +106,7 @@ namespace YachtDice.Server.Services
             _savedGames.TryRemove(room.Code, out _);
             TrackGame(room, snapshot);
             SyncTimer(room.Code, snapshot);
+            _logger.Info(string.Format(CultureInfo.InvariantCulture, StartedLogFormat, room.Code, participants.Count));
         }
 
         /// <summary>
@@ -326,6 +329,8 @@ namespace YachtDice.Server.Services
 
             if (isFirstTime && _roomSettings.TryGetValue(roomCode, out LogicRooms.RoomSettings settings))
             {
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, FinishedLogFormat, roomCode));
+
                 try
                 {
                     _resultRecorder.Record(settings, snapshot);
