@@ -4372,6 +4372,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se inició sesión con passkey. Si todavía no tienes una, entra con tu contraseña y crea una en Ajustes > Seguridad..
+        /// </summary>
+        public static string Passkey_LoginNotCompleted {
+            get {
+                return ResourceManager.GetString("Passkey_LoginNotCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El servidor está ocupado. Intenta de nuevo en un momento..
         /// </summary>
         public static string Passkey_ErrorBusy {

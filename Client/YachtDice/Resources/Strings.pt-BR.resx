@@ -2508,6 +2508,9 @@
   <data name="Passkey_ErrorWindows" xml:space="preserve">
     <value>O Windows não conseguiu concluir a operação com a passkey.</value>
   </data>
+  <data name="Passkey_LoginNotCompleted" xml:space="preserve">
+    <value>O login com passkey não foi concluído. Se você ainda não tem uma, entre com sua senha e crie uma em Configurações > Segurança.</value>
+  </data>
   <data name="Passkey_ErrorBusy" xml:space="preserve">
     <value>O servidor está ocupado. Tente de novo em instantes.</value>
   </data>

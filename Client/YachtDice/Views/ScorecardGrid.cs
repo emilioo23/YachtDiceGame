@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Settings;
 using YachtDice.GameServiceReference;
 using YachtDice.Models;
 using YachtDice.Resources;
@@ -38,22 +39,26 @@ namespace YachtDice.Views
         private const string ResourceBrushWood = "BrushWood";
         private const string NullPanelMessage = "The panel where it is drawn cannot be null.";
         private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
+        private const string NullGameplayMessage = "The choices of the player about the help cannot be null.";
         private const string NullStateMessage = "The state of the game cannot be null.";
         private const string NullColumnsMessage = "The players of the columns cannot be null.";
         private const string NullOnClickMessage = "The action of the click cannot be null.";
 
         private readonly Panel _panel;
         private readonly FrameworkElement _resources;
+        private readonly GameplaySettings _gameplay;
 
         /// <summary>
         /// Initializes the scorecard inside a panel.
         /// </summary>
         /// <param name="panel">Panel that receives the rows.</param>
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
-        public ScorecardGrid(Panel panel, FrameworkElement resources)
+        /// <param name="gameplay">Choices of the player about the help while playing.</param>
+        public ScorecardGrid(Panel panel, FrameworkElement resources, GameplaySettings gameplay)
         {
             _panel = panel ?? throw new ArgumentNullException(nameof(panel), NullPanelMessage);
             _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullResourcesMessage);
+            _gameplay = gameplay ?? throw new ArgumentNullException(nameof(gameplay), NullGameplayMessage);
         }
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace YachtDice.Views
             ScoreChoice option = context.FindOption(category);
             bool isLocalPlayerTurn = player.IsLocalPlayer && context.IsLocalTurn;
             bool isOpenCell = text.Length == 0 && isLocalPlayerTurn;
-            bool canPreviewPoints = isOpenCell && option != null;
+            bool canPreviewPoints = isOpenCell && option != null && _gameplay.ShowPotentialPoints;
 
             if (canPreviewPoints)
             {

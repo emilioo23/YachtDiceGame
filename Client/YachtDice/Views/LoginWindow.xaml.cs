@@ -193,15 +193,17 @@ namespace YachtDice.Views
             try
             {
                 assertion = await Task.Run(() => _passkeys.GetAssertion(windowHandle, challenge));
+
+                // Windows also reports a cancel when the account has no passkey on this device or phone.
+                if (assertion == null)
+                {
+                    CustomDialogWindow.ShowMessage(this, Strings.Passkey_LoginNotCompleted);
+                }
             }
             catch (PasskeyException ex)
             {
-                // A player who closes the Windows dialog is not an error, so nothing is shown.
-                if (!ex.IsCancelled)
-                {
-                    _logger.Error(ex, PasskeyFailedLogMessage);
-                    CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
-                }
+                _logger.Error(ex, PasskeyFailedLogMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
             }
 
             return assertion;

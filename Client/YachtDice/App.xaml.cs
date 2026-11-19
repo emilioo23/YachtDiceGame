@@ -139,6 +139,7 @@ namespace YachtDice
             _services.Audio.SetEffectsEnabled(preferences.AreEffectsEnabled);
             _services.Audio.SetMusicMuted(preferences.IsMusicMuted);
             _services.Audio.SetMusicVolume(preferences.MusicVolume);
+            _services.Gameplay.SetShowPotentialPoints(preferences.ShowPotentialPoints);
         }
 
         private UserPreferences CreateCurrentPreferences()
@@ -149,7 +150,8 @@ namespace YachtDice
                 IsDarkTheme = IsDarkTheme,
                 AreEffectsEnabled = _services.Audio.AreEffectsEnabled,
                 IsMusicMuted = _services.Audio.IsMusicMuted,
-                MusicVolume = _services.Audio.MusicVolume
+                MusicVolume = _services.Audio.MusicVolume,
+                ShowPotentialPoints = _services.Gameplay.ShowPotentialPoints
             };
         }
 

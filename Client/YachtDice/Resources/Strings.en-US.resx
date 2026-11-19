@@ -2508,6 +2508,9 @@
   <data name="Passkey_ErrorWindows" xml:space="preserve">
     <value>Windows could not complete the passkey operation.</value>
   </data>
+  <data name="Passkey_LoginNotCompleted" xml:space="preserve">
+    <value>You were not logged in with a passkey. If you do not have one yet, log in with your password and create one in Settings > Security.</value>
+  </data>
   <data name="Passkey_ErrorBusy" xml:space="preserve">
     <value>The server is busy. Try again in a moment.</value>
   </data>

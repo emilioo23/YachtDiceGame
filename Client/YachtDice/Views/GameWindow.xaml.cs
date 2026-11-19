@@ -85,7 +85,7 @@ namespace YachtDice.Views
             _connectionRecovery = new GameConnectionRecovery(roomGateway, chat, _gameGateway);
             _recoverConnection = RecoverConnectionAsync;
             _diceBoard = new DiceBoard(DiceCanvas, this);
-            _scorecard = new ScorecardGrid(CategoriesPanel, this);
+            _scorecard = new ScorecardGrid(CategoriesPanel, this, _services.Gameplay);
             _celebration = new YachtCelebration(CelebrationCanvas, this);
             _diceBoard.DieClicked += HandleDieClick;
 

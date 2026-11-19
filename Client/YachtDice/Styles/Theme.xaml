@@ -129,6 +129,10 @@
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushCream2}"/>
                             <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushWood}"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

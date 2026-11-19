@@ -6,7 +6,7 @@ namespace YachtDice.Utils
 {
     /// <summary>
     /// Reads and saves the preferences of the player in the user settings of Windows, so the language, the
-    /// theme and the audio stay the same the next time the game opens. If the settings file is damaged, the
+    /// theme, the audio and the help while playing stay the same the next time the game opens. If the settings file is damaged, the
     /// error is only written to the log and the game uses the default preferences: the player does not need
     /// to know, because the game works the same and the next save writes a good file.
     /// </summary>
@@ -35,7 +35,8 @@ namespace YachtDice.Utils
                     IsDarkTheme = saved.IsDarkTheme,
                     AreEffectsEnabled = saved.AreEffectsEnabled,
                     IsMusicMuted = saved.IsMusicMuted,
-                    MusicVolume = saved.MusicVolume
+                    MusicVolume = saved.MusicVolume,
+                    ShowPotentialPoints = saved.ShowPotentialPoints
                 };
             }
             catch (ConfigurationErrorsException ex)
@@ -61,6 +62,7 @@ namespace YachtDice.Utils
                 saved.AreEffectsEnabled = preferences.AreEffectsEnabled;
                 saved.IsMusicMuted = preferences.IsMusicMuted;
                 saved.MusicVolume = preferences.MusicVolume;
+                saved.ShowPotentialPoints = preferences.ShowPotentialPoints;
                 saved.Save();
             }
             catch (ConfigurationErrorsException ex)

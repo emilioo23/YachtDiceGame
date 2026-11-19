@@ -2508,6 +2508,9 @@
   <data name="Passkey_ErrorWindows" xml:space="preserve">
     <value>Windows 无法完成通行密钥操作。</value>
   </data>
+  <data name="Passkey_LoginNotCompleted" xml:space="preserve">
+    <value>未能使用通行密钥登录。如果你还没有通行密钥，请先用密码登录，然后在“设置 > 安全”中创建。</value>
+  </data>
   <data name="Passkey_ErrorBusy" xml:space="preserve">
     <value>服务器正忙，请稍后再试。</value>
   </data>

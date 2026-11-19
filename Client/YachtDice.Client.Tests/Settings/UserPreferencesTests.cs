@@ -76,6 +76,18 @@ namespace YachtDice.Client.Tests.Settings
         }
 
         [Fact]
+        public void Normalize_PotentialPointsTurnedOff_KeepsTheChoice()
+        {
+            var preferences = new UserPreferences { ShowPotentialPoints = false };
+
+            UserPreferences normalized = preferences.Normalize();
+
+            bool showPotentialPointsResult = normalized.ShowPotentialPoints;
+
+            Assert.False(showPotentialPointsResult);
+        }
+
+        [Fact]
         public void Normalize_ChosenThemeAndAudio_KeepsTheChoices()
         {
             var preferences = new UserPreferences

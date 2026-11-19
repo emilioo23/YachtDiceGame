@@ -11,17 +11,9 @@ namespace YachtDice.Passkeys
         /// Initializes the exception.
         /// </summary>
         /// <param name="message">What failed.</param>
-        /// <param name="isCancelled">True if the player closed the Windows dialog or the time ran out.</param>
-        public PasskeyException(string message, bool isCancelled)
+        public PasskeyException(string message)
             : base(message)
         {
-            IsCancelled = isCancelled;
         }
-
-        /// <summary>
-        /// Gets a value that says whether the player cancelled the operation. It is not an error, so no message
-        /// is shown to the player.
-        /// </summary>
-        public bool IsCancelled { get; }
     }
 }

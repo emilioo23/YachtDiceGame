@@ -52,8 +52,8 @@ namespace YachtDice.Passkeys
         /// </summary>
         /// <param name="windowHandle">Window that owns the Windows dialog.</param>
         /// <param name="challenge">Challenge and data of the player that the server gave.</param>
-        /// <returns>The answer that the server verifies.</returns>
-        /// <exception cref="PasskeyException">Windows failed or the player cancelled.</exception>
+        /// <returns>The answer that the server verifies, or null if the player cancelled.</returns>
+        /// <exception cref="PasskeyException">Windows failed.</exception>
         public PasskeyAttestationData CreateCredential(IntPtr windowHandle, PasskeyChallengeData challenge)
         {
             if (challenge == null)
@@ -63,6 +63,7 @@ namespace YachtDice.Passkeys
 
             byte[] clientDataJson = PasskeyClientData.Create(PasskeyRules.CreateClientDataType, challenge.Challenge);
             IntPtr attestationPointer;
+            PasskeyAttestationData attestation = null;
             int result;
 
             using (var scope = new NativeScope())
@@ -83,7 +84,13 @@ namespace YachtDice.Passkeys
                     out attestationPointer);
             }
 
-            return ReadAttestation(result, attestationPointer, new Ceremony(challenge.ChallengeId, clientDataJson));
+            if (!IsCancelled(result))
+            {
+                var ceremony = new Ceremony(challenge.ChallengeId, clientDataJson);
+                attestation = ReadAttestation(result, attestationPointer, ceremony);
+            }
+
+            return attestation;
         }
 
         /// <summary>
@@ -91,8 +98,8 @@ namespace YachtDice.Passkeys
         /// </summary>
         /// <param name="windowHandle">Window that owns the Windows dialog.</param>
         /// <param name="challenge">Challenge that the server gave.</param>
-        /// <returns>The answer that the server verifies.</returns>
-        /// <exception cref="PasskeyException">Windows failed or the player cancelled.</exception>
+        /// <returns>The answer that the server verifies, or null if the player cancelled.</returns>
+        /// <exception cref="PasskeyException">Windows failed.</exception>
         public PasskeyAssertionData GetAssertion(IntPtr windowHandle, PasskeyChallengeData challenge)
         {
             if (challenge == null)
@@ -102,6 +109,7 @@ namespace YachtDice.Passkeys
 
             byte[] clientDataJson = PasskeyClientData.Create(PasskeyRules.GetClientDataType, challenge.Challenge);
             IntPtr assertionPointer;
+            PasskeyAssertionData assertion = null;
             int result;
 
             using (var scope = new NativeScope())
@@ -117,7 +125,13 @@ namespace YachtDice.Passkeys
                     out assertionPointer);
             }
 
-            return ReadAssertion(result, assertionPointer, new Ceremony(challenge.ChallengeId, clientDataJson));
+            if (!IsCancelled(result))
+            {
+                var ceremony = new Ceremony(challenge.ChallengeId, clientDataJson);
+                assertion = ReadAssertion(result, assertionPointer, ceremony);
+            }
+
+            return assertion;
         }
 
         private static RelyingPartyInfo BuildRelyingParty(NativeScope scope)
@@ -257,18 +271,21 @@ namespace YachtDice.Passkeys
             }
         }
 
+        private static bool IsCancelled(int result)
+        {
+            return result == CancelledByUser || result == CancelledByWindows || result == TimedOut;
+        }
+
         private static void ThrowIfFailed(int result, IntPtr pointer)
         {
             if (result < 0)
             {
-                bool isCancelled = result == CancelledByUser || result == CancelledByWindows || result == TimedOut;
-
-                throw new PasskeyException(string.Format(CallFailedMessage, result), isCancelled);
+                throw new PasskeyException(string.Format(CallFailedMessage, result));
             }
 
             if (pointer == IntPtr.Zero)
             {
-                throw new PasskeyException(NoAnswerMessage, false);
+                throw new PasskeyException(NoAnswerMessage);
             }
         }
 
@@ -288,7 +305,7 @@ namespace YachtDice.Passkeys
         {
             if (!Base64Url.TryDecode(text, out byte[] data))
             {
-                throw new PasskeyException(InvalidBase64Message, false);
+                throw new PasskeyException(InvalidBase64Message);
             }
 
             return data;

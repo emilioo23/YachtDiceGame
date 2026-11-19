@@ -4,9 +4,9 @@ using YachtDice.Client.Logic.Audio;
 namespace YachtDice.Client.Logic.Settings
 {
     /// <summary>
-    /// Choices of the player that the game keeps between one session and the next: the language, the theme
-    /// and the audio. The values come from a file that the player could edit, so they are checked before they
-    /// are used.
+    /// Choices of the player that the game keeps between one session and the next: the language, the theme,
+    /// the audio and the help while playing. The values come from a file that the player could edit, so they
+    /// are checked before they are used.
     /// </summary>
     public sealed class UserPreferences
     {
@@ -36,6 +36,11 @@ namespace YachtDice.Client.Logic.Settings
         public int MusicVolume { get; set; } = AudioSettings.DefaultMusicVolume;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the points of each category are shown before scoring.
+        /// </summary>
+        public bool ShowPotentialPoints { get; set; } = true;
+
+        /// <summary>
         /// Creates a copy that the game can use as it is: a language that the game does not have is changed
         /// for the default one and the volume is kept between its limits.
         /// </summary>
@@ -52,7 +57,8 @@ namespace YachtDice.Client.Logic.Settings
                 IsDarkTheme = IsDarkTheme,
                 AreEffectsEnabled = AreEffectsEnabled,
                 IsMusicMuted = IsMusicMuted,
-                MusicVolume = Math.Max(AudioSettings.MinVolume, Math.Min(AudioSettings.MaxVolume, MusicVolume))
+                MusicVolume = Math.Max(AudioSettings.MinVolume, Math.Min(AudioSettings.MaxVolume, MusicVolume)),
+                ShowPotentialPoints = ShowPotentialPoints
             };
         }
     }

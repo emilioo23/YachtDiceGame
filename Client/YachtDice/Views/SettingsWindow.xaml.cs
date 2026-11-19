@@ -74,18 +74,35 @@ namespace YachtDice.Views
             ApplyDarkThemeToggleVisual(App.IsDarkTheme);
             ApplyToggleVisual(SoundsToggle, SoundsToggleKnob, _audio.AreEffectsEnabled);
             ApplyToggleVisual(MusicToggle, MusicToggleKnob, !_audio.IsMusicMuted);
+            ApplyToggleVisual(
+                PotentialPointsToggle,
+                PotentialPointsToggleKnob,
+                session.Services.Gameplay.ShowPotentialPoints);
             MusicVolumeSlider.Value = _audio.MusicVolume;
 
             ShowSection(initialSection);
             _isInitializing = false;
 
-            _ = LoadTwoFactorStateAsync();
-
-            if (!session.IsGuest)
+            if (session.IsGuest)
             {
+                ApplyGuestRestrictions();
+            }
+            else
+            {
+                _ = LoadTwoFactorStateAsync();
                 _ = LoadSecuritySummaryAsync();
                 _ = LoadPasskeysAsync();
             }
+        }
+
+        private void ApplyGuestRestrictions()
+        {
+            // A guest has no account on the server, so the sections that change account data stay off.
+            SecurityNavButton.IsEnabled = false;
+            PrivacyNavButton.IsEnabled = false;
+            ChangeUsernameButton.IsEnabled = false;
+            ChangeEmailButton.IsEnabled = false;
+            EditProfileButton.IsEnabled = false;
         }
 
         private void ShowSection(string sectionName)
@@ -276,12 +293,8 @@ namespace YachtDice.Views
             }
             catch (PasskeyException ex)
             {
-                // A player who closes the Windows dialog is not an error, so nothing is shown.
-                if (!ex.IsCancelled)
-                {
-                    _logger.Error(ex, PasskeyFailedLogMessage);
-                    CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
-                }
+                _logger.Error(ex, PasskeyFailedLogMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
             }
 
             return attestation;
@@ -535,6 +548,14 @@ namespace YachtDice.Views
         {
             _audio.SetMusicMuted(!_audio.IsMusicMuted);
             ApplyToggleVisual(MusicToggle, MusicToggleKnob, !_audio.IsMusicMuted);
+        }
+
+        private void PotentialPointsToggle_Click(object sender, MouseButtonEventArgs e)
+        {
+            GameplaySettings gameplay = _session.Services.Gameplay;
+
+            gameplay.SetShowPotentialPoints(!gameplay.ShowPotentialPoints);
+            ApplyToggleVisual(PotentialPointsToggle, PotentialPointsToggleKnob, gameplay.ShowPotentialPoints);
         }
 
         private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

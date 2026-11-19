@@ -1,5 +1,6 @@
 ﻿using System;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Settings;
 using YachtDice.Navigation;
 using YachtDice.Utils;
 
@@ -24,6 +25,7 @@ namespace YachtDice.Composition
         {
             Audio = audio ?? throw new ArgumentNullException(nameof(audio), NullDependencyMessage);
             Music = music ?? throw new ArgumentNullException(nameof(music), NullDependencyMessage);
+            Gameplay = new GameplaySettings();
             ConnectionLoss = new ConnectionLossHandler(this);
         }
 
@@ -31,6 +33,11 @@ namespace YachtDice.Composition
         /// Gets what the player chose about the sound effects and the music.
         /// </summary>
         public AudioSettings Audio { get; }
+
+        /// <summary>
+        /// Gets what the player chose about the help that the game gives while playing.
+        /// </summary>
+        public GameplaySettings Gameplay { get; }
 
         /// <summary>
         /// Gets the player of the background music, which keeps playing while the windows change.
