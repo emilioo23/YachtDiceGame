@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using YachtDice.Client.Logic.Passkeys;
 using YachtDice.TwoFactorManagementServiceReference;
+using YachtDice.Utils;
 using static YachtDice.Passkeys.WebAuthnNative;
 
 namespace YachtDice.Passkeys
@@ -22,6 +23,17 @@ namespace YachtDice.Passkeys
         private const string InvalidBase64Message = "The server sent a value that is not valid base64url.";
         private const string CallFailedMessage = "Windows could not complete the passkey operation. HRESULT: 0x{0:X8}.";
         private const string NoAnswerMessage = "Windows did not return the answer of the passkey operation.";
+        private const string UnavailableLogMessage = "This Windows does not have the passkey API, so passkeys are off.";
+
+        private readonly AppLogger _logger;
+
+        /// <summary>
+        /// Initializes the authenticator with its own logger.
+        /// </summary>
+        public WindowsPasskeyAuthenticator()
+        {
+            _logger = new AppLogger(GetType());
+        }
 
         /// <summary>
         /// Says whether this Windows has the WebAuthn API.
@@ -35,12 +47,14 @@ namespace YachtDice.Passkeys
             {
                 isAvailable = WebAuthNGetApiVersionNumber() >= StructureVersion;
             }
-            catch (DllNotFoundException)
+            catch (DllNotFoundException ex)
             {
+                _logger.Warning(ex, UnavailableLogMessage);
                 isAvailable = false;
             }
-            catch (EntryPointNotFoundException)
+            catch (EntryPointNotFoundException ex)
             {
+                _logger.Warning(ex, UnavailableLogMessage);
                 isAvailable = false;
             }
 
