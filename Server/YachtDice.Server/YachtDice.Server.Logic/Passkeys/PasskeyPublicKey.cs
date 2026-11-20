@@ -84,9 +84,14 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (signedData != null && signature != null)
             {
-                isValid = _algorithm == PasskeyRules.EcdsaAlgorithm
-                    ? VerifyEcdsa(signedData, signature)
-                    : VerifyRsa(signedData, signature);
+                if (_algorithm == PasskeyRules.EcdsaAlgorithm)
+                {
+                    isValid = VerifyEcdsa(signedData, signature);
+                }
+                else
+                {
+                    isValid = VerifyRsa(signedData, signature);
+                }
             }
 
             return isValid;

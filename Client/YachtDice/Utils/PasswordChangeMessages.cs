@@ -15,7 +15,7 @@ namespace YachtDice.Utils
         /// <returns>The text to show to the player.</returns>
         public static string GetMessage(PasswordChangeResultCode resultCode)
         {
-            string message = Strings.Dialogs_UnexpectedError;
+            string message;
 
             switch (resultCode)
             {
@@ -33,6 +33,9 @@ namespace YachtDice.Utils
                     break;
                 case PasswordChangeResultCode.TooManyAttempts:
                     message = Strings.Auth_ErrorTemporarilyLocked;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
                     break;
             }
 

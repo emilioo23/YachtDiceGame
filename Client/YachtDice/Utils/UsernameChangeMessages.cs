@@ -15,7 +15,7 @@ namespace YachtDice.Utils
         /// <returns>The text to show to the player.</returns>
         public static string GetMessage(UsernameChangeResultCode resultCode)
         {
-            string message = Strings.Profile_UsernameSaveError;
+            string message;
 
             switch (resultCode)
             {
@@ -30,6 +30,9 @@ namespace YachtDice.Utils
                     break;
                 case UsernameChangeResultCode.ChangedRecently:
                     message = Strings.Profile_UsernameChangedRecently;
+                    break;
+                default:
+                    message = Strings.Profile_UsernameSaveError;
                     break;
             }
 

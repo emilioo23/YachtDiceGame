@@ -23,6 +23,7 @@ namespace YachtDice.Server.Logic.Passkeys
         private const int EightBytesLength = 27;
         private const int MajorUnsigned = 0;
         private const int MajorNegative = 1;
+        private const long NegativeBase = -1;
         private const int MajorBytes = 2;
         private const int MajorText = 3;
         private const int MajorArray = 4;
@@ -51,10 +52,7 @@ namespace YachtDice.Server.Logic.Passkeys
         /// <summary>
         /// Number of bytes read so far.
         /// </summary>
-        public int Position
-        {
-            get { return _position; }
-        }
+        public int Position => _position;
 
         /// <summary>
         /// Reads the next item. Integers are long, byte strings are byte[], texts are string, arrays are
@@ -85,7 +83,7 @@ namespace YachtDice.Server.Logic.Passkeys
                     item = ReadArgument(additional);
                     break;
                 case MajorNegative:
-                    item = -1 - ReadArgument(additional);
+                    item = NegativeBase - ReadArgument(additional);
                     break;
                 case MajorBytes:
                     item = ReadBytes(ReadLength(additional));
@@ -225,16 +223,26 @@ namespace YachtDice.Server.Logic.Passkeys
 
             var map = new Dictionary<object, object>();
 
-            for (int index = 0; index < count; index++)
+            int index = 0;
+            bool hasInvalidKey = false;
+
+            while (index < count && !hasInvalidKey)
             {
                 object key = ReadItem(depth + 1);
 
-                if (key == null)
+                hasInvalidKey = key == null;
+
+                if (!hasInvalidKey)
                 {
-                    throw new FormatException(InvalidDataMessage);
+                    map[key] = ReadItem(depth + 1);
                 }
 
-                map[key] = ReadItem(depth + 1);
+                index++;
+            }
+
+            if (hasInvalidKey)
+            {
+                throw new FormatException(InvalidDataMessage);
             }
 
             return map;

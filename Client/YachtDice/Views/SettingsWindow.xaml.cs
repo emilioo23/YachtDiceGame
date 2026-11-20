@@ -97,7 +97,6 @@ namespace YachtDice.Views
 
         private void ApplyGuestRestrictions()
         {
-            // A guest has no account on the server, so the sections that change account data stay off.
             SecurityNavButton.IsEnabled = false;
             PrivacyNavButton.IsEnabled = false;
             ChangeUsernameButton.IsEnabled = false;
@@ -184,10 +183,14 @@ namespace YachtDice.Views
         {
             bool isAvailable = _passkeys.IsAvailable();
             bool hasPasskeys = passkeys.Length > 0;
+            string statusText = Strings.Passkey_ErrorUnavailable;
 
-            PasskeysStatusTextBlock.Text = isAvailable
-                ? BuildPasskeysCountText(passkeys.Length)
-                : Strings.Passkey_ErrorUnavailable;
+            if (isAvailable)
+            {
+                statusText = BuildPasskeysCountText(passkeys.Length);
+            }
+
+            PasskeysStatusTextBlock.Text = statusText;
             AddPasskeyButton.IsEnabled = isAvailable;
             PasskeysComboBox.ItemsSource = passkeys;
             PasskeysComboBox.SelectedIndex = hasPasskeys ? FirstItem : NoSelection;
@@ -196,9 +199,12 @@ namespace YachtDice.Views
 
         private static string BuildPasskeysCountText(int passkeysCount)
         {
-            string text = passkeysCount == SinglePasskey
-                ? Strings.Settings_Security_PasskeysCountSingle
-                : string.Format(Strings.Settings_Security_PasskeysCount, passkeysCount);
+            string text = Strings.Settings_Security_PasskeysCountSingle;
+
+            if (passkeysCount != SinglePasskey)
+            {
+                text = string.Format(Strings.Settings_Security_PasskeysCount, passkeysCount);
+            }
 
             return text;
         }
@@ -663,7 +669,7 @@ namespace YachtDice.Views
 
         private static string GetPasswordInputMessage(PasswordChangeStatus status)
         {
-            string message = Strings.Dialogs_UnexpectedError;
+            string message;
 
             switch (status)
             {
@@ -675,6 +681,9 @@ namespace YachtDice.Views
                     break;
                 case PasswordChangeStatus.PasswordsDoNotMatch:
                     message = Strings.ResetPassword_ErrorPasswordsDoNotMatch;
+                    break;
+                default:
+                    message = Strings.Dialogs_UnexpectedError;
                     break;
             }
 

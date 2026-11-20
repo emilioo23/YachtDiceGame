@@ -242,13 +242,15 @@ namespace YachtDice.Passkeys
 
         private static PasskeyAttestationData ReadAttestation(int result, IntPtr pointer, Ceremony ceremony)
         {
+            PasskeyAttestationData attestation;
+
             ThrowIfFailed(result, pointer);
 
             try
             {
                 var native = (AttestationResult)Marshal.PtrToStructure(pointer, typeof(AttestationResult));
 
-                return new PasskeyAttestationData
+                attestation = new PasskeyAttestationData
                 {
                     ChallengeId = ceremony.ChallengeId,
                     ClientDataJson = Base64Url.Encode(ceremony.ClientDataJson),
@@ -260,6 +262,8 @@ namespace YachtDice.Passkeys
             {
                 WebAuthNFreeCredentialAttestation(pointer);
             }
+
+            return attestation;
         }
 
         private static int ReadTransport(IntPtr pointer, uint version)
@@ -280,13 +284,15 @@ namespace YachtDice.Passkeys
 
         private static PasskeyAssertionData ReadAssertion(int result, IntPtr pointer, Ceremony ceremony)
         {
+            PasskeyAssertionData assertion;
+
             ThrowIfFailed(result, pointer);
 
             try
             {
                 var native = (AssertionResult)Marshal.PtrToStructure(pointer, typeof(AssertionResult));
 
-                return new PasskeyAssertionData
+                assertion = new PasskeyAssertionData
                 {
                     ChallengeId = ceremony.ChallengeId,
                     CredentialId = ToText(native.Credential.Id, native.Credential.IdSize),
@@ -300,6 +306,8 @@ namespace YachtDice.Passkeys
             {
                 WebAuthNFreeAssertion(pointer);
             }
+
+            return assertion;
         }
 
         private static bool IsCancelled(int result)

@@ -103,7 +103,14 @@ namespace YachtDice.Views
 
             for (var index = 0; index < FaceCount; index++)
             {
-                _faces[index].Material = isBlank ? _materials.Blank : _materials.GetFace(index + FirstFace);
+                Material material = _materials.Blank;
+
+                if (!isBlank)
+                {
+                    material = _materials.GetFace(index + FirstFace);
+                }
+
+                _faces[index].Material = material;
             }
 
             _faceUp.Axis = new Vector3D(faceUp.Axis.X, faceUp.Axis.Y, faceUp.Axis.Z);
