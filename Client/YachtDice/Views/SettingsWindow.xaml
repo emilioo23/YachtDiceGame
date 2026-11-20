@@ -215,7 +215,7 @@
                                         Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Left"
                                         Margin="3,0,0,0"/>
 
@@ -519,7 +519,7 @@
                                 <Border Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Right"
                                         Margin="0,0,3,0"/>
 
@@ -561,7 +561,7 @@
                                         Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Right"
                                         Margin="0,0,3,0"/>
 
@@ -599,7 +599,7 @@
                                         Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Right"
                                         Margin="0,0,3,0"/>
 
@@ -694,7 +694,7 @@
                                         Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Right"
                                         Margin="0,0,3,0"/>
 
@@ -733,7 +733,7 @@
                                 <Border Width="18"
                                         Height="18"
                                         CornerRadius="9"
-                                        Background="White"
+                                        Background="{DynamicResource BrushWhite}"
                                         HorizontalAlignment="Right"
                                         Margin="0,0,3,0"/>
 

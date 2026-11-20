@@ -142,7 +142,7 @@
                                                 <TextBlock Text="{Binding Number}"
                                                            FontWeight="Bold"
                                                            FontSize="15"
-                                                           Foreground="White"
+                                                           Foreground="{DynamicResource BrushWhite}"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
                                             </Border>

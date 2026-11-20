@@ -126,7 +126,7 @@
                         VerticalAlignment="Center">
 
                     <TextBlock x:Name="UnreadCountTextBlock"
-                               Foreground="White"
+                               Foreground="{DynamicResource BrushWhite}"
                                FontSize="12"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"/>

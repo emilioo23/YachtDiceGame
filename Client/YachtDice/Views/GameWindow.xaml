@@ -74,7 +74,7 @@
                         <Grid>
                             <TextBlock
                                 x:Name="TurnTextBlock"
-                                Foreground="White"
+                                Foreground="{DynamicResource BrushWhite}"
                                 FontWeight="Bold"
                                 FontSize="17"
                                 VerticalAlignment="Center"/>

@@ -74,7 +74,7 @@
                                             Margin="0,0,10,0">
 
                                         <TextBlock Text="{Binding Initial}"
-                                                   Foreground="White"
+                                                   Foreground="{DynamicResource BrushWhite}"
                                                    FontWeight="Bold"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>

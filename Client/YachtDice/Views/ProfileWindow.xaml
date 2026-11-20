@@ -160,7 +160,7 @@
                                                 StringFormat={x:Static properties:Strings.Profile_AvatarLockedBadge}}"
                                                        FontSize="11"
                                                        FontWeight="Bold"
-                                                       Foreground="White"/>
+                                                       Foreground="{DynamicResource BrushWhite}"/>
                                         </Border>
                                     </Grid>
                                 </Border>
