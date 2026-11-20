@@ -266,9 +266,10 @@ namespace YachtDice.Server.Logic.Passkeys
 
         private PasskeyRemovalStatus DeletePasskeyOf(Player player, int passkeyId)
         {
+            Func<PasskeyRecord, bool> isPasskeyToRemove = key => key.Id == passkeyId;
             PasskeyRecord record = _passkeyRepository
                 .FindByPlayer(player.Id)
-                .FirstOrDefault(key => key.Id == passkeyId);
+                .FirstOrDefault(isPasskeyToRemove);
             PasskeyRemovalStatus status = PasskeyRemovalStatus.PasskeyNotFound;
 
             if (record != null)
@@ -305,9 +306,14 @@ namespace YachtDice.Server.Logic.Passkeys
             {
                 PendingChallenge pending = _challengeStore.Issue(PasskeyPurpose.Registration, player.Id);
 
-                challenge = pending == null
-                    ? new PasskeyChallenge(PasskeyStartStatus.Busy)
-                    : DescribeRegistration(player, pending, existing);
+                if (pending == null)
+                {
+                    challenge = new PasskeyChallenge(PasskeyStartStatus.Busy);
+                }
+                else
+                {
+                    challenge = DescribeRegistration(player, pending, existing);
+                }
             }
 
             return challenge;
@@ -398,13 +404,17 @@ namespace YachtDice.Server.Logic.Passkeys
         private static AuthenticatorData ReadAttestation(PasskeyAttestation attestation, PendingChallenge pending)
         {
             AuthenticatorData data = null;
+            byte[] clientData = null;
+            byte[] attestationObject = null;
+            AuthenticatorData parsed = null;
 
-            if (Base64Url.TryDecode(attestation.ClientDataJson, out byte[] clientData)
-                && Base64Url.TryDecode(attestation.AttestationObject, out byte[] attestationObject)
-                && ClientDataValidator.IsValid(clientData, PasskeyRules.CreateClientDataType, pending.Challenge)
-                && TryReadAuthenticatorData(attestationObject, out AuthenticatorData parsed)
-                && IsAcceptable(parsed)
-                && parsed.CredentialId != null)
+            bool isDecoded = Base64Url.TryDecode(attestation.ClientDataJson, out clientData)
+                && Base64Url.TryDecode(attestation.AttestationObject, out attestationObject);
+            bool isClientDataValid = isDecoded
+                && ClientDataValidator.IsValid(clientData, PasskeyRules.CreateClientDataType, pending.Challenge);
+            bool isReadable = isClientDataValid && TryReadAuthenticatorData(attestationObject, out parsed);
+
+            if (isReadable && IsAcceptable(parsed) && parsed.CredentialId != null)
             {
                 data = parsed;
             }
@@ -491,13 +501,19 @@ namespace YachtDice.Server.Logic.Passkeys
         private static ParsedAssertion ParseAssertion(PasskeyAssertion assertion, PendingChallenge pending)
         {
             ParsedAssertion parsed = null;
+            byte[] clientData = null;
+            byte[] authenticatorBytes = null;
+            byte[] signature = null;
+            AuthenticatorData data = null;
 
-            if (Base64Url.TryDecode(assertion.ClientDataJson, out byte[] clientData)
-                && Base64Url.TryDecode(assertion.AuthenticatorData, out byte[] authenticatorBytes)
-                && Base64Url.TryDecode(assertion.Signature, out byte[] signature)
-                && ClientDataValidator.IsValid(clientData, PasskeyRules.GetClientDataType, pending.Challenge)
-                && AuthenticatorData.TryParse(authenticatorBytes, out AuthenticatorData data)
-                && IsAcceptable(data))
+            bool isDecoded = Base64Url.TryDecode(assertion.ClientDataJson, out clientData)
+                && Base64Url.TryDecode(assertion.AuthenticatorData, out authenticatorBytes)
+                && Base64Url.TryDecode(assertion.Signature, out signature);
+            bool isClientDataValid = isDecoded
+                && ClientDataValidator.IsValid(clientData, PasskeyRules.GetClientDataType, pending.Challenge);
+            bool isReadable = isClientDataValid && AuthenticatorData.TryParse(authenticatorBytes, out data);
+
+            if (isReadable && IsAcceptable(data))
             {
                 parsed = new ParsedAssertion
                 {

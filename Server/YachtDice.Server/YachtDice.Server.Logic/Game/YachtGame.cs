@@ -23,6 +23,8 @@ namespace YachtDice.Server.Logic.Game
         private const int RoundOffset = 1;
         private const int LastPlayerCount = 1;
         private const int NoContenders = 0;
+        private const string NullParticipantsMessage = "The participants of the game cannot be null.";
+        private const string NullDieRollerMessage = "The roller of the dice cannot be null.";
 
         private readonly List<GamePlayer> _players;
         private readonly IDieRoller _dieRoller;
@@ -39,12 +41,13 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="participants">Players of the game, in the order of the turns.</param>
         /// <param name="dieRoller">Rolls the dice of the game.</param>
         /// <param name="turnSeconds">Seconds that a player has to play a turn.</param>
+        /// <exception cref="ArgumentNullException">The participants or the roller are null.</exception>
         public YachtGame(IEnumerable<GameParticipant> participants, IDieRoller dieRoller, int turnSeconds)
         {
-            _players = participants
+            _players = (participants ?? throw new ArgumentNullException(nameof(participants), NullParticipantsMessage))
                 .Select(participant => new GamePlayer(participant, new ScoreCard(_calculator)))
                 .ToList();
-            _dieRoller = dieRoller;
+            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller), NullDieRollerMessage);
             TurnSeconds = turnSeconds;
             TurnNumber = FirstTurnNumber;
             _turnIndex = NoPlayerIndex;

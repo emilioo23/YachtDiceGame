@@ -75,21 +75,21 @@ namespace YachtDice.Server.Logic.Game
             }
 
             RoomSettings settings;
-            bool mustSave;
+            bool shouldSave;
 
             lock (_syncRoot)
             {
-                mustSave = _trackedRooms.TryGetValue(roomCode, out settings)
+                shouldSave = _trackedRooms.TryGetValue(roomCode, out settings)
                     && snapshot.Version > _savedVersions[roomCode]
                     && snapshot.Status == GameStatus.InProgress;
 
-                if (mustSave)
+                if (shouldSave)
                 {
                     _savedVersions[roomCode] = snapshot.Version;
                 }
             }
 
-            if (mustSave)
+            if (shouldSave)
             {
                 _checkpointRepository.Save(CreateRecord(roomCode, settings, snapshot));
                 RemoveIfForgotten(roomCode);

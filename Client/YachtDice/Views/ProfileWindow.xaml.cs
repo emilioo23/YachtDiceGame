@@ -78,7 +78,6 @@ namespace YachtDice.Views
 
         private void LockEditing()
         {
-            // A guest has no account on the server, so nothing in the profile can be saved.
             UsernameTextBox.IsEnabled = false;
             AvatarOptionsItemsControl.IsEnabled = false;
             TitleComboBox.IsEnabled = false;
@@ -372,6 +371,8 @@ namespace YachtDice.Views
             bool hasNewUsername = newUsername != _session.DisplayName;
             bool hasNewTitle = GetSelectedTitleId() != _savedTitleId;
             bool hasNewFlag = GetSelectedFlagCode() != _savedFlagCode;
+            bool hasNewLook = hasNewAvatar || hasNewTitle;
+            bool hasNewLookOrFlag = hasNewLook || hasNewFlag;
 
             if (hasNewAvatar)
             {
@@ -385,18 +386,15 @@ namespace YachtDice.Views
 
             if (hasNewFlag)
             {
-                await SaveFlagAsync(hasNewAvatar || hasNewTitle);
+                await SaveFlagAsync(hasNewLook);
             }
 
             if (hasNewUsername)
             {
-                await SaveUsernameAsync(newUsername, hasNewAvatar || hasNewTitle || hasNewFlag);
+                await SaveUsernameAsync(newUsername, hasNewLookOrFlag);
             }
 
-            bool hasNoNewLook = !hasNewAvatar && !hasNewTitle;
-            bool hasNoNewIdentity = !hasNewFlag && !hasNewUsername;
-
-            if (hasNoNewLook && hasNoNewIdentity)
+            if (!hasNewLookOrFlag && !hasNewUsername)
             {
                 CustomDialogWindow.ShowMessage(this, Strings.Profile_SavedMessage);
             }

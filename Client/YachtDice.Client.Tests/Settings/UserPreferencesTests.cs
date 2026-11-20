@@ -82,9 +82,9 @@ namespace YachtDice.Client.Tests.Settings
 
             UserPreferences normalized = preferences.Normalize();
 
-            bool showPotentialPointsResult = normalized.ShowsPotentialPoints;
+            bool showsPotentialPointsResult = normalized.ShowsPotentialPoints;
 
-            Assert.False(showPotentialPointsResult);
+            Assert.False(showsPotentialPointsResult);
         }
 
         [Fact]
