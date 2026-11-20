@@ -13,6 +13,7 @@ namespace YachtDice.Server.Logic.Passkeys
         private const char UrlUnderscore = '_';
         private const char Padding = '=';
         private const int GroupSize = 4;
+        private const string NullDataMessage = "The bytes to encode cannot be null.";
 
         /// <summary>
         /// Writes the bytes as base64url without padding.
@@ -24,7 +25,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (data == null)
             {
-                throw new ArgumentNullException(nameof(data), "The bytes to encode cannot be null.");
+                throw new ArgumentNullException(nameof(data), NullDataMessage);
             }
 
             string text = Convert.ToBase64String(data)
