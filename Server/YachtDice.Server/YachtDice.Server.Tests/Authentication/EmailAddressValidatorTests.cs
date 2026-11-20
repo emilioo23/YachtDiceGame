@@ -9,6 +9,9 @@ namespace YachtDice.Server.Tests.Authentication
     /// </summary>
     public class EmailAddressValidatorTests
     {
+        private const string UniversityDomain = "@uv.mx";
+        private const string EmailWithSurroundingSpaces = " gabriel@gmail.com ";
+
         [Theory]
         [InlineData("gabriel@gmail.com")]
         [InlineData("emilio.alvarez@uv.mx")]
@@ -33,7 +36,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void IsValid_EmailLongerThanTheMaximum_ReturnsFalse()
         {
-            string longEmail = new string('a', CredentialRules.EmailMaxLength) + "@uv.mx";
+            string longEmail = new string('a', CredentialRules.EmailMaxLength) + UniversityDomain;
 
             Assert.False(EmailAddressValidator.IsValid(longEmail));
         }
@@ -41,7 +44,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void IsValid_EmailWithSpacesAround_ReturnsFalse()
         {
-            Assert.False(EmailAddressValidator.IsValid(" gabriel@gmail.com "));
+            Assert.False(EmailAddressValidator.IsValid(EmailWithSurroundingSpaces));
         }
     }
 }

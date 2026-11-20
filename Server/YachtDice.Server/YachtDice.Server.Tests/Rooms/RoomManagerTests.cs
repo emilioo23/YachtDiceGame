@@ -45,6 +45,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const int HostAvatarId = 3;
         private const int PlayerAvatarId = 7;
         private const string SavedRoomCode = "ABC234";
+        private const string BlankText = " ";
 
         private readonly InMemoryAvatarLookup _avatars = new InMemoryAvatarLookup();
         private readonly OffensiveWordFilter _wordFilter = new OffensiveWordFilter(new[] { OffensiveWord });
@@ -135,7 +136,7 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void CreateRoom_BlankName_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => _manager.CreateRoom(" "));
+            Assert.Throws<ArgumentException>(() => _manager.CreateRoom(BlankText));
         }
 
         [Fact]
@@ -210,7 +211,7 @@ namespace YachtDice.Server.Tests.Rooms
         public void Join_CodeInLowercaseWithSpaces_FindsTheRoom()
         {
             RoomResult host = _manager.CreateRoom(HostName);
-            string typedCode = " " + host.Room.Code.ToLowerInvariant() + " ";
+            string typedCode = BlankText + host.Room.Code.ToLowerInvariant() + BlankText;
 
             RoomResult player = _manager.Join(typedCode, PlayerName);
 
@@ -414,7 +415,7 @@ namespace YachtDice.Server.Tests.Rooms
         [Fact]
         public void FindPendingRoomCode_BlankName_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => _manager.FindPendingRoomCode(" "));
+            Assert.Throws<ArgumentException>(() => _manager.FindPendingRoomCode(BlankText));
         }
 
         [Fact]
@@ -905,7 +906,7 @@ namespace YachtDice.Server.Tests.Rooms
             CreatePublicRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            Assert.Throws<ArgumentException>(() => _manager.JoinListed(" ", CreateListedRoom(roomId, string.Empty)));
+            Assert.Throws<ArgumentException>(() => _manager.JoinListed(BlankText, CreateListedRoom(roomId, string.Empty)));
         }
 
         [Fact]

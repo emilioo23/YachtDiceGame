@@ -15,6 +15,11 @@ namespace YachtDice.Client.Tests.Settings
         private const string UnknownCulture = "fr-FR";
         private const int EnglishPosition = 1;
         private const int SpanishPosition = 0;
+        private const string BrazilFlag = "br";
+        private const string ChinaFlag = "cn";
+        private const string SpanishFlag = "es";
+        private const string PortugueseShortName = "PT";
+        private const string ChineseShortName = "ZH";
 
         [Fact]
         public void IsSupported_ChineseCulture_ReturnsTrue()
@@ -45,7 +50,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             string flag = LanguageCatalog.GetFlagCode(PortugueseCulture);
 
-            Assert.Equal("br", flag);
+            Assert.Equal(BrazilFlag, flag);
         }
 
         [Fact]
@@ -53,7 +58,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             string flag = LanguageCatalog.GetFlagCode(ChineseCulture);
 
-            Assert.Equal("cn", flag);
+            Assert.Equal(ChinaFlag, flag);
         }
 
         [Fact]
@@ -61,7 +66,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             string flag = LanguageCatalog.GetFlagCode(UnknownCulture);
 
-            Assert.Equal("es", flag);
+            Assert.Equal(SpanishFlag, flag);
         }
 
         [Fact]
@@ -69,7 +74,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             string name = LanguageCatalog.GetShortName(PortugueseCulture);
 
-            Assert.Equal("PT", name);
+            Assert.Equal(PortugueseShortName, name);
         }
 
         [Fact]
@@ -77,7 +82,7 @@ namespace YachtDice.Client.Tests.Settings
         {
             string name = LanguageCatalog.GetShortName(ChineseCulture);
 
-            Assert.Equal("ZH", name);
+            Assert.Equal(ChineseShortName, name);
         }
 
         [Fact]

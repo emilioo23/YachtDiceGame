@@ -16,12 +16,21 @@ namespace YachtDice.Client.Tests.Rooms
         private const string ThirdHost = "Carlos";
         private const string RoomName = "Los del salon 4";
         private const string RoomNameSearch = "salon";
+        private const string FirstRoomId = "1";
+        private const string SecondRoomId = "2";
+        private const string ThirdRoomId = "3";
+        private const string FourthRoomId = "4";
+        private const string PartialHostSearch = "gab";
+        private const string UppercaseHostSearch = "CARLOS";
+        private const string SpacedHostSearch = "  emilio  ";
+        private const string ExactHostSearch = "emilio";
+        private const string NoMatchSearch = "zzz";
 
         private readonly List<RoomListItem> _rooms = new List<RoomListItem>
         {
-            CreateRoom("1", FirstHost, false),
-            CreateRoom("2", SecondHost, true),
-            CreateRoom("3", ThirdHost, false)
+            CreateRoom(FirstRoomId, FirstHost, false),
+            CreateRoom(SecondRoomId, SecondHost, true),
+            CreateRoom(ThirdRoomId, ThirdHost, false)
         };
 
         [Fact]
@@ -29,9 +38,9 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("1", FirstHost, false),
-                CreateRoom("2", SecondHost, true),
-                CreateRoom("3", ThirdHost, false)
+                CreateRoom(FirstRoomId, FirstHost, false),
+                CreateRoom(SecondRoomId, SecondHost, true),
+                CreateRoom(ThirdRoomId, ThirdHost, false)
             };
 
             List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, NoSearch);
@@ -44,8 +53,8 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("1", FirstHost, false),
-                CreateRoom("3", ThirdHost, false)
+                CreateRoom(FirstRoomId, FirstHost, false),
+                CreateRoom(ThirdRoomId, ThirdHost, false)
             };
 
             List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Public, NoSearch);
@@ -58,7 +67,7 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("2", SecondHost, true)
+                CreateRoom(SecondRoomId, SecondHost, true)
             };
 
             List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, NoSearch);
@@ -71,10 +80,10 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("2", SecondHost, true)
+                CreateRoom(SecondRoomId, SecondHost, true)
             };
 
-            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "gab");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, PartialHostSearch);
 
             Assert.Equivalent(filteredRoomsExpected, filteredRooms, strict: true);
         }
@@ -82,7 +91,7 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_TextInTheNameOfTheRoom_KeepsThatRoom()
         {
-            RoomListItem namedRoom = CreateRoom("4", ThirdHost, false);
+            RoomListItem namedRoom = CreateRoom(FourthRoomId, ThirdHost, false);
             namedRoom.Title = RoomName;
             var rooms = new List<RoomListItem> { namedRoom };
 
@@ -97,10 +106,10 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("3", ThirdHost, false)
+                CreateRoom(ThirdRoomId, ThirdHost, false)
             };
 
-            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "CARLOS");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, UppercaseHostSearch);
 
             Assert.Equivalent(filteredRoomsExpected, filteredRooms, strict: true);
         }
@@ -110,10 +119,10 @@ namespace YachtDice.Client.Tests.Rooms
         {
             RoomListItem[] filteredRoomsExpected =
             {
-                CreateRoom("1", FirstHost, false)
+                CreateRoom(FirstRoomId, FirstHost, false)
             };
 
-            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "  emilio  ");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, SpacedHostSearch);
 
             Assert.Equivalent(filteredRoomsExpected, filteredRooms, strict: true);
         }
@@ -121,7 +130,7 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_PrivateFilterWithTextOfAPublicRoomHost_ReturnsAnEmptyList()
         {
-            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, "emilio");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.Private, ExactHostSearch);
 
             Assert.Empty(filteredRooms);
         }
@@ -129,7 +138,7 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_TextThatNobodyHas_ReturnsAnEmptyList()
         {
-            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, "zzz");
+            List<RoomListItem> filteredRooms = ApplyFilter(RoomPrivacyFilter.All, NoMatchSearch);
 
             Assert.Empty(filteredRooms);
         }

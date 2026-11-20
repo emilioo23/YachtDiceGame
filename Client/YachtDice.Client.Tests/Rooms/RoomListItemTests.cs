@@ -8,13 +8,22 @@ namespace YachtDice.Client.Tests.Rooms
     /// </summary>
     public class RoomListItemTests
     {
+        private const string FirstTypedCode = "AAAAAA";
+        private const string SecondTypedCode = "BBBBBB";
+        private const string OtherRoomId = "other";
+        private const string OtherDetails = "3/4";
+        private const string CreatedRoomId = "room";
+        private const string CreatedRoomTitle = "Sala de Emilio";
+        private const string CreatedRoomDetails = "2/4";
+        private const string CreatedRoomPrivacyText = "Publica";
+
         [Fact]
         public void HasSameContentAs_EqualRowsWithDifferentTypedCodes_ReturnsTrue()
         {
             RoomListItem first = CreateRoom();
             RoomListItem second = CreateRoom();
-            first.AccessCode = "AAAAAA";
-            second.AccessCode = "BBBBBB";
+            first.AccessCode = FirstTypedCode;
+            second.AccessCode = SecondTypedCode;
 
             Assert.True(first.HasSameContentAs(second));
         }
@@ -23,7 +32,7 @@ namespace YachtDice.Client.Tests.Rooms
         public void HasSameContentAs_DifferentRoomIdentifier_ReturnsFalse()
         {
             RoomListItem second = CreateRoom();
-            second.RoomId = "other";
+            second.RoomId = OtherRoomId;
 
             Assert.False(CreateRoom().HasSameContentAs(second));
         }
@@ -32,7 +41,7 @@ namespace YachtDice.Client.Tests.Rooms
         public void HasSameContentAs_DifferentDetails_ReturnsFalse()
         {
             RoomListItem second = CreateRoom();
-            second.Details = "3/4";
+            second.Details = OtherDetails;
 
             Assert.False(CreateRoom().HasSameContentAs(second));
         }
@@ -56,10 +65,10 @@ namespace YachtDice.Client.Tests.Rooms
         {
             return new RoomListItem
             {
-                RoomId = "room",
-                Title = "Sala de Emilio",
-                Details = "2/4",
-                PrivacyText = "Publica",
+                RoomId = CreatedRoomId,
+                Title = CreatedRoomTitle,
+                Details = CreatedRoomDetails,
+                PrivacyText = CreatedRoomPrivacyText,
                 HasSpace = true
             };
         }

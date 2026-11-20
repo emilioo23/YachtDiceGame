@@ -12,13 +12,15 @@ namespace YachtDice.Client.Tests.Utils
         private const int FirstWinAchievementId = 2;
         private const int DefaultTitleId = 0;
         private const int UnknownId = 9999;
+        private const string AchievementNameKey = "Achievement_2_Name";
+        private const string DefaultTitleKey = "Title_0";
 
         [Fact]
         public void GetAchievementName_ExistingAchievement_ReturnsItsName()
         {
             string name = ProgressTexts.GetAchievementName(FirstWinAchievementId);
 
-            Assert.Equal(Strings.ResourceManager.GetString("Achievement_2_Name", Strings.Culture), name);
+            Assert.Equal(Strings.ResourceManager.GetString(AchievementNameKey, Strings.Culture), name);
         }
 
         [Fact]
@@ -38,7 +40,7 @@ namespace YachtDice.Client.Tests.Utils
         {
             string title = ProgressTexts.GetTitleName(DefaultTitleId);
 
-            Assert.Equal(Strings.ResourceManager.GetString("Title_0", Strings.Culture), title);
+            Assert.Equal(Strings.ResourceManager.GetString(DefaultTitleKey, Strings.Culture), title);
         }
 
         [Fact]

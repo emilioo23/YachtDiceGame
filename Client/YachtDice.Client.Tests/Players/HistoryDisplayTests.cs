@@ -13,6 +13,7 @@ namespace YachtDice.Client.Tests.Players
         private const string ComputerText = "la computadora";
         private const string NoNames = "";
         private const string OnlySpaces = "   ";
+        private const string NameSeparator = ", ";
 
         [Fact]
         public void ChooseOpponents_NamesOfRegisteredRivals_ReturnsTheNames()
@@ -51,7 +52,7 @@ namespace YachtDice.Client.Tests.Players
         {
             string text = HistoryDisplay.AddComputer(OpponentNames, ComputerText);
 
-            Assert.Equal(OpponentNames + ", " + ComputerText, text);
+            Assert.Equal(OpponentNames + NameSeparator + ComputerText, text);
         }
 
         [Fact]

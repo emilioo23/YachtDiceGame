@@ -11,17 +11,23 @@ namespace YachtDice.Client.Tests.Players
         private const string Unknown = "?";
         private const string AccentedName = "álvaro";
         private const string AccentedInitial = "Á";
+        private const string LowercaseName = "emilio";
+        private const string LowercaseInitial = "E";
+        private const string SpacedName = "   gabriel";
+        private const string SpacedInitial = "G";
+        private const string NumberName = "7seas";
+        private const string NumberInitial = "7";
 
         [Fact]
         public void From_LowercaseName_ReturnsTheFirstLetterInUppercase()
         {
-            Assert.Equal("E", InitialLetter.From("emilio", Unknown));
+            Assert.Equal(LowercaseInitial, InitialLetter.From(LowercaseName, Unknown));
         }
 
         [Fact]
         public void From_NameWithSpacesAround_IgnoresTheSpaces()
         {
-            Assert.Equal("G", InitialLetter.From("   gabriel", Unknown));
+            Assert.Equal(SpacedInitial, InitialLetter.From(SpacedName, Unknown));
         }
 
         [Theory]
@@ -36,7 +42,7 @@ namespace YachtDice.Client.Tests.Players
         [Fact]
         public void From_NameThatStartsWithANumber_ReturnsThatNumber()
         {
-            Assert.Equal("7", InitialLetter.From("7seas", Unknown));
+            Assert.Equal(NumberInitial, InitialLetter.From(NumberName, Unknown));
         }
 
         [Fact]

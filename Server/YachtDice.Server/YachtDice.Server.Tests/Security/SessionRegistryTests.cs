@@ -13,6 +13,7 @@ namespace YachtDice.Server.Tests.Security
         private const string NewPlayerName = "gabriel_hm";
         private const string ChallengeId = "challenge-1";
         private const string UnknownToken = "token-inventado";
+        private const string BlankText = " ";
 
         private readonly SessionRegistry _sessions = new SessionRegistry();
 
@@ -153,7 +154,7 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Start_BlankName_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => _sessions.Start(" "));
+            Assert.Throws<ArgumentException>(() => _sessions.Start(BlankText));
         }
     }
 }

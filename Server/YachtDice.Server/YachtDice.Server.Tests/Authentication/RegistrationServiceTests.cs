@@ -36,6 +36,10 @@ namespace YachtDice.Server.Tests.Authentication
         private const int FiftyHours = 50;
         private const int TenHours = 10;
         private const int OneAccount = 1;
+        private const string LastNameWithNumber = "Hernandez3";
+        private const string FirstNameWithAccent = "José María";
+        private const string LastNameWithAccent = "O'Brien-Núñez";
+        private const string FirstNameWithNumber = "Gabriel2";
 
         private static readonly string UsernameAtTheLimit = new string(FillCharacter, UsernameMaxLength);
         private static readonly string TooLongUsername = new string(FillCharacter, UsernameMaxLength + 1);
@@ -246,7 +250,7 @@ namespace YachtDice.Server.Tests.Authentication
         public void RegisterPlayer_LastNameWithDigits_ReturnsInvalidName()
         {
             Player newPlayer = CreatePlayer(Username, Email);
-            newPlayer.LastName = "Hernandez3";
+            newPlayer.LastName = LastNameWithNumber;
 
             RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
@@ -257,8 +261,8 @@ namespace YachtDice.Server.Tests.Authentication
         public void RegisterPlayer_NamesWithAccentsAndSeparators_ReturnsSuccess()
         {
             Player newPlayer = CreatePlayer(Username, Email);
-            newPlayer.FirstName = "José María";
-            newPlayer.LastName = "O'Brien-Núñez";
+            newPlayer.FirstName = FirstNameWithAccent;
+            newPlayer.LastName = LastNameWithAccent;
 
             RegistrationResult registrationResult = _service.RegisterPlayer(newPlayer, Password);
 
@@ -269,7 +273,7 @@ namespace YachtDice.Server.Tests.Authentication
         public void RegisterPlayer_InvalidName_SavesNothing()
         {
             Player newPlayer = CreatePlayer(Username, Email);
-            newPlayer.FirstName = "Gabriel2";
+            newPlayer.FirstName = FirstNameWithNumber;
 
             _service.RegisterPlayer(newPlayer, Password);
 

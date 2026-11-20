@@ -26,6 +26,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const string DisplayName = "gabrielhernandez";
         private const string FirstName = "Gabriel";
         private const char FillCharacter = 'a';
+        private const string GmailDomain = "@gmail.com";
+        private const string SurroundingSpaces = "  ";
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
@@ -142,7 +144,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_EmailLongerThanTheMaximum_ReturnsInvalidEmail()
         {
-            string longEmail = new string(FillCharacter, CredentialRules.EmailMaxLength) + "@gmail.com";
+            string longEmail = new string(FillCharacter, CredentialRules.EmailMaxLength) + GmailDomain;
 
             LoginResult loginResult = _service.LoginPlayer(CreateCredentials(longEmail, Password));
 
@@ -175,7 +177,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_EmailWithSpacesAround_StillFindsThePlayer()
         {
-            LoginCredentials credentials = CreateCredentials("  " + Email + "  ", Password);
+            LoginCredentials credentials = CreateCredentials(SurroundingSpaces + Email + SurroundingSpaces, Password);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 
@@ -228,7 +230,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_UsernameWithSpacesAround_StillFindsThePlayer()
         {
-            LoginCredentials credentials = CreateCredentials("  " + Username + "  ", Password);
+            LoginCredentials credentials = CreateCredentials(SurroundingSpaces + Username + SurroundingSpaces, Password);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 

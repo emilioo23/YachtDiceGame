@@ -24,6 +24,7 @@ namespace YachtDice.Server.Tests.Security
         private const string UnknownAlgorithmHash = "md5$100000$c2FsdA==$a2V5";
         private const string BrokenBase64Hash = "pbkdf2-sha256$100000$***$***";
         private const string EmptyText = "";
+        private const string BlankText = " ";
 
         [Fact]
         public void Compute_SamePlayerAndCode_ReturnsTheSameHash()
@@ -93,7 +94,7 @@ namespace YachtDice.Server.Tests.Security
         {
             string trimmedCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, Code);
 
-            string spacedCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, " " + Code + " ");
+            string spacedCodeHash = PasswordHasher.ComputeResetCodeHash(FirstPlayerId, BlankText + Code + BlankText);
 
             Assert.NotEqual(trimmedCodeHash, spacedCodeHash);
         }
