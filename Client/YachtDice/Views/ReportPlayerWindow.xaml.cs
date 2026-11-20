@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using YachtDice.Client.Logic.Friends;
 using YachtDice.FriendServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -18,6 +17,7 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ReportPlayerWindow : Window
     {
+        private const int CommentMaxLength = 300;
         private const string NullSessionMessage = "The session of the player cannot be null.";
         private const string NullReportedNameMessage = "The name of the reported player cannot be null.";
 
@@ -39,7 +39,7 @@ namespace YachtDice.Views
                 ?? throw new ArgumentNullException(nameof(reportedName), NullReportedNameMessage);
 
             TitleTextBlock.Text = string.Format(Strings.Report_TitleFormat, reportedName);
-            CommentTextBox.MaxLength = ReportLimits.CommentMaxLength;
+            CommentTextBox.MaxLength = CommentMaxLength;
             ReasonComboBox.ItemsSource = CreateReasonOptions();
             ReasonComboBox.SelectedIndex = 0;
         }

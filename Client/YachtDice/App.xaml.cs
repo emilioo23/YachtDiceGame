@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using YachtDice.Client.Logic.Audio;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Composition;
 using YachtDice.Resources;
@@ -60,7 +61,11 @@ namespace YachtDice
             _logger.Info(StartedLogMessage);
             DispatcherUnhandledException += HandleDispatcherUnhandledException;
             TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
-            _provider = new ServiceCollection().AddClientComponents().BuildServiceProvider();
+            _provider = new ServiceCollection()
+                .AddSingleton<AudioSettings>()
+                .AddSingleton<MusicPlayer>()
+                .AddSingleton<ClientServices>()
+                .BuildServiceProvider();
             _services = _provider.GetRequiredService<ClientServices>();
             _clickSounds = new SoundEffectPlayer(_services.Audio);
             ApplyPreferences(_preferencesStore.Load());

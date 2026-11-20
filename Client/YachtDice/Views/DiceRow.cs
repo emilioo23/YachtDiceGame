@@ -14,6 +14,9 @@ namespace YachtDice.Views
         private const int DieSize = 40;
         private const int DieGap = 3;
         private const double DimmedOpacity = 0.3;
+        private const string DiceImagesFolder = "Resources/Dice";
+
+        private static readonly ImageCatalog DiceCatalog = new ImageCatalog(DiceImagesFolder);
 
         /// <summary>
         /// Property that holds the text that describes the dice of the row.
@@ -51,7 +54,9 @@ namespace YachtDice.Views
         {
             var image = new Image
             {
-                Source = DiceImages.Get(die.Value),
+                Source = DiceCatalog.Get(
+                    DieResourceKey.Create(die.Value),
+                    DieResourceKey.Create(DieResourceKey.DefaultValue)),
                 Width = DieSize,
                 Height = DieSize,
                 Margin = new Thickness(DieGap)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -230,7 +231,7 @@ namespace YachtDice.Server.Services
         {
             List<LogicPlayers.AchievementStatus> achievements = _profileService.GetAchievements(playerName);
 
-            return Mapping.AchievementMapper.ToContracts(achievements);
+            return achievements.Select(ToAchievementContract).ToList();
         }
 
         private Contracts.TitleChangeResultCode ProcessTitleChange(string playerName, int titleId)
@@ -244,7 +245,35 @@ namespace YachtDice.Server.Services
         {
             List<LogicPlayers.LeaderboardEntry> entries = _statisticsService.GetTopPlayers(displayName);
 
-            return Mapping.LeaderboardMapper.ToContracts(entries);
+            return entries.Select(ToLeaderboardContract).ToList();
+        }
+
+        private static Contracts.Achievement ToAchievementContract(LogicPlayers.AchievementStatus achievement)
+        {
+            var contract = new Contracts.Achievement
+            {
+                Id = achievement.Id,
+                IsUnlocked = achievement.IsUnlocked,
+                HasTitle = achievement.HasTitle
+            };
+
+            return contract;
+        }
+
+        private static Contracts.LeaderboardEntry ToLeaderboardContract(LogicPlayers.LeaderboardEntry entry)
+        {
+            var contract = new Contracts.LeaderboardEntry
+            {
+                Position = entry.Position,
+                DisplayName = entry.DisplayName,
+                AvatarId = entry.AvatarId,
+                TotalPoints = entry.TotalPoints,
+                Wins = entry.Wins,
+                GamesPlayed = entry.GamesPlayed,
+                Level = entry.Level
+            };
+
+            return contract;
         }
     }
 }
