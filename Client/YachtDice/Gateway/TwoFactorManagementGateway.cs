@@ -143,7 +143,8 @@ namespace YachtDice.Gateway
         /// <returns>The challenge and the data of the player for the authenticator.</returns>
         public async Task<PasskeyChallengeData> BeginPasskeyRegistrationAsync(string sessionToken)
         {
-            PasskeyChallengeData challenge = await ExecuteAsync(client => client.BeginPasskeyRegistration(sessionToken));
+            PasskeyChallengeData challenge = await ExecuteAsync(
+                client => client.BeginPasskeyRegistration(sessionToken));
 
             return challenge;
         }

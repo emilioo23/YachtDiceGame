@@ -47,4 +47,3 @@ namespace YachtDice.Server.Contracts.Chat
         public DateTime Timestamp { get; set; }
     }
 }
-

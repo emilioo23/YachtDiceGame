@@ -14,7 +14,6 @@ namespace YachtDice.Client.Tests.Utils
         private const string FriendName = "Beto";
         private const string OtherFriendName = "Ana";
 
-
         [Fact]
         public void GetMessage_Sent_IncludesTheNameOfTheFriend()
         {

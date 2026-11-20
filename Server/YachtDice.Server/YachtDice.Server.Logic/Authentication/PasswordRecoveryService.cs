@@ -15,8 +15,6 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class PasswordRecoveryService : IPasswordRecoveryService
     {
-
-
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
         private const string RequestedLogMessage = "A password recovery code was requested for an account.";

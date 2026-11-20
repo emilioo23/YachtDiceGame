@@ -15,8 +15,6 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorCodeService
     {
-
-
         /// <summary>
         /// Number of digits in a backup code. It is longer than the code sent by email, so both are told apart.
         /// </summary>

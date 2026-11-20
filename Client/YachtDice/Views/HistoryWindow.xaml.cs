@@ -21,7 +21,6 @@ namespace YachtDice.Views
     {
         private const string NullSessionMessage = "The session of the player cannot be null.";
 
-
         private readonly PlayerSession _session;
         private readonly PlayerGateway _gateway = new PlayerGateway();
         private readonly AppLogger _logger = new AppLogger(typeof(HistoryWindow));

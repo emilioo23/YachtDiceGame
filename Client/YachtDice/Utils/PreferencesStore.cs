@@ -6,9 +6,9 @@ namespace YachtDice.Utils
 {
     /// <summary>
     /// Reads and saves the preferences of the player in the user settings of Windows, so the language, the
-    /// theme, the audio and the help while playing stay the same the next time the game opens. If the settings file is damaged, the
-    /// error is only written to the log and the game uses the default preferences: the player does not need
-    /// to know, because the game works the same and the next save writes a good file.
+    /// theme, the audio and the help while playing stay the same the next time the game opens. If the settings
+    /// file is damaged, the error is only written to the log and the game uses the default preferences: the
+    /// player does not need to know, because the game works the same and the next save writes a good file.
     /// </summary>
     public sealed class PreferencesStore
     {

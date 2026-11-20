@@ -194,7 +194,6 @@ namespace YachtDice.Views
             {
                 assertion = await Task.Run(() => _passkeys.GetAssertion(windowHandle, challenge));
 
-                // Windows also reports a cancel when the account has no passkey on this device or phone.
                 if (assertion == null)
                 {
                     CustomDialogWindow.ShowMessage(this, Strings.Passkey_LoginNotCompleted);
