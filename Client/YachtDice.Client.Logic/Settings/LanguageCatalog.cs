@@ -30,10 +30,7 @@ namespace YachtDice.Client.Logic.Settings
         /// <summary>
         /// Gets the culture codes of the languages, in the order that the lists show them.
         /// </summary>
-        public static IReadOnlyList<string> CultureCodes
-        {
-            get { return _cultureCodes; }
-        }
+        public static IReadOnlyList<string> CultureCodes => _cultureCodes;
 
         /// <summary>
         /// Gets the code of the flag that represents a language.

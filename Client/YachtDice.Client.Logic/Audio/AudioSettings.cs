@@ -43,10 +43,7 @@ namespace YachtDice.Client.Logic.Audio
         /// <summary>
         /// Gets the volume of the music, from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
         /// </summary>
-        public int MusicVolume
-        {
-            get { return _musicVolume; }
-        }
+        public int MusicVolume => _musicVolume;
 
         /// <summary>
         /// Turns the sound effects on or off.

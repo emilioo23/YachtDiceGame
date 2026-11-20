@@ -55,11 +55,7 @@ namespace YachtDice.Server.Logic.Players
         /// <summary>
         /// Gets the rules of all the achievements, in the order in which they are shown.
         /// </summary>
-        /// <returns>The rules of the achievements.</returns>
-        public IReadOnlyList<AchievementRule> GetAll()
-        {
-            return _rules;
-        }
+        public IReadOnlyList<AchievementRule> Rules => _rules;
 
         /// <summary>
         /// Decides if the statistics of a player unlock an achievement.

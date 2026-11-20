@@ -39,10 +39,7 @@ namespace YachtDice.Server.Logic.Passkeys
                 _data = data;
             }
 
-            public bool IsAtEnd
-            {
-                get { return _position == _data.Length; }
-            }
+            public bool IsAtEnd => _position == _data.Length;
 
             public bool TryReadSignature(int partSize, out byte[] signature)
             {

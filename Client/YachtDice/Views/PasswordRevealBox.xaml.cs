@@ -26,10 +26,7 @@ namespace YachtDice.Views
         /// <summary>
         /// Gets the password that the player typed, whether the characters are hidden or shown.
         /// </summary>
-        public string Password
-        {
-            get { return _isRevealed ? VisiblePasswordBox.Text : HiddenPasswordBox.Password; }
-        }
+        public string Password => _isRevealed ? VisiblePasswordBox.Text : HiddenPasswordBox.Password;
 
         private static void FocusAtEnd(TextBox textBox)
         {

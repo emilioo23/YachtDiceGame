@@ -57,9 +57,6 @@ namespace YachtDice.Views
         /// <summary>
         /// Gets the milliseconds, from the start of the animation, when the movement ends.
         /// </summary>
-        public double FinishMilliseconds
-        {
-            get { return DelayMilliseconds + DurationMilliseconds; }
-        }
+        public double FinishMilliseconds => DelayMilliseconds + DurationMilliseconds;
     }
 }

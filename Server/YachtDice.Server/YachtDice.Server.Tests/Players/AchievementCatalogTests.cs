@@ -47,7 +47,7 @@ namespace YachtDice.Server.Tests.Players
         [Fact]
         public void GetAll_Always_ReturnsEveryAchievement()
         {
-            Assert.Equal(AchievementCount, _catalog.GetAll().Count);
+            Assert.Equal(AchievementCount, _catalog.Rules.Count);
         }
 
         [Fact]

@@ -98,7 +98,7 @@ namespace YachtDice.Server.Tests.Players
         {
             List<AchievementStatus> achievements = _service.GetAchievements(CurrentUsername);
 
-            Assert.Equal(_catalog.GetAll().Count, achievements.Count);
+            Assert.Equal(_catalog.Rules.Count, achievements.Count);
         }
 
         [Fact]

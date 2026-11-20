@@ -33,10 +33,7 @@ namespace YachtDice.Views
         /// <summary>
         /// Gets the material of a face without pips, used by a die that was not rolled yet.
         /// </summary>
-        public Material Blank
-        {
-            get { return _faces[NoValue]; }
-        }
+        public Material Blank => _faces[NoValue];
 
         /// <summary>
         /// Gets the soft dark material that is drawn under every die.

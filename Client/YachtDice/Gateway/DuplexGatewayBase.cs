@@ -41,13 +41,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets whether the connection with the server is open.
         /// </summary>
-        protected bool IsConnected
-        {
-            get
-            {
-                return CurrentClient() != null;
-            }
-        }
+        protected bool IsConnected => CurrentClient() != null;
 
         /// <summary>
         /// Closes the connection with the server, if it is open.
@@ -216,10 +210,14 @@ namespace YachtDice.Gateway
 
         private TClient CurrentClient()
         {
+            TClient client;
+
             lock (_syncRoot)
             {
-                return _client;
+                client = _client;
             }
+
+            return client;
         }
 
         private TClient TakeClient()

@@ -39,7 +39,7 @@ namespace YachtDice.Server.Logic.Players
             List<int> unlockedIds = GetUnlockedIds(playerName);
             var achievements = new List<AchievementStatus>();
 
-            foreach (AchievementRule rule in _catalog.GetAll())
+            foreach (AchievementRule rule in _catalog.Rules)
             {
                 achievements.Add(new AchievementStatus
                 {

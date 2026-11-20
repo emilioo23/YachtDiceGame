@@ -17,11 +17,7 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task WarmUpAsync()
         {
-            await ExecuteAsync(client =>
-            {
-                @client.Open();
-                return true;
-            });
+            await ExecuteAsync(OpenConnection);
         }
 
         /// <summary>
@@ -104,6 +100,13 @@ namespace YachtDice.Gateway
             var typedFault = fault as FaultException<AuthFault>;
 
             return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
+        }
+
+        private static bool OpenConnection(AuthenticationServiceClient client)
+        {
+            client.Open();
+
+            return true;
         }
     }
 }
