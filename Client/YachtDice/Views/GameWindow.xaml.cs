@@ -658,9 +658,9 @@ namespace YachtDice.Views
 
         private bool IsRegisteredPlayer(string playerId)
         {
-            Func<GamePlayer, bool> isSamePlayer = player => player.Id == playerId;
+            Func<GamePlayer, bool> isRegisteredPlayer = player => player.Id == playerId && player.IsRegistered;
 
-            return _gamePlayers.Any(player => isSamePlayer(player) && player.IsRegistered);
+            return _gamePlayers.Any(isRegisteredPlayer);
         }
 
         private static FinalPlace CreateFinalPlace(PlayerScorecard card, bool isRegistered)

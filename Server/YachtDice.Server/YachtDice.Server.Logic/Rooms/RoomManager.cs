@@ -545,7 +545,8 @@ namespace YachtDice.Server.Logic.Rooms
             Func<RoomPlayer, bool> isNotReady = player => !player.IsReady && !room.IsHost(player.Id);
             Func<RoomPlayer, bool> canStillConfirm = player => player.JoinedAt > waitedEnough;
             List<RoomPlayer> notReady = room.Players.Where(isNotReady).ToList();
-            int waitedTooLong = notReady.Count(player => !canStillConfirm(player));
+            Func<RoomPlayer, bool> hasWaitedTooLong = player => !canStillConfirm(player);
+            int waitedTooLong = notReady.Count(hasWaitedTooLong);
             RoomStatus status = GetStartStatus(room, playerId, waitedTooLong);
             RoomResult result = RoomResult.CreateFailed(status);
             bool isWaitingForSomeone = notReady.Any(canStillConfirm);

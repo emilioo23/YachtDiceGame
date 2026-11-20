@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -32,15 +33,16 @@ namespace YachtDice.Server.Tests.Passkeys
         /// </summary>
         public PasskeyRemovalTests()
         {
-            _context.Players.Players.First(player => player.Id == PasskeyTestContext.PlayerId).PwdHash =
-                PasswordHasher.ComputeHash(Password);
+            Func<Player, bool> isTestPlayer = player => player.Id == PasskeyTestContext.PlayerId;
+            Func<PasskeyRecord, bool> isFirstCredential = record => record.CredentialId == FirstCredential;
+            Func<PasskeyRecord, bool> isOtherCredential = record => record.CredentialId == OtherCredential;
+
+            _context.Players.Players.First(isTestPlayer).PwdHash = PasswordHasher.ComputeHash(Password);
             AddPasskey(PasskeyTestContext.PlayerId, FirstCredential);
             AddPasskey(PasskeyTestContext.PlayerId, SecondCredential);
             AddPasskey(PasskeyTestContext.OtherPlayerId, OtherCredential);
-            _firstId = _context.Passkeys.Records.First(record => record.CredentialId == FirstCredential).Id;
-            _otherPlayerPasskeyId = _context.Passkeys.Records
-                .First(record => record.CredentialId == OtherCredential)
-                .Id;
+            _firstId = _context.Passkeys.Records.First(isFirstCredential).Id;
+            _otherPlayerPasskeyId = _context.Passkeys.Records.First(isOtherCredential).Id;
         }
 
         [Fact]
@@ -79,10 +81,12 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void RemovePasskey_RightPassword_DeletesThePasskey()
         {
-            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _firstId, Password);
-            bool passkeyExists = _context.Passkeys.Records.Any(record => record.Id == _firstId);
+            Func<PasskeyRecord, bool> isFirstPasskey = record => record.Id == _firstId;
 
-            Assert.False(passkeyExists);
+            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _firstId, Password);
+            bool hasPasskey = _context.Passkeys.Records.Any(isFirstPasskey);
+
+            Assert.False(hasPasskey);
         }
 
         [Fact]
@@ -101,10 +105,12 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void RemovePasskey_WrongPassword_KeepsThePasskey()
         {
-            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _firstId, WrongPassword);
-            bool passkeyExists = _context.Passkeys.Records.Any(record => record.Id == _firstId);
+            Func<PasskeyRecord, bool> isFirstPasskey = record => record.Id == _firstId;
 
-            Assert.True(passkeyExists);
+            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _firstId, WrongPassword);
+            bool hasPasskey = _context.Passkeys.Records.Any(isFirstPasskey);
+
+            Assert.True(hasPasskey);
         }
 
         [Fact]
@@ -136,10 +142,12 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void RemovePasskey_PasskeyOfAnotherPlayer_KeepsThePasskey()
         {
-            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _otherPlayerPasskeyId, Password);
-            bool passkeyExists = _context.Passkeys.Records.Any(record => record.Id == _otherPlayerPasskeyId);
+            Func<PasskeyRecord, bool> isOtherPasskey = record => record.Id == _otherPlayerPasskeyId;
 
-            Assert.True(passkeyExists);
+            _context.Service.RemovePasskey(PasskeyTestContext.DisplayName, _otherPlayerPasskeyId, Password);
+            bool hasPasskey = _context.Passkeys.Records.Any(isOtherPasskey);
+
+            Assert.True(hasPasskey);
         }
 
         [Fact]

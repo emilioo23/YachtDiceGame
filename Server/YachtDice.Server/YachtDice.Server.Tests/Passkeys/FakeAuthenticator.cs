@@ -153,7 +153,8 @@ namespace YachtDice.Server.Tests.Passkeys
 
         private static byte[] ToDerInteger(byte[] value)
         {
-            byte[] trimmed = value.SkipWhile(item => item == 0).ToArray();
+            Func<byte, bool> isZero = item => item == 0;
+            byte[] trimmed = value.SkipWhile(isZero).ToArray();
             byte[] content = trimmed.Length == 0 ? new byte[] { 0 } : trimmed;
 
             if ((content[0] & DerHighBit) != 0)

@@ -67,7 +67,9 @@ namespace YachtDice.Server.Logic.Game
                 .First()
                 .Key;
 
-            return dice.Select(value => value == keptValue).ToArray();
+            Func<int, bool> isKeptValue = value => value == keptValue;
+
+            return dice.Select(isKeptValue).ToArray();
         }
 
         /// <summary>

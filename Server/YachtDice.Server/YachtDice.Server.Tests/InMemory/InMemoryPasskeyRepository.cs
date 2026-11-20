@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
@@ -31,19 +32,24 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<PasskeyRecord> FindByPlayer(int playerId)
         {
-            return _records.Where(record => record.PlayerId == playerId).ToList();
+            Func<PasskeyRecord, bool> isOfPlayer = record => record.PlayerId == playerId;
+
+            return _records.Where(isOfPlayer).ToList();
         }
 
         /// <inheritdoc />
         public PasskeyRecord FindByCredentialId(string credentialId)
         {
-            return _records.FirstOrDefault(record => record.CredentialId == credentialId);
+            Func<PasskeyRecord, bool> hasCredentialId = record => record.CredentialId == credentialId;
+
+            return _records.FirstOrDefault(hasCredentialId);
         }
 
         /// <inheritdoc />
         public void Add(PasskeyRecord record)
         {
-            Player owner = _players.Players.First(player => player.Id == record.PlayerId);
+            Func<Player, bool> isOwner = player => player.Id == record.PlayerId;
+            Player owner = _players.Players.First(isOwner);
 
             record.Id = _nextId;
             record.PlayerDisplayName = owner.DisplayName;
@@ -55,13 +61,17 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public void Delete(int passkeyId)
         {
-            _records.RemoveAll(record => record.Id == passkeyId);
+            Predicate<PasskeyRecord> isDeleted = record => record.Id == passkeyId;
+
+            _records.RemoveAll(isDeleted);
         }
 
         /// <inheritdoc />
         public void SaveSignCount(int passkeyId, long signCount)
         {
-            _records.First(record => record.Id == passkeyId).SignCount = signCount;
+            Func<PasskeyRecord, bool> isSaved = record => record.Id == passkeyId;
+
+            _records.First(isSaved).SignCount = signCount;
         }
     }
 }

@@ -94,7 +94,8 @@ namespace YachtDice.Server.Tests.Configuration
         {
             GameRules rules = GameRulesReader.Read(XDocument.Parse(ValidRules));
 
-            AchievementRule rule = rules.Achievements.GetAll().Single(achievement => achievement.Id == MinimumGamesId);
+            Func<AchievementRule, bool> isMinimumGamesRule = achievement => achievement.Id == MinimumGamesId;
+            AchievementRule rule = rules.Achievements.Rules.Single(isMinimumGamesRule);
 
             Assert.Equal(MinimumGames, rule.MinimumGames);
         }
@@ -142,7 +143,7 @@ namespace YachtDice.Server.Tests.Configuration
         {
             GameRules rules = GameRulesFile.Load();
 
-            Assert.Equal(AchievementCount, rules.Achievements.GetAll().Count);
+            Assert.Equal(AchievementCount, rules.Achievements.Rules.Count);
         }
 
         [Fact]

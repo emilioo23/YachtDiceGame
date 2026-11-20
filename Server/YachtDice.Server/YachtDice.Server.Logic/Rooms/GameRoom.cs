@@ -76,12 +76,12 @@ namespace YachtDice.Server.Logic.Rooms
         /// <summary>
         /// Gets a value indicating whether a person is inside the room.
         /// </summary>
-        public bool HasPeople => _players.Any(player => !player.IsComputer);
+        public bool HasPeople => _players.Any(IsPerson);
 
         /// <summary>
         /// Gets a value indicating whether a person left the game in progress and still has time to come back.
         /// </summary>
-        public bool HasAbsentPeople => _absentPlayers.Any(player => !player.IsComputer);
+        public bool HasAbsentPeople => _absentPlayers.Any(IsPerson);
 
         /// <summary>
         /// Puts a new player inside the room. The server gives the player a new identifier, and if another
@@ -222,7 +222,7 @@ namespace YachtDice.Server.Logic.Rooms
 
             _players.RemoveAll(player => IsSameId(player.Id, playerId));
 
-            RoomPlayer nextHost = _players.FirstOrDefault(player => !player.IsComputer);
+            RoomPlayer nextHost = _players.FirstOrDefault(IsPerson);
 
             if (isHostLeaving && nextHost != null)
             {
@@ -255,9 +255,10 @@ namespace YachtDice.Server.Logic.Rooms
         {
             string name = displayName.Trim();
 
-            player = _players.FirstOrDefault(
-                candidate => !candidate.IsComputer
-                    && string.Equals(candidate.DisplayName, name, StringComparison.OrdinalIgnoreCase));
+            Func<RoomPlayer, bool> isPersonWithName = candidate => !candidate.IsComputer
+                && string.Equals(candidate.DisplayName, name, StringComparison.OrdinalIgnoreCase);
+
+            player = _players.FirstOrDefault(isPersonWithName);
 
             return player != null;
         }
@@ -395,6 +396,11 @@ namespace YachtDice.Server.Logic.Rooms
             {
                 HostId = player.Id;
             }
+        }
+
+        private static bool IsPerson(RoomPlayer player)
+        {
+            return !player.IsComputer;
         }
 
         private static bool IsSameId(string firstId, string secondId)

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace YachtDice.Client.Logic.Logging
 {
@@ -57,9 +58,10 @@ namespace YachtDice.Client.Logic.Logging
         private static string DescribeStack(Exception exception)
         {
             StackFrame[] frames = new StackTrace(exception, false).GetFrames() ?? new StackFrame[0];
+            Func<MethodBase, bool> hasDeclaringType = method => method != null && method.DeclaringType != null;
             string[] levels = frames
                 .Select(frame => frame.GetMethod())
-                .Where(method => method != null && method.DeclaringType != null)
+                .Where(hasDeclaringType)
                 .Take(MaxStackLevels)
                 .Select(method => string.Format(
                     CultureInfo.InvariantCulture,

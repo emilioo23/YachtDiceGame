@@ -178,7 +178,9 @@ namespace YachtDice.Server.Tests.InMemory
 
         public void Delete(int playerId)
         {
-            _players.RemoveAll(player => player.Id == playerId);
+            Predicate<Player> isDeleted = player => player.Id == playerId;
+
+            _players.RemoveAll(isDeleted);
             _playersWithTwoFactor.Remove(playerId);
             _titles.Remove(playerId);
             _flagCodes.Remove(playerId);

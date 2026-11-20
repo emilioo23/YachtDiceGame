@@ -91,8 +91,9 @@ namespace YachtDice.Server.Logic.Passkeys
         private void RemoveExpired()
         {
             DateTime now = _clock();
+            Func<PendingChallenge, bool> hasExpired = item => item.ExpiresAt <= now;
             string[] expiredIds = _pending.Values
-                .Where(item => item.ExpiresAt <= now)
+                .Where(hasExpired)
                 .Select(item => item.Id)
                 .ToArray();
 
