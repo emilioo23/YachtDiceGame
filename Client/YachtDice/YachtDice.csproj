@@ -365,7 +365,6 @@
       <DependentUpon>HowToPlayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DiceRow.cs" />
-    <Compile Include="Views\DiceFaceFactory.cs" />
     <Compile Include="Views\DiceBoard.cs" />
     <Compile Include="Views\DiceMaterials.cs" />
     <Compile Include="Views\DiceMeshFactory.cs" />

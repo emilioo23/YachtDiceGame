@@ -65,9 +65,22 @@ namespace YachtDice.Server.Services
             }
         }
 
+        private static Data.Player ToEntity(Contracts.Player player)
+        {
+            var entity = new Data.Player
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Username = player.Username,
+                Email = player.Email
+            };
+
+            return entity;
+        }
+
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
-            Data.Player logicPlayer = Mapping.RegistrationMapper.ToEntity(newPlayer);
+            Data.Player logicPlayer = ToEntity(newPlayer);
             LogicAuth.RegistrationResult logicResult =
                 _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 
