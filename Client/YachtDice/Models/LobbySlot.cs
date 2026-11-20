@@ -11,9 +11,20 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the initial of the name, used for the avatar.
+        /// Gets or sets the identifier of the player in the place. It is empty if the place is free.
         /// </summary>
-        public string Initial { get; set; }
+        public string PlayerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the person who looks at the room can expel this player or
+        /// make them the host, which only the host can do with another player.
+        /// </summary>
+        public bool CanManage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the avatar of the player.
+        /// </summary>
+        public int AvatarId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the player in the place is the host of the room.
@@ -21,9 +32,40 @@
         public bool IsHost { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player in the place confirmed that they are ready.
+        /// </summary>
+        public bool IsReady { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the place is free.
         /// </summary>
         public bool IsEmpty { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of the player in the place.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the label of a computer player with its difficulty. It is empty for a person.
+        /// </summary>
+        public string ComputerLabel { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the person who looks at the room can put a computer player
+        /// in this free place, which only the host can do.
+        /// </summary>
+        public bool CanAddComputer { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the player in the place can be expelled. A computer cannot.
+        /// </summary>
+        public bool CanBeKicked => CanManage && !IsComputer;
+
+        /// <summary>
+        /// Gets a value indicating whether the player in the place can become the host. A computer cannot.
+        /// </summary>
+        public bool CanBecomeHost => CanManage && !IsComputer;
 
         /// <summary>
         /// Gets a value indicating whether a player is in the place.

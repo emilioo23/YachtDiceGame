@@ -11,18 +11,16 @@ namespace YachtDice.Server.Logic.Authentication
         /// Verifies a two-factor code.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="code">The verification code provided.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="verificationCode">The code provided and the session challenge it answers.</param>
         /// <returns>The result status of the verification process.</returns>
-        TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId);
+        TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode);
 
         /// <summary>
         /// Resends a two-factor verification code.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="cultureName">The culture name for email localization.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="delivery">The session challenge and the culture name for email localization.</param>
         /// <returns>The result status of the resend process.</returns>
-        ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId);
+        ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery);
     }
 }

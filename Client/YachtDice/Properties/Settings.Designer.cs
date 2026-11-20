@@ -26,5 +26,95 @@ namespace YachtDice.Properties
                 return defaultInstance;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("es-MX")]
+        public string CultureCode
+        {
+            get
+            {
+                return ((string)(this["CultureCode"]));
+            }
+            set
+            {
+                this["CultureCode"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsDarkTheme
+        {
+            get
+            {
+                return ((bool)(this["IsDarkTheme"]));
+            }
+            set
+            {
+                this["IsDarkTheme"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AreEffectsEnabled
+        {
+            get
+            {
+                return ((bool)(this["AreEffectsEnabled"]));
+            }
+            set
+            {
+                this["AreEffectsEnabled"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsMusicMuted
+        {
+            get
+            {
+                return ((bool)(this["IsMusicMuted"]));
+            }
+            set
+            {
+                this["IsMusicMuted"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int MusicVolume
+        {
+            get
+            {
+                return ((int)(this["MusicVolume"]));
+            }
+            set
+            {
+                this["MusicVolume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowsPotentialPoints
+        {
+            get
+            {
+                return ((bool)(this["ShowsPotentialPoints"]));
+            }
+            set
+            {
+                this["ShowsPotentialPoints"] = value;
+            }
+        }
     }
 }

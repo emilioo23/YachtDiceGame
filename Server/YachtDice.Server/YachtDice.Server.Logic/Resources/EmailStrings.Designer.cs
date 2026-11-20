@@ -61,6 +61,42 @@ namespace YachtDice.Server.Logic.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Hola {0}, tu cuenta de Yacht Dice se bloqueó por {1} horas.
+        /// </summary>
+        public static string AccountLock_EmailBody {
+            get {
+                return ResourceManager.GetString("AccountLock_EmailBody", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta de Yacht Dice se bloqueó por seguridad.
+        /// </summary>
+        public static string AccountLock_EmailSubject {
+            get {
+                return ResourceManager.GetString("AccountLock_EmailSubject", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Hola {0}, tu código para recuperar la contraseña es: {1}. Este código vence en {2} minutos. Si no lo pediste, ignora este mensaje..
+        /// </summary>
+        public static string PasswordReset_EmailBody {
+            get {
+                return ResourceManager.GetString("PasswordReset_EmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Recupera tu contraseña de Yacht Dice.
+        /// </summary>
+        public static string PasswordReset_EmailSubject {
+            get {
+                return ResourceManager.GetString("PasswordReset_EmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Hola {0}, tu código de verificación es: {1}. Este código vence en {2} minutos. Si no intentaste iniciar sesión, ignora este mensaje..
         /// </summary>
         public static string TwoFactor_EmailBody {

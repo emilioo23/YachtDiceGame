@@ -18,7 +18,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Category">
@@ -64,9 +64,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HostId" Type="int" Nullable="false" />
           <Property Name="TargetId" Type="int" Nullable="false" />
-          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="100" />
           <Property Name="Date" Type="datetime" />
+          <Property Name="RoomCode" Type="nvarchar" MaxLength="6" />
         </EntityType>
         <EntityType Name="Passkey">
           <Key>
@@ -75,6 +76,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="PublicKey" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CredentialId" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="SignCount" Type="bigint" Nullable="false" />
           <Property Name="DeviceName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Player">
@@ -89,7 +92,6 @@
           <Property Name="State" Type="nvarchar" MaxLength="30" />
           <Property Name="RegDate" Type="datetime" />
           <Property Name="XP" Type="int" />
-          <Property Name="Level" Type="int" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
           <Property Name="LastUserChange" Type="datetime" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
@@ -118,6 +120,24 @@
           <Property Name="Bio" Type="nvarchar" MaxLength="150" />
           <Property Name="ThemePref" Type="nvarchar" MaxLength="20" />
           <Property Name="LangPref" Type="nvarchar" MaxLength="20" />
+          <Property Name="FlagCode" Type="nvarchar" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="PasswordHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="PwdHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ChangeDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountLock">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="LockType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="LockedUntil" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -141,6 +161,7 @@
           <Property Name="PwdHash" Type="nvarchar" MaxLength="255" />
           <Property Name="Status" Type="nvarchar" MaxLength="20" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="GameSpeed" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="RoomInvite">
           <Key>
@@ -149,8 +170,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InviterId" Type="int" Nullable="false" />
           <Property Name="InvitedId" Type="int" Nullable="false" />
-          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" />
           <Property Name="SendDate" Type="datetime" />
+          <Property Name="RoomCode" Type="nvarchar" MaxLength="6" />
         </EntityType>
         <EntityType Name="RoomPlayer">
           <Key>
@@ -167,7 +189,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="PlayerId" Type="int" />
           <Property Name="GameId" Type="int" Nullable="false" />
           <Property Name="UpperBonus" Type="bit" />
           <Property Name="YachtBonusCt" Type="int" />
@@ -190,7 +212,16 @@
           <Property Name="GameId" Type="int" Nullable="false" />
           <Property Name="PlayerId" Type="int" Nullable="false" />
           <Property Name="RollNum" Type="int" />
-          <Property Name="DiceValues" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="RolledDie">
+          <Key>
+            <PropertyRef Name="TurnStateId" />
+            <PropertyRef Name="DiePosition" />
+          </Key>
+          <Property Name="TurnStateId" Type="int" Nullable="false" />
+          <Property Name="DiePosition" Type="int" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="IsHeld" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -287,7 +318,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__KickLog__RoomId__1AD3FDA4">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -443,7 +474,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__RoomInvit__RoomI__2739D489">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="RoomInvite" Type="Self.RoomInvite" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -503,7 +534,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Scorecard__Playe__2B0A656D">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">
@@ -550,6 +581,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RolledDie_TurnState">
+          <End Role="TurnState" Type="Self.TurnState" Multiplicity="1" />
+          <End Role="RolledDie" Type="Self.RolledDie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TurnState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolledDie">
+              <PropertyRef Name="TurnStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__TwoFactor__Playe__2FCF1A8A">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="TwoFactorAuth" Type="Self.TwoFactorAuth" Multiplicity="*" />
@@ -574,12 +617,15 @@
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountLock" EntityType="Self.AccountLock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Room" EntityType="Self.Room" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomPlayer" EntityType="Self.RoomPlayer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Scorecard" EntityType="Self.Scorecard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScorecardEntry" EntityType="Self.ScorecardEntry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolledDie" EntityType="Self.RolledDie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurnState" EntityType="Self.TurnState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TwoFactorAuth" EntityType="Self.TwoFactorAuth" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__BackupCod__Playe__14270015" Association="Self.FK__BackupCod__Playe__14270015">
@@ -698,6 +744,10 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="TurnState" EntitySet="TurnState" />
           </AssociationSet>
+          <AssociationSet Name="FK_RolledDie_TurnState" Association="Self.FK_RolledDie_TurnState">
+            <End Role="TurnState" EntitySet="TurnState" />
+            <End Role="RolledDie" EntitySet="RolledDie" />
+          </AssociationSet>
           <AssociationSet Name="FK__TwoFactor__Playe__2FCF1A8A" Association="Self.FK__TwoFactor__Playe__2FCF1A8A">
             <End Role="Player" EntitySet="Player" />
             <End Role="TwoFactorAuth" EntitySet="TwoFactorAuth" />
@@ -721,7 +771,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__BACKUP_CO__Playe__0D7A0286" FromRole="BackupCode" ToRole="Player" />
         </EntityType>
@@ -778,9 +828,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HostId" Type="Int32" Nullable="false" />
           <Property Name="TargetId" Type="Int32" Nullable="false" />
-          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="RoomId" Type="Int32" />
           <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="RoomCode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__KICK_LOG__HostId__1332DBDC" FromRole="KickLog" ToRole="Player" />
           <NavigationProperty Name="Room" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="KickLog" ToRole="Room" />
           <NavigationProperty Name="Player1" Relationship="Self.FK__KICK_LOG__Target__151B244E" FromRole="KickLog" ToRole="Player" />
@@ -792,6 +843,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="PublicKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CredentialId" Type="String" MaxLength="400" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SignCount" Type="Int64" Nullable="false" />
           <Property Name="DeviceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PASSKEY__PlayerI__503BEA1C" FromRole="Passkey" ToRole="Player" />
         </EntityType>
@@ -807,7 +860,6 @@
           <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="RegDate" Type="DateTime" Precision="3" />
           <Property Name="XP" Type="Int32" />
-          <Property Name="Level" Type="Int32" />
           <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUserChange" Type="DateTime" Precision="3" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -859,7 +911,25 @@
           <Property Name="Bio" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ThemePref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="LangPref" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FlagCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__PLAYER_SE__Playe__1BC821DD" FromRole="PlayerSettings" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="PasswordHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ChangeDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountLock">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="LockType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LockedUntil" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="PwdResetToken">
           <Key>
@@ -884,6 +954,7 @@
           <Property Name="PwdHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="GameSpeed" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__GAME_HIST__RoomI__10566F31" FromRole="Room" ToRole="GameHistory" />
           <NavigationProperty Name="KickLog" Relationship="Self.FK__KICK_LOG__RoomId__14270015" FromRole="Room" ToRole="KickLog" />
           <NavigationProperty Name="Player" Relationship="Self.FK__ROOM__HostPlayer__1DB06A4F" FromRole="Room" ToRole="Player" />
@@ -898,8 +969,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InviterId" Type="Int32" Nullable="false" />
           <Property Name="InvitedId" Type="Int32" Nullable="false" />
-          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="RoomId" Type="Int32" />
           <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="RoomCode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Player" Relationship="Self.FK__ROOM_INVI__Invit__58D1301D" FromRole="RoomInvite" ToRole="Player" />
           <NavigationProperty Name="Player1" Relationship="Self.FK__ROOM_INVI__Invit__59C55456" FromRole="RoomInvite" ToRole="Player" />
           <NavigationProperty Name="Room" Relationship="Self.FK__ROOM_INVI__RoomI__5AB9788F" FromRole="RoomInvite" ToRole="Room" />
@@ -921,7 +993,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="PlayerId" Type="Int32" />
           <Property Name="GameId" Type="Int32" Nullable="false" />
           <Property Name="UpperBonus" Type="Boolean" />
           <Property Name="YachtBonusCt" Type="Int32" />
@@ -949,9 +1021,20 @@
           <Property Name="GameId" Type="Int32" Nullable="false" />
           <Property Name="PlayerId" Type="Int32" Nullable="false" />
           <Property Name="RollNum" Type="Int32" />
-          <Property Name="DiceValues" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GameHistory" Relationship="Self.FK__TURN_STAT__GameI__6166761E" FromRole="TurnState" ToRole="GameHistory" />
           <NavigationProperty Name="Player" Relationship="Self.FK__TURN_STAT__Playe__625A9A57" FromRole="TurnState" ToRole="Player" />
+          <NavigationProperty Name="RolledDie" Relationship="Self.FK_RolledDie_TurnState" FromRole="TurnState" ToRole="RolledDie" />
+        </EntityType>
+        <EntityType Name="RolledDie">
+          <Key>
+            <PropertyRef Name="TurnStateId" />
+            <PropertyRef Name="DiePosition" />
+          </Key>
+          <Property Name="TurnStateId" Type="Int32" Nullable="false" />
+          <Property Name="DiePosition" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="IsHeld" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TurnState" Relationship="Self.FK_RolledDie_TurnState" FromRole="RolledDie" ToRole="TurnState" />
         </EntityType>
         <EntityType Name="TwoFactorAuth">
           <Key>
@@ -1109,7 +1192,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__KICK_LOG__RoomId__14270015">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="KickLog" Type="Self.KickLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -1241,7 +1324,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__SCORECARD__Playe__5E8A0973">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">
@@ -1261,6 +1344,18 @@
             </Principal>
             <Dependent Role="TurnState">
               <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolledDie_TurnState">
+          <End Role="TurnState" Type="Self.TurnState" Multiplicity="1" />
+          <End Role="RolledDie" Type="Self.RolledDie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TurnState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolledDie">
+              <PropertyRef Name="TurnStateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1289,7 +1384,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__ROOM_INVI__RoomI__5AB9788F">
-          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="Room" Type="Self.Room" Multiplicity="0..1" />
           <End Role="RoomInvite" Type="Self.RoomInvite" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Room">
@@ -1336,12 +1431,15 @@
           <EntitySet Name="Player" EntityType="Self.Player" />
           <EntitySet Name="PlayerReport" EntityType="Self.PlayerReport" />
           <EntitySet Name="PlayerSettings" EntityType="Self.PlayerSettings" />
+          <EntitySet Name="PasswordHistory" EntityType="Self.PasswordHistory" />
+          <EntitySet Name="AccountLock" EntityType="Self.AccountLock" />
           <EntitySet Name="PwdResetToken" EntityType="Self.PwdResetToken" />
           <EntitySet Name="Room" EntityType="Self.Room" />
           <EntitySet Name="RoomInvite" EntityType="Self.RoomInvite" />
           <EntitySet Name="RoomPlayer" EntityType="Self.RoomPlayer" />
           <EntitySet Name="Scorecard" EntityType="Self.Scorecard" />
           <EntitySet Name="ScorecardEntry" EntityType="Self.ScorecardEntry" />
+          <EntitySet Name="RolledDie" EntityType="Self.RolledDie" />
           <EntitySet Name="TurnState" EntityType="Self.TurnState" />
           <EntitySet Name="TwoFactorAuth" EntityType="Self.TwoFactorAuth" />
           <AssociationSet Name="FK__PLAYER__AvatarId__17036CC0" Association="Self.FK__PLAYER__AvatarId__17036CC0">
@@ -1444,6 +1542,10 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="TurnState" EntitySet="TurnState" />
           </AssociationSet>
+          <AssociationSet Name="FK_RolledDie_TurnState" Association="Self.FK_RolledDie_TurnState">
+            <End Role="TurnState" EntitySet="TurnState" />
+            <End Role="RolledDie" EntitySet="RolledDie" />
+          </AssociationSet>
           <AssociationSet Name="FK__TWO_FACTO__Playe__29221CFB" Association="Self.FK__TWO_FACTO__Playe__29221CFB">
             <End Role="Player" EntitySet="Player" />
             <End Role="TwoFactorAuth" EntitySet="TwoFactorAuth" />
@@ -1536,6 +1638,7 @@
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="RoomCode" ColumnName="RoomCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1545,6 +1648,8 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="PublicKey" ColumnName="PublicKey" />
+                <ScalarProperty Name="CredentialId" ColumnName="CredentialId" />
+                <ScalarProperty Name="SignCount" ColumnName="SignCount" />
                 <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1560,7 +1665,6 @@
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="RegDate" ColumnName="RegDate" />
                 <ScalarProperty Name="XP" ColumnName="XP" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="LastUserChange" ColumnName="LastUserChange" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -1591,6 +1695,26 @@
                 <ScalarProperty Name="Bio" ColumnName="Bio" />
                 <ScalarProperty Name="ThemePref" ColumnName="ThemePref" />
                 <ScalarProperty Name="LangPref" ColumnName="LangPref" />
+                <ScalarProperty Name="FlagCode" ColumnName="FlagCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PasswordHistory">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.PasswordHistory">
+              <MappingFragment StoreEntitySet="PasswordHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
+                <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountLock">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.AccountLock">
+              <MappingFragment StoreEntitySet="AccountLock">
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="LockType" ColumnName="LockType" />
+                <ScalarProperty Name="LockedUntil" ColumnName="LockedUntil" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1616,6 +1740,7 @@
                 <ScalarProperty Name="PwdHash" ColumnName="PwdHash" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="GameSpeed" ColumnName="GameSpeed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1627,6 +1752,7 @@
                 <ScalarProperty Name="InvitedId" ColumnName="InvitedId" />
                 <ScalarProperty Name="RoomId" ColumnName="RoomId" />
                 <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="RoomCode" ColumnName="RoomCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1661,6 +1787,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RolledDie">
+            <EntityTypeMapping TypeName="YachtDice.Server.Data.RolledDie">
+              <MappingFragment StoreEntitySet="RolledDie">
+                <ScalarProperty Name="TurnStateId" ColumnName="TurnStateId" />
+                <ScalarProperty Name="DiePosition" ColumnName="DiePosition" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="IsHeld" ColumnName="IsHeld" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TurnState">
             <EntityTypeMapping TypeName="YachtDice.Server.Data.TurnState">
               <MappingFragment StoreEntitySet="TurnState">
@@ -1668,7 +1804,6 @@
                 <ScalarProperty Name="GameId" ColumnName="GameId" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="RollNum" ColumnName="RollNum" />
-                <ScalarProperty Name="DiceValues" ColumnName="DiceValues" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

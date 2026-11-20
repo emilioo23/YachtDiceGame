@@ -33,6 +33,7 @@ namespace YachtDice.Server.Data
         public string PwdHash { get; set; }
         public string Status { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
+        public string GameSpeed { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GameHistory> GameHistory { get; set; }

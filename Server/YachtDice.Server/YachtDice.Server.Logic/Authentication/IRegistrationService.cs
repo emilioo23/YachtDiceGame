@@ -1,4 +1,5 @@
-﻿using YachtDice.Server.Data;
+﻿using System;
+using YachtDice.Server.Data;
 
 namespace YachtDice.Server.Logic.Authentication
 {
@@ -14,5 +15,12 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="plainPassword">The player's plain text password.</param>
         /// <returns>The result of the registration attempt.</returns>
         RegistrationResult RegisterPlayer(Player newPlayer, string plainPassword);
+
+        /// <summary>
+        /// Deletes the accounts that did not confirm the email in the 48 hours after they were registered.
+        /// </summary>
+        /// <param name="now">Current moment.</param>
+        /// <returns>How many accounts were deleted.</returns>
+        int RemoveUnverifiedAccounts(DateTime now);
     }
 }

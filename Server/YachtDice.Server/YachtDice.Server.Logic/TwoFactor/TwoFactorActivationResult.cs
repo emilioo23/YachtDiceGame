@@ -1,10 +1,14 @@
-﻿namespace YachtDice.Server.Logic.TwoFactor
+﻿using System;
+namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
     /// Result of the request to turn on the two-step verification.
     /// </summary>
     public class TwoFactorActivationResult
     {
+        private const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
+        private const string NullMaskedEmailMessage = "The masked email cannot be null.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TwoFactorActivationResult"/> class.
         /// </summary>
@@ -14,8 +18,8 @@
         public TwoFactorActivationResult(TwoFactorActivationStatus status, string challengeId, string maskedEmail)
         {
             Status = status;
-            ChallengeId = challengeId;
-            MaskedEmail = maskedEmail;
+            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
+            MaskedEmail = maskedEmail ?? throw new ArgumentNullException(nameof(maskedEmail), NullMaskedEmailMessage);
         }
 
         /// <summary>

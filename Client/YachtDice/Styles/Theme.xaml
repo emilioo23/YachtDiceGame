@@ -129,6 +129,10 @@
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushCream2}"/>
                             <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushWood}"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -136,6 +140,20 @@
     </Style>
 
     
+    <Style x:Key="BtnBack" TargetType="Button" BasedOn="{StaticResource BtnOutline}">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Padding" Value="24,10"/>
+        <Setter Property="MinWidth" Value="140"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushWood}"/>
+        <Setter Property="Effect" Value="{StaticResource ShadowSoft}"/>
+    </Style>
+
+    <Style x:Key="BtnCompact" TargetType="Button" BasedOn="{StaticResource BtnOutline}">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="12,6"/>
+    </Style>
+
     <Style x:Key="TabButtonActive" TargetType="Button" BasedOn="{StaticResource BtnPrimary}">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Padding" Value="0,11"/>

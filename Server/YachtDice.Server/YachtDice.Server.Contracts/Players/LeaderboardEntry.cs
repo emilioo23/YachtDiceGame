@@ -21,6 +21,12 @@ namespace YachtDice.Server.Contracts.Players
         public string DisplayName { get; set; }
 
         /// <summary>
+        /// Identifier of the avatar of the player.
+        /// </summary>
+        [DataMember]
+        public int AvatarId { get; set; }
+
+        /// <summary>
         /// Sum of the final scores of all the games of the player.
         /// </summary>
         [DataMember]
@@ -31,5 +37,11 @@ namespace YachtDice.Server.Contracts.Players
         /// </summary>
         [DataMember]
         public int Wins { get; set; }
+
+        [DataMember]
+        public int GamesPlayed { get; set; }
+
+        [DataMember]
+        public int Level { get; set; }
     }
 }

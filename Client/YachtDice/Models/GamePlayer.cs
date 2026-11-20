@@ -1,0 +1,46 @@
+﻿namespace YachtDice.Models
+{
+    /// <summary>
+    /// Player shown at the top of the scorecard of a match.
+    /// </summary>
+    public class GamePlayer
+    {
+        /// <summary>
+        /// Gets or sets the identifier that the server gave to the player. Two players can show the same name,
+        /// so the identifier is what tells them apart.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the player.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the avatar of the player.
+        /// </summary>
+        public int AvatarId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this is the player who uses the window.
+        /// </summary>
+        public bool IsLocalPlayer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player already left the room.
+        /// </summary>
+        public bool HasLeft { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of this player. A computer
+        /// player cannot be expelled.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player has an account. A guest and a computer player do
+        /// not, so they cannot be reported at the end of the game.
+        /// </summary>
+        public bool IsRegistered { get; set; }
+    }
+}

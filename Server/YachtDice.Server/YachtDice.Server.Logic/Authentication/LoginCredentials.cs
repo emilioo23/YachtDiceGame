@@ -8,9 +8,9 @@ namespace YachtDice.Server.Logic.Authentication
     public class LoginCredentials
     {
         /// <summary>
-        /// Player's email address.
+        /// Email address or username of the player.
         /// </summary>
-        public string Email { get; set; }
+        public string Identifier { get; set; }
 
         /// <summary>
         /// Password in plain text; it is compared against the stored hash.

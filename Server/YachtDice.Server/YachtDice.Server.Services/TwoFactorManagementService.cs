@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.TwoFactor;
+    using AuthenticationContracts = YachtDice.Server.Contracts.Authentication;
+    using LogicAuthentication = YachtDice.Server.Logic.Authentication;
+    using LogicPasskeys = YachtDice.Server.Logic.Passkeys;
     using LogicTwoFactor = YachtDice.Server.Logic.TwoFactor;
 
     /// <summary>
@@ -12,15 +16,32 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
+        private const string NullDependencyMessage = "A dependency of the two-factor management cannot be null.";
+
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
+        private readonly LogicAuthentication.PasswordChangeService _passwordChangeService;
+        private readonly LogicPasskeys.IPasskeyService _passkeyService;
 
         /// <summary>
         /// Initializes a new instance of the TwoFactorManagementService class.
         /// </summary>
         /// <param name="settingsService">The service that turns the two-factor verification on or off.</param>
-        public TwoFactorManagementService(LogicTwoFactor.ITwoFactorSettingsService settingsService)
+        /// <param name="passwordChangeService">
+        /// The service that changes the password of a player who is logged in.
+        /// </param>
+        /// <param name="passkeyService">The service that registers the passkeys and logs in with them.</param>
+        /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
+        public TwoFactorManagementService(
+            LogicTwoFactor.ITwoFactorSettingsService settingsService,
+            LogicAuthentication.PasswordChangeService passwordChangeService,
+            LogicPasskeys.IPasskeyService passkeyService)
         {
-            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _settingsService = settingsService
+                ?? throw new ArgumentNullException(nameof(settingsService), NullDependencyMessage);
+            _passwordChangeService = passwordChangeService
+                ?? throw new ArgumentNullException(nameof(passwordChangeService), NullDependencyMessage);
+            _passkeyService = passkeyService
+                ?? throw new ArgumentNullException(nameof(passkeyService), NullDependencyMessage);
         }
 
         /// <summary>
@@ -38,13 +59,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Starts turning on the two-step verification by sending a code to the player's email.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
-        public Contracts.TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture)
+        public Contracts.TwoFactorActivationData StartTwoFactorActivation(string sessionToken, string culture)
         {
             Contracts.TwoFactorActivationData activation =
-                Execute(displayName, () => ProcessActivationStart(displayName, culture));
+                ExecuteForPlayer(sessionToken, playerName => ProcessActivationStart(playerName, culture));
 
             return activation;
         }
@@ -52,17 +73,16 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         public Contracts.VerificationResultCode ConfirmTwoFactorActivation(
-            string displayName,
-            string code,
-            string challengeId)
+            string sessionToken,
+            Contracts.VerificationCode verificationCode)
         {
-            Contracts.VerificationResultCode result =
-                Execute(displayName, () => ProcessActivationConfirmation(displayName, code, challengeId));
+            Contracts.VerificationResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => ProcessActivationConfirmation(playerName, verificationCode));
 
             return result;
         }
@@ -70,14 +90,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Sends a new code while the player is turning on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="delivery">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public Contracts.ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture)
+        public Contracts.ResendResultCode ResendActivationCode(string sessionToken, Contracts.CodeDelivery delivery)
         {
             Contracts.ResendResultCode result =
-                Execute(displayName, () => ProcessActivationResend(displayName, challengeId, culture));
+                ExecuteForPlayer(sessionToken, playerName => ProcessActivationResend(playerName, delivery));
 
             return result;
         }
@@ -85,15 +104,249 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Turns off the two-step verification after checking the player's password.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
-        public Contracts.TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password)
+        public Contracts.TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password)
         {
             Contracts.TwoFactorChangeResultCode result =
-                Execute(displayName, () => ProcessDisable(displayName, password));
+                ExecuteForPlayer(sessionToken, playerName => ProcessDisable(playerName, password));
 
             return result;
+        }
+
+        /// <summary>
+        /// Changes the password of the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>The result of the change.</returns>
+        public Contracts.PasswordChangeResultCode ChangePassword(string sessionToken, Contracts.PasswordChange change)
+        {
+            Contracts.PasswordChangeResultCode result =
+                ExecuteForPlayer(sessionToken, playerName => ProcessPasswordChange(playerName, change));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        public Contracts.BackupCodesData CreateBackupCodes(string sessionToken, string password)
+        {
+            Contracts.BackupCodesData codesData =
+                ExecuteForPlayer(sessionToken, playerName => ProcessBackupCodeCreation(playerName, password));
+
+            return codesData;
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        public int CountBackupCodes(string sessionToken)
+        {
+            int codeCount = ExecuteForPlayer(sessionToken, playerName => _settingsService.CountBackupCodes(playerName));
+
+            return codeCount;
+        }
+
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The summary of the security of the account.</returns>
+        public Contracts.SecuritySummary GetSecuritySummary(string sessionToken)
+        {
+            Contracts.SecuritySummary summary =
+                ExecuteForPlayer(sessionToken, playerName => ProcessSecuritySummary(playerName));
+
+            return summary;
+        }
+
+        /// <summary>
+        /// Gives the challenge to create a passkey for the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The challenge and the data of the player for the authenticator.</returns>
+        public Contracts.PasskeyChallengeData BeginPasskeyRegistration(string sessionToken)
+        {
+            Contracts.PasskeyChallengeData challenge = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginRegistration(playerName)));
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Checks the answer of the authenticator and saves the new passkey.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="attestation">Answer of the authenticator.</param>
+        /// <returns>Outcome of the registration.</returns>
+        public Contracts.PasskeyRegistrationResultCode CompletePasskeyRegistration(
+            string sessionToken,
+            Contracts.PasskeyAttestationData attestation)
+        {
+            Contracts.PasskeyRegistrationResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => ProcessPasskeyRegistration(playerName, attestation));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Counts the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of passkeys.</returns>
+        public int CountPasskeys(string sessionToken)
+        {
+            int passkeyCount = ExecuteForPlayer(sessionToken, playerName => _passkeyService.CountPasskeys(playerName));
+
+            return passkeyCount;
+        }
+
+        /// <summary>
+        /// Lists the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The passkeys of the player.</returns>
+        public List<Contracts.PasskeyInfoData> ListPasskeys(string sessionToken)
+        {
+            List<Contracts.PasskeyInfoData> passkeys = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.ListPasskeys(playerName)));
+
+            return passkeys;
+        }
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        public Contracts.PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password)
+        {
+            Contracts.PasskeyRemovalResultCode result = ExecuteForPlayer(
+                sessionToken,
+                playerName => Mapping.EnumMapper.Map<
+                    LogicPasskeys.PasskeyRemovalStatus,
+                    Contracts.PasskeyRemovalResultCode>(
+                    _passkeyService.RemovePasskey(playerName, passkeyId, password)));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gives the challenge to log in with a passkey. The player is not known yet, so no session is needed.
+        /// </summary>
+        /// <returns>The challenge.</returns>
+        public Contracts.PasskeyChallengeData BeginPasskeyLogin()
+        {
+            Contracts.PasskeyChallengeData challenge =
+                Execute(() => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginLogin()));
+
+            return challenge;
+        }
+
+        /// <summary>
+        /// Checks the answer of the authenticator and, if it is valid, logs the player in.
+        /// </summary>
+        /// <param name="assertion">Answer of the authenticator.</param>
+        /// <returns>Outcome of the login and the data of the new session.</returns>
+        public AuthenticationContracts.LoginData CompletePasskeyLogin(Contracts.PasskeyAssertionData assertion)
+        {
+            AuthenticationContracts.LoginData loginData = Execute(assertion, () => ProcessPasskeyLogin(assertion));
+
+            return loginData;
+        }
+
+        private Contracts.PasskeyRegistrationResultCode ProcessPasskeyRegistration(
+            string displayName,
+            Contracts.PasskeyAttestationData attestation)
+        {
+            LogicPasskeys.PasskeyRegistrationStatus status =
+                _passkeyService.CompleteRegistration(displayName, Mapping.PasskeyMapper.ToLogic(attestation));
+
+            return Mapping.EnumMapper.Map<
+                LogicPasskeys.PasskeyRegistrationStatus,
+                Contracts.PasskeyRegistrationResultCode>(status);
+        }
+
+        private AuthenticationContracts.LoginData ProcessPasskeyLogin(Contracts.PasskeyAssertionData assertion)
+        {
+            LogicAuthentication.LoginResult logicResult =
+                _passkeyService.CompleteLogin(Mapping.PasskeyMapper.ToLogic(assertion));
+            var loginData = new AuthenticationContracts.LoginData
+            {
+                Code = Mapping.EnumMapper.Map<
+                    LogicAuthentication.LoginStatus,
+                    AuthenticationContracts.LoginResultCode>(logicResult.Status),
+                DisplayName = logicResult.DisplayName,
+                FirstName = logicResult.FirstName,
+                ChallengeId = logicResult.ChallengeId,
+                SessionToken = string.Empty
+            };
+
+            if (logicResult.Status == LogicAuthentication.LoginStatus.LoggedIn)
+            {
+                loginData.SessionToken = Sessions.Start(logicResult.DisplayName);
+            }
+
+            return loginData;
+        }
+
+        private Contracts.SecuritySummary ProcessSecuritySummary(string displayName)
+        {
+            LogicAuthentication.SecuritySummary summary = _passwordChangeService.GetSecuritySummary(displayName);
+
+            return new Contracts.SecuritySummary
+            {
+                HasPasswordChange = summary.HasPasswordChange,
+                LastPasswordChange = summary.LastPasswordChange,
+                HasRecentLock = summary.HasRecentLock,
+                LockedUntil = summary.LockedUntil,
+                LockReason = summary.LockReason
+            };
+        }
+
+        private Contracts.BackupCodesData ProcessBackupCodeCreation(string displayName, string password)
+        {
+            LogicTwoFactor.BackupCodeCreation creation = _settingsService.CreateBackupCodes(displayName, password);
+
+            var codesData = new Contracts.BackupCodesData
+            {
+                Code = Mapping.EnumMapper.Map<
+                    LogicTwoFactor.BackupCodeCreationStatus,
+                    Contracts.BackupCodesResultCode>(creation.Status),
+                Codes = creation.Codes
+            };
+
+            return codesData;
+        }
+
+        private Contracts.PasswordChangeResultCode ProcessPasswordChange(
+            string displayName,
+            Contracts.PasswordChange change)
+        {
+            var logicChange = new LogicAuthentication.PasswordChange
+            {
+                CurrentPassword = change?.CurrentPassword,
+                NewPassword = change?.NewPassword
+            };
+            LogicAuthentication.PasswordChangeStatus status =
+                _passwordChangeService.ChangePassword(displayName, logicChange);
+
+            return Mapping.EnumMapper.Map<
+                LogicAuthentication.PasswordChangeStatus,
+                Contracts.PasswordChangeResultCode>(status);
         }
 
         private Contracts.TwoFactorActivationData ProcessActivationStart(string displayName, string culture)
@@ -115,11 +368,16 @@ namespace YachtDice.Server.Services
 
         private Contracts.VerificationResultCode ProcessActivationConfirmation(
             string displayName,
-            string code,
-            string challengeId)
+            Contracts.VerificationCode verificationCode)
         {
+            var logicCode = new LogicTwoFactor.VerificationCode
+            {
+                Code = verificationCode.Code,
+                ChallengeId = verificationCode.ChallengeId
+            };
+
             LogicTwoFactor.TwoFactorValidationStatus logicResult =
-                _settingsService.ConfirmActivation(displayName, code, challengeId);
+                _settingsService.ConfirmActivation(displayName, logicCode);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorValidationStatus, Contracts.VerificationResultCode>(
                 logicResult);
@@ -127,11 +385,16 @@ namespace YachtDice.Server.Services
 
         private Contracts.ResendResultCode ProcessActivationResend(
             string displayName,
-            string challengeId,
-            string culture)
+            Contracts.CodeDelivery delivery)
         {
+            var logicDelivery = new LogicTwoFactor.CodeDelivery
+            {
+                ChallengeId = delivery.ChallengeId,
+                CultureName = delivery.Culture
+            };
+
             LogicTwoFactor.ResendCodeStatus logicResult =
-                _settingsService.ResendActivationCode(displayName, culture, challengeId);
+                _settingsService.ResendActivationCode(displayName, logicDelivery);
 
             return Mapping.EnumMapper.Map<LogicTwoFactor.ResendCodeStatus, Contracts.ResendResultCode>(logicResult);
         }

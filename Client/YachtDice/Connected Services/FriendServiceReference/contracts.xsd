@@ -4,7 +4,7 @@
   <xs:element name="SendFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="targetUsername" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -26,6 +26,9 @@
       <xs:enumeration value="AlreadyFriends" />
       <xs:enumeration value="AlreadyRequested" />
       <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="FriendLimitReached" />
+      <xs:enumeration value="TooManyPendingRequests" />
+      <xs:enumeration value="Blocked" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendRequestResultCode" nillable="true" type="tns:FriendRequestResultCode" />
@@ -41,18 +44,26 @@
       <xs:enumeration value="UnexpectedError" />
       <xs:enumeration value="DatabaseUnavailable" />
       <xs:enumeration value="ValidationFailed" />
+      <xs:enumeration value="SessionExpired" />
+      <xs:enumeration value="SessionReplaced" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
   <xs:element name="RespondToFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="requesterName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="isAccepted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="answer" nillable="true" type="tns:FriendRequestAnswer" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="FriendRequestAnswer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsAccepted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RequesterName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendRequestAnswer" nillable="true" type="tns:FriendRequestAnswer" />
   <xs:element name="RespondToFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
@@ -65,13 +76,15 @@
       <xs:enumeration value="Success" />
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="RelationNotFound" />
+      <xs:enumeration value="FriendLimitReached" />
+      <xs:enumeration value="InvalidTarget" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FriendActionResultCode" nillable="true" type="tns:FriendActionResultCode" />
   <xs:element name="RemoveFriend">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="friendName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -83,6 +96,52 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BlockPlayer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="blockedName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BlockPlayerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="BlockPlayerResult" type="tns:FriendActionResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InviteToRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sender" nillable="true" type="tns:RoomMember" />
+        <xs:element minOccurs="0" name="friendName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="RoomMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RoomCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoomMember" nillable="true" type="tns:RoomMember" />
+  <xs:element name="InviteToRoomResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="InviteToRoomResult" type="tns:InvitationResultCode" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="InvitationResultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sent" />
+      <xs:enumeration value="NotInRoom" />
+      <xs:enumeration value="NotFriends" />
+      <xs:enumeration value="FriendOffline" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="InvitationResultCode" nillable="true" type="tns:InvitationResultCode" />
   <xs:element name="GetUsername">
     <xs:complexType>
       <xs:sequence>

@@ -8,9 +8,7 @@
         /// <summary>
         /// Sends an email synchronously.
         /// </summary>
-        /// <param name="to">Recipient email address.</param>
-        /// <param name="subject">Subject of the email.</param>
-        /// <param name="body">Body of the email.</param>
-        void Send(string to, string subject, string body);
+        /// <param name="message">Email to send, with its recipient, subject and body.</param>
+        void Send(EmailMessage message);
     }
 }

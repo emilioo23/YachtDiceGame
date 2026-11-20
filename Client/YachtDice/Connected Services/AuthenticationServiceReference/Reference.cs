@@ -26,7 +26,7 @@ namespace YachtDice.AuthenticationServiceReference {
         private string CultureNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
+        private string IdentifierField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
@@ -55,14 +55,14 @@ namespace YachtDice.AuthenticationServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
+        public string Identifier {
             get {
-                return this.EmailField;
+                return this.IdentifierField;
             }
             set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
+                if ((object.ReferenceEquals(this.IdentifierField, value) != true)) {
+                    this.IdentifierField = value;
+                    this.RaisePropertyChanged("Identifier");
                 }
             }
         }
@@ -109,7 +109,13 @@ namespace YachtDice.AuthenticationServiceReference {
         private string DisplayNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FirstNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -161,6 +167,19 @@ namespace YachtDice.AuthenticationServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string FirstName {
             get {
                 return this.FirstNameField;
@@ -169,6 +188,19 @@ namespace YachtDice.AuthenticationServiceReference {
                 if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
                     this.FirstNameField = value;
                     this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
                 }
             }
         }
@@ -197,13 +229,25 @@ namespace YachtDice.AuthenticationServiceReference {
         InvalidCredentials = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        VerificationLocked = 3,
+        InvalidEmail = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        CodeSendFailed = 4,
+        VerificationLocked = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        LoggedIn = 5,
+        CodeSendFailed = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LoggedIn = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TemporarilyLocked = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LockedForTheDay = 8,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SuspendedByReports = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -279,6 +323,73 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionReplaced = 4,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCode", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class VerificationCode : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -296,6 +407,67 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Locked = 3,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CodeDelivery", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class CodeDelivery : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ChallengeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CultureField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ChallengeId {
+            get {
+                return this.ChallengeIdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ChallengeIdField, value) != true)) {
+                    this.ChallengeIdField = value;
+                    this.RaisePropertyChanged("ChallengeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Culture {
+            get {
+                return this.CultureField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CultureField, value) != true)) {
+                    this.CultureField = value;
+                    this.RaisePropertyChanged("Culture");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -318,6 +490,123 @@ namespace YachtDice.AuthenticationServiceReference {
         PlayerNotFound = 4,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetRequestResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasswordResetRequestResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MissingRequiredField = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeSendFailed = 2,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetData", Namespace="urn:yachtdice:contracts")]
+    [System.SerializableAttribute()]
+    public partial class PasswordResetData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NewPasswordField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodeField, value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NewPassword {
+            get {
+                return this.NewPasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NewPasswordField, value) != true)) {
+                    this.NewPasswordField = value;
+                    this.RaisePropertyChanged("NewPassword");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetResultCode", Namespace="urn:yachtdice:contracts")]
+    public enum PasswordResetResultCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordChanged = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MissingRequiredField = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        IncorrectCode = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CodeExpired = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TooManyAttempts = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WeakPassword = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PasswordUsedBefore = 6,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:yachtdice:contracts", ConfigurationName="AuthenticationServiceReference.IAuthenticationService")]
     public interface IAuthenticationService {
@@ -328,11 +617,21 @@ namespace YachtDice.AuthenticationServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/VerifyPlayerCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId);
+        YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, YachtDice.AuthenticationServiceReference.VerificationCode verificationCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault", Name="ServiceFault")]
-        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture);
+        YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.CodeDelivery delivery);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFa" +
+            "ult", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode RequestPasswordReset(string email, string culture);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordReset", ReplyAction="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.AuthenticationServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetServiceFaultFa" +
+            "ult", Name="ServiceFault")]
+        YachtDice.AuthenticationServiceReference.PasswordResetResultCode ConfirmPasswordReset(YachtDice.AuthenticationServiceReference.PasswordResetData data);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -366,12 +665,20 @@ namespace YachtDice.AuthenticationServiceReference {
             return base.Channel.LoginPlayer(credentials);
         }
         
-        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, string code, string challengeId) {
-            return base.Channel.VerifyPlayerCode(email, code, challengeId);
+        public YachtDice.AuthenticationServiceReference.VerificationResultCode VerifyPlayerCode(string email, YachtDice.AuthenticationServiceReference.VerificationCode verificationCode) {
+            return base.Channel.VerifyPlayerCode(email, verificationCode);
         }
         
-        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, string challengeId, string culture) {
-            return base.Channel.ResendPlayerCode(email, challengeId, culture);
+        public YachtDice.AuthenticationServiceReference.ResendResultCode ResendPlayerCode(string email, YachtDice.AuthenticationServiceReference.CodeDelivery delivery) {
+            return base.Channel.ResendPlayerCode(email, delivery);
+        }
+        
+        public YachtDice.AuthenticationServiceReference.PasswordResetRequestResultCode RequestPasswordReset(string email, string culture) {
+            return base.Channel.RequestPasswordReset(email, culture);
+        }
+        
+        public YachtDice.AuthenticationServiceReference.PasswordResetResultCode ConfirmPasswordReset(YachtDice.AuthenticationServiceReference.PasswordResetData data) {
+            return base.Channel.ConfirmPasswordReset(data);
         }
     }
 }

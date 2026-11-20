@@ -4,21 +4,30 @@ using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Lets a player turn the two-step verification on or off.
+    /// Lets a player turn the two-step verification on or off and create the backup codes that replace the code
+    /// sent by email.
     /// </summary>
     public class TwoFactorSettingsService : ITwoFactorSettingsService
     {
         private const int VisibleLocalPartChars = 2;
         private const int FirstCharacterIndex = 0;
+        private const int NoBackupCodes = 0;
         private const char MaskCharacter = '*';
         private const char AtSign = '@';
-        private const string NullDependencyMessage = "The dependency cannot be null.";
+        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the two-factor settings cannot be null.";
+        private const string EnabledLogFormat = "Player {0} turned on the two-step verification.";
+        private const string DisabledLogFormat = "Player {0} turned off the two-step verification.";
+        private const string BackupCodesLogFormat = "Player {0} created new backup codes.";
+        private const string WrongPasswordLogFormat = "A wrong password was typed in a security change of player {0}.";
 
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -40,6 +49,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -89,21 +99,21 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Checks the code entered by the player and, if it is correct, turns the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="verificationCode">Code entered by the player and the activation challenge it answers.</param>
         /// <returns>Result of the validation.</returns>
-        public TwoFactorValidationStatus ConfirmActivation(string displayName, string code, string challengeId)
+        public TwoFactorValidationStatus ConfirmActivation(string displayName, VerificationCode verificationCode)
         {
             Player player = FindPlayers(displayName).FirstOrDefault();
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
 
             if (player != null)
             {
-                status = _verificationService.VerifyPlayerCode(player.Email, code, challengeId);
+                status = _verificationService.VerifyPlayerCode(player.Email, verificationCode);
 
                 if (status == TwoFactorValidationStatus.Valid)
                 {
                     _playerRepository.SaveTwoFactorEnabled(player.Id, true);
+                    _logger.Info(Describe(EnabledLogFormat, player));
                 }
             }
 
@@ -114,17 +124,22 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="cultureName">Name of the language in which the email is written.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="delivery">Activation challenge and language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public ResendCodeStatus ResendActivationCode(string displayName, string cultureName, string challengeId)
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendActivationCode(string displayName, CodeDelivery delivery)
         {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
             Player player = FindPlayers(displayName).FirstOrDefault();
             ResendCodeStatus status = ResendCodeStatus.PlayerNotFound;
 
             if (player != null)
             {
-                status = _verificationService.ResendPlayerCode(player.Email, cultureName, challengeId);
+                status = _verificationService.ResendPlayerCode(player.Email, delivery);
             }
 
             return status;
@@ -145,17 +160,82 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 status = TwoFactorChangeStatus.PlayerNotFound;
             }
-            else if (string.IsNullOrEmpty(password) || !PasswordHasher.Verify(password, player.PwdHash))
+            else if (!IsPasswordCorrect(player, password))
             {
+                _logger.Warning(Describe(WrongPasswordLogFormat, player));
                 status = TwoFactorChangeStatus.InvalidPassword;
             }
             else
             {
                 _playerRepository.SaveTwoFactorEnabled(player.Id, false);
+                _verificationService.RemoveBackupCodes(player.Id);
+                _logger.Info(Describe(DisabledLogFormat, player));
                 status = TwoFactorChangeStatus.Success;
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        public BackupCodeCreation CreateBackupCodes(string displayName, string password)
+        {
+            Player player = FindPlayers(displayName).FirstOrDefault();
+            BackupCodeCreation creation;
+
+            if (player == null)
+            {
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.PlayerNotFound, new List<string>());
+            }
+            else if (!IsPasswordCorrect(player, password))
+            {
+                _logger.Warning(Describe(WrongPasswordLogFormat, player));
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.InvalidPassword, new List<string>());
+            }
+            else if (!_playerRepository.HasTwoFactorEnabled(player.Id))
+            {
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.TwoFactorDisabled, new List<string>());
+            }
+            else
+            {
+                List<string> codes = _verificationService.CreateBackupCodes(player.Id);
+                _logger.Info(Describe(BackupCodesLogFormat, player));
+                creation = new BackupCodeCreation(BackupCodeCreationStatus.Created, codes);
+            }
+
+            return creation;
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The number of backup codes left; zero if the player does not exist.</returns>
+        public int CountBackupCodes(string displayName)
+        {
+            Player player = FindPlayers(displayName).FirstOrDefault();
+            int codeCount = NoBackupCodes;
+
+            if (player != null)
+            {
+                codeCount = _verificationService.CountBackupCodes(player.Id);
+            }
+
+            return codeCount;
+        }
+
+        private static string Describe(string logFormat, Player player)
+        {
+            return string.Format(CultureInfo.InvariantCulture, logFormat, player.Id);
+        }
+
+        private static bool IsPasswordCorrect(Player player, string password)
+        {
+            return !string.IsNullOrEmpty(password) && PasswordHasher.Verify(password, player.PwdHash);
         }
 
         private static TwoFactorActivationResult CreateFailure(TwoFactorActivationStatus status)
@@ -194,7 +274,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
             if (isSent)

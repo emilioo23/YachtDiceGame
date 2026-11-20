@@ -33,6 +33,24 @@
   <wsdl:message name="IAuthenticationService_ResendPlayerCode_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IAuthenticationService_RequestPasswordReset_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestPasswordReset" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_RequestPasswordReset_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestPasswordResetResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_RequestPasswordReset_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmPasswordReset_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmPasswordReset" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmPasswordReset_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmPasswordResetResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_ConfirmPasswordReset_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="LoginPlayer">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/LoginPlayer" message="tns:IAuthenticationService_LoginPlayer_InputMessage" />
@@ -48,6 +66,16 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCode" message="tns:IAuthenticationService_ResendPlayerCode_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeResponse" message="tns:IAuthenticationService_ResendPlayerCode_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ResendPlayerCodeServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ResendPlayerCode_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestPasswordReset">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordReset" message="tns:IAuthenticationService_RequestPasswordReset_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetResponse" message="tns:IAuthenticationService_RequestPasswordReset_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/RequestPasswordResetServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_RequestPasswordReset_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmPasswordReset">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordReset" message="tns:IAuthenticationService_ConfirmPasswordReset_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetResponse" message="tns:IAuthenticationService_ConfirmPasswordReset_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IAuthenticationService/ConfirmPasswordResetServiceFaultFault" name="ServiceFaultFault" message="tns:IAuthenticationService_ConfirmPasswordReset_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

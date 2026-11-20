@@ -11,6 +11,16 @@ namespace YachtDice.Gateway
     public class AuthenticationGateway : GatewayBase<AuthenticationServiceClient, IAuthenticationService>
     {
         /// <summary>
+        /// Opens and closes a connection to the server so the first real call does not pay for the start-up.
+        /// </summary>
+        /// <returns>A task that finishes when the connection was opened.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task WarmUpAsync()
+        {
+            await ExecuteAsync(OpenConnection);
+        }
+
+        /// <summary>
         /// Checks the credentials and asks the server to send the verification code.
         /// </summary>
         /// <param name="credentials">Login credentials of the player.</param>
@@ -26,13 +36,12 @@ namespace YachtDice.Gateway
         /// Validates the verification code entered by the player.
         /// </summary>
         /// <param name="email">Email address the code was sent to.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the login session.</param>
         /// <returns>Result of the validation.</returns>
-        public async Task<VerificationResultCode> VerifyCodeAsync(string email, string code, string challengeId)
+        public async Task<VerificationResultCode> VerifyCodeAsync(string email, VerificationCode verificationCode)
         {
             VerificationResultCode result =
-                await ExecuteAsync(client => client.VerifyPlayerCode(email, code, challengeId));
+                await ExecuteAsync(client => client.VerifyPlayerCode(email, verificationCode));
 
             return result;
         }
@@ -41,13 +50,42 @@ namespace YachtDice.Gateway
         /// Asks the server to send a new verification code.
         /// </summary>
         /// <param name="email">Email address to send the new code to.</param>
-        /// <param name="challengeId">Unique challenge identifier tied to the login session.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="challengeId">Challenge whose code is sent again.</param>
+        /// <param name="culture">Culture preferred by the player for the email.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        public async Task<ResendResultCode> ResendCodeAsync(string email, string challengeId, string culture)
+        public async Task<ResendResultCode> ResendCodeAsync(
+            string email,
+            string challengeId,
+            string culture)
         {
-            ResendResultCode result =
-                await ExecuteAsync(client => client.ResendPlayerCode(email, challengeId, culture));
+            var delivery = new CodeDelivery { ChallengeId = challengeId, Culture = culture };
+            ResendResultCode result = await ExecuteAsync(client => client.ResendPlayerCode(email, delivery));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server to send a password recovery code to the email of the account.
+        /// </summary>
+        /// <param name="email">Email of the account to recover.</param>
+        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <returns>Outcome of the request.</returns>
+        public async Task<PasswordResetRequestResultCode> RequestPasswordResetAsync(string email, string culture)
+        {
+            PasswordResetRequestResultCode result =
+                await ExecuteAsync(client => client.RequestPasswordReset(email, culture));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends the recovery code and the new password so the server changes the password of the account.
+        /// </summary>
+        /// <param name="data">Email, code and new password written by the player.</param>
+        /// <returns>Outcome of the confirmation.</returns>
+        public async Task<PasswordResetResultCode> ConfirmPasswordResetAsync(PasswordResetData data)
+        {
+            PasswordResetResultCode result = await ExecuteAsync(client => client.ConfirmPasswordReset(data));
 
             return result;
         }
@@ -62,6 +100,13 @@ namespace YachtDice.Gateway
             var typedFault = fault as FaultException<AuthFault>;
 
             return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
+        }
+
+        private static bool OpenConnection(AuthenticationServiceClient client)
+        {
+            client.Open();
+
+            return true;
         }
     }
 }

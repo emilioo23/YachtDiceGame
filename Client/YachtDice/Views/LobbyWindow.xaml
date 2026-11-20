@@ -28,14 +28,55 @@
                                      Margin="0,-16,0,0"
                                      Panel.ZIndex="99"/>
 
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Panel.ZIndex="99">
+
+                <Button x:Name="BackToMenuButton"
+                        Content="{x:Static properties:Strings.Lobby_ButtonBackToMenu}"
+                        Style="{StaticResource BtnOutline}"
+                        Padding="20,10"
+                        FontSize="16"
+                        Click="BackToMenuButton_Click"/>
+
+                <Button x:Name="HowToPlayButton"
+                        Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}"
+                        Style="{StaticResource BtnOutline}"
+                        Margin="10,0,0,0"
+                        Padding="20,10"
+                        FontSize="16"
+                        Click="HowToPlayButton_Click"/>
+
+            </StackPanel>
+
+            <Grid Width="300"
+                  Height="720"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <views:InviteFriendsPanel x:Name="FriendsPanel"
+                                          Grid.Row="0"
+                                          Margin="0,0,0,14"/>
+
+                <views:ChatPanel x:Name="ChatPanelControl"
+                                 Grid.Row="1"
+                                 PanelHeight="330"/>
+            </Grid>
+
             <Border Style="{StaticResource CardPanel}"
                     Width="760"
+                    Margin="0,0,300,0"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
 
                 <StackPanel>
 
-                    <Grid Margin="0,0,0,6">
+                    <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
@@ -59,11 +100,15 @@
                         </Border>
                     </Grid>
 
-                    <TextBlock Text="{x:Static properties:Strings.Lobby_LinkBackToPlay}"
-                               Style="{StaticResource LinkText}"
-                               Margin="0,0,0,20"
-                               FontSize="15"
-                               MouseLeftButtonUp="BackToPlayLink_Click"/>
+                    <TextBlock Text="{x:Static properties:Strings.Lobby_RoomName}"
+                               Style="{StaticResource FieldLabel}"
+                               FontSize="15"/>
+
+                    <TextBox x:Name="RoomNameTextBox"
+                             Style="{StaticResource TextBoxRounded}"
+                             Margin="0,0,0,16"
+                             LostFocus="RoomNameTextBox_LostFocus"
+                             KeyDown="RoomNameTextBox_KeyDown"/>
 
                     <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
@@ -191,6 +236,22 @@
                                    HorizontalAlignment="Right"/>
                     </Grid>
 
+                    <StackPanel x:Name="ComputerDifficultyPanel"
+                                Orientation="Horizontal"
+                                Margin="0,0,0,10">
+
+                        <TextBlock Text="{x:Static properties:Strings.Lobby_ComputerDifficulty}"
+                                   FontSize="14"
+                                   Margin="0,0,8,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource BrushTextMuted}"/>
+
+                        <ComboBox x:Name="ComputerDifficultyComboBox"
+                                  Padding="10,6"
+                                  FontSize="14"
+                                  MinWidth="130"/>
+                    </StackPanel>
+
                     <ItemsControl x:Name="PlayerSlotsItemsControl"
                                   Margin="-3,0,-3,24">
 
@@ -209,33 +270,59 @@
                                             CornerRadius="8"
                                             Padding="10">
 
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel>
 
-                                            <Border Width="30"
-                                                    Height="30"
-                                                    CornerRadius="15"
-                                                    Background="{StaticResource BrushWood}"
-                                                    Margin="0,0,8,0">
+                                            <StackPanel Orientation="Horizontal">
 
-                                                <TextBlock Text="{Binding Initial}"
-                                                           Foreground="White"
-                                                           FontWeight="Bold"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           FontSize="15"/>
-                                            </Border>
+                                                <Image Source="{Binding AvatarId,
+                                                               Converter={StaticResource AvatarImageConverter}}"
+                                                       Width="36"
+                                                       Height="36"
+                                                       VerticalAlignment="Top"
+                                                       Margin="0,0,8,0"/>
 
-                                            <StackPanel>
+                                                <StackPanel VerticalAlignment="Center">
 
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           FontSize="15"
-                                                           Foreground="{StaticResource BrushText}"/>
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="15"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Foreground="{StaticResource BrushText}"/>
 
-                                                <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
-                                                           Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                           FontSize="12"
-                                                           Foreground="{StaticResource BrushFeltLight}"/>
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_Host}"
+                                                               Visibility="{Binding IsHost, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
+
+                                                    <TextBlock Text="{Binding ComputerLabel}"
+                                                               Visibility="{Binding IsComputer, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushTextMuted}"/>
+
+                                                    <TextBlock Text="{x:Static properties:Strings.Lobby_PlayerReady}"
+                                                               Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource BrushFeltLight}"/>
+                                                </StackPanel>
+
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,8,0,0"
+                                                        Visibility="{Binding CanManage,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostKick}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Margin="0,0,0,4"
+                                                        Visibility="{Binding CanBeKicked,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        Click="KickButton_Click"/>
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Visibility="{Binding CanBecomeHost,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        Click="TransferButton_Click"/>
                                             </StackPanel>
 
                                         </StackPanel>
@@ -248,11 +335,20 @@
                                             BorderThickness="1"
                                             Padding="10">
 
-                                        <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
-                                                   FontSize="13"
-                                                   Foreground="{StaticResource BrushTextMuted}"
-                                                   TextWrapping="Wrap"
-                                                   VerticalAlignment="Center"/>
+                                        <StackPanel VerticalAlignment="Center">
+
+                                            <TextBlock Text="{x:Static properties:Strings.Lobby_WaitingPlayer}"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource BrushTextMuted}"
+                                                       TextWrapping="Wrap"/>
+
+                                            <Button Content="{x:Static properties:Strings.Lobby_ButtonAddComputer}"
+                                                    Style="{StaticResource BtnCompact}"
+                                                    Margin="0,8,0,0"
+                                                    Visibility="{Binding CanAddComputer,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    Click="AddComputerButton_Click"/>
+                                        </StackPanel>
                                     </Border>
 
                                 </Grid>

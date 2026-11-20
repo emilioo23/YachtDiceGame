@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PasswordReset_EmailBody" xml:space="preserve">
+    <value>Hi {0}, your code to recover your password is: {1}. This code expires in {2} minutes. If you did not ask for it, ignore this message.</value>
+  </data>
+  <data name="PasswordReset_EmailSubject" xml:space="preserve">
+    <value>Recover your Yacht Dice password</value>
+  </data>
   <data name="TwoFactor_EmailBody" xml:space="preserve">
     <value>Hi {0}, your verification code is: {1}. This code expires in {2} minutes. If you did not try to sign in, ignore this message.</value>
   </data>
   <data name="TwoFactor_EmailSubject" xml:space="preserve">
     <value>Your Yacht Dice verification code</value>
+  </data>
+  <data name="AccountLock_EmailBody" xml:space="preserve">
+    <value>Hi {0}, your Yacht Dice account was locked for {1} hours because a wrong password was typed 10 times today. If it was not you, we recommend changing your password when it is unlocked.</value>
+  </data>
+  <data name="AccountLock_EmailSubject" xml:space="preserve">
+    <value>Your Yacht Dice account was locked for security</value>
   </data>
 </root>

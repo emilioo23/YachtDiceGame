@@ -1,4 +1,4 @@
-namespace YachtDice.Utils
+﻿namespace YachtDice.Utils
 {
     /// <summary>
     /// Holds the texts that a dialog shows.

@@ -4,14 +4,17 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
 using YachtDice.Resources;
 using YachtDice.Utils;
 using AuthResendResult = YachtDice.AuthenticationServiceReference.ResendResultCode;
+using AuthVerificationCode = YachtDice.AuthenticationServiceReference.VerificationCode;
 using AuthVerificationResult = YachtDice.AuthenticationServiceReference.VerificationResultCode;
 using TwoFactorResendResult = YachtDice.TwoFactorManagementServiceReference.ResendResultCode;
+using TwoFactorVerificationCode = YachtDice.TwoFactorManagementServiceReference.VerificationCode;
 using TwoFactorVerificationResult = YachtDice.TwoFactorManagementServiceReference.VerificationResultCode;
 
 namespace YachtDice.Views
@@ -21,18 +24,15 @@ namespace YachtDice.Views
     /// </summary>
     public partial class TwoFactorWindow : Window
     {
-        private const int VisibleLocalPartChars = 2;
-        private const int FirstCharacterIndex = 0;
-        private const char MaskCharacter = '*';
-        private const char AtSign = '@';
         private const int MaxDigitsPerBox = 1;
+        private const int FirstBoxIndex = 0;
+        private const string NullChallengeMessage = "The verification challenge cannot be null.";
 
         private readonly string _email;
         private readonly PlayerSession _session;
         private readonly string _challengeId;
         private readonly bool _isActivation;
 
-        // Both gateways are needed because the window serves the login and the activation of the verification.
         private readonly AuthenticationGateway _authGateway = new AuthenticationGateway();
         private readonly TwoFactorManagementGateway _twoFactorGateway = new TwoFactorManagementGateway();
 
@@ -44,6 +44,11 @@ namespace YachtDice.Views
         /// <param name="challenge">Data of the verification code that was sent to the player.</param>
         public TwoFactorWindow(VerificationChallenge challenge)
         {
+            if (challenge == null)
+            {
+                throw new ArgumentNullException(nameof(challenge), NullChallengeMessage);
+            }
+
             InitializeComponent();
 
             _email = challenge.Email;
@@ -61,7 +66,16 @@ namespace YachtDice.Views
                 box.MaxLength = MaxDigitsPerBox;
             }
 
-            DestinationEmailTextBlock.Text = _isActivation ? _email : MaskEmail(_email);
+            DestinationEmailTextBlock.Text = _email;
+
+            if (!_isActivation)
+            {
+                DestinationEmailTextBlock.Text = EmailMask.Mask(_email);
+                UseBackupCodeLink.Visibility = Visibility.Visible;
+            }
+
+            BackupCodeTextBox.MaxLength = BackupCodeValidator.BackupCodeLength;
+
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
         }
@@ -76,7 +90,8 @@ namespace YachtDice.Views
             var box = (TextBox)sender;
             int index = Array.IndexOf(_digitBoxes, box);
             bool isPaste = e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
-            bool isBackOnEmptyBox = e.Key == Key.Back && box.Text.Length == 0 && index > 0;
+            bool isEmptyBoxAfterFirst = box.Text.Length == 0 && index > FirstBoxIndex;
+            bool isBackOnEmptyBox = e.Key == Key.Back && isEmptyBoxAfterFirst;
 
             if (isPaste)
             {
@@ -103,7 +118,7 @@ namespace YachtDice.Views
             }
             else if (IsCodeComplete())
             {
-                await VerifyCodeAsync();
+                await VerifyCodeAsync(ReadDigits());
             }
         }
 
@@ -111,7 +126,7 @@ namespace YachtDice.Views
         {
             if (IsCodeComplete())
             {
-                await VerifyCodeAsync();
+                await VerifyCodeAsync(ReadDigits());
             }
             else
             {
@@ -126,7 +141,7 @@ namespace YachtDice.Views
                 if (_isActivation)
                 {
                     TwoFactorResendResult result = await _twoFactorGateway.ResendActivationCodeAsync(
-                        _session.DisplayName,
+                        _session.SessionToken,
                         _challengeId,
                         App.CurrentCultureCode);
 
@@ -148,6 +163,28 @@ namespace YachtDice.Views
             }
         }
 
+        private void UseBackupCodeLink_Click(object sender, MouseButtonEventArgs e)
+        {
+            BackupCodePanel.Visibility = Visibility.Visible;
+            BackupCodeTextBox.Focus();
+        }
+
+        private async void UseBackupCodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            string backupCode = BackupCodeTextBox.Text.Trim();
+
+            if (BackupCodeValidator.IsValid(backupCode))
+            {
+                UseBackupCodeButton.IsEnabled = false;
+                await VerifyCodeAsync(backupCode);
+                UseBackupCodeButton.IsEnabled = true;
+            }
+            else
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.TwoFactor_ErrorInvalidBackupCode);
+            }
+        }
+
         private void BackLink_Click(object sender, MouseButtonEventArgs e)
         {
             if (_isActivation)
@@ -156,51 +193,40 @@ namespace YachtDice.Views
             }
             else
             {
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_session.Services));
             }
-        }
-
-        private static string MaskEmail(string email)
-        {
-            int atIndex = email.IndexOf(AtSign);
-            string maskedEmail = email;
-
-            if (atIndex > VisibleLocalPartChars)
-            {
-                string visiblePart = email.Substring(FirstCharacterIndex, VisibleLocalPartChars);
-                string hiddenPart = new string(MaskCharacter, atIndex - VisibleLocalPartChars);
-
-                maskedEmail = visiblePart + hiddenPart + email.Substring(atIndex);
-            }
-
-            return maskedEmail;
         }
 
         private bool IsCodeComplete()
         {
-            bool isComplete = _digitBoxes.All(box => !string.IsNullOrEmpty(box.Text));
+            Func<TextBox, bool> hasDigit = box => !string.IsNullOrEmpty(box.Text);
+            bool isComplete = _digitBoxes.All(hasDigit);
 
             return isComplete;
         }
 
-        private async Task VerifyCodeAsync()
+        private string ReadDigits()
         {
-            string code = string.Concat(_digitBoxes.Select(box => box.Text));
+            return string.Concat(_digitBoxes.Select(box => box.Text));
+        }
 
+        private async Task VerifyCodeAsync(string code)
+        {
             try
             {
                 if (_isActivation)
                 {
+                    var verificationCode = new TwoFactorVerificationCode { Code = code, ChallengeId = _challengeId };
                     TwoFactorVerificationResult result = await _twoFactorGateway.ConfirmActivationAsync(
-                        _session.DisplayName,
-                        code,
-                        _challengeId);
+                        _session.SessionToken,
+                        verificationCode);
 
                     HandleVerificationResult((AuthVerificationResult)(int)result);
                 }
                 else
                 {
-                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, code, _challengeId);
+                    var verificationCode = new AuthVerificationCode { Code = code, ChallengeId = _challengeId };
+                    AuthVerificationResult result = await _authGateway.VerifyCodeAsync(_email, verificationCode);
                     HandleVerificationResult(result);
                 }
             }
@@ -277,7 +303,13 @@ namespace YachtDice.Views
 
         private void PasteCodeFromClipboard()
         {
-            string clipboardText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
+            string clipboardText = string.Empty;
+
+            if (Clipboard.ContainsText())
+            {
+                clipboardText = Clipboard.GetText();
+            }
+
             var digits = new string(clipboardText.Where(char.IsDigit).Take(_digitBoxes.Length).ToArray());
 
             ClearDigits();

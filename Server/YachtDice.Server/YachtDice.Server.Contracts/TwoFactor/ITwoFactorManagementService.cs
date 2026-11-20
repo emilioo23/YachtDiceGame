@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace YachtDice.Server.Contracts.TwoFactor
 {
@@ -20,43 +21,146 @@ namespace YachtDice.Server.Contracts.TwoFactor
         /// <summary>
         /// Starts turning on the two-step verification by sending a code to the player's email.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="culture">Culture or language code preferred by the player.</param>
         /// <returns>Outcome of the request and the data of the challenge.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        TwoFactorActivationData StartTwoFactorActivation(string displayName, string culture);
+        TwoFactorActivationData StartTwoFactorActivation(string sessionToken, string culture);
 
         /// <summary>
         /// Checks the code entered by the player and, if correct, turns on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="verificationCode">Code entered by the player and the challenge of the activation.</param>
         /// <returns>Result of the validation.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        VerificationResultCode ConfirmTwoFactorActivation(string displayName, string code, string challengeId);
+        VerificationResultCode ConfirmTwoFactorActivation(string sessionToken, VerificationCode verificationCode);
 
         /// <summary>
         /// Sends a new code while the player is turning on the two-step verification.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
-        /// <param name="challengeId">Unique challenge identifier of the activation.</param>
-        /// <param name="culture">Culture or language code preferred by the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="delivery">Challenge of the activation and culture preferred by the player.</param>
         /// <returns>Outcome of the resend attempt.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        ResendResultCode ResendActivationCode(string displayName, string challengeId, string culture);
+        ResendResultCode ResendActivationCode(string sessionToken, CodeDelivery delivery);
 
         /// <summary>
         /// Turns off the two-step verification after checking the player's password.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        TwoFactorChangeResultCode DisableTwoFactor(string displayName, string password);
+        TwoFactorChangeResultCode DisableTwoFactor(string sessionToken, string password);
+
+        /// <summary>
+        /// Changes the password of the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>The result of the change.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasswordChangeResultCode ChangePassword(string sessionToken, PasswordChange change);
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        BackupCodesData CreateBackupCodes(string sessionToken, string password);
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        int CountBackupCodes(string sessionToken);
+
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The summary of the security of the account.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        SecuritySummary GetSecuritySummary(string sessionToken);
+
+        /// <summary>
+        /// Gives the challenge to create a passkey for the player who is logged in.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The challenge and the data of the player for the authenticator.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyChallengeData BeginPasskeyRegistration(string sessionToken);
+
+        /// <summary>
+        /// Checks the answer of the authenticator and saves the new passkey.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="attestation">Answer of the authenticator.</param>
+        /// <returns>Outcome of the registration.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyRegistrationResultCode CompletePasskeyRegistration(
+            string sessionToken,
+            PasskeyAttestationData attestation);
+
+        /// <summary>
+        /// Counts the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The number of passkeys.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        int CountPasskeys(string sessionToken);
+
+        /// <summary>
+        /// Lists the passkeys that the player has registered.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The passkeys of the player.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<PasskeyInfoData> ListPasskeys(string sessionToken);
+
+        /// <summary>
+        /// Removes a passkey of the player after checking the password.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="passkeyId">Identifier of the passkey to remove.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the removal.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyRemovalResultCode RemovePasskey(string sessionToken, int passkeyId, string password);
+
+        /// <summary>
+        /// Gives the challenge to log in with a passkey. The player is not known yet, so no session is needed.
+        /// </summary>
+        /// <returns>The challenge.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        PasskeyChallengeData BeginPasskeyLogin();
+
+        /// <summary>
+        /// Checks the answer of the authenticator and, if it is valid, logs the player in.
+        /// </summary>
+        /// <param name="assertion">Answer of the authenticator.</param>
+        /// <returns>Outcome of the login and the data of the new session.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        Authentication.LoginData CompletePasskeyLogin(PasskeyAssertionData assertion);
     }
 }

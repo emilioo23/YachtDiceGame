@@ -14,7 +14,7 @@ Yacht Dice Multiplayer es un videojuego de dados basado en las reglas originales
 
 - **Moderación**: Reporte de jugadores y expulsión de la sala por parte del anfitrión, ya sea manual o mediante confirmación tras 3 infracciones de chat acumuladas (el sistema notifica al anfitrión, pero la expulsión siempre requiere su confirmación).
 
-- **Progresión**: Marcador Top Global según los puntos históricos acumulados y sistema de experiencia (XP) que otorga niveles progresivos a los jugadores registrados según su desempeño.
+- **Progresión**: Marcador Top Global según los puntos históricos acumulados y sistema de experiencia (XP) que otorga niveles progresivos a los jugadores registrados según su desempeño. Al terminar una partida, el ganador recibe 100 XP y los demás jugadores 30 XP, más 1 XP por cada punto obtenido; quien abandona no recibe XP y los invitados no tienen progresión. La XP que pide cada nivel (20 niveles) está en la clave `LevelExperience` del `App.config` del servidor.
 
 - **Internacionalización**: Interfaz con soporte en tiempo real para Español (es-MX) e Inglés (en-US), mediante enlace de datos estático hacia diccionarios de recursos `.resx`.
 
@@ -54,6 +54,20 @@ La persistencia se maneja en SQL Server, en la base de datos `YachtDiceDB`. El e
 
 > El diseño de la base de datos especifica la intercalación `Latin1_General_100_CI_AS_SC_UTF8` para admitir caracteres acentuados y emojis de forma nativa. La autenticación a la base de datos debe utilizar SQL Authentication mediante credenciales, evitando el uso de Windows Authentication (Autenticación Integrada).
 
+## Configuración de Credenciales
+
+Las credenciales de la base de datos y del correo no se guardan en el código ni en el repositorio. El servidor las lee de variables de entorno del usuario de Windows, que cada integrante crea en su equipo (en PowerShell, con `[Environment]::SetEnvironmentVariable('NOMBRE', 'valor', 'User')`):
+
+| Variable | Contenido |
+| --- | --- |
+| `YACHTDICE_DB_SERVER` | Servidor de SQL Server (por ejemplo, `localhost`) |
+| `YACHTDICE_DB_USER` | Usuario de SQL Authentication |
+| `YACHTDICE_DB_PASSWORD` | Contraseña de ese usuario |
+| `YACHTDICE_SMTP_USER` | Cuenta de correo que envía los códigos |
+| `YACHTDICE_SMTP_PASSWORD` | Contraseña de aplicación de esa cuenta |
+
+Después de crearlas hay que cerrar y volver a abrir Visual Studio. Los valores reales no se comparten por chat ni se suben a git.
+
 ## Tecnologías Utilizadas
 
 - C# / .NET
@@ -61,6 +75,10 @@ La persistencia se maneja en SQL Server, en la base de datos `YachtDiceDB`. El e
 - Windows Communication Foundation (WCF)
 - SQL Server
 - Visual Studio / Visual Studio Code
+
+## Créditos de recursos de terceros
+
+- **Banderas de países:** [flag-icons](https://github.com/lipis/flag-icons), licencia MIT. Se convirtieron a PNG de 48x36 y están en `Client/YachtDice/Resources/Flags`. El texto de la licencia está en `Client/YachtDice/Resources/Flags/LICENSE-flag-icons.txt`.
 
 ## Equipo de Desarrollo
 

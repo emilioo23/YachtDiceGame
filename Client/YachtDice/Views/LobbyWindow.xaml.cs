@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,16 +24,22 @@ namespace YachtDice.Views
     public partial class LobbyWindow : Window
     {
         private const int EmptyLength = 0;
+        private const int MaxRoomNameLength = 30;
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
-        private const string ChatJoinFailedLogMessage = "The player could not join the chat of the room.";
+        private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
+        private const string ComputerLabelFormat = "{0} · {1}";
+        private const string CopyFailedLogMessage = "The room code could not be copied to the clipboard.";
+        private const string NullRoomGatewayMessage = "The connection to the room cannot be null.";
+        private const string NullChatMessage = "The connection to the chat cannot be null.";
 
-        private readonly AppLogger _logger;
         private readonly RoomGateway _roomGateway;
+        private readonly ChatGateway _chat;
+        private readonly InvitationListener _invitationListener;
+        private readonly AppLogger _logger = new AppLogger(typeof(LobbyWindow));
 
-        // The window is created with this flag on because InitializeComponent raises SelectionChanged events
-        // for the initial values of the combo boxes, and those events must not be sent to the server.
         private bool _isShowingRoom = true;
+        private bool _isLocalPlayerReady;
         private bool _isLeavingOnClose = true;
         private bool _isOpeningGame;
         private bool _isClosed;
@@ -41,47 +48,128 @@ namespace YachtDice.Views
         /// Initializes the waiting room window of a room where the player already is.
         /// </summary>
         /// <param name="roomGateway">Connection of the player to the room, already inside it.</param>
-        public LobbyWindow(RoomGateway roomGateway)
+        /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
+        public LobbyWindow(RoomGateway roomGateway, ChatGateway chat)
         {
             InitializeComponent();
+            RoomNameTextBox.MaxLength = MaxRoomNameLength;
+            FillComputerDifficulties();
 
-            _logger = new AppLogger(GetType());
-            _roomGateway = roomGateway;
+            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullRoomGatewayMessage);
+            _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullChatMessage);
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;
 
+            FriendsPanel.Attach(_roomGateway);
+            _invitationListener = new InvitationListener(this, _roomGateway.Session)
+            {
+                CurrentRoomCode = _roomGateway.CurrentRoom.Code
+            };
+            _invitationListener.Start();
+
+            StartChat();
             ShowRoom(_roomGateway.CurrentRoom);
         }
 
-        private static List<LobbySlot> CreateSlots(RoomState room)
+        private static List<LobbySlot> CreateSlots(RoomState room, string localPlayerId)
         {
             var slots = new List<LobbySlot>();
+            bool isLocalPlayerHost = room.HostId == localPlayerId;
 
-            foreach (string playerName in room.Players)
+            foreach (RoomPlayer player in room.Players)
             {
-                slots.Add(CreateOccupiedSlot(playerName, playerName == room.HostName));
+                bool canManage = isLocalPlayerHost && player.Id != localPlayerId;
+
+                slots.Add(CreateOccupiedSlot(player, player.Id == room.HostId, canManage));
             }
 
             for (int slotIndex = room.Players.Length; slotIndex < room.Settings.MaxPlayers; slotIndex++)
             {
-                slots.Add(new LobbySlot { Name = string.Empty, Initial = string.Empty, IsEmpty = true });
+                slots.Add(new LobbySlot { Name = string.Empty, IsEmpty = true, CanAddComputer = isLocalPlayerHost });
             }
 
             return slots;
         }
 
-        private static LobbySlot CreateOccupiedSlot(string playerName, bool isHost)
+        private static LobbySlot CreateOccupiedSlot(RoomPlayer player, bool isHost, bool canManage)
         {
             var slot = new LobbySlot
             {
-                Name = playerName,
-                Initial = PlayerInitials.GetInitial(playerName),
+                PlayerId = player.Id,
+                Name = player.DisplayName,
+                AvatarId = player.AvatarId,
                 IsHost = isHost,
+                IsReady = player.IsReady && !isHost,
+                CanManage = canManage,
+                IsComputer = player.IsComputer,
+                ComputerLabel = CreateComputerLabel(player),
                 IsEmpty = false
             };
 
             return slot;
+        }
+
+        private static string GetDifficultyName(ComputerDifficulty difficulty)
+        {
+            return Strings.ResourceManager.GetString(DifficultyKeyPrefix + difficulty, Strings.Culture);
+        }
+
+        private static string CreateComputerLabel(RoomPlayer player)
+        {
+            string label = string.Empty;
+
+            if (player.IsComputer)
+            {
+                label = string.Format(
+                    CultureInfo.CurrentCulture,
+                    ComputerLabelFormat,
+                    Strings.Lobby_ComputerPlayer,
+                    GetDifficultyName(player.Difficulty));
+            }
+
+            return label;
+        }
+
+        private void FillComputerDifficulties()
+        {
+            foreach (ComputerDifficulty difficulty in Enum.GetValues(typeof(ComputerDifficulty)))
+            {
+                var item = new ComboBoxItem { Content = GetDifficultyName(difficulty), Tag = difficulty };
+
+                ComputerDifficultyComboBox.Items.Add(item);
+
+                if (difficulty == ComputerDifficulty.Normal)
+                {
+                    ComputerDifficultyComboBox.SelectedItem = item;
+                }
+            }
+        }
+
+        private static string ReadTag(object sender)
+        {
+            return (string)((FrameworkElement)sender).Tag;
+        }
+
+        private static async Task<string> TryRunAsync(Func<Task<RoomResultCode>> operation)
+        {
+            string errorMessage = string.Empty;
+
+            try
+            {
+                RoomResultCode result = await operation();
+
+                if (result != RoomResultCode.Success)
+                {
+                    errorMessage = RoomResultMessages.GetMessage(result);
+                }
+            }
+            catch (GatewayException ex)
+            {
+                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
+            }
+
+            return errorMessage;
         }
 
         private static int ParseMaxPlayers(ComboBoxItem item)
@@ -93,7 +181,16 @@ namespace YachtDice.Views
         {
             _isLeavingOnClose = false;
 
-            return new LobbyWindow(_roomGateway);
+            return new LobbyWindow(_roomGateway, _chat);
+        }
+
+        private void StartChat()
+        {
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                Strings.Lobby_Chat_WelcomeMessage,
+                ChatMessageKind.System);
+            ChatPanelControl.Attach(_chat, _roomGateway.PlayerId);
         }
 
         private void ShowRoom(RoomState room)
@@ -105,10 +202,11 @@ namespace YachtDice.Views
                 Strings.Lobby_PlayerCountFormat,
                 room.Players.Length,
                 room.Settings.MaxPlayers);
-            PlayerSlotsItemsControl.ItemsSource = CreateSlots(room);
+            PlayerSlotsItemsControl.ItemsSource = CreateSlots(room, _roomGateway.PlayerId);
 
             ShowSettings(room.Settings);
-            ApplyHostPermissions(room.HostName == _roomGateway.PlayerName);
+            ApplyHostPermissions(room.HostId == _roomGateway.PlayerId);
+            ShowReadyButton(room);
 
             _isShowingRoom = false;
         }
@@ -117,6 +215,11 @@ namespace YachtDice.Views
         {
             PrivacyComboBox.SelectedItem = settings.IsPrivate ? PrivateOptionItem : PublicOptionItem;
             SelectMaxPlayers(settings.MaxPlayers);
+
+            if (!RoomNameTextBox.IsKeyboardFocused)
+            {
+                RoomNameTextBox.Text = settings.Name ?? string.Empty;
+            }
 
             if (settings.Speed == GameSpeed.Fast)
             {
@@ -142,21 +245,40 @@ namespace YachtDice.Views
         private void ApplyHostPermissions(bool isHost)
         {
             PrivacyComboBox.IsEnabled = isHost;
+            ComputerDifficultyPanel.Visibility = isHost ? Visibility.Visible : Visibility.Collapsed;
+            RoomNameTextBox.IsReadOnly = !isHost;
             MaxPlayersComboBox.IsEnabled = isHost;
             NormalModeBorder.IsHitTestVisible = isHost;
             FastModeBorder.IsHitTestVisible = isHost;
-            StartGameButton.IsEnabled = isHost;
-            StartGameButton.Content = isHost ? Strings.Lobby_ButtonStartMatch : Strings.Lobby_WaitingForHost;
+            StartGameButton.IsEnabled = true;
+            StartGameButton.Content = Strings.Lobby_ButtonStartMatch;
+        }
+
+        private void ShowReadyButton(RoomState room)
+        {
+            bool isHost = room.HostId == _roomGateway.PlayerId;
+            Func<RoomPlayer, bool> isLocalPlayer = player => player.Id == _roomGateway.PlayerId;
+            _isLocalPlayerReady = room.Players
+                .Where(isLocalPlayer)
+                .Select(player => player.IsReady)
+                .FirstOrDefault();
+
+            if (!isHost)
+            {
+                StartGameButton.Content = _isLocalPlayerReady
+                    ? Strings.Lobby_ButtonNotReady
+                    : Strings.Lobby_ButtonReady;
+            }
         }
 
         private void SelectModeBorder(Border selected, Border unselected)
         {
-            selected.Background = (SolidColorBrush)FindResource(ResourceKeys.Cream2BrushKey);
-            selected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.FeltLightBrushKey);
+            selected.Background = (SolidColorBrush)FindResource(ThemeResourceKeys.Cream2BrushKey);
+            selected.BorderBrush = (SolidColorBrush)FindResource(ThemeResourceKeys.FeltLightBrushKey);
             selected.BorderThickness = new Thickness(SelectedBorderThickness);
 
             unselected.Background = Brushes.Transparent;
-            unselected.BorderBrush = (SolidColorBrush)FindResource(ResourceKeys.BorderBrushKey);
+            unselected.BorderBrush = (SolidColorBrush)FindResource(ThemeResourceKeys.BorderBrushKey);
             unselected.BorderThickness = new Thickness(UnselectedBorderThickness);
         }
 
@@ -166,7 +288,8 @@ namespace YachtDice.Views
             {
                 IsPrivate = PrivacyComboBox.SelectedItem == PrivateOptionItem,
                 MaxPlayers = ParseMaxPlayers((ComboBoxItem)MaxPlayersComboBox.SelectedItem),
-                Speed = speed
+                Speed = speed,
+                Name = RoomNameTextBox.Text.Trim()
             };
 
             return settings;
@@ -174,21 +297,7 @@ namespace YachtDice.Views
 
         private async Task SendSettingsAsync(RoomSettings settings)
         {
-            string errorMessage = string.Empty;
-
-            try
-            {
-                RoomResultCode result = await _roomGateway.UpdateSettingsAsync(settings);
-
-                if (result != RoomResultCode.Success)
-                {
-                    errorMessage = RoomResultMessages.GetMessage(result);
-                }
-            }
-            catch (GatewayException ex)
-            {
-                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
-            }
+            string errorMessage = await TryRunAsync(() => _roomGateway.UpdateSettingsAsync(settings));
 
             if (errorMessage.Length > EmptyLength)
             {
@@ -197,82 +306,110 @@ namespace YachtDice.Views
             }
         }
 
-        private async Task<string> TryStartGameAsync()
+        private async Task RunHostActionAsync(Func<Task<RoomResultCode>> action)
         {
-            string errorMessage = string.Empty;
+            string errorMessage = await TryRunAsync(action);
 
-            try
+            if (errorMessage.Length > EmptyLength)
             {
-                RoomResultCode result = await _roomGateway.StartGameAsync();
-
-                if (result != RoomResultCode.Success)
-                {
-                    errorMessage = RoomResultMessages.GetMessage(result);
-                }
+                CustomDialogWindow.ShowMessage(this, errorMessage);
             }
-            catch (GatewayException ex)
-            {
-                errorMessage = GatewayErrorMessages.GetMessage(ex.ErrorCode);
-            }
+        }
 
-            return errorMessage;
+        private string FindPlayerName(string playerId)
+        {
+            Func<RoomPlayer, bool> isSameId = candidate => candidate.Id == playerId;
+            RoomPlayer player = _roomGateway.CurrentRoom.Players.FirstOrDefault(isSameId);
+
+            return player == null ? string.Empty : player.DisplayName;
+        }
+
+        private bool IsInside(RoomState room)
+        {
+            Func<RoomPlayer, bool> isSameId = player => player.Id == _roomGateway.PlayerId;
+
+            return room.Players.Any(isSameId);
+        }
+
+        private void LeaveBecauseKicked()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_KickedMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private void LeaveBecauseLeftOut()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_LeftOutMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private Task<RoomResultCode> ToggleReadyAsync()
+        {
+            return _roomGateway.SetReadyAsync(!_isLocalPlayerReady);
+        }
+
+        private void LeaveBecauseClosed()
+        {
+            CustomDialogWindow.ShowMessage(this, Strings.Lobby_ClosedMessage);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private void AnnounceHostChange(RoomState room)
+        {
+            Func<RoomPlayer, bool> isSameId = player => player.Id == room.HostId;
+            RoomPlayer host = room.Players.First(isSameId);
+
+            ChatPanelControl.AddMessage(
+                Strings.Game_Chat_SystemName,
+                string.Format(Strings.Lobby_Chat_NewHost, host.DisplayName),
+                ChatMessageKind.System);
         }
 
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
-            Dispatcher.BeginInvoke(new Func<Task>(() => ApplyRoomChangeAsync(room, eventType)));
+            Dispatcher.BeginInvoke(new Action(() => ApplyRoomChange(room, eventType)));
         }
 
-        private async Task ApplyRoomChangeAsync(RoomState room, RoomEventType eventType)
+        private void ApplyRoomChange(RoomState room, RoomEventType eventType)
         {
-            ShowRoom(room);
-
-            if (eventType == RoomEventType.GameStarted)
+            if (eventType == RoomEventType.PlayerKicked && !IsInside(room))
             {
-                await OpenGameWindowAsync();
+                LeaveBecauseKicked();
             }
-        }
-
-        private async Task OpenGameWindowAsync()
-        {
-            if (!_isOpeningGame)
+            else if (eventType == RoomEventType.LeftOutOfGame)
             {
-                _isOpeningGame = true;
-
-                var chatGateway = new ChatGateway(_roomGateway.PlayerName, _roomGateway.CurrentRoom.Code);
-                bool isChatAvailable = await TryJoinChatAsync(chatGateway);
-
-                await ShowGameWindowAsync(chatGateway, isChatAvailable);
+                LeaveBecauseLeftOut();
             }
-        }
-
-        private async Task<bool> TryJoinChatAsync(ChatGateway chatGateway)
-        {
-            bool isJoined = true;
-
-            try
+            else if (eventType == RoomEventType.RoomClosed)
             {
-                await chatGateway.JoinAsync();
-            }
-            catch (GatewayException)
-            {
-                _logger.Warning(ChatJoinFailedLogMessage);
-                isJoined = false;
-            }
-
-            return isJoined;
-        }
-
-        private async Task ShowGameWindowAsync(ChatGateway chatGateway, bool isChatAvailable)
-        {
-            if (_isClosed)
-            {
-                await chatGateway.LeaveAsync();
+                LeaveBecauseClosed();
             }
             else
             {
+                ShowRoom(room);
+                AnnounceChange(room, eventType);
+            }
+        }
+
+        private void AnnounceChange(RoomState room, RoomEventType eventType)
+        {
+            if (eventType == RoomEventType.GameStarted)
+            {
+                OpenGameWindow();
+            }
+            else if (eventType == RoomEventType.HostChanged)
+            {
+                AnnounceHostChange(room);
+            }
+        }
+
+        private void OpenGameWindow()
+        {
+            if (!_isOpeningGame && !_isClosed)
+            {
+                _isOpeningGame = true;
                 _isLeavingOnClose = false;
-                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, chatGateway, isChatAvailable));
+                WindowNavigator.SwitchTo(this, new GameWindow(_roomGateway, _chat));
             }
         }
 
@@ -280,10 +417,13 @@ namespace YachtDice.Views
         {
             _isClosed = true;
             _roomGateway.RoomChanged -= HandleRoomChanged;
+            ChatPanelControl.Detach();
+            FriendsPanel.Detach();
+            _invitationListener.Stop();
 
             if (_isLeavingOnClose)
             {
-                await _roomGateway.LeaveRoomAsync();
+                await LobbyNavigator.LeaveRoomAsync(_chat, _roomGateway);
             }
         }
 
@@ -293,6 +433,31 @@ namespace YachtDice.Views
             {
                 await SendSettingsAsync(ReadSettings(_roomGateway.CurrentRoom.Settings.Speed));
             }
+        }
+
+        private async void KickButton_Click(object sender, RoutedEventArgs e)
+        {
+            string targetPlayerId = ReadTag(sender);
+            string question = string.Format(Strings.Lobby_ConfirmKick, FindPlayerName(targetPlayerId));
+
+            if (CustomDialogWindow.Confirm(this, question))
+            {
+                await RunHostActionAsync(() => _roomGateway.KickPlayerAsync(targetPlayerId));
+            }
+        }
+
+        private async void TransferButton_Click(object sender, RoutedEventArgs e)
+        {
+            string newHostId = ReadTag(sender);
+
+            await RunHostActionAsync(() => _roomGateway.TransferHostAsync(newHostId));
+        }
+
+        private async void AddComputerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var difficulty = (ComputerDifficulty)((ComboBoxItem)ComputerDifficultyComboBox.SelectedItem).Tag;
+
+            await RunHostActionAsync(() => _roomGateway.AddComputerAsync(difficulty));
         }
 
         private async void NormalMode_Click(object sender, MouseButtonEventArgs e)
@@ -305,9 +470,14 @@ namespace YachtDice.Views
             await SendSettingsAsync(ReadSettings(GameSpeed.Fast));
         }
 
-        private void BackToPlayLink_Click(object sender, MouseButtonEventArgs e)
+        private void BackToMenuButton_Click(object sender, RoutedEventArgs e)
         {
             WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+        }
+
+        private void HowToPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            new HowToPlayWindow(this).ShowDialog();
         }
 
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
@@ -320,19 +490,50 @@ namespace YachtDice.Views
                 Clipboard.SetText(roomCode);
                 message = string.Format(Strings.Lobby_NotificationCodeCopied, roomCode);
             }
-            catch (ExternalException)
+            catch (ExternalException ex)
             {
+                _logger.Error(ex, CopyFailedLogMessage);
                 message = Strings.Dialogs_UnexpectedError;
             }
 
             CustomDialogWindow.ShowMessage(this, message);
         }
 
+        private async void RoomNameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            await SaveRoomNameAsync();
+        }
+
+        private async void RoomNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                await SaveRoomNameAsync();
+            }
+        }
+
+        private async Task SaveRoomNameAsync()
+        {
+            RoomSettings current = _roomGateway.CurrentRoom.Settings;
+            bool isHost = _roomGateway.CurrentRoom.HostId == _roomGateway.PlayerId;
+            bool hasChanged = !string.Equals(RoomNameTextBox.Text.Trim(), current.Name ?? string.Empty);
+
+            if (isHost && hasChanged)
+            {
+                await SendSettingsAsync(ReadSettings(current.Speed));
+            }
+        }
+
         private async void StartGameButton_Click(object sender, RoutedEventArgs e)
         {
+            bool isHost = _roomGateway.CurrentRoom.HostId == _roomGateway.PlayerId;
+            Func<Task<RoomResultCode>> startOrConfirm = isHost
+                ? (Func<Task<RoomResultCode>>)_roomGateway.StartGameAsync
+                : ToggleReadyAsync;
+
             StartGameButton.IsEnabled = false;
 
-            string errorMessage = await TryStartGameAsync();
+            string errorMessage = await TryRunAsync(startOrConfirm);
 
             if (errorMessage.Length > EmptyLength)
             {

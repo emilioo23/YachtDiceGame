@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -13,7 +14,13 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
+        private const string NullDependencyMessage = "A dependency of the player registration service cannot be null.";
+
+        private const int CleanupIntervalSeconds = 3600;
+        private const string RemovedAccountsLogFormat = "{0} accounts without a confirmed email were deleted.";
+
         private readonly LogicAuth.IRegistrationService _registrationLogic;
+        private TurnClock _cleanupClock;
 
         /// <summary>
         /// Initializes a new instance of the PlayerRegistrationService class.
@@ -21,7 +28,9 @@ namespace YachtDice.Server.Services
         /// <param name="registrationLogic">The registration logic service.</param>
         public PlayerRegistrationService(LogicAuth.IRegistrationService registrationLogic)
         {
-            _registrationLogic = registrationLogic ?? throw new ArgumentNullException(nameof(registrationLogic));
+            _registrationLogic = registrationLogic
+                ?? throw new ArgumentNullException(nameof(registrationLogic), NullDependencyMessage);
+            _cleanupClock = StartCleanupClock();
         }
 
         /// <summary>
@@ -36,9 +45,42 @@ namespace YachtDice.Server.Services
             return result;
         }
 
+        private TurnClock StartCleanupClock()
+        {
+            return new TurnClock(TurnClock.NoTurnNumber, CleanupIntervalSeconds, RemoveUnverifiedAccounts);
+        }
+
+        private void RemoveUnverifiedAccounts()
+        {
+            try
+            {
+                int removedCount = _registrationLogic.RemoveUnverifiedAccounts(DateTime.UtcNow);
+
+                LogInfo(string.Format(CultureInfo.InvariantCulture, RemovedAccountsLogFormat, removedCount));
+            }
+            finally
+            {
+                _cleanupClock.Dispose();
+                _cleanupClock = StartCleanupClock();
+            }
+        }
+
+        private static Data.Player ToEntity(Contracts.Player player)
+        {
+            var entity = new Data.Player
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Username = player.Username,
+                Email = player.Email
+            };
+
+            return entity;
+        }
+
         private Contracts.RegisterResultCode ProcessRegistration(Contracts.Player newPlayer)
         {
-            Data.Player logicPlayer = Mapping.RegistrationMapper.ToEntity(newPlayer);
+            Data.Player logicPlayer = ToEntity(newPlayer);
             LogicAuth.RegistrationResult logicResult =
                 _registrationLogic.RegisterPlayer(logicPlayer, newPlayer.Password);
 

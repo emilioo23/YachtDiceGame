@@ -16,9 +16,9 @@ namespace YachtDice.Server.Tests.InMemory
         public IReadOnlyList<string> Recipients => _recipients;
 
         /// <inheritdoc />
-        public void Send(string toAddress, string subject, string body)
+        public void Send(EmailMessage message)
         {
-            _recipients.Add(toAddress);
+            _recipients.Add(message.ToAddress);
         }
     }
 }

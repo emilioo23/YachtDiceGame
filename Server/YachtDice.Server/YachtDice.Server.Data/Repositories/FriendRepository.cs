@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
 
 namespace YachtDice.Server.Data.Repositories
@@ -10,7 +11,7 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class FriendRepository : IFriendRepository
     {
-        private const string EmptyValueMessage = "The value cannot be empty.";
+        private const string NullFriendshipMessage = "The friendship cannot be null.";
         private const string QueryFailedMessage = "Database error occurred while querying the friendships.";
         private const string UpdateFailedMessage = "Database error occurred while saving the friendships.";
 
@@ -55,67 +56,125 @@ namespace YachtDice.Server.Data.Repositories
         }
 
         /// <summary>
+        /// Finds the players that the player blocked.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who blocked them.</param>
+        /// <returns>The blocked players, or an empty list if there is none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<Player> FindBlockedBy(int playerId)
+        {
+            List<Player> blockedPlayers = Query(context => SelectBlockedBy(context, playerId));
+
+            return blockedPlayers;
+        }
+
+        /// <summary>
+        /// Counts the friends of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The number of accepted friendships of the player.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public int CountFriends(int playerId)
+        {
+            int friendCount = Query(context => CountAcceptedFriendships(context, playerId));
+
+            return friendCount;
+        }
+
+        /// <summary>
+        /// Counts the friend requests that a player sent and that are still waiting for an answer.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player who sent the requests.</param>
+        /// <returns>The number of pending requests sent by the player.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public int CountPendingSent(int playerId)
+        {
+            int pendingCount = Query(context => CountPendingRequestsSent(context, playerId));
+
+            return pendingCount;
+        }
+
+        /// <summary>
         /// Saves a new friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sends the request.</param>
-        /// <param name="addresseeId">Identifier of the player who receives the request.</param>
-        /// <param name="status">Status of the friendship.</param>
+        /// <param name="friendship">Friendship to save, with the two players and its status.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="ArgumentException">The status is empty.</exception>
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
-        public void Add(int requesterId, int addresseeId, string status)
+        public void Add(Friendship friendship)
         {
-            ValidateText(status, nameof(status));
-
-            var friendship = new Friendship
+            if (friendship == null)
             {
-                RequesterId = requesterId,
-                AddresseeId = addresseeId,
-                Status = status
-            };
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
 
             Save(context => context.Friendship.Add(friendship));
         }
 
         /// <summary>
+        /// Deletes the friend requests that are still waiting for an answer and were sent before a moment.
+        /// </summary>
+        /// <param name="sentBefore">Requests sent before this moment are deleted.</param>
+        /// <exception cref="DataAccessException">The requests could not be deleted.</exception>
+        public void RemoveExpiredRequests(DateTime sentBefore)
+        {
+            Save(context => DeleteExpiredRequests(context, sentBefore));
+        }
+
+        /// <summary>
         /// Changes the status of a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
-        /// <param name="status">New status of the friendship.</param>
+        /// <param name="friendship">Friendship that already exists, with its new status.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="ArgumentException">The status is empty.</exception>
         /// <exception cref="DataAccessException">The friendship could not be saved.</exception>
-        public void UpdateStatus(int requesterId, int addresseeId, string status)
+        public void UpdateStatus(Friendship friendship)
         {
-            ValidateText(status, nameof(status));
-
-            var changes = new Friendship
+            if (friendship == null)
             {
-                RequesterId = requesterId,
-                AddresseeId = addresseeId,
-                Status = status
-            };
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
 
-            Save(context => ApplyStatus(context, changes));
+            TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
+
+            Save(context => ApplyStatus(context, friendship));
         }
 
         /// <summary>
         /// Deletes a friendship.
         /// </summary>
-        /// <param name="requesterId">Identifier of the player who sent the request.</param>
-        /// <param name="addresseeId">Identifier of the player who received the request.</param>
+        /// <param name="friendship">Friendship to delete, identified by its two players.</param>
+        /// <exception cref="ArgumentNullException">The friendship is null.</exception>
         /// <exception cref="DataAccessException">The friendship could not be deleted.</exception>
-        public void Remove(int requesterId, int addresseeId)
+        public void Remove(Friendship friendship)
         {
-            Save(context => DeleteFriendship(context, requesterId, addresseeId));
+            if (friendship == null)
+            {
+                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+            }
+
+            Save(context => DeleteFriendship(context, friendship));
         }
 
         private static List<Friendship> SelectBetween(YachtDiceContext context, int firstPlayerId, int secondPlayerId)
         {
-            List<Friendship> friendships = context.Friendship
-                .Where(friendship =>
-                    (friendship.RequesterId == firstPlayerId && friendship.AddresseeId == secondPlayerId)
-                    || (friendship.RequesterId == secondPlayerId && friendship.AddresseeId == firstPlayerId))
-                .ToList();
+            Expression<Func<Friendship, bool>> isFromFirstPlayer =
+                friendship => friendship.RequesterId == firstPlayerId;
+            Expression<Func<Friendship, bool>> isToSecondPlayer =
+                friendship => friendship.AddresseeId == secondPlayerId;
+            IQueryable<Friendship> requested = context.Friendship
+                .Where(isFromFirstPlayer)
+                .Where(isToSecondPlayer);
+            Expression<Func<Friendship, bool>> isFromSecondPlayer =
+                friendship => friendship.RequesterId == secondPlayerId;
+            Expression<Func<Friendship, bool>> isToFirstPlayer = friendship => friendship.AddresseeId == firstPlayerId;
+            IQueryable<Friendship> received = context.Friendship
+                .Where(isFromSecondPlayer)
+                .Where(isToFirstPlayer);
+
+            List<Friendship> friendships = requested.Concat(received).ToList();
 
             return friendships;
         }
@@ -130,9 +189,11 @@ namespace YachtDice.Server.Data.Repositories
             }
         }
 
-        private static void DeleteFriendship(YachtDiceContext context, int requesterId, int addresseeId)
+        private static void DeleteFriendship(YachtDiceContext context, Friendship friendshipToDelete)
         {
-            Friendship friendship = context.Friendship.Find(requesterId, addresseeId);
+            Friendship friendship = context.Friendship.Find(
+                friendshipToDelete.RequesterId,
+                friendshipToDelete.AddresseeId);
 
             if (friendship != null)
             {
@@ -142,17 +203,21 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectFriends(YachtDiceContext context, int playerId)
         {
+            Expression<Func<Friendship, bool>> isAcceptedFromPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Accepted;
             IQueryable<int> requested = context.Friendship
-                .Where(friendship => friendship.RequesterId == playerId
-                    && friendship.Status == FriendshipStatus.Accepted)
+                .Where(isAcceptedFromPlayer)
                 .Select(friendship => friendship.AddresseeId);
+            Expression<Func<Friendship, bool>> isAcceptedByPlayer =
+                friendship => friendship.AddresseeId == playerId && friendship.Status == FriendshipStatus.Accepted;
             IQueryable<int> received = context.Friendship
-                .Where(friendship => friendship.AddresseeId == playerId
-                    && friendship.Status == FriendshipStatus.Accepted)
+                .Where(isAcceptedByPlayer)
                 .Select(friendship => friendship.RequesterId);
+            Expression<Func<Player, bool>> isFriend =
+                player => requested.Contains(player.Id) || received.Contains(player.Id);
 
             List<Player> friends = context.Player
-                .Where(player => requested.Contains(player.Id) || received.Contains(player.Id))
+                .Where(isFriend)
                 .ToList();
 
             return friends;
@@ -160,14 +225,56 @@ namespace YachtDice.Server.Data.Repositories
 
         private static List<Player> SelectPendingRequesters(YachtDiceContext context, int playerId)
         {
+            Expression<Func<Friendship, bool>> isPendingForPlayer =
+                friendship => friendship.AddresseeId == playerId && friendship.Status == FriendshipStatus.Pending;
             IQueryable<int> requesterIds = context.Friendship
-                .Where(friendship => friendship.AddresseeId == playerId
-                    && friendship.Status == FriendshipStatus.Pending)
+                .Where(isPendingForPlayer)
                 .Select(friendship => friendship.RequesterId);
 
-            List<Player> requesters = context.Player.Where(player => requesterIds.Contains(player.Id)).ToList();
+            Expression<Func<Player, bool>> isRequester = player => requesterIds.Contains(player.Id);
+            List<Player> requesters = context.Player.Where(isRequester).ToList();
 
             return requesters;
+        }
+
+        private static List<Player> SelectBlockedBy(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isBlockedByPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Blocked;
+            IQueryable<int> blockedIds = context.Friendship
+                .Where(isBlockedByPlayer)
+                .Select(friendship => friendship.AddresseeId);
+
+            Expression<Func<Player, bool>> isBlocked = player => blockedIds.Contains(player.Id);
+            List<Player> blockedPlayers = context.Player.Where(isBlocked).ToList();
+
+            return blockedPlayers;
+        }
+
+        private static int CountAcceptedFriendships(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isAcceptedWithPlayer = friendship =>
+                (friendship.RequesterId == playerId || friendship.AddresseeId == playerId)
+                && friendship.Status == FriendshipStatus.Accepted;
+
+            return context.Friendship.Count(isAcceptedWithPlayer);
+        }
+
+        private static int CountPendingRequestsSent(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<Friendship, bool>> isPendingFromPlayer =
+                friendship => friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Pending;
+
+            return context.Friendship.Count(isPendingFromPlayer);
+        }
+
+        private static void DeleteExpiredRequests(YachtDiceContext context, DateTime sentBefore)
+        {
+            Expression<Func<Friendship, bool>> isExpiredRequest = friendship =>
+                friendship.Status == FriendshipStatus.Pending && friendship.CreateDate < sentBefore;
+            List<Friendship> expired = context.Friendship.Where(isExpiredRequest).ToList();
+
+            context.Friendship.RemoveRange(expired);
         }
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)
@@ -178,14 +285,6 @@ namespace YachtDice.Server.Data.Repositories
         private static void Save(Action<YachtDiceContext> change)
         {
             DatabaseOperation.Save(change, UpdateFailedMessage);
-        }
-
-        private static void ValidateText(string value, string parameterName)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException(EmptyValueMessage, parameterName);
-            }
         }
     }
 }

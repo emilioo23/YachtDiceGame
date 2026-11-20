@@ -366,5 +366,9 @@ FodyWeavers.xsd
 *.conf
 ConnectionStrings.config
 Secrets.config
+ServerSettings.config
 
 logs/
+
+# SonarQube local analysis
+.sonarqube/

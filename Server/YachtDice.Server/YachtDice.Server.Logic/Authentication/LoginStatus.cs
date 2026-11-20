@@ -11,8 +11,16 @@
         /// <summary>The email or the password was not provided.</summary>
         MissingRequiredField,
 
-        /// <summary>The email or the password is incorrect.</summary>
+        /// <summary>
+        /// The email is not registered or the password does not match. Both cases give the same answer so
+        /// nobody can find out which emails have an account.
+        /// </summary>
         InvalidCredentials,
+
+        /// <summary>
+        /// The email is empty or is not written like an email address.
+        /// </summary>
+        InvalidEmail,
 
         /// <summary>The two-step verification is locked because of too many failed attempts.</summary>
         VerificationLocked,
@@ -21,6 +29,18 @@
         CodeSendFailed,
 
         /// <summary>The credentials are correct and the player has no two-step verification.</summary>
-        LoggedIn
+        LoggedIn,
+
+        /// <summary>Three wrong passwords in a row locked the account for five minutes.</summary>
+        TemporarilyLocked,
+
+        /// <summary>Ten wrong passwords in the same day locked the account for twenty-four hours.</summary>
+        LockedForTheDay,
+
+        /// <summary>Several different players reported the player, so the account is suspended for a day.</summary>
+        SuspendedByReports,
+
+        /// <summary>The passkey is not valid, or the challenge expired.</summary>
+        InvalidPasskey
     }
 }

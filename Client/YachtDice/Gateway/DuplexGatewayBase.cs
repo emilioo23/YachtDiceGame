@@ -9,18 +9,18 @@ namespace YachtDice.Gateway
     /// Common behavior of the gateways that keep one connection open with the server because the server
     /// also sends notifications to the client (duplex services). It runs each call without blocking the
     /// interface and converts the failures into <see cref="GatewayException"/>. Its methods are called from
-    /// the thread of the interface and they continue there after each await, so the client needs no lock.
+    /// the thread of the interface, but the channel tells when it breaks from another thread, so the client
+    /// is only changed inside the lock.
     /// </summary>
     /// <typeparam name="TClient">Type of the generated WCF client that the gateway uses.</typeparam>
-    public abstract class DuplexGatewayBase<TClient>
+    public abstract class DuplexGatewayBase<TClient> : IConnectionLossSource
         where TClient : class, ICommunicationObject
     {
-        private const string FaultLogMessage = "The server reported an error.";
-        private const string UnavailableLogMessage = "The server could not be reached.";
-        private const string FaultMessage = "The server could not complete the request.";
-        private const string UnavailableMessage = "The server is not available.";
         private const string NotConnectedMessage = "There is no connection with the server.";
+        private const string ConnectionLostLogMessage = "The connection with the server was lost.";
+        private const string CloseFailedLogMessage = "The connection could not be closed normally, so it was aborted.";
 
+        private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private TClient _client;
 
@@ -33,18 +33,43 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Event triggered when the connection with the server breaks without the application closing it. It
+        /// can be raised from any thread.
+        /// </summary>
+        public event Action ConnectionLost;
+
+        /// <summary>
+        /// Gets whether the connection with the server is open.
+        /// </summary>
+        protected bool IsConnected => CurrentClient() != null;
+
+        /// <summary>
         /// Closes the connection with the server, if it is open.
         /// </summary>
         /// <returns>A task that finishes when the connection is closed.</returns>
         public async Task CloseAsync()
         {
-            TClient client = _client;
-
-            _client = null;
+            TClient client = TakeClient();
 
             if (client != null)
             {
                 await Task.Run(() => CloseGracefully(client));
+            }
+        }
+
+        /// <summary>
+        /// Throws the connection away without waiting for the server and without reporting a loss. It is used
+        /// when the player is about to connect again: a connection that is already broken could take a long time
+        /// to close. The server notices the closed channel and keeps the player as absent until the new one
+        /// arrives.
+        /// </summary>
+        public void Abandon()
+        {
+            TClient client = TakeClient();
+
+            if (client != null)
+            {
+                client.Abort();
             }
         }
 
@@ -72,7 +97,7 @@ namespace YachtDice.Gateway
         {
             TResult result;
 
-            _client = CreateClient();
+            SaveClient(CreateClient());
 
             try
             {
@@ -116,20 +141,20 @@ namespace YachtDice.Gateway
             }
             catch (FaultException ex)
             {
-                _logger.Error(ex, FaultLogMessage);
-                throw new GatewayException(GetErrorCode(ex), FaultMessage, ex);
+                _logger.Error(ex, GatewayMessages.FaultLogMessage);
+                throw new GatewayException(GetErrorCode(ex), GatewayMessages.FaultMessage, ex);
             }
             catch (CommunicationException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
             catch (TimeoutException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, UnavailableMessage, ex);
+                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
             }
 
             return result;
@@ -153,39 +178,102 @@ namespace YachtDice.Gateway
             return true;
         }
 
-        private static void CloseGracefully(TClient client)
+        private void CloseGracefully(TClient client)
         {
             try
             {
                 client.Close();
             }
-            catch (CommunicationException)
+            catch (CommunicationException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
-            catch (TimeoutException)
+            catch (TimeoutException ex)
             {
                 client.Abort();
+                _logger.Warning(ex, CloseFailedLogMessage);
             }
         }
 
         private TClient RequireClient()
         {
-            if (_client == null)
+            TClient client = CurrentClient();
+
+            if (client == null)
             {
                 throw new GatewayException(GatewayErrorCode.ServerUnavailable, NotConnectedMessage, null);
             }
 
-            return _client;
+            return client;
+        }
+
+        private TClient CurrentClient()
+        {
+            TClient client;
+
+            lock (_syncRoot)
+            {
+                client = _client;
+            }
+
+            return client;
+        }
+
+        private TClient TakeClient()
+        {
+            TClient client;
+
+            lock (_syncRoot)
+            {
+                client = _client;
+                _client = null;
+            }
+
+            return client;
+        }
+
+        private bool TryDetach(TClient client)
+        {
+            bool isCurrent;
+
+            lock (_syncRoot)
+            {
+                isCurrent = ReferenceEquals(_client, client);
+
+                if (isCurrent)
+                {
+                    _client = null;
+                }
+            }
+
+            return isCurrent;
+        }
+
+        private void SaveClient(TClient client)
+        {
+            client.Faulted += (sender, e) => HandleConnectionBroken(client);
+            client.Closed += (sender, e) => HandleConnectionBroken(client);
+
+            lock (_syncRoot)
+            {
+                _client = client;
+            }
+        }
+
+        private void HandleConnectionBroken(TClient client)
+        {
+            if (TryDetach(client))
+            {
+                client.Abort();
+                _logger.Warning(ConnectionLostLogMessage);
+                ConnectionLost?.Invoke();
+            }
         }
 
         private void DiscardClient(TClient client)
         {
-            if (ReferenceEquals(_client, client))
-            {
-                _client = null;
-            }
-
+            TryDetach(client);
             client.Abort();
         }
     }

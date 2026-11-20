@@ -5,16 +5,25 @@ using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
+using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Validates the verification codes and sends them again when the player asks for it.
+    /// Validates the verification codes and sends them again when the player asks for it. A code with the shape
+    /// of a backup code is checked against the backup codes of the player instead of the code sent by email.
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
-        private const string NullDependencyMessage = "The dependency cannot be null.";
+        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the two-factor verification cannot be null.";
+        private const string AcceptedLogMessage = "A verification code was accepted.";
+        private const string WrongLogMessage = "A wrong verification code was typed.";
+        private const string ExpiredLogMessage = "A verification code that expired was typed.";
+        private const string LockedLogMessage = "The verification codes are locked after too many wrong tries.";
 
+        private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorDeliveryService _deliveryService;
@@ -35,6 +44,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _logger = new AppLogger(GetType());
         }
 
         /// <summary>
@@ -60,43 +70,159 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Processes the code verification required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="code">The verification code provided.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
+        /// <param name="verificationCode">The code provided and the session challenge it answers.</param>
         /// <returns>Result status of the verification process.</returns>
-        public TwoFactorValidationStatus VerifyPlayerCode(string email, string code, string challengeId)
+        public TwoFactorValidationStatus VerifyPlayerCode(string email, VerificationCode verificationCode)
         {
-            return _codeService.Validate(email, code, challengeId);
+            TwoFactorValidationStatus status;
+
+            if (TwoFactorCodeService.IsBackupCodeFormat(verificationCode?.Code))
+            {
+                status = VerifyBackupCode(email, verificationCode);
+            }
+            else
+            {
+                status = _codeService.ValidateCode(email, verificationCode);
+            }
+
+            LogOutcome(status);
+
+            if (status == TwoFactorValidationStatus.Valid)
+            {
+                ActivateIfUnverified(email);
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Creates new backup codes for the player. The codes created before stop working.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The new codes, to show them to the player only once.</returns>
+        public List<string> CreateBackupCodes(int playerId)
+        {
+            return _codeService.CreateBackupCodes(playerId);
+        }
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The number of backup codes left.</returns>
+        public int CountBackupCodes(int playerId)
+        {
+            return _codeService.CountBackupCodes(playerId);
+        }
+
+        /// <summary>
+        /// Deletes every backup code of the player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        public void RemoveBackupCodes(int playerId)
+        {
+            _codeService.RemoveBackupCodes(playerId);
+        }
+
+        private void LogOutcome(TwoFactorValidationStatus status)
+        {
+            if (status == TwoFactorValidationStatus.Valid)
+            {
+                _logger.Info(AcceptedLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Incorrect)
+            {
+                _logger.Warning(WrongLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Expired)
+            {
+                _logger.Warning(ExpiredLogMessage);
+            }
+            else if (status == TwoFactorValidationStatus.Locked)
+            {
+                _logger.Warning(LockedLogMessage);
+            }
+        }
+
+        private TwoFactorValidationStatus VerifyBackupCode(string email, VerificationCode verificationCode)
+        {
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            TwoFactorValidationStatus status;
+
+            if (player == null)
+            {
+                status = _codeService.ValidateCode(email, verificationCode);
+            }
+            else
+            {
+                status = _codeService.ValidateBackupCode(email, player.Id, verificationCode);
+            }
+
+            return status;
+        }
+
+        private void ActivateIfUnverified(string email)
+        {
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+
+            if (player != null && player.State == PlayerState.Unverified.ToString())
+            {
+                _playerRepository.SaveState(player.Id, PlayerState.Active.ToString());
+            }
         }
 
         /// <summary>
         /// Processes the code resend required by the interface.
         /// </summary>
         /// <param name="email">The player's email address.</param>
-        /// <param name="cultureName">The culture name for email localization.</param>
-        /// <param name="challengeId">The session challenge identifier.</param>
-        /// <returns>Result status of the resend process.</returns>
-        public ResendCodeStatus ResendPlayerCode(string email, string cultureName, string challengeId)
+        /// <param name="delivery">The session challenge and the culture name for email localization.</param>
+        /// <returns>
+        /// Result status of the resend process. A code is only sent when the challenge was issued to that email;
+        /// for any other email the answer is the same as for a sent code, so the screen cannot be used to find
+        /// out which emails have an account (section 8.8 of the standard).
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery)
         {
-            List<Player> matches = _playerRepository.FindByEmail(email);
-            Player player = matches.FirstOrDefault();
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            ResendCodeStatus status = ResendCodeStatus.CodeSent;
+
+            if (IsOwnerOfTheChallenge(player, delivery))
+            {
+                status = ResendTo(player, delivery);
+            }
+
+            return status;
+        }
+
+        private static bool IsOwnerOfTheChallenge(Player player, CodeDelivery delivery)
+        {
+            return player != null
+                && !string.IsNullOrEmpty(delivery.OwnerName)
+                && string.Equals(player.DisplayName, delivery.OwnerName, StringComparison.Ordinal);
+        }
+
+        private ResendCodeStatus ResendTo(Player player, CodeDelivery delivery)
+        {
             ResendCodeStatus status;
 
-            if (player == null)
-            {
-                status = ResendCodeStatus.PlayerNotFound;
-            }
-            else if (_codeService.IsLocked(player.Email))
+            if (_codeService.IsLocked(player.Email))
             {
                 status = ResendCodeStatus.VerificationLocked;
             }
-            else if (!_codeService.IsResendAllowed(player.Email, challengeId))
+            else if (!_codeService.IsResendAllowed(player.Email, delivery.ChallengeId))
             {
                 status = ResendCodeStatus.ResendTooSoon;
             }
             else
             {
-                var culture = new CultureInfo(cultureName);
-                bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+                var culture = new CultureInfo(delivery.CultureName);
+                bool isSent = _deliveryService.SendCode(player, delivery.ChallengeId, culture);
                 status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

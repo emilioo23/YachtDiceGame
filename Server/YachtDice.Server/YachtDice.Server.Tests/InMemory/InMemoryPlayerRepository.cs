@@ -12,8 +12,13 @@ namespace YachtDice.Server.Tests.InMemory
     /// </summary>
     internal sealed class InMemoryPlayerRepository : IPlayerRepository
     {
+        private const int SingleResultCount = 1;
+
         private readonly List<Player> _players = new List<Player>();
         private readonly HashSet<int> _playersWithTwoFactor = new HashSet<int>();
+        private readonly Dictionary<int, string> _titles = new Dictionary<int, string>();
+        private readonly Dictionary<int, string> _flagCodes = new Dictionary<int, string>();
+        private readonly Dictionary<int, AccountLock> _locks = new Dictionary<int, AccountLock>();
 
         /// <summary>
         /// Gets the players saved so far.
@@ -31,9 +36,11 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindByName(string name)
         {
+            Func<Player, bool> hasName =
+                player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name);
             List<Player> matches = _players
-                .Where(player => IsSameText(player.DisplayName, name) || IsSameText(player.Username, name))
-                .Take(1)
+                .Where(hasName)
+                .Take(SingleResultCount)
                 .ToList();
 
             return matches;
@@ -42,7 +49,10 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindByUsername(string username)
         {
-            List<Player> matches = _players.Where(player => IsSameText(player.Username, username)).Take(1).ToList();
+            List<Player> matches = _players
+                .Where(player => IsSameText(player.Username, username))
+                .Take(SingleResultCount)
+                .ToList();
 
             return matches;
         }
@@ -86,6 +96,94 @@ namespace YachtDice.Server.Tests.InMemory
             {
                 _playersWithTwoFactor.Remove(playerId);
             }
+        }
+
+        /// <inheritdoc />
+        public void SaveAvatar(int playerId, int avatarId)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+            Player player = _players.First(isSameId);
+
+            player.AvatarId = avatarId;
+        }
+
+        public void SaveUsername(int playerId, string username)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+            Player player = _players.First(isSameId);
+
+            player.Username = username;
+            player.DisplayName = username;
+            player.LastUserChange = DateTime.UtcNow;
+        }
+
+        public List<AccountLock> FindLocks(int playerId)
+        {
+            var locks = new List<AccountLock>();
+
+            if (_locks.TryGetValue(playerId, out AccountLock savedLock))
+            {
+                locks.Add(savedLock);
+            }
+
+            return locks;
+        }
+
+        public void SaveLock(int playerId, string lockType, DateTime lockedUntil)
+        {
+            _locks[playerId] = new AccountLock { PlayerId = playerId, LockType = lockType, LockedUntil = lockedUntil };
+        }
+
+        public string FindTitle(int playerId)
+        {
+            return _titles.TryGetValue(playerId, out string title) ? title : string.Empty;
+        }
+
+        public void SaveTitle(int playerId, string title)
+        {
+            _titles[playerId] = title;
+        }
+
+        public string FindFlagCode(int playerId)
+        {
+            return _flagCodes.TryGetValue(playerId, out string flagCode) ? flagCode : string.Empty;
+        }
+
+        public void SaveFlagCode(int playerId, string flagCode)
+        {
+            _flagCodes[playerId] = flagCode;
+        }
+
+        /// <inheritdoc />
+        public void SaveState(int playerId, string state)
+        {
+            Func<Player, bool> isSameId = candidate => candidate.Id == playerId;
+
+            _players.First(isSameId).State = state;
+        }
+
+        public int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore)
+        {
+            Func<Player, bool> isExpiredUnverified =
+                player => player.State == unverifiedState && player.RegDate < registeredBefore;
+            List<Player> expired = _players.Where(isExpiredUnverified).ToList();
+
+            foreach (Player player in expired)
+            {
+                Delete(player.Id);
+            }
+
+            return expired.Count;
+        }
+
+        public void Delete(int playerId)
+        {
+            Predicate<Player> isDeleted = player => player.Id == playerId;
+
+            _players.RemoveAll(isDeleted);
+            _playersWithTwoFactor.Remove(playerId);
+            _titles.Remove(playerId);
+            _flagCodes.Remove(playerId);
         }
 
         private static bool IsSameText(string firstText, string secondText)

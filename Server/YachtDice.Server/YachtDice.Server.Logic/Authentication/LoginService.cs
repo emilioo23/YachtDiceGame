@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Security;
 using YachtDice.Server.Logic.TwoFactor;
 
@@ -15,15 +15,30 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginService : ILoginService
     {
-        private const string InvalidCredentialsLogMessage = "Login attempt with invalid credentials.";
+        private const string InvalidEmailLogMessage = "Login attempt with a malformed email.";
+        private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
+        private const string InvalidUsernameLogMessage = "Login attempt with a malformed username.";
+        private const string UnknownUsernameLogMessage = "Login attempt with a username that is not registered.";
+        private const string TooLongPasswordLogMessage = "Login attempt with a password longer than the maximum.";
+        private const char EmailSeparator = '@';
+        private const string TimingEqualizerPassword = "password-used-only-to-take-the-same-time";
+        private const string WrongPasswordLogFormat = "Login attempt with a wrong password for player {0}.";
+        private const string LoggedInLogFormat = "Player {0} logged in.";
+        private const string CodeSentLogFormat = "A verification code was sent to player {0}.";
+        private const string DailyLockLogFormat =
+            "The account of player {0} was locked for the day after wrong passwords.";
         private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
         private const string NullCredentialsMessage = "The login credentials cannot be null.";
-        private const string NullDependencyMessage = "The dependency cannot be null.";
+        private const string NullDependencyMessage = "A dependency of the login service cannot be null.";
+        private const string LockedLoginLogFormat =
+            "Login attempt while the account of player {0} is locked by wrong passwords.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorDeliveryService _deliveryService;
         private readonly TwoFactorVerificationService _verificationService;
+        private readonly LoginAttemptTracker _attemptTracker;
+        private readonly string _timingEqualizerHash;
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -42,8 +57,16 @@ namespace YachtDice.Server.Logic.Authentication
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _attemptTracker = new LoginAttemptTracker(playerRepository);
+            _timingEqualizerHash = PasswordHasher.ComputeHash(TimingEqualizerPassword);
             _logger = new AppLogger(GetType());
         }
+
+        /// <summary>
+        /// Event triggered when an account is locked for the day because of too many wrong passwords, with the
+        /// player and the language of the login, so the player can be told by email.
+        /// </summary>
+        public event Action<Player, CultureInfo> AccountLockedForTheDay;
 
         /// <summary>
         /// Checks the credentials and, if they are correct, sends the verification code or completes the login.
@@ -59,9 +82,13 @@ namespace YachtDice.Server.Logic.Authentication
 
             LoginResult result;
 
-            if (string.IsNullOrWhiteSpace(credentials.Email) || string.IsNullOrWhiteSpace(credentials.Password))
+            if (string.IsNullOrWhiteSpace(credentials.Identifier) || string.IsNullOrWhiteSpace(credentials.Password))
             {
                 result = new LoginResult(LoginStatus.MissingRequiredField, string.Empty);
+            }
+            else if (credentials.Password.Length > CredentialRules.PasswordMaxLength)
+            {
+                result = Reject(LoginStatus.InvalidCredentials, TooLongPasswordLogMessage);
             }
             else
             {
@@ -72,36 +99,175 @@ namespace YachtDice.Server.Logic.Authentication
         }
 
         /// <summary>
-        /// Authenticates the user synchronously by checking the database and password hash.
+        /// Looks for the account by email when the text has an at sign and by username when it does not, because a
+        /// username cannot have one. When the account is not registered and when the password is wrong the answer is
+        /// the same, so the screen cannot be used to find out which emails or usernames have an account (section 8.8
+        /// of the standard).
         /// </summary>
         /// <param name="credentials">The login credentials provided by the user.</param>
         /// <returns>The login result status.</returns>
         private LoginResult Authenticate(LoginCredentials credentials)
         {
-            List<Player> matches = _playerRepository.FindByEmail(credentials.Email.Trim());
-            Player player = matches.FirstOrDefault();
+            string identifier = credentials.Identifier.Trim();
             LoginResult result;
 
-            if (player == null || !PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            if (identifier.Contains(EmailSeparator))
             {
-                _logger.Warning(InvalidCredentialsLogMessage);
-                result = new LoginResult(LoginStatus.InvalidCredentials, string.Empty);
+                result = AuthenticateByEmail(identifier, credentials);
             }
-            else if (_verificationService.IsLocked(player.Email))
+            else
+            {
+                result = AuthenticateByUsername(identifier, credentials);
+            }
+
+            return result;
+        }
+
+        private LoginResult AuthenticateByEmail(string email, LoginCredentials credentials)
+        {
+            LoginResult result;
+
+            if (EmailAddressValidator.IsValid(email))
+            {
+                Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+
+                result = CheckPlayer(player, credentials, UnknownEmailLogMessage);
+            }
+            else
+            {
+                result = Reject(LoginStatus.InvalidEmail, InvalidEmailLogMessage);
+            }
+
+            return result;
+        }
+
+        private LoginResult AuthenticateByUsername(string username, LoginCredentials credentials)
+        {
+            LoginResult result;
+
+            if (CredentialRules.IsValidUsername(username))
+            {
+                Player player = _playerRepository.FindByUsername(username).FirstOrDefault();
+
+                result = CheckPlayer(player, credentials, UnknownUsernameLogMessage);
+            }
+            else
+            {
+                result = Reject(LoginStatus.InvalidCredentials, InvalidUsernameLogMessage);
+            }
+
+            return result;
+        }
+
+        private LoginResult CheckPlayer(Player player, LoginCredentials credentials, string unknownLogMessage)
+        {
+            LoginResult result;
+
+            if (player == null)
+            {
+                PasswordHasher.Verify(credentials.Password, _timingEqualizerHash);
+                result = Reject(LoginStatus.InvalidCredentials, unknownLogMessage);
+            }
+            else
+            {
+                result = CheckPassword(player, credentials);
+            }
+
+            return result;
+        }
+
+        private LoginResult CheckPassword(Player player, LoginCredentials credentials)
+        {
+            DateTime now = DateTime.UtcNow;
+            LoginLock currentLock = _attemptTracker.GetLock(player.Id, now);
+            LoginResult result;
+
+            if (currentLock != LoginLock.None)
+            {
+                result = RejectLocked(player, currentLock);
+            }
+            else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            {
+                result = RejectWrongPassword(player, credentials.Culture, now);
+            }
+            else
+            {
+                _attemptTracker.RegisterSuccess(player.Id);
+                result = CompleteLogin(player, credentials.Culture);
+            }
+
+            return result;
+        }
+
+        private LoginResult RejectWrongPassword(Player player, CultureInfo culture, DateTime now)
+        {
+            LoginLock newLock = _attemptTracker.RegisterFailure(player.Id, now);
+            LoginResult result;
+
+            if (newLock == LoginLock.None)
+            {
+                result = Reject(LoginStatus.InvalidCredentials, Describe(WrongPasswordLogFormat, player));
+            }
+            else
+            {
+                NotifyDailyLock(player, culture, newLock);
+                result = RejectLocked(player, newLock);
+            }
+
+            return result;
+        }
+
+        private void NotifyDailyLock(Player player, CultureInfo culture, LoginLock newLock)
+        {
+            if (newLock == LoginLock.Daily)
+            {
+                _logger.Warning(Describe(DailyLockLogFormat, player));
+                AccountLockedForTheDay?.Invoke(player, culture);
+            }
+        }
+
+        private static string Describe(string logFormat, Player player)
+        {
+            return string.Format(CultureInfo.InvariantCulture, logFormat, player.Id);
+        }
+
+        private LoginResult RejectLocked(Player player, LoginLock currentLock)
+        {
+            return Reject(LockStatusMapper.ToStatus(currentLock), Describe(LockedLoginLogFormat, player));
+        }
+
+        private LoginResult CompleteLogin(Player player, CultureInfo culture)
+        {
+            LoginResult result;
+
+            if (_verificationService.IsLocked(player.Email))
             {
                 _logger.Warning(LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
-            else if (_playerRepository.HasTwoFactorEnabled(player.Id))
+            else if (IsUnverified(player) || _playerRepository.HasTwoFactorEnabled(player.Id))
             {
-                result = SendCode(player, credentials.Culture);
+                result = SendCode(player, culture);
             }
             else
             {
+                _logger.Info(Describe(LoggedInLogFormat, player));
                 result = new LoginResult(LoginStatus.LoggedIn, player, string.Empty);
             }
 
             return result;
+        }
+
+        private static bool IsUnverified(Player player)
+        {
+            return player.State == PlayerState.Unverified.ToString();
+        }
+
+        private LoginResult Reject(LoginStatus status, string logMessage)
+        {
+            _logger.Warning(logMessage);
+
+            return new LoginResult(status, string.Empty);
         }
 
         /// <summary>
@@ -113,8 +279,13 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, culture, challengeId);
+            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
+
+            if (isSent)
+            {
+                _logger.Info(Describe(CodeSentLogFormat, player));
+            }
 
             return new LoginResult(status, player, challengeId);
         }

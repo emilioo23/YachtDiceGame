@@ -11,6 +11,11 @@
         public string DisplayName { get; set; }
 
         /// <summary>
+        /// Identifier of the avatar of the player.
+        /// </summary>
+        public int AvatarId { get; set; }
+
+        /// <summary>
         /// Sum of the final scores of all the games of the player.
         /// </summary>
         public int TotalPoints { get; set; }
@@ -19,5 +24,15 @@
         /// Number of games won by the player.
         /// </summary>
         public int Wins { get; set; }
+
+        /// <summary>
+        /// Number of games that the player finished.
+        /// </summary>
+        public int GamesPlayed { get; set; }
+
+        /// <summary>
+        /// Accumulated experience of the player, from which the level is calculated.
+        /// </summary>
+        public int Experience { get; set; }
     }
 }

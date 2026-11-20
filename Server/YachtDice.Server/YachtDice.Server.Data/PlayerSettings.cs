@@ -20,6 +20,7 @@ namespace YachtDice.Server.Data
         public string Bio { get; set; }
         public string ThemePref { get; set; }
         public string LangPref { get; set; }
+        public string FlagCode { get; set; }
     
         public virtual Player Player { get; set; }
     }

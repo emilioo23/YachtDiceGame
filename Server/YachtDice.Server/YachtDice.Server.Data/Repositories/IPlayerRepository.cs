@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -61,5 +62,95 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="playerId">Identifier of the player.</param>
         /// <param name="isEnabled">True to turn it on, false to turn it off.</param>
         void SaveTwoFactorEnabled(int playerId, bool isEnabled);
+
+        /// <summary>
+        /// Saves the avatar that the player chose.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="avatarId">Identifier of the avatar the player will use from now on.</param>
+        void SaveAvatar(int playerId, int avatarId);
+
+        /// <summary>
+        /// Saves the new username of a player, which is also the name that the other players see.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="username">New username of the player.</param>
+        /// <exception cref="DataAccessException">The username could not be saved.</exception>
+        void SaveUsername(int playerId, string username);
+
+        /// <summary>
+        /// Finds the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved title, or an empty text if the player never chose one.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindTitle(int playerId);
+
+        /// <summary>
+        /// Saves the title that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="title">Title to save.</param>
+        /// <exception cref="DataAccessException">The title could not be saved.</exception>
+        void SaveTitle(int playerId, string title);
+
+        /// <summary>
+        /// Finds the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved code, or an empty text if the player never chose a flag.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        string FindFlagCode(int playerId);
+
+        /// <summary>
+        /// Saves the code of the country flag that the player chose to show in the profile.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="flagCode">Code of the country, or an empty text to remove the flag.</param>
+        /// <exception cref="DataAccessException">The flag could not be saved.</exception>
+        void SaveFlagCode(int playerId, string flagCode);
+
+        /// <summary>
+        /// Deletes the player and everything that belongs to the player: settings, security data, friendships,
+        /// invitations, scorecards and game history. The games that other players also played are kept.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player to delete.</param>
+        /// <exception cref="DataAccessException">The player could not be deleted.</exception>
+        void Delete(int playerId);
+
+        /// <summary>
+        /// Saves the state of the account of a player, for example when the player confirms the email.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="state">New state of the account.</param>
+        /// <exception cref="DataAccessException">The state could not be saved.</exception>
+        void SaveState(int playerId, string state);
+
+        /// <summary>
+        /// Deletes the accounts that never confirmed the email and were registered before a moment, with
+        /// everything that belongs to them.
+        /// </summary>
+        /// <param name="unverifiedState">State that the accounts without a confirmed email have.</param>
+        /// <param name="registeredBefore">Accounts registered before this moment are deleted.</param>
+        /// <returns>How many accounts were deleted.</returns>
+        /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
+        int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore);
+
+        /// <summary>
+        /// Finds the lock that wrong passwords put on the login of a player.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <returns>The saved lock, or an empty list if the account was never locked.</returns>
+        /// <exception cref="Exceptions.DataAccessException">The database could not be queried.</exception>
+        List<AccountLock> FindLocks(int playerId);
+
+        /// <summary>
+        /// Saves the lock of the login of a player, replacing the previous one, so it lasts after a restart.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="lockType">Kind of lock.</param>
+        /// <param name="lockedUntil">Moment, in UTC, when the lock ends.</param>
+        /// <exception cref="Exceptions.DataAccessException">The lock could not be saved.</exception>
+        void SaveLock(int playerId, string lockType, DateTime lockedUntil);
     }
 }

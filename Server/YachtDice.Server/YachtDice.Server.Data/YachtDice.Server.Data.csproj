@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -54,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Avatar.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AccountLock.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="BackupCode.cs">
@@ -87,18 +91,53 @@
     <Compile Include="PlayerSettings.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="PasswordHistory.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PwdResetToken.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\AccountEraser.cs" />
+    <Compile Include="Repositories\BackupCodeRepository.cs" />
+    <Compile Include="Repositories\BackupCodeStatus.cs" />
     <Compile Include="Repositories\DatabaseOperation.cs" />
     <Compile Include="Repositories\FriendRepository.cs" />
     <Compile Include="Repositories\FriendshipStatus.cs" />
     <Compile Include="Repositories\GameHistoryRepository.cs" />
+    <Compile Include="Repositories\CheckpointPlayerRecord.cs" />
+    <Compile Include="Repositories\GameCheckpointRecord.cs" />
+    <Compile Include="Repositories\GameCheckpointRepository.cs" />
+    <Compile Include="Repositories\GameResultRecord.cs" />
+    <Compile Include="Repositories\IGameCheckpointRepository.cs" />
+    <Compile Include="Repositories\RolledDieRecord.cs" />
+    <Compile Include="Repositories\RoomPlayerRecordStatus.cs" />
+    <Compile Include="Repositories\IBackupCodeRepository.cs" />
     <Compile Include="Repositories\IFriendRepository.cs" />
     <Compile Include="Repositories\IGameHistoryRepository.cs" />
+    <Compile Include="Repositories\IPasswordResetRepository.cs" />
+    <Compile Include="Repositories\IKickLogRepository.cs" />
+    <Compile Include="Repositories\IPlayerReportRepository.cs" />
+    <Compile Include="Repositories\IRoomInviteRepository.cs" />
+    <Compile Include="Repositories\RoomInviteRecord.cs" />
+    <Compile Include="Repositories\RoomInviteRepository.cs" />
+    <Compile Include="Repositories\KickLogRecord.cs" />
+    <Compile Include="Repositories\KickLogRepository.cs" />
     <Compile Include="Repositories\IPlayerRepository.cs" />
+    <Compile Include="Repositories\PlayerReportRepository.cs" />
+    <Compile Include="Repositories\IPasskeyRepository.cs" />
+    <Compile Include="Repositories\PasskeyRecord.cs" />
+    <Compile Include="Repositories\PasskeyRepository.cs" />
+    <Compile Include="Repositories\PasswordResetRepository.cs" />
+    <Compile Include="Repositories\PlayedGameRecord.cs" />
     <Compile Include="Repositories\PlayerRankingRecord.cs" />
+    <Compile Include="Repositories\PlayerResultRecord.cs" />
+    <Compile Include="Repositories\PlayerResultStatus.cs" />
+    <Compile Include="Repositories\RoomRecordStatus.cs" />
+    <Compile Include="Repositories\RoomRecordType.cs" />
+    <Compile Include="Repositories\ScorecardRecord.cs" />
+    <Compile Include="Repositories\ScoreRecord.cs" />
+    <Compile Include="Repositories\TextGuard.cs" />
     <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Room.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
@@ -113,6 +152,9 @@
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="ScorecardEntry.cs">
+      <DependentUpon>YachtDiceContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolledDie.cs">
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
     <Compile Include="TurnState.cs">
@@ -131,6 +173,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>YachtDiceContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="YachtDiceContext.Connection.cs" />
     <Compile Include="YachtDiceContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +183,18 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scripts\AddFlagCodeToPlayerSettings.sql" />
+    <None Include="Scripts\AddMoreAvatars.sql" />
+    <None Include="Scripts\AddPasskeyCredentialData.sql" />
+    <None Include="Scripts\AllowBlockedFriendships.sql" />
+    <None Include="Scripts\AllowComputerRoomType.sql" />
+    <None Include="Scripts\AllowComputerScorecards.sql" />
+    <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
+    <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
+    <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />
+    <None Include="Scripts\SaveGamesInProgress.sql" />
+    <None Include="Scripts\SeedScoreCategories.sql" />
+    <None Include="Scripts\WidenBackupCodeHash.sql" />
     <EntityDeploy Include="YachtDiceContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>YachtDiceContext.Designer.cs</LastGenOutput>

@@ -7,30 +7,54 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IGameService_JoinGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_JoinGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_JoinGame_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:message name="IGameService_RollDice_InputMessage">
     <wsdl:part name="parameters" element="tns:RollDice" />
   </wsdl:message>
-  <wsdl:message name="IGameService_SelectScoreCategory_InputMessage">
-    <wsdl:part name="parameters" element="tns:SelectScoreCategory" />
+  <wsdl:message name="IGameService_RollDice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RollDiceResponse" />
   </wsdl:message>
-  <wsdl:message name="IGameService_DiceRolled_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:DiceRolled" />
+  <wsdl:message name="IGameService_RollDice_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IGameService_TurnChanged_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:TurnChanged" />
+  <wsdl:message name="IGameService_SelectCategory_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectCategory" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_SelectCategory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectCategoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_SelectCategory_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_GameChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GameChanged" />
   </wsdl:message>
   <wsdl:portType name="IGameService">
+    <wsdl:operation name="JoinGame">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/JoinGame" message="tns:IGameService_JoinGame_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/JoinGameResponse" message="tns:IGameService_JoinGame_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IGameService/JoinGameServiceFaultFault" name="ServiceFaultFault" message="tns:IGameService_JoinGame_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation name="RollDice">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/RollDice" message="tns:IGameService_RollDice_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/RollDiceResponse" message="tns:IGameService_RollDice_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IGameService/RollDiceServiceFaultFault" name="ServiceFaultFault" message="tns:IGameService_RollDice_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SelectScoreCategory">
-      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/SelectScoreCategory" message="tns:IGameService_SelectScoreCategory_InputMessage" />
+    <wsdl:operation name="SelectCategory">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IGameService/SelectCategory" message="tns:IGameService_SelectCategory_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/SelectCategoryResponse" message="tns:IGameService_SelectCategory_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IGameService/SelectCategoryServiceFaultFault" name="ServiceFaultFault" message="tns:IGameService_SelectCategory_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DiceRolled">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/DiceRolled" message="tns:IGameService_DiceRolled_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="TurnChanged">
-      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/TurnChanged" message="tns:IGameService_TurnChanged_OutputCallbackMessage" />
+    <wsdl:operation name="GameChanged">
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IGameService/GameChanged" message="tns:IGameService_GameChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

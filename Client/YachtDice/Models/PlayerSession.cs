@@ -1,4 +1,7 @@
-﻿using YachtDice.Gateway;
+﻿using System;
+using System.Collections.Generic;
+using YachtDice.Composition;
+using YachtDice.Gateway;
 
 namespace YachtDice.Models
 {
@@ -7,18 +10,23 @@ namespace YachtDice.Models
     /// </summary>
     public class PlayerSession
     {
+        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
+        private const string NullFirstNameMessage = "The first name of the player cannot be null.";
+        private const string NullServicesMessage = "The shared components of the client cannot be null.";
+
         /// <summary>
         /// Initializes the session of the player.
         /// </summary>
         /// <param name="displayName">Name that identifies the player in the game.</param>
         /// <param name="firstName">First name of the player, used to greet them. It is empty for a guest.</param>
-        /// <param name="isGuest">Whether the player entered as a guest, without an account.</param>
-        public PlayerSession(string displayName, string firstName, bool isGuest)
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public PlayerSession(string displayName, string firstName, ClientServices services)
         {
-            DisplayName = displayName;
-            FirstName = firstName;
-            IsGuest = isGuest;
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName), NullFirstNameMessage);
+            Services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
             Presence = new PresenceGateway();
+            LastOfferedMatchCode = string.Empty;
         }
 
         /// <summary>
@@ -32,13 +40,35 @@ namespace YachtDice.Models
         public string FirstName { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the player entered as a guest, without an account.
+        /// Gets or sets a value indicating whether the player entered as a guest, without an account.
         /// </summary>
-        public bool IsGuest { get; }
+        public bool IsGuest { get; set; }
+
+        /// <summary>
+        /// Gets the components that the windows share while the application is open.
+        /// </summary>
+        public ClientServices Services { get; }
+
+        /// <summary>
+        /// Gets or sets the secret token that the server gave when the player logged in. The gateways send it
+        /// instead of the name in the operations that change the data of the player. It is empty for a guest.
+        /// </summary>
+        public string SessionToken { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets the connection of the player to the presence service, shared by all the windows.
         /// </summary>
         public PresenceGateway Presence { get; }
+
+        /// <summary>
+        /// Gets or sets the code of the last match in progress that the menu offered to the player, so the
+        /// offer is not repeated every time the menu opens.
+        /// </summary>
+        public string LastOfferedMatchCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the achievements that the player is known to have unlocked, or null before they are first read.
+        /// </summary>
+        public List<int> KnownAchievementIds { get; set; }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Presence;
+    using LogicFriends = YachtDice.Server.Logic.Friends;
     using LogicLogging = YachtDice.Server.Logic.Logging;
 
     /// <summary>
@@ -17,20 +19,23 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
-        private const string DeliveryFailedMessage = "A presence notification could not be delivered: ";
-        private const string ConnectedLogMessage = "A player is now online.";
-        private const string DisconnectedLogMessage = "A player is now offline.";
+        private const string NullFinderMessage = "What finds the identifiers of the players cannot be null.";
+        private const string ConnectedLogFormat = "{0} is now online.";
+        private const string DisconnectedLogFormat = "{0} is now offline.";
 
         private readonly ConcurrentDictionary<string, OnlinePlayer> _players =
             new ConcurrentDictionary<string, OnlinePlayer>(StringComparer.OrdinalIgnoreCase);
 
         private readonly LogicLogging.AppLogger _logger;
+        private readonly LogicFriends.IPlayerIdFinder _playerIds;
 
         /// <summary>
         /// Initializes a new instance of the PresenceService class.
         /// </summary>
-        public PresenceService()
+        /// <param name="playerIds">Finds the identifier of the account of a name, to write it in the log.</param>
+        public PresenceService(LogicFriends.IPlayerIdFinder playerIds)
         {
+            _playerIds = playerIds ?? throw new ArgumentNullException(nameof(playerIds), NullFinderMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -51,7 +56,10 @@ namespace YachtDice.Server.Services
                 onlinePlayers = _players.Keys.ToArray();
 
                 WatchChannel(displayName, player.SessionId);
-                _logger.Info(ConnectedLogMessage);
+                _logger.Info(string.Format(
+                    CultureInfo.InvariantCulture,
+                    ConnectedLogFormat,
+                    PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerConnected);
             }
 
@@ -78,11 +86,44 @@ namespace YachtDice.Server.Services
         /// <param name="eventType">What happened with the subject.</param>
         public void SendEvent(string recipientName, string subjectName, Contracts.PresenceEventType eventType)
         {
-            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient)
-                && !TryNotify(recipient.Callback, subjectName, eventType))
+            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient))
             {
-                Remove(recipientName, recipient.SessionId);
+                bool isDelivered = CallbackDelivery.TryDeliver(
+                    recipient.Callback,
+                    callback => callback.PresenceChanged(subjectName, eventType),
+                    _logger);
+
+                if (!isDelivered)
+                {
+                    Remove(recipientName, recipient.SessionId);
+                }
             }
+        }
+
+        /// <summary>
+        /// Sends an invitation to a room to the player, if the player is online.
+        /// </summary>
+        /// <param name="recipientName">Name of the player who receives the invitation.</param>
+        /// <param name="invitation">Who invites and the code of the room.</param>
+        /// <returns>True if the invitation reached the player.</returns>
+        public bool SendInvitation(string recipientName, Contracts.RoomInvitation invitation)
+        {
+            var isDelivered = false;
+
+            if (_players.TryGetValue(recipientName, out OnlinePlayer recipient))
+            {
+                isDelivered = CallbackDelivery.TryDeliver(
+                    recipient.Callback,
+                    callback => callback.InvitationReceived(invitation),
+                    _logger);
+
+                if (!isDelivered)
+                {
+                    Remove(recipientName, recipient.SessionId);
+                }
+            }
+
+            return isDelivered;
         }
 
         private static OnlinePlayer CreateCurrentPlayer()
@@ -102,61 +143,46 @@ namespace YachtDice.Server.Services
 
         private void Remove(string displayName, string sessionId)
         {
-            if (_players.TryGetValue(displayName, out OnlinePlayer player)
-                && player.SessionId == sessionId
-                && RemoveEntry(displayName, player))
+            var isRemoved = false;
+
+            if (_players.TryGetValue(displayName, out OnlinePlayer player))
             {
-                _logger.Info(DisconnectedLogMessage);
+                bool isSameSession = player.SessionId == sessionId;
+
+                if (isSameSession)
+                {
+                    isRemoved = RemoveEntry(displayName, player);
+                }
+            }
+
+            if (isRemoved)
+            {
+                _logger.Info(string.Format(
+                    CultureInfo.InvariantCulture,
+                    DisconnectedLogFormat,
+                    PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
             }
         }
 
-        // Removing the pair instead of the key keeps a newer session of the same player that connected meanwhile.
         private bool RemoveEntry(string displayName, OnlinePlayer player)
         {
-            var entry = new KeyValuePair<string, OnlinePlayer>(displayName, player);
+            var namedPlayer = new KeyValuePair<string, OnlinePlayer>(displayName, player);
 
-            return ((ICollection<KeyValuePair<string, OnlinePlayer>>)_players).Remove(entry);
+            return ((ICollection<KeyValuePair<string, OnlinePlayer>>)_players).Remove(namedPlayer);
         }
 
         private void Broadcast(string displayName, Contracts.PresenceEventType eventType)
         {
-            foreach (KeyValuePair<string, OnlinePlayer> recipient in _players)
+            foreach (string recipientName in _players.Keys)
             {
-                bool isOtherPlayer = !string.Equals(recipient.Key, displayName, StringComparison.OrdinalIgnoreCase);
+                bool isOtherPlayer = !string.Equals(recipientName, displayName, StringComparison.OrdinalIgnoreCase);
 
-                if (isOtherPlayer && !TryNotify(recipient.Value.Callback, displayName, eventType))
+                if (isOtherPlayer)
                 {
-                    Remove(recipient.Key, recipient.Value.SessionId);
+                    SendEvent(recipientName, displayName, eventType);
                 }
             }
-        }
-
-        private bool TryNotify(
-            Contracts.IPresenceCallback callback,
-            string displayName,
-            Contracts.PresenceEventType eventType)
-        {
-            var isDelivered = false;
-
-            if (((ICommunicationObject)callback).State == CommunicationState.Opened)
-            {
-                try
-                {
-                    callback.PresenceChanged(displayName, eventType);
-                    isDelivered = true;
-                }
-                catch (CommunicationException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-                catch (TimeoutException ex)
-                {
-                    _logger.Warning(DeliveryFailedMessage + ex.GetType().Name);
-                }
-            }
-
-            return isDelivered;
         }
     }
 }

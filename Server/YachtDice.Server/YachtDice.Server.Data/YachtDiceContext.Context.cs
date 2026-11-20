@@ -36,12 +36,15 @@ namespace YachtDice.Server.Data
         public virtual DbSet<Player> Player { get; set; }
         public virtual DbSet<PlayerReport> PlayerReport { get; set; }
         public virtual DbSet<PlayerSettings> PlayerSettings { get; set; }
+        public virtual DbSet<PasswordHistory> PasswordHistory { get; set; }
+        public virtual DbSet<AccountLock> AccountLock { get; set; }
         public virtual DbSet<PwdResetToken> PwdResetToken { get; set; }
         public virtual DbSet<Room> Room { get; set; }
         public virtual DbSet<RoomInvite> RoomInvite { get; set; }
         public virtual DbSet<RoomPlayer> RoomPlayer { get; set; }
         public virtual DbSet<Scorecard> Scorecard { get; set; }
         public virtual DbSet<ScorecardEntry> ScorecardEntry { get; set; }
+        public virtual DbSet<RolledDie> RolledDie { get; set; }
         public virtual DbSet<TurnState> TurnState { get; set; }
         public virtual DbSet<TwoFactorAuth> TwoFactorAuth { get; set; }
     }

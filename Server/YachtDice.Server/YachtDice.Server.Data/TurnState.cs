@@ -14,13 +14,20 @@ namespace YachtDice.Server.Data
     
     public partial class TurnState
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TurnState()
+        {
+            this.RolledDie = new HashSet<RolledDie>();
+        }
+
         public int Id { get; set; }
         public int GameId { get; set; }
         public int PlayerId { get; set; }
         public Nullable<int> RollNum { get; set; }
-        public string DiceValues { get; set; }
     
         public virtual GameHistory GameHistory { get; set; }
         public virtual Player Player { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RolledDie> RolledDie { get; set; }
     }
 }

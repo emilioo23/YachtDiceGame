@@ -115,11 +115,83 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Correo o usuario.
+        /// </summary>
+        public static string Auth_LoginIdentifier {
+            get {
+                return ResourceManager.GetString("Auth_LoginIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a correo@ejemplo.com o usuario.
+        /// </summary>
+        public static string Auth_LoginIdentifierPlaceholder {
+            get {
+                return ResourceManager.GetString("Auth_LoginIdentifierPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El nombre y el apellido solo pueden tener letras, espacios, guiones y apóstrofos (de 2 a 50 caracteres)..
+        /// </summary>
+        public static string Auth_ErrorInvalidName {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Algún campo es demasiado largo. Usuario: máximo 20 caracteres, correo: 100, nombre y apellido: 50..
         /// </summary>
         public static string Auth_ErrorFieldTooLong {
             get {
                 return ResourceManager.GetString("Auth_ErrorFieldTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario no puede tener palabras ofensivas. Elige otro nombre.
+        /// </summary>
+        public static string Auth_ErrorOffensiveUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorOffensiveUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se bloqueó por 24 horas porque escribiste mal la contraseña 10 veces en el día.
+        /// </summary>
+        public static string Auth_ErrorLockedForTheDay {
+            get {
+                return ResourceManager.GetString("Auth_ErrorLockedForTheDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribiste mal la contraseña 3 veces seguidas. Espera 5 minutos para volver a intentarlo.
+        /// </summary>
+        public static string Auth_ErrorTemporarilyLocked {
+            get {
+                return ResourceManager.GetString("Auth_ErrorTemporarilyLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de usuario debe tener de 3 a 20 caracteres y solo puede usar letras sin acento, números, punto y guion bajo..
+        /// </summary>
+        public static string Auth_ErrorInvalidUsername {
+            get {
+                return ResourceManager.GetString("Auth_ErrorInvalidUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña debe tener de 8 a 64 caracteres, con al menos una letra y un número..
+        /// </summary>
+        public static string Auth_ErrorWeakPassword {
+            get {
+                return ResourceManager.GetString("Auth_ErrorWeakPassword", resourceCulture);
             }
         }
         
@@ -169,6 +241,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Ocultar contraseña.
+        /// </summary>
+        public static string Auth_HidePassword {
+            get {
+                return ResourceManager.GetString("Auth_HidePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Apellidos.
         /// </summary>
         public static string Auth_LastName {
@@ -214,6 +295,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Mostrar contraseña.
+        /// </summary>
+        public static string Auth_ShowPassword {
+            get {
+                return ResourceManager.GetString("Auth_ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El clásico juego de dados multijugador.
         /// </summary>
         public static string Auth_Subtitle {
@@ -223,7 +313,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Registro exitoso..
+        ///   Busca una cadena traducida similar a Registro exitoso. La primera vez que inicies sesión te mandaremos un código.
         /// </summary>
         public static string Auth_SuccessRegister {
             get {
@@ -250,6 +340,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Cancelar.
+        /// </summary>
+        public static string Dialogs_ButtonCancel {
+            get {
+                return ResourceManager.GetString("Dialogs_ButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ignorar.
         /// </summary>
         public static string Dialogs_ButtonIgnore {
@@ -268,11 +367,38 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres cerrar sesión?.
+        /// </summary>
+        public static string Dialogs_ConfirmLogout {
+            get {
+                return ResourceManager.GetString("Dialogs_ConfirmLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. Inicia sesión de nuevo para seguir jugando..
+        /// </summary>
+        public static string Dialogs_ConnectionLost {
+            get {
+                return ResourceManager.GetString("Dialogs_ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
         /// </summary>
-        public static string Dialogs_DatabaseConnectionError {
+        public static string Dialogs_ServerUnavailable {
             get {
-                return ResourceManager.GetString("Dialogs_DatabaseConnectionError", resourceCulture);
+                return ResourceManager.GetString("Dialogs_ServerUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor no puede consultar sus datos en este momento. Inténtalo más tarde..
+        /// </summary>
+        public static string Dialogs_DatabaseUnavailable {
+            get {
+                return ResourceManager.GetString("Dialogs_DatabaseUnavailable", resourceCulture);
             }
         }
         
@@ -313,11 +439,83 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ¿Estás seguro de que deseas salir de la sala? Tu progreso no se guardará..
+        ///   Busca una cadena traducida similar a El servidor rechazó la información enviada. Revisa los datos e inténtalo de nuevo..
+        /// </summary>
+        public static string Dialogs_InvalidData {
+            get {
+                return ResourceManager.GetString("Dialogs_InvalidData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres salir de la partida? Se avisará a los demás jugadores y podrás volver mientras siga en curso..
         /// </summary>
         public static string Dialogs_LeaveMatch {
             get {
                 return ResourceManager.GetString("Dialogs_LeaveMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si cierras la ventana, tu partida sigue en curso y tendrás {0} segundos para volver. Si no vuelves a tiempo, la perderás. ¿Cerrar de todos modos?.
+        /// </summary>
+        public static string Dialogs_CloseWindowDuringMatch {
+            get {
+                return ResourceManager.GetString("Dialogs_CloseWindowDuringMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Música de fondo.
+        /// </summary>
+        public static string Settings_Audio_Music {
+            get {
+                return ResourceManager.GetString("Settings_Audio_Music", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activa o silencia la música del juego.
+        /// </summary>
+        public static string Settings_Audio_MusicSub {
+            get {
+                return ResourceManager.GetString("Settings_Audio_MusicSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Volumen de la música.
+        /// </summary>
+        public static string Settings_Audio_MusicVolume {
+            get {
+                return ResourceManager.GetString("Settings_Audio_MusicVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Silenciar música.
+        /// </summary>
+        public static string Game_Sidebar_ButtonMuteMusic {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_ButtonMuteMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activar música.
+        /// </summary>
+        public static string Game_Sidebar_ButtonUnmuteMusic {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_ButtonUnmuteMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Volumen.
+        /// </summary>
+        public static string Game_Sidebar_MusicVolume {
+            get {
+                return ResourceManager.GetString("Game_Sidebar_MusicVolume", resourceCulture);
             }
         }
         
@@ -349,16 +547,25 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Enviar enlace de recuperación.
+        ///   Busca una cadena traducida similar a Enviar código.
         /// </summary>
-        public static string ForgotPassword_ButtonSendLink {
+        public static string ForgotPassword_ButtonSendCode {
             get {
-                return ResourceManager.GetString("ForgotPassword_ButtonSendLink", resourceCulture);
+                return ResourceManager.GetString("ForgotPassword_ButtonSendCode", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Te enviaremos un enlace para restablecer tu contraseña..
+        ///   Busca una cadena traducida similar a Si el correo está registrado, te enviamos un código de 6 dígitos..
+        /// </summary>
+        public static string ForgotPassword_CodeSentMessage {
+            get {
+                return ResourceManager.GetString("ForgotPassword_CodeSentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu correo y te enviaremos un código de 6 dígitos para restablecer tu contraseña..
         /// </summary>
         public static string ForgotPassword_Description {
             get {
@@ -385,20 +592,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo enviar el código. Revisa tu conexión e inténtalo de nuevo..
+        /// </summary>
+        public static string ForgotPassword_ErrorSendFailed {
+            get {
+                return ResourceManager.GetString("ForgotPassword_ErrorSendFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a ← Volver al inicio de sesión.
         /// </summary>
         public static string ForgotPassword_LinkBackToLogin {
             get {
                 return ResourceManager.GetString("ForgotPassword_LinkBackToLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Enlace de recuperación enviado a {0}..
-        /// </summary>
-        public static string ForgotPassword_LinkSentMessage {
-            get {
-                return ResourceManager.GetString("ForgotPassword_LinkSentMessage", resourceCulture);
             }
         }
         
@@ -417,6 +624,24 @@ namespace YachtDice.Resources {
         public static string Friends_Result_AlreadyFriends {
             get {
                 return ResourceManager.GetString("Friends_Result_AlreadyFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya tienes el máximo de solicitudes sin respuesta. Espera a que te respondan para enviar otra.
+        /// </summary>
+        public static string Friends_Result_TooManyPendingRequests {
+            get {
+                return ResourceManager.GetString("Friends_Result_TooManyPendingRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Uno de los dos ya llegó al máximo de amigos permitido.
+        /// </summary>
+        public static string Friends_Result_FriendLimitReached {
+            get {
+                return ResourceManager.GetString("Friends_Result_FriendLimitReached", resourceCulture);
             }
         }
         
@@ -511,6 +736,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Esc. Grande.
+        /// </summary>
+        public static string Game_Category_BigStraight {
+            get {
+                return ResourceManager.GetString("Game_Category_BigStraight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Bono +35.
         /// </summary>
         public static string Game_Category_Bonus {
@@ -520,11 +754,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Chance.
+        ///   Busca una cadena traducida similar a Libre.
         /// </summary>
-        public static string Game_Category_Chance {
+        public static string Game_Category_Choice {
             get {
-                return ResourceManager.GetString("Game_Category_Chance", resourceCulture);
+                return ResourceManager.GetString("Game_Category_Choice", resourceCulture);
             }
         }
         
@@ -565,11 +799,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Esc.Grande.
+        ///   Busca una cadena traducida similar a Esc. Pequeña.
         /// </summary>
-        public static string Game_Category_LargeStraight {
+        public static string Game_Category_LittleStraight {
             get {
-                return ResourceManager.GetString("Game_Category_LargeStraight", resourceCulture);
+                return ResourceManager.GetString("Game_Category_LittleStraight", resourceCulture);
             }
         }
         
@@ -592,29 +826,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Esc.Pequeña.
-        /// </summary>
-        public static string Game_Category_SmallStraight {
-            get {
-                return ResourceManager.GetString("Game_Category_SmallStraight", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Suma.
         /// </summary>
         public static string Game_Category_Sum {
             get {
                 return ResourceManager.GetString("Game_Category_Sum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a 3 Iguales.
-        /// </summary>
-        public static string Game_Category_ThreeOfAKind {
-            get {
-                return ResourceManager.GetString("Game_Category_ThreeOfAKind", resourceCulture);
             }
         }
         
@@ -642,6 +858,33 @@ namespace YachtDice.Resources {
         public static string Game_Category_Yacht {
             get {
                 return ResourceManager.GetString("Game_Category_Yacht", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bono Yacht.
+        /// </summary>
+        public static string Game_Category_YachtBonus {
+            get {
+                return ResourceManager.GetString("Game_Category_YachtBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} suma {1} puntos.
+        /// </summary>
+        public static string Game_Celebration_YachtPoints {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡YACHT!.
+        /// </summary>
+        public static string Game_Celebration_YachtTitle {
+            get {
+                return ResourceManager.GetString("Game_Celebration_YachtTitle", resourceCulture);
             }
         }
         
@@ -691,6 +934,78 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} no volvió a tiempo y quedó fuera de la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerForfeited {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerForfeited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando que {0} vuelva a la partida: {1} s.
+        /// </summary>
+        public static string Game_Reconnect_WaitingFormat {
+            get {
+                return ResourceManager.GetString("Game_Reconnect_WaitingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. Reconectando… (intento {0}).
+        /// </summary>
+        public static string Game_Link_ReconnectingFormat {
+            get {
+                return ResourceManager.GetString("Game_Link_ReconnectingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se recuperó la conexión con el servidor..
+        /// </summary>
+        public static string Game_Chat_ConnectionRestored {
+            get {
+                return ResourceManager.GetString("Game_Chat_ConnectionRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} fue expulsado de la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerKicked {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerKicked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} abandonó la partida o perdió la conexión..
+        /// </summary>
+        public static string Game_Chat_PlayerLeft {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} volvió a la partida..
+        /// </summary>
+        public static string Game_Chat_PlayerReturned {
+            get {
+                return ResourceManager.GetString("Game_Chat_PlayerReturned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se permiten enlaces en el chat.
+        /// </summary>
+        public static string Game_Chat_LinksNotAllowed {
+            get {
+                return ResourceManager.GetString("Game_Chat_LinksNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo enviar el mensaje..
         /// </summary>
         public static string Game_Chat_SendFailed {
@@ -718,11 +1033,272 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a A {0} se le acabó el tiempo y el servidor jugó su turno..
+        /// </summary>
+        public static string Game_Chat_TurnTimedOut {
+            get {
+                return ResourceManager.GetString("Game_Chat_TurnTimedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a El chat no está disponible en esta partida..
         /// </summary>
         public static string Game_Chat_Unavailable {
             get {
                 return ResourceManager.GetString("Game_Chat_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} sacó otro Yacht y gana 100 puntos de bono..
+        /// </summary>
+        public static string Game_Chat_YachtBonus {
+            get {
+                return ResourceManager.GetString("Game_Chat_YachtBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Atajos: Espacio tira los dados y las teclas 1 a 5 apartan o sueltan un dado.
+        /// </summary>
+        public static string Game_Dice_ShortcutsHint {
+            get {
+                return ResourceManager.GetString("Game_Dice_ShortcutsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Partidas.
+        /// </summary>
+        public static string Leaderboard_ColumnGames {
+            get {
+                return ResourceManager.GetString("Leaderboard_ColumnGames", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel.
+        /// </summary>
+        public static string Leaderboard_ColumnLevel {
+            get {
+                return ResourceManager.GetString("Leaderboard_ColumnLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Superior {0} · Bono {1} · Inferior {2} · Bono Yacht {3}.
+        /// </summary>
+        public static string Results_BreakdownFormat {
+            get {
+                return ResourceManager.GetString("Results_BreakdownFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} (Nv. {1}).
+        /// </summary>
+        public static string Game_Chat_AuthorLevelFormat {
+            get {
+                return ResourceManager.GetString("Game_Chat_AuthorLevelFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Estoy listo.
+        /// </summary>
+        public static string Lobby_ButtonReady {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no estoy listo.
+        /// </summary>
+        public static string Lobby_ButtonNotReady {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonNotReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Listo.
+        /// </summary>
+        public static string Lobby_PlayerReady {
+            get {
+                return ResourceManager.GetString("Lobby_PlayerReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida empezó sin ti porque no confirmaste que estabas listo..
+        /// </summary>
+        public static string Lobby_LeftOutMessage {
+            get {
+                return ResourceManager.GetString("Lobby_LeftOutMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía hay jugadores que no confirman que están listos. Espera a que confirmen o hasta 2 minutos para iniciar sin ellos..
+        /// </summary>
+        public static string Lobby_Result_PlayersNotReady {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayersNotReady", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nombre de la sala.
+        /// </summary>
+        public static string Lobby_RoomName {
+            get {
+                return ResourceManager.GetString("Lobby_RoomName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a El nombre de la sala tiene una palabra que no está permitida..
+        /// </summary>
+        public static string Lobby_Result_OffensiveRoomName {
+            get {
+                return ResourceManager.GetString("Lobby_Result_OffensiveRoomName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo tú ves esto: {0} ya escribió 3 mensajes con palabras prohibidas.
+        /// </summary>
+        public static string Game_Chat_InfractionNotice {
+            get {
+                return ResourceManager.GetString("Game_Chat_InfractionNotice", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a ⊘.
+        /// </summary>
+        public static string Global_SymbolBlock {
+            get {
+                return ResourceManager.GetString("Global_SymbolBlock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloquear.
+        /// </summary>
+        public static string Friends_BlockTooltip {
+            get {
+                return ResourceManager.GetString("Friends_BlockTooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Bloquear a {0}? Dejarán de ser amigos y ninguno podrá mandarle solicitud al otro hasta que lo desbloquees..
+        /// </summary>
+        public static string Dialogs_BlockPlayer {
+            get {
+                return ResourceManager.GetString("Dialogs_BlockPlayer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloqueados.
+        /// </summary>
+        public static string Friends_Section_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Section_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bloqueado por ti.
+        /// </summary>
+        public static string Friends_Status_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Status_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Desbloquear.
+        /// </summary>
+        public static string Friends_ButtonUnblock {
+            get {
+                return ResourceManager.GetString("Friends_ButtonUnblock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Desbloquear a {0}? Podrán volver a mandarse solicitudes, pero no serán amigos hasta que uno acepte una nueva..
+        /// </summary>
+        public static string Dialogs_UnblockPlayer {
+            get {
+                return ResourceManager.GetString("Dialogs_UnblockPlayer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a No puedes mandarle solicitud a este jugador..
+        /// </summary>
+        public static string Friends_Result_Blocked {
+            get {
+                return ResourceManager.GetString("Friends_Result_Blocked", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes cambiar tu nombre de usuario una vez cada 30 días.
+        /// </summary>
+        public static string Profile_UsernameChangedRecently {
+            get {
+                return ResourceManager.GetString("Profile_UsernameChangedRecently", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a No puedes usar tu contraseña actual ni ninguna de las dos anteriores.
+        /// </summary>
+        public static string ResetPassword_ErrorPasswordUsedBefore {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorPasswordUsedBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu sesión terminó. Vuelve a iniciar sesión.
+        /// </summary>
+        public static string Dialogs_SessionExpired {
+            get {
+                return ResourceManager.GetString("Dialogs_SessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu sesión se cerró porque iniciaste sesión en otro lugar. Vuelve a iniciar sesión.
+        /// </summary>
+        public static string Dialogs_SessionReplaced {
+            get {
+                return ResourceManager.GetString("Dialogs_SessionReplaced", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña para borrar la cuenta.
+        /// </summary>
+        public static string Settings_DeleteAccount_PasswordLabel {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_PasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña no es correcta. La cuenta no se borró..
+        /// </summary>
+        public static string Settings_DeleteAccount_WrongPassword {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_WrongPassword", resourceCulture);
             }
         }
         
@@ -736,11 +1312,110 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Elige una categoría o conserva dados y vuelve a tirar..
+        /// </summary>
+        public static string Game_Dice_HintChoose {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintChoose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando el turno de {0}....
+        /// </summary>
+        public static string Game_Dice_HintOpponent {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintOpponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sin tiradas. Elige una categoría..
+        /// </summary>
+        public static string Game_Dice_HintPickBox {
+            get {
+                return ResourceManager.GetString("Game_Dice_HintPickBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Presiona Tirar para comenzar.
         /// </summary>
         public static string Game_Dice_HintPress {
             get {
                 return ResourceManager.GetString("Game_Dice_HintPress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No hay otros jugadores en la partida para expulsar..
+        /// </summary>
+        public static string Game_KickNoPlayers {
+            get {
+                return ResourceManager.GetString("Game_KickNoPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa categoría ya tiene puntos..
+        /// </summary>
+        public static string Game_Result_CategoryFilled {
+            get {
+                return ResourceManager.GetString("Game_Result_CategoryFilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Con un Yacht repetido la regla del comodín no permite esa categoría..
+        /// </summary>
+        public static string Game_Result_CategoryNotAllowed {
+            get {
+                return ResourceManager.GetString("Game_Result_CategoryNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida ya terminó..
+        /// </summary>
+        public static string Game_Result_GameFinished {
+            get {
+                return ResourceManager.GetString("Game_Result_GameFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La partida ya no existe..
+        /// </summary>
+        public static string Game_Result_GameNotFound {
+            get {
+                return ResourceManager.GetString("Game_Result_GameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya usaste las tres tiradas de este turno..
+        /// </summary>
+        public static string Game_Result_NoRollsLeft {
+            get {
+                return ResourceManager.GetString("Game_Result_NoRollsLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no es tu turno..
+        /// </summary>
+        public static string Game_Result_NotYourTurn {
+            get {
+                return ResourceManager.GetString("Game_Result_NotYourTurn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no participas en esta partida..
+        /// </summary>
+        public static string Game_Result_PlayerNotInGame {
+            get {
+                return ResourceManager.GetString("Game_Result_PlayerNotInGame", resourceCulture);
             }
         }
         
@@ -781,11 +1456,56 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a {0} s.
+        /// </summary>
+        public static string Game_Timer_SecondsLeft {
+            get {
+                return ResourceManager.GetString("Game_Timer_SecondsLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Partida terminada.
+        /// </summary>
+        public static string Game_Topbar_GameOver {
+            get {
+                return ResourceManager.GetString("Game_Topbar_GameOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esperando jugadores.
+        /// </summary>
+        public static string Game_Topbar_Paused {
+            get {
+                return ResourceManager.GetString("Game_Topbar_Paused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Ronda {0} / {1}.
         /// </summary>
         public static string Game_Topbar_RoundInfo {
             get {
                 return ResourceManager.GetString("Game_Topbar_RoundInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Turno de {0}.
+        /// </summary>
+        public static string Game_Topbar_TurnOf {
+            get {
+                return ResourceManager.GetString("Game_Topbar_TurnOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar el resultado de la partida, así que la experiencia de esta partida no se sumó..
+        /// </summary>
+        public static string Game_ResultNotSaved {
+            get {
+                return ResourceManager.GetString("Game_ResultNotSaved", resourceCulture);
             }
         }
         
@@ -880,6 +1600,321 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Los dados 2-3-4-5-6. Anotas 30 puntos..
+        /// </summary>
+        public static string HowToPlay_BigStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_BigStraightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si la suma de Unos a Seises llega a 63 puntos o más (por ejemplo, tres dados de cada número), ganas 35 puntos extra..
+        /// </summary>
+        public static string HowToPlay_BonusText {
+            get {
+                return ResourceManager.GetString("HowToPlay_BonusText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sirve para cualquier combinación. Anotas la suma de los cinco dados. Ejemplo: 1+3+4+5+6 = 19 puntos..
+        /// </summary>
+        public static string HowToPlay_ChoiceText {
+            get {
+                return ResourceManager.GetString("HowToPlay_ChoiceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Al menos cuatro dados iguales. Anotas la suma de los cinco dados. Ejemplo: 5+5+5+5+1 = 21 puntos..
+        /// </summary>
+        public static string HowToPlay_FourOfAKindText {
+            get {
+                return ResourceManager.GetString("HowToPlay_FourOfAKindText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tres dados iguales y, además, otros dos iguales entre sí. Anotas 25 puntos..
+        /// </summary>
+        public static string HowToPlay_FullHouseText {
+            get {
+                return ResourceManager.GetString("HowToPlay_FullHouseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Juegas una ronda por cada categoría de tu tabla de puntos y en cada una anotas puntos con cinco dados. Cuando todas las categorías están llenas, gana quien tenga más puntos..
+        /// </summary>
+        public static string HowToPlay_GoalText {
+            get {
+                return ResourceManager.GetString("HowToPlay_GoalText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El objetivo.
+        /// </summary>
+        public static string HowToPlay_GoalTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_GoalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si sacas un Yacht y la casilla Yacht ya está usada, debes anotarlo en la casilla del mismo número si está libre. Si no, en cualquier casilla inferior libre (la casa llena y las escaleras valen completas). Si tampoco hay, en cualquier casilla superior libre..
+        /// </summary>
+        public static string HowToPlay_JokerText {
+            get {
+                return ResourceManager.GetString("HowToPlay_JokerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Comodín.
+        /// </summary>
+        public static string HowToPlay_JokerTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_JokerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los dados 1-2-3-4-5. Anotas 30 puntos..
+        /// </summary>
+        public static string HowToPlay_LittleStraightText {
+            get {
+                return ResourceManager.GetString("HowToPlay_LittleStraightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sección inferior.
+        /// </summary>
+        public static string HowToPlay_LowerTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_LowerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tira los cinco dados..
+        /// </summary>
+        public static string HowToPlay_Step1 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Elige los dados que quieres conservar y vuelve a tirar los demás. Puedes tirar hasta tres veces en total..
+        /// </summary>
+        public static string HowToPlay_Step2 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cuando estés listo, elige una categoría libre de tu tabla y anota los puntos. Si los dados no cumplen la combinación, anotas 0. Cada categoría se usa una sola vez..
+        /// </summary>
+        public static string HowToPlay_Step3 {
+            get {
+                return ResourceManager.GetString("HowToPlay_Step3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Las reglas de Yacht Dice en un minuto..
+        /// </summary>
+        public static string HowToPlay_Subtitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Conserva los dados que más se repiten. Si una categoría ya no se ve posible, sacrifícala anotando 0 en la que menos te convenga..
+        /// </summary>
+        public static string HowToPlay_TipsText {
+            get {
+                return ResourceManager.GetString("HowToPlay_TipsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Consejos.
+        /// </summary>
+        public static string HowToPlay_TipsTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_TipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cómo jugar.
+        /// </summary>
+        public static string HowToPlay_Title {
+            get {
+                return ResourceManager.GetString("HowToPlay_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu turno.
+        /// </summary>
+        public static string HowToPlay_TurnTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_TurnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sumas solo los dados que muestran el número de la categoría. Con 3, 3, 3, 5 y 6 en Tres anotas 9, porque solo cuentan los tres 3..
+        /// </summary>
+        public static string HowToPlay_UpperRuleText {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperRuleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unos a Seises.
+        /// </summary>
+        public static string HowToPlay_UpperRuleTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperRuleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sección superior.
+        /// </summary>
+        public static string HowToPlay_UpperTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_UpperTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Al final se suman todas tus categorías más el bono. Gana el jugador con más puntos, y los puntos de cada partida cuentan para el ranking..
+        /// </summary>
+        public static string HowToPlay_WinText {
+            get {
+                return ResourceManager.GetString("HowToPlay_WinText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Quién gana?.
+        /// </summary>
+        public static string HowToPlay_WinTitle {
+            get {
+                return ResourceManager.GetString("HowToPlay_WinTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si ya anotaste 50 puntos en Yacht y sacas otro Yacht, ganas 100 puntos extra. Si anotaste 0 en Yacht, no hay bono..
+        /// </summary>
+        public static string HowToPlay_YachtBonusText {
+            get {
+                return ResourceManager.GetString("HowToPlay_YachtBonusText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los cinco dados iguales. Anotas 50 puntos..
+        /// </summary>
+        public static string HowToPlay_YachtText {
+            get {
+                return ResourceManager.GetString("HowToPlay_YachtText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Invitations_Received_Join {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si te unes, saldrás de la sala en la que estás..
+        /// </summary>
+        public static string Invitations_Received_LeaveNotice {
+            get {
+                return ResourceManager.GetString("Invitations_Received_LeaveNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} te invitó a unirse a su sala..
+        /// </summary>
+        public static string Invitations_Received_Message {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Rechazar.
+        /// </summary>
+        public static string Invitations_Received_Reject {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Reject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitación a una sala.
+        /// </summary>
+        public static string Invitations_Received_Title {
+            get {
+                return ResourceManager.GetString("Invitations_Received_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} no está en línea..
+        /// </summary>
+        public static string Invitations_Result_FriendOffline {
+            get {
+                return ResourceManager.GetString("Invitations_Result_FriendOffline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes invitar a tus amigos..
+        /// </summary>
+        public static string Invitations_Result_NotFriends {
+            get {
+                return ResourceManager.GetString("Invitations_Result_NotFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya no estás en esa sala..
+        /// </summary>
+        public static string Invitations_Result_NotInRoom {
+            get {
+                return ResourceManager.GetString("Invitations_Result_NotInRoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitación enviada a {0}..
+        /// </summary>
+        public static string Invitations_Result_Sent {
+            get {
+                return ResourceManager.GetString("Invitations_Result_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Jugador.
         /// </summary>
         public static string Leaderboard_ColumnPlayer {
@@ -912,15 +1947,6 @@ namespace YachtDice.Resources {
         public static string Leaderboard_ColumnWins {
             get {
                 return ResourceManager.GetString("Leaderboard_ColumnWins", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a No se pudo conectar con el servidor para obtener el ranking..
-        /// </summary>
-        public static string Leaderboard_ConnectionError {
-            get {
-                return ResourceManager.GetString("Leaderboard_ConnectionError", resourceCulture);
             }
         }
         
@@ -961,6 +1987,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ← Regresar al menú.
+        /// </summary>
+        public static string Lobby_ButtonBackToMenu {
+            get {
+                return ResourceManager.GetString("Lobby_ButtonBackToMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Copiar código.
         /// </summary>
         public static string Lobby_ButtonCopyCode {
@@ -975,6 +2010,78 @@ namespace YachtDice.Resources {
         public static string Lobby_ButtonStartMatch {
             get {
                 return ResourceManager.GetString("Lobby_ButtonStartMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} es ahora el anfitrión de la sala..
+        /// </summary>
+        public static string Lobby_Chat_NewHost {
+            get {
+                return ResourceManager.GetString("Lobby_Chat_NewHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aquí puedes platicar con los demás jugadores mientras empieza la partida..
+        /// </summary>
+        public static string Lobby_Chat_WelcomeMessage {
+            get {
+                return ResourceManager.GetString("Lobby_Chat_WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres expulsar a {0} de la sala?.
+        /// </summary>
+        public static string Lobby_ConfirmKick {
+            get {
+                return ResourceManager.GetString("Lobby_ConfirmKick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no tienes amigos agregados..
+        /// </summary>
+        public static string Lobby_Friends_Empty {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Inicia sesión con una cuenta para ver tus amigos e invitarlos a la sala..
+        /// </summary>
+        public static string Lobby_Friends_GuestNotice {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_GuestNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Da clic derecho a un amigo en línea para invitarlo a la sala..
+        /// </summary>
+        public static string Lobby_Friends_Hint {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitar al jugador a la sala.
+        /// </summary>
+        public static string Lobby_Friends_MenuInvite {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_MenuInvite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Amigos.
+        /// </summary>
+        public static string Lobby_Friends_Title {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_Title", resourceCulture);
             }
         }
         
@@ -997,11 +2104,38 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ← Volver a Jugar.
+        ///   Busca una cadena traducida similar a Expulsar.
         /// </summary>
-        public static string Lobby_LinkBackToPlay {
+        public static string Lobby_HostKick {
             get {
-                return ResourceManager.GetString("Lobby_LinkBackToPlay", resourceCulture);
+                return ResourceManager.GetString("Lobby_HostKick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Dar anfitrión.
+        /// </summary>
+        public static string Lobby_HostTransfer {
+            get {
+                return ResourceManager.GetString("Lobby_HostTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La sala se cerró porque pasó el tiempo de espera sin iniciar la partida.
+        /// </summary>
+        public static string Lobby_ClosedMessage {
+            get {
+                return ResourceManager.GetString("Lobby_ClosedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El anfitrión te expulsó de la sala..
+        /// </summary>
+        public static string Lobby_KickedMessage {
+            get {
+                return ResourceManager.GetString("Lobby_KickedMessage", resourceCulture);
             }
         }
         
@@ -1114,6 +2248,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El código de la sala no es correcto..
+        /// </summary>
+        public static string Lobby_Result_InvalidAccessCode {
+            get {
+                return ResourceManager.GetString("Lobby_Result_InvalidAccessCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esa configuración no es válida para la sala..
         /// </summary>
         public static string Lobby_Result_InvalidSettings {
@@ -1141,11 +2284,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Ya hay un jugador con tu nombre en esa sala..
+        ///   Busca una cadena traducida similar a El anfitrión te expulsó de esta sala, así que no puedes volver a entrar.
         /// </summary>
-        public static string Lobby_Result_PlayerAlreadyInRoom {
+        public static string Lobby_Result_PlayerExpelled {
             get {
-                return ResourceManager.GetString("Lobby_Result_PlayerAlreadyInRoom", resourceCulture);
+                return ResourceManager.GetString("Lobby_Result_PlayerExpelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ese jugador ya no está en la sala..
+        /// </summary>
+        public static string Lobby_Result_PlayerNotFound {
+            get {
+                return ResourceManager.GetString("Lobby_Result_PlayerNotFound", resourceCulture);
             }
         }
         
@@ -1186,11 +2338,128 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Esperando al anfitrión....
+        ///   Busca una cadena traducida similar a Agregar computadora.
         /// </summary>
-        public static string Lobby_WaitingForHost {
+        public static string Lobby_ButtonAddComputer {
             get {
-                return ResourceManager.GetString("Lobby_WaitingForHost", resourceCulture);
+                return ResourceManager.GetString("Lobby_ButtonAddComputer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Computadora.
+        /// </summary>
+        public static string Lobby_ComputerPlayer {
+            get {
+                return ResourceManager.GetString("Lobby_ComputerPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Dificultad de la computadora:.
+        /// </summary>
+        public static string Lobby_ComputerDifficulty {
+            get {
+                return ResourceManager.GetString("Lobby_ComputerDifficulty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Fácil.
+        /// </summary>
+        public static string Lobby_Difficulty_Easy {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Easy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Normal.
+        /// </summary>
+        public static string Lobby_Difficulty_Normal {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Difícil.
+        /// </summary>
+        public static string Lobby_Difficulty_Hard {
+            get {
+                return ResourceManager.GetString("Lobby_Difficulty_Hard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Rápidos.
+        /// </summary>
+        public static string Game_Chat_ButtonQuick {
+            get {
+                return ResourceManager.GetString("Game_Chat_ButtonQuick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enviar un mensaje rápido.
+        /// </summary>
+        public static string Game_Chat_QuickTooltip {
+            get {
+                return ResourceManager.GetString("Game_Chat_QuickTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Suerte a todos!.
+        /// </summary>
+        public static string Game_Chat_Quick_GoodLuck {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_GoodLuck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Buena jugada!.
+        /// </summary>
+        public static string Game_Chat_Quick_NicePlay {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_NicePlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Uy, casi!.
+        /// </summary>
+        public static string Game_Chat_Quick_SoClose {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_SoClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Te toca, apúrate.
+        /// </summary>
+        public static string Game_Chat_Quick_YourTurn {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_YourTurn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buena partida, gracias.
+        /// </summary>
+        public static string Game_Chat_Quick_GoodGame {
+            get {
+                return ResourceManager.GetString("Game_Chat_Quick_GoodGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Contra la computadora: {0} jugadas, {1} ganadas.
+        /// </summary>
+        public static string MainMenu_Play_StatComputer {
+            get {
+                return ResourceManager.GetString("MainMenu_Play_StatComputer", resourceCulture);
             }
         }
         
@@ -1294,6 +2563,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Cómo jugar.
+        /// </summary>
+        public static string MainMenu_Nav_HowToPlay {
+            get {
+                return ResourceManager.GetString("MainMenu_Nav_HowToPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Marcador.
         /// </summary>
         public static string MainMenu_Nav_Leaderboard {
@@ -1303,20 +2581,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Lobby.
+        ///   Busca una cadena traducida similar a Salas.
         /// </summary>
-        public static string MainMenu_Nav_Lobby {
+        public static string MainMenu_Nav_Rooms {
             get {
-                return ResourceManager.GetString("MainMenu_Nav_Lobby", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Jugar.
-        /// </summary>
-        public static string MainMenu_Nav_Play {
-            get {
-                return ResourceManager.GetString("MainMenu_Nav_Play", resourceCulture);
+                return ResourceManager.GetString("MainMenu_Nav_Rooms", resourceCulture);
             }
         }
         
@@ -1438,20 +2707,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Primera partida.
+        ///   Busca una cadena traducida similar a Dejaste una partida en curso. ¿Quieres volver a ella?.
         /// </summary>
-        public static string Profile_Achievements_FirstMatch {
+        public static string Menu_PendingMatchPrompt {
             get {
-                return ResourceManager.GetString("Profile_Achievements_FirstMatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Primera victoria.
-        /// </summary>
-        public static string Profile_Achievements_FirstWin {
-            get {
-                return ResourceManager.GetString("Profile_Achievements_FirstWin", resourceCulture);
+                return ResourceManager.GetString("Menu_PendingMatchPrompt", resourceCulture);
             }
         }
         
@@ -1465,20 +2725,164 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Tirador veloz.
+        ///   Busca una cadena traducida similar a Todavía no desbloqueas ese avatar. Necesitas el nivel {0}..
         /// </summary>
-        public static string Profile_Achievements_SpeedRoller {
+        public static string Profile_AvatarLocked {
             get {
-                return ResourceManager.GetString("Profile_Achievements_SpeedRoller", resourceCulture);
+                return ResourceManager.GetString("Profile_AvatarLocked", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Color de fondo.
+        ///   Busca una cadena traducida similar a Nv. {0}.
         /// </summary>
-        public static string Profile_BackgroundColor {
+        public static string Profile_AvatarLockedBadge {
             get {
-                return ResourceManager.GetString("Profile_BackgroundColor", resourceCulture);
+                return ResourceManager.GetString("Profile_AvatarLockedBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo cambiar el nombre de usuario. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_UsernameSaveError {
+            get {
+                return ResourceManager.GetString("Profile_UsernameSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} (bloqueado).
+        /// </summary>
+        public static string Profile_TitleLocked {
+            get {
+                return ResourceManager.GetString("Profile_TitleLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar el título. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_TitleSaveError {
+            get {
+                return ResourceManager.GetString("Profile_TitleSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Logro desbloqueado.
+        /// </summary>
+        public static string Achievements_Unlocked {
+            get {
+                return ResourceManager.GetString("Achievements_Unlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} de {1} desbloqueados.
+        /// </summary>
+        public static string Profile_AchievementsFormat {
+            get {
+                return ResourceManager.GetString("Profile_AchievementsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Historial.
+        /// </summary>
+        public static string MainMenu_Nav_History {
+            get {
+                return ResourceManager.GetString("MainMenu_Nav_History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Historial de partidas.
+        /// </summary>
+        public static string History_Title {
+            get {
+                return ResourceManager.GetString("History_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no has jugado partidas..
+        /// </summary>
+        public static string History_Empty {
+            get {
+                return ResourceManager.GetString("History_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a VICTORIA.
+        /// </summary>
+        public static string History_Victory {
+            get {
+                return ResourceManager.GetString("History_Victory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a DERROTA.
+        /// </summary>
+        public static string History_Defeat {
+            get {
+                return ResourceManager.GetString("History_Defeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Contra {0}.
+        /// </summary>
+        public static string History_VersusFormat {
+            get {
+                return ResourceManager.GetString("History_VersusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} - {1}.
+        /// </summary>
+        public static string History_ScoreFormat {
+            get {
+                return ResourceManager.GetString("History_ScoreFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sin bandera.
+        /// </summary>
+        public static string Flag_None {
+            get {
+                return ResourceManager.GetString("Flag_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bandera.
+        /// </summary>
+        public static string Profile_FlagLabel {
+            get {
+                return ResourceManager.GetString("Profile_FlagLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo guardar la bandera. Inténtalo de nuevo..
+        /// </summary>
+        public static string Profile_FlagSaveError {
+            get {
+                return ResourceManager.GetString("Profile_FlagSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo cambiar el avatar. Intenta de nuevo..
+        /// </summary>
+        public static string Profile_AvatarSaveError {
+            get {
+                return ResourceManager.GetString("Profile_AvatarSaveError", resourceCulture);
             }
         }
         
@@ -1506,6 +2910,15 @@ namespace YachtDice.Resources {
         public static string Profile_CustomizeProfileTitle {
             get {
                 return ResourceManager.GetString("Profile_CustomizeProfileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel {0} · {1} XP.
+        /// </summary>
+        public static string Profile_LevelFormat {
+            get {
+                return ResourceManager.GetString("Profile_LevelFormat", resourceCulture);
             }
         }
         
@@ -1555,56 +2968,11 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Debutante.
-        /// </summary>
-        public static string Profile_TitleBeginner {
-            get {
-                return ResourceManager.GetString("Profile_TitleBeginner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Campeón del Yacht.
-        /// </summary>
-        public static string Profile_TitleChampion {
-            get {
-                return ResourceManager.GetString("Profile_TitleChampion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Experto en dados.
-        /// </summary>
-        public static string Profile_TitleExpert {
-            get {
-                return ResourceManager.GetString("Profile_TitleExpert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Título.
         /// </summary>
         public static string Profile_TitleLabel {
             get {
                 return ResourceManager.GetString("Profile_TitleLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Tirador veloz.
-        /// </summary>
-        public static string Profile_TitleShooter {
-            get {
-                return ResourceManager.GetString("Profile_TitleShooter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Estratega.
-        /// </summary>
-        public static string Profile_TitleStrategist {
-            get {
-                return ResourceManager.GetString("Profile_TitleStrategist", resourceCulture);
             }
         }
         
@@ -1623,6 +2991,141 @@ namespace YachtDice.Resources {
         public static string Profile_Username {
             get {
                 return ResourceManager.GetString("Profile_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cambiar contraseña.
+        /// </summary>
+        public static string ResetPassword_ButtonChange {
+            get {
+                return ResourceManager.GetString("ResetPassword_ButtonChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código de 6 dígitos.
+        /// </summary>
+        public static string ResetPassword_Code {
+            get {
+                return ResourceManager.GetString("ResetPassword_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirmar contraseña.
+        /// </summary>
+        public static string ResetPassword_ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código expiró o ya no es válido. Pide uno nuevo con «Reenviar»..
+        /// </summary>
+        public static string ResetPassword_ErrorCodeExpired {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorCodeExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe la nueva contraseña..
+        /// </summary>
+        public static string ResetPassword_ErrorEmptyPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorEmptyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código debe tener 6 dígitos..
+        /// </summary>
+        public static string ResetPassword_ErrorIncompleteCode {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorIncompleteCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código es incorrecto..
+        /// </summary>
+        public static string ResetPassword_ErrorIncorrectCode {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorIncorrectCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Las contraseñas no coinciden..
+        /// </summary>
+        public static string ResetPassword_ErrorPasswordsDoNotMatch {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorPasswordsDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Demasiados intentos fallidos. Pide un código nuevo con «Reenviar»..
+        /// </summary>
+        public static string ResetPassword_ErrorTooManyAttempts {
+            get {
+                return ResourceManager.GetString("ResetPassword_ErrorTooManyAttempts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reenviar.
+        /// </summary>
+        public static string ResetPassword_LinkResend {
+            get {
+                return ResourceManager.GetString("ResetPassword_LinkResend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string ResetPassword_NewPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿No llegó el código?.
+        /// </summary>
+        public static string ResetPassword_ResendText {
+            get {
+                return ResourceManager.GetString("ResetPassword_ResendText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el código que enviamos a.
+        /// </summary>
+        public static string ResetPassword_Subtitle {
+            get {
+                return ResourceManager.GetString("ResetPassword_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu contraseña se cambió. Ya puedes iniciar sesión..
+        /// </summary>
+        public static string ResetPassword_SuccessMessage {
+            get {
+                return ResourceManager.GetString("ResetPassword_SuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string ResetPassword_Title {
+            get {
+                return ResourceManager.GetString("ResetPassword_Title", resourceCulture);
             }
         }
         
@@ -1654,6 +3157,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Lugar.
+        /// </summary>
+        public static string Results_ColumnRank {
+            get {
+                return ResourceManager.GetString("Results_ColumnRank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Total.
         /// </summary>
         public static string Results_ColumnTotal {
@@ -1668,6 +3180,42 @@ namespace YachtDice.Resources {
         public static string Results_ColumnXp {
             get {
                 return ResourceManager.GetString("Results_ColumnXp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a +{0} XP.
+        /// </summary>
+        public static string Results_ExperienceGainedFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceGainedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nivel {0}.
+        /// </summary>
+        public static string Results_LevelFormat {
+            get {
+                return ResourceManager.GetString("Results_LevelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} / {1} XP.
+        /// </summary>
+        public static string Results_ExperienceProgressFormat {
+            get {
+                return ResourceManager.GetString("Results_ExperienceProgressFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¡Subiste de nivel!.
+        /// </summary>
+        public static string Results_LevelUp {
+            get {
+                return ResourceManager.GetString("Results_LevelUp", resourceCulture);
             }
         }
         
@@ -1690,11 +3238,146 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Empate.
+        /// </summary>
+        public static string Results_TitleTie {
+            get {
+                return ResourceManager.GetString("Results_TitleTie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a {0} ganó.
         /// </summary>
         public static string Results_TitleWinner {
             get {
                 return ResourceManager.GetString("Results_TitleWinner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Rooms_ButtonJoin {
+            get {
+                return ResourceManager.GetString("Rooms_ButtonJoin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Actualizar.
+        /// </summary>
+        public static string Rooms_ButtonRefresh {
+            get {
+                return ResourceManager.GetString("Rooms_ButtonRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Código de la sala (solo salas privadas).
+        /// </summary>
+        public static string Rooms_CodeHint {
+            get {
+                return ResourceManager.GetString("Rooms_CodeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0}/{1} jugadores · {2}.
+        /// </summary>
+        public static string Rooms_DetailsFormat {
+            get {
+                return ResourceManager.GetString("Rooms_DetailsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No hay salas disponibles por ahora. Crea una desde el menú..
+        /// </summary>
+        public static string Rooms_Empty {
+            get {
+                return ResourceManager.GetString("Rooms_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todas.
+        /// </summary>
+        public static string Rooms_FilterAll {
+            get {
+                return ResourceManager.GetString("Rooms_FilterAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mostrar.
+        /// </summary>
+        public static string Rooms_FilterPrivacyLabel {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPrivacyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Privadas.
+        /// </summary>
+        public static string Rooms_FilterPrivate {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Públicas.
+        /// </summary>
+        public static string Rooms_FilterPublic {
+            get {
+                return ResourceManager.GetString("Rooms_FilterPublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe el nombre de quien creó la sala.
+        /// </summary>
+        public static string Rooms_FilterSearchHint {
+            get {
+                return ResourceManager.GetString("Rooms_FilterSearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buscar sala.
+        /// </summary>
+        public static string Rooms_FilterSearchLabel {
+            get {
+                return ResourceManager.GetString("Rooms_FilterSearchLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ninguna sala coincide con tu búsqueda..
+        /// </summary>
+        public static string Rooms_NoResults {
+            get {
+                return ResourceManager.GetString("Rooms_NoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Salas disponibles.
+        /// </summary>
+        public static string Rooms_Title {
+            get {
+                return ResourceManager.GetString("Rooms_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala de {0}.
+        /// </summary>
+        public static string Rooms_TitleFormat {
+            get {
+                return ResourceManager.GetString("Rooms_TitleFormat", resourceCulture);
             }
         }
         
@@ -1753,20 +3436,74 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Contraseña actual.
+        /// </summary>
+        public static string Settings_Password_Current {
+            get {
+                return ResourceManager.GetString("Settings_Password_Current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nueva contraseña.
+        /// </summary>
+        public static string Settings_Password_New {
+            get {
+                return ResourceManager.GetString("Settings_Password_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirmar nueva contraseña.
+        /// </summary>
+        public static string Settings_Password_Confirm {
+            get {
+                return ResourceManager.GetString("Settings_Password_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Guardar contraseña.
+        /// </summary>
+        public static string Settings_Password_Save {
+            get {
+                return ResourceManager.GetString("Settings_Password_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu contraseña se cambió correctamente..
+        /// </summary>
+        public static string Settings_Password_Changed {
+            get {
+                return ResourceManager.GetString("Settings_Password_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a La contraseña actual no es correcta..
+        /// </summary>
+        public static string Settings_Password_WrongCurrent {
+            get {
+                return ResourceManager.GetString("Settings_Password_WrongCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña actual..
+        /// </summary>
+        public static string Settings_Password_ErrorEmptyCurrent {
+            get {
+                return ResourceManager.GetString("Settings_Password_ErrorEmptyCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Cambiar.
         /// </summary>
         public static string Settings_ButtonChange {
             get {
                 return ResourceManager.GetString("Settings_ButtonChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Característica no implementada..
-        /// </summary>
-        public static string Settings_FeatureNotImplementedMessage {
-            get {
-                return ResourceManager.GetString("Settings_FeatureNotImplementedMessage", resourceCulture);
             }
         }
         
@@ -1879,11 +3616,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a EN.
+        ///   Busca una cadena traducida similar a Português.
         /// </summary>
-        public static string Settings_Preferences_OptionEnglishShort {
+        public static string Settings_Preferences_OptionPortuguese {
             get {
-                return ResourceManager.GetString("Settings_Preferences_OptionEnglishShort", resourceCulture);
+                return ResourceManager.GetString("Settings_Preferences_OptionPortuguese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 中文.
+        /// </summary>
+        public static string Settings_Preferences_OptionChinese {
+            get {
+                return ResourceManager.GetString("Settings_Preferences_OptionChinese", resourceCulture);
             }
         }
         
@@ -1893,15 +3639,6 @@ namespace YachtDice.Resources {
         public static string Settings_Preferences_OptionSpanish {
             get {
                 return ResourceManager.GetString("Settings_Preferences_OptionSpanish", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a ES.
-        /// </summary>
-        public static string Settings_Preferences_OptionSpanishShort {
-            get {
-                return ResourceManager.GetString("Settings_Preferences_OptionSpanishShort", resourceCulture);
             }
         }
         
@@ -1929,6 +3666,42 @@ namespace YachtDice.Resources {
         public static string Settings_Privacy_ButtonDeleteAccount {
             get {
                 return ResourceManager.GetString("Settings_Privacy_ButtonDeleteAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres eliminar tu cuenta? Se borrarán tu perfil, tus amigos, tus logros y tu historial de partidas..
+        /// </summary>
+        public static string Settings_DeleteAccount_FirstConfirmation {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_FirstConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta acción no se puede deshacer. ¿Eliminar tu cuenta definitivamente?.
+        /// </summary>
+        public static string Settings_DeleteAccount_FinalConfirmation {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_FinalConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta fue eliminada. Gracias por jugar..
+        /// </summary>
+        public static string Settings_DeleteAccount_DoneMessage {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_DoneMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo eliminar la cuenta. Inténtalo de nuevo..
+        /// </summary>
+        public static string Settings_DeleteAccount_Error {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_Error", resourceCulture);
             }
         }
         
@@ -2127,6 +3900,645 @@ namespace YachtDice.Resources {
         public static string TwoFactor_Title {
             get {
                 return ResourceManager.GetString("TwoFactor_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Buscar país....
+        /// </summary>
+        public static string Profile_FlagSearchHint {
+            get {
+                return ResourceManager.GetString("Profile_FlagSearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tienes cambios sin guardar. ¿Quieres salir sin guardarlos?.
+        /// </summary>
+        public static string Profile_DiscardChangesConfirm {
+            get {
+                return ResourceManager.GetString("Profile_DiscardChangesConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a la computadora.
+        /// </summary>
+        public static string History_ComputerOpponent {
+            get {
+                return ResourceManager.GetString("History_ComputerOpponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Máximo {0} caracteres.
+        /// </summary>
+        public static string Global_TextLimitFormat {
+            get {
+                return ResourceManager.GetString("Global_TextLimitFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitado.
+        /// </summary>
+        public static string History_GuestOpponent {
+            get {
+                return ResourceManager.GetString("History_GuestOpponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Códigos de respaldo.
+        /// </summary>
+        public static string Settings_Security_BackupCodes {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Te quedan {0} códigos. Cada uno sirve una vez si no puedes recibir el correo..
+        /// </summary>
+        public static string Settings_Security_BackupCodesLeft {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Activa la verificación en dos pasos para crear tus códigos..
+        /// </summary>
+        public static string Settings_Security_BackupCodesOff {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Crear códigos.
+        /// </summary>
+        public static string Settings_Security_ButtonBackupCodes {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonBackupCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Los códigos que tenías dejarán de servir. ¿Quieres crear códigos nuevos?.
+        /// </summary>
+        public static string Settings_Security_BackupCodesConfirm {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Guarda estos códigos en un lugar seguro. No se volverán a mostrar..
+        /// </summary>
+        public static string Settings_Security_BackupCodesCreated {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña actual para crear los códigos..
+        /// </summary>
+        public static string Settings_Security_BackupCodesPasswordRequired {
+            get {
+                return ResourceManager.GetString("Settings_Security_BackupCodesPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿No puedes recibir el correo? Usa un código de respaldo.
+        /// </summary>
+        public static string TwoFactor_UseBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_UseBackupCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Usar código.
+        /// </summary>
+        public static string TwoFactor_ButtonUseBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_ButtonUseBackupCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código de respaldo debe tener 8 dígitos..
+        /// </summary>
+        public static string TwoFactor_ErrorInvalidBackupCode {
+            get {
+                return ResourceManager.GetString("TwoFactor_ErrorInvalidBackupCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reportar.
+        /// </summary>
+        public static string Report_ButtonReport {
+            get {
+                return ResourceManager.GetString("Report_ButtonReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reportar a {0}.
+        /// </summary>
+        public static string Report_TitleFormat {
+            get {
+                return ResourceManager.GetString("Report_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Motivo.
+        /// </summary>
+        public static string Report_ReasonLabel {
+            get {
+                return ResourceManager.GetString("Report_ReasonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Comentario (opcional).
+        /// </summary>
+        public static string Report_CommentLabel {
+            get {
+                return ResourceManager.GetString("Report_CommentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enviar reporte.
+        /// </summary>
+        public static string Report_ButtonSend {
+            get {
+                return ResourceManager.GetString("Report_ButtonSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Lenguaje ofensivo.
+        /// </summary>
+        public static string Report_Reason_OffensiveLanguage {
+            get {
+                return ResourceManager.GetString("Report_Reason_OffensiveLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Trampa.
+        /// </summary>
+        public static string Report_Reason_Cheating {
+            get {
+                return ResourceManager.GetString("Report_Reason_Cheating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mala conducta.
+        /// </summary>
+        public static string Report_Reason_UnsportingBehavior {
+            get {
+                return ResourceManager.GetString("Report_Reason_UnsportingBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Otro.
+        /// </summary>
+        public static string Report_Reason_Other {
+            get {
+                return ResourceManager.GetString("Report_Reason_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Gracias. Tu reporte se envió..
+        /// </summary>
+        public static string Report_Result_Sent {
+            get {
+                return ResourceManager.GetString("Report_Result_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solo puedes reportar a jugadores registrados con quienes terminaste una partida hoy..
+        /// </summary>
+        public static string Report_Result_NotAllowed {
+            get {
+                return ResourceManager.GetString("Report_Result_NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya reportaste a este jugador hoy..
+        /// </summary>
+        public static string Report_Result_AlreadyReported {
+            get {
+                return ResourceManager.GetString("Report_Result_AlreadyReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No puedes reportarte a ti mismo..
+        /// </summary>
+        public static string Report_Result_CannotReportSelf {
+            get {
+                return ResourceManager.GetString("Report_Result_CannotReportSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El comentario es demasiado largo..
+        /// </summary>
+        public static string Report_Result_InvalidComment {
+            get {
+                return ResourceManager.GetString("Report_Result_InvalidComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta está suspendida por un día porque varios jugadores la reportaron..
+        /// </summary>
+        public static string Auth_ErrorSuspendedByReports {
+            get {
+                return ResourceManager.GetString("Auth_ErrorSuspendedByReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Expulsiones.
+        /// </summary>
+        public static string History_KicksTitle {
+            get {
+                return ResourceManager.GetString("History_KicksTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Expulsaste a {0} de la sala {1}.
+        /// </summary>
+        public static string History_KickedByYouFormat {
+            get {
+                return ResourceManager.GetString("History_KickedByYouFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} te expulsó de la sala {1}.
+        /// </summary>
+        public static string History_KickedYouFormat {
+            get {
+                return ResourceManager.GetString("History_KickedYouFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ver tarjeta.
+        /// </summary>
+        public static string History_ButtonScorecard {
+            get {
+                return ResourceManager.GetString("History_ButtonScorecard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tarjetas de la partida.
+        /// </summary>
+        public static string Scorecard_WindowTitle {
+            get {
+                return ResourceManager.GetString("Scorecard_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} — {1} puntos.
+        /// </summary>
+        public static string Scorecard_TitleFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0}: {1}.
+        /// </summary>
+        public static string Scorecard_LineFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_LineFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a sin anotar.
+        /// </summary>
+        public static string Scorecard_NotUsed {
+            get {
+                return ResourceManager.GetString("Scorecard_NotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Bono superior: {0}.
+        /// </summary>
+        public static string Scorecard_UpperBonusFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_UpperBonusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Yacht extra: {0}.
+        /// </summary>
+        public static string Scorecard_YachtBonusFormat {
+            get {
+                return ResourceManager.GetString("Scorecard_YachtBonusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a sí.
+        /// </summary>
+        public static string Scorecard_Yes {
+            get {
+                return ResourceManager.GetString("Scorecard_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a no.
+        /// </summary>
+        public static string Scorecard_No {
+            get {
+                return ResourceManager.GetString("Scorecard_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta partida no tiene tarjetas guardadas..
+        /// </summary>
+        public static string Scorecard_Empty {
+            get {
+                return ResourceManager.GetString("Scorecard_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no has cambiado tu contraseña..
+        /// </summary>
+        public static string Settings_Security_PasswordNeverChanged {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasswordNeverChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Último cambio: {0}.
+        /// </summary>
+        public static string Settings_Security_PasswordChangedFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasswordChangedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se bloqueó por contraseñas incorrectas hasta {0}..
+        /// </summary>
+        public static string Settings_Security_LockByAttemptsFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_LockByAttemptsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu cuenta se suspendió por reportes de otros jugadores hasta {0}..
+        /// </summary>
+        public static string Settings_Security_LockByReportsFormat {
+            get {
+                return ResourceManager.GetString("Settings_Security_LockByReportsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitaciones recibidas.
+        /// </summary>
+        public static string Friends_Section_Invitations {
+            get {
+                return ResourceManager.GetString("Friends_Section_Invitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala {0} · {1}.
+        /// </summary>
+        public static string Friends_Invitation_OpenFormat {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_OpenFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sala {0} cerrada · {1}.
+        /// </summary>
+        public static string Friends_Invitation_ClosedFormat {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_ClosedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unirse.
+        /// </summary>
+        public static string Friends_Invitation_Join {
+            get {
+                return ResourceManager.GetString("Friends_Invitation_Join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Entrar con passkey.
+        /// </summary>
+        public static string Auth_ButtonPasskey {
+            get {
+                return ResourceManager.GetString("Auth_ButtonPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esta versión de Windows no permite usar passkeys..
+        /// </summary>
+        public static string Passkey_ErrorUnavailable {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No pudimos verificar tu passkey. Intenta de nuevo o entra con tu correo y contraseña..
+        /// </summary>
+        public static string Passkey_ErrorInvalid {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Windows no pudo completar la operación con la passkey..
+        /// </summary>
+        public static string Passkey_ErrorWindows {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se inició sesión con passkey. Si todavía no tienes una, entra con tu contraseña y crea una en Ajustes > Seguridad..
+        /// </summary>
+        public static string Passkey_LoginNotCompleted {
+            get {
+                return ResourceManager.GetString("Passkey_LoginNotCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El servidor está ocupado. Intenta de nuevo en un momento..
+        /// </summary>
+        public static string Passkey_ErrorBusy {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorBusy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ya llegaste al máximo de passkeys..
+        /// </summary>
+        public static string Passkey_ErrorTooMany {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorTooMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa passkey ya está registrada..
+        /// </summary>
+        public static string Passkey_ErrorAlreadyRegistered {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorAlreadyRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El tiempo para crear la passkey terminó. Intenta de nuevo..
+        /// </summary>
+        public static string Passkey_ErrorExpired {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu passkey quedó registrada. Ya puedes entrar con ella..
+        /// </summary>
+        public static string Passkey_Registered {
+            get {
+                return ResourceManager.GetString("Passkey_Registered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Passkeys.
+        /// </summary>
+        public static string Settings_Security_Passkeys {
+            get {
+                return ResourceManager.GetString("Settings_Security_Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tienes {0} passkeys. Entra con Windows Hello o con tu celular, sin escribir contraseña..
+        /// </summary>
+        public static string Settings_Security_PasskeysCount {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasskeysCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tienes 1 passkey. Entra con Windows Hello o con tu celular, sin escribir contraseña..
+        /// </summary>
+        public static string Settings_Security_PasskeysCountSingle {
+            get {
+                return ResourceManager.GetString("Settings_Security_PasskeysCountSingle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Para quitar una passkey, elígela en la lista y escribe tu contraseña actual..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyHint {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Agregar passkey.
+        /// </summary>
+        public static string Settings_Security_ButtonAddPasskey {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonAddPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Se quitó la passkey..
+        /// </summary>
+        public static string Passkey_Removed {
+            get {
+                return ResourceManager.GetString("Passkey_Removed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Esa passkey ya no existe..
+        /// </summary>
+        public static string Passkey_ErrorNotFound {
+            get {
+                return ResourceManager.GetString("Passkey_ErrorNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Quitar.
+        /// </summary>
+        public static string Settings_Security_ButtonRemovePasskey {
+            get {
+                return ResourceManager.GetString("Settings_Security_ButtonRemovePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿Seguro que quieres quitar esta passkey? Ya no podrás entrar con ella..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyConfirm {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Elige la passkey y escribe tu contraseña actual para quitarla..
+        /// </summary>
+        public static string Settings_Security_RemovePasskeyPasswordRequired {
+            get {
+                return ResourceManager.GetString("Settings_Security_RemovePasskeyPasswordRequired", resourceCulture);
             }
         }
     }

@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using YachtDice.Composition;
 using YachtDice.Navigation;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -8,14 +11,20 @@ namespace YachtDice.Views
     /// </summary>
     public partial class SplashWindow : Window
     {
+        private const string NullServicesMessage = "The shared components of the client cannot be null.";
+
+        private readonly ClientServices _services;
         private bool _hasContinued;
 
         /// <summary>
         /// Initializes the welcome window.
         /// </summary>
-        public SplashWindow()
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public SplashWindow(ClientServices services)
         {
             InitializeComponent();
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            _services.Music.Play(MusicTrack.MenuTheme);
         }
 
         private void SplashWindow_Loaded(object sender, RoutedEventArgs e)
@@ -30,7 +39,7 @@ namespace YachtDice.Views
             {
                 _hasContinued = true;
 
-                WindowNavigator.SwitchTo(this, new LoginWindow());
+                WindowNavigator.SwitchTo(this, new LoginWindow(_services));
             }
         }
     }

@@ -1,0 +1,1315 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
+using YachtDice.Server.Logic.Avatars;
+using YachtDice.Server.Logic.Game;
+using YachtDice.Server.Logic.Moderation;
+using YachtDice.Server.Logic.Rooms;
+using YachtDice.Server.Tests.InMemory;
+
+namespace YachtDice.Server.Tests.Rooms
+{
+    /// <summary>
+    /// Rules of the rooms: the server recognizes each player by the identifier it gives, and the display name
+    /// is only a label that can be repeated.
+    /// </summary>
+    public class RoomManagerTests
+    {
+        private const string GuestName = "Invitado";
+        private const string SecondGuestName = "Invitado 2";
+        private const string ThirdGuestName = "Invitado 3";
+        private const string LowercaseGuestName = "invitado";
+        private const string SecondLowercaseGuestName = "invitado 2";
+        private const int SixteenMinutes = 16;
+        private const int TenMinutes = 10;
+        private const int ConfiguredWaitingMinutes = 5;
+        private const int PlayerLevel = 7;
+        private const int GuestLevel = 0;
+        private const int ThreeMinutes = 3;
+        private const int ThreeInfractions = 3;
+        private const int NoInfractions = 0;
+        private const string OffensiveWord = "pendejo";
+        private const string RoomName = "Los del salon 4";
+        private const string OffensiveRoomName = "Sala de pendejos";
+        private const string TooLongRoomName = "Una sala con un nombre demasiado largo para la lista";
+        private const string HostName = "Emilio";
+        private const string PlayerName = "Gabriel";
+        private const string ThirdPlayerName = "Ana";
+        private const string UnknownRoomCode = "ZZZZZZ";
+        private const string UnknownPlayerId = "not-a-player";
+        private const int TwoPlayers = 2;
+        private const int ThreePlayers = 3;
+        private const int FourPlayers = 4;
+        private const int SingleSlot = 1;
+        private const int HostAvatarId = 3;
+        private const int PlayerAvatarId = 7;
+        private const string SavedRoomCode = "ABC234";
+        private const string BlankText = " ";
+
+        private readonly InMemoryAvatarLookup _avatars = new InMemoryAvatarLookup();
+        private readonly OffensiveWordFilter _wordFilter = new OffensiveWordFilter(new[] { OffensiveWord });
+        private readonly RoomManager _manager;
+
+        /// <summary>
+        /// Prepares a manager without rooms whose players have the avatars set in the test.
+        /// </summary>
+        public RoomManagerTests()
+        {
+            _manager = new RoomManager(_avatars, _wordFilter);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_SavedGame_OffersThePlayerToGoBack()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            string roomCode = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(SavedRoomCode, roomCode);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_PlayerWhoLost_IsNotOfferedToGoBack()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(true));
+
+            string roomCode = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, roomCode);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_PlayerComesBack_GetsTheIdentifierThatTheGameUses()
+        {
+            SavedGame saved = CreateSavedGame(false);
+            _manager.TryRestoreRoom(saved);
+
+            RoomResult joinResult = _manager.Join(SavedRoomCode, PlayerName);
+
+            Assert.Equal(saved.Players.Last().PlayerId, joinResult.PlayerId);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_FirstPlayerToComeBackIsNotTheHost_BecomesTheHost()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            RoomResult joinResult = _manager.Join(SavedRoomCode, PlayerName);
+
+            Assert.Equal(joinResult.PlayerId, joinResult.Room.HostId);
+        }
+
+        [Fact]
+        public void TryRestoreRoom_CodeAlreadyUsed_ReturnsFalse()
+        {
+            _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            bool isRestored = _manager.TryRestoreRoom(CreateSavedGame(false));
+
+            Assert.False(isRestored);
+        }
+
+        [Fact]
+        public void CreateRoom_ValidName_PutsTheHostInsideWithAnIdentifier()
+        {
+            var hostExpected = new
+            {
+                Status = RoomStatus.Success,
+                HasIdentifier = true,
+                IsHost = true,
+                DisplayName = HostName
+            };
+
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+
+            var hostResult = new
+            {
+                createdRoom.Status,
+                HasIdentifier = !string.IsNullOrEmpty(createdRoom.PlayerId),
+                IsHost = createdRoom.PlayerId == createdRoom.Room.HostId,
+                createdRoom.Room.Players.Single().DisplayName
+            };
+            Assert.Equal(hostExpected, hostResult);
+        }
+
+        [Fact]
+        public void CreateRoom_BlankName_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _manager.CreateRoom(BlankText));
+        }
+
+        [Fact]
+        public void Join_NameFreeInTheRoom_KeepsTheNameAndGivesANewIdentifier()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            var joinedPlayerExpected = new
+            {
+                Status = RoomStatus.Success,
+                DisplayName = PlayerName,
+                HasNewIdentifier = true
+            };
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            var joinedPlayerResult = new
+            {
+                player.Status,
+                player.Room.Players.Last().DisplayName,
+                HasNewIdentifier = player.PlayerId != host.PlayerId
+            };
+            Assert.Equal(joinedPlayerExpected, joinedPlayerResult);
+        }
+
+        [Fact]
+        public void Join_NameUsedByAnotherPlayer_AddsANumberToTheName()
+        {
+            RoomResult host = _manager.CreateRoom(GuestName);
+
+            var joinedPlayerExpected = new
+            {
+                Status = RoomStatus.Success,
+                DisplayName = SecondGuestName,
+                HasNewIdentifier = true
+            };
+
+            RoomResult second = _manager.Join(host.Room.Code, GuestName);
+
+            var joinedPlayerResult = new
+            {
+                second.Status,
+                second.Room.Players.Last().DisplayName,
+                HasNewIdentifier = second.PlayerId != host.PlayerId
+            };
+            Assert.Equal(joinedPlayerExpected, joinedPlayerResult);
+        }
+
+        [Fact]
+        public void Join_SameNameThreeTimes_NumbersEachPlayer()
+        {
+            RoomResult host = _manager.CreateRoom(GuestName);
+            _manager.Join(host.Room.Code, GuestName);
+
+            RoomResult third = _manager.Join(host.Room.Code, GuestName);
+
+            string[] names = third.Room.Players.Select(player => player.DisplayName).ToArray();
+            Assert.Equal(new[] { GuestName, SecondGuestName, ThirdGuestName }, names);
+        }
+
+        [Fact]
+        public void Join_NameUsedWithDifferentCase_AddsANumberToTheName()
+        {
+            RoomResult host = _manager.CreateRoom(GuestName);
+
+            RoomResult second = _manager.Join(host.Room.Code, LowercaseGuestName);
+
+            Assert.Equal(SecondLowercaseGuestName, second.Room.Players.Last().DisplayName);
+        }
+
+        [Fact]
+        public void Join_CodeInLowercaseWithSpaces_FindsTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            string typedCode = BlankText + host.Room.Code.ToLowerInvariant() + BlankText;
+
+            RoomResult player = _manager.Join(typedCode, PlayerName);
+
+            Assert.Equal(RoomStatus.Success, player.Status);
+        }
+
+        [Fact]
+        public void Join_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult playerExpected = RoomResult.CreateFailed(RoomStatus.RoomNotFound);
+
+            RoomResult player = _manager.Join(UnknownRoomCode, PlayerName);
+
+            Assert.Equivalent(playerExpected, player);
+        }
+
+        [Fact]
+        public void Join_RoomWithoutSpace_ReturnsRoomFull()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(TwoPlayers));
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult player = _manager.Join(host.Room.Code, GuestName);
+
+            Assert.Equal(RoomStatus.RoomFull, player.Status);
+        }
+
+        [Fact]
+        public void Join_GameAlreadyStarted_ReturnsGameAlreadyStarted()
+        {
+            RoomResult host = CreateStartedRoom();
+
+            RoomResult player = _manager.Join(host.Room.Code, GuestName);
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, player.Status);
+        }
+
+        [Fact]
+        public void Leave_GameAlreadyStarted_KeepsThePlayerAsAbsent()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            var roomExpected = new
+            {
+                IsStarted = true,
+                Players = new[] { new { Id = host.PlayerId } },
+                AbsentPlayers = new[] { new { Id = player.PlayerId } }
+            };
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            Assert.Equivalent(roomExpected, afterLeaving.Room);
+        }
+
+        [Fact]
+        public void Leave_HostOfAGameInProgress_PassesTheHostToThePlayerWhoStays()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(player.PlayerId, afterLeaving.Room.HostId);
+        }
+
+        [Fact]
+        public void Leave_LastPlayerOfAGameInProgress_DeletesTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+            _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            RoomResult attempt = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.RoomNotFound, attempt.Status);
+        }
+
+        [Fact]
+        public void Join_PlayerWhoLeftTheGame_ReturnsWithTheSameIdentifier()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            var returnedPlayerExpected = new { Status = RoomStatus.Success, HasReturned = true, player.PlayerId };
+
+            RoomResult returned = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equivalent(returnedPlayerExpected, returned);
+        }
+
+        [Fact]
+        public void Join_PlayerWhoLeftTheGame_MovesThePlayerBackToThePlayers()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            var roomExpected = new
+            {
+                Players = new[] { new { Id = host.PlayerId }, new { Id = player.PlayerId } },
+                AbsentPlayers = Array.Empty<RoomPlayer>()
+            };
+
+            RoomResult returned = _manager.Join(host.Room.Code, PlayerName.ToUpperInvariant());
+
+            Assert.Equivalent(roomExpected, returned.Room);
+        }
+
+        [Fact]
+        public void Join_StrangerToAGameInProgress_ReturnsGameAlreadyStarted()
+        {
+            RoomResult host = CreateStartedRoom();
+
+            RoomResult strangerExpected = RoomResult.CreateFailed(RoomStatus.GameAlreadyStarted);
+
+            RoomResult stranger = _manager.Join(host.Room.Code, GuestName);
+
+            Assert.Equivalent(strangerExpected, stranger);
+        }
+
+        [Fact]
+        public void Join_PlayerBeforeTheGameStarts_DoesNotReportAReturn()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.False(player.HasReturned);
+        }
+
+        [Fact]
+        public void FindPendingRoomCode_PlayerWhoLeftTheGame_ReturnsTheCodeOfTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            string code = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(host.Room.Code, code);
+        }
+
+        [Fact]
+        public void FindPendingRoomCode_PlayerWhoWasForgotten_ReturnsEmpty()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+            _manager.ForgetAbsentPlayer(new RoomMember(host.Room.Code, player.PlayerId));
+
+            string code = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, code);
+        }
+
+        [Fact]
+        public void ForgetAbsentPlayer_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult forgetResult = _manager.ForgetAbsentPlayer(new RoomMember(UnknownRoomCode, HostName));
+
+            Assert.Equal(RoomStatus.RoomNotFound, forgetResult.Status);
+        }
+
+        [Fact]
+        public void FindPendingRoomCode_PlayerWhoReturned_ReturnsEmpty()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+            _manager.Join(host.Room.Code, PlayerName);
+
+            string code = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, code);
+        }
+
+        [Fact]
+        public void FindPendingRoomCode_PlayerWhoLeftBeforeTheGame_ReturnsEmpty()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            string code = _manager.FindPendingRoomCode(PlayerName);
+
+            Assert.Equal(string.Empty, code);
+        }
+
+        [Fact]
+        public void FindPendingRoomCode_BlankName_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _manager.FindPendingRoomCode(BlankText));
+        }
+
+        [Fact]
+        public void Leave_PlayerWithTheSameNameAsAnother_RemovesOnlyThatPlayer()
+        {
+            RoomResult first = _manager.CreateRoom(GuestName);
+            RoomResult second = _manager.Join(first.Room.Code, GuestName);
+
+            var remainingPlayerExpected = new { Status = RoomStatus.Success, RemainingId = first.PlayerId };
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(first.Room.Code, second.PlayerId));
+
+            var remainingPlayerResult = new
+            {
+                afterLeaving.Status,
+                RemainingId = afterLeaving.Room.Players.Single().Id
+            };
+            Assert.Equal(remainingPlayerExpected, remainingPlayerResult);
+        }
+
+        [Fact]
+        public void Leave_HostWithOtherPlayersInside_PassesTheHostToTheNextPlayer()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(player.PlayerId, afterLeaving.Room.HostId);
+        }
+
+        [Fact]
+        public void Leave_HostWithOtherPlayersInside_ReportsThatTheHostChanged()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.True(afterLeaving.HasHostChanged);
+        }
+
+        [Fact]
+        public void Leave_PlayerWhoIsNotTheHost_DoesNotReportAHostChange()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            Assert.False(afterLeaving.HasHostChanged);
+        }
+
+        [Fact]
+        public void Leave_LastPlayer_LeavesTheRoomEmpty()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.True(afterLeaving.Room.IsEmpty);
+        }
+
+        [Fact]
+        public void Leave_LastPlayer_DeletesTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Leave(new RoomMember(host.Room.Code, host.PlayerId));
+
+            RoomResult afterDeleting = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.RoomNotFound, afterDeleting.Status);
+        }
+
+        [Fact]
+        public void Leave_PlayerNameInsteadOfIdentifier_ReturnsRoomNotFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterLeaving = _manager.Leave(new RoomMember(host.Room.Code, HostName));
+
+            Assert.Equal(RoomStatus.RoomNotFound, afterLeaving.Status);
+        }
+
+        [Fact]
+        public void Leave_PlayerNameInsteadOfIdentifier_KeepsTheHostInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Leave(new RoomMember(host.Room.Code, HostName));
+
+            bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _);
+
+            Assert.True(isFound);
+        }
+
+        [Fact]
+        public void RegisterChatInfraction_ThirdInfraction_ReturnsThree()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            var writer = new RoomMember(host.Room.Code, player.PlayerId);
+
+            _manager.RegisterChatInfraction(writer);
+            _manager.RegisterChatInfraction(writer);
+            int infractions = _manager.RegisterChatInfraction(writer);
+
+            Assert.Equal(ThreeInfractions, infractions);
+        }
+
+        [Fact]
+        public void RegisterChatInfraction_PlayerNotInside_ReturnsZero()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            int infractions = _manager.RegisterChatInfraction(new RoomMember(host.Room.Code, UnknownPlayerId));
+
+            Assert.Equal(NoInfractions, infractions);
+        }
+
+        [Fact]
+        public void TryGetHost_ExistingRoom_ReturnsTheHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            _manager.TryGetHost(host.Room.Code, out RoomPlayer foundHost);
+
+            Assert.Equal(host.PlayerId, foundHost.Id);
+        }
+
+        [Fact]
+        public void UpdateSettings_RoomName_ShowsTheNameInTheListOfRooms()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers, false);
+            settings.Name = RoomName;
+
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomName, _manager.GetOpenRooms().Single().Name);
+        }
+
+        [Fact]
+        public void UpdateSettings_OffensiveRoomName_ReturnsOffensiveRoomName()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers);
+            settings.Name = OffensiveRoomName;
+
+            RoomResult updateResult = _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomStatus.OffensiveRoomName, updateResult.Status);
+        }
+
+        [Fact]
+        public void UpdateSettings_TooLongRoomName_ReturnsInvalidSettings()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers);
+            settings.Name = TooLongRoomName;
+
+            RoomResult updateResult = _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomStatus.InvalidSettings, updateResult.Status);
+        }
+
+        [Fact]
+        public void UpdateSettings_PlayerWithTheHostName_ReturnsNotHost()
+        {
+            RoomResult host = _manager.CreateRoom(GuestName);
+            RoomResult sameName = _manager.Join(host.Room.Code, GuestName);
+
+            RoomResult updateResult =
+                _manager.UpdateSettings(new RoomMember(host.Room.Code, sameName.PlayerId), CreateSettings(TwoPlayers));
+
+            Assert.Equal(RoomStatus.NotHost, updateResult.Status);
+        }
+
+        [Fact]
+        public void UpdateSettings_HostWithValidSettings_ChangesTheSettings()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            var updateResultExpected = new
+            {
+                Status = RoomStatus.Success,
+                Room = new { Settings = new { MaxPlayers = ThreePlayers } }
+            };
+
+            RoomResult updateResult =
+                _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(ThreePlayers));
+
+            Assert.Equivalent(updateResultExpected, updateResult);
+        }
+
+        [Fact]
+        public void UpdateSettings_FewerPlacesThanPlayers_ReturnsInvalidSettings()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult updateResult =
+                _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(SingleSlot));
+
+            Assert.Equal(RoomStatus.InvalidSettings, updateResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_PlayerWithTheHostName_ReturnsNotHost()
+        {
+            RoomResult host = _manager.CreateRoom(GuestName);
+            RoomResult sameName = _manager.Join(host.Room.Code, GuestName);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, sameName.PlayerId));
+
+            Assert.Equal(RoomStatus.NotHost, startResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_HostAlone_ReturnsNotEnoughPlayers()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.NotEnoughPlayers, startResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_PlayerNotReady_ReturnsPlayersNotReady()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.PlayersNotReady, startResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_EveryoneReady_StartsTheGame()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult startResult = StartWhenEveryoneIsReady(host);
+
+            Assert.True(startResult.Room.IsStarted);
+        }
+
+        [Fact]
+        public void StartGame_PlayerNotReadyForMoreThanTwoMinutes_LeavesThePlayerOut()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult ready = _manager.Join(host.Room.Code, PlayerName);
+            RoomResult late = _manager.Join(host.Room.Code, ThirdPlayerName);
+            _manager.SetReady(new RoomMember(host.Room.Code, ready.PlayerId), true);
+            late.Room.Players.Last().JoinedAt = DateTime.UtcNow.AddMinutes(-ThreeMinutes);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(new[] { late.PlayerId }, startResult.LeftOutPlayerIds);
+        }
+
+        [Fact]
+        public void StartGame_OnlyGuestNeverReady_ReturnsNotEnoughPlayers()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult late = _manager.Join(host.Room.Code, PlayerName);
+            late.Room.Players.Last().JoinedAt = DateTime.UtcNow.AddMinutes(-ThreeMinutes);
+
+            RoomResult startResult = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.NotEnoughPlayers, startResult.Status);
+        }
+
+        [Fact]
+        public void SetReady_GameAlreadyStarted_ReturnsGameAlreadyStarted()
+        {
+            RoomResult host = CreateStartedRoom();
+
+            RoomResult readyResult = _manager.SetReady(new RoomMember(host.Room.Code, host.PlayerId), false);
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, readyResult.Status);
+        }
+
+        [Fact]
+        public void StartGame_HostWithEnoughPlayers_StartsTheGameOnlyOnce()
+        {
+            RoomResult host = CreateStartedRoom();
+
+            RoomResult secondStart = _manager.StartGame(new RoomMember(host.Room.Code, host.PlayerId));
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, secondStart.Status);
+        }
+
+        [Fact]
+        public void TryGetPlayer_PlayerInside_ReturnsThePlayerWithItsName()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            var searchExpected = new { IsFound = true, DisplayName = HostName };
+
+            bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out RoomPlayer player);
+
+            var searchResult = new { IsFound = isFound, player.DisplayName };
+            Assert.Equal(searchExpected, searchResult);
+        }
+
+        [Fact]
+        public void TryGetPlayer_UnknownIdentifier_ReturnsFalse()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            var searchExpected = new { IsFound = false, HasPlayer = false };
+
+            bool isFound =
+                _manager.TryGetPlayer(new RoomMember(host.Room.Code, UnknownPlayerId), out RoomPlayer player);
+
+            var searchResult = new { IsFound = isFound, HasPlayer = player != null };
+            Assert.Equal(searchExpected, searchResult);
+        }
+
+        [Fact]
+        public void TryGetPlayer_UnknownRoom_ReturnsFalse()
+        {
+            bool isFound = _manager.TryGetPlayer(new RoomMember(UnknownRoomCode, UnknownPlayerId), out _);
+
+            Assert.False(isFound);
+        }
+
+        [Fact]
+        public void GetOpenRooms_NoRooms_ReturnsAnEmptyList()
+        {
+            List<RoomSummary> rooms = _manager.GetOpenRooms();
+
+            Assert.Empty(rooms);
+        }
+
+        [Fact]
+        public void GetOpenRooms_RoomWithPlayers_ShowsTheHostAndHowManyAreInside()
+        {
+            RoomResult host = CreatePublicRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            var summaryExpected = new
+            {
+                HostName,
+                PlayerCount = TwoPlayers,
+                MaxPlayers = FourPlayers,
+                IsPrivate = false
+            };
+
+            RoomSummary summary = _manager.GetOpenRooms().Single();
+
+            var summaryResult = new { summary.HostName, summary.PlayerCount, summary.MaxPlayers, summary.IsPrivate };
+            Assert.Equal(summaryExpected, summaryResult);
+        }
+
+        [Fact]
+        public void GetOpenRooms_PrivateRoom_ListsItWithoutRevealingItsCode()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            var summaryExpected = new { IsPrivate = true, RevealsCode = false };
+
+            RoomSummary summary = _manager.GetOpenRooms().Single();
+
+            var summaryResult = new { summary.IsPrivate, RevealsCode = summary.RoomId == host.Room.Code };
+            Assert.Equal(summaryExpected, summaryResult);
+        }
+
+        [Fact]
+        public void GetOpenRooms_GameAlreadyStarted_DoesNotListTheRoom()
+        {
+            CreateStartedRoom();
+            _manager.CreateRoom(PlayerName);
+
+            List<RoomSummary> rooms = _manager.GetOpenRooms();
+
+            Assert.Equal(PlayerName, rooms.Single().HostName);
+        }
+
+        [Fact]
+        public void GetOpenRooms_SeveralRooms_OrdersThemByHostName()
+        {
+            _manager.CreateRoom(PlayerName);
+            _manager.CreateRoom(HostName);
+
+            string[] hosts = _manager.GetOpenRooms().Select(room => room.HostName).ToArray();
+
+            Assert.Equal(new[] { HostName, PlayerName }, hosts);
+        }
+
+        [Fact]
+        public void JoinListed_PublicRoomWithoutCode_PutsThePlayerInside()
+        {
+            CreatePublicRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            var joinedPlayerExpected = new
+            {
+                Status = RoomStatus.Success,
+                HasIdentifier = true,
+                PlayerCount = TwoPlayers
+            };
+
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, string.Empty));
+
+            var joinedPlayerResult = new
+            {
+                player.Status,
+                HasIdentifier = !string.IsNullOrEmpty(player.PlayerId),
+                PlayerCount = player.Room.Players.Count
+            };
+            Assert.Equal(joinedPlayerExpected, joinedPlayerResult);
+        }
+
+        [Fact]
+        public void JoinListed_PrivateRoomWithTheRightCode_PutsThePlayerInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomAccess roomAccess = CreateListedRoom(roomId, host.Room.Code.ToLowerInvariant());
+            var joinedPlayerExpected = new { Status = RoomStatus.Success, host.Room.Code };
+
+            RoomResult player = _manager.JoinListed(PlayerName, roomAccess);
+
+            var joinedPlayerResult = new { player.Status, player.Room.Code };
+            Assert.Equal(joinedPlayerExpected, joinedPlayerResult);
+        }
+
+        [Theory]
+        [InlineData(UnknownRoomCode)]
+        [InlineData("")]
+        [InlineData(null)]
+        public void JoinListed_PrivateRoomWithAWrongCode_ReturnsInvalidAccessCode(string accessCode)
+        {
+            _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult playerExpected = RoomResult.CreateFailed(RoomStatus.InvalidAccessCode);
+
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
+
+            Assert.Equivalent(playerExpected, player);
+        }
+
+        [Theory]
+        [InlineData(UnknownRoomCode)]
+        [InlineData("")]
+        [InlineData(null)]
+        public void JoinListed_PrivateRoomWithAWrongCode_DoesNotAddThePlayer(string accessCode)
+        {
+            _manager.CreateRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+            _manager.JoinListed(PlayerName, CreateListedRoom(roomId, accessCode));
+
+            int playerCount = _manager.GetOpenRooms().Single().PlayerCount;
+
+            Assert.Equal(SingleSlot, playerCount);
+        }
+
+        [Fact]
+        public void JoinListed_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult player = _manager.JoinListed(PlayerName, CreateListedRoom(UnknownPlayerId, string.Empty));
+
+            Assert.Equal(RoomStatus.RoomNotFound, player.Status);
+        }
+
+        [Fact]
+        public void JoinListed_PublicRoomWithoutSpace_ReturnsRoomFull()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(TwoPlayers, false));
+            _manager.Join(host.Room.Code, PlayerName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            RoomResult player = _manager.JoinListed(GuestName, CreateListedRoom(roomId, string.Empty));
+
+            Assert.Equal(RoomStatus.RoomFull, player.Status);
+        }
+
+        [Fact]
+        public void JoinListed_BlankName_ThrowsArgumentException()
+        {
+            CreatePublicRoom(HostName);
+            string roomId = _manager.GetOpenRooms().Single().RoomId;
+
+            Assert.Throws<ArgumentException>(() => _manager.JoinListed(BlankText, CreateListedRoom(roomId, string.Empty)));
+        }
+
+        [Fact]
+        public void KickPlayer_HostExpelsAnotherPlayer_RemovesOnlyThatPlayer()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            var remainingPlayerExpected = new { Status = RoomStatus.Success, RemainingId = host.PlayerId };
+
+            RoomResult afterKicking =
+                _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            var remainingPlayerResult = new
+            {
+                afterKicking.Status,
+                RemainingId = afterKicking.Room.Players.Single().Id
+            };
+            Assert.Equal(remainingPlayerExpected, remainingPlayerResult);
+        }
+
+        [Fact]
+        public void KickPlayer_HostExpelsAnotherPlayer_ThePlayerIsNoLongerFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, player.PlayerId), out _);
+
+            Assert.False(isFound);
+        }
+
+        [Fact]
+        public void Join_PlayerExpelledFromTheRoom_ReturnsPlayerExpelled()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            RoomResult returnAttempt = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.PlayerExpelled, returnAttempt.Status);
+        }
+
+        [Fact]
+        public void Join_PlayerExpelledFromAnotherRoom_EntersTheRoom()
+        {
+            RoomResult firstHost = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(firstHost.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(firstHost.Room.Code, firstHost.PlayerId), player.PlayerId);
+            RoomResult secondHost = _manager.CreateRoom(GuestName);
+
+            RoomResult joinAttempt = _manager.Join(secondHost.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.Success, joinAttempt.Status);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_RoomWaitingMoreThanFifteenMinutes_ClosesTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            var closedRoomExpected = new { host.Room.Code, IsFound = false };
+
+            RoomDetails closedRoom = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(SixteenMinutes)).Single();
+
+            var closedRoomResult = new
+            {
+                closedRoom.Code,
+                IsFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _)
+            };
+            Assert.Equal(closedRoomExpected, closedRoomResult);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_ConfiguredWaitOfFiveMinutesPassed_ClosesTheRoom()
+        {
+            _manager.WaitingMinutes = ConfiguredWaitingMinutes;
+            _manager.CreateRoom(HostName);
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(TenMinutes));
+
+            Assert.Single(closedRooms);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_RecentRoom_KeepsTheRoom()
+        {
+            _manager.CreateRoom(HostName);
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(TenMinutes));
+
+            Assert.Empty(closedRooms);
+        }
+
+        [Fact]
+        public void CloseExpiredRooms_StartedGame_KeepsTheRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            List<RoomDetails> closedRooms = _manager.CloseExpiredRooms(DateTime.UtcNow.AddMinutes(SixteenMinutes));
+
+            Assert.Empty(closedRooms);
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerWhoIsNotTheHost_ReturnsNotHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterKicking =
+                _manager.KickPlayer(new RoomMember(host.Room.Code, player.PlayerId), host.PlayerId);
+
+            Assert.Equal(RoomStatus.NotHost, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerWhoIsNotTheHost_KeepsTheHostInside()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.KickPlayer(new RoomMember(host.Room.Code, player.PlayerId), host.PlayerId);
+
+            bool isFound = _manager.TryGetPlayer(new RoomMember(host.Room.Code, host.PlayerId), out _);
+
+            Assert.True(isFound);
+        }
+
+        [Fact]
+        public void KickPlayer_HostChoosesThemselves_ReturnsInvalidTarget()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterKicking = _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), host.PlayerId);
+
+            Assert.Equal(RoomStatus.InvalidTarget, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_PlayerNotInTheRoom_ReturnsPlayerNotFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterKicking =
+                _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.PlayerNotFound, afterKicking.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_GameAlreadyStarted_RemovesThePlayer()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            var kickedPlayerExpected = new { Status = RoomStatus.Success, IsPlaying = false };
+
+            RoomResult afterKicking =
+                _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+            Func<RoomPlayer, bool> isSamePlayer = remaining => remaining.Id == player.PlayerId;
+
+            var kickedPlayerResult = new
+            {
+                afterKicking.Status,
+                IsPlaying = afterKicking.Room.Players.Any(isSamePlayer)
+            };
+            Assert.Equal(kickedPlayerExpected, kickedPlayerResult);
+        }
+
+        [Fact]
+        public void KickPlayer_GameAlreadyStarted_DoesNotLetThePlayerReturn()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.KickPlayer(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            RoomResult attempt = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(RoomStatus.PlayerExpelled, attempt.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_UnknownRoom_ReturnsRoomNotFound()
+        {
+            RoomResult afterKicking =
+                _manager.KickPlayer(new RoomMember(UnknownRoomCode, UnknownPlayerId), UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.RoomNotFound, afterKicking.Status);
+        }
+
+        [Fact]
+        public void TransferHost_HostChoosesAnotherPlayer_MakesThatPlayerTheHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            var roomExpected = new { Status = RoomStatus.Success, HostId = player.PlayerId, PlayerCount = TwoPlayers };
+
+            RoomResult afterTransfer =
+                _manager.TransferHost(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            var roomResult = new
+            {
+                afterTransfer.Status,
+                afterTransfer.Room.HostId,
+                PlayerCount = afterTransfer.Room.Players.Count
+            };
+            Assert.Equal(roomExpected, roomResult);
+        }
+
+        [Fact]
+        public void TransferHost_FormerHost_CannotChangeTheSettingsAnymore()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.TransferHost(new RoomMember(host.Room.Code, host.PlayerId), player.PlayerId);
+
+            RoomResult afterChange = _manager.UpdateSettings(
+                new RoomMember(host.Room.Code, host.PlayerId),
+                CreateSettings(FourPlayers));
+
+            Assert.Equal(RoomStatus.NotHost, afterChange.Status);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerWhoIsNotTheHost_ReturnsNotHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            RoomResult afterTransfer =
+                _manager.TransferHost(new RoomMember(host.Room.Code, player.PlayerId), player.PlayerId);
+
+            Assert.Equal(RoomStatus.NotHost, afterTransfer.Status);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerWhoIsNotTheHost_KeepsTheSameHost()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            _manager.TransferHost(new RoomMember(host.Room.Code, player.PlayerId), player.PlayerId);
+
+            RoomResult newcomer = _manager.Join(host.Room.Code, GuestName);
+
+            Assert.Equal(host.PlayerId, newcomer.Room.HostId);
+        }
+
+        [Fact]
+        public void TransferHost_PlayerNotInTheRoom_ReturnsPlayerNotFound()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterTransfer =
+                _manager.TransferHost(new RoomMember(host.Room.Code, host.PlayerId), UnknownPlayerId);
+
+            Assert.Equal(RoomStatus.PlayerNotFound, afterTransfer.Status);
+        }
+
+        [Fact]
+        public void TransferHost_HostChoosesThemselves_ReturnsInvalidTarget()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult afterTransfer =
+                _manager.TransferHost(new RoomMember(host.Room.Code, host.PlayerId), host.PlayerId);
+
+            Assert.Equal(RoomStatus.InvalidTarget, afterTransfer.Status);
+        }
+
+        [Fact]
+        public void CreateRoom_HostWithAvatar_ShowsTheAvatarOfTheHost()
+        {
+            _avatars.SetAvatar(HostName, HostAvatarId);
+
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+
+            Assert.Equal(HostAvatarId, createdRoom.Room.Players.Single().AvatarId);
+        }
+
+        [Fact]
+        public void CreateRoom_HostNotRegistered_ShowsTheDefaultAvatar()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(GuestName);
+
+            Assert.Equal(AvatarCatalog.DefaultAvatarId, createdRoom.Room.Players.Single().AvatarId);
+        }
+
+        [Fact]
+        public void Join_PlayerWithAvatar_KeepsTheAvatarOfEachPlayer()
+        {
+            _avatars.SetAvatar(HostName, HostAvatarId);
+            _avatars.SetAvatar(PlayerName, PlayerAvatarId);
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            int[] avatarIds = player.Room.Players.Select(member => member.AvatarId).ToArray();
+            Assert.Equal(new[] { HostAvatarId, PlayerAvatarId }, avatarIds);
+        }
+
+        [Fact]
+        public void Join_RegisteredPlayerWithLevel_KeepsTheLevelInTheRoom()
+        {
+            _avatars.SetLevel(PlayerName, PlayerLevel);
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+
+            Assert.Equal(PlayerLevel, player.Room.Players.Last().Level);
+        }
+
+        [Fact]
+        public void CreateRoom_Guest_HasNoLevel()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(GuestName);
+
+            Assert.Equal(GuestLevel, createdRoom.Room.Players.Single().Level);
+        }
+
+        [Fact]
+        public void Constructor_NullAvatarLookup_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new RoomManager(null, _wordFilter));
+        }
+
+        private static RoomSettings CreateSettings(int maxPlayers)
+        {
+            return CreateSettings(maxPlayers, true);
+        }
+
+        private static RoomSettings CreateSettings(int maxPlayers, bool isPrivate)
+        {
+            var settings = new RoomSettings
+            {
+                MaxPlayers = maxPlayers,
+                IsPrivate = isPrivate,
+                Speed = GameSpeed.Normal
+            };
+
+            return settings;
+        }
+
+        private static RoomAccess CreateListedRoom(string roomId, string accessCode)
+        {
+            var roomAccess = new RoomAccess
+            {
+                RoomId = roomId,
+                AccessCode = accessCode
+            };
+
+            return roomAccess;
+        }
+
+        private RoomResult CreatePublicRoom(string hostName)
+        {
+            RoomResult host = _manager.CreateRoom(hostName);
+
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), CreateSettings(FourPlayers, false));
+
+            return host;
+        }
+
+        private RoomResult CreateStartedRoom()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+
+            _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            return host;
+        }
+
+        private RoomResult StartWhenEveryoneIsReady(RoomResult host)
+        {
+            string code = host.Room.Code;
+            RoomResult state = _manager.SetReady(new RoomMember(code, host.PlayerId), true);
+
+            foreach (RoomPlayer player in state.Room.Players)
+            {
+                _manager.SetReady(new RoomMember(code, player.Id), true);
+            }
+
+            return _manager.StartGame(new RoomMember(code, host.PlayerId));
+        }
+
+        private static SavedGame CreateSavedGame(bool hasPlayerForfeited)
+        {
+            var saved = new SavedGame
+            {
+                RoomCode = SavedRoomCode,
+                Settings = new RoomSettings { MaxPlayers = TwoPlayers }
+            };
+
+            saved.Players.Add(new SavedPlayer { Name = HostName });
+            saved.Players.Add(new SavedPlayer { Name = PlayerName, HasForfeited = hasPlayerForfeited });
+
+            return saved;
+        }
+    }
+}

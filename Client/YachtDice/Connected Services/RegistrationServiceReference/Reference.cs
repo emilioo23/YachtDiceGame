@@ -143,6 +143,18 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UsernameAlreadyTaken = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidUsername = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WeakPassword = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OffensiveUsername = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        InvalidName = 9,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -218,6 +230,12 @@ namespace YachtDice.RegistrationServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ValidationFailed = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionExpired = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SessionReplaced = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

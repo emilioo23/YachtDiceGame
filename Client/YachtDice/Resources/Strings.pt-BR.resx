@@ -1,0 +1,2568 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Auth_Logo" xml:space="preserve">
+    <value>Yacht Dice</value>
+  </data>
+  <data name="Auth_Subtitle" xml:space="preserve">
+    <value>O clássico jogo de dados multijogador</value>
+  </data>
+  <data name="Auth_LoginTab" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Auth_RegisterTab" xml:space="preserve">
+    <value>Cadastrar-se</value>
+  </data>
+  <data name="Auth_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Auth_EmailPlaceholder" xml:space="preserve">
+    <value>usuario@ejemplo.com</value>
+  </data>
+  <data name="Auth_LoginIdentifier" xml:space="preserve">
+    <value>E-mail ou usuário</value>
+  </data>
+  <data name="Auth_LoginIdentifierPlaceholder" xml:space="preserve">
+    <value>email@exemplo.com ou usuário</value>
+  </data>
+  <data name="Auth_Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="Auth_ForgotPassword" xml:space="preserve">
+    <value>Esqueceu sua senha?</value>
+  </data>
+  <data name="Auth_FirstName" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Auth_LastName" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="Auth_Username" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Auth_UsernamePlaceholder" xml:space="preserve">
+    <value>MeuNick123</value>
+  </data>
+  <data name="Auth_ButtonLogin" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Auth_ButtonCreateAccount" xml:space="preserve">
+    <value>Criar conta</value>
+  </data>
+  <data name="Auth_Divider" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="Auth_ButtonGuest" xml:space="preserve">
+    <value>Jogar como convidado</value>
+  </data>
+  <data name="Auth_ErrorRequiredFields" xml:space="preserve">
+    <value>Todos os campos são obrigatórios.</value>
+  </data>
+  <data name="Auth_SuccessRegister" xml:space="preserve">
+    <value>Cadastro realizado com sucesso. Na primeira vez que entrar enviaremos um código ao seu e-mail para confirmá-lo; se não confirmar em 48 horas, a conta é apagada.</value>
+  </data>
+  <data name="ForgotPassword_ErrorRequiredEmail" xml:space="preserve">
+    <value>O e-mail é obrigatório.</value>
+  </data>
+  <data name="Global_ButtonBack" xml:space="preserve">
+    <value>← Voltar</value>
+  </data>
+  <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
+    <value>Editar perfil</value>
+  </data>
+  <data name="MainMenu_Friends_OnlineCount" xml:space="preserve">
+    <value>{0} online</value>
+  </data>
+  <data name="MainMenu_Friends_StatusOnline" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="MainMenu_ButtonLogout" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="MainMenu_Nav_Leaderboard" xml:space="preserve">
+    <value>Ranking</value>
+  </data>
+  <data name="MainMenu_Nav_Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="MainMenu_Play_ErrorRequiredRoomCode" xml:space="preserve">
+    <value>Digite o código de uma sala.</value>
+  </data>
+  <data name="MainMenu_PlayerLevel" xml:space="preserve">
+    <value>Nível {0}</value>
+  </data>
+  <data name="Profile_SavedMessage" xml:space="preserve">
+    <value>Perfil salvo com sucesso.</value>
+  </data>
+  <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
+    <value>Código reenviado.</value>
+  </data>
+  <data name="TwoFactor_ErrorIncompleteCode" xml:space="preserve">
+    <value>Código incompleto.</value>
+  </data>
+  <data name="TwoFactor_Title" xml:space="preserve">
+    <value>Verificação em duas etapas</value>
+  </data>
+  <data name="TwoFactor_Subtitle" xml:space="preserve">
+    <value>Digite o código de 6 dígitos enviado para</value>
+  </data>
+  <data name="TwoFactor_ResendText" xml:space="preserve">
+    <value>O código não chegou?</value>
+  </data>
+  <data name="TwoFactor_LinkResend" xml:space="preserve">
+    <value>Reenviar</value>
+  </data>
+  <data name="TwoFactor_ButtonVerify" xml:space="preserve">
+    <value>Verificar →</value>
+  </data>
+  <data name="ForgotPassword_Title" xml:space="preserve">
+    <value>Recuperar senha</value>
+  </data>
+  <data name="ForgotPassword_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="ForgotPassword_LinkBackToLogin" xml:space="preserve">
+    <value>← Voltar ao login</value>
+  </data>
+  <data name="MainMenu_Friends_Title" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="MainMenu_Friends_Subtitle" xml:space="preserve">
+    <value>Lista de jogadores</value>
+  </data>
+  <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
+    <value>+ Adicionar</value>
+  </data>
+  <data name="MainMenu_Play_Welcome" xml:space="preserve">
+    <value>Bem-vindo de volta,</value>
+  </data>
+  <data name="MainMenu_Play_CreateRoomTitle" xml:space="preserve">
+    <value>Criar sala</value>
+  </data>
+  <data name="MainMenu_Play_CreateRoomDescription" xml:space="preserve">
+    <value>Crie uma partida privada e espere seus amigos</value>
+  </data>
+  <data name="MainMenu_Play_JoinRoomTitle" xml:space="preserve">
+    <value>Entrar em uma sala</value>
+  </data>
+  <data name="MainMenu_Play_JoinRoomDescription" xml:space="preserve">
+    <value>Digite o código de uma sala</value>
+  </data>
+  <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
+    <value>Entrar →</value>
+  </data>
+  <data name="MainMenu_Play_StatGames" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
+  <data name="MainMenu_Play_StatWins" xml:space="preserve">
+    <value>Vitórias</value>
+  </data>
+  <data name="MainMenu_Play_StatBestScore" xml:space="preserve">
+    <value>Melhor pontuação</value>
+  </data>
+  <data name="MainMenu_Play_StatWinRate" xml:space="preserve">
+    <value>% de vitórias</value>
+  </data>
+  <data name="Lobby_Title" xml:space="preserve">
+    <value>Sala de espera</value>
+  </data>
+  <data name="Lobby_Privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="Lobby_OptionPrivate" xml:space="preserve">
+    <value>Privada</value>
+  </data>
+  <data name="Lobby_OptionPublic" xml:space="preserve">
+    <value>Pública</value>
+  </data>
+  <data name="Lobby_MaxPlayers" xml:space="preserve">
+    <value>Máx. de jogadores</value>
+  </data>
+  <data name="Lobby_GameMode" xml:space="preserve">
+    <value>Modo de jogo</value>
+  </data>
+  <data name="Lobby_Mode1MinuteTitle" xml:space="preserve">
+    <value>1 minuto</value>
+  </data>
+  <data name="Lobby_Mode1MinuteSub" xml:space="preserve">
+    <value>Ritmo normal · Sem pressão</value>
+  </data>
+  <data name="Lobby_Mode30SecondsTitle" xml:space="preserve">
+    <value>30 segundos</value>
+  </data>
+  <data name="Lobby_Mode30SecondsSub" xml:space="preserve">
+    <value>Ritmo rápido · Sob pressão</value>
+  </data>
+  <data name="Lobby_Players" xml:space="preserve">
+    <value>Jogadores</value>
+  </data>
+  <data name="Lobby_Host" xml:space="preserve">
+    <value>Anfitrião</value>
+  </data>
+  <data name="Lobby_WaitingPlayer" xml:space="preserve">
+    <value>Aguardando jogador...</value>
+  </data>
+  <data name="Lobby_ButtonCopyCode" xml:space="preserve">
+    <value>Copiar código</value>
+  </data>
+  <data name="Lobby_ButtonStartMatch" xml:space="preserve">
+    <value>Iniciar partida →</value>
+  </data>
+  <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
+    <value>Código copiado: {0}</value>
+  </data>
+  <data name="Leaderboard_Title" xml:space="preserve">
+    <value>Ranking Global</value>
+  </data>
+  <data name="Leaderboard_FilterGlobal" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="Leaderboard_FilterFriends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="Leaderboard_ColumnRank" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Leaderboard_ColumnPlayer" xml:space="preserve">
+    <value>Jogador</value>
+  </data>
+  <data name="Leaderboard_ColumnPoints" xml:space="preserve">
+    <value>Pontos</value>
+  </data>
+  <data name="Leaderboard_ColumnWins" xml:space="preserve">
+    <value>Vitórias</value>
+  </data>
+  <data name="Leaderboard_YourPosition" xml:space="preserve">
+    <value>Sua posição: #{0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="Settings_Nav_Account" xml:space="preserve">
+    <value>Minha conta</value>
+  </data>
+  <data name="Settings_Nav_Appearance" xml:space="preserve">
+    <value>Aparência</value>
+  </data>
+  <data name="Settings_Nav_Security" xml:space="preserve">
+    <value>Segurança</value>
+  </data>
+  <data name="Settings_Nav_Notifications" xml:space="preserve">
+    <value>Notificações</value>
+  </data>
+  <data name="Settings_Nav_Preferences" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="Settings_Nav_Privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="Settings_Account_Username" xml:space="preserve">
+    <value>Nome de usuário</value>
+  </data>
+  <data name="Settings_Account_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Settings_Account_Avatar" xml:space="preserve">
+    <value>Avatar e personalização</value>
+  </data>
+  <data name="Settings_Password_Current" xml:space="preserve">
+    <value>Senha atual</value>
+  </data>
+  <data name="Settings_Password_New" xml:space="preserve">
+    <value>Nova senha</value>
+  </data>
+  <data name="Settings_Password_Confirm" xml:space="preserve">
+    <value>Confirmar nova senha</value>
+  </data>
+  <data name="Settings_Password_Save" xml:space="preserve">
+    <value>Salvar senha</value>
+  </data>
+  <data name="Settings_Password_Changed" xml:space="preserve">
+    <value>Sua senha foi alterada com sucesso.</value>
+  </data>
+  <data name="Settings_Password_WrongCurrent" xml:space="preserve">
+    <value>A senha atual não está correta.</value>
+  </data>
+  <data name="Settings_Password_ErrorEmptyCurrent" xml:space="preserve">
+    <value>Digite sua senha atual.</value>
+  </data>
+  <data name="Settings_ButtonChange" xml:space="preserve">
+    <value>Alterar</value>
+  </data>
+  <data name="Settings_Account_ButtonEditProfile" xml:space="preserve">
+    <value>Editar perfil</value>
+  </data>
+  <data name="Settings_Security_Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="Settings_Security_PasswordCurrent" xml:space="preserve">
+    <value>Senha atual</value>
+  </data>
+  <data name="Settings_Security_TwoFactor" xml:space="preserve">
+    <value>Verificação em 2 etapas</value>
+  </data>
+  <data name="Settings_Security_TwoFactorSub" xml:space="preserve">
+    <value>Código por e-mail ao entrar</value>
+  </data>
+  <data name="Settings_Security_ButtonTwoFactorEnable" xml:space="preserve">
+    <value>Ativar</value>
+  </data>
+  <data name="Settings_Security_ButtonTwoFactorDisable" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="Settings_Security_TwoFactorEnabledMessage" xml:space="preserve">
+    <value>Verificação em duas etapas ativada.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorDisabledMessage" xml:space="preserve">
+    <value>Verificação em duas etapas desativada.</value>
+  </data>
+  <data name="Settings_Security_TwoFactorUnavailableMessage" xml:space="preserve">
+    <value>Você precisa de uma conta cadastrada para usar esta opção.</value>
+  </data>
+  <data name="Settings_Notifications_Match" xml:space="preserve">
+    <value>Notificações de partida</value>
+  </data>
+  <data name="Settings_Notifications_MatchSub" xml:space="preserve">
+    <value>Quando você for convidado para jogar</value>
+  </data>
+  <data name="Settings_Notifications_SoundsGame" xml:space="preserve">
+    <value>Sons do jogo</value>
+  </data>
+  <data name="Settings_Notifications_SoundsGameSub" xml:space="preserve">
+    <value>Efeitos ao lançar os dados</value>
+  </data>
+  <data name="Settings_Preferences_ShowPotentialPoints" xml:space="preserve">
+    <value>Mostrar pontos potenciais</value>
+  </data>
+  <data name="Settings_Preferences_ShowPotentialPointsSub" xml:space="preserve">
+    <value>Ver os pontos antes de marcar</value>
+  </data>
+  <data name="Settings_Preferences_Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Settings_Preferences_OptionSpanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Preferences_OptionEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Preferences_OptionPortuguese" xml:space="preserve">
+    <value>Português</value>
+  </data>
+  <data name="Settings_Preferences_OptionChinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Appearance_DarkTheme" xml:space="preserve">
+    <value>Tema escuro</value>
+  </data>
+  <data name="Settings_Appearance_DarkThemeSub" xml:space="preserve">
+    <value>Muda a aparência de toda a interface</value>
+  </data>
+  <data name="Settings_Privacy_PublicProfile" xml:space="preserve">
+    <value>Perfil público</value>
+  </data>
+  <data name="Settings_Privacy_PublicProfileSub" xml:space="preserve">
+    <value>Permitir que outros vejam seu perfil</value>
+  </data>
+  <data name="Settings_Privacy_ButtonDeleteAccount" xml:space="preserve">
+    <value>Excluir conta</value>
+  </data>
+  <data name="Settings_DeleteAccount_FirstConfirmation" xml:space="preserve">
+    <value>Tem certeza de que quer excluir sua conta? Seu perfil, amigos, conquistas e histórico de partidas serão apagados.</value>
+  </data>
+  <data name="Settings_DeleteAccount_FinalConfirmation" xml:space="preserve">
+    <value>Esta ação não pode ser desfeita. Excluir sua conta definitivamente?</value>
+  </data>
+  <data name="Settings_DeleteAccount_DoneMessage" xml:space="preserve">
+    <value>Sua conta foi excluída. Obrigado por jogar.</value>
+  </data>
+  <data name="Settings_DeleteAccount_Error" xml:space="preserve">
+    <value>Não foi possível excluir a conta. Tente novamente.</value>
+  </data>
+  <data name="Profile_ChooseAvatar" xml:space="preserve">
+    <value>Escolha seu avatar</value>
+  </data>
+  <data name="Profile_CustomizeProfileTitle" xml:space="preserve">
+    <value>Personalizar perfil</value>
+  </data>
+  <data name="Profile_Username" xml:space="preserve">
+    <value>Nome de usuário</value>
+  </data>
+  <data name="Profile_TitleLabel" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="Profile_StatisticsHeader" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
+  <data name="Profile_StatGames" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
+  <data name="Profile_StatWins" xml:space="preserve">
+    <value>Vitórias</value>
+  </data>
+  <data name="Profile_StatBestScore" xml:space="preserve">
+    <value>Melhor pontuação</value>
+  </data>
+  <data name="Profile_TotalXp" xml:space="preserve">
+    <value>XP total</value>
+  </data>
+  <data name="Profile_Achievements_Header" xml:space="preserve">
+    <value>Conquistas</value>
+  </data>
+  <data name="Profile_ButtonSaveChanges" xml:space="preserve">
+    <value>Salvar alterações</value>
+  </data>
+  <data name="Game_Sidebar_ButtonKick" xml:space="preserve">
+    <value>Expulsar jogador</value>
+  </data>
+  <data name="Game_Sidebar_ButtonLeave" xml:space="preserve">
+    <value>Sair da partida</value>
+  </data>
+  <data name="Game_Topbar_YourTurn" xml:space="preserve">
+    <value>Sua vez</value>
+  </data>
+  <data name="Game_ResultNotSaved" xml:space="preserve">
+    <value>Não foi possível salvar o resultado da partida, então a experiência desta partida não foi somada.</value>
+  </data>
+  <data name="Game_Topbar_RoundInfo" xml:space="preserve">
+    <value>Rodada {0} / {1}</value>
+  </data>
+  <data name="Game_Scorecard_Total" xml:space="preserve">
+    <value>TOTAL</value>
+  </data>
+  <data name="Game_Dice_ButtonRoll" xml:space="preserve">
+    <value>Lançar ({0}/3)</value>
+  </data>
+  <data name="Game_Dice_HintPress" xml:space="preserve">
+    <value>Pressione Lançar para começar</value>
+  </data>
+  <data name="Game_Chat_ButtonChat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="Game_Category_Ones" xml:space="preserve">
+    <value>Uns</value>
+  </data>
+  <data name="Game_Category_Twos" xml:space="preserve">
+    <value>Dois</value>
+  </data>
+  <data name="Game_Category_Threes" xml:space="preserve">
+    <value>Três</value>
+  </data>
+  <data name="Game_Category_Fours" xml:space="preserve">
+    <value>Quatros</value>
+  </data>
+  <data name="Game_Category_Fives" xml:space="preserve">
+    <value>Cincos</value>
+  </data>
+  <data name="Game_Category_Sixes" xml:space="preserve">
+    <value>Seis</value>
+  </data>
+  <data name="Game_Category_Sum" xml:space="preserve">
+    <value>Soma</value>
+  </data>
+  <data name="Game_Category_Bonus" xml:space="preserve">
+    <value>Bônus +35</value>
+  </data>
+  <data name="Game_Category_FourOfAKind" xml:space="preserve">
+    <value>Quadra</value>
+  </data>
+  <data name="Game_Category_FullHouse" xml:space="preserve">
+    <value>Full house</value>
+  </data>
+  <data name="Game_Category_Yacht" xml:space="preserve">
+    <value>YACHT</value>
+  </data>
+  <data name="Results_Title" xml:space="preserve">
+    <value>Partida encerrada</value>
+  </data>
+  <data name="Results_TitleWinner" xml:space="preserve">
+    <value>{0} venceu</value>
+  </data>
+  <data name="Results_SubtitleScore" xml:space="preserve">
+    <value>Pontuação vencedora: {0} pts</value>
+  </data>
+  <data name="Results_ColumnPlayer" xml:space="preserve">
+    <value>Jogador</value>
+  </data>
+  <data name="Results_ColumnTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Results_ColumnXp" xml:space="preserve">
+    <value>XP ganho</value>
+  </data>
+  <data name="Results_ExperienceGainedFormat" xml:space="preserve">
+    <value>+{0} XP</value>
+  </data>
+  <data name="Results_LevelFormat" xml:space="preserve">
+    <value>Nível {0}</value>
+  </data>
+  <data name="Results_ExperienceProgressFormat" xml:space="preserve">
+    <value>{0} / {1} XP</value>
+  </data>
+  <data name="Results_LevelUp" xml:space="preserve">
+    <value>Você subiu de nível!</value>
+  </data>
+  <data name="Results_ButtonMenu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="Results_ButtonNewGame" xml:space="preserve">
+    <value>Nova partida</value>
+  </data>
+  <data name="Dialogs_LeaveMatch" xml:space="preserve">
+    <value>Tem certeza de que quer sair da partida? Os outros jogadores serão avisados e você poderá voltar enquanto ela continuar em andamento.</value>
+  </data>
+  <data name="Dialogs_CloseWindowDuringMatch" xml:space="preserve">
+    <value>Se você fechar a janela, sua partida continua e você terá {0} segundos para voltar. Se não voltar a tempo, você a perderá. Fechar mesmo assim?</value>
+  </data>
+  <data name="Settings_Audio_Music" xml:space="preserve">
+    <value>Música de fundo</value>
+  </data>
+  <data name="Settings_Audio_MusicSub" xml:space="preserve">
+    <value>Ativa ou silencia a música do jogo</value>
+  </data>
+  <data name="Settings_Audio_MusicVolume" xml:space="preserve">
+    <value>Volume da música</value>
+  </data>
+  <data name="Game_Sidebar_ButtonMuteMusic" xml:space="preserve">
+    <value>Silenciar música</value>
+  </data>
+  <data name="Game_Sidebar_ButtonUnmuteMusic" xml:space="preserve">
+    <value>Ativar música</value>
+  </data>
+  <data name="Game_Sidebar_MusicVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="Dialogs_DeleteFriend" xml:space="preserve">
+    <value>Tem certeza de que quer remover este amigo?</value>
+  </data>
+  <data name="Dialogs_InvalidCredentials" xml:space="preserve">
+    <value>Credenciais inválidas.</value>
+  </data>
+  <data name="Dialogs_UsernameTaken" xml:space="preserve">
+    <value>O nome de usuário já está em uso.</value>
+  </data>
+  <data name="Dialogs_EmailRegistered" xml:space="preserve">
+    <value>Este e-mail já está cadastrado.</value>
+  </data>
+  <data name="Dialogs_IncorrectCode" xml:space="preserve">
+    <value>Código de verificação incorreto.</value>
+  </data>
+  <data name="Dialogs_TooManyAttempts" xml:space="preserve">
+    <value>Muitas tentativas falhas. Verificação bloqueada por 15 min.</value>
+  </data>
+  <data name="Dialogs_ButtonIgnore" xml:space="preserve">
+    <value>Ignorar</value>
+  </data>
+  <data name="Dialogs_ButtonOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Friends_Status_WantsFriend" xml:space="preserve">
+    <value>Quer ser seu amigo</value>
+  </data>
+  <data name="Friends_Section_Requests" xml:space="preserve">
+    <value>Solicitações</value>
+  </data>
+  <data name="Friends_Section_InGame" xml:space="preserve">
+    <value>Em partida</value>
+  </data>
+  <data name="Friends_Section_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Game_Chat_SystemName" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="Game_Chat_MatchStartedMessage" xml:space="preserve">
+    <value>Partida iniciada. Boa sorte.</value>
+  </data>
+  <data name="Game_Sidebar_ButtonHowToPlay" xml:space="preserve">
+    <value>Como jogar</value>
+  </data>
+  <data name="TwoFactor_ErrorSendFailed" xml:space="preserve">
+    <value>Não foi possível enviar o código de verificação. Verifique sua conexão e tente novamente.</value>
+  </data>
+  <data name="TwoFactor_ErrorCodeExpired" xml:space="preserve">
+    <value>O código expirou. Peça um novo com o link de reenvio.</value>
+  </data>
+  <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
+    <value>Aguarde alguns segundos antes de pedir outro código.</value>
+  </data>
+  <data name="Dialogs_ServerUnavailable" xml:space="preserve">
+    <value>Não foi possível conectar ao servidor. Verifique sua conexão com a internet e tente novamente.</value>
+  </data>
+  <data name="Dialogs_DatabaseUnavailable" xml:space="preserve">
+    <value>O servidor não consegue consultar seus dados neste momento. Tente mais tarde.</value>
+  </data>
+  <data name="Dialogs_InvalidData" xml:space="preserve">
+    <value>O servidor recusou as informações enviadas. Verifique os dados e tente novamente.</value>
+  </data>
+  <data name="Dialogs_UnexpectedError" xml:space="preserve">
+    <value>Ocorreu um erro inesperado. Tente novamente.</value>
+  </data>
+  <data name="Auth_ErrorInvalidUsername" xml:space="preserve">
+    <value>O nome de usuário deve ter de 3 a 20 caracteres e só pode usar letras sem acento, números, ponto e sublinhado.</value>
+  </data>
+  <data name="Auth_ErrorOffensiveUsername" xml:space="preserve">
+    <value>O nome de usuário não pode ter palavras ofensivas. Escolha outro nome.</value>
+  </data>
+  <data name="Auth_ErrorWeakPassword" xml:space="preserve">
+    <value>A senha deve ter de 8 a 64 caracteres, com pelo menos uma letra e um número.</value>
+  </data>
+  <data name="Auth_ErrorInvalidName" xml:space="preserve">
+    <value>O nome e o sobrenome só podem ter letras, espaços, hífens e apóstrofos (de 2 a 50 caracteres).</value>
+  </data>
+  <data name="Auth_ErrorFieldTooLong" xml:space="preserve">
+    <value>Algum campo é longo demais. Usuário: máximo de 20 caracteres, e-mail: 100, nome e sobrenome: 50.</value>
+  </data>
+  <data name="Auth_ErrorInvalidEmail" xml:space="preserve">
+    <value>Digite um e-mail válido.</value>
+  </data>
+  <data name="Auth_GuestDisplayName" xml:space="preserve">
+    <value>Convidado</value>
+  </data>
+  <data name="MainMenu_Friends_UsernamePlaceholder" xml:space="preserve">
+    <value>Nome de usuário</value>
+  </data>
+  <data name="MainMenu_Friends_YourUsername" xml:space="preserve">
+    <value>Seu nome de usuário</value>
+  </data>
+  <data name="MainMenu_Friends_StatusOffline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Friends_Result_RequestSent" xml:space="preserve">
+    <value>Solicitação enviada.</value>
+  </data>
+  <data name="Friends_Result_RequestAlreadyReceived" xml:space="preserve">
+    <value>Este jogador já enviou uma solicitação para você. Aceite-a nas suas solicitações.</value>
+  </data>
+  <data name="Friends_Result_InvalidUsername" xml:space="preserve">
+    <value>Digite o nome de usuário.</value>
+  </data>
+  <data name="Friends_Result_UsernameNotFound" xml:space="preserve">
+    <value>Não existe nenhum jogador com esse nome de usuário.</value>
+  </data>
+  <data name="Friends_Result_SelfRequest" xml:space="preserve">
+    <value>Esse é o seu próprio nome de usuário.</value>
+  </data>
+  <data name="Friends_Result_AlreadyFriends" xml:space="preserve">
+    <value>Vocês já são amigos.</value>
+  </data>
+  <data name="Friends_Result_AlreadyRequested" xml:space="preserve">
+    <value>Você já enviou uma solicitação para este jogador.</value>
+  </data>
+  <data name="Lobby_RoomCodeFormat" xml:space="preserve">
+    <value>Código: {0}</value>
+  </data>
+  <data name="Lobby_PlayerCountFormat" xml:space="preserve">
+    <value>({0}/{1})</value>
+  </data>
+  <data name="Lobby_Result_NotEnoughPlayers" xml:space="preserve">
+    <value>São necessários pelo menos 2 jogadores para iniciar a partida.</value>
+  </data>
+  <data name="Lobby_Result_NotHost" xml:space="preserve">
+    <value>Só o anfitrião pode fazer isso.</value>
+  </data>
+  <data name="Lobby_Result_RoomNotFound" xml:space="preserve">
+    <value>Não existe uma sala com esse código.</value>
+  </data>
+  <data name="Lobby_Result_RoomFull" xml:space="preserve">
+    <value>A sala já está cheia.</value>
+  </data>
+  <data name="Lobby_Result_GameAlreadyStarted" xml:space="preserve">
+    <value>A partida dessa sala já começou.</value>
+  </data>
+  <data name="Lobby_Result_InvalidSettings" xml:space="preserve">
+    <value>Essa configuração não é válida para a sala.</value>
+  </data>
+  <data name="Game_Chat_ButtonHide" xml:space="preserve">
+    <value>Ocultar</value>
+  </data>
+  <data name="Game_Chat_ShowTooltip" xml:space="preserve">
+    <value>Mostrar o chat</value>
+  </data>
+  <data name="Game_Chat_SendFailed" xml:space="preserve">
+    <value>Não foi possível enviar a mensagem.</value>
+  </data>
+  <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
+    <value>Links não são permitidos no chat.</value>
+  </data>
+  <data name="Game_Chat_Unavailable" xml:space="preserve">
+    <value>O chat não está disponível nesta partida.</value>
+  </data>
+  <data name="Game_Chat_AuthorSeparator" xml:space="preserve">
+    <value>: </value>
+  </data>
+  <data name="Global_FormatPercentage" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Global_UnknownInitial" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="Global_SymbolMedalBronze" xml:space="preserve">
+    <value>🥉</value>
+  </data>
+  <data name="Global_SymbolClose" xml:space="preserve">
+    <value>✕</value>
+  </data>
+  <data name="Global_SymbolConfirm" xml:space="preserve">
+    <value>✓</value>
+  </data>
+  <data name="Global_SymbolDropdown" xml:space="preserve">
+    <value>▾</value>
+  </data>
+  <data name="Global_SymbolMedalGold" xml:space="preserve">
+    <value>🥇</value>
+  </data>
+  <data name="Game_Chat_ButtonSend" xml:space="preserve">
+    <value>&gt;</value>
+  </data>
+  <data name="Global_SymbolMedalSilver" xml:space="preserve">
+    <value>🥈</value>
+  </data>
+  <data name="MainMenu_Nav_Rooms" xml:space="preserve">
+    <value>Salas</value>
+  </data>
+  <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
+    <value>← Voltar ao menu</value>
+  </data>
+  <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
+    <value>O código da sala não está correto.</value>
+  </data>
+  <data name="Lobby_Friends_Title" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="Lobby_Friends_Hint" xml:space="preserve">
+    <value>Clique com o botão direito em um amigo online para convidá-lo para a sala.</value>
+  </data>
+  <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
+    <value>Convidar o jogador para a sala</value>
+  </data>
+  <data name="Lobby_Friends_GuestNotice" xml:space="preserve">
+    <value>Entre com uma conta para ver seus amigos e convidá-los para a sala.</value>
+  </data>
+  <data name="Lobby_Friends_Empty" xml:space="preserve">
+    <value>Você ainda não tem amigos adicionados.</value>
+  </data>
+  <data name="Rooms_Title" xml:space="preserve">
+    <value>Salas disponíveis</value>
+  </data>
+  <data name="Rooms_ButtonRefresh" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="Rooms_ButtonJoin" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Rooms_Empty" xml:space="preserve">
+    <value>Não há salas disponíveis por enquanto. Crie uma pelo menu.</value>
+  </data>
+  <data name="Rooms_TitleFormat" xml:space="preserve">
+    <value>Sala de {0}</value>
+  </data>
+  <data name="Rooms_DetailsFormat" xml:space="preserve">
+    <value>{0}/{1} jogadores · {2}</value>
+  </data>
+  <data name="Rooms_CodeHint" xml:space="preserve">
+    <value>Código da sala (somente salas privadas)</value>
+  </data>
+  <data name="Invitations_Result_Sent" xml:space="preserve">
+    <value>Convite enviado para {0}.</value>
+  </data>
+  <data name="Invitations_Result_NotInRoom" xml:space="preserve">
+    <value>Você não está mais nessa sala.</value>
+  </data>
+  <data name="Invitations_Result_NotFriends" xml:space="preserve">
+    <value>Você só pode convidar seus amigos.</value>
+  </data>
+  <data name="Invitations_Result_FriendOffline" xml:space="preserve">
+    <value>{0} não está online.</value>
+  </data>
+  <data name="Invitations_Received_Title" xml:space="preserve">
+    <value>Convite para uma sala</value>
+  </data>
+  <data name="Invitations_Received_Message" xml:space="preserve">
+    <value>{0} convidou você para a sala dele.</value>
+  </data>
+  <data name="Invitations_Received_LeaveNotice" xml:space="preserve">
+    <value>Se você entrar, sairá da sala em que está.</value>
+  </data>
+  <data name="Invitations_Received_Join" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Invitations_Received_Reject" xml:space="preserve">
+    <value>Recusar</value>
+  </data>
+  <data name="Auth_ShowPassword" xml:space="preserve">
+    <value>Mostrar senha</value>
+  </data>
+  <data name="Auth_HidePassword" xml:space="preserve">
+    <value>Ocultar senha</value>
+  </data>
+  <data name="Rooms_FilterSearchLabel" xml:space="preserve">
+    <value>Buscar sala</value>
+  </data>
+  <data name="Rooms_FilterSearchHint" xml:space="preserve">
+    <value>Digite o nome de quem criou a sala</value>
+  </data>
+  <data name="Rooms_FilterPrivacyLabel" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
+  <data name="Rooms_FilterAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="Rooms_FilterPublic" xml:space="preserve">
+    <value>Públicas</value>
+  </data>
+  <data name="Rooms_FilterPrivate" xml:space="preserve">
+    <value>Privadas</value>
+  </data>
+  <data name="Rooms_NoResults" xml:space="preserve">
+    <value>Nenhuma sala corresponde à sua busca.</value>
+  </data>
+  <data name="Lobby_Chat_WelcomeMessage" xml:space="preserve">
+    <value>Aqui você pode conversar com os outros jogadores enquanto a partida não começa.</value>
+  </data>
+  <data name="ForgotPassword_Description" xml:space="preserve">
+    <value>Digite seu e-mail e enviaremos um código de 6 dígitos para redefinir sua senha.</value>
+  </data>
+  <data name="ForgotPassword_ButtonSendCode" xml:space="preserve">
+    <value>Enviar código</value>
+  </data>
+  <data name="ForgotPassword_CodeSentMessage" xml:space="preserve">
+    <value>Se o e-mail estiver cadastrado, enviamos um código de 6 dígitos.</value>
+  </data>
+  <data name="ForgotPassword_ErrorSendFailed" xml:space="preserve">
+    <value>Não foi possível enviar o código. Verifique sua conexão e tente novamente.</value>
+  </data>
+  <data name="ResetPassword_Title" xml:space="preserve">
+    <value>Nova senha</value>
+  </data>
+  <data name="ResetPassword_Subtitle" xml:space="preserve">
+    <value>Digite o código que enviamos para</value>
+  </data>
+  <data name="ResetPassword_Code" xml:space="preserve">
+    <value>Código de 6 dígitos</value>
+  </data>
+  <data name="ResetPassword_NewPassword" xml:space="preserve">
+    <value>Nova senha</value>
+  </data>
+  <data name="ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Confirmar senha</value>
+  </data>
+  <data name="ResetPassword_ButtonChange" xml:space="preserve">
+    <value>Alterar senha</value>
+  </data>
+  <data name="ResetPassword_ResendText" xml:space="preserve">
+    <value>O código não chegou?</value>
+  </data>
+  <data name="ResetPassword_LinkResend" xml:space="preserve">
+    <value>Reenviar</value>
+  </data>
+  <data name="ResetPassword_SuccessMessage" xml:space="preserve">
+    <value>Sua senha foi alterada. Agora você já pode entrar.</value>
+  </data>
+  <data name="ResetPassword_ErrorIncompleteCode" xml:space="preserve">
+    <value>O código deve ter 6 dígitos.</value>
+  </data>
+  <data name="ResetPassword_ErrorEmptyPassword" xml:space="preserve">
+    <value>Digite a nova senha.</value>
+  </data>
+  <data name="ResetPassword_ErrorPasswordsDoNotMatch" xml:space="preserve">
+    <value>As senhas não coincidem.</value>
+  </data>
+  <data name="ResetPassword_ErrorIncorrectCode" xml:space="preserve">
+    <value>O código está incorreto.</value>
+  </data>
+  <data name="ResetPassword_ErrorCodeExpired" xml:space="preserve">
+    <value>O código expirou ou não é mais válido. Peça um novo em «Reenviar».</value>
+  </data>
+  <data name="ResetPassword_ErrorTooManyAttempts" xml:space="preserve">
+    <value>Muitas tentativas falhas. Peça um novo código em «Reenviar».</value>
+  </data>
+  <data name="Dialogs_ConnectionLost" xml:space="preserve">
+    <value>A conexão com o servidor foi perdida. Entre novamente para continuar jogando.</value>
+  </data>
+  <data name="Lobby_Result_PlayerNotFound" xml:space="preserve">
+    <value>Esse jogador não está mais na sala.</value>
+  </data>
+  <data name="Lobby_HostKick" xml:space="preserve">
+    <value>Expulsar</value>
+  </data>
+  <data name="Lobby_HostTransfer" xml:space="preserve">
+    <value>Passar anfitrião</value>
+  </data>
+  <data name="Lobby_KickedMessage" xml:space="preserve">
+    <value>O anfitrião expulsou você da sala.</value>
+  </data>
+  <data name="Lobby_Chat_NewHost" xml:space="preserve">
+    <value>{0} agora é o anfitrião da sala.</value>
+  </data>
+  <data name="Lobby_ConfirmKick" xml:space="preserve">
+    <value>Tem certeza de que quer expulsar {0} da sala?</value>
+  </data>
+  <data name="Dialogs_ButtonCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Profile_AvatarLocked" xml:space="preserve">
+    <value>Você ainda não desbloqueou esse avatar. Precisa do nível {0}.</value>
+  </data>
+  <data name="Profile_AvatarLockedBadge" xml:space="preserve">
+    <value>Nív. {0}</value>
+  </data>
+  <data name="Profile_UsernameSaveError" xml:space="preserve">
+    <value>Não foi possível alterar o nome de usuário. Tente novamente.</value>
+  </data>
+  <data name="Profile_AvatarSaveError" xml:space="preserve">
+    <value>Não foi possível alterar o avatar. Tente novamente.</value>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>Nível {0} · {1} XP</value>
+  </data>
+  <data name="MainMenu_Nav_HowToPlay" xml:space="preserve">
+    <value>Como jogar</value>
+  </data>
+  <data name="HowToPlay_Title" xml:space="preserve">
+    <value>Como jogar</value>
+  </data>
+  <data name="HowToPlay_Subtitle" xml:space="preserve">
+    <value>As regras do Yacht Dice em um minuto.</value>
+  </data>
+  <data name="HowToPlay_GoalTitle" xml:space="preserve">
+    <value>O objetivo</value>
+  </data>
+  <data name="HowToPlay_GoalText" xml:space="preserve">
+    <value>Você joga uma rodada para cada categoria da sua tabela de pontos e, em cada uma, marca pontos com cinco dados. Quando todas as categorias estiverem preenchidas, vence quem tiver mais pontos.</value>
+  </data>
+  <data name="HowToPlay_TurnTitle" xml:space="preserve">
+    <value>Sua vez</value>
+  </data>
+  <data name="HowToPlay_Step1" xml:space="preserve">
+    <value>Lance os cinco dados.</value>
+  </data>
+  <data name="HowToPlay_Step2" xml:space="preserve">
+    <value>Escolha os dados que quer manter e lance os outros novamente. Você pode lançar até três vezes no total.</value>
+  </data>
+  <data name="HowToPlay_Step3" xml:space="preserve">
+    <value>Quando estiver pronto, escolha uma categoria livre da sua tabela e marque os pontos. Se os dados não formarem a combinação, você marca 0. Cada categoria só pode ser usada uma vez.</value>
+  </data>
+  <data name="HowToPlay_UpperTitle" xml:space="preserve">
+    <value>Seção superior</value>
+  </data>
+  <data name="HowToPlay_UpperRuleTitle" xml:space="preserve">
+    <value>Uns a Seis</value>
+  </data>
+  <data name="HowToPlay_UpperRuleText" xml:space="preserve">
+    <value>Você soma apenas os dados que mostram o número da categoria. Com 3, 3, 3, 5 e 6 em Três, você marca 9, porque só contam os três 3.</value>
+  </data>
+  <data name="HowToPlay_BonusText" xml:space="preserve">
+    <value>Se a soma de Uns a Seis chegar a 63 pontos ou mais (por exemplo, três dados de cada número), você ganha 35 pontos extras.</value>
+  </data>
+  <data name="HowToPlay_LowerTitle" xml:space="preserve">
+    <value>Seção inferior</value>
+  </data>
+  <data name="HowToPlay_FourOfAKindText" xml:space="preserve">
+    <value>Pelo menos quatro dados iguais. Você marca a soma de apenas quatro deles. Exemplo: 5+5+5+5 = 20 pontos; o quinto dado não conta.</value>
+  </data>
+  <data name="HowToPlay_FullHouseText" xml:space="preserve">
+    <value>Três dados iguais e outros dois iguais entre si. Você marca a soma dos cinco dados. Exemplo: 2+2+3+3+3 = 13 pontos.</value>
+  </data>
+  <data name="HowToPlay_YachtText" xml:space="preserve">
+    <value>Os cinco dados iguais. Você marca 50 pontos.</value>
+  </data>
+  <data name="HowToPlay_WinTitle" xml:space="preserve">
+    <value>Quem vence?</value>
+  </data>
+  <data name="HowToPlay_WinText" xml:space="preserve">
+    <value>No final, todas as suas categorias são somadas, mais o bônus. Vence o jogador com mais pontos, e os pontos de cada partida contam para o ranking.</value>
+  </data>
+  <data name="HowToPlay_TipsTitle" xml:space="preserve">
+    <value>Dicas</value>
+  </data>
+  <data name="HowToPlay_TipsText" xml:space="preserve">
+    <value>Mantenha os dados que mais se repetem. Se uma categoria já não parece possível, sacrifique-a marcando 0 na que menos convier.</value>
+  </data>
+  <data name="Dialogs_ConfirmLogout" xml:space="preserve">
+    <value>Tem certeza de que quer sair?</value>
+  </data>
+  <data name="Game_Chat_PlayerLeft" xml:space="preserve">
+    <value>{0} saiu da partida ou perdeu a conexão.</value>
+  </data>
+  <data name="Game_Chat_PlayerReturned" xml:space="preserve">
+    <value>{0} voltou para a partida.</value>
+  </data>
+  <data name="Game_Chat_PlayerKicked" xml:space="preserve">
+    <value>{0} foi expulso da partida.</value>
+  </data>
+  <data name="Game_Reconnect_WaitingFormat" xml:space="preserve">
+    <value>Aguardando {0} voltar à partida: {1} s</value>
+  </data>
+  <data name="Game_Link_ReconnectingFormat" xml:space="preserve">
+    <value>A conexão com o servidor foi perdida. Reconectando… (tentativa {0})</value>
+  </data>
+  <data name="Game_Chat_ConnectionRestored" xml:space="preserve">
+    <value>A conexão com o servidor foi restabelecida.</value>
+  </data>
+  <data name="Game_Chat_PlayerForfeited" xml:space="preserve">
+    <value>{0} não voltou a tempo e saiu da partida.</value>
+  </data>
+  <data name="Game_KickNoPlayers" xml:space="preserve">
+    <value>Não há outros jogadores na partida para expulsar.</value>
+  </data>
+  <data name="Menu_PendingMatchPrompt" xml:space="preserve">
+    <value>Você deixou uma partida em andamento. Quer voltar para ela?</value>
+  </data>
+  <data name="Game_Category_LittleStraight" xml:space="preserve">
+    <value>Seq. Baixa</value>
+  </data>
+  <data name="Game_Category_BigStraight" xml:space="preserve">
+    <value>Seq. Alta</value>
+  </data>
+  <data name="Game_Category_Choice" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="Game_Category_YachtBonus" xml:space="preserve">
+    <value>Bônus Yacht</value>
+  </data>
+  <data name="Game_Topbar_TurnOf" xml:space="preserve">
+    <value>Vez de {0}</value>
+  </data>
+  <data name="Game_Topbar_GameOver" xml:space="preserve">
+    <value>Partida encerrada</value>
+  </data>
+  <data name="Game_Topbar_Paused" xml:space="preserve">
+    <value>Aguardando jogadores</value>
+  </data>
+  <data name="Game_Timer_SecondsLeft" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Game_Dice_HintOpponent" xml:space="preserve">
+    <value>Aguardando a vez de {0}...</value>
+  </data>
+  <data name="Game_Dice_HintChoose" xml:space="preserve">
+    <value>Escolha uma categoria ou mantenha dados e lance novamente.</value>
+  </data>
+  <data name="Game_Dice_HintPickBox" xml:space="preserve">
+    <value>Sem lançamentos. Escolha uma categoria.</value>
+  </data>
+  <data name="Game_Result_GameNotFound" xml:space="preserve">
+    <value>A partida não existe mais.</value>
+  </data>
+  <data name="Game_Result_PlayerNotInGame" xml:space="preserve">
+    <value>Você não participa mais desta partida.</value>
+  </data>
+  <data name="Game_Result_NotYourTurn" xml:space="preserve">
+    <value>Ainda não é a sua vez.</value>
+  </data>
+  <data name="Game_Result_GameFinished" xml:space="preserve">
+    <value>A partida já terminou.</value>
+  </data>
+  <data name="Game_Result_NoRollsLeft" xml:space="preserve">
+    <value>Você já usou os três lançamentos deste turno.</value>
+  </data>
+  <data name="Game_Result_CategoryFilled" xml:space="preserve">
+    <value>Essa categoria já tem pontos.</value>
+  </data>
+  <data name="Game_Result_CategoryNotAllowed" xml:space="preserve">
+    <value>Com um Yacht repetido, a regra do coringa não permite essa categoria.</value>
+  </data>
+  <data name="Game_Chat_TurnTimedOut" xml:space="preserve">
+    <value>O tempo de {0} acabou e o servidor jogou a vez dele.</value>
+  </data>
+  <data name="Game_Chat_YachtBonus" xml:space="preserve">
+    <value>{0} tirou outro Yacht e ganha 100 pontos de bônus.</value>
+  </data>
+  <data name="Results_ColumnRank" xml:space="preserve">
+    <value>Posição</value>
+  </data>
+  <data name="HowToPlay_LittleStraightText" xml:space="preserve">
+    <value>Os dados 1-2-3-4-5. Você marca 30 pontos.</value>
+  </data>
+  <data name="HowToPlay_BigStraightText" xml:space="preserve">
+    <value>Os dados 2-3-4-5-6. Você marca 30 pontos.</value>
+  </data>
+  <data name="HowToPlay_ChoiceText" xml:space="preserve">
+    <value>Serve para qualquer combinação. Você marca a soma dos cinco dados. Exemplo: 1+3+4+5+6 = 19 pontos.</value>
+  </data>
+  <data name="HowToPlay_YachtBonusText" xml:space="preserve">
+    <value>Se você já marcou 50 pontos em Yacht e tirar outro Yacht, ganha 100 pontos extras. Se marcou 0 em Yacht, não há bônus.</value>
+  </data>
+  <data name="HowToPlay_JokerTitle" xml:space="preserve">
+    <value>Coringa</value>
+  </data>
+  <data name="HowToPlay_JokerText" xml:space="preserve">
+    <value>Se você tirar um Yacht e a casa Yacht já estiver usada, deve marcá-lo na casa do mesmo número, se estiver livre. Se não, em qualquer casa inferior livre (o full house e as sequências valem o total). Se também não houver, em qualquer casa superior livre.</value>
+  </data>
+  <data name="Results_TitleTie" xml:space="preserve">
+    <value>Empate</value>
+  </data>
+  <data name="Game_Celebration_YachtTitle" xml:space="preserve">
+    <value>YACHT!</value>
+  </data>
+  <data name="Game_Celebration_YachtPoints" xml:space="preserve">
+    <value>{0} soma {1} pontos</value>
+  </data>
+  <data name="Achievement_1_Name" xml:space="preserve">
+    <value>Primeira partida</value>
+  </data>
+  <data name="Achievement_1_Description" xml:space="preserve">
+    <value>Termine sua primeira partida</value>
+  </data>
+  <data name="Achievement_2_Name" xml:space="preserve">
+    <value>Primeira vitória</value>
+  </data>
+  <data name="Achievement_2_Description" xml:space="preserve">
+    <value>Vença sua primeira partida</value>
+  </data>
+  <data name="Achievement_3_Name" xml:space="preserve">
+    <value>Aquecendo os motores</value>
+  </data>
+  <data name="Achievement_3_Description" xml:space="preserve">
+    <value>Vença 3 partidas</value>
+  </data>
+  <data name="Achievement_4_Name" xml:space="preserve">
+    <value>Cinco estrelas</value>
+  </data>
+  <data name="Achievement_4_Description" xml:space="preserve">
+    <value>Vença 5 partidas</value>
+  </data>
+  <data name="Achievement_5_Name" xml:space="preserve">
+    <value>Sequência de especialista</value>
+  </data>
+  <data name="Achievement_5_Description" xml:space="preserve">
+    <value>Vença 10 partidas</value>
+  </data>
+  <data name="Achievement_6_Name" xml:space="preserve">
+    <value>Imparável</value>
+  </data>
+  <data name="Achievement_6_Description" xml:space="preserve">
+    <value>Vença 25 partidas</value>
+  </data>
+  <data name="Achievement_7_Name" xml:space="preserve">
+    <value>Lenda viva</value>
+  </data>
+  <data name="Achievement_7_Description" xml:space="preserve">
+    <value>Vença 50 partidas</value>
+  </data>
+  <data name="Achievement_8_Name" xml:space="preserve">
+    <value>Jogador constante</value>
+  </data>
+  <data name="Achievement_8_Description" xml:space="preserve">
+    <value>Jogue 10 partidas</value>
+  </data>
+  <data name="Achievement_9_Name" xml:space="preserve">
+    <value>Veterano</value>
+  </data>
+  <data name="Achievement_9_Description" xml:space="preserve">
+    <value>Jogue 25 partidas</value>
+  </data>
+  <data name="Achievement_10_Name" xml:space="preserve">
+    <value>Viciado em dados</value>
+  </data>
+  <data name="Achievement_10_Description" xml:space="preserve">
+    <value>Jogue 50 partidas</value>
+  </data>
+  <data name="Achievement_11_Name" xml:space="preserve">
+    <value>Centenário</value>
+  </data>
+  <data name="Achievement_11_Description" xml:space="preserve">
+    <value>Jogue 100 partidas</value>
+  </data>
+  <data name="Achievement_12_Name" xml:space="preserve">
+    <value>Bom começo</value>
+  </data>
+  <data name="Achievement_12_Description" xml:space="preserve">
+    <value>Consiga 100 pontos em uma partida</value>
+  </data>
+  <data name="Achievement_13_Name" xml:space="preserve">
+    <value>Lançador veloz</value>
+  </data>
+  <data name="Achievement_13_Description" xml:space="preserve">
+    <value>Consiga 200 pontos em uma partida</value>
+  </data>
+  <data name="Achievement_14_Name" xml:space="preserve">
+    <value>Quase perfeito</value>
+  </data>
+  <data name="Achievement_14_Description" xml:space="preserve">
+    <value>Consiga 250 pontos em uma partida</value>
+  </data>
+  <data name="Achievement_15_Name" xml:space="preserve">
+    <value>Mestre do Yacht</value>
+  </data>
+  <data name="Achievement_15_Description" xml:space="preserve">
+    <value>Consiga 300 pontos em uma partida</value>
+  </data>
+  <data name="Achievement_16_Name" xml:space="preserve">
+    <value>Dominante</value>
+  </data>
+  <data name="Achievement_16_Description" xml:space="preserve">
+    <value>Vença 60% das suas partidas (mínimo de 10 jogadas)</value>
+  </data>
+  <data name="Achievement_17_Name" xml:space="preserve">
+    <value>Intocável</value>
+  </data>
+  <data name="Achievement_17_Description" xml:space="preserve">
+    <value>Vença 80% das suas partidas (mínimo de 20 jogadas)</value>
+  </data>
+  <data name="Achievement_18_Name" xml:space="preserve">
+    <value>Subindo de nível</value>
+  </data>
+  <data name="Achievement_18_Description" xml:space="preserve">
+    <value>Chegue ao nível 5</value>
+  </data>
+  <data name="Achievement_19_Name" xml:space="preserve">
+    <value>Experiente</value>
+  </data>
+  <data name="Achievement_19_Description" xml:space="preserve">
+    <value>Chegue ao nível 10</value>
+  </data>
+  <data name="Achievement_20_Name" xml:space="preserve">
+    <value>Elite</value>
+  </data>
+  <data name="Achievement_20_Description" xml:space="preserve">
+    <value>Chegue ao nível 15</value>
+  </data>
+  <data name="Achievement_21_Name" xml:space="preserve">
+    <value>Mestre dos mestres</value>
+  </data>
+  <data name="Achievement_21_Description" xml:space="preserve">
+    <value>Chegue ao nível 20</value>
+  </data>
+  <data name="Achievement_22_Name" xml:space="preserve">
+    <value>Colecionador de XP</value>
+  </data>
+  <data name="Achievement_22_Description" xml:space="preserve">
+    <value>Acumule 1000 de XP</value>
+  </data>
+  <data name="Achievement_23_Name" xml:space="preserve">
+    <value>Montanha de XP</value>
+  </data>
+  <data name="Achievement_23_Description" xml:space="preserve">
+    <value>Acumule 5000 de XP</value>
+  </data>
+  <data name="Title_0" xml:space="preserve">
+    <value>Estreante</value>
+  </data>
+  <data name="Title_1" xml:space="preserve">
+    <value>Novato</value>
+  </data>
+  <data name="Title_2" xml:space="preserve">
+    <value>Vencedor</value>
+  </data>
+  <data name="Title_3" xml:space="preserve">
+    <value>Aquecido</value>
+  </data>
+  <data name="Title_4" xml:space="preserve">
+    <value>Promessa</value>
+  </data>
+  <data name="Title_5" xml:space="preserve">
+    <value>Estrategista</value>
+  </data>
+  <data name="Title_6" xml:space="preserve">
+    <value>Imparável</value>
+  </data>
+  <data name="Title_7" xml:space="preserve">
+    <value>Lenda viva</value>
+  </data>
+  <data name="Title_8" xml:space="preserve">
+    <value>Constante</value>
+  </data>
+  <data name="Title_9" xml:space="preserve">
+    <value>Veterano</value>
+  </data>
+  <data name="Title_10" xml:space="preserve">
+    <value>Dadeiro</value>
+  </data>
+  <data name="Title_11" xml:space="preserve">
+    <value>Centenário</value>
+  </data>
+  <data name="Title_12" xml:space="preserve">
+    <value>Afinado</value>
+  </data>
+  <data name="Title_13" xml:space="preserve">
+    <value>Lançador veloz</value>
+  </data>
+  <data name="Title_14" xml:space="preserve">
+    <value>Perfeccionista</value>
+  </data>
+  <data name="Title_15" xml:space="preserve">
+    <value>Campeão do Yacht</value>
+  </data>
+  <data name="Title_16" xml:space="preserve">
+    <value>Dominador</value>
+  </data>
+  <data name="Title_17" xml:space="preserve">
+    <value>Intocável</value>
+  </data>
+  <data name="Title_18" xml:space="preserve">
+    <value>Aprendiz</value>
+  </data>
+  <data name="Title_19" xml:space="preserve">
+    <value>Lenda</value>
+  </data>
+  <data name="Title_20" xml:space="preserve">
+    <value>Elite</value>
+  </data>
+  <data name="Title_21" xml:space="preserve">
+    <value>Grão-mestre</value>
+  </data>
+  <data name="Title_23" xml:space="preserve">
+    <value>Titã</value>
+  </data>
+  <data name="Profile_TitleLocked" xml:space="preserve">
+    <value>{0} (bloqueado)</value>
+  </data>
+  <data name="Profile_TitleSaveError" xml:space="preserve">
+    <value>Não foi possível salvar o título. Tente novamente.</value>
+  </data>
+  <data name="Achievements_Unlocked" xml:space="preserve">
+    <value>Conquista desbloqueada</value>
+  </data>
+  <data name="Profile_AchievementsFormat" xml:space="preserve">
+    <value>{0} de {1} desbloqueadas</value>
+  </data>
+  <data name="MainMenu_Nav_History" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Histórico de partidas</value>
+  </data>
+  <data name="History_Empty" xml:space="preserve">
+    <value>Você ainda não jogou nenhuma partida.</value>
+  </data>
+  <data name="History_Victory" xml:space="preserve">
+    <value>VITÓRIA</value>
+  </data>
+  <data name="History_Defeat" xml:space="preserve">
+    <value>DERROTA</value>
+  </data>
+  <data name="History_VersusFormat" xml:space="preserve">
+    <value>Contra {0}</value>
+  </data>
+  <data name="History_ScoreFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Flag_ad" xml:space="preserve">
+    <value>Andorra</value>
+  </data>
+  <data name="Flag_ae" xml:space="preserve">
+    <value>Emirados Árabes Unidos</value>
+  </data>
+  <data name="Flag_af" xml:space="preserve">
+    <value>Afeganistão</value>
+  </data>
+  <data name="Flag_ag" xml:space="preserve">
+    <value>Antígua e Barbuda</value>
+  </data>
+  <data name="Flag_ai" xml:space="preserve">
+    <value>Anguila</value>
+  </data>
+  <data name="Flag_al" xml:space="preserve">
+    <value>Albânia</value>
+  </data>
+  <data name="Flag_am" xml:space="preserve">
+    <value>Armênia</value>
+  </data>
+  <data name="Flag_ao" xml:space="preserve">
+    <value>Angola</value>
+  </data>
+  <data name="Flag_aq" xml:space="preserve">
+    <value>Antártida</value>
+  </data>
+  <data name="Flag_ar" xml:space="preserve">
+    <value>Argentina</value>
+  </data>
+  <data name="Flag_as" xml:space="preserve">
+    <value>Samoa Americana</value>
+  </data>
+  <data name="Flag_at" xml:space="preserve">
+    <value>Áustria</value>
+  </data>
+  <data name="Flag_au" xml:space="preserve">
+    <value>Austrália</value>
+  </data>
+  <data name="Flag_aw" xml:space="preserve">
+    <value>Aruba</value>
+  </data>
+  <data name="Flag_ax" xml:space="preserve">
+    <value>Ilhas Åland</value>
+  </data>
+  <data name="Flag_az" xml:space="preserve">
+    <value>Azerbaijão</value>
+  </data>
+  <data name="Flag_ba" xml:space="preserve">
+    <value>Bósnia e Herzegovina</value>
+  </data>
+  <data name="Flag_bb" xml:space="preserve">
+    <value>Barbados</value>
+  </data>
+  <data name="Flag_bd" xml:space="preserve">
+    <value>Bangladesh</value>
+  </data>
+  <data name="Flag_be" xml:space="preserve">
+    <value>Bélgica</value>
+  </data>
+  <data name="Flag_bf" xml:space="preserve">
+    <value>Burkina Faso</value>
+  </data>
+  <data name="Flag_bg" xml:space="preserve">
+    <value>Bulgária</value>
+  </data>
+  <data name="Flag_bh" xml:space="preserve">
+    <value>Bahrein</value>
+  </data>
+  <data name="Flag_bi" xml:space="preserve">
+    <value>Burundi</value>
+  </data>
+  <data name="Flag_bj" xml:space="preserve">
+    <value>Benin</value>
+  </data>
+  <data name="Flag_bl" xml:space="preserve">
+    <value>São Bartolomeu</value>
+  </data>
+  <data name="Flag_bm" xml:space="preserve">
+    <value>Bermudas</value>
+  </data>
+  <data name="Flag_bn" xml:space="preserve">
+    <value>Brunei</value>
+  </data>
+  <data name="Flag_bo" xml:space="preserve">
+    <value>Bolívia</value>
+  </data>
+  <data name="Flag_bq" xml:space="preserve">
+    <value>Países Baixos Caribenhos</value>
+  </data>
+  <data name="Flag_br" xml:space="preserve">
+    <value>Brasil</value>
+  </data>
+  <data name="Flag_bs" xml:space="preserve">
+    <value>Bahamas</value>
+  </data>
+  <data name="Flag_bt" xml:space="preserve">
+    <value>Butão</value>
+  </data>
+  <data name="Flag_bv" xml:space="preserve">
+    <value>Ilha Bouvet</value>
+  </data>
+  <data name="Flag_bw" xml:space="preserve">
+    <value>Botsuana</value>
+  </data>
+  <data name="Flag_by" xml:space="preserve">
+    <value>Bielorrússia</value>
+  </data>
+  <data name="Flag_bz" xml:space="preserve">
+    <value>Belize</value>
+  </data>
+  <data name="Flag_ca" xml:space="preserve">
+    <value>Canadá</value>
+  </data>
+  <data name="Flag_cc" xml:space="preserve">
+    <value>Ilhas Cocos</value>
+  </data>
+  <data name="Flag_cd" xml:space="preserve">
+    <value>República Democrática do Congo</value>
+  </data>
+  <data name="Flag_cf" xml:space="preserve">
+    <value>República Centro-Africana</value>
+  </data>
+  <data name="Flag_cg" xml:space="preserve">
+    <value>Congo</value>
+  </data>
+  <data name="Flag_ch" xml:space="preserve">
+    <value>Suíça</value>
+  </data>
+  <data name="Flag_ci" xml:space="preserve">
+    <value>Costa do Marfim</value>
+  </data>
+  <data name="Flag_ck" xml:space="preserve">
+    <value>Ilhas Cook</value>
+  </data>
+  <data name="Flag_cl" xml:space="preserve">
+    <value>Chile</value>
+  </data>
+  <data name="Flag_cm" xml:space="preserve">
+    <value>Camarões</value>
+  </data>
+  <data name="Flag_cn" xml:space="preserve">
+    <value>China</value>
+  </data>
+  <data name="Flag_co" xml:space="preserve">
+    <value>Colômbia</value>
+  </data>
+  <data name="Flag_cr" xml:space="preserve">
+    <value>Costa Rica</value>
+  </data>
+  <data name="Flag_cu" xml:space="preserve">
+    <value>Cuba</value>
+  </data>
+  <data name="Flag_cv" xml:space="preserve">
+    <value>Cabo Verde</value>
+  </data>
+  <data name="Flag_cw" xml:space="preserve">
+    <value>Curaçao</value>
+  </data>
+  <data name="Flag_cx" xml:space="preserve">
+    <value>Ilha Christmas</value>
+  </data>
+  <data name="Flag_cy" xml:space="preserve">
+    <value>Chipre</value>
+  </data>
+  <data name="Flag_cz" xml:space="preserve">
+    <value>Tchéquia</value>
+  </data>
+  <data name="Flag_de" xml:space="preserve">
+    <value>Alemanha</value>
+  </data>
+  <data name="Flag_dj" xml:space="preserve">
+    <value>Djibuti</value>
+  </data>
+  <data name="Flag_dk" xml:space="preserve">
+    <value>Dinamarca</value>
+  </data>
+  <data name="Flag_dm" xml:space="preserve">
+    <value>Dominica</value>
+  </data>
+  <data name="Flag_do" xml:space="preserve">
+    <value>República Dominicana</value>
+  </data>
+  <data name="Flag_dz" xml:space="preserve">
+    <value>Argélia</value>
+  </data>
+  <data name="Flag_ec" xml:space="preserve">
+    <value>Equador</value>
+  </data>
+  <data name="Flag_ee" xml:space="preserve">
+    <value>Estônia</value>
+  </data>
+  <data name="Flag_eg" xml:space="preserve">
+    <value>Egito</value>
+  </data>
+  <data name="Flag_eh" xml:space="preserve">
+    <value>Saara Ocidental</value>
+  </data>
+  <data name="Flag_er" xml:space="preserve">
+    <value>Eritreia</value>
+  </data>
+  <data name="Flag_es" xml:space="preserve">
+    <value>Espanha</value>
+  </data>
+  <data name="Flag_et" xml:space="preserve">
+    <value>Etiópia</value>
+  </data>
+  <data name="Flag_fi" xml:space="preserve">
+    <value>Finlândia</value>
+  </data>
+  <data name="Flag_fj" xml:space="preserve">
+    <value>Fiji</value>
+  </data>
+  <data name="Flag_fk" xml:space="preserve">
+    <value>Ilhas Malvinas</value>
+  </data>
+  <data name="Flag_fm" xml:space="preserve">
+    <value>Micronésia</value>
+  </data>
+  <data name="Flag_fo" xml:space="preserve">
+    <value>Ilhas Faroé</value>
+  </data>
+  <data name="Flag_fr" xml:space="preserve">
+    <value>França</value>
+  </data>
+  <data name="Flag_ga" xml:space="preserve">
+    <value>Gabão</value>
+  </data>
+  <data name="Flag_gb" xml:space="preserve">
+    <value>Reino Unido</value>
+  </data>
+  <data name="Flag_gd" xml:space="preserve">
+    <value>Granada</value>
+  </data>
+  <data name="Flag_ge" xml:space="preserve">
+    <value>Geórgia</value>
+  </data>
+  <data name="Flag_gf" xml:space="preserve">
+    <value>Guiana Francesa</value>
+  </data>
+  <data name="Flag_gg" xml:space="preserve">
+    <value>Guernsey</value>
+  </data>
+  <data name="Flag_gh" xml:space="preserve">
+    <value>Gana</value>
+  </data>
+  <data name="Flag_gi" xml:space="preserve">
+    <value>Gibraltar</value>
+  </data>
+  <data name="Flag_gl" xml:space="preserve">
+    <value>Groenlândia</value>
+  </data>
+  <data name="Flag_gm" xml:space="preserve">
+    <value>Gâmbia</value>
+  </data>
+  <data name="Flag_gn" xml:space="preserve">
+    <value>Guiné</value>
+  </data>
+  <data name="Flag_gp" xml:space="preserve">
+    <value>Guadalupe</value>
+  </data>
+  <data name="Flag_gq" xml:space="preserve">
+    <value>Guiné Equatorial</value>
+  </data>
+  <data name="Flag_gr" xml:space="preserve">
+    <value>Grécia</value>
+  </data>
+  <data name="Flag_gs" xml:space="preserve">
+    <value>Ilhas Geórgia do Sul e Sandwich do Sul</value>
+  </data>
+  <data name="Flag_gt" xml:space="preserve">
+    <value>Guatemala</value>
+  </data>
+  <data name="Flag_gu" xml:space="preserve">
+    <value>Guam</value>
+  </data>
+  <data name="Flag_gw" xml:space="preserve">
+    <value>Guiné-Bissau</value>
+  </data>
+  <data name="Flag_gy" xml:space="preserve">
+    <value>Guiana</value>
+  </data>
+  <data name="Flag_hk" xml:space="preserve">
+    <value>RAE de Hong Kong (China)</value>
+  </data>
+  <data name="Flag_hm" xml:space="preserve">
+    <value>Ilhas Heard e McDonald</value>
+  </data>
+  <data name="Flag_hn" xml:space="preserve">
+    <value>Honduras</value>
+  </data>
+  <data name="Flag_hr" xml:space="preserve">
+    <value>Croácia</value>
+  </data>
+  <data name="Flag_ht" xml:space="preserve">
+    <value>Haiti</value>
+  </data>
+  <data name="Flag_hu" xml:space="preserve">
+    <value>Hungria</value>
+  </data>
+  <data name="Flag_id" xml:space="preserve">
+    <value>Indonésia</value>
+  </data>
+  <data name="Flag_ie" xml:space="preserve">
+    <value>Irlanda</value>
+  </data>
+  <data name="Flag_il" xml:space="preserve">
+    <value>Israel</value>
+  </data>
+  <data name="Flag_im" xml:space="preserve">
+    <value>Ilha de Man</value>
+  </data>
+  <data name="Flag_in" xml:space="preserve">
+    <value>Índia</value>
+  </data>
+  <data name="Flag_io" xml:space="preserve">
+    <value>Território Britânico do Oceano Índico</value>
+  </data>
+  <data name="Flag_iq" xml:space="preserve">
+    <value>Iraque</value>
+  </data>
+  <data name="Flag_ir" xml:space="preserve">
+    <value>Irã</value>
+  </data>
+  <data name="Flag_is" xml:space="preserve">
+    <value>Islândia</value>
+  </data>
+  <data name="Flag_it" xml:space="preserve">
+    <value>Itália</value>
+  </data>
+  <data name="Flag_je" xml:space="preserve">
+    <value>Jersey</value>
+  </data>
+  <data name="Flag_jm" xml:space="preserve">
+    <value>Jamaica</value>
+  </data>
+  <data name="Flag_jo" xml:space="preserve">
+    <value>Jordânia</value>
+  </data>
+  <data name="Flag_jp" xml:space="preserve">
+    <value>Japão</value>
+  </data>
+  <data name="Flag_ke" xml:space="preserve">
+    <value>Quênia</value>
+  </data>
+  <data name="Flag_kg" xml:space="preserve">
+    <value>Quirguistão</value>
+  </data>
+  <data name="Flag_kh" xml:space="preserve">
+    <value>Camboja</value>
+  </data>
+  <data name="Flag_ki" xml:space="preserve">
+    <value>Kiribati</value>
+  </data>
+  <data name="Flag_km" xml:space="preserve">
+    <value>Comores</value>
+  </data>
+  <data name="Flag_kn" xml:space="preserve">
+    <value>São Cristóvão e Nevis</value>
+  </data>
+  <data name="Flag_kp" xml:space="preserve">
+    <value>Coreia do Norte</value>
+  </data>
+  <data name="Flag_kr" xml:space="preserve">
+    <value>Coreia do Sul</value>
+  </data>
+  <data name="Flag_kw" xml:space="preserve">
+    <value>Kuwait</value>
+  </data>
+  <data name="Flag_ky" xml:space="preserve">
+    <value>Ilhas Cayman</value>
+  </data>
+  <data name="Flag_kz" xml:space="preserve">
+    <value>Cazaquistão</value>
+  </data>
+  <data name="Flag_la" xml:space="preserve">
+    <value>Laos</value>
+  </data>
+  <data name="Flag_lb" xml:space="preserve">
+    <value>Líbano</value>
+  </data>
+  <data name="Flag_lc" xml:space="preserve">
+    <value>Santa Lúcia</value>
+  </data>
+  <data name="Flag_li" xml:space="preserve">
+    <value>Liechtenstein</value>
+  </data>
+  <data name="Flag_lk" xml:space="preserve">
+    <value>Sri Lanka</value>
+  </data>
+  <data name="Flag_lr" xml:space="preserve">
+    <value>Libéria</value>
+  </data>
+  <data name="Flag_ls" xml:space="preserve">
+    <value>Lesoto</value>
+  </data>
+  <data name="Flag_lt" xml:space="preserve">
+    <value>Lituânia</value>
+  </data>
+  <data name="Flag_lu" xml:space="preserve">
+    <value>Luxemburgo</value>
+  </data>
+  <data name="Flag_lv" xml:space="preserve">
+    <value>Letônia</value>
+  </data>
+  <data name="Flag_ly" xml:space="preserve">
+    <value>Líbia</value>
+  </data>
+  <data name="Flag_ma" xml:space="preserve">
+    <value>Marrocos</value>
+  </data>
+  <data name="Flag_mc" xml:space="preserve">
+    <value>Mônaco</value>
+  </data>
+  <data name="Flag_md" xml:space="preserve">
+    <value>Moldávia</value>
+  </data>
+  <data name="Flag_me" xml:space="preserve">
+    <value>Montenegro</value>
+  </data>
+  <data name="Flag_mf" xml:space="preserve">
+    <value>São Martinho</value>
+  </data>
+  <data name="Flag_mg" xml:space="preserve">
+    <value>Madagascar</value>
+  </data>
+  <data name="Flag_mh" xml:space="preserve">
+    <value>Ilhas Marshall</value>
+  </data>
+  <data name="Flag_mk" xml:space="preserve">
+    <value>Macedônia do Norte</value>
+  </data>
+  <data name="Flag_ml" xml:space="preserve">
+    <value>Mali</value>
+  </data>
+  <data name="Flag_mm" xml:space="preserve">
+    <value>Mianmar (Birmânia)</value>
+  </data>
+  <data name="Flag_mn" xml:space="preserve">
+    <value>Mongólia</value>
+  </data>
+  <data name="Flag_mo" xml:space="preserve">
+    <value>RAE de Macau (China)</value>
+  </data>
+  <data name="Flag_mp" xml:space="preserve">
+    <value>Ilhas Marianas do Norte</value>
+  </data>
+  <data name="Flag_mq" xml:space="preserve">
+    <value>Martinica</value>
+  </data>
+  <data name="Flag_mr" xml:space="preserve">
+    <value>Mauritânia</value>
+  </data>
+  <data name="Flag_ms" xml:space="preserve">
+    <value>Montserrat</value>
+  </data>
+  <data name="Flag_mt" xml:space="preserve">
+    <value>Malta</value>
+  </data>
+  <data name="Flag_mu" xml:space="preserve">
+    <value>Maurício</value>
+  </data>
+  <data name="Flag_mv" xml:space="preserve">
+    <value>Maldivas</value>
+  </data>
+  <data name="Flag_mw" xml:space="preserve">
+    <value>Maláui</value>
+  </data>
+  <data name="Flag_mx" xml:space="preserve">
+    <value>México</value>
+  </data>
+  <data name="Flag_my" xml:space="preserve">
+    <value>Malásia</value>
+  </data>
+  <data name="Flag_mz" xml:space="preserve">
+    <value>Moçambique</value>
+  </data>
+  <data name="Flag_na" xml:space="preserve">
+    <value>Namíbia</value>
+  </data>
+  <data name="Flag_nc" xml:space="preserve">
+    <value>Nova Caledônia</value>
+  </data>
+  <data name="Flag_ne" xml:space="preserve">
+    <value>Níger</value>
+  </data>
+  <data name="Flag_nf" xml:space="preserve">
+    <value>Ilha Norfolk</value>
+  </data>
+  <data name="Flag_ng" xml:space="preserve">
+    <value>Nigéria</value>
+  </data>
+  <data name="Flag_ni" xml:space="preserve">
+    <value>Nicarágua</value>
+  </data>
+  <data name="Flag_nl" xml:space="preserve">
+    <value>Países Baixos</value>
+  </data>
+  <data name="Flag_no" xml:space="preserve">
+    <value>Noruega</value>
+  </data>
+  <data name="Flag_np" xml:space="preserve">
+    <value>Nepal</value>
+  </data>
+  <data name="Flag_nr" xml:space="preserve">
+    <value>Nauru</value>
+  </data>
+  <data name="Flag_nu" xml:space="preserve">
+    <value>Niue</value>
+  </data>
+  <data name="Flag_nz" xml:space="preserve">
+    <value>Nova Zelândia</value>
+  </data>
+  <data name="Flag_om" xml:space="preserve">
+    <value>Omã</value>
+  </data>
+  <data name="Flag_pa" xml:space="preserve">
+    <value>Panamá</value>
+  </data>
+  <data name="Flag_pe" xml:space="preserve">
+    <value>Peru</value>
+  </data>
+  <data name="Flag_pf" xml:space="preserve">
+    <value>Polinésia Francesa</value>
+  </data>
+  <data name="Flag_pg" xml:space="preserve">
+    <value>Papua-Nova Guiné</value>
+  </data>
+  <data name="Flag_ph" xml:space="preserve">
+    <value>Filipinas</value>
+  </data>
+  <data name="Flag_pk" xml:space="preserve">
+    <value>Paquistão</value>
+  </data>
+  <data name="Flag_pl" xml:space="preserve">
+    <value>Polônia</value>
+  </data>
+  <data name="Flag_pm" xml:space="preserve">
+    <value>São Pedro e Miquelão</value>
+  </data>
+  <data name="Flag_pn" xml:space="preserve">
+    <value>Ilhas Pitcairn</value>
+  </data>
+  <data name="Flag_pr" xml:space="preserve">
+    <value>Porto Rico</value>
+  </data>
+  <data name="Flag_ps" xml:space="preserve">
+    <value>Territórios Palestinos</value>
+  </data>
+  <data name="Flag_pt" xml:space="preserve">
+    <value>Portugal</value>
+  </data>
+  <data name="Flag_pw" xml:space="preserve">
+    <value>Palau</value>
+  </data>
+  <data name="Flag_py" xml:space="preserve">
+    <value>Paraguai</value>
+  </data>
+  <data name="Flag_qa" xml:space="preserve">
+    <value>Catar</value>
+  </data>
+  <data name="Flag_re" xml:space="preserve">
+    <value>Reunião</value>
+  </data>
+  <data name="Flag_ro" xml:space="preserve">
+    <value>Romênia</value>
+  </data>
+  <data name="Flag_rs" xml:space="preserve">
+    <value>Sérvia</value>
+  </data>
+  <data name="Flag_ru" xml:space="preserve">
+    <value>Rússia</value>
+  </data>
+  <data name="Flag_rw" xml:space="preserve">
+    <value>Ruanda</value>
+  </data>
+  <data name="Flag_sa" xml:space="preserve">
+    <value>Arábia Saudita</value>
+  </data>
+  <data name="Flag_sb" xml:space="preserve">
+    <value>Ilhas Salomão</value>
+  </data>
+  <data name="Flag_sc" xml:space="preserve">
+    <value>Seicheles</value>
+  </data>
+  <data name="Flag_sd" xml:space="preserve">
+    <value>Sudão</value>
+  </data>
+  <data name="Flag_se" xml:space="preserve">
+    <value>Suécia</value>
+  </data>
+  <data name="Flag_sg" xml:space="preserve">
+    <value>Singapura</value>
+  </data>
+  <data name="Flag_sh" xml:space="preserve">
+    <value>Santa Helena</value>
+  </data>
+  <data name="Flag_si" xml:space="preserve">
+    <value>Eslovênia</value>
+  </data>
+  <data name="Flag_sj" xml:space="preserve">
+    <value>Svalbard e Jan Mayen</value>
+  </data>
+  <data name="Flag_sk" xml:space="preserve">
+    <value>Eslováquia</value>
+  </data>
+  <data name="Flag_sl" xml:space="preserve">
+    <value>Serra Leoa</value>
+  </data>
+  <data name="Flag_sm" xml:space="preserve">
+    <value>San Marino</value>
+  </data>
+  <data name="Flag_sn" xml:space="preserve">
+    <value>Senegal</value>
+  </data>
+  <data name="Flag_so" xml:space="preserve">
+    <value>Somália</value>
+  </data>
+  <data name="Flag_sr" xml:space="preserve">
+    <value>Suriname</value>
+  </data>
+  <data name="Flag_ss" xml:space="preserve">
+    <value>Sudão do Sul</value>
+  </data>
+  <data name="Flag_st" xml:space="preserve">
+    <value>São Tomé e Príncipe</value>
+  </data>
+  <data name="Flag_sv" xml:space="preserve">
+    <value>El Salvador</value>
+  </data>
+  <data name="Flag_sx" xml:space="preserve">
+    <value>Sint Maarten</value>
+  </data>
+  <data name="Flag_sy" xml:space="preserve">
+    <value>Síria</value>
+  </data>
+  <data name="Flag_sz" xml:space="preserve">
+    <value>Essuatíni</value>
+  </data>
+  <data name="Flag_tc" xml:space="preserve">
+    <value>Ilhas Turcas e Caicos</value>
+  </data>
+  <data name="Flag_td" xml:space="preserve">
+    <value>Chade</value>
+  </data>
+  <data name="Flag_tf" xml:space="preserve">
+    <value>Territórios Austrais Franceses</value>
+  </data>
+  <data name="Flag_tg" xml:space="preserve">
+    <value>Togo</value>
+  </data>
+  <data name="Flag_th" xml:space="preserve">
+    <value>Tailândia</value>
+  </data>
+  <data name="Flag_tj" xml:space="preserve">
+    <value>Tadjiquistão</value>
+  </data>
+  <data name="Flag_tk" xml:space="preserve">
+    <value>Tokelau</value>
+  </data>
+  <data name="Flag_tl" xml:space="preserve">
+    <value>Timor-Leste</value>
+  </data>
+  <data name="Flag_tm" xml:space="preserve">
+    <value>Turcomenistão</value>
+  </data>
+  <data name="Flag_tn" xml:space="preserve">
+    <value>Tunísia</value>
+  </data>
+  <data name="Flag_to" xml:space="preserve">
+    <value>Tonga</value>
+  </data>
+  <data name="Flag_tr" xml:space="preserve">
+    <value>Turquia</value>
+  </data>
+  <data name="Flag_tt" xml:space="preserve">
+    <value>Trinidad e Tobago</value>
+  </data>
+  <data name="Flag_tv" xml:space="preserve">
+    <value>Tuvalu</value>
+  </data>
+  <data name="Flag_tw" xml:space="preserve">
+    <value>Taiwan</value>
+  </data>
+  <data name="Flag_tz" xml:space="preserve">
+    <value>Tanzânia</value>
+  </data>
+  <data name="Flag_ua" xml:space="preserve">
+    <value>Ucrânia</value>
+  </data>
+  <data name="Flag_ug" xml:space="preserve">
+    <value>Uganda</value>
+  </data>
+  <data name="Flag_um" xml:space="preserve">
+    <value>Ilhas Menores Distantes dos EUA</value>
+  </data>
+  <data name="Flag_us" xml:space="preserve">
+    <value>Estados Unidos</value>
+  </data>
+  <data name="Flag_uy" xml:space="preserve">
+    <value>Uruguai</value>
+  </data>
+  <data name="Flag_uz" xml:space="preserve">
+    <value>Uzbequistão</value>
+  </data>
+  <data name="Flag_va" xml:space="preserve">
+    <value>Cidade do Vaticano</value>
+  </data>
+  <data name="Flag_vc" xml:space="preserve">
+    <value>São Vicente e Granadinas</value>
+  </data>
+  <data name="Flag_ve" xml:space="preserve">
+    <value>Venezuela</value>
+  </data>
+  <data name="Flag_vg" xml:space="preserve">
+    <value>Ilhas Virgens Britânicas</value>
+  </data>
+  <data name="Flag_vi" xml:space="preserve">
+    <value>Ilhas Virgens dos EUA</value>
+  </data>
+  <data name="Flag_vn" xml:space="preserve">
+    <value>Vietnã</value>
+  </data>
+  <data name="Flag_vu" xml:space="preserve">
+    <value>Vanuatu</value>
+  </data>
+  <data name="Flag_wf" xml:space="preserve">
+    <value>Wallis e Futuna</value>
+  </data>
+  <data name="Flag_ws" xml:space="preserve">
+    <value>Samoa</value>
+  </data>
+  <data name="Flag_ye" xml:space="preserve">
+    <value>Iêmen</value>
+  </data>
+  <data name="Flag_yt" xml:space="preserve">
+    <value>Mayotte</value>
+  </data>
+  <data name="Flag_za" xml:space="preserve">
+    <value>África do Sul</value>
+  </data>
+  <data name="Flag_zm" xml:space="preserve">
+    <value>Zâmbia</value>
+  </data>
+  <data name="Flag_zw" xml:space="preserve">
+    <value>Zimbábue</value>
+  </data>
+  <data name="Flag_None" xml:space="preserve">
+    <value>Sem bandeira</value>
+  </data>
+  <data name="Profile_FlagLabel" xml:space="preserve">
+    <value>Bandeira</value>
+  </data>
+  <data name="Profile_FlagSaveError" xml:space="preserve">
+    <value>Não foi possível salvar a bandeira. Tente novamente.</value>
+  </data>
+  <data name="Profile_FlagSearchHint" xml:space="preserve">
+    <value>Buscar país...</value>
+  </data>
+  <data name="Profile_DiscardChangesConfirm" xml:space="preserve">
+    <value>Você tem alterações não salvas. Quer sair sem salvá-las?</value>
+  </data>
+  <data name="History_ComputerOpponent" xml:space="preserve">
+    <value>o computador</value>
+  </data>
+  <data name="History_GuestOpponent" xml:space="preserve">
+    <value>Convidado</value>
+  </data>
+  <data name="Lobby_Result_PlayerExpelled" xml:space="preserve">
+    <value>O anfitrião expulsou você desta sala, então você não pode entrar nela de novo.</value>
+  </data>
+  <data name="Lobby_ClosedMessage" xml:space="preserve">
+    <value>A sala foi fechada porque o tempo de espera acabou sem iniciar a partida.</value>
+  </data>
+  <data name="Auth_ErrorTemporarilyLocked" xml:space="preserve">
+    <value>Você digitou uma senha errada 3 vezes seguidas. Espere 5 minutos para tentar de novo.</value>
+  </data>
+  <data name="Auth_ErrorLockedForTheDay" xml:space="preserve">
+    <value>Sua conta foi bloqueada por 24 horas porque você digitou uma senha errada 10 vezes hoje.</value>
+  </data>
+  <data name="Friends_Result_FriendLimitReached" xml:space="preserve">
+    <value>Um de vocês já chegou ao máximo de amigos permitido.</value>
+  </data>
+  <data name="Friends_Result_TooManyPendingRequests" xml:space="preserve">
+    <value>Você já tem o máximo de solicitações sem resposta. Espere uma resposta para enviar outra.</value>
+  </data>
+  <data name="Game_Dice_ShortcutsHint" xml:space="preserve">
+    <value>Atalhos: Espaço rola os dados e as teclas 1 a 5 guardam ou soltam um dado.</value>
+  </data>
+  <data name="Leaderboard_ColumnLevel" xml:space="preserve">
+    <value>Nível</value>
+  </data>
+  <data name="Leaderboard_ColumnGames" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
+  <data name="Results_BreakdownFormat" xml:space="preserve">
+    <value>Superior {0} · Bônus {1} · Inferior {2} · Bônus Yacht {3}</value>
+  </data>
+  <data name="Game_Chat_AuthorLevelFormat" xml:space="preserve">
+    <value>{0} (Nv. {1})</value>
+  </data>
+  <data name="Lobby_ButtonReady" xml:space="preserve">
+    <value>Estou pronto</value>
+  </data>
+  <data name="Lobby_ButtonNotReady" xml:space="preserve">
+    <value>Não estou pronto</value>
+  </data>
+  <data name="Lobby_PlayerReady" xml:space="preserve">
+    <value>Pronto</value>
+  </data>
+  <data name="Lobby_LeftOutMessage" xml:space="preserve">
+    <value>A partida começou sem você porque você não confirmou que estava pronto.</value>
+  </data>
+  <data name="Lobby_Result_PlayersNotReady" xml:space="preserve">
+    <value>Ainda há jogadores que não confirmaram que estão prontos. Espere que confirmem ou até 2 minutos para começar sem eles.</value>
+  </data>
+  <data name="Lobby_RoomName" xml:space="preserve">
+    <value>Nome da sala</value>
+  </data>
+  <data name="Lobby_Result_OffensiveRoomName" xml:space="preserve">
+    <value>O nome da sala tem uma palavra que não é permitida.</value>
+  </data>
+  <data name="Game_Chat_InfractionNotice" xml:space="preserve">
+    <value>Só você vê isto: {0} já escreveu 3 mensagens com palavras proibidas. Você pode expulsá-lo da sala.</value>
+  </data>
+  <data name="Global_SymbolBlock" xml:space="preserve">
+    <value>⊘</value>
+  </data>
+  <data name="Friends_BlockTooltip" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="Dialogs_BlockPlayer" xml:space="preserve">
+    <value>Bloquear {0}? Vocês deixarão de ser amigos e nenhum poderá enviar solicitação ao outro até que você o desbloqueie.</value>
+  </data>
+  <data name="Friends_Section_Blocked" xml:space="preserve">
+    <value>Bloqueados</value>
+  </data>
+  <data name="Friends_Status_Blocked" xml:space="preserve">
+    <value>Bloqueado por você</value>
+  </data>
+  <data name="Friends_ButtonUnblock" xml:space="preserve">
+    <value>Desbloquear</value>
+  </data>
+  <data name="Dialogs_UnblockPlayer" xml:space="preserve">
+    <value>Desbloquear {0}? Vocês poderão enviar solicitações novamente, mas só serão amigos quando um aceitar uma nova.</value>
+  </data>
+  <data name="Friends_Result_Blocked" xml:space="preserve">
+    <value>Você não pode enviar solicitação a este jogador.</value>
+  </data>
+  <data name="Profile_UsernameChangedRecently" xml:space="preserve">
+    <value>Você só pode mudar seu nome de usuário uma vez a cada 30 dias.</value>
+  </data>
+  <data name="ResetPassword_ErrorPasswordUsedBefore" xml:space="preserve">
+    <value>Você não pode usar sua senha atual nem nenhuma das duas anteriores.</value>
+  </data>
+  <data name="Dialogs_SessionExpired" xml:space="preserve">
+    <value>Sua sessão terminou. Entre novamente.</value>
+  </data>
+  <data name="Dialogs_SessionReplaced" xml:space="preserve">
+    <value>Sua sessão foi encerrada porque você entrou em outro lugar. Entre novamente.</value>
+  </data>
+  <data name="Settings_DeleteAccount_PasswordLabel" xml:space="preserve">
+    <value>Digite sua senha para apagar a conta</value>
+  </data>
+  <data name="Settings_DeleteAccount_WrongPassword" xml:space="preserve">
+    <value>A senha não está correta. A conta não foi apagada.</value>
+  </data>
+  <data name="Lobby_ButtonAddComputer" xml:space="preserve">
+    <value>Adicionar computador</value>
+  </data>
+  <data name="Lobby_ComputerPlayer" xml:space="preserve">
+    <value>Computador</value>
+  </data>
+  <data name="Lobby_ComputerDifficulty" xml:space="preserve">
+    <value>Dificuldade do computador:</value>
+  </data>
+  <data name="Lobby_Difficulty_Easy" xml:space="preserve">
+    <value>Fácil</value>
+  </data>
+  <data name="Lobby_Difficulty_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Lobby_Difficulty_Hard" xml:space="preserve">
+    <value>Difícil</value>
+  </data>
+  <data name="Game_Chat_ButtonQuick" xml:space="preserve">
+    <value>Rápidas</value>
+  </data>
+  <data name="Game_Chat_QuickTooltip" xml:space="preserve">
+    <value>Enviar uma mensagem rápida</value>
+  </data>
+  <data name="Game_Chat_Quick_GoodLuck" xml:space="preserve">
+    <value>Boa sorte a todos!</value>
+  </data>
+  <data name="Game_Chat_Quick_NicePlay" xml:space="preserve">
+    <value>Boa jogada!</value>
+  </data>
+  <data name="Game_Chat_Quick_SoClose" xml:space="preserve">
+    <value>Quase!</value>
+  </data>
+  <data name="Game_Chat_Quick_YourTurn" xml:space="preserve">
+    <value>Sua vez, rápido</value>
+  </data>
+  <data name="Game_Chat_Quick_GoodGame" xml:space="preserve">
+    <value>Boa partida, obrigado</value>
+  </data>
+  <data name="MainMenu_Play_StatComputer" xml:space="preserve">
+    <value>Contra o computador: {0} jogadas, {1} vencidas</value>
+  </data>
+  <data name="Settings_Security_BackupCodes" xml:space="preserve">
+    <value>Códigos de backup</value>
+  </data>
+  <data name="Settings_Security_BackupCodesLeft" xml:space="preserve">
+    <value>Restam {0} códigos. Cada um funciona uma vez se você não puder receber o e-mail.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesOff" xml:space="preserve">
+    <value>Ative a verificação em duas etapas para criar seus códigos.</value>
+  </data>
+  <data name="Settings_Security_ButtonBackupCodes" xml:space="preserve">
+    <value>Criar códigos</value>
+  </data>
+  <data name="Settings_Security_BackupCodesConfirm" xml:space="preserve">
+    <value>Os códigos que você tinha deixarão de funcionar. Deseja criar códigos novos?</value>
+  </data>
+  <data name="Settings_Security_BackupCodesCreated" xml:space="preserve">
+    <value>Guarde estes códigos em um lugar seguro. Eles não serão mostrados novamente.</value>
+  </data>
+  <data name="Settings_Security_BackupCodesPasswordRequired" xml:space="preserve">
+    <value>Digite sua senha atual para criar os códigos.</value>
+  </data>
+  <data name="TwoFactor_UseBackupCode" xml:space="preserve">
+    <value>Não consegue receber o e-mail? Use um código de backup</value>
+  </data>
+  <data name="TwoFactor_ButtonUseBackupCode" xml:space="preserve">
+    <value>Usar código</value>
+  </data>
+  <data name="TwoFactor_ErrorInvalidBackupCode" xml:space="preserve">
+    <value>O código de backup deve ter 8 dígitos.</value>
+  </data>
+  <data name="Report_ButtonReport" xml:space="preserve">
+    <value>Denunciar</value>
+  </data>
+  <data name="Report_TitleFormat" xml:space="preserve">
+    <value>Denunciar {0}</value>
+  </data>
+  <data name="Report_ReasonLabel" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="Report_CommentLabel" xml:space="preserve">
+    <value>Comentário (opcional)</value>
+  </data>
+  <data name="Report_ButtonSend" xml:space="preserve">
+    <value>Enviar denúncia</value>
+  </data>
+  <data name="Report_Reason_OffensiveLanguage" xml:space="preserve">
+    <value>Linguagem ofensiva</value>
+  </data>
+  <data name="Report_Reason_Cheating" xml:space="preserve">
+    <value>Trapaça</value>
+  </data>
+  <data name="Report_Reason_UnsportingBehavior" xml:space="preserve">
+    <value>Mau comportamento</value>
+  </data>
+  <data name="Report_Reason_Other" xml:space="preserve">
+    <value>Outro</value>
+  </data>
+  <data name="Report_Result_Sent" xml:space="preserve">
+    <value>Obrigado. Sua denúncia foi enviada.</value>
+  </data>
+  <data name="Report_Result_NotAllowed" xml:space="preserve">
+    <value>Você só pode denunciar jogadores registrados com quem terminou uma partida hoje.</value>
+  </data>
+  <data name="Report_Result_AlreadyReported" xml:space="preserve">
+    <value>Você já denunciou este jogador hoje.</value>
+  </data>
+  <data name="Report_Result_CannotReportSelf" xml:space="preserve">
+    <value>Você não pode denunciar a si mesmo.</value>
+  </data>
+  <data name="Report_Result_InvalidComment" xml:space="preserve">
+    <value>O comentário é muito longo.</value>
+  </data>
+  <data name="Auth_ErrorSuspendedByReports" xml:space="preserve">
+    <value>Sua conta está suspensa por um dia porque vários jogadores a denunciaram.</value>
+  </data>
+  <data name="History_KicksTitle" xml:space="preserve">
+    <value>Expulsões</value>
+  </data>
+  <data name="History_KickedByYouFormat" xml:space="preserve">
+    <value>Você expulsou {0} da sala {1}</value>
+  </data>
+  <data name="History_KickedYouFormat" xml:space="preserve">
+    <value>{0} expulsou você da sala {1}</value>
+  </data>
+  <data name="History_ButtonScorecard" xml:space="preserve">
+    <value>Ver cartela</value>
+  </data>
+  <data name="Scorecard_WindowTitle" xml:space="preserve">
+    <value>Cartelas da partida</value>
+  </data>
+  <data name="Scorecard_TitleFormat" xml:space="preserve">
+    <value>{0} — {1} pontos</value>
+  </data>
+  <data name="Scorecard_LineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Scorecard_NotUsed" xml:space="preserve">
+    <value>sem marcar</value>
+  </data>
+  <data name="Scorecard_UpperBonusFormat" xml:space="preserve">
+    <value>Bônus superior: {0}</value>
+  </data>
+  <data name="Scorecard_YachtBonusFormat" xml:space="preserve">
+    <value>Yachts extras: {0}</value>
+  </data>
+  <data name="Scorecard_Yes" xml:space="preserve">
+    <value>sim</value>
+  </data>
+  <data name="Scorecard_No" xml:space="preserve">
+    <value>não</value>
+  </data>
+  <data name="Scorecard_Empty" xml:space="preserve">
+    <value>Esta partida não tem cartelas salvas.</value>
+  </data>
+  <data name="Settings_Security_PasswordNeverChanged" xml:space="preserve">
+    <value>Você ainda não alterou sua senha.</value>
+  </data>
+  <data name="Settings_Security_PasswordChangedFormat" xml:space="preserve">
+    <value>Última alteração: {0}</value>
+  </data>
+  <data name="Settings_Security_LockByAttemptsFormat" xml:space="preserve">
+    <value>Sua conta foi bloqueada por senhas incorretas até {0}.</value>
+  </data>
+  <data name="Settings_Security_LockByReportsFormat" xml:space="preserve">
+    <value>Sua conta foi suspensa por denúncias de outros jogadores até {0}.</value>
+  </data>
+  <data name="Friends_Section_Invitations" xml:space="preserve">
+    <value>Convites recebidos</value>
+  </data>
+  <data name="Friends_Invitation_OpenFormat" xml:space="preserve">
+    <value>Sala {0} · {1}</value>
+  </data>
+  <data name="Friends_Invitation_ClosedFormat" xml:space="preserve">
+    <value>Sala {0} fechada · {1}</value>
+  </data>
+  <data name="Friends_Invitation_Join" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Auth_ButtonPasskey" xml:space="preserve">
+    <value>Entrar com passkey</value>
+  </data>
+  <data name="Passkey_ErrorUnavailable" xml:space="preserve">
+    <value>Esta versão do Windows não permite usar passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorInvalid" xml:space="preserve">
+    <value>Não conseguimos verificar sua passkey. Tente de novo ou entre com seu e-mail e senha.</value>
+  </data>
+  <data name="Passkey_ErrorWindows" xml:space="preserve">
+    <value>O Windows não conseguiu concluir a operação com a passkey.</value>
+  </data>
+  <data name="Passkey_LoginNotCompleted" xml:space="preserve">
+    <value>O login com passkey não foi concluído. Se você ainda não tem uma, entre com sua senha e crie uma em Configurações > Segurança.</value>
+  </data>
+  <data name="Passkey_ErrorBusy" xml:space="preserve">
+    <value>O servidor está ocupado. Tente de novo em instantes.</value>
+  </data>
+  <data name="Passkey_ErrorTooMany" xml:space="preserve">
+    <value>Você já atingiu o máximo de passkeys.</value>
+  </data>
+  <data name="Passkey_ErrorAlreadyRegistered" xml:space="preserve">
+    <value>Essa passkey já está registrada.</value>
+  </data>
+  <data name="Passkey_ErrorExpired" xml:space="preserve">
+    <value>O tempo para criar a passkey acabou. Tente de novo.</value>
+  </data>
+  <data name="Passkey_Registered" xml:space="preserve">
+    <value>Sua passkey foi registrada. Agora você pode entrar com ela.</value>
+  </data>
+  <data name="Settings_Security_Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Settings_Security_PasskeysCount" xml:space="preserve">
+    <value>Você tem {0} passkeys. Entre com o Windows Hello ou com o celular, sem digitar senha.</value>
+  </data>
+  <data name="Settings_Security_PasskeysCountSingle" xml:space="preserve">
+    <value>Você tem 1 passkey. Entre com o Windows Hello ou com o celular, sem digitar senha.</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyHint" xml:space="preserve">
+    <value>Para remover uma passkey, escolha-a na lista e digite sua senha atual.</value>
+  </data>
+  <data name="Settings_Security_ButtonAddPasskey" xml:space="preserve">
+    <value>Adicionar passkey</value>
+  </data>
+  <data name="Passkey_Removed" xml:space="preserve">
+    <value>A passkey foi removida.</value>
+  </data>
+  <data name="Passkey_ErrorNotFound" xml:space="preserve">
+    <value>Essa passkey não existe mais.</value>
+  </data>
+  <data name="Settings_Security_ButtonRemovePasskey" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyConfirm" xml:space="preserve">
+    <value>Tem certeza de que quer remover esta passkey? Você não poderá mais entrar com ela.</value>
+  </data>
+  <data name="Settings_Security_RemovePasskeyPasswordRequired" xml:space="preserve">
+    <value>Escolha a passkey e digite sua senha atual para removê-la.</value>
+  </data>
+  <data name="Global_TextLimitFormat" xml:space="preserve">
+    <value>Máximo de {0} caracteres.</value>
+  </data>
+</root>

@@ -1,4 +1,5 @@
-﻿namespace YachtDice.Server.Services
+﻿using System;
+namespace YachtDice.Server.Services
 {
     using Contracts = YachtDice.Server.Contracts.Presence;
 
@@ -7,6 +8,9 @@
     /// </summary>
     internal sealed class OnlinePlayer
     {
+        private const string NullSessionIdMessage = "The identifier of the session cannot be null.";
+        private const string NullCallbackMessage = "The callback channel of the player cannot be null.";
+
         /// <summary>
         /// Initializes the player with its session and callback channel.
         /// </summary>
@@ -14,8 +18,8 @@
         /// <param name="callback">Callback channel of the player.</param>
         public OnlinePlayer(string sessionId, Contracts.IPresenceCallback callback)
         {
-            SessionId = sessionId;
-            Callback = callback;
+            SessionId = sessionId ?? throw new ArgumentNullException(nameof(sessionId), NullSessionIdMessage);
+            Callback = callback ?? throw new ArgumentNullException(nameof(callback), NullCallbackMessage);
         }
 
         /// <summary>

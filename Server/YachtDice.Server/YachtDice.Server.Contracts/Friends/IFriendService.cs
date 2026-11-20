@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using YachtDice.Server.Contracts.Rooms;
 
 namespace YachtDice.Server.Contracts.Friends
 {
@@ -12,33 +13,90 @@ namespace YachtDice.Server.Contracts.Friends
         /// <summary>
         /// Sends a friend request to the player who owns the username.
         /// </summary>
-        /// <param name="displayName">Name of the player who sends the request.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="targetUsername">Username of the player who will receive the request.</param>
         /// <returns>Outcome of the request.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendRequestResultCode SendFriendRequest(string displayName, string targetUsername);
+        FriendRequestResultCode SendFriendRequest(string sessionToken, string targetUsername);
 
         /// <summary>
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
-        /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="requesterName">Name of the player who sent the request.</param>
-        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
         /// <returns>Outcome of the answer.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode RespondToFriendRequest(string displayName, string requesterName, bool isAccepted);
+        FriendActionResultCode RespondToFriendRequest(string sessionToken, FriendRequestAnswer answer);
 
         /// <summary>
         /// Removes a friend from the list of the player.
         /// </summary>
-        /// <param name="displayName">Name of the player who removes the friend.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <param name="friendName">Name of the friend to remove.</param>
         /// <returns>Outcome of the removal.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        FriendActionResultCode RemoveFriend(string displayName, string friendName);
+        FriendActionResultCode RemoveFriend(string sessionToken, string friendName);
+
+        /// <summary>
+        /// Blocks another player: they stop being friends and cannot send requests to each other again.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="blockedName">Name of the player who is blocked.</param>
+        /// <returns>Outcome of the block.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        FriendActionResultCode BlockPlayer(string sessionToken, string blockedName);
+
+        /// <summary>
+        /// Removes a block that the player made. The two players do not become friends again.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <param name="blockedName">Name of the player who was blocked.</param>
+        /// <returns>Outcome of the removal of the block.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        FriendActionResultCode UnblockPlayer(string sessionToken, string blockedName);
+
+        /// <summary>
+        /// Gets the names of the players that the player blocked.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The names of the blocked players, or an empty list if there is none.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<string> GetBlockedPlayers(string sessionToken);
+
+        /// <summary>
+        /// Invites a friend who is online to join the room where the player is.
+        /// </summary>
+        /// <param name="sender">Room and identifier of the player who invites.</param>
+        /// <param name="friendName">Name of the friend to invite.</param>
+        /// <returns>Whether the invitation reached the friend or why not.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        InvitationResultCode InviteToRoom(RoomMember sender, string friendName);
+
+        /// <summary>
+        /// Reports another player who finished a game with the player in the last day.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player who reports.</param>
+        /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>
+        /// <returns>Outcome of the report.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        ReportResultCode ReportPlayer(string sessionToken, PlayerReport report);
+
+        /// <summary>
+        /// Gets the invitations to a room that the player received in the last day, from the newest to the oldest.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session of the player.</param>
+        /// <returns>The invitations, or an empty list if there is none.</returns>
+        [OperationContract]
+        [FaultContract(typeof(ServiceFault))]
+        List<ReceivedInvitation> GetReceivedInvitations(string sessionToken);
 
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.

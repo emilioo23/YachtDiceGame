@@ -2,13 +2,22 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Client.Logic.Authentication;
+using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
+using YachtDice.Passkeys;
 using YachtDice.RegistrationServiceReference;
 using YachtDice.Resources;
 using YachtDice.Utils;
+using PasskeyAssertionData = YachtDice.TwoFactorManagementServiceReference.PasskeyAssertionData;
+using PasskeyChallengeData = YachtDice.TwoFactorManagementServiceReference.PasskeyChallengeData;
+using PasskeyStartResultCode = YachtDice.TwoFactorManagementServiceReference.PasskeyStartResultCode;
+using TwoFactorLoginData = YachtDice.TwoFactorManagementServiceReference.LoginData;
+using TwoFactorLoginResultCode = YachtDice.TwoFactorManagementServiceReference.LoginResultCode;
 
 namespace YachtDice.Views
 {
@@ -17,19 +26,49 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string UnexpectedErrorLogMessage = "Unexpected exception during authentication.";
+        private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
+        private const string NullServicesMessage = "The shared components of the client cannot be null.";
+        private const string PasskeyFailedLogMessage = "Windows could not use the passkey to log in.";
 
         private readonly AppLogger _logger;
+        private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
+        private readonly TwoFactorManagementGateway _passkeyGateway = new TwoFactorManagementGateway();
+        private readonly WindowsPasskeyAuthenticator _passkeys = new WindowsPasskeyAuthenticator();
 
         /// <summary>
         /// Initializes the login and registration window.
         /// </summary>
-        public LoginWindow()
+        /// <param name="services">Components that the windows share while the application is open.</param>
+        public LoginWindow(ClientServices services)
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow();
+            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow(services);
+            ApplyFieldLimits();
+            _ = WarmUpConnectionAsync();
+        }
+
+        private async Task WarmUpConnectionAsync()
+        {
+            try
+            {
+                await _gateway.WarmUpAsync();
+            }
+            catch (GatewayException)
+            {
+                _logger.Warning(WarmUpFailedLogMessage);
+            }
+        }
+
+        private void ApplyFieldLimits()
+        {
+            LoginIdentifierTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
+            FirstNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            LastNameTextBox.MaxLength = RegistrationLimits.NameMaxLength;
+            UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            RegisterEmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
         }
 
         private void LoginTabButton_Click(object sender, RoutedEventArgs e)
@@ -41,18 +80,22 @@ namespace YachtDice.Views
         {
             LoginPanel.Visibility = Visibility.Visible;
             RegisterPanel.Visibility = Visibility.Collapsed;
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
+            PasskeyPanel.Visibility = Visibility.Visible;
             AuthSubmitButton.Content = Strings.Auth_ButtonLogin;
+            LoginIdentifierTextBox.Focus();
         }
 
         private void RegisterTabButton_Click(object sender, RoutedEventArgs e)
         {
             LoginPanel.Visibility = Visibility.Collapsed;
             RegisterPanel.Visibility = Visibility.Visible;
-            RegisterTabButton.Style = (Style)FindResource(ResourceKeys.ActiveTabStyleKey);
-            LoginTabButton.Style = (Style)FindResource(ResourceKeys.InactiveTabStyleKey);
+            RegisterTabButton.Style = (Style)FindResource(ThemeResourceKeys.ActiveTabStyleKey);
+            LoginTabButton.Style = (Style)FindResource(ThemeResourceKeys.InactiveTabStyleKey);
+            PasskeyPanel.Visibility = Visibility.Collapsed;
             AuthSubmitButton.Content = Strings.Auth_ButtonCreateAccount;
+            FirstNameTextBox.Focus();
         }
 
         private async void AuthSubmitButton_Click(object sender, RoutedEventArgs e)
@@ -61,25 +104,7 @@ namespace YachtDice.Views
 
             try
             {
-                bool isLogin = LoginPanel.Visibility == Visibility.Visible;
-
-                if (isLogin)
-                {
-                    await ProcessLoginAsync();
-                }
-                else
-                {
-                    await ProcessRegisterAsync();
-                }
-            }
-            catch (GatewayException ex)
-            {
-                CustomDialogWindow.ShowMessage(this, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, UnexpectedErrorLogMessage);
-                CustomDialogWindow.ShowMessage(this, Strings.Dialogs_UnexpectedError);
+                await GatewayCallRunner.RunAsync(this, _logger, SubmitAuthFormAsync);
             }
             finally
             {
@@ -87,42 +112,115 @@ namespace YachtDice.Views
             }
         }
 
+        private async Task SubmitAuthFormAsync()
+        {
+            bool isLogin = LoginPanel.Visibility == Visibility.Visible;
+
+            if (isLogin)
+            {
+                await ProcessLoginAsync();
+            }
+            else
+            {
+                await ProcessRegisterAsync();
+            }
+        }
+
+        private async void PasskeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            PasskeyButton.IsEnabled = false;
+
+            try
+            {
+                await GatewayCallRunner.RunAsync(this, _logger, LoginWithPasskeyAsync);
+            }
+            finally
+            {
+                PasskeyButton.IsEnabled = true;
+            }
+        }
+
+        private async Task LoginWithPasskeyAsync()
+        {
+            if (!_passkeys.IsAvailable())
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorUnavailable);
+            }
+            else
+            {
+                PasskeyChallengeData challenge = await _passkeyGateway.BeginPasskeyLoginAsync();
+
+                if (challenge.Code == PasskeyStartResultCode.Created)
+                {
+                    await SendPasskeyAnswerAsync(challenge);
+                }
+                else
+                {
+                    CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetStartMessage(challenge.Code));
+                }
+            }
+        }
+
+        private async Task SendPasskeyAnswerAsync(PasskeyChallengeData challenge)
+        {
+            PasskeyAssertionData assertion = await AskWindowsForAssertionAsync(challenge);
+
+            if (assertion != null)
+            {
+                TwoFactorLoginData loginData = await _passkeyGateway.CompletePasskeyLoginAsync(assertion);
+
+                if (loginData.Code == TwoFactorLoginResultCode.LoggedIn)
+                {
+                    var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, _services)
+                    {
+                        SessionToken = loginData.SessionToken ?? string.Empty
+                    };
+
+                    WindowNavigator.SwitchTo(this, new MenuWindow(session));
+                }
+                else
+                {
+                    CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetLoginMessage(loginData.Code));
+                }
+            }
+        }
+
+        private async Task<PasskeyAssertionData> AskWindowsForAssertionAsync(PasskeyChallengeData challenge)
+        {
+            IntPtr windowHandle = new WindowInteropHelper(this).Handle;
+            PasskeyAssertionData assertion = null;
+
+            try
+            {
+                assertion = await Task.Run(() => _passkeys.GetAssertion(windowHandle, challenge));
+
+                if (assertion == null)
+                {
+                    CustomDialogWindow.ShowMessage(this, Strings.Passkey_LoginNotCompleted);
+                }
+            }
+            catch (PasskeyException ex)
+            {
+                _logger.Error(ex, PasskeyFailedLogMessage);
+                CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
+            }
+
+            return assertion;
+        }
+
         private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, isGuest: true);
+            var session = new PlayerSession(Strings.Auth_GuestDisplayName, string.Empty, _services)
+            {
+                IsGuest = true
+            };
 
             WindowNavigator.SwitchTo(this, new MenuWindow(session));
         }
 
         private void ForgotPasswordLink_Click(object sender, MouseButtonEventArgs e)
         {
-            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow());
-        }
-
-        private static string GetLoginMessage(LoginResultCode code)
-        {
-            string message;
-
-            switch (code)
-            {
-                case LoginResultCode.MissingRequiredField:
-                    message = Strings.Auth_ErrorRequiredFields;
-                    break;
-                case LoginResultCode.InvalidCredentials:
-                    message = Strings.Dialogs_InvalidCredentials;
-                    break;
-                case LoginResultCode.VerificationLocked:
-                    message = Strings.Dialogs_TooManyAttempts;
-                    break;
-                case LoginResultCode.CodeSendFailed:
-                    message = Strings.TwoFactor_ErrorSendFailed;
-                    break;
-                default:
-                    message = Strings.Dialogs_UnexpectedError;
-                    break;
-            }
-
-            return message;
+            WindowNavigator.SwitchTo(this, new ForgotPasswordWindow(_services));
         }
 
         private static string GetRegisterMessage(RegisterResultCode code)
@@ -146,6 +244,18 @@ namespace YachtDice.Views
                 case RegisterResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
                     break;
+                case RegisterResultCode.InvalidUsername:
+                    message = Strings.Auth_ErrorInvalidUsername;
+                    break;
+                case RegisterResultCode.WeakPassword:
+                    message = Strings.Auth_ErrorWeakPassword;
+                    break;
+                case RegisterResultCode.OffensiveUsername:
+                    message = Strings.Auth_ErrorOffensiveUsername;
+                    break;
+                case RegisterResultCode.InvalidName:
+                    message = Strings.Auth_ErrorInvalidName;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;
@@ -158,17 +268,20 @@ namespace YachtDice.Views
         {
             var credentials = new LoginCredentials
             {
-                Email = EmailTextBox.Text.Trim(),
+                Identifier = LoginIdentifierTextBox.Text.Trim(),
                 Password = LoginPasswordBox.Password,
                 CultureName = App.CurrentCultureCode
             };
 
             LoginData loginData = await _gateway.LoginAsync(credentials);
-            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, isGuest: false);
+            var session = new PlayerSession(loginData.DisplayName, loginData.FirstName, _services)
+            {
+                SessionToken = loginData.SessionToken ?? string.Empty
+            };
 
             if (loginData.Code == LoginResultCode.VerificationCodeSent)
             {
-                OpenVerificationWindow(credentials.Email, session, loginData.ChallengeId);
+                OpenVerificationWindow(loginData.Email, session, loginData.ChallengeId);
             }
             else if (loginData.Code == LoginResultCode.LoggedIn)
             {
@@ -176,7 +289,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, GetLoginMessage(loginData.Code));
+                CustomDialogWindow.ShowMessage(this, LoginResultMessages.GetMessage(loginData.Code));
             }
         }
 

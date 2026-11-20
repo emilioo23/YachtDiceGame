@@ -34,6 +34,15 @@
   <wsdl:message name="IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage">
     <wsdl:part name="detail" element="tns:ServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IFriendService_InviteToRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:InviteToRoom" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_InviteToRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InviteToRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_InviteToRoom_ServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:ServiceFault" />
+  </wsdl:message>
   <wsdl:message name="IFriendService_GetUsername_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUsername" />
   </wsdl:message>
@@ -76,6 +85,11 @@
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriend" message="tns:IFriendService_RemoveFriend_InputMessage" />
       <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendResponse" message="tns:IFriendService_RemoveFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/RemoveFriendServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_RemoveFriend_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InviteToRoom">
+      <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/InviteToRoom" message="tns:IFriendService_InviteToRoom_InputMessage" />
+      <wsdl:output wsaw:Action="urn:yachtdice:contracts/IFriendService/InviteToRoomResponse" message="tns:IFriendService_InviteToRoom_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:yachtdice:contracts/IFriendService/InviteToRoomServiceFaultFault" name="ServiceFaultFault" message="tns:IFriendService_InviteToRoom_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUsername">
       <wsdl:input wsaw:Action="urn:yachtdice:contracts/IFriendService/GetUsername" message="tns:IFriendService_GetUsername_InputMessage" />

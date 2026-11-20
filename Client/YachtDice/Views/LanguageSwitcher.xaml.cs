@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using YachtDice.Resources;
+using YachtDice.Client.Logic.Settings;
+using YachtDice.Navigation;
+using YachtDice.Utils;
 
 namespace YachtDice.Views
 {
@@ -12,22 +12,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LanguageSwitcher : UserControl
     {
-        private const string SpanishCultureCode = "es-MX";
-        private const string EnglishCultureCode = "en-US";
-        private const int UsFlagTotalRows = 7;
-        private const int UsFlagCantonRowSpan = 4;
-        private const double UsFlagCantonWidth = 9.0;
-        private const int EvenRowDivisor = 2;
-        private const int ZeroRemainder = 0;
-        private const int TopStripeRow = 0;
-        private const int MiddleStripeRow = 1;
-        private const int BottomStripeRow = 2;
-
-        private static readonly Color _spanishRedColor = Color.FromRgb(0xAA, 0x15, 0x1B);
-        private static readonly Color _spanishYellowColor = Color.FromRgb(0xF1, 0xBF, 0x00);
-        private static readonly Color _usRedColor = Color.FromRgb(0xB2, 0x22, 0x34);
-        private static readonly Color _usBlueColor = Color.FromRgb(0x3C, 0x3B, 0x6E);
-
         /// <summary>
         /// Initializes a new instance of the floating language switch control.
         /// </summary>
@@ -35,6 +19,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             RefreshCurrentFlagDisplay();
+            LoadOptionFlags();
         }
 
         /// <summary>
@@ -48,20 +33,17 @@ namespace YachtDice.Views
             LanguagePopup.IsOpen = LanguageToggleButton.IsChecked == true;
         }
 
-        private void SpanishOptionButton_Click(object sender, RoutedEventArgs e)
+        private void LanguageOptionButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyLanguage(SpanishCultureCode);
-        }
+            var optionButton = (Button)sender;
 
-        private void EnglishOptionButton_Click(object sender, RoutedEventArgs e)
-        {
-            ApplyLanguage(EnglishCultureCode);
+            ApplyLanguage(optionButton.Tag.ToString());
         }
 
         /// <summary>
         /// Applies the chosen culture and reopens the current window to refresh the texts.
         /// </summary>
-        /// <param name="cultureCode">Culture code, for example "es-MX" or "en-US".</param>
+        /// <param name="cultureCode">Culture code, for example "es-MX" or "pt-BR".</param>
         private void ApplyLanguage(string cultureCode)
         {
             LanguagePopup.IsOpen = false;
@@ -85,68 +67,24 @@ namespace YachtDice.Views
             if (currentWindow != null)
             {
                 ReopenWindowFunc.Invoke().Show();
-                currentWindow.Close();
+                WindowNavigator.Close(currentWindow);
+            }
+        }
+
+        private void LoadOptionFlags()
+        {
+            var optionImages = new[] { SpanishFlagImage, EnglishFlagImage, PortugueseFlagImage, ChineseFlagImage };
+
+            foreach (Image optionImage in optionImages)
+            {
+                optionImage.Source = FlagImages.Get(LanguageCatalog.GetFlagCode((string)optionImage.Tag));
             }
         }
 
         private void RefreshCurrentFlagDisplay()
         {
-            bool isSpanish = App.CurrentCultureCode == SpanishCultureCode;
-            CurrentLangText.Text = isSpanish
-                ? Strings.Settings_Preferences_OptionSpanishShort
-                : Strings.Settings_Preferences_OptionEnglishShort;
-            CurrentFlagGrid.Children.Clear();
-            CurrentFlagGrid.Children.Add(isSpanish ? BuildSpanishFlag() : BuildEnglishFlag());
-        }
-
-        private static Grid BuildSpanishFlag()
-        {
-            var grid = new Grid();
-            grid.RowDefinitions.Add(new RowDefinition());
-            grid.RowDefinitions.Add(new RowDefinition());
-            grid.RowDefinitions.Add(new RowDefinition());
-
-            var topStripe = new Rectangle { Fill = new SolidColorBrush(_spanishRedColor) };
-            var midStripe = new Rectangle { Fill = new SolidColorBrush(_spanishYellowColor) };
-            var bottomStripe = new Rectangle { Fill = new SolidColorBrush(_spanishRedColor) };
-
-            Grid.SetRow(topStripe, TopStripeRow);
-            Grid.SetRow(midStripe, MiddleStripeRow);
-            Grid.SetRow(bottomStripe, BottomStripeRow);
-
-            grid.Children.Add(topStripe);
-            grid.Children.Add(midStripe);
-            grid.Children.Add(bottomStripe);
-
-            return grid;
-        }
-
-        private static Grid BuildEnglishFlag()
-        {
-            var grid = new Grid();
-            var stripeRed = new SolidColorBrush(_usRedColor);
-            var stripeWhite = new SolidColorBrush(Colors.White);
-
-            for (int rowIndex = 0; rowIndex < UsFlagTotalRows; rowIndex++)
-            {
-                bool isRedStripe = rowIndex % EvenRowDivisor == ZeroRemainder;
-                var stripe = new Rectangle { Fill = isRedStripe ? stripeRed : stripeWhite };
-
-                grid.RowDefinitions.Add(new RowDefinition());
-                Grid.SetRow(stripe, rowIndex);
-                grid.Children.Add(stripe);
-            }
-
-            var canton = new Rectangle
-            {
-                Width = UsFlagCantonWidth,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Fill = new SolidColorBrush(_usBlueColor)
-            };
-            Grid.SetRowSpan(canton, UsFlagCantonRowSpan);
-            grid.Children.Add(canton);
-
-            return grid;
+            CurrentLangText.Text = LanguageCatalog.GetShortName(App.CurrentCultureCode);
+            CurrentFlagImage.Source = FlagImages.Get(LanguageCatalog.GetFlagCode(App.CurrentCultureCode));
         }
     }
 }

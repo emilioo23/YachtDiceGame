@@ -40,6 +40,15 @@ namespace YachtDice.Utils
                 case FriendRequestResultCode.AlreadyRequested:
                     message = Strings.Friends_Result_AlreadyRequested;
                     break;
+                case FriendRequestResultCode.FriendLimitReached:
+                    message = Strings.Friends_Result_FriendLimitReached;
+                    break;
+                case FriendRequestResultCode.TooManyPendingRequests:
+                    message = Strings.Friends_Result_TooManyPendingRequests;
+                    break;
+                case FriendRequestResultCode.Blocked:
+                    message = Strings.Friends_Result_Blocked;
+                    break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;
                     break;

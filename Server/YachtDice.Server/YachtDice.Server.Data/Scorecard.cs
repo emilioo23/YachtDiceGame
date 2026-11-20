@@ -21,7 +21,7 @@ namespace YachtDice.Server.Data
         }
     
         public int Id { get; set; }
-        public int PlayerId { get; set; }
+        public Nullable<int> PlayerId { get; set; }
         public int GameId { get; set; }
         public Nullable<bool> UpperBonus { get; set; }
         public Nullable<int> YachtBonusCt { get; set; }

@@ -9,7 +9,8 @@
         Title="{x:Static properties:Strings.Auth_Logo}" Height="800" Width="700"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BrushFeltBackground}"
-        FontFamily="{StaticResource FontBody}">
+        FontFamily="{StaticResource FontBody}"
+        FocusManager.FocusedElement="{Binding ElementName=LoginIdentifierTextBox}">
 
     <Viewbox Stretch="Uniform" Margin="0,20,0,20">
         <Grid Width="650">
@@ -55,22 +56,21 @@
                         </Grid>
 
                         <StackPanel x:Name="LoginPanel">
-                            <TextBlock Text="{x:Static properties:Strings.Auth_Email}"
+                            <TextBlock Text="{x:Static properties:Strings.Auth_LoginIdentifier}"
                                        Style="{StaticResource FieldLabel}"
                                        FontSize="15"/>
-                            <TextBox x:Name="EmailTextBox"
+                            <TextBox x:Name="LoginIdentifierTextBox"
                                      Style="{StaticResource TextBoxRounded}"
                                      Margin="0,0,0,12"
                                      FontSize="16" Padding="10,8"
-                                     Tag="{x:Static properties:Strings.Auth_EmailPlaceholder}"/>
+                                     Tag="{x:Static properties:Strings.Auth_LoginIdentifierPlaceholder}"/>
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
                                        Style="{StaticResource FieldLabel}"
                                        FontSize="15"/>
 
-                            <PasswordBox x:Name="LoginPasswordBox"
-                                         Style="{StaticResource PasswordBoxRounded}"
-                                         Margin="0,0,0,8" Padding="10,8"/>
+                            <views:PasswordRevealBox x:Name="LoginPasswordBox"
+                                                     Margin="0,0,0,8"/>
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_ForgotPassword}"
                                        Style="{StaticResource LinkText}"
@@ -122,17 +122,27 @@
 
                             <TextBlock Text="{x:Static properties:Strings.Auth_Password}"
                                        Style="{StaticResource FieldLabel}" FontSize="15"/>
-                            <PasswordBox x:Name="RegisterPasswordBox"
-                                         Style="{StaticResource PasswordBoxRounded}"
-                                         Margin="0,0,0,15" FontSize="16" Padding="10,8"/>
+                            <views:PasswordRevealBox x:Name="RegisterPasswordBox"
+                                                     Margin="0,0,0,15"/>
                         </StackPanel>
 
                         <Button x:Name="AuthSubmitButton"
+                                IsDefault="True"
                                 Content="{x:Static properties:Strings.Auth_ButtonLogin}"
                                 Style="{StaticResource BtnPrimary}"
                                 HorizontalAlignment="Stretch"
                                 FontSize="16" Padding="0,11"
                                 Click="AuthSubmitButton_Click"/>
+
+                        <StackPanel x:Name="PasskeyPanel"
+                                    Margin="0,10,0,0">
+                            <Button x:Name="PasskeyButton"
+                                    Content="{x:Static properties:Strings.Auth_ButtonPasskey}"
+                                    Style="{StaticResource BtnOutline}"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="0,10" FontSize="15"
+                                    Click="PasskeyButton_Click"/>
+                        </StackPanel>
 
                         <Grid Margin="0,14,0,14">
                             <Grid.ColumnDefinitions>

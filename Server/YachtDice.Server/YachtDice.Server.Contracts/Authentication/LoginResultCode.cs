@@ -20,6 +20,9 @@ namespace YachtDice.Server.Contracts.Authentication
         [EnumMember]
         InvalidCredentials,
 
+        [EnumMember]
+        InvalidEmail,
+
         /// <summary>The two-step verification is locked because of too many failed attempts.</summary>
         [EnumMember]
         VerificationLocked,
@@ -30,6 +33,22 @@ namespace YachtDice.Server.Contracts.Authentication
 
         /// <summary>The credentials are correct and the player has no two-step verification.</summary>
         [EnumMember]
-        LoggedIn
+        LoggedIn,
+
+        /// <summary>Three wrong passwords in a row locked the account for five minutes.</summary>
+        [EnumMember]
+        TemporarilyLocked,
+
+        /// <summary>Ten wrong passwords in the same day locked the account for twenty-four hours.</summary>
+        [EnumMember]
+        LockedForTheDay,
+
+        /// <summary>Several different players reported the player, so the account is suspended for a day.</summary>
+        [EnumMember]
+        SuspendedByReports,
+
+        /// <summary>The passkey is not valid, or the challenge expired.</summary>
+        [EnumMember]
+        InvalidPasskey
     }
 }

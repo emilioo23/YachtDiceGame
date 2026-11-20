@@ -15,7 +15,7 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
-        private readonly AppLogger _logger;
+        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         /// <summary>
         /// Initializes the gateway for the player.
@@ -23,8 +23,7 @@ namespace YachtDice.Gateway
         /// <param name="session">Session of the player who uses the room.</param>
         public RoomGateway(PlayerSession session)
         {
-            Session = session;
-            _logger = new AppLogger(GetType());
+            Session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the name of the player who uses the room.
         /// </summary>
-        public string PlayerName => Session.DisplayName;
+        public string PlayerId { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets the last state of the room that the server sent. It has no code if the player is not in a room.
@@ -52,13 +51,13 @@ namespace YachtDice.Gateway
         /// </summary>
         /// <returns>The state of the new room, with the code that the other players type to enter.</returns>
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
-        public async Task<RoomState> CreateRoomAsync()
+        public async Task CreateRoomAsync()
         {
-            RoomState room = await ConnectAndExecuteAsync(client => client.CreateRoom(PlayerName));
+            CreateRoomResult result = await ConnectAndExecuteAsync(
+                client => client.CreateRoom(Session.DisplayName));
 
-            CurrentRoom = room;
-
-            return room;
+            PlayerId = result.PlayerId;
+            CurrentRoom = result.Room;
         }
 
         /// <summary>
@@ -70,18 +69,25 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> JoinRoomAsync(string roomCode)
         {
-            JoinRoomResult result = await ConnectAndExecuteAsync(client => client.JoinRoom(PlayerName, roomCode));
+            JoinRoomResult result = await ConnectAndExecuteAsync(
+                client => client.JoinRoom(Session.DisplayName, roomCode));
 
-            if (result.Code == RoomResultCode.Success)
-            {
-                CurrentRoom = result.Room;
-            }
-            else
-            {
-                await CloseAsync();
-            }
+            return await ApplyJoinResultAsync(result);
+        }
 
-            return result.Code;
+        /// <summary>
+        /// Puts the player inside a room of the list of rooms. A private room also needs its code. If the
+        /// player cannot enter, the connection is closed.
+        /// </summary>
+        /// <param name="roomAccess">Room of the list that the player wants to enter and its code.</param>
+        /// <returns>Whether the player entered or why not.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> JoinListedRoomAsync(RoomAccess roomAccess)
+        {
+            JoinRoomResult result = await ConnectAndExecuteAsync(
+                client => client.JoinListedRoom(Session.DisplayName, roomAccess));
+
+            return await ApplyJoinResultAsync(result);
         }
 
         /// <summary>
@@ -92,9 +98,8 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> UpdateSettingsAsync(RoomSettings settings)
         {
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(
-                client => client.UpdateRoomSettings(PlayerName, roomCode, settings));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.UpdateRoomSettings(host, settings));
 
             return result;
         }
@@ -107,30 +112,95 @@ namespace YachtDice.Gateway
         /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
         public async Task<RoomResultCode> StartGameAsync()
         {
-            string roomCode = CurrentRoom.Code;
-            RoomResultCode result = await ExecuteAsync(client => client.StartGame(PlayerName, roomCode));
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.StartGame(host));
 
             return result;
         }
 
         /// <summary>
-        /// Takes the player out of the room and closes the connection.
+        /// Tells the server whether the player is ready to start. The server tells every player of the room.
+        /// </summary>
+        /// <param name="isReady">True if the player is ready.</param>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> SetReadyAsync(bool isReady)
+        {
+            RoomMember player = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.SetReady(player, isReady));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server to expel another player from the room. Only the host can do it, and only before the
+        /// game starts. When it is done, the server tells every player of the room.
+        /// </summary>
+        /// <param name="targetPlayerId">Identifier of the player to expel.</param>
+        /// <returns>Outcome of the expulsion.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> KickPlayerAsync(string targetPlayerId)
+        {
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.KickPlayer(host, targetPlayerId));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server to make another player the host of the room. Only the current host can do it. When
+        /// it is done, the server tells every player of the room.
+        /// </summary>
+        /// <param name="newHostId">Identifier of the player who becomes the host.</param>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> TransferHostAsync(string newHostId)
+        {
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.TransferHost(host, newHostId));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asks the server to add a computer player to the room. Only the host can do it, before the game
+        /// starts. When it is done, the server tells every player of the room.
+        /// </summary>
+        /// <param name="difficulty">How well the computer player plays.</param>
+        /// <returns>Outcome of the change.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> AddComputerAsync(ComputerDifficulty difficulty)
+        {
+            RoomMember host = CreateMember();
+            RoomResultCode result = await ExecuteAsync(client => client.AddComputer(host, difficulty));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Takes the player out of the room and closes the connection. If the connection was already lost, the
+        /// server took the player out when it noticed, so there is nothing to do.
         /// </summary>
         /// <returns>A task that finishes when the player left.</returns>
+        /// <exception cref="GatewayException">
+        /// The server could not be told. The connection is closed anyway, so the server takes the player out
+        /// when it notices.
+        /// </exception>
         public async Task LeaveRoomAsync()
         {
-            string roomCode = CurrentRoom.Code;
-
-            try
+            if (IsConnected)
             {
-                await ExecuteAsync(client => client.LeaveRoom(PlayerName, roomCode));
-            }
-            catch (GatewayException ex)
-            {
-                _logger.Warning(ex.Message);
-            }
+                RoomMember member = CreateMember();
 
-            await CloseAsync();
+                try
+                {
+                    await ExecuteAsync(client => client.LeaveRoom(member));
+                }
+                finally
+                {
+                    await CloseAsync();
+                }
+            }
         }
 
         /// <inheritdoc />
@@ -158,18 +228,49 @@ namespace YachtDice.Gateway
             var room = new RoomState
             {
                 Code = string.Empty,
-                HostName = string.Empty,
-                Players = new string[] { },
+                HostId = string.Empty,
+                Players = new RoomPlayer[] { },
+                AbsentPlayers = new RoomPlayer[] { },
                 Settings = new RoomSettings()
             };
 
             return room;
         }
 
+        private async Task<RoomResultCode> ApplyJoinResultAsync(JoinRoomResult result)
+        {
+            if (result.Code == RoomResultCode.Success)
+            {
+                PlayerId = result.PlayerId;
+                CurrentRoom = result.Room;
+            }
+            else
+            {
+                await CloseAsync();
+            }
+
+            return result.Code;
+        }
+
         private void HandleRoomChanged(RoomState room, RoomEventType eventType)
         {
             CurrentRoom = room;
             RoomChanged?.Invoke(room, eventType);
+        }
+
+        /// <summary>
+        /// Creates the identity of the player inside the current room, as the server expects it.
+        /// </summary>
+        /// <returns>The code of the room and the identifier of the player.</returns>
+        private RoomMember CreateMember()
+        {
+            var member = new RoomMember
+            {
+                PlayerId = PlayerId,
+                RoomCode = CurrentRoom.Code
+            };
+
+            return member;
         }
     }
 }

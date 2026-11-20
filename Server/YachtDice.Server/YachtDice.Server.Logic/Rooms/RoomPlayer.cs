@@ -1,0 +1,68 @@
+﻿using System;
+
+namespace YachtDice.Server.Logic.Rooms
+{
+    /// <summary>
+    /// A player inside a room. The server decides the identifier when the player enters and uses it to
+    /// recognize the player in every later operation. The display name is only a label for the screens: two
+    /// players can choose the same name, but never share an identifier.
+    /// </summary>
+    public class RoomPlayer
+    {
+        private const string NullIdMessage = "The identifier of the player cannot be null.";
+        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoomPlayer"/> class.
+        /// </summary>
+        /// <param name="id">Identifier that the server gave to the player.</param>
+        /// <param name="displayName">Name that the screens show for the player.</param>
+        /// <param name="avatarId">Identifier of the avatar that the player uses.</param>
+        public RoomPlayer(string id, string displayName, int avatarId)
+        {
+            Id = id ?? throw new ArgumentNullException(nameof(id), NullIdMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
+            AvatarId = avatarId;
+        }
+
+        /// <summary>
+        /// Gets the identifier that the server gave to the player. It is unique and it does not change.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// Gets the name that the screens show for the player. It is unique only inside its room.
+        /// </summary>
+        public string DisplayName { get; }
+
+        /// <summary>
+        /// Gets the identifier of the avatar that the player had when entering the room.
+        /// </summary>
+        public int AvatarId { get; }
+
+        /// <summary>
+        /// Gets or sets the level that the player had when entering the room; zero for a guest.
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player confirmed that they are ready to start.
+        /// </summary>
+        public bool IsReady { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of this player.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets how well the server plays the turns of this player when it is a computer player.
+        /// </summary>
+        public ComputerDifficulty Difficulty { get; set; } = ComputerDifficulty.Normal;
+
+        /// <summary>
+        /// Gets or sets the moment in which the player entered the room.
+        /// </summary>
+        public DateTime JoinedAt { get; set; }
+    }
+}

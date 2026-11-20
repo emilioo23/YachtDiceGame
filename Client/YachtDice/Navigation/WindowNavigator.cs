@@ -15,7 +15,18 @@ namespace YachtDice.Navigation
         public static void SwitchTo(Window currentWindow, Window nextWindow)
         {
             nextWindow.Show();
-            currentWindow.Close();
+            Close(currentWindow);
+        }
+
+        /// <summary>
+        /// Closes a window because the program decided it, so a window that asks the player before closing
+        /// does not ask.
+        /// </summary>
+        /// <param name="window">Window to close.</param>
+        public static void Close(Window window)
+        {
+            (window as IClosePromptingWindow)?.AllowClose();
+            window.Close();
         }
     }
 }

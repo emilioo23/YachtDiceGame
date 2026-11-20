@@ -16,26 +16,44 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IGameService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="JoinGame">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/JoinGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="RollDice">
       <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/RollDice" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="SelectScoreCategory">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/SelectScoreCategory" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="DiceRolled">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/DiceRolled" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="TurnChanged">
-      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/TurnChanged" style="document" />
+    <wsdl:operation name="SelectCategory">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/SelectCategory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap12:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GameChanged">
+      <soap12:operation soapAction="urn:yachtdice:contracts/IGameService/GameChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

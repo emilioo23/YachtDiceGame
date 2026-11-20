@@ -1,0 +1,46 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace YachtDice.Client.Logic.Game
+{
+    /// <summary>
+    /// Sorts the players of a finished game by their points and gives each one a place. Players with the same
+    /// points share the place, and the next place is skipped (1, 1, 3).
+    /// </summary>
+    public static class StandingsBuilder
+    {
+        /// <summary>
+        /// Place of the winner.
+        /// </summary>
+        public const int FirstRank = 1;
+
+        /// <summary>
+        /// Creates the final scoreboard.
+        /// </summary>
+        /// <param name="entries">Players of the game, in any order.</param>
+        /// <returns>The players from the first place to the last. Players that tie keep their order.</returns>
+        public static IReadOnlyList<FinalPlace> Build(IEnumerable<FinalPlace> entries)
+        {
+            List<FinalPlace> sorted = entries.OrderByDescending(finalPlace => finalPlace.Total).ToList();
+
+            for (var position = 0; position < sorted.Count; position++)
+            {
+                sorted[position].Rank = FindRank(sorted, position);
+            }
+
+            return sorted;
+        }
+
+        private static int FindRank(IReadOnlyList<FinalPlace> sorted, int position)
+        {
+            var firstWithSameTotal = 0;
+
+            while (sorted[firstWithSameTotal].Total != sorted[position].Total)
+            {
+                firstWithSameTotal++;
+            }
+
+            return firstWithSameTotal + FirstRank;
+        }
+    }
+}

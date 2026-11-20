@@ -26,19 +26,17 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// Checks the code entered by the player and, if it is correct, turns the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="code">Verification code entered by the player.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="verificationCode">Code entered by the player and the activation challenge it answers.</param>
         /// <returns>Result of the validation.</returns>
-        TwoFactorValidationStatus ConfirmActivation(string displayName, string code, string challengeId);
+        TwoFactorValidationStatus ConfirmActivation(string displayName, VerificationCode verificationCode);
 
         /// <summary>
         /// Sends a new code while the player is turning the verification on.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
-        /// <param name="cultureName">Name of the language in which the email is written.</param>
-        /// <param name="challengeId">Identifier of the activation challenge.</param>
+        /// <param name="delivery">Activation challenge and language in which the email is written.</param>
         /// <returns>Outcome of the resend attempt.</returns>
-        ResendCodeStatus ResendActivationCode(string displayName, string cultureName, string challengeId);
+        ResendCodeStatus ResendActivationCode(string displayName, CodeDelivery delivery);
 
         /// <summary>
         /// Turns the verification off after checking the player's password.
@@ -47,5 +45,20 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// <param name="password">Current password of the player.</param>
         /// <returns>Outcome of the request.</returns>
         TwoFactorChangeStatus Disable(string displayName, string password);
+
+        /// <summary>
+        /// Creates new backup codes after checking the player's password. The codes created before stop working.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <param name="password">Current password of the player.</param>
+        /// <returns>Outcome of the request and the new codes.</returns>
+        BackupCodeCreation CreateBackupCodes(string displayName, string password);
+
+        /// <summary>
+        /// Counts the backup codes that the player has not used.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The number of backup codes left; zero if the player does not exist.</returns>
+        int CountBackupCodes(string displayName);
     }
 }

@@ -1,0 +1,90 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace YachtDice.Server.Logic.Game
+{
+    /// <summary>
+    /// A copy of the state of a player in a game, safe to read outside the lock of the game.
+    /// </summary>
+    public sealed class PlayerSnapshot
+    {
+        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
+        private const string NullNameMessage = "The name of the player cannot be null.";
+
+        /// <summary>
+        /// Initializes a new snapshot.
+        /// </summary>
+        /// <param name="playerId">Identifier of the player.</param>
+        /// <param name="name">Name that the screens show for the player.</param>
+        /// <param name="isPresent">True if the player is connected to the game.</param>
+        public PlayerSnapshot(string playerId, string name, bool isPresent)
+        {
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
+            IsPresent = isPresent;
+            Scores = new List<ScoreEntry>();
+        }
+
+        /// <summary>
+        /// Gets the identifier of the player.
+        /// </summary>
+        public string PlayerId { get; }
+
+        /// <summary>
+        /// Gets the name that the screens show for the player.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the player is connected to the game.
+        /// </summary>
+        public bool IsPresent { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the server plays the turns of the player.
+        /// </summary>
+        public bool IsComputer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the points of the upper section.
+        /// </summary>
+        public int UpperSubtotal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bonus of the upper section.
+        /// </summary>
+        public int UpperBonus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bonus of the extra Yachts.
+        /// </summary>
+        public int YachtBonus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total of the scorecard.
+        /// </summary>
+        public int Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player won the game. It is only set when the game is
+        /// over, and several players can win when they tie.
+        /// </summary>
+        public bool IsWinner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the experience that the player earned in the game. It is only set when the game is
+        /// over, and it stays at zero for the players who left before the end.
+        /// </summary>
+        public int ExperienceGained { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is out of the game for not coming back in time.
+        /// </summary>
+        public bool HasForfeited { get; set; }
+
+        /// <summary>
+        /// Gets the boxes of the scorecard, in the order of the scorecard.
+        /// </summary>
+        public IList<ScoreEntry> Scores { get; }
+    }
+}

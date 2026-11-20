@@ -26,13 +26,15 @@
       <xs:enumeration value="UnexpectedError" />
       <xs:enumeration value="DatabaseUnavailable" />
       <xs:enumeration value="ValidationFailed" />
+      <xs:enumeration value="SessionExpired" />
+      <xs:enumeration value="SessionReplaced" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ServiceErrorCode" nillable="true" type="tns:ServiceErrorCode" />
   <xs:element name="StartTwoFactorActivation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="culture" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -65,12 +67,18 @@
   <xs:element name="ConfirmTwoFactorActivation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="challengeId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="verificationCode" nillable="true" type="tns:VerificationCode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="VerificationCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerificationCode" nillable="true" type="tns:VerificationCode" />
   <xs:element name="ConfirmTwoFactorActivationResponse">
     <xs:complexType>
       <xs:sequence>
@@ -90,12 +98,18 @@
   <xs:element name="ResendActivationCode">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="challengeId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="culture" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="delivery" nillable="true" type="tns:CodeDelivery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="CodeDelivery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChallengeId" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Culture" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CodeDelivery" nillable="true" type="tns:CodeDelivery" />
   <xs:element name="ResendActivationCodeResponse">
     <xs:complexType>
       <xs:sequence>
@@ -116,7 +130,7 @@
   <xs:element name="DisableTwoFactor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

@@ -95,7 +95,44 @@
                                FontSize="14"/>
                 </StackPanel>
 
+                <TextBlock x:Name="UseBackupCodeLink"
+                           Text="{x:Static properties:Strings.TwoFactor_UseBackupCode}"
+                           Style="{StaticResource LinkText}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Visibility="Collapsed"
+                           MouseLeftButtonUp="UseBackupCodeLink_Click"
+                           FontSize="14"
+                           Margin="0,0,0,14"/>
+
+                <Grid x:Name="BackupCodePanel"
+                      Visibility="Collapsed"
+                      Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="BackupCodeTextBox"
+                             Grid.Column="0"
+                             Style="{StaticResource TextBoxRounded}"
+                             FontSize="18"
+                             Padding="12,9"
+                             Margin="0,0,10,0"
+                             PreviewTextInput="DigitTextBox_PreviewTextInput"/>
+
+                    <Button x:Name="UseBackupCodeButton"
+                            Grid.Column="1"
+                            Content="{x:Static properties:Strings.TwoFactor_ButtonUseBackupCode}"
+                            Style="{StaticResource BtnOutline}"
+                            FontSize="16"
+                            Padding="18,10"
+                            Click="UseBackupCodeButton_Click"/>
+                </Grid>
+
                 <Button
+                        IsDefault="True"
                         Content="{x:Static properties:Strings.TwoFactor_ButtonVerify}"
                         Style="{StaticResource BtnPrimary}"
                         HorizontalAlignment="Stretch"

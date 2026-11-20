@@ -15,6 +15,16 @@
         DatabaseUnavailable,
 
         /// <summary>The server rejected the request because of invalid data.</summary>
-        ValidationFailed
+        ValidationFailed,
+
+        /// <summary>
+        /// The session of the player ended, so the player must log in again.
+        /// </summary>
+        SessionExpired,
+
+        /// <summary>
+        /// The session of the player ended because the same player logged in again somewhere else.
+        /// </summary>
+        SessionReplaced
     }
 }

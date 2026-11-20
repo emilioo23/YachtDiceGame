@@ -71,14 +71,24 @@
                              VerticalContentAlignment="Center"
                              KeyDown="MessageTextBox_KeyDown"/>
 
-                    <Button x:Name="SendButton"
-                            Grid.Column="1"
-                            Content="{x:Static properties:Strings.Game_Chat_ButtonSend}"
-                            Style="{StaticResource BtnPrimary}"
-                            Margin="6,0,0,0"
-                            Padding="14,4"
-                            FontSize="15"
-                            Click="SendButton_Click"/>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal">
+                        <Button x:Name="QuickMessagesButton"
+                                Content="{x:Static properties:Strings.Game_Chat_ButtonQuick}"
+                                ToolTip="{x:Static properties:Strings.Game_Chat_QuickTooltip}"
+                                Style="{StaticResource BtnOutline}"
+                                Margin="6,0,0,0"
+                                Padding="10,4"
+                                FontSize="13"
+                                Click="QuickMessagesButton_Click"/>
+                        <Button x:Name="SendButton"
+                                Content="{x:Static properties:Strings.Game_Chat_ButtonSend}"
+                                Style="{StaticResource BtnPrimary}"
+                                Margin="6,0,0,0"
+                                Padding="14,4"
+                                FontSize="15"
+                                Click="SendButton_Click"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>
@@ -116,7 +126,7 @@
                         VerticalAlignment="Center">
 
                     <TextBlock x:Name="UnreadCountTextBlock"
-                               Foreground="White"
+                               Foreground="{DynamicResource BrushWhite}"
                                FontSize="12"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"/>
