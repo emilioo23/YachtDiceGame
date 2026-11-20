@@ -13,6 +13,7 @@ namespace YachtDice.Server.Data.Repositories
         public GameResultRecord()
         {
             Players = new List<PlayerResultRecord>();
+            ComputerPlayers = new List<PlayerResultRecord>();
         }
 
         /// <summary>
@@ -39,5 +40,11 @@ namespace YachtDice.Server.Data.Repositories
         /// Gets the result of each registered player of the game.
         /// </summary>
         public IList<PlayerResultRecord> Players { get; }
+
+        /// <summary>
+        /// Gets the scorecard of each computer player of the game. Only the scorecard is saved, because a
+        /// computer player has no account.
+        /// </summary>
+        public IList<PlayerResultRecord> ComputerPlayers { get; }
     }
 }

@@ -2562,4 +2562,7 @@
   <data name="Settings_Security_RemovePasskeyPasswordRequired" xml:space="preserve">
     <value>Choose the passkey and type your current password to remove it.</value>
   </data>
+  <data name="Global_TextLimitFormat" xml:space="preserve">
+    <value>Maximum {0} characters.</value>
+  </data>
 </root>

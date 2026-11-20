@@ -18,7 +18,11 @@ namespace YachtDice.Utils
         /// <returns>The title of the scorecard.</returns>
         public static string CreateTitle(SavedScorecard scorecard)
         {
-            return string.Format(Strings.Scorecard_TitleFormat, scorecard.PlayerName, scorecard.Total);
+            string playerName = string.IsNullOrEmpty(scorecard.PlayerName)
+                ? Strings.History_ComputerOpponent
+                : scorecard.PlayerName;
+
+            return string.Format(Strings.Scorecard_TitleFormat, playerName, scorecard.Total);
         }
 
         /// <summary>

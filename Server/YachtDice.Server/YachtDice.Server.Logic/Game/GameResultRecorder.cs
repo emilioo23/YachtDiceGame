@@ -67,6 +67,13 @@ namespace YachtDice.Server.Logic.Game
                 AddIfRegistered(result, savedPlayerIds, player);
             }
 
+            Func<PlayerSnapshot, bool> isComputer = candidate => candidate.IsComputer;
+
+            foreach (PlayerSnapshot computer in snapshot.Players.Where(isComputer))
+            {
+                result.ComputerPlayers.Add(CreateComputerResult(computer));
+            }
+
             if (result.Players.Count > 0)
             {
                 result.HostPlayerId = result.Players.First().PlayerId;
@@ -82,6 +89,19 @@ namespace YachtDice.Server.Logic.Game
             {
                 result.Players.Add(CreatePlayerResult(account, player));
             }
+        }
+
+        private static PlayerResultRecord CreateComputerResult(PlayerSnapshot computer)
+        {
+            return new PlayerResultRecord
+            {
+                FinalScore = computer.Total,
+                IsWinner = computer.IsWinner,
+                Status = PlayerResultStatus.Completed,
+                HasUpperBonus = computer.UpperBonus > NoBonusPoints,
+                YachtBonusCount = computer.YachtBonus / ScoreCard.YachtBonusPoints,
+                Scores = computer.Scores.Select(ToScoreRecord).ToList()
+            };
         }
 
         private static ScoreRecord ToScoreRecord(ScoreEntry entry)

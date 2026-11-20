@@ -200,11 +200,12 @@ namespace YachtDice.Server.Data.Repositories
         private static void AddScorecard(
             YachtDiceContext context,
             GameHistory game,
-            PlayerResultRecord player)
+            PlayerResultRecord player,
+            int? playerId)
         {
             var scorecard = new Scorecard
             {
-                PlayerId = player.PlayerId,
+                PlayerId = playerId,
                 GameHistory = game,
                 UpperBonus = player.HasUpperBonus,
                 YachtBonusCt = player.YachtBonusCount
@@ -271,7 +272,12 @@ namespace YachtDice.Server.Data.Repositories
                     Status = player.Status.ToString()
                 });
                 UpdateProgress(context, player);
-                AddScorecard(context, game, player);
+                AddScorecard(context, game, player, player.PlayerId);
+            }
+
+            foreach (PlayerResultRecord computer in result.ComputerPlayers)
+            {
+                AddScorecard(context, game, computer, null);
             }
 
             context.GameHistory.Add(game);

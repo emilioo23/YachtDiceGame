@@ -85,8 +85,11 @@ namespace YachtDice.Server.Logic.Friends
             if (playerId != FriendshipService.NoPlayerId)
             {
                 DateTime since = DateTime.UtcNow.AddHours(-InvitationLifetimeHours);
+                Func<ReceivedInvitation, bool> isRoomOpen = invitation => invitation.IsRoomOpen;
+
                 invitations = _inviteRepository.FindReceived(playerId, since, MaxReceivedInvitations)
                     .Select(ToReceivedInvitation)
+                    .Where(isRoomOpen)
                     .ToList();
             }
 

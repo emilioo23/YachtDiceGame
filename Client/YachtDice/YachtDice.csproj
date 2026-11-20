@@ -276,6 +276,7 @@
     <Compile Include="Utils\KickHistoryTexts.cs" />
     <Compile Include="Utils\ReceivedInvitationTexts.cs" />
     <Compile Include="Utils\SavedScorecardTexts.cs" />
+    <Compile Include="Utils\TextLimitNotice.cs" />
     <Compile Include="Utils\DisplayFormats.cs" />
     <Compile Include="Utils\SecuritySummaryTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />

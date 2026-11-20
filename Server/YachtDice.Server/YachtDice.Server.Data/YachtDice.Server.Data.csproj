@@ -188,6 +188,7 @@
     <None Include="Scripts\AddPasskeyCredentialData.sql" />
     <None Include="Scripts\AllowBlockedFriendships.sql" />
     <None Include="Scripts\AllowComputerRoomType.sql" />
+    <None Include="Scripts\AllowComputerScorecards.sql" />
     <None Include="Scripts\AllowInvitesToRoomsInMemory.sql" />
     <None Include="Scripts\AllowKicksFromRoomsInMemory.sql" />
     <None Include="Scripts\RemoveStoredLevelAndAddRolledDie.sql" />

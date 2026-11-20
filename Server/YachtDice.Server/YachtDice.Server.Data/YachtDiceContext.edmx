@@ -189,7 +189,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="PlayerId" Type="int" />
           <Property Name="GameId" Type="int" Nullable="false" />
           <Property Name="UpperBonus" Type="bit" />
           <Property Name="YachtBonusCt" Type="int" />
@@ -534,7 +534,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Scorecard__Playe__2B0A656D">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">
@@ -993,7 +993,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="PlayerId" Type="Int32" />
           <Property Name="GameId" Type="Int32" Nullable="false" />
           <Property Name="UpperBonus" Type="Boolean" />
           <Property Name="YachtBonusCt" Type="Int32" />
@@ -1324,7 +1324,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__SCORECARD__Playe__5E8A0973">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
           <End Role="Scorecard" Type="Self.Scorecard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">

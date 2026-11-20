@@ -11,11 +11,15 @@ namespace YachtDice.Server.Logic.Game
     public sealed class ScoreCard
     {
         private const int UpperBonusThreshold = 63;
-        private const int UpperBonusPoints = 35;
         /// <summary>
         /// Points of each extra Yacht scored after the first one.
         /// </summary>
         public const int YachtBonusPoints = 100;
+
+        /// <summary>
+        /// Points of the bonus of the upper section.
+        /// </summary>
+        public const int UpperBonusPoints = 35;
 
         private const int NoPoints = 0;
         private const string NullScoresMessage = "The saved boxes cannot be null.";

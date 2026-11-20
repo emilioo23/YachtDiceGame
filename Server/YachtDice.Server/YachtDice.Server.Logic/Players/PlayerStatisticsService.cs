@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Game;
 
 namespace YachtDice.Server.Logic.Players
 {
@@ -12,6 +13,7 @@ namespace YachtDice.Server.Logic.Players
     public class PlayerStatisticsService
     {
         private const int EmptyCount = 0;
+        private const int NoBonusPoints = 0;
         private const int PercentageFactor = 100;
         private const int FirstPosition = 1;
         private const int MaxLeaderboardEntries = 100;
@@ -138,6 +140,14 @@ namespace YachtDice.Server.Logic.Players
             return scorecards;
         }
 
+        private static int CalculateComputerTotal(ScorecardRecord record)
+        {
+            int upperBonus = record.HasUpperBonus ? ScoreCard.UpperBonusPoints : NoBonusPoints;
+            int boxes = record.Scores.Sum(score => score.Points);
+
+            return boxes + upperBonus + (record.YachtBonusCount * ScoreCard.YachtBonusPoints);
+        }
+
         private static SavedScorecard ToSavedScorecard(ScorecardRecord record)
         {
             Func<ScoreRecord, SavedScore> toSavedScore = score => new SavedScore
@@ -149,8 +159,8 @@ namespace YachtDice.Server.Logic.Players
 
             return new SavedScorecard
             {
-                PlayerName = record.PlayerName,
-                Total = record.Total,
+                PlayerName = record.PlayerName ?? string.Empty,
+                Total = record.PlayerName == null ? CalculateComputerTotal(record) : record.Total,
                 HasUpperBonus = record.HasUpperBonus,
                 YachtBonusCount = record.YachtBonusCount,
                 Scores = record.Scores.Select(toSavedScore).ToList()

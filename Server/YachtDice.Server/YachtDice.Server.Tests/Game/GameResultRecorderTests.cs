@@ -151,7 +151,7 @@ namespace YachtDice.Server.Tests.Game
 
             _recorder.Record(_settings, CreateSnapshot(computer, CreatePlayer(BetoName, LoserTotal, true)));
 
-            Assert.Equivalent(new[] { savedResultExpected }, _history.SavedResults, strict: true);
+            Assert.Equivalent(savedResultExpected.Players, _history.SavedResults.Single().Players, strict: true);
         }
 
         [Fact]

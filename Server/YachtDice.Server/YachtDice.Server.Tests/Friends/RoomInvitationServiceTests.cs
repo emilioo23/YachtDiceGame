@@ -60,14 +60,13 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
-        public void GetReceivedInvitations_RoomThatNoLongerExists_SaysTheRoomIsClosed()
+        public void GetReceivedInvitations_RoomThatNoLongerExists_LeavesTheInvitationOut()
         {
             _service.SaveInvitation(HostName, FriendName, UnknownRoomCode);
-            var invitationsExpected = new[] { new { RoomCode = UnknownRoomCode, IsRoomOpen = false } };
 
             List<ReceivedInvitation> invitations = _service.GetReceivedInvitations(FriendName);
 
-            Assert.Equivalent(invitationsExpected, invitations);
+            Assert.Empty(invitations);
         }
 
         [Fact]

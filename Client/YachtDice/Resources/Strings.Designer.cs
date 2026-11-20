@@ -3931,6 +3931,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Máximo {0} caracteres.
+        /// </summary>
+        public static string Global_TextLimitFormat {
+            get {
+                return ResourceManager.GetString("Global_TextLimitFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Invitado.
         /// </summary>
         public static string History_GuestOpponent {

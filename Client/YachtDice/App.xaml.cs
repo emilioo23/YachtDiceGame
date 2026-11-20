@@ -60,6 +60,7 @@ namespace YachtDice
 
             _logger.Info(StartedLogMessage);
             DispatcherUnhandledException += HandleDispatcherUnhandledException;
+            TextLimitNotice.Register();
             TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
             _provider = new ServiceCollection()
                 .AddSingleton<AudioSettings>()

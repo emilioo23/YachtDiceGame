@@ -2562,4 +2562,7 @@
   <data name="Settings_Security_RemovePasskeyPasswordRequired" xml:space="preserve">
     <value>请选择通行密钥并输入当前密码以移除。</value>
   </data>
+  <data name="Global_TextLimitFormat" xml:space="preserve">
+    <value>最多 {0} 个字符。</value>
+  </data>
 </root>
