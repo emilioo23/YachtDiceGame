@@ -101,7 +101,6 @@
     <Compile Include="Repositories\AccountEraser.cs" />
     <Compile Include="Repositories\BackupCodeRepository.cs" />
     <Compile Include="Repositories\BackupCodeStatus.cs" />
-    <Compile Include="Repositories\DatabaseConnection.cs" />
     <Compile Include="Repositories\DatabaseOperation.cs" />
     <Compile Include="Repositories\FriendRepository.cs" />
     <Compile Include="Repositories\FriendshipStatus.cs" />
