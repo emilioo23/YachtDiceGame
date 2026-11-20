@@ -127,10 +127,10 @@ namespace YachtDice.Server.Logic.Friends
                 Func<Friendship, bool> isPendingFromRequester =
                     friendship => friendship.RequesterId == requester.Id
                     && friendship.Status == FriendshipStatus.Pending;
-                Friendship friendRequest = _friendRepository.FindBetween(requester.Id, addressee.Id)
+                Friendship pendingFriendship = _friendRepository.FindBetween(requester.Id, addressee.Id)
                     .FirstOrDefault(isPendingFromRequester);
 
-                status = AnswerRequest(friendRequest, answer.IsAccepted);
+                status = AnswerRequest(pendingFriendship, answer.IsAccepted);
             }
 
             return status;
@@ -400,9 +400,9 @@ namespace YachtDice.Server.Logic.Friends
             return status;
         }
 
-        private bool HasEitherMaxFriends(Friendship friendRequest)
+        private bool HasEitherMaxFriends(Friendship pendingFriendship)
         {
-            return HasMaxFriends(friendRequest.RequesterId) || HasMaxFriends(friendRequest.AddresseeId);
+            return HasMaxFriends(pendingFriendship.RequesterId) || HasMaxFriends(pendingFriendship.AddresseeId);
         }
 
         private bool HasMaxFriends(int playerId)
@@ -410,12 +410,12 @@ namespace YachtDice.Server.Logic.Friends
             return _friendRepository.CountFriends(playerId) >= MaxFriends;
         }
 
-        private FriendActionStatus AnswerRequest(Friendship friendRequest, bool isAccepted)
+        private FriendActionStatus AnswerRequest(Friendship pendingFriendship, bool isAccepted)
         {
             FriendActionStatus status = FriendActionStatus.RelationNotFound;
 
-            bool isAcceptedRequest = friendRequest != null && isAccepted;
-            bool isOverLimit = isAcceptedRequest && HasEitherMaxFriends(friendRequest);
+            bool isAcceptedRequest = pendingFriendship != null && isAccepted;
+            bool isOverLimit = isAcceptedRequest && HasEitherMaxFriends(pendingFriendship);
 
             if (isOverLimit)
             {
@@ -423,13 +423,13 @@ namespace YachtDice.Server.Logic.Friends
             }
             else if (isAcceptedRequest)
             {
-                friendRequest.Status = FriendshipStatus.Accepted;
-                _friendRepository.UpdateStatus(friendRequest);
+                pendingFriendship.Status = FriendshipStatus.Accepted;
+                _friendRepository.UpdateStatus(pendingFriendship);
                 status = FriendActionStatus.Success;
             }
-            else if (friendRequest != null)
+            else if (pendingFriendship != null)
             {
-                _friendRepository.Remove(friendRequest);
+                _friendRepository.Remove(pendingFriendship);
                 status = FriendActionStatus.Success;
             }
 

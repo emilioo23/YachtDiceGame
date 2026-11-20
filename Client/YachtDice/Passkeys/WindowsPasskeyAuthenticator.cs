@@ -82,10 +82,10 @@ namespace YachtDice.Passkeys
 
             using (var scope = new NativeScope())
             {
-                RelyingPartyInfo relyingParty = BuildRelyingParty(scope);
-                UserInfo user = BuildUser(scope, challenge);
+                RelyingParty relyingParty = BuildRelyingParty(scope);
+                NativeUser user = BuildUser(scope, challenge);
                 CoseParameters parameters = BuildParameters(scope);
-                ClientDataInfo clientData = BuildClientData(scope, clientDataJson);
+                NativeClientData clientData = BuildClientData(scope, clientDataJson);
                 MakeOptions options = BuildMakeOptions(scope, challenge);
 
                 result = WebAuthNAuthenticatorMakeCredential(
@@ -128,7 +128,7 @@ namespace YachtDice.Passkeys
 
             using (var scope = new NativeScope())
             {
-                ClientDataInfo clientData = BuildClientData(scope, clientDataJson);
+                NativeClientData clientData = BuildClientData(scope, clientDataJson);
                 GetOptions options = BuildGetOptions();
 
                 result = WebAuthNAuthenticatorGetAssertion(
@@ -148,9 +148,9 @@ namespace YachtDice.Passkeys
             return assertion;
         }
 
-        private static RelyingPartyInfo BuildRelyingParty(NativeScope scope)
+        private static RelyingParty BuildRelyingParty(NativeScope scope)
         {
-            return new RelyingPartyInfo
+            return new RelyingParty
             {
                 Version = StructureVersion,
                 Id = scope.Text(PasskeyRules.RelyingPartyId),
@@ -158,11 +158,11 @@ namespace YachtDice.Passkeys
             };
         }
 
-        private static UserInfo BuildUser(NativeScope scope, PasskeyChallengeData challenge)
+        private static NativeUser BuildUser(NativeScope scope, PasskeyChallengeData challenge)
         {
             byte[] handle = DecodeOrThrow(challenge.UserHandle);
 
-            return new UserInfo
+            return new NativeUser
             {
                 Version = StructureVersion,
                 IdSize = (uint)handle.Length,
@@ -184,9 +184,9 @@ namespace YachtDice.Passkeys
             return new CoseParameters { Count = (uint)items.Count, Items = scope.Array(items) };
         }
 
-        private static ClientDataInfo BuildClientData(NativeScope scope, byte[] clientDataJson)
+        private static NativeClientData BuildClientData(NativeScope scope, byte[] clientDataJson)
         {
-            return new ClientDataInfo
+            return new NativeClientData
             {
                 Version = StructureVersion,
                 JsonSize = (uint)clientDataJson.Length,
@@ -197,14 +197,14 @@ namespace YachtDice.Passkeys
 
         private static MakeOptions BuildMakeOptions(NativeScope scope, PasskeyChallengeData challenge)
         {
-            var excluded = new List<CredentialInfo>();
+            var excluded = new List<NativeCredential>();
             IntPtr type = scope.Text(PublicKeyType);
 
             foreach (string credentialId in challenge.ExcludedCredentialIds ?? new string[0])
             {
                 byte[] id = DecodeOrThrow(credentialId);
 
-                excluded.Add(new CredentialInfo
+                excluded.Add(new NativeCredential
                 {
                     Version = StructureVersion,
                     IdSize = (uint)id.Length,

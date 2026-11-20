@@ -61,10 +61,10 @@ namespace YachtDice.Passkeys
         [DllImport(Library)]
         public static extern int WebAuthNAuthenticatorMakeCredential(
             IntPtr windowHandle,
-            ref RelyingPartyInfo relyingParty,
-            ref UserInfo user,
+            ref RelyingParty relyingParty,
+            ref NativeUser user,
             ref CoseParameters parameters,
-            ref ClientDataInfo clientData,
+            ref NativeClientData clientData,
             ref MakeOptions options,
             out IntPtr attestation);
 
@@ -82,7 +82,7 @@ namespace YachtDice.Passkeys
         public static extern int WebAuthNAuthenticatorGetAssertion(
             IntPtr windowHandle,
             string relyingPartyId,
-            ref ClientDataInfo clientData,
+            ref NativeClientData clientData,
             ref GetOptions options,
             out IntPtr assertion);
 
@@ -102,7 +102,7 @@ namespace YachtDice.Passkeys
 
         /// <summary>WEBAUTHN_RP_ENTITY_INFORMATION.</summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct RelyingPartyInfo
+        public struct RelyingParty
         {
             public uint Version;
             public IntPtr Id;
@@ -112,7 +112,7 @@ namespace YachtDice.Passkeys
 
         /// <summary>WEBAUTHN_USER_ENTITY_INFORMATION.</summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct UserInfo
+        public struct NativeUser
         {
             public uint Version;
             public uint IdSize;
@@ -141,7 +141,7 @@ namespace YachtDice.Passkeys
 
         /// <summary>WEBAUTHN_CLIENT_DATA.</summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct ClientDataInfo
+        public struct NativeClientData
         {
             public uint Version;
             public uint JsonSize;
@@ -151,7 +151,7 @@ namespace YachtDice.Passkeys
 
         /// <summary>WEBAUTHN_CREDENTIAL.</summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct CredentialInfo
+        public struct NativeCredential
         {
             public uint Version;
             public uint IdSize;
@@ -253,7 +253,7 @@ namespace YachtDice.Passkeys
             public IntPtr AuthenticatorData;
             public uint SignatureSize;
             public IntPtr Signature;
-            public CredentialInfo Credential;
+            public NativeCredential Credential;
             public uint UserIdSize;
             public IntPtr UserId;
         }

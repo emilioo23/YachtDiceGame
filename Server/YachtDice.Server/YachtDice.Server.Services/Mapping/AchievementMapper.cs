@@ -19,9 +19,9 @@ namespace YachtDice.Server.Services.Mapping
         /// <returns>The achievements for the clients.</returns>
         public static List<Contracts.Achievement> ToContracts(List<Logic.Players.AchievementStatus> achievements)
         {
-            Func<Logic.Players.AchievementStatus, Contracts.Achievement> createInfo = ToContract;
+            Func<Logic.Players.AchievementStatus, Contracts.Achievement> convertAchievement = ToContract;
             List<Contracts.Achievement> contracts = achievements
-                .Select(createInfo)
+                .Select(convertAchievement)
                 .ToList();
 
             return contracts;
