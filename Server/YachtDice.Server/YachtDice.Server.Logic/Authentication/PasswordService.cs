@@ -13,7 +13,7 @@ namespace YachtDice.Server.Logic.Authentication
     /// <summary>
     /// Recovers and changes the passwords of the accounts.
     /// </summary>
-    public class PasswordService
+    public class PasswordService : IPasswordRecoveryService
     {
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
