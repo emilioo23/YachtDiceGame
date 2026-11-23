@@ -52,10 +52,10 @@ namespace YachtDice.Server.Logic.TwoFactor
         /// </summary>
         /// <param name="email">Player's email address.</param>
         /// <param name="challengeId">Unique session challenge identifier.</param>
-        /// <returns>Numeric code of <see cref="VerificationCodeRules.CodeLength"/> digits.</returns>
+        /// <returns>Numeric code of <see cref="SecureCodes.CodeLength"/> digits.</returns>
         public string GenerateCode(string email, string challengeId)
         {
-            string code = NumericCodeGenerator.Generate(VerificationCodeRules.CodeLength);
+            string code = SecureCodes.Generate(SecureCodes.CodeLength);
             DateTime now = DateTime.UtcNow;
             DateTime lockedUntil = DateTime.MinValue;
 
@@ -69,7 +69,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 Code = code,
                 ChallengeId = challengeId,
                 CreatedAt = now,
-                ExpiresAt = now.AddMinutes(VerificationCodeRules.ExpirationMinutes),
+                ExpiresAt = now.AddMinutes(SecureCodes.ExpirationMinutes),
                 FailedAttempts = NoFailedAttempts,
                 LockedUntil = lockedUntil
             };
@@ -152,7 +152,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             for (int codeIndex = 0; codeIndex < BackupCodeCount; codeIndex++)
             {
-                codes.Add(NumericCodeGenerator.Generate(BackupCodeLength));
+                codes.Add(SecureCodes.Generate(BackupCodeLength));
             }
 
             Func<string, string> hashCode = code => PasswordHasher.ComputeResetCodeHash(playerId, code);
@@ -210,7 +210,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
             if (_entries.TryGetValue(email, out TwoFactorCode issuedCode) && issuedCode.ChallengeId == challengeId)
             {
-                DateTime allowedAt = issuedCode.CreatedAt.AddSeconds(VerificationCodeRules.ResendCooldownSeconds);
+                DateTime allowedAt = issuedCode.CreatedAt.AddSeconds(SecureCodes.ResendCooldownSeconds);
 
                 isAllowed = DateTime.UtcNow >= allowedAt;
             }
@@ -279,7 +279,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorValidationStatus status = TwoFactorValidationStatus.Incorrect;
             issuedCode.FailedAttempts++;
 
-            if (issuedCode.FailedAttempts >= VerificationCodeRules.MaxFailedAttempts)
+            if (issuedCode.FailedAttempts >= SecureCodes.MaxFailedAttempts)
             {
                 issuedCode.FailedAttempts = NoFailedAttempts;
                 issuedCode.LockedUntil = now.AddMinutes(LockMinutes);

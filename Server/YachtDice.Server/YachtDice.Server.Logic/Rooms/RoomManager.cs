@@ -777,7 +777,7 @@ namespace YachtDice.Server.Logic.Rooms
 
             for (int characterIndex = 0; characterIndex < CodeLength; characterIndex++)
             {
-                int alphabetIndex = SecureRandom.Next(FirstAlphabetIndex, CodeAlphabet.Length);
+                int alphabetIndex = SecureCodes.Next(FirstAlphabetIndex, CodeAlphabet.Length);
 
                 characters[characterIndex] = CodeAlphabet[alphabetIndex];
             }

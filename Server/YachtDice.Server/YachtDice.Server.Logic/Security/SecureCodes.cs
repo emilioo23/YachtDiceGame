@@ -1,18 +1,68 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Cryptography;
 
 namespace YachtDice.Server.Logic.Security
 {
     /// <summary>
-    /// Chooses random integers with a cryptographically secure generator, so nobody can predict the dice of a
-    /// game or the code of a room. Every value of the range has the same probability, because the values that
-    /// would favor some numbers are discarded and drawn again.
+    /// Secure random numbers and the numeric codes of the verification.
     /// </summary>
-    public static class SecureRandom
+    public static class SecureCodes
     {
+        /// <summary>
+        /// Number of digits of a code.
+        /// </summary>
+        public const int CodeLength = 6;
+
+        /// <summary>
+        /// Minutes that a code can be used after it is sent.
+        /// </summary>
+        public const int ExpirationMinutes = 10;
+
+        /// <summary>
+        /// Wrong codes that can be entered before the code stops working.
+        /// </summary>
+        public const int MaxFailedAttempts = 3;
+
+        /// <summary>
+        /// Seconds that the player must wait before asking for a new code.
+        /// </summary>
+        public const int ResendCooldownSeconds = 30;
+
+        private const int MinimumLength = 1;
+        private const int DecimalBase = 10;
         private const int BufferStartIndex = 0;
+        private const char PaddingCharacter = '0';
+        private const string InvalidLengthMessage = "The code must have at least one digit.";
         private const ulong GeneratedValueCount = (ulong)uint.MaxValue + 1;
         private const string InvalidRangeMessage = "The maximum value must be greater than the minimum value.";
+
+        /// <summary>
+        /// Creates a random code made only of digits.
+        /// </summary>
+        /// <param name="length">Number of digits of the code.</param>
+        /// <returns>The code, padded with zeros on the left when needed.</returns>
+        public static string Generate(int length)
+        {
+            if (length < MinimumLength)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), InvalidLengthMessage);
+            }
+
+            var upperBound = (long)Math.Pow(DecimalBase, length);
+            var buffer = new byte[sizeof(uint)];
+
+            using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
+            {
+                generator.GetBytes(buffer);
+            }
+
+            uint randomValue = BitConverter.ToUInt32(buffer, BufferStartIndex);
+
+            return (randomValue % upperBound)
+                .ToString(CultureInfo.InvariantCulture)
+                .PadLeft(length, PaddingCharacter);
+        }
 
         /// <summary>
         /// Gets a random integer inside a range.

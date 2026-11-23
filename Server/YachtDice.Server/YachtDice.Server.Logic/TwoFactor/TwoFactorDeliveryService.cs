@@ -17,7 +17,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const string NullArgumentMessage = "The value cannot be null.";
 
         private static readonly CodeEmailTemplate EmailTemplate =
-            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, VerificationCodeRules.ExpirationMinutes);
+            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, SecureCodes.ExpirationMinutes);
 
         private readonly TwoFactorCodeService _codeService;
         private readonly CodeEmailSender _emailSender;

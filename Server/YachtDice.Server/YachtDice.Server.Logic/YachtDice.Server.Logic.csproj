@@ -195,11 +195,8 @@
     <Compile Include="Rooms\RoomStatus.cs" />
     <Compile Include="Rooms\RoomSummary.cs" />
     <Compile Include="Security\CredentialRules.cs" />
-    <Compile Include="Security\VerificationCodeRules.cs" />
     <Compile Include="Moderation\ModerationRules.cs" />
-    <Compile Include="Security\NumericCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
-    <Compile Include="Security\SecureRandom.cs" />
     <Compile Include="Security\SessionRegistry.cs" />
     <Compile Include="TwoFactor\BackupCodeCreation.cs" />
     <Compile Include="TwoFactor\BackupCodeCreationStatus.cs" />
@@ -216,6 +213,7 @@
     <Compile Include="TwoFactor\TwoFactorValidationStatus.cs" />
     <Compile Include="TwoFactor\VerificationCode.cs" />
     <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
+    <Compile Include="Security\SecureCodes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">

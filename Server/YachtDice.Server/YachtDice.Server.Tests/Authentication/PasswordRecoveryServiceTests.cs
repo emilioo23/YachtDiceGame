@@ -438,7 +438,7 @@ namespace YachtDice.Server.Tests.Authentication
         private void SeedCode(string code, int secondsSinceCreation)
         {
             DateTime createdAt = DateTime.UtcNow.AddSeconds(-secondsSinceCreation);
-            DateTime expireDate = createdAt.AddMinutes(VerificationCodeRules.ExpirationMinutes);
+            DateTime expireDate = createdAt.AddMinutes(SecureCodes.ExpirationMinutes);
 
             _resets.Save(CreateToken(code, expireDate));
         }

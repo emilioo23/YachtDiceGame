@@ -27,7 +27,7 @@ namespace YachtDice.Server.Logic.Authentication
             new CodeEmailTemplate(
                 EmailSubjectResourceKey,
                 EmailBodyResourceKey,
-                VerificationCodeRules.ExpirationMinutes);
+                SecureCodes.ExpirationMinutes);
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -128,8 +128,8 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (token != null)
             {
-                DateTime createdAt = token.ExpireDate.AddMinutes(-VerificationCodeRules.ExpirationMinutes);
-                isRecent = DateTime.UtcNow < createdAt.AddSeconds(VerificationCodeRules.ResendCooldownSeconds);
+                DateTime createdAt = token.ExpireDate.AddMinutes(-SecureCodes.ExpirationMinutes);
+                isRecent = DateTime.UtcNow < createdAt.AddSeconds(SecureCodes.ResendCooldownSeconds);
             }
 
             return isRecent;
@@ -137,14 +137,14 @@ namespace YachtDice.Server.Logic.Authentication
 
         private PasswordResetRequestStatus CreateAndSendCode(Player player, CultureInfo culture)
         {
-            string code = NumericCodeGenerator.Generate(VerificationCodeRules.CodeLength);
+            string code = SecureCodes.Generate(SecureCodes.CodeLength);
             string codeHash = PasswordHasher.ComputeResetCodeHash(player.Id, code);
 
             var token = new PwdResetToken
             {
                 PlayerId = player.Id,
                 Token = codeHash,
-                ExpireDate = DateTime.UtcNow.AddMinutes(VerificationCodeRules.ExpirationMinutes)
+                ExpireDate = DateTime.UtcNow.AddMinutes(SecureCodes.ExpirationMinutes)
             };
 
             _resetRepository.Save(token);
@@ -232,7 +232,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             PasswordResetStatus status = PasswordResetStatus.IncorrectCode;
 
-            if (_attempts.RegisterFailure(playerId) >= VerificationCodeRules.MaxFailedAttempts)
+            if (_attempts.RegisterFailure(playerId) >= SecureCodes.MaxFailedAttempts)
             {
                 _resetRepository.Delete(playerId);
                 _attempts.Reset(playerId);
