@@ -175,7 +175,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             bool isValid = false;
 
-            if (EcdsaSignatureConverter.TryConvert(signature, P256PartSize, out byte[] fixedSignature))
+            if (PasskeyRules.TryConvert(signature, P256PartSize, out byte[] fixedSignature))
             {
                 isValid = VerifyWithAlgorithm(() => CreateEcdsa(), algorithm =>
                     ((ECDsa)algorithm).VerifyData(signedData, fixedSignature, HashAlgorithmName.SHA256));

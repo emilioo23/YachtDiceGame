@@ -73,7 +73,7 @@ namespace YachtDice.Server.Tests.Passkeys
                 byte[] credentialIdExpected = authenticator.CredentialId;
                 var challenge = new PasskeyChallenge(PasskeyStartStatus.Created) { Challenge = ChallengeText };
                 PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
-                Base64Url.TryDecode(attestation.AttestationObject, out byte[] attestationObject);
+                PasskeyRules.TryDecode(attestation.AttestationObject, out byte[] attestationObject);
                 int start = IndexOfAuthenticatorData(attestationObject);
                 byte[] bytes = attestationObject.Skip(start).ToArray();
 

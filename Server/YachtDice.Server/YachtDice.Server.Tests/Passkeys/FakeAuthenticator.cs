@@ -68,8 +68,8 @@ namespace YachtDice.Server.Tests.Passkeys
             return new PasskeyAttestation
             {
                 ChallengeId = challenge.ChallengeId,
-                ClientDataJson = Base64Url.Encode(clientData),
-                AttestationObject = Base64Url.Encode(CreateAttestationObject(authenticatorData)),
+                ClientDataJson = PasskeyRules.Encode(clientData),
+                AttestationObject = PasskeyRules.Encode(CreateAttestationObject(authenticatorData)),
                 Transport = options.Transport
             };
         }
@@ -88,10 +88,10 @@ namespace YachtDice.Server.Tests.Passkeys
             return new PasskeyAssertion
             {
                 ChallengeId = challenge.ChallengeId,
-                CredentialId = Base64Url.Encode(CredentialId),
-                ClientDataJson = Base64Url.Encode(clientData),
-                AuthenticatorData = Base64Url.Encode(authenticatorData),
-                Signature = Base64Url.Encode(Sign(authenticatorData, clientData)),
+                CredentialId = PasskeyRules.Encode(CredentialId),
+                ClientDataJson = PasskeyRules.Encode(clientData),
+                AuthenticatorData = PasskeyRules.Encode(authenticatorData),
+                Signature = PasskeyRules.Encode(Sign(authenticatorData, clientData)),
                 UserHandle = options.UserHandle
             };
         }

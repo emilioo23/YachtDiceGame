@@ -51,7 +51,7 @@ namespace YachtDice.Server.Logic.Passkeys
             if (_pending.Count < PasskeyRules.MaxPendingChallenges)
             {
                 pending = new PendingChallenge(
-                    Base64Url.Encode(CreateRandom()),
+                    PasskeyRules.Encode(CreateRandom()),
                     CreateRandom(),
                     _clock().AddMinutes(PasskeyRules.ChallengeMinutes))
                 {

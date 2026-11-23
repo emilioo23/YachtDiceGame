@@ -89,7 +89,7 @@ namespace YachtDice.Server.Tests.Passkeys
             var options = new AuthenticatorOptions
             {
                 SignCount = NewerCounter,
-                UserHandle = Base64Url.Encode(OtherPlayerHandle)
+                UserHandle = PasskeyRules.Encode(OtherPlayerHandle)
             };
 
             LoginResult loginResult = Login(options);
@@ -152,7 +152,7 @@ namespace YachtDice.Server.Tests.Passkeys
                     challenge,
                     new AuthenticatorOptions { SignCount = NewerCounter });
 
-                assertion.CredentialId = Base64Url.Encode(_authenticator.CredentialId);
+                assertion.CredentialId = PasskeyRules.Encode(_authenticator.CredentialId);
                 LoginResult loginResult = _context.Service.CompleteLogin(assertion);
 
                 Assert.Equivalent(loginResultExpected, loginResult);

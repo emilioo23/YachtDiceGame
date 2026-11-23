@@ -56,7 +56,7 @@ namespace YachtDice.Server.Tests.Passkeys
             {
                 var challengeExpected = new
                 {
-                    ExcludedCredentialIds = new[] { Base64Url.Encode(authenticator.CredentialId) }
+                    ExcludedCredentialIds = new[] { PasskeyRules.Encode(authenticator.CredentialId) }
                 };
                 _context.Register(authenticator, new AuthenticatorOptions());
 
@@ -88,7 +88,7 @@ namespace YachtDice.Server.Tests.Passkeys
                 var passkeyExpected = new
                 {
                     PlayerId = PasskeyTestContext.PlayerId,
-                    CredentialId = Base64Url.Encode(authenticator.CredentialId)
+                    CredentialId = PasskeyRules.Encode(authenticator.CredentialId)
                 };
 
                 _context.Register(authenticator, new AuthenticatorOptions());
@@ -196,7 +196,7 @@ namespace YachtDice.Server.Tests.Passkeys
             using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
                 PasskeyRegistrationStatus registrationStatusExpected = PasskeyRegistrationStatus.InvalidResponse;
-                var options = new AuthenticatorOptions { Challenge = Base64Url.Encode(OtherChallenge) };
+                var options = new AuthenticatorOptions { Challenge = PasskeyRules.Encode(OtherChallenge) };
 
                 PasskeyRegistrationStatus registrationStatusResult = _context.Register(authenticator, options);
 

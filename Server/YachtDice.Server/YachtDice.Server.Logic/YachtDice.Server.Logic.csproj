@@ -127,12 +127,8 @@
     <Compile Include="Logging\AppLogger.cs" />
     <Compile Include="Logging\ErrorLogFormatter.cs" />
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
-    <Compile Include="Moderation\LinkCensor.cs" />
     <Compile Include="Passkeys\AuthenticatorData.cs" />
-    <Compile Include="Passkeys\Base64Url.cs" />
     <Compile Include="Passkeys\CborReader.cs" />
-    <Compile Include="Passkeys\ClientDataValidator.cs" />
-    <Compile Include="Passkeys\EcdsaSignatureConverter.cs" />
     <Compile Include="Passkeys\IPasskeyService.cs" />
     <Compile Include="Passkeys\PasskeyAssertion.cs" />
     <Compile Include="Passkeys\PasskeyAttestation.cs" />
@@ -190,7 +186,6 @@
     <Compile Include="Rooms\RoomStatus.cs" />
     <Compile Include="Rooms\RoomSummary.cs" />
     <Compile Include="Security\CredentialRules.cs" />
-    <Compile Include="Moderation\ModerationRules.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\SessionRegistry.cs" />
     <Compile Include="TwoFactor\BackupCodeCreation.cs" />
@@ -209,6 +204,7 @@
     <Compile Include="TwoFactor\VerificationCode.cs" />
     <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
     <Compile Include="Security\SecureCodes.cs" />
+    <Compile Include="Moderation\ChatCensor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">

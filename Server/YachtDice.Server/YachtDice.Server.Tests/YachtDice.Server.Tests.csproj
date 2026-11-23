@@ -100,15 +100,12 @@
     <Compile Include="Mapping\EnumMapperTests.cs" />
     <Compile Include="Mapping\GameMapperTests.cs" />
     <Compile Include="Mapping\RoomMapperTests.cs" />
-    <Compile Include="Moderation\LinkCensorTests.cs" />
+    <Compile Include="Moderation\ChatCensorTests.cs" />
     <Compile Include="Moderation\OffensiveWordFilterTests.cs" />
     <Compile Include="Passkeys\AuthenticatorDataTests.cs" />
     <Compile Include="Passkeys\AuthenticatorOptions.cs" />
-    <Compile Include="Passkeys\Base64UrlTests.cs" />
     <Compile Include="Passkeys\CborReaderTests.cs" />
-    <Compile Include="Passkeys\ClientDataValidatorTests.cs" />
     <Compile Include="Passkeys\CoseRsaKey.cs" />
-    <Compile Include="Passkeys\EcdsaSignatureConverterTests.cs" />
     <Compile Include="Passkeys\FakeAuthenticator.cs" />
     <Compile Include="Passkeys\PasskeyChallengeStoreTests.cs" />
     <Compile Include="Passkeys\PasskeyRulesTests.cs" />

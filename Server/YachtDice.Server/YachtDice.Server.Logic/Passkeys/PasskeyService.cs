@@ -211,7 +211,7 @@ namespace YachtDice.Server.Logic.Passkeys
                 challenge = new PasskeyChallenge(PasskeyStartStatus.Created)
                 {
                     ChallengeId = pending.Id,
-                    Challenge = Base64Url.Encode(pending.Challenge)
+                    Challenge = PasskeyRules.Encode(pending.Challenge)
                 };
             }
 
@@ -327,7 +327,7 @@ namespace YachtDice.Server.Logic.Passkeys
             return new PasskeyChallenge(PasskeyStartStatus.Created)
             {
                 ChallengeId = pending.Id,
-                Challenge = Base64Url.Encode(pending.Challenge),
+                Challenge = PasskeyRules.Encode(pending.Challenge),
                 UserHandle = EncodeHandle(player.Id),
                 UserName = player.DisplayName,
                 ExcludedCredentialIds = existing.Select(record => record.CredentialId).ToList()
@@ -364,8 +364,8 @@ namespace YachtDice.Server.Logic.Passkeys
             return new PasskeyRecord
             {
                 PlayerId = player.Id,
-                CredentialId = Base64Url.Encode(data.CredentialId),
-                PublicKey = Base64Url.Encode(key.ToBytes()),
+                CredentialId = PasskeyRules.Encode(data.CredentialId),
+                PublicKey = PasskeyRules.Encode(key.ToBytes()),
                 SignCount = data.SignCount
             };
         }
@@ -408,10 +408,10 @@ namespace YachtDice.Server.Logic.Passkeys
             byte[] attestationObject = null;
             AuthenticatorData parsed = null;
 
-            bool isDecoded = Base64Url.TryDecode(attestation.ClientDataJson, out clientData)
-                && Base64Url.TryDecode(attestation.AttestationObject, out attestationObject);
+            bool isDecoded = PasskeyRules.TryDecode(attestation.ClientDataJson, out clientData)
+                && PasskeyRules.TryDecode(attestation.AttestationObject, out attestationObject);
             bool isClientDataValid = isDecoded
-                && ClientDataValidator.IsValid(clientData, PasskeyRules.CreateClientDataType, pending.Challenge);
+                && PasskeyRules.IsValid(clientData, PasskeyRules.CreateClientDataType, pending.Challenge);
             bool isReadable = isClientDataValid && TryReadAuthenticatorData(attestationObject, out parsed);
 
             if (isReadable && IsAcceptable(parsed) && parsed.CredentialId != null)
@@ -490,9 +490,9 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             PasskeyRecord record = null;
 
-            if (Base64Url.TryDecode(assertion.CredentialId, out byte[] credentialId))
+            if (PasskeyRules.TryDecode(assertion.CredentialId, out byte[] credentialId))
             {
-                record = _passkeyRepository.FindByCredentialId(Base64Url.Encode(credentialId));
+                record = _passkeyRepository.FindByCredentialId(PasskeyRules.Encode(credentialId));
             }
 
             return record;
@@ -506,11 +506,11 @@ namespace YachtDice.Server.Logic.Passkeys
             byte[] signature = null;
             AuthenticatorData data = null;
 
-            bool isDecoded = Base64Url.TryDecode(assertion.ClientDataJson, out clientData)
-                && Base64Url.TryDecode(assertion.AuthenticatorData, out authenticatorBytes)
-                && Base64Url.TryDecode(assertion.Signature, out signature);
+            bool isDecoded = PasskeyRules.TryDecode(assertion.ClientDataJson, out clientData)
+                && PasskeyRules.TryDecode(assertion.AuthenticatorData, out authenticatorBytes)
+                && PasskeyRules.TryDecode(assertion.Signature, out signature);
             bool isClientDataValid = isDecoded
-                && ClientDataValidator.IsValid(clientData, PasskeyRules.GetClientDataType, pending.Challenge);
+                && PasskeyRules.IsValid(clientData, PasskeyRules.GetClientDataType, pending.Challenge);
             bool isReadable = isClientDataValid && AuthenticatorData.TryParse(authenticatorBytes, out data);
 
             if (isReadable && IsAcceptable(data))
@@ -530,7 +530,7 @@ namespace YachtDice.Server.Logic.Passkeys
         private static bool IsSignatureValid(ParsedAssertion parsed, PasskeyRecord record)
         {
             return IsHandleValid(parsed.UserHandle, record.PlayerId)
-                && Base64Url.TryDecode(record.PublicKey, out byte[] coseKey)
+                && PasskeyRules.TryDecode(record.PublicKey, out byte[] coseKey)
                 && PasskeyPublicKey.TryParse(coseKey, out PasskeyPublicKey key)
                 && key.Verify(parsed.SignedData, parsed.Signature);
         }
@@ -567,7 +567,7 @@ namespace YachtDice.Server.Logic.Passkeys
                 handle[HandleSize - 1 - index] = (byte)((playerId >> (index * BitsPerByte)) & ByteMask);
             }
 
-            return Base64Url.Encode(handle);
+            return PasskeyRules.Encode(handle);
         }
 
         private LoginResult CompleteWith(PasskeyRecord record, AuthenticatorData data)
