@@ -21,7 +21,7 @@ namespace YachtDice.Server.Services
         private const string NullAttestationMessage = "The answer of the authenticator cannot be null.";
 
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
-        private readonly LogicAuthentication.PasswordChangeService _passwordChangeService;
+        private readonly LogicAuthentication.PasswordService _passwordChangeService;
         private readonly LogicPasskeys.IPasskeyService _passkeyService;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace YachtDice.Server.Services
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public TwoFactorManagementService(
             LogicTwoFactor.ITwoFactorSettingsService settingsService,
-            LogicAuthentication.PasswordChangeService passwordChangeService,
+            LogicAuthentication.PasswordService passwordChangeService,
             LogicPasskeys.IPasskeyService passkeyService)
         {
             _settingsService = settingsService

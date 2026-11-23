@@ -59,10 +59,9 @@
     <Compile Include="Authentication\LoginService.cs" />
     <Compile Include="Authentication\LoginStatus.cs" />
     <Compile Include="Authentication\PasswordChange.cs" />
-    <Compile Include="Authentication\PasswordChangeService.cs" />
     <Compile Include="Authentication\SecuritySummary.cs" />
     <Compile Include="Authentication\PasswordChangeStatus.cs" />
-    <Compile Include="Authentication\PasswordRecoveryService.cs" />
+    <Compile Include="Authentication\PasswordService.cs" />
     <Compile Include="Authentication\PasswordResetAttemptCounter.cs" />
     <Compile Include="Authentication\PasswordResetConfirmation.cs" />
     <Compile Include="Authentication\PasswordResetRequestStatus.cs" />

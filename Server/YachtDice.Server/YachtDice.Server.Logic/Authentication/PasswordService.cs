@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
@@ -10,30 +11,32 @@ using YachtDice.Server.Logic.Security;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Lets a player recover the password of the account with a code sent by email. Only the hash of the code is
-    /// saved, the code expires and it is discarded after too many wrong attempts.
+    /// Recovers and changes the passwords of the accounts.
     /// </summary>
-    public class PasswordRecoveryService : IPasswordRecoveryService
+    public class PasswordService
     {
         private const string ChangedLogMessage = "Password changed with a recovery code.";
         private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
         private const string RequestedLogMessage = "A password recovery code was requested for an account.";
+        private const string ChangedFromSettingsLogMessage = "A player changed the password from the settings.";
         private const string NullArgumentMessage = "The value cannot be null.";
         private const string EmailSubjectResourceKey = "PasswordReset_EmailSubject";
         private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
-        private const string NullDependencyMessage = "A dependency of the password recovery service cannot be null.";
-
+        private const string NullDependencyMessage = "A dependency of the password service cannot be null.";
+        private const string WrongPasswordLogMessage = "A wrong current password was typed in a password change.";
+        private const string NullChangeMessage = "The password change cannot be null.";
+        private const int RecentLockDays = 7;
         private static readonly CodeEmailTemplate EmailTemplate =
             new CodeEmailTemplate(
                 EmailSubjectResourceKey,
                 EmailBodyResourceKey,
                 SecureCodes.ExpirationMinutes);
-
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly IPasswordResetRepository _resetRepository;
         private readonly CodeEmailSender _emailSender;
         private readonly PasswordResetAttemptCounter _attempts = new PasswordResetAttemptCounter();
+        private readonly LoginAttemptTracker _attemptTracker;
 
         /// <summary>
         /// Initializes the service with the components it needs.
@@ -41,7 +44,7 @@ namespace YachtDice.Server.Logic.Authentication
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="resetRepository">Repository that keeps the recovery codes.</param>
         /// <param name="emailService">Service that delivers the email with the recovery code.</param>
-        public PasswordRecoveryService(
+        public PasswordService(
             IPlayerRepository playerRepository,
             IPasswordResetRepository resetRepository,
             IEmailService emailService)
@@ -51,6 +54,7 @@ namespace YachtDice.Server.Logic.Authentication
             _resetRepository = resetRepository
                 ?? throw new ArgumentNullException(nameof(resetRepository), NullDependencyMessage);
             _emailSender = new CodeEmailSender(emailService, EmailTemplate);
+            _attemptTracker = new LoginAttemptTracker(playerRepository);
             _logger = new AppLogger(GetType());
         }
 
@@ -112,6 +116,55 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Changes the password of a player after checking the current one.
+        /// </summary>
+        /// <param name="displayName">Name of the player who is logged in.</param>
+        /// <param name="change">Current password and new password.</param>
+        /// <returns>The result of the change.</returns>
+        /// <exception cref="ArgumentNullException">The change is null.</exception>
+        /// <exception cref="Data.Exceptions.DataAccessException">The password could not be read or saved.</exception>
+        public PasswordChangeStatus ChangePassword(string displayName, PasswordChange change)
+        {
+            if (change == null)
+            {
+                throw new ArgumentNullException(nameof(change), NullChangeMessage);
+            }
+
+            Player player = FindPlayer(displayName);
+            PasswordChangeStatus status = PasswordChangeStatus.PlayerNotFound;
+
+            if (player != null)
+            {
+                status = CheckAndChange(player, change);
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// Gets the last change of password of the player and the last lock of the account, if it was recent.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The summary; it says that nothing happened if the player does not exist.</returns>
+        public SecuritySummary GetSecuritySummary(string displayName)
+        {
+            Player player = FindPlayer(displayName);
+            var summary = new SecuritySummary { LockReason = string.Empty };
+
+            if (player != null)
+            {
+                List<DateTime> changeDates = _resetRepository.FindPasswordChangeDates(player.Id);
+                AccountLock lastLock = _playerRepository.FindLocks(player.Id).FirstOrDefault();
+
+                summary.HasPasswordChange = changeDates.Any();
+                summary.LastPasswordChange = changeDates.FirstOrDefault();
+                AddLock(summary, lastLock);
+            }
+
+            return summary;
         }
 
         private static bool HasAllFields(PasswordResetConfirmation confirmation)
@@ -201,7 +254,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (isCorrect)
             {
-                status = ChangePassword(playerId, confirmation.NewPassword);
+                status = SaveRecoveredPassword(playerId, confirmation.NewPassword);
             }
             else
             {
@@ -211,7 +264,7 @@ namespace YachtDice.Server.Logic.Authentication
             return status;
         }
 
-        private PasswordResetStatus ChangePassword(int playerId, string newPassword)
+        private PasswordResetStatus SaveRecoveredPassword(int playerId, string newPassword)
         {
             Func<string, bool> isSamePassword = passwordHash => CredentialRules.Verify(newPassword, passwordHash);
             bool isUsedBefore = _resetRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
@@ -241,6 +294,84 @@ namespace YachtDice.Server.Logic.Authentication
             }
 
             return status;
+        }
+
+        private PasswordChangeStatus CheckAndChange(Player player, PasswordChange change)
+        {
+            PasswordChangeStatus status = FindProblem(player, change);
+
+            if (status == PasswordChangeStatus.Success)
+            {
+                _resetRepository.CompleteReset(player.Id, CredentialRules.ComputeHash(change.NewPassword));
+                _attemptTracker.RegisterSuccess(player.Id);
+                _logger.Info(ChangedFromSettingsLogMessage);
+            }
+
+            return status;
+        }
+
+        private PasswordChangeStatus FindProblem(Player player, PasswordChange change)
+        {
+            PasswordChangeStatus status = PasswordChangeStatus.Success;
+
+            if (_attemptTracker.GetLock(player.Id, DateTime.UtcNow) != LoginLock.None)
+            {
+                status = PasswordChangeStatus.TooManyAttempts;
+            }
+            else if (!IsCurrentPassword(player, change.CurrentPassword))
+            {
+                _attemptTracker.RegisterFailure(player.Id, DateTime.UtcNow);
+                _logger.Info(WrongPasswordLogMessage);
+                status = PasswordChangeStatus.WrongCurrentPassword;
+            }
+            else if (!CredentialRules.IsStrongPassword(change.NewPassword))
+            {
+                status = PasswordChangeStatus.InvalidNewPassword;
+            }
+            else if (IsUsedBefore(player.Id, change.NewPassword))
+            {
+                status = PasswordChangeStatus.PasswordUsedBefore;
+            }
+
+            return status;
+        }
+
+        private static bool IsCurrentPassword(Player player, string password)
+        {
+            bool hasValidSize = !string.IsNullOrEmpty(password) && password.Length <= CredentialRules.PasswordMaxLength;
+
+            return hasValidSize && CredentialRules.Verify(password, player.PwdHash);
+        }
+
+        private bool IsUsedBefore(int playerId, string newPassword)
+        {
+            Func<string, bool> isSamePassword = passwordHash => CredentialRules.Verify(newPassword, passwordHash);
+
+            return _resetRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
+        }
+
+        private static void AddLock(SecuritySummary summary, AccountLock lastLock)
+        {
+            DateTime recentLimit = DateTime.UtcNow.AddDays(-RecentLockDays);
+
+            if (lastLock != null && lastLock.LockedUntil >= recentLimit)
+            {
+                summary.HasRecentLock = true;
+                summary.LockedUntil = lastLock.LockedUntil;
+                summary.LockReason = lastLock.LockType;
+            }
+        }
+
+        private Player FindPlayer(string displayName)
+        {
+            List<Player> matches = new List<Player>();
+
+            if (!string.IsNullOrWhiteSpace(displayName))
+            {
+                matches = _playerRepository.FindByName(displayName);
+            }
+
+            return matches.FirstOrDefault();
         }
     }
 }

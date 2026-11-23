@@ -26,7 +26,7 @@ namespace YachtDice.Server.Tests.Authentication
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryPasswordResetRepository _passwords;
-        private readonly PasswordChangeService _service;
+        private readonly PasswordService _service;
 
         /// <summary>
         /// Prepares the service with one registered player.
@@ -40,7 +40,7 @@ namespace YachtDice.Server.Tests.Authentication
                 PwdHash = CredentialRules.ComputeHash(OldPassword)
             });
             _passwords = new InMemoryPasswordResetRepository(_players);
-            _service = new PasswordChangeService(_players, _passwords);
+            _service = new PasswordService(_players, _passwords, new InMemoryEmailService());
         }
 
         [Fact]
@@ -226,13 +226,13 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PasswordChangeService(null, _passwords));
+            Assert.Throws<ArgumentNullException>(() => new PasswordService(null, _passwords, new InMemoryEmailService()));
         }
 
         [Fact]
         public void Constructor_NullPasswordRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PasswordChangeService(_players, null));
+            Assert.Throws<ArgumentNullException>(() => new PasswordService(_players, null, new InMemoryEmailService()));
         }
 
         private static PasswordChange CreateChange(string currentPassword, string newPassword)

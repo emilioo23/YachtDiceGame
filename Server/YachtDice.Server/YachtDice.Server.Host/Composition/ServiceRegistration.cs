@@ -102,10 +102,10 @@ namespace YachtDice.Server.Host.Composition
         {
             services.AddTransient<TwoFactorVerificationService>();
             services.AddTransient<IVerificationService, TwoFactorVerificationService>();
-            services.AddTransient<IPasswordRecoveryService, PasswordRecoveryService>();
+            services.AddTransient<IPasswordRecoveryService, PasswordService>();
             services.AddTransient<AccountLockNotifier>();
             services.AddTransient(CreateLoginService);
-            services.AddTransient<PasswordChangeService>();
+            services.AddTransient<PasswordService>();
             services.AddTransient<IPasskeyService, PasskeyService>();
             services.AddTransient<ITwoFactorSettingsService, TwoFactorSettingsService>();
             services.AddTransient<IRegistrationService, RegistrationService>();

@@ -40,7 +40,7 @@ namespace YachtDice.Server.Tests.Authentication
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryPasswordResetRepository _resets;
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
-        private readonly PasswordRecoveryService _service;
+        private readonly PasswordService _service;
 
         /// <summary>
         /// Prepares the service with one registered player and without sending real emails.
@@ -144,7 +144,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_EmailCannotBeSent_ReturnsCodeSendFailed()
         {
-            PasswordRecoveryService service = CreateService(new InMemoryFailingEmailService());
+            PasswordService service = CreateService(new InMemoryFailingEmailService());
 
             PasswordResetRequestStatus status = service.RequestReset(Email, CultureInfo.InvariantCulture);
 
@@ -154,7 +154,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void RequestReset_EmailCannotBeSent_DiscardsTheCode()
         {
-            PasswordRecoveryService service = CreateService(new InMemoryFailingEmailService());
+            PasswordService service = CreateService(new InMemoryFailingEmailService());
 
             service.RequestReset(Email, CultureInfo.InvariantCulture);
 
@@ -407,9 +407,9 @@ namespace YachtDice.Server.Tests.Authentication
             };
         }
 
-        private PasswordRecoveryService CreateService(IEmailService emailService)
+        private PasswordService CreateService(IEmailService emailService)
         {
-            return new PasswordRecoveryService(_players, _resets, emailService);
+            return new PasswordService(_players, _resets, emailService);
         }
 
         private void ChangePasswordWithANewCode(string newPassword)
