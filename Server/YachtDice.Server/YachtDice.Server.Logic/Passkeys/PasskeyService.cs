@@ -375,7 +375,7 @@ namespace YachtDice.Server.Logic.Passkeys
             return string.Format(
                 CultureInfo.InvariantCulture,
                 DeviceNameFormat,
-                PasskeyKinds.GetName(transport),
+                PasskeyRules.GetName(transport),
                 DateTime.UtcNow.ToString(DateFormat, CultureInfo.InvariantCulture));
         }
 

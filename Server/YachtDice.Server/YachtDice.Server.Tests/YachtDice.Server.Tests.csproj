@@ -112,7 +112,7 @@
     <Compile Include="Passkeys\EcdsaSignatureConverterTests.cs" />
     <Compile Include="Passkeys\FakeAuthenticator.cs" />
     <Compile Include="Passkeys\PasskeyChallengeStoreTests.cs" />
-    <Compile Include="Passkeys\PasskeyKindsTests.cs" />
+    <Compile Include="Passkeys\PasskeyRulesTests.cs" />
     <Compile Include="Passkeys\PasskeyLoginTests.cs" />
     <Compile Include="Passkeys\PasskeyPublicKeyTests.cs" />
     <Compile Include="Passkeys\PasskeyRegistrationTests.cs" />

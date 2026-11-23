@@ -4,18 +4,18 @@ using YachtDice.Server.Logic.Passkeys;
 namespace YachtDice.Server.Tests.Passkeys
 {
     /// <summary>
-    /// Names that tell the player which authenticator holds each passkey.
+    /// Names and limits of the passkeys.
     /// </summary>
-    public class PasskeyKindsTests
+    public class PasskeyRulesTests
     {
         private const int UnrecognizedTransport = 0x40;
 
         [Fact]
         public void GetName_InternalTransport_ReturnsWindowsHello()
         {
-            string nameExpected = PasskeyKinds.WindowsHelloName;
+            string nameExpected = PasskeyRules.WindowsHelloName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.InternalTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.InternalTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -23,9 +23,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_HybridTransport_ReturnsPhone()
         {
-            string nameExpected = PasskeyKinds.PhoneName;
+            string nameExpected = PasskeyRules.PhoneName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.HybridTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.HybridTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -33,9 +33,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_UsbTransport_ReturnsSecurityKey()
         {
-            string nameExpected = PasskeyKinds.SecurityKeyName;
+            string nameExpected = PasskeyRules.SecurityKeyName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.UsbTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.UsbTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -43,9 +43,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_NfcTransport_ReturnsSecurityKey()
         {
-            string nameExpected = PasskeyKinds.SecurityKeyName;
+            string nameExpected = PasskeyRules.SecurityKeyName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.NfcTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.NfcTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -53,9 +53,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_BluetoothTransport_ReturnsSecurityKey()
         {
-            string nameExpected = PasskeyKinds.SecurityKeyName;
+            string nameExpected = PasskeyRules.SecurityKeyName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.BluetoothTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.BluetoothTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -63,9 +63,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_UnknownTransport_ReturnsPasskey()
         {
-            string nameExpected = PasskeyKinds.UnknownName;
+            string nameExpected = PasskeyRules.UnknownName;
 
-            string nameResult = PasskeyKinds.GetName(PasskeyKinds.UnknownTransport);
+            string nameResult = PasskeyRules.GetName(PasskeyRules.UnknownTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }
@@ -73,9 +73,9 @@ namespace YachtDice.Server.Tests.Passkeys
         [Fact]
         public void GetName_UnrecognizedTransport_ReturnsPasskey()
         {
-            string nameExpected = PasskeyKinds.UnknownName;
+            string nameExpected = PasskeyRules.UnknownName;
 
-            string nameResult = PasskeyKinds.GetName(UnrecognizedTransport);
+            string nameResult = PasskeyRules.GetName(UnrecognizedTransport);
 
             Assert.Equal(nameExpected, nameResult);
         }

@@ -102,9 +102,9 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                string nameExpected = PasskeyKinds.WindowsHelloName;
+                string nameExpected = PasskeyRules.WindowsHelloName;
 
-                var options = new AuthenticatorOptions { Transport = PasskeyKinds.InternalTransport };
+                var options = new AuthenticatorOptions { Transport = PasskeyRules.InternalTransport };
 
                 _context.Register(authenticator, options);
 
@@ -117,9 +117,9 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                string nameExpected = PasskeyKinds.PhoneName;
+                string nameExpected = PasskeyRules.PhoneName;
 
-                var options = new AuthenticatorOptions { Transport = PasskeyKinds.HybridTransport };
+                var options = new AuthenticatorOptions { Transport = PasskeyRules.HybridTransport };
 
                 _context.Register(authenticator, options);
 
@@ -132,9 +132,9 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                string nameExpected = PasskeyKinds.SecurityKeyName;
+                string nameExpected = PasskeyRules.SecurityKeyName;
 
-                var options = new AuthenticatorOptions { Transport = PasskeyKinds.UsbTransport };
+                var options = new AuthenticatorOptions { Transport = PasskeyRules.UsbTransport };
 
                 _context.Register(authenticator, options);
 
@@ -147,9 +147,9 @@ namespace YachtDice.Server.Tests.Passkeys
         {
             using (FakeAuthenticator authenticator = new FakeAuthenticator())
             {
-                string nameExpected = PasskeyKinds.UnknownName;
+                string nameExpected = PasskeyRules.UnknownName;
 
-                var options = new AuthenticatorOptions { Transport = PasskeyKinds.UnknownTransport };
+                var options = new AuthenticatorOptions { Transport = PasskeyRules.UnknownTransport };
 
                 _context.Register(authenticator, options);
 
