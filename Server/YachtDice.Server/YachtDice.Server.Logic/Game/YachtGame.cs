@@ -281,7 +281,7 @@ namespace YachtDice.Server.Logic.Game
                 Total = player.Card.Total
             };
 
-            foreach (var category in ScoreCategories.All)
+            foreach (var category in ScoreCalculator.All)
             {
                 snapshot.Scores.Add(
                     new ScoreEntry(category, player.Card.IsFilled(category), player.Card.GetScore(category)));
@@ -580,7 +580,7 @@ namespace YachtDice.Server.Logic.Game
             if (_turnIndex != NoPlayerIndex)
             {
                 var openCount = _players[_turnIndex].Card.GetOpenCategories().Count;
-                round = ScoreCategories.All.Count - openCount + RoundOffset;
+                round = ScoreCalculator.All.Count - openCount + RoundOffset;
             }
 
             return round;

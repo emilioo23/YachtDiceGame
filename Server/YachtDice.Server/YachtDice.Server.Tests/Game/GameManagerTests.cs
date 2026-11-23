@@ -847,7 +847,7 @@ namespace YachtDice.Server.Tests.Game
 
         private static void PlayEveryCategory(GameManager manager)
         {
-            foreach (ScoreCategory category in ScoreCategories.All)
+            foreach (ScoreCategory category in ScoreCalculator.All)
             {
                 PlayTurn(manager, FirstId, category);
             }
@@ -857,7 +857,7 @@ namespace YachtDice.Server.Tests.Game
         {
             GameActionResult actionResult = GameActionResult.CreateFailed(GameActionStatus.GameNotFound);
 
-            foreach (ScoreCategory category in ScoreCategories.All)
+            foreach (ScoreCategory category in ScoreCalculator.All)
             {
                 PlayTurn(manager, FirstId, category);
                 actionResult = PlayTurn(manager, SecondId, category);

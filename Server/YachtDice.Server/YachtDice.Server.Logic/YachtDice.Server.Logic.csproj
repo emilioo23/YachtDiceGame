@@ -121,7 +121,6 @@
     <Compile Include="Game\RandomDieRoller.cs" />
     <Compile Include="Game\ScoreCalculator.cs" />
     <Compile Include="Game\ScoreCard.cs" />
-    <Compile Include="Game\ScoreCategories.cs" />
     <Compile Include="Game\ScoreCategory.cs" />
     <Compile Include="Game\ScoreEntry.cs" />
     <Compile Include="Game\TurnDuration.cs" />

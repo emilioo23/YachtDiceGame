@@ -216,7 +216,7 @@ namespace YachtDice.Server.Tests.Game
             var optionsResult = new
             {
                 OffersUpperBox =
-                    options.Any(option => ScoreCategories.IsUpper(option.Category)),
+                    options.Any(option => ScoreCalculator.IsUpper(option.Category)),
                 OptionCount = options.Count,
                 BigStraightPoints = FindOption(options, ScoreCategory.BigStraight).Points,
                 ChoicePoints = FindOption(options, ScoreCategory.Choice).Points
@@ -239,7 +239,7 @@ namespace YachtDice.Server.Tests.Game
             {
                 OptionCount = options.Count,
                 IsAllUpper =
-                    options.All(option => ScoreCategories.IsUpper(option.Category)),
+                    options.All(option => ScoreCalculator.IsUpper(option.Category)),
                 HasOnlyZeros = options.All(hasNoPoints)
             };
             Assert.Equal(optionsExpected, optionsResult);
@@ -264,7 +264,7 @@ namespace YachtDice.Server.Tests.Game
             ScoreCard card = CreateCard();
             var completionExpected = new { IsComplete = true, OpenCategoryCount = NoOpenCategories };
 
-            foreach (ScoreCategory category in ScoreCategories.All)
+            foreach (ScoreCategory category in ScoreCalculator.All)
             {
                 card.Score(category, NoCombination);
             }

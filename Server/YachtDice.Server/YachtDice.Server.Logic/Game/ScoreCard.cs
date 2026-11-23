@@ -46,7 +46,7 @@ namespace YachtDice.Server.Logic.Game
         /// Gets the sum of the points of the upper section.
         /// </summary>
         public int UpperSubtotal => _scores
-            .Where(scoredCategory => ScoreCategories.IsUpper(scoredCategory.Key))
+            .Where(scoredCategory => ScoreCalculator.IsUpper(scoredCategory.Key))
             .Sum(scoredCategory => scoredCategory.Value);
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Gets a value indicating whether all the boxes have points.
         /// </summary>
-        public bool IsComplete => _scores.Count == ScoreCategories.All.Count;
+        public bool IsComplete => _scores.Count == ScoreCalculator.All.Count;
 
         /// <summary>
         /// Tells whether a box already has points.
@@ -103,7 +103,7 @@ namespace YachtDice.Server.Logic.Game
         {
             Func<ScoreCategory, bool> isNotFilled = category => !IsFilled(category);
 
-            return ScoreCategories.All.Where(isNotFilled).ToList();
+            return ScoreCalculator.All.Where(isNotFilled).ToList();
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static IReadOnlyList<ScoreCategory> ChooseLowerOrAny(IReadOnlyList<ScoreCategory> openCategories)
         {
-            Func<ScoreCategory, bool> isNotUpper = category => !ScoreCategories.IsUpper(category);
+            Func<ScoreCategory, bool> isNotUpper = category => !ScoreCalculator.IsUpper(category);
             var lowerCategories = openCategories.Where(isNotUpper).ToList();
             IReadOnlyList<ScoreCategory> categories;
 
@@ -205,7 +205,7 @@ namespace YachtDice.Server.Logic.Game
 
         private IReadOnlyList<ScoreCategory> GetJokerCategories(int diceValue)
         {
-            var matchingCategory = ScoreCategories.GetUpperCategory(diceValue);
+            var matchingCategory = ScoreCalculator.GetUpperCategory(diceValue);
             var openCategories = GetOpenCategories();
             IReadOnlyList<ScoreCategory> categories;
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
-    /// Calculates the points that a roll gives in each box of the scorecard. It only knows the rules of the
-    /// boxes: which boxes are still open is decided by <see cref="ScoreCard"/>.
+    /// Points of each category of the scorecard and the list of the categories.
     /// </summary>
     public sealed class ScoreCalculator
     {
@@ -24,6 +24,13 @@ namespace YachtDice.Server.Logic.Game
         private const int BigStraightFirstValue = 2;
         private const int BigStraightLastValue = 6;
         private const string UnknownCategoryMessage = "The box does not exist in the scorecard.";
+        private const int FaceToCategoryOffset = 1;
+
+        /// <summary>
+        /// Gets all the boxes in the order of the scorecard.
+        /// </summary>
+        public static IReadOnlyList<ScoreCategory> All { get; } =
+            Enum.GetValues(typeof(ScoreCategory)).Cast<ScoreCategory>().ToList();
 
         /// <summary>
         /// Calculates the points that the dice give in a box.
@@ -102,14 +109,44 @@ namespace YachtDice.Server.Logic.Game
             return new DiceHand(dice).IsYacht;
         }
 
+        /// <summary>
+        /// Tells whether a box belongs to the upper section, the one that gives the bonus.
+        /// </summary>
+        /// <param name="category">Box to check.</param>
+        /// <returns>True if the box is from Ones to Sixes.</returns>
+        public static bool IsUpper(ScoreCategory category)
+        {
+            return category <= ScoreCategory.Sixes;
+        }
+
+        /// <summary>
+        /// Gets the upper box that counts the dice with a value.
+        /// </summary>
+        /// <param name="faceValue">Value of the dice, from one to six.</param>
+        /// <returns>The box that sums the dice with that value.</returns>
+        public static ScoreCategory GetUpperCategory(int faceValue)
+        {
+            return (ScoreCategory)(faceValue - FaceToCategoryOffset);
+        }
+
+        /// <summary>
+        /// Gets the value of the dice that an upper box counts.
+        /// </summary>
+        /// <param name="category">Upper box.</param>
+        /// <returns>The value of the dice, from one to six.</returns>
+        public static int GetFaceValue(ScoreCategory category)
+        {
+            return (int)category + FaceToCategoryOffset;
+        }
+
         private static int ScoreUpper(DiceHand hand, ScoreCategory category)
         {
-            if (!ScoreCategories.IsUpper(category))
+            if (!ScoreCalculator.IsUpper(category))
             {
                 throw new ArgumentOutOfRangeException(nameof(category), UnknownCategoryMessage);
             }
 
-            int value = ScoreCategories.GetFaceValue(category);
+            int value = ScoreCalculator.GetFaceValue(category);
 
             return hand.CountFace(value) * value;
         }
