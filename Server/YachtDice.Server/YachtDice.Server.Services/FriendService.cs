@@ -223,13 +223,8 @@ namespace YachtDice.Server.Services
             string displayName,
             Contracts.FriendRequestAnswer answer)
         {
-            var logicAnswer = new LogicFriends.FriendRequestAnswer
-            {
-                RequesterName = answer.RequesterName,
-                IsAccepted = answer.IsAccepted
-            };
-
-            LogicFriends.FriendActionStatus status = _friendshipService.RespondToRequest(displayName, logicAnswer);
+            LogicFriends.FriendActionStatus status =
+                _friendshipService.RespondToRequest(displayName, answer.RequesterName, answer.IsAccepted);
 
             if (status == LogicFriends.FriendActionStatus.Success && answer.IsAccepted)
             {

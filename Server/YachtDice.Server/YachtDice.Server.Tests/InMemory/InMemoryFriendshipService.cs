@@ -42,7 +42,7 @@ namespace YachtDice.Server.Tests.InMemory
         }
 
         /// <inheritdoc />
-        public FriendActionStatus RespondToRequest(string displayName, FriendRequestAnswer answer)
+        public FriendActionStatus RespondToRequest(string displayName, string requesterName, bool isAccepted)
         {
             throw new NotSupportedException(NotSupportedMessage);
         }

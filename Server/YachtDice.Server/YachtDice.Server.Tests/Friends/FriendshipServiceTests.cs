@@ -72,9 +72,7 @@ namespace YachtDice.Server.Tests.Friends
         {
             _service.SendRequest(RequesterName, TargetUsername);
             _friends.FindBetween(RequesterId, TargetId).Single().CreateDate = DateTime.UtcNow.AddDays(-EightDays);
-            var answer = new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true };
-
-            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, answer);
+            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, RequesterName, true);
 
             Assert.Equal(FriendActionStatus.RelationNotFound, status);
         }
@@ -243,9 +241,7 @@ namespace YachtDice.Server.Tests.Friends
         {
             _service.SendRequest(RequesterName, TargetUsername);
             AddFriendships(TargetId, _service.MaxFriends, FriendshipStatus.Accepted);
-            var answer = new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true };
-
-            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, answer);
+            FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, RequesterName, true);
 
             Assert.Equal(FriendActionStatus.FriendLimitReached, status);
         }
@@ -377,17 +373,9 @@ namespace YachtDice.Server.Tests.Friends
             Assert.Equal(FriendActionStatus.PlayerNotFound, status);
         }
 
-        [Fact]
-        public void RespondToRequest_NullAnswer_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => _service.RespondToRequest(TargetDisplayName, null));
-        }
-
         private FriendActionStatus RespondAsTarget(string requesterName, bool isAccepted)
         {
-            var answer = new FriendRequestAnswer { RequesterName = requesterName, IsAccepted = isAccepted };
-
-            return _service.RespondToRequest(TargetDisplayName, answer);
+            return _service.RespondToRequest(TargetDisplayName, requesterName, isAccepted);
         }
 
         private void AddFriendships(int playerId, int count, string status)
@@ -420,9 +408,7 @@ namespace YachtDice.Server.Tests.Friends
         private void AcceptRequestBetweenThePlayers()
         {
             _service.SendRequest(RequesterName, TargetUsername);
-            _service.RespondToRequest(
-                TargetDisplayName,
-                new FriendRequestAnswer { RequesterName = RequesterName, IsAccepted = true });
+            _service.RespondToRequest(TargetDisplayName, RequesterName, true);
         }
     }
 }

@@ -19,9 +19,10 @@ namespace YachtDice.Server.Logic.Friends
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
+        /// <param name="requesterName">Name of the player who sent the request.</param>
+        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
         /// <returns>Outcome of the answer.</returns>
-        FriendActionStatus RespondToRequest(string displayName, FriendRequestAnswer answer);
+        FriendActionStatus RespondToRequest(string displayName, string requesterName, bool isAccepted);
 
         /// <summary>
         /// Removes a friend from the list of the player.

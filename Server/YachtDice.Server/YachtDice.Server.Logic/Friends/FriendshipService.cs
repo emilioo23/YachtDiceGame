@@ -39,7 +39,6 @@ namespace YachtDice.Server.Logic.Friends
         private const int SuspensionHours = 24;
         private const string ReportSentLogFormat = "Player {0} reported player {1}.";
         private const string SuspendedLogFormat = "Player {0} was suspended after reports from several players.";
-        private const string NullAnswerMessage = "The answer to the friend request cannot be null.";
         private const string NullReportMessage = "The details of the report cannot be null.";
         private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
@@ -106,20 +105,15 @@ namespace YachtDice.Server.Logic.Friends
         /// Accepts or rejects a friend request that the player received.
         /// </summary>
         /// <param name="displayName">Name of the player who answers the request.</param>
-        /// <param name="answer">Name of the player who sent the request and whether it is accepted.</param>
+        /// <param name="requesterName">Name of the player who sent the request.</param>
+        /// <param name="isAccepted">True to accept the request, false to reject it.</param>
         /// <returns>Outcome of the answer.</returns>
-        /// <exception cref="ArgumentNullException">The answer is null.</exception>
-        public FriendActionStatus RespondToRequest(string displayName, FriendRequestAnswer answer)
+        public FriendActionStatus RespondToRequest(string displayName, string requesterName, bool isAccepted)
         {
-            if (answer == null)
-            {
-                throw new ArgumentNullException(nameof(answer), NullAnswerMessage);
-            }
-
             ForgetExpiredRequests();
 
             Player addressee = _playerRepository.FindByName(displayName).FirstOrDefault();
-            Player requester = _playerRepository.FindByName(answer.RequesterName).FirstOrDefault();
+            Player requester = _playerRepository.FindByName(requesterName).FirstOrDefault();
             FriendActionStatus status = FriendActionStatus.PlayerNotFound;
 
             if (addressee != null && requester != null)
@@ -130,7 +124,7 @@ namespace YachtDice.Server.Logic.Friends
                 Friendship pendingFriendship = _friendRepository.FindBetween(requester.Id, addressee.Id)
                     .FirstOrDefault(isPendingFromRequester);
 
-                status = AnswerRequest(pendingFriendship, answer.IsAccepted);
+                status = AnswerRequest(pendingFriendship, isAccepted);
             }
 
             return status;
