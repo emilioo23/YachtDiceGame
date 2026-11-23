@@ -7,7 +7,7 @@ namespace YachtDice.Server.Tests.Moderation
     /// <summary>
     /// Links hidden in the chat messages.
     /// </summary>
-    public class LinkCensorTests
+    public class ChatCensorTests
     {
         private const string MessageWithFullLink = "mira https://spam.example.com/x";
         private const string CensoredFullLink = "mira **************************";
@@ -20,7 +20,7 @@ namespace YachtDice.Server.Tests.Moderation
         [InlineData(MessageWithShortLink, CensoredShortLink)]
         public void Censor_MessageWithLink_ReplacesTheLinkWithAsterisks(string message, string messageExpected)
         {
-            string censoredMessage = LinkCensor.Censor(message);
+            string censoredMessage = ChatCensor.Censor(message);
 
             Assert.Equal(messageExpected, censoredMessage);
         }
@@ -28,7 +28,7 @@ namespace YachtDice.Server.Tests.Moderation
         [Fact]
         public void Censor_MessageWithoutLinks_KeepsTheMessage()
         {
-            string censoredMessage = LinkCensor.Censor(MessageWithoutLinks);
+            string censoredMessage = ChatCensor.Censor(MessageWithoutLinks);
 
             Assert.Equal(MessageWithoutLinks, censoredMessage);
         }
@@ -36,7 +36,7 @@ namespace YachtDice.Server.Tests.Moderation
         [Fact]
         public void Censor_NullMessage_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => LinkCensor.Censor(null));
+            Assert.Throws<ArgumentNullException>(() => ChatCensor.Censor(null));
         }
     }
 }

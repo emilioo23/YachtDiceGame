@@ -59,7 +59,7 @@ namespace YachtDice.Server.Logic.Moderation
             _wholeWords = new Regex(
                 CreateWholeWordPattern(_words),
                 RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
-                TimeSpan.FromMilliseconds(ModerationRules.RegexTimeoutMilliseconds));
+                TimeSpan.FromMilliseconds(ChatCensor.RegexTimeoutMilliseconds));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace YachtDice.Server.Logic.Moderation
                 throw new ArgumentNullException(nameof(message), NullTextMessage);
             }
 
-            return _wholeWords.Replace(message, match => new string(ModerationRules.CensorCharacter, match.Length));
+            return _wholeWords.Replace(message, match => new string(ChatCensor.CensorCharacter, match.Length));
         }
 
         private static string CreateWholeWordPattern(List<string> words)
