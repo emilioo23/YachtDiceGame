@@ -156,7 +156,7 @@ namespace YachtDice.Views
                 }
                 else
                 {
-                    CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetStartMessage(challenge.Code));
+                    CustomDialogWindow.ShowMessage(this, AccountMessages.GetStartMessage(challenge.Code));
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace YachtDice.Views
                 }
                 else
                 {
-                    CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetLoginMessage(loginData.Code));
+                    CustomDialogWindow.ShowMessage(this, AccountMessages.GetLoginMessage(loginData.Code));
                 }
             }
         }
@@ -289,7 +289,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, LoginResultMessages.GetMessage(loginData.Code));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetMessage(loginData.Code));
             }
         }
 

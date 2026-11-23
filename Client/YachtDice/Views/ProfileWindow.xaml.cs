@@ -330,7 +330,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, AvatarChangeMessages.GetMessage(result, GetRequiredLevel()));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetMessage(result, GetRequiredLevel()));
             }
         }
 
@@ -451,7 +451,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, UsernameChangeMessages.GetMessage(result));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetMessage(result));
             }
         }
 

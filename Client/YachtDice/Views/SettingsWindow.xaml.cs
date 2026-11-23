@@ -241,7 +241,7 @@ namespace YachtDice.Views
                 PasskeyPasswordBox.Password);
 
             PasskeyPasswordBox.Clear();
-            CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetRemovalMessage(result));
+            CustomDialogWindow.ShowMessage(this, AccountMessages.GetRemovalMessage(result));
             ShowPasskeys(await _twoFactorGateway.ListPasskeysAsync(_session.SessionToken));
         }
 
@@ -270,7 +270,7 @@ namespace YachtDice.Views
             }
             else
             {
-                CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetStartMessage(challenge.Code));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetStartMessage(challenge.Code));
             }
         }
 
@@ -283,7 +283,7 @@ namespace YachtDice.Views
                 PasskeyRegistrationResultCode result =
                     await _twoFactorGateway.CompletePasskeyRegistrationAsync(_session.SessionToken, attestation);
 
-                CustomDialogWindow.ShowMessage(this, PasskeyMessages.GetRegistrationMessage(result));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetRegistrationMessage(result));
                 ShowPasskeys(await _twoFactorGateway.ListPasskeysAsync(_session.SessionToken));
             }
         }
@@ -334,9 +334,9 @@ namespace YachtDice.Views
             try
             {
                 SecuritySummary summary = await _twoFactorGateway.GetSecuritySummaryAsync(_session.SessionToken);
-                string lockNotice = SecuritySummaryTexts.DescribeLock(summary);
+                string lockNotice = AccountMessages.DescribeLock(summary);
 
-                PasswordChangeTextBlock.Text = SecuritySummaryTexts.DescribePasswordChange(summary);
+                PasswordChangeTextBlock.Text = AccountMessages.DescribePasswordChange(summary);
                 LockNoticeTextBlock.Text = lockNotice;
                 LockNoticeTextBlock.Visibility = lockNotice.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
             }
@@ -471,7 +471,7 @@ namespace YachtDice.Views
                     ShowBackupCodes(codesData.Codes);
                 }
 
-                CustomDialogWindow.ShowMessage(this, BackupCodesMessages.GetMessage(codesData.Code));
+                CustomDialogWindow.ShowMessage(this, AccountMessages.GetMessage(codesData.Code));
             }
             catch (GatewayException ex)
             {
@@ -659,7 +659,7 @@ namespace YachtDice.Views
             PasswordChangeResultCode result =
                 await _twoFactorGateway.ChangePasswordAsync(_session.SessionToken, change);
 
-            CustomDialogWindow.ShowMessage(this, PasswordChangeMessages.GetMessage(result));
+            CustomDialogWindow.ShowMessage(this, AccountMessages.GetMessage(result));
 
             if (result == PasswordChangeResultCode.Success)
             {

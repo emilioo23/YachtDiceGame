@@ -278,7 +278,6 @@
     <Compile Include="Utils\SavedScorecardTexts.cs" />
     <Compile Include="Utils\TextLimitNotice.cs" />
     <Compile Include="Utils\DisplayFormats.cs" />
-    <Compile Include="Utils\SecuritySummaryTexts.cs" />
     <Compile Include="Utils\ReportResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
     <Compile Include="Utils\PreferencesStore.cs" />
@@ -287,7 +286,6 @@
     <Compile Include="Utils\TaskbarAlert.cs" />
     <Compile Include="Utils\SoundEffectPlayer.cs" />
     <Compile Include="Utils\CategoryNames.cs" />
-    <Compile Include="Utils\AvatarChangeMessages.cs" />
     <Compile Include="Models\HistoryRow.cs" />
     <Compile Include="Models\KickRow.cs" />
     <Compile Include="Models\ReceivedInvitationRow.cs" />
@@ -295,7 +293,6 @@
     <Compile Include="Utils\AchievementNotifier.cs" />
     <Compile Include="Utils\FlagImages.cs" />
     <Compile Include="Utils\ProgressTexts.cs" />
-    <Compile Include="Utils\UsernameChangeMessages.cs" />
     <Compile Include="Utils\AvatarImageConverter.cs" />
     <Compile Include="Utils\AvatarImages.cs" />
     <Compile Include="Utils\ImageCatalog.cs" />
@@ -316,11 +313,7 @@
     <Compile Include="Passkeys\PasskeyException.cs" />
     <Compile Include="Passkeys\WebAuthnNative.cs" />
     <Compile Include="Passkeys\WindowsPasskeyAuthenticator.cs" />
-    <Compile Include="Utils\PasskeyMessages.cs" />
-    <Compile Include="Utils\LoginResultMessages.cs" />
     <Compile Include="Utils\GamePlayerFactory.cs" />
-    <Compile Include="Utils\BackupCodesMessages.cs" />
-    <Compile Include="Utils\PasswordChangeMessages.cs" />
     <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
@@ -537,6 +530,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Include="Utils\AccountMessages.cs" />
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
