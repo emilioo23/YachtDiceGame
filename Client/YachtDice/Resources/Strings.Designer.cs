@@ -1015,6 +1015,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Escribe un mensaje válido..
+        /// </summary>
+        public static string Game_Chat_EmptyMessage {
+            get {
+                return ResourceManager.GetString("Game_Chat_EmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Mostrar el chat.
         /// </summary>
         public static string Game_Chat_ShowTooltip {

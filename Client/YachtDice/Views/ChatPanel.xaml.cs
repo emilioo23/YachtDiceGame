@@ -301,19 +301,33 @@ namespace YachtDice.Views
 
         private void SubmitMessage()
         {
-            string content = MessageTextBox.Text.Trim();
-
-            bool canSend = content.Length > EmptyLength && _isSubscribed;
-
-            if (canSend && ChatLinkDetector.ContainsLink(content))
+            if (_isSubscribed)
             {
-                AddMessage(Strings.Game_Chat_SystemName, Strings.Game_Chat_LinksNotAllowed, ChatMessageKind.System);
+                SubmitContent(MessageTextBox.Text.Trim());
             }
-            else if (canSend)
+        }
+
+        private void SubmitContent(string content)
+        {
+            if (content.Length == EmptyLength)
+            {
+                MessageTextBox.Clear();
+                ShowSystemNotice(Strings.Game_Chat_EmptyMessage);
+            }
+            else if (ChatLinkDetector.ContainsLink(content))
+            {
+                ShowSystemNotice(Strings.Game_Chat_LinksNotAllowed);
+            }
+            else
             {
                 MessageTextBox.Clear();
                 _ = SendMessageAsync(content);
             }
+        }
+
+        private void ShowSystemNotice(string notice)
+        {
+            AddMessage(Strings.Game_Chat_SystemName, notice, ChatMessageKind.System);
         }
 
         private void HideChatButton_Click(object sender, RoutedEventArgs e)

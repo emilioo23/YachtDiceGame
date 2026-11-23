@@ -810,6 +810,9 @@
   <data name="Game_Chat_SendFailed" xml:space="preserve">
     <value>No se pudo enviar el mensaje.</value>
   </data>
+  <data name="Game_Chat_EmptyMessage" xml:space="preserve">
+    <value>Escribe un mensaje válido.</value>
+  </data>
   <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
     <value>No se permiten enlaces en el chat.</value>
   </data>

@@ -798,6 +798,9 @@
   <data name="Game_Chat_SendFailed" xml:space="preserve">
     <value>无法发送消息。</value>
   </data>
+  <data name="Game_Chat_EmptyMessage" xml:space="preserve">
+    <value>请输入有效的消息。</value>
+  </data>
   <data name="Game_Chat_LinksNotAllowed" xml:space="preserve">
     <value>聊天中不允许发送链接。</value>
   </data>
