@@ -172,7 +172,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.PasswordChanged, status);
         }
@@ -183,7 +183,7 @@ namespace YachtDice.Server.Tests.Authentication
             SeedCode(CorrectCode, SecondsOutsideCooldown);
             var resetExpected = new { HasNewPassword = true, TokenCount = NoTokens };
 
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             var resetResult = new
             {
@@ -198,7 +198,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, OldPassword);
 
             Assert.Equal(PasswordResetStatus.PasswordUsedBefore, status);
         }
@@ -210,7 +210,7 @@ namespace YachtDice.Server.Tests.Authentication
             ChangePasswordWithANewCode(ThirdPassword);
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, OldPassword);
 
             Assert.Equal(PasswordResetStatus.PasswordUsedBefore, status);
         }
@@ -223,7 +223,7 @@ namespace YachtDice.Server.Tests.Authentication
             ChangePasswordWithANewCode(FourthPassword);
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, OldPassword);
 
             Assert.Equal(PasswordResetStatus.PasswordChanged, status);
         }
@@ -232,9 +232,9 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_CodeAlreadyUsed_ReturnsCodeExpired()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, OldPassword);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
         }
@@ -243,9 +243,9 @@ namespace YachtDice.Server.Tests.Authentication
         public void ConfirmReset_CodeAlreadyUsed_KeepsThePasswordOfTheFirstChange()
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, OldPassword));
+            _service.ConfirmReset(Email, CorrectCode, OldPassword);
 
             Assert.True(IsCurrentPassword(NewPassword));
         }
@@ -255,7 +255,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, WrongCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.IncorrectCode, status);
         }
@@ -266,7 +266,7 @@ namespace YachtDice.Server.Tests.Authentication
             SeedCode(CorrectCode, SecondsOutsideCooldown);
             var resetExpected = new { HasOldPassword = true, TokenCount = OneToken };
 
-            _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
+            _service.ConfirmReset(Email, WrongCode, NewPassword);
 
             var resetResult = new
             {
@@ -302,7 +302,7 @@ namespace YachtDice.Server.Tests.Authentication
             SeedCode(CorrectCode, SecondsOutsideCooldown);
             TryWrongCodeUntilDiscarded();
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
         }
@@ -313,7 +313,7 @@ namespace YachtDice.Server.Tests.Authentication
             SeedCode(CorrectCode, SecondsOutsideCooldown);
             TryWrongCodeUntilDiscarded();
 
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.True(IsCurrentPassword(OldPassword));
         }
@@ -323,7 +323,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedExpiredCode();
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
         }
@@ -333,7 +333,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedExpiredCode();
 
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.Empty(_resets.Tokens);
         }
@@ -341,7 +341,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ConfirmReset_NoCodeRequested_ReturnsCodeExpired()
         {
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, NewPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
         }
@@ -349,14 +349,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ConfirmReset_UnknownEmail_ReturnsCodeExpired()
         {
-            var confirmation = new PasswordResetConfirmation
-            {
-                Email = UnknownEmail,
-                Code = CorrectCode,
-                NewPassword = NewPassword
-            };
-
-            PasswordResetStatus status = _service.ConfirmReset(confirmation);
+            PasswordResetStatus status = _service.ConfirmReset(UnknownEmail, CorrectCode, NewPassword);
 
             Assert.Equal(PasswordResetStatus.CodeExpired, status);
         }
@@ -366,7 +359,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(CorrectCode, WeakPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, CorrectCode, WeakPassword);
 
             Assert.Equal(PasswordResetStatus.WeakPassword, status);
         }
@@ -376,7 +369,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
 
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, WeakPassword));
+            _service.ConfirmReset(Email, CorrectCode, WeakPassword);
 
             Assert.True(IsCurrentPassword(OldPassword));
         }
@@ -387,7 +380,7 @@ namespace YachtDice.Server.Tests.Authentication
         [InlineData(CorrectCode, "   ")]
         public void ConfirmReset_BlankCodeOrPassword_ReturnsMissingRequiredField(string code, string newPassword)
         {
-            PasswordResetStatus status = _service.ConfirmReset(CreateConfirmation(code, newPassword));
+            PasswordResetStatus status = _service.ConfirmReset(Email, code, newPassword);
 
             Assert.Equal(PasswordResetStatus.MissingRequiredField, status);
         }
@@ -395,16 +388,6 @@ namespace YachtDice.Server.Tests.Authentication
         private static DateTime ExpiredDate()
         {
             return DateTime.UtcNow.AddMinutes(-MinutesExpired);
-        }
-
-        private static PasswordResetConfirmation CreateConfirmation(string code, string newPassword)
-        {
-            return new PasswordResetConfirmation
-            {
-                Email = Email,
-                Code = code,
-                NewPassword = newPassword
-            };
         }
 
         private PasswordService CreateService(IEmailService emailService)
@@ -415,7 +398,7 @@ namespace YachtDice.Server.Tests.Authentication
         private void ChangePasswordWithANewCode(string newPassword)
         {
             SeedCode(CorrectCode, SecondsOutsideCooldown);
-            _service.ConfirmReset(CreateConfirmation(CorrectCode, newPassword));
+            _service.ConfirmReset(Email, CorrectCode, newPassword);
         }
 
         private bool IsCurrentPassword(string password)
@@ -429,7 +412,7 @@ namespace YachtDice.Server.Tests.Authentication
 
             for (var attempt = 0; attempt < WrongAttemptsToDiscard; attempt++)
             {
-                status = _service.ConfirmReset(CreateConfirmation(WrongCode, NewPassword));
+                status = _service.ConfirmReset(Email, WrongCode, NewPassword);
             }
 
             return status;

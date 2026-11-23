@@ -62,7 +62,6 @@
     <Compile Include="Authentication\PasswordChangeStatus.cs" />
     <Compile Include="Authentication\PasswordService.cs" />
     <Compile Include="Authentication\PasswordResetAttemptCounter.cs" />
-    <Compile Include="Authentication\PasswordResetConfirmation.cs" />
     <Compile Include="Authentication\PasswordResetRequestStatus.cs" />
     <Compile Include="Authentication\PasswordResetStatus.cs" />
     <Compile Include="Authentication\RegistrationResult.cs" />

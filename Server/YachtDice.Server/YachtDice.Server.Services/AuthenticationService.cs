@@ -206,14 +206,8 @@ namespace YachtDice.Server.Services
 
         private Contracts.PasswordResetResultCode ProcessPasswordResetConfirmation(Contracts.PasswordResetData data)
         {
-            var confirmation = new LogicAuth.PasswordResetConfirmation
-            {
-                Email = data.Email,
-                Code = data.Code,
-                NewPassword = data.NewPassword
-            };
-
-            LogicAuth.PasswordResetStatus logicResult = _passwordRecoveryService.ConfirmReset(confirmation);
+            LogicAuth.PasswordResetStatus logicResult =
+                _passwordRecoveryService.ConfirmReset(data.Email, data.Code, data.NewPassword);
 
             return Mapping.EnumMapper.Map<LogicAuth.PasswordResetStatus, Contracts.PasswordResetResultCode>(
                 logicResult);

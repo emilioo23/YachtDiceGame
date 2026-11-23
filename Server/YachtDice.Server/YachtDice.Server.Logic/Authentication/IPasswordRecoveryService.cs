@@ -20,6 +20,6 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="confirmation">Email, code and new password written by the player.</param>
         /// <returns>Outcome of the confirmation.</returns>
-        PasswordResetStatus ConfirmReset(PasswordResetConfirmation confirmation);
+        PasswordResetStatus ConfirmReset(string email, string code, string newPassword);
     }
 }

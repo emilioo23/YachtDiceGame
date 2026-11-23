@@ -90,28 +90,25 @@ namespace YachtDice.Server.Logic.Authentication
         /// <summary>
         /// Checks the recovery code and, if it is correct, saves the new password.
         /// </summary>
-        /// <param name="confirmation">Email, code and new password written by the player.</param>
+        /// <param name="email">Email of the account to recover.</param>
+        /// <param name="code">Recovery code written by the player.</param>
+        /// <param name="newPassword">Password that the player wants.</param>
         /// <returns>Outcome of the confirmation.</returns>
-        public PasswordResetStatus ConfirmReset(PasswordResetConfirmation confirmation)
+        public PasswordResetStatus ConfirmReset(string email, string code, string newPassword)
         {
-            if (confirmation == null)
-            {
-                throw new ArgumentNullException(nameof(confirmation), NullArgumentMessage);
-            }
-
             PasswordResetStatus status;
 
-            if (!HasAllFields(confirmation))
+            if (!HasAllFields(email, code, newPassword))
             {
                 status = PasswordResetStatus.MissingRequiredField;
             }
-            else if (!CredentialRules.IsStrongPassword(confirmation.NewPassword))
+            else if (!CredentialRules.IsStrongPassword(newPassword))
             {
                 status = PasswordResetStatus.WeakPassword;
             }
             else
             {
-                status = CheckPlayerCode(confirmation);
+                status = CheckPlayerCode(email, code, newPassword);
             }
 
             return status;
@@ -161,11 +158,11 @@ namespace YachtDice.Server.Logic.Authentication
             return summary;
         }
 
-        private static bool HasAllFields(PasswordResetConfirmation confirmation)
+        private static bool HasAllFields(string email, string code, string newPassword)
         {
-            return !string.IsNullOrWhiteSpace(confirmation.Email)
-                && !string.IsNullOrWhiteSpace(confirmation.Code)
-                && !string.IsNullOrWhiteSpace(confirmation.NewPassword);
+            return !string.IsNullOrWhiteSpace(email)
+                && !string.IsNullOrWhiteSpace(code)
+                && !string.IsNullOrWhiteSpace(newPassword);
         }
 
         private bool WasCodeSentRecently(int playerId)
@@ -207,20 +204,20 @@ namespace YachtDice.Server.Logic.Authentication
             return isSent ? PasswordResetRequestStatus.CodeSent : PasswordResetRequestStatus.CodeSendFailed;
         }
 
-        private PasswordResetStatus CheckPlayerCode(PasswordResetConfirmation confirmation)
+        private PasswordResetStatus CheckPlayerCode(string email, string code, string newPassword)
         {
-            Player player = _playerRepository.FindByEmail(confirmation.Email.Trim()).FirstOrDefault();
+            Player player = _playerRepository.FindByEmail(email.Trim()).FirstOrDefault();
             PasswordResetStatus status = PasswordResetStatus.CodeExpired;
 
             if (player != null)
             {
-                status = CheckSavedCode(player, confirmation);
+                status = CheckSavedCode(player, code, newPassword);
             }
 
             return status;
         }
 
-        private PasswordResetStatus CheckSavedCode(Player player, PasswordResetConfirmation confirmation)
+        private PasswordResetStatus CheckSavedCode(Player player, string code, string newPassword)
         {
             PwdResetToken token = _resetRepository.FindByPlayerId(player.Id).FirstOrDefault();
             PasswordResetStatus status = PasswordResetStatus.CodeExpired;
@@ -231,24 +228,22 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else if (token != null)
             {
-                status = CheckCodeMatch(player.Id, token, confirmation);
+                status = CheckCodeMatch(token, code, newPassword);
             }
 
             return status;
         }
 
-        private PasswordResetStatus CheckCodeMatch(
-            int playerId,
-            PwdResetToken token,
-            PasswordResetConfirmation confirmation)
+        private PasswordResetStatus CheckCodeMatch(PwdResetToken token, string code, string newPassword)
         {
-            string enteredHash = CredentialRules.ComputeResetCodeHash(playerId, confirmation.Code.Trim());
+            int playerId = token.PlayerId;
+            string enteredHash = CredentialRules.ComputeResetCodeHash(playerId, code.Trim());
             bool isCorrect = string.Equals(enteredHash, token.Token, StringComparison.OrdinalIgnoreCase);
             PasswordResetStatus status;
 
             if (isCorrect)
             {
-                status = SaveRecoveredPassword(playerId, confirmation.NewPassword);
+                status = SaveRecoveredPassword(playerId, newPassword);
             }
             else
             {
