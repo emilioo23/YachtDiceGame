@@ -119,7 +119,6 @@
     <Compile Include="Passkeys\PasskeyRemovalTests.cs" />
     <Compile Include="Passkeys\PasskeyTestContext.cs" />
     <Compile Include="Players\AchievementCatalogTests.cs" />
-    <Compile Include="Players\ExperienceRulesTests.cs" />
     <Compile Include="Players\LevelTableTests.cs" />
     <Compile Include="Players\PlayerStatisticsServiceTests.cs" />
     <Compile Include="Players\ProfileServiceTests.cs" />

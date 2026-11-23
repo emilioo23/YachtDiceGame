@@ -316,7 +316,7 @@ namespace YachtDice.Server.Tests.Game
 
             PlayerSnapshot winner = FindPlayer(manager.GetState(new RoomMember(RoomCode, FirstId)).Snapshot, FirstId);
 
-            int experienceGainedExpected = ExperienceRules.WinnerBaseExperience + winner.Total;
+            int experienceGainedExpected = LevelTable.WinnerBaseExperience + winner.Total;
             Assert.Equal(experienceGainedExpected, winner.ExperienceGained);
         }
 

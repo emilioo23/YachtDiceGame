@@ -5,7 +5,7 @@ using YachtDice.Server.Logic.Players;
 namespace YachtDice.Server.Tests.Players
 {
     /// <summary>
-    /// Level of a player according to the experience that each level needs.
+    /// Levels of the players and the experience that they gain.
     /// </summary>
     public class LevelTableTests
     {
@@ -20,7 +20,11 @@ namespace YachtDice.Server.Tests.Players
         private const int NegativeExperience = -1;
         private const int NoLevel = 0;
         private const int AboveLastLevel = 9;
-
+        private const int GameTotal = 180;
+        private const int NoPoints = 0;
+        private const int NegativeTotal = -1;
+        private const int WinnerExperience = 280;
+        private const int LoserExperience = 210;
         private static readonly int[] Thresholds = { NoExperience, SecondLevelExperience, ThirdLevelExperience };
 
         [Theory]
@@ -113,6 +117,36 @@ namespace YachtDice.Server.Tests.Players
         {
             Assert.Throws<ArgumentException>(
                 () => new LevelTable(new[] { NoExperience, ThirdLevelExperience, SecondLevelExperience }));
+        }
+
+        [Fact]
+        public void CalculateGain_Winner_AddsTheWinnerBaseToTheTotal()
+        {
+            int experienceGained = LevelTable.CalculateGain(GameTotal, true);
+
+            Assert.Equal(WinnerExperience, experienceGained);
+        }
+
+        [Fact]
+        public void CalculateGain_Loser_AddsTheLoserBaseToTheTotal()
+        {
+            int experienceGained = LevelTable.CalculateGain(GameTotal, false);
+
+            Assert.Equal(LoserExperience, experienceGained);
+        }
+
+        [Fact]
+        public void CalculateGain_LoserWithoutPoints_GetsOnlyTheLoserBase()
+        {
+            int experienceGained = LevelTable.CalculateGain(NoPoints, false);
+
+            Assert.Equal(LevelTable.LoserBaseExperience, experienceGained);
+        }
+
+        [Fact]
+        public void CalculateGain_NegativeTotal_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => LevelTable.CalculateGain(NegativeTotal, true));
         }
     }
 }

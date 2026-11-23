@@ -311,7 +311,7 @@ namespace YachtDice.Server.Logic.Game
             {
                 if (player.IsPresent)
                 {
-                    player.ExperienceGained = ExperienceRules.CalculateGain(player.Total, player.IsWinner);
+                    player.ExperienceGained = LevelTable.CalculateGain(player.Total, player.IsWinner);
                 }
             }
         }

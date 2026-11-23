@@ -5,11 +5,20 @@ using System.Linq;
 namespace YachtDice.Server.Logic.Players
 {
     /// <summary>
-    /// The experience that each level needs. The values come from the configuration of the server: the first
-    /// one is the first level and must be zero, and each next level needs more experience than the one before.
+    /// Experience that each level needs and the experience that a player gains in a game.
     /// </summary>
     public sealed class LevelTable
     {
+        /// <summary>
+        /// Base experience of a player who wins the game.
+        /// </summary>
+        public const int WinnerBaseExperience = 100;
+
+        /// <summary>
+        /// Base experience of a player who completes the game without winning it.
+        /// </summary>
+        public const int LoserBaseExperience = 30;
+
         private const int StartingExperience = 0;
         private const int FirstLevel = 1;
         private const string NullThresholdsMessage = "The experience of each level cannot be null.";
@@ -18,7 +27,8 @@ namespace YachtDice.Server.Logic.Players
         private const string UnorderedThresholdsMessage = "Each level must need more experience than the last one.";
         private const string NegativeExperienceMessage = "The experience of a player cannot be negative.";
         private const string InvalidLevelMessage = "The level must be at least one.";
-
+        private const int NoPoints = 0;
+        private const string NegativeTotalMessage = "The total of the scorecard cannot be negative.";
         private readonly List<int> _thresholds;
 
         /// <summary>
@@ -111,6 +121,25 @@ namespace YachtDice.Server.Logic.Players
             }
 
             return GetLevelStart(Math.Min(level + 1, MaxLevel));
+        }
+
+        /// <summary>
+        /// Calculates the experience that a player earns for completing a game.
+        /// </summary>
+        /// <param name="total">Total of the scorecard of the player when the game finished.</param>
+        /// <param name="isWinner">True if the player won the game.</param>
+        /// <returns>The experience earned in the game.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The total is negative.</exception>
+        public static int CalculateGain(int total, bool isWinner)
+        {
+            if (total < NoPoints)
+            {
+                throw new ArgumentOutOfRangeException(nameof(total), NegativeTotalMessage);
+            }
+
+            int baseExperience = isWinner ? WinnerBaseExperience : LoserBaseExperience;
+
+            return baseExperience + total;
         }
 
         private static bool IsAscending(List<int> thresholds)
