@@ -55,8 +55,8 @@ namespace YachtDice.Views
             var image = new Image
             {
                 Source = DiceCatalog.Get(
-                    DieResourceKey.Create(die.Value),
-                    DieResourceKey.Create(DieResourceKey.DefaultValue)),
+                    DiceFaces.Create(die.Value),
+                    DiceFaces.Create(DiceFaces.DefaultValue)),
                 Width = DieSize,
                 Height = DieSize,
                 Margin = new Thickness(DieGap)
@@ -74,7 +74,7 @@ namespace YachtDice.Views
         {
             Children.Clear();
 
-            foreach (DieDisplay die in DiceRowParser.Parse(text))
+            foreach (DieDisplay die in DiceFaces.Parse(text))
             {
                 Children.Add(CreateDieImage(die));
             }

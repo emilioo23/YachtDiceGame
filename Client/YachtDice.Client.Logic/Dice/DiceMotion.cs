@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace YachtDice.Client.Logic.Dice
 {
     /// <summary>
-    /// The movement of the dice. In a throw the die first goes to the hand, which is a place near the edge of
-    /// the table, and then it flies from there to its landing place: it turns in the air, bounces two times and
-    /// slows down. A glide is the short hop that moves a die to another place, for example to the row under the
-    /// table. Every method receives the progress of the movement from zero, when it starts, to one, when it
-    /// ends; a value out of that range is moved to the nearest limit.
+    /// Path that a die follows when it is thrown and the place where it lands.
     /// </summary>
-    public static class DiceThrowPath
+    public static class DiceMotion
     {
+        /// <summary>
+        /// Smallest distance between the centers of two dice on the table. It is a little more than the diagonal
+        /// of a cube.
+        /// </summary>
+        public const double MinimumGap = 1.9;
+
         private const double StartProgress = 0;
         private const double EndProgress = 1;
         private const double GatherShare = 0.2;
@@ -23,6 +26,9 @@ namespace YachtDice.Client.Logic.Dice
         private const double TravelDecayPower = 3;
         private const double SmoothstepCubic = 3;
         private const double SmoothstepLinear = 2;
+        private const int MaxAttempts = 60;
+        private const double FullTurnRadians = 2 * Math.PI;
+        private const double NoClearance = -1;
 
         /// <summary>
         /// Gets how much of the way to the hand the die has made. It reaches one at the end of the first part of
@@ -97,6 +103,36 @@ namespace YachtDice.Client.Logic.Dice
             return restHeight + (HopHeight * Math.Sin(Math.PI * Clamp(progress)));
         }
 
+        /// <summary>
+        /// Chooses a landing place. It tries random places until one is far enough from the others; if none is
+        /// after several tries, it uses the one that was farthest.
+        /// </summary>
+        /// <param name="occupied">Places of the dice that are already on the table.</param>
+        /// <param name="nextUnit">Gives a random number from zero up to one that is not included.</param>
+        /// <returns>The place where the die lands.</returns>
+        public static DiceSlot Choose(IReadOnlyList<DiceSlot> occupied, Func<double> nextUnit)
+        {
+            DiceSlot best = null;
+            double bestClearance = NoClearance;
+            var attempt = 0;
+
+            while (attempt < MaxAttempts && bestClearance < MinimumGap)
+            {
+                DiceSlot candidate = Sample(nextUnit);
+                double clearance = FindClearance(candidate, occupied);
+
+                if (clearance > bestClearance)
+                {
+                    best = candidate;
+                    bestClearance = clearance;
+                }
+
+                attempt++;
+            }
+
+            return best;
+        }
+
         private static double Flight(double progress)
         {
             return Clamp((Clamp(progress) - GatherShare) / (EndProgress - GatherShare));
@@ -110,6 +146,31 @@ namespace YachtDice.Client.Logic.Dice
         private static double Clamp(double progress)
         {
             return Math.Max(StartProgress, Math.Min(EndProgress, progress));
+        }
+
+        private static DiceSlot Sample(Func<double> nextUnit)
+        {
+            double radiusUnit = nextUnit();
+            double angleUnit = nextUnit();
+            double radius = DiceTableLayout.LandingRadius * Math.Sqrt(radiusUnit);
+            double angle = FullTurnRadians * angleUnit;
+
+            return new DiceSlot(radius * Math.Cos(angle), radius * Math.Sin(angle));
+        }
+
+        private static double FindClearance(DiceSlot candidate, IReadOnlyList<DiceSlot> occupied)
+        {
+            double clearance = double.MaxValue;
+
+            foreach (DiceSlot other in occupied)
+            {
+                double deltaX = candidate.X - other.X;
+                double deltaZ = candidate.Z - other.Z;
+
+                clearance = Math.Min(clearance, Math.Sqrt((deltaX * deltaX) + (deltaZ * deltaZ)));
+            }
+
+            return clearance;
         }
     }
 }

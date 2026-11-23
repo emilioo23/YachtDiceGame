@@ -239,7 +239,7 @@ namespace YachtDice.Views
 
             if (die.Location == DiceLocation.Rack)
             {
-                DiceSlot slot = DiceLanding.Choose(occupied, _random.NextDouble);
+                DiceSlot slot = DiceMotion.Choose(occupied, _random.NextDouble);
                 DieMotion motion = CreateGlide(slot, DiceLocation.Table, NoDuration);
 
                 occupied.Add(slot);
@@ -253,7 +253,7 @@ namespace YachtDice.Views
 
         private double Throw(int index, List<DiceSlot> landed)
         {
-            DiceSlot slot = DiceLanding.Choose(landed, _random.NextDouble);
+            DiceSlot slot = DiceMotion.Choose(landed, _random.NextDouble);
             int tumbleTurns = MinTumbleTurns + _random.Next(ExtraTumbleTurns);
             var motion = new DieMotion
             {

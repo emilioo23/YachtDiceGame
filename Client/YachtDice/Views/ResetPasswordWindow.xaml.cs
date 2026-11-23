@@ -38,7 +38,7 @@ namespace YachtDice.Views
             _logger = new AppLogger(GetType());
             _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
             EmailTextBlock.Text = email;
-            CodeTextBox.MaxLength = ResetPasswordValidator.CodeLength;
+            CodeTextBox.MaxLength = AccountInputRules.CodeLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);
             CodeTextBox.Focus();
         }
@@ -122,7 +122,7 @@ namespace YachtDice.Views
 
         private async Task ChangePasswordAsync()
         {
-            ResetPasswordStatus inputStatus = ResetPasswordValidator.Validate(
+            ResetPasswordStatus inputStatus = AccountInputRules.ValidateResetPassword(
                 CodeTextBox.Text.Trim(),
                 NewPasswordBox.Password,
                 ConfirmPasswordBox.Password);

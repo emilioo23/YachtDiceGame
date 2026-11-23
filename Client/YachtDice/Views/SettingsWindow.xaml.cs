@@ -633,7 +633,7 @@ namespace YachtDice.Views
 
         private async Task ChangePasswordAsync()
         {
-            PasswordChangeStatus inputStatus = PasswordChangeValidator.Validate(
+            PasswordChangeStatus inputStatus = AccountInputRules.ValidatePasswordChange(
                 CurrentPasswordBox.Password,
                 NewPasswordBox.Password,
                 ConfirmNewPasswordBox.Password);

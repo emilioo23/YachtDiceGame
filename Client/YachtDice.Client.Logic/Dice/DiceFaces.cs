@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace YachtDice.Client.Logic.Dice
 {
     /// <summary>
-    /// The cells of the grid that have a pip in each face of a die.
+    /// Faces of the dice: how a row of dice is read, which resource shows each value and where the pips go.
     /// </summary>
-    public static class DicePipLayout
+    public static class DiceFaces
     {
+        /// <summary>
+        /// Number of the face that is shown when the image of another one is missing.
+        /// </summary>
+        public const int DefaultValue = 1;
+
+        private const char Separator = ' ';
+        private const string DimmedMarker = "-";
+        private const int LowestValue = 1;
+        private const int HighestValue = 6;
+        private const int FirstCharacterIndex = 0;
+        private const string KeyFormat = "Die_{0}";
         private const int NoValue = 0;
         private const int FaceOne = 1;
         private const int FaceTwo = 2;
@@ -19,7 +31,6 @@ namespace YachtDice.Client.Logic.Dice
         private const int Middle = 1;
         private const int High = 2;
         private const string InvalidValueMessage = "The value of a die goes from zero to six.";
-
         private static readonly Dictionary<int, PipCell[]> Layouts = new Dictionary<int, PipCell[]>
         {
             { NoValue, new PipCell[] { } },
@@ -56,6 +67,37 @@ namespace YachtDice.Client.Logic.Dice
         };
 
         /// <summary>
+        /// Converts the text into the dice that must be drawn. Words that are not a number from 1 to 6 are
+        /// ignored, so a typing mistake in an example does not break the window.
+        /// </summary>
+        /// <param name="text">Text with the dice separated by spaces; it can be empty.</param>
+        /// <returns>The dice, in the same order as in the text; an empty list if there are none.</returns>
+        public static List<DieDisplay> Parse(string text)
+        {
+            var dice = new List<DieDisplay>();
+
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                foreach (string word in text.Split(new[] { Separator }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    AddIfValid(dice, word);
+                }
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Gets the resource name of the image of a face.
+        /// </summary>
+        /// <param name="value">Number of the face, from 1 to 6.</param>
+        /// <returns>The resource name, for example Die_4.</returns>
+        public static string Create(int value)
+        {
+            return string.Format(CultureInfo.InvariantCulture, KeyFormat, value);
+        }
+
+        /// <summary>
         /// Gets the cells that have a pip in a face.
         /// </summary>
         /// <param name="value">Value of the face from one to six; zero is a die that was not rolled yet.</param>
@@ -71,6 +113,25 @@ namespace YachtDice.Client.Logic.Dice
             }
 
             return cells;
+        }
+
+        private static void AddIfValid(List<DieDisplay> dice, string word)
+        {
+            bool isDimmed = word.EndsWith(DimmedMarker, StringComparison.Ordinal);
+            string digits = word;
+
+            if (isDimmed)
+            {
+                digits = word.Substring(FirstCharacterIndex, word.Length - DimmedMarker.Length);
+            }
+
+            bool isNumber = int.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out int value);
+            bool isFaceValue = value >= LowestValue && value <= HighestValue;
+
+            if (isNumber && isFaceValue)
+            {
+                dice.Add(new DieDisplay { Value = value, IsDimmed = isDimmed });
+            }
         }
     }
 }

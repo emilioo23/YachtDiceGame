@@ -118,9 +118,9 @@ namespace YachtDice.Views
 
         private void ShowRooms(List<RoomListItem> newRooms)
         {
-            if (!_isClosed && !RoomListUpdater.HasSameContent(_allRooms, newRooms))
+            if (!_isClosed && !RoomListRules.HasSameContent(_allRooms, newRooms))
             {
-                RoomListUpdater.KeepTypedCodes(_allRooms, newRooms);
+                RoomListRules.KeepTypedCodes(_allRooms, newRooms);
                 _allRooms = newRooms;
                 ApplyFilters();
             }
@@ -130,7 +130,7 @@ namespace YachtDice.Views
 
         private void ApplyFilters()
         {
-            _visibleRooms = RoomListItemFilter.Apply(_allRooms, GetSelectedPrivacyFilter(), SearchTextBox.Text);
+            _visibleRooms = RoomListRules.Apply(_allRooms, GetSelectedPrivacyFilter(), SearchTextBox.Text);
             RoomsItemsControl.ItemsSource = _visibleRooms;
         }
 

@@ -43,31 +43,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
-    <Compile Include="Authentication\BackupCodeValidatorTests.cs" />
-    <Compile Include="Authentication\EmailMaskTests.cs" />
-    <Compile Include="Authentication\PasswordChangeValidatorTests.cs" />
-    <Compile Include="Authentication\ResetPasswordValidatorTests.cs" />
+    <Compile Include="Authentication\AccountInputRulesTests.cs" />
     <Compile Include="Avatars\AvatarOptionBuilderTests.cs" />
     <Compile Include="Avatars\AvatarResourceKeyTests.cs" />
     <Compile Include="Chat\ChatLinkDetectorTests.cs" />
     <Compile Include="Connection\ConnectionLossGateTests.cs" />
     <Compile Include="Connection\ReconnectLoopTests.cs" />
     <Compile Include="Dice\DiceFaceOrientationTests.cs" />
-    <Compile Include="Dice\DiceLandingTests.cs" />
-    <Compile Include="Dice\DicePipLayoutTests.cs" />
-    <Compile Include="Dice\DiceRowParserTests.cs" />
+    <Compile Include="Dice\DiceFacesTests.cs" />
+    <Compile Include="Dice\DiceMotionTests.cs" />
     <Compile Include="Dice\DiceTableLayoutTests.cs" />
-    <Compile Include="Dice\DiceThrowPathTests.cs" />
     <Compile Include="Dice\DiceVectorTests.cs" />
-    <Compile Include="Dice\DieResourceKeyTests.cs" />
     <Compile Include="Game\FinalPlaceTests.cs" />
     <Compile Include="Game\HeldDiceSelectionTests.cs" />
     <Compile Include="Game\ReconnectWaitTrackerTests.cs" />
     <Compile Include="Game\StandingsBuilderTests.cs" />
     <Compile Include="Game\StateVersionGateTests.cs" />
     <Compile Include="Game\TurnCountdownTests.cs" />
-    <Compile Include="Game\TurnPhaseResolverTests.cs" />
-    <Compile Include="Game\YachtCelebrationRuleTests.cs" />
+    <Compile Include="Game\TurnRulesTests.cs" />
     <Compile Include="Gateway\PinnedServerCertificateValidatorTests.cs" />
     <Compile Include="Logging\ErrorLogFormatterTests.cs" />
     <Compile Include="Passkeys\Base64UrlTests.cs" />
@@ -77,10 +70,8 @@
     <Compile Include="Players\InitialLetterTests.cs" />
     <Compile Include="Players\LevelProgressTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rooms\PresenceComparerTests.cs" />
-    <Compile Include="Rooms\RoomListItemFilterTests.cs" />
     <Compile Include="Rooms\RoomListItemTests.cs" />
-    <Compile Include="Rooms\RoomListUpdaterTests.cs" />
+    <Compile Include="Rooms\RoomListRulesTests.cs" />
     <Compile Include="Settings\GameplaySettingsTests.cs" />
     <Compile Include="Settings\LanguageCatalogTests.cs" />
     <Compile Include="Settings\UserPreferencesTests.cs" />

@@ -189,28 +189,28 @@ namespace YachtDice.Views
 
         private void Fly(double progress)
         {
-            double gather = DiceThrowPath.Gather(progress);
-            double scatter = DiceThrowPath.Scatter(progress);
+            double gather = DiceMotion.Gather(progress);
+            double scatter = DiceMotion.Scatter(progress);
             double handX = Blend(_startX, _motion.Hand.X, gather);
             double handZ = Blend(_startZ, _motion.Hand.Z, gather);
 
             _tumble.Axis = _motion.TumbleAxis;
-            _tumble.Angle = DiceThrowPath.TumbleDegrees(_motion.TumbleDegrees, progress);
+            _tumble.Angle = DiceMotion.TumbleDegrees(_motion.TumbleDegrees, progress);
             _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, scatter);
             MoveTo(
                 Blend(handX, _motion.End.X, scatter),
-                DiceThrowPath.Height(progress, RestHeight),
+                DiceMotion.Height(progress, RestHeight),
                 Blend(handZ, _motion.End.Z, scatter));
         }
 
         private void Glide(double progress)
         {
-            double travel = DiceThrowPath.GlideTravel(progress);
+            double travel = DiceMotion.GlideTravel(progress);
 
             _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, travel);
             MoveTo(
                 Blend(_startX, _motion.End.X, travel),
-                DiceThrowPath.GlideHeight(progress, RestHeight),
+                DiceMotion.GlideHeight(progress, RestHeight),
                 Blend(_startZ, _motion.End.Z, travel));
         }
 

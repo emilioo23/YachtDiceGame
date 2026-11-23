@@ -97,7 +97,7 @@ namespace YachtDice.Views
 
             group.Children.Add(new GeometryDrawing(Brushes.White, edge, square));
 
-            foreach (PipCell cell in DicePipLayout.GetCells(value))
+            foreach (PipCell cell in DiceFaces.GetCells(value))
             {
                 var center = new Point(PipStart + (cell.Column * PipStep), PipStart + (cell.Row * PipStep));
                 var pip = new EllipseGeometry(center, PipRadius, PipRadius);

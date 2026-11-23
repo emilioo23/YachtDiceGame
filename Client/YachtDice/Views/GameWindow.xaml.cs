@@ -97,7 +97,7 @@ namespace YachtDice.Views
             Closed += HandleWindowClosed;
         }
 
-        private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
+        private TurnPhase CurrentPhase => TurnRules.ResolvePhase(
             _state.Status == GameStatus.Finished,
             _state.CurrentPlayerId,
             _playerId);
@@ -305,7 +305,7 @@ namespace YachtDice.Views
         private string GetHintText()
         {
             string name = FindPlayerName(_state.CurrentPlayerId);
-            TurnHint hint = TurnPhaseResolver.ResolveHint(
+            TurnHint hint = TurnRules.ResolveHint(
                 CurrentPhase,
                 _state.RollsLeft,
                 MaxRolls);
@@ -603,7 +603,7 @@ namespace YachtDice.Views
             CategoryScore after = FindYachtScore(state, scorerId);
             bool isFilledBefore = before != null && before.IsFilled;
             bool isCelebrationDue = after != null
-                && YachtCelebrationRule.IsCelebrationDue(isFilledBefore, after.IsFilled, after.Points);
+                && TurnRules.IsCelebrationDue(isFilledBefore, after.IsFilled, after.Points);
 
             if (isCelebrationDue)
             {
@@ -719,12 +719,12 @@ namespace YachtDice.Views
         {
             List<GameParticipant> currentPlayers = ToParticipants(room);
 
-            foreach (GameParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
+            foreach (GameParticipant departed in RoomListRules.FindDeparted(_presentPlayers, currentPlayers))
             {
                 AddNotice(GameMessages.GetDepartureMessage(eventType, departed.Name));
             }
 
-            foreach (GameParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
+            foreach (GameParticipant arrived in RoomListRules.FindArrived(_presentPlayers, currentPlayers))
             {
                 AddNotice(GameMessages.GetReturnMessage(arrived.Name));
             }
