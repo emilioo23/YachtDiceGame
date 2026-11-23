@@ -65,7 +65,7 @@ namespace YachtDice.Views
         {
             return new KickRow
             {
-                Text = KickHistoryTexts.Describe(kick, _session.DisplayName),
+                Text = SocialMessages.Describe(kick, _session.DisplayName),
                 DateText = kick.Date.ToLocalTime().ToString(DisplayFormats.ShortDateTime)
             };
         }

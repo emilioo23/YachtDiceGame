@@ -39,8 +39,8 @@ namespace YachtDice.Views
         {
             return new ScorecardView
             {
-                Title = SavedScorecardTexts.CreateTitle(scorecard),
-                Lines = SavedScorecardTexts.CreateLines(scorecard)
+                Title = GameMessages.CreateTitle(scorecard),
+                Lines = GameMessages.CreateLines(scorecard)
             };
         }
 

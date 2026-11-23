@@ -200,7 +200,7 @@ namespace YachtDice.Views
                 }
                 else
                 {
-                    errorMessage = GameResultMessages.GetMessage(result.Code);
+                    errorMessage = GameMessages.GetMessage(result.Code);
                 }
             }
             catch (GatewayException ex)
@@ -531,7 +531,7 @@ namespace YachtDice.Views
 
                 if (result != GameResultCode.Success)
                 {
-                    errorMessage = GameResultMessages.GetMessage(result);
+                    errorMessage = GameMessages.GetMessage(result);
                 }
             }
             catch (GatewayException ex)
@@ -721,12 +721,12 @@ namespace YachtDice.Views
 
             foreach (GameParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
             {
-                AddNotice(PresenceMessages.GetDepartureMessage(eventType, departed.Name));
+                AddNotice(GameMessages.GetDepartureMessage(eventType, departed.Name));
             }
 
             foreach (GameParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
             {
-                AddNotice(PresenceMessages.GetReturnMessage(arrived.Name));
+                AddNotice(GameMessages.GetReturnMessage(arrived.Name));
             }
 
             _presentPlayers = currentPlayers;

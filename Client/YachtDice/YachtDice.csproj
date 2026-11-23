@@ -272,13 +272,8 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\GatewayErrorMessages.cs" />
-    <Compile Include="Utils\GameResultMessages.cs" />
-    <Compile Include="Utils\KickHistoryTexts.cs" />
-    <Compile Include="Utils\ReceivedInvitationTexts.cs" />
-    <Compile Include="Utils\SavedScorecardTexts.cs" />
     <Compile Include="Utils\TextLimitNotice.cs" />
     <Compile Include="Utils\DisplayFormats.cs" />
-    <Compile Include="Utils\ReportResultMessages.cs" />
     <Compile Include="Utils\MusicPlayer.cs" />
     <Compile Include="Utils\PreferencesStore.cs" />
     <Compile Include="Utils\MusicTrack.cs" />
@@ -307,14 +302,11 @@
     <Compile Include="Utils\DialogContent.cs" />
     <Compile Include="Utils\ThemeResourceKeys.cs" />
     <Compile Include="Utils\FriendItemFactory.cs" />
-    <Compile Include="Utils\FriendRequestMessages.cs" />
-    <Compile Include="Utils\InvitationResultMessages.cs" />
     <Compile Include="Passkeys\NativeScope.cs" />
     <Compile Include="Passkeys\PasskeyException.cs" />
     <Compile Include="Passkeys\WebAuthnNative.cs" />
     <Compile Include="Passkeys\WindowsPasskeyAuthenticator.cs" />
     <Compile Include="Utils\GamePlayerFactory.cs" />
-    <Compile Include="Utils\PresenceMessages.cs" />
     <Compile Include="Utils\RoomListItemFactory.cs" />
     <Compile Include="Utils\RoomResultMessages.cs" />
     <Compile Include="Utils\SecureRandom.cs" />
@@ -531,6 +523,8 @@
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
     <Compile Include="Utils\AccountMessages.cs" />
+    <Compile Include="Utils\SocialMessages.cs" />
+    <Compile Include="Utils\GameMessages.cs" />
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

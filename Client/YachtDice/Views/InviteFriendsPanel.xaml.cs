@@ -122,7 +122,7 @@ namespace YachtDice.Views
                 };
                 InvitationResultCode result = await _friendGateway.InviteToRoomAsync(sender, friendName);
 
-                message = InvitationResultMessages.GetMessage(result, friendName);
+                message = SocialMessages.GetMessage(result, friendName);
             }
             catch (GatewayException ex)
             {
