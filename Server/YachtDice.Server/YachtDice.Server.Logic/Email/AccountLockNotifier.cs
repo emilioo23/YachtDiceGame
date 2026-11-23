@@ -67,7 +67,7 @@ namespace YachtDice.Server.Logic.Email
                 Body = string.Format(culture, body, player.DisplayName, LockHours)
             };
 
-            bool isSent = EmailDelivery.TrySend(_emailService, message, _logger);
+            bool isSent = EmailService.TrySend(_emailService, message, _logger);
             string logMessage = isSent ? SentLogMessage : SendFailedLogMessage;
 
             _logger.Info(logMessage);

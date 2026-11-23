@@ -3,12 +3,12 @@ using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Logic.Email
 {
     /// <summary>
-    /// Sends the application's emails through SMTP. The host and the port come from the configuration file; the
-    /// account and its password come from environment variables, so they are never written in a file.
+    /// Sends the emails of the game and delivers them without stopping the operation when the mail server fails.
     /// </summary>
     public class EmailService : IEmailService
     {
@@ -21,6 +21,7 @@ namespace YachtDice.Server.Logic.Email
         private const string EmptyRecipientMessage = "The recipient address cannot be empty.";
         private const string MissingSettingMessage = "The setting '{0}' is missing in the configuration file.";
         private const string MissingVariableMessage = "The environment variable {0} is not defined on this computer.";
+        private const string SendFailedLogMessage = "An email could not be delivered to the mail server.";
 
         /// <summary>
         /// Sends a plain-text email to its recipient.
@@ -59,6 +60,30 @@ namespace YachtDice.Server.Logic.Email
             }
         }
 
+        /// <summary>
+        /// Sends the email.
+        /// </summary>
+        /// <param name="emailService">Service that delivers the emails.</param>
+        /// <param name="message">Email to send.</param>
+        /// <param name="logger">Logger of the class that sends the email.</param>
+        /// <returns>True if the email was delivered to the mail server.</returns>
+        internal static bool TrySend(IEmailService emailService, EmailMessage message, AppLogger logger)
+        {
+            var isSent = false;
+
+            try
+            {
+                emailService.Send(message);
+                isSent = true;
+            }
+            catch (Exception ex) when (IsDeliveryFailure(ex))
+            {
+                logger.Error(ex, SendFailedLogMessage);
+            }
+
+            return isSent;
+        }
+
         private static string ReadSetting(string key)
         {
             string value = ConfigurationManager.AppSettings[key];
@@ -85,6 +110,13 @@ namespace YachtDice.Server.Logic.Email
             }
 
             return value;
+        }
+
+        private static bool IsDeliveryFailure(Exception exception)
+        {
+            bool isMailFailure = exception is SmtpException || exception is InvalidOperationException;
+
+            return isMailFailure || exception is FormatException || exception is ArgumentException;
         }
     }
 }
