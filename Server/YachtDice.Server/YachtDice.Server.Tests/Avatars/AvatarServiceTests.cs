@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using YachtDice.Server.Data;
@@ -9,7 +10,7 @@ using YachtDice.Server.Tests.InMemory;
 namespace YachtDice.Server.Tests.Avatars
 {
     /// <summary>
-    /// Rules to choose an avatar: it must exist and the player must have reached its level.
+    /// Tests of the avatars and the catalog of unlockable avatars.
     /// </summary>
     public class AvatarServiceTests
     {
@@ -32,7 +33,9 @@ namespace YachtDice.Server.Tests.Avatars
         private const int FourthLevelExperience = 300;
         private const int FifthLevelExperience = 400;
         private const int SixthLevelExperience = 500;
-
+        private const int MinimumFreeAvatars = 4;
+        private const int FirstAvatarPosition = 0;
+        private const int LastLevelOfTheGame = 20;
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly AvatarService _service;
 
@@ -86,7 +89,7 @@ namespace YachtDice.Server.Tests.Avatars
         {
             int avatarId = _service.GetAvatarId(UnknownName);
 
-            Assert.Equal(AvatarCatalog.DefaultAvatarId, avatarId);
+            Assert.Equal(AvatarService.DefaultAvatarId, avatarId);
         }
 
         [Fact]
@@ -94,7 +97,7 @@ namespace YachtDice.Server.Tests.Avatars
         {
             int avatarId = _service.GetAvatarId(BlankName);
 
-            Assert.Equal(AvatarCatalog.DefaultAvatarId, avatarId);
+            Assert.Equal(AvatarService.DefaultAvatarId, avatarId);
         }
 
         [Fact]
@@ -120,7 +123,7 @@ namespace YachtDice.Server.Tests.Avatars
         {
             PlayerProfile profileExpected = new PlayerProfile
             {
-                AvatarId = AvatarCatalog.DefaultAvatarId,
+                AvatarId = AvatarService.DefaultAvatarId,
                 Level = NewPlayerLevel,
                 Experience = NoExperience,
                 LevelStartExperience = NoExperience,
@@ -174,7 +177,7 @@ namespace YachtDice.Server.Tests.Avatars
         [Fact]
         public void ChangeAvatar_ExperienceThatReachesTheRequiredLevel_UnlocksTheAvatar()
         {
-            AvatarCatalog.TryFind(UnlockedAvatarId, out UnlockableAvatar avatar);
+            AvatarService.TryFind(UnlockedAvatarId, out UnlockableAvatar avatar);
             _players.Players.Single().XP = CreateLevelTable().GetLevelStart(avatar.RequiredLevel);
 
             AvatarChangeStatus status = _service.ChangeAvatar(PlayerName, UnlockedAvatarId);
@@ -206,6 +209,94 @@ namespace YachtDice.Server.Tests.Avatars
             AvatarChangeStatus status = _service.ChangeAvatar(UnknownName, CurrentAvatarId);
 
             Assert.Equal(AvatarChangeStatus.PlayerNotFound, status);
+        }
+
+        [Fact]
+        public void TryFind_DefaultAvatar_IsFreeForANewPlayer()
+        {
+            var searchExpected = new { IsFound = true, IsFree = true };
+
+            bool isFound = AvatarService.TryFind(AvatarService.DefaultAvatarId, out UnlockableAvatar avatar);
+
+            var searchResult = new { IsFound = isFound, IsFree = avatar.RequiredLevel <= NewPlayerLevel };
+            Assert.Equal(searchExpected, searchResult);
+        }
+
+        [Fact]
+        public void TryFind_UnknownIdentifier_ReturnsFalse()
+        {
+            var searchExpected = new { IsFound = false, HasAvatar = false };
+
+            bool isFound = AvatarService.TryFind(UnknownAvatarId, out UnlockableAvatar avatar);
+
+            var searchResult = new { IsFound = isFound, HasAvatar = avatar != null };
+            Assert.Equal(searchExpected, searchResult);
+        }
+
+        [Fact]
+        public void GetAll_Always_HasSeveralAvatarsThatAreFreeForANewPlayer()
+        {
+            Func<UnlockableAvatar, bool> isAvailableForNewPlayer = avatar => avatar.RequiredLevel <= NewPlayerLevel;
+            int freeAvatars = AvatarService.GetAll().Count(isAvailableForNewPlayer);
+
+            Assert.True(freeAvatars >= MinimumFreeAvatars);
+        }
+
+        [Fact]
+        public void GetAll_Always_HasAvatarsThatNeedALevel()
+        {
+            Predicate<UnlockableAvatar> isLockedForNewPlayer = avatar => avatar.RequiredLevel > NewPlayerLevel;
+            Assert.Contains(AvatarService.GetAll(), isLockedForNewPlayer);
+        }
+
+        [Fact]
+        public void GetAll_Always_HasDifferentIdentifiers()
+        {
+            List<int> identifiers = AvatarService.GetAll().Select(avatar => avatar.Id).ToList();
+
+            Assert.Equal(identifiers.Count, identifiers.Distinct().Count());
+        }
+
+        [Fact]
+        public void GetAll_Always_StartsAtTheDefaultAvatar()
+        {
+            List<int> identifiers = AvatarService.GetAll().Select(avatar => avatar.Id).ToList();
+
+            Assert.Equal(AvatarService.DefaultAvatarId, identifiers[FirstAvatarPosition]);
+        }
+
+        [Fact]
+        public void GetAll_Always_HasConsecutiveIdentifiersFromTheDefaultAvatar()
+        {
+            Func<UnlockableAvatar, int> readId = avatar => avatar.Id;
+            List<int> identifiersExpected = Enumerable
+                .Range(AvatarService.DefaultAvatarId, AvatarService.GetAll().Count)
+                .ToList();
+
+            List<int> identifiers = AvatarService.GetAll().Select(readId).ToList();
+
+            Assert.Equal(identifiersExpected, identifiers);
+        }
+
+        [Fact]
+        public void GetAll_Always_NeverNeedsMoreThanTheLastLevelOfTheGame()
+        {
+            Func<UnlockableAvatar, int> readLevel = avatar => avatar.RequiredLevel;
+
+            int highestRequiredLevel = AvatarService.GetAll().Max(readLevel);
+
+            Assert.True(highestRequiredLevel <= LastLevelOfTheGame);
+        }
+
+        [Fact]
+        public void GetAll_ChangingTheReturnedList_DoesNotChangeTheCatalog()
+        {
+            List<UnlockableAvatar> firstCopy = AvatarService.GetAll();
+            int originalCount = firstCopy.Count;
+
+            firstCopy.Clear();
+
+            Assert.Equal(originalCount, AvatarService.GetAll().Count);
         }
 
         private static Player CreatePlayer(int avatarId)

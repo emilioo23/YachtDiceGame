@@ -54,7 +54,6 @@
     <Compile Include="Authentication\PasswordRecoveryServiceTests.cs" />
     <Compile Include="Authentication\PasswordResetAttemptCounterTests.cs" />
     <Compile Include="Authentication\RegistrationServiceTests.cs" />
-    <Compile Include="Avatars\AvatarCatalogTests.cs" />
     <Compile Include="Avatars\AvatarServiceTests.cs" />
     <Compile Include="Configuration\GameRulesFile.cs" />
     <Compile Include="Configuration\GameRulesTests.cs" />

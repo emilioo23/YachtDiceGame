@@ -44,7 +44,7 @@ namespace YachtDice.Server.Tests.InMemory
 
             if (!_avatars.TryGetValue(displayName, out avatarId))
             {
-                avatarId = AvatarCatalog.DefaultAvatarId;
+                avatarId = AvatarService.DefaultAvatarId;
             }
 
             return avatarId;

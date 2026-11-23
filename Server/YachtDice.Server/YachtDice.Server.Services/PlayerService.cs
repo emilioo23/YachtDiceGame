@@ -163,7 +163,7 @@ namespace YachtDice.Server.Services
 
         private static List<Contracts.UnlockableAvatar> ProcessCatalog()
         {
-            return ToContracts(LogicAvatars.AvatarCatalog.GetAll());
+            return ToContracts(LogicAvatars.AvatarService.GetAll());
         }
 
         private Contracts.PlayerStatistics ProcessPlayerStatistics(Contracts.Player player)

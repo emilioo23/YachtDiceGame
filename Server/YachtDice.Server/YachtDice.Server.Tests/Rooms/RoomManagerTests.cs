@@ -1197,7 +1197,7 @@ namespace YachtDice.Server.Tests.Rooms
         {
             RoomResult createdRoom = _manager.CreateRoom(GuestName);
 
-            Assert.Equal(AvatarCatalog.DefaultAvatarId, createdRoom.Room.Players.Single().AvatarId);
+            Assert.Equal(AvatarService.DefaultAvatarId, createdRoom.Room.Players.Single().AvatarId);
         }
 
         [Fact]

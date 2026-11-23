@@ -428,7 +428,7 @@ namespace YachtDice.Server.Logic.Rooms
             if (status == RoomStatus.Success)
             {
                 RoomPlayer computer =
-                    room.AddPlayer(new RoomApplicant(ComputerName, AvatarCatalog.DefaultAvatarId, ComputerLevel));
+                    room.AddPlayer(new RoomApplicant(ComputerName, AvatarService.DefaultAvatarId, ComputerLevel));
 
                 computer.IsComputer = true;
                 computer.IsReady = true;
