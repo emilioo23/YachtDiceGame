@@ -47,7 +47,7 @@ namespace YachtDice.Server.Tests.Authentication
                 Id = PlayerId,
                 Email = Email,
                 Username = Username,
-                PwdHash = PasswordHasher.ComputeHash(Password),
+                PwdHash = CredentialRules.ComputeHash(Password),
                 DisplayName = DisplayName,
                 FirstName = FirstName
             });

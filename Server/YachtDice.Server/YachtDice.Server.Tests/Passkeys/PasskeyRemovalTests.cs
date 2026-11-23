@@ -37,7 +37,7 @@ namespace YachtDice.Server.Tests.Passkeys
             Func<PasskeyRecord, bool> isFirstCredential = record => record.CredentialId == FirstCredential;
             Func<PasskeyRecord, bool> isOtherCredential = record => record.CredentialId == OtherCredential;
 
-            _context.Players.Players.First(isTestPlayer).PwdHash = PasswordHasher.ComputeHash(Password);
+            _context.Players.Players.First(isTestPlayer).PwdHash = CredentialRules.ComputeHash(Password);
             AddPasskey(PasskeyTestContext.PlayerId, FirstCredential);
             AddPasskey(PasskeyTestContext.PlayerId, SecondCredential);
             AddPasskey(PasskeyTestContext.OtherPlayerId, OtherCredential);

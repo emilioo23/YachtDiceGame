@@ -27,7 +27,7 @@ namespace YachtDice.Server.Tests.Configuration
             {
                 XDocument document = XDocument.Load(reader);
 
-                gameRules = GameRulesReader.Read(document);
+                gameRules = GameRules.Read(document);
             }
 
             return gameRules;

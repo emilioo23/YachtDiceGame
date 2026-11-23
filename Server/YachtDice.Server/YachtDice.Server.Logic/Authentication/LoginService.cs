@@ -58,7 +58,7 @@ namespace YachtDice.Server.Logic.Authentication
             _deliveryService = deliveryService
                 ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
-            _timingEqualizerHash = PasswordHasher.ComputeHash(TimingEqualizerPassword);
+            _timingEqualizerHash = CredentialRules.ComputeHash(TimingEqualizerPassword);
             _logger = new AppLogger(GetType());
         }
 
@@ -165,7 +165,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (player == null)
             {
-                PasswordHasher.Verify(credentials.Password, _timingEqualizerHash);
+                CredentialRules.Verify(credentials.Password, _timingEqualizerHash);
                 result = Reject(LoginStatus.InvalidCredentials, unknownLogMessage);
             }
             else
@@ -186,7 +186,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RejectLocked(player, currentLock);
             }
-            else if (!PasswordHasher.Verify(credentials.Password, player.PwdHash))
+            else if (!CredentialRules.Verify(credentials.Password, player.PwdHash))
             {
                 result = RejectWrongPassword(player, credentials.Culture, now);
             }
@@ -233,7 +233,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private LoginResult RejectLocked(Player player, LoginLock currentLock)
         {
-            return Reject(LockStatusMapper.ToStatus(currentLock), Describe(LockedLoginLogFormat, player));
+            return Reject(LoginAttemptTracker.ToStatus(currentLock), Describe(LockedLoginLogFormat, player));
         }
 
         private LoginResult CompleteLogin(Player player, CultureInfo culture)

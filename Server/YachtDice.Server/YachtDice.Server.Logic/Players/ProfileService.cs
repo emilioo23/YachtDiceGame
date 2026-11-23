@@ -151,7 +151,7 @@ namespace YachtDice.Server.Logic.Players
             Player player = FindPlayers(playerName).FirstOrDefault();
             AccountDeletionStatus status = AccountDeletionStatus.PlayerNotFound;
 
-            if (player != null && !PasswordHasher.Verify(password ?? string.Empty, player.PwdHash))
+            if (player != null && !CredentialRules.Verify(password ?? string.Empty, player.PwdHash))
             {
                 _logger.Warning(string.Format(CultureInfo.InvariantCulture, WrongPasswordLogFormat, player.Id));
                 status = AccountDeletionStatus.WrongPassword;

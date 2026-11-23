@@ -37,7 +37,7 @@ namespace YachtDice.Server.Tests.Authentication
             {
                 Id = PlayerId,
                 DisplayName = DisplayName,
-                PwdHash = PasswordHasher.ComputeHash(OldPassword)
+                PwdHash = CredentialRules.ComputeHash(OldPassword)
             });
             _passwords = new InMemoryPasswordResetRepository(_players);
             _service = new PasswordChangeService(_players, _passwords);
@@ -56,7 +56,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
 
-            Assert.True(PasswordHasher.Verify(NewPassword, _players.Players.Single().PwdHash));
+            Assert.True(CredentialRules.Verify(NewPassword, _players.Players.Single().PwdHash));
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             _service.ChangePassword(DisplayName, CreateChange(WrongPassword, NewPassword));
 
-            Assert.True(PasswordHasher.Verify(OldPassword, _players.Players.Single().PwdHash));
+            Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             _service.ChangePassword(DisplayName, CreateChange(OldPassword, WeakPassword));
 
-            Assert.True(PasswordHasher.Verify(OldPassword, _players.Players.Single().PwdHash));
+            Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
         }
 
         [Fact]
@@ -187,7 +187,7 @@ namespace YachtDice.Server.Tests.Authentication
 
             _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
 
-            Assert.True(PasswordHasher.Verify(OldPassword, _players.Players.Single().PwdHash));
+            Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
         }
 
         [Fact]

@@ -39,7 +39,7 @@ namespace YachtDice.Server.Tests.TwoFactor
             {
                 Id = PlayerId,
                 Email = Email,
-                PwdHash = PasswordHasher.ComputeHash(Password),
+                PwdHash = CredentialRules.ComputeHash(Password),
                 DisplayName = DisplayName
             });
             _verificationService = new TwoFactorVerificationService(_players, codeService, deliveryService);

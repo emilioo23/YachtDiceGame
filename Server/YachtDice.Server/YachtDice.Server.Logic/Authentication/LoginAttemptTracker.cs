@@ -7,10 +7,7 @@ using YachtDice.Server.Data.Repositories;
 namespace YachtDice.Server.Logic.Authentication
 {
     /// <summary>
-    /// Counts the wrong passwords of each account and locks it: three in a row lock it for five minutes, and
-    /// ten in the same twenty-four hours lock it for a whole day. The counts live in the memory of the server,
-    /// shared by every login, so each change happens inside the lock. The lock itself is saved in the database,
-    /// so a restart of the server does not open a locked account.
+    /// Counts the failed logins and decides the lock.
     /// </summary>
     public sealed class LoginAttemptTracker
     {
@@ -36,7 +33,6 @@ namespace YachtDice.Server.Logic.Authentication
 
         private const int NoFailures = 0;
         private const string NullRepositoryMessage = "The data access of the players cannot be null.";
-
         private readonly object _syncRoot = new object();
         private readonly Dictionary<int, LoginAttempts> _attemptsByPlayer = new Dictionary<int, LoginAttempts>();
         private readonly IPlayerRepository _playerRepository;
@@ -121,6 +117,31 @@ namespace YachtDice.Server.Logic.Authentication
                     attempts.ConsecutiveFailures = NoFailures;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gives the status that matches a lock.
+        /// </summary>
+        /// <param name="currentLock">Lock that is running.</param>
+        /// <returns>The status to answer to the player.</returns>
+        public static LoginStatus ToStatus(LoginLock currentLock)
+        {
+            LoginStatus status;
+
+            switch (currentLock)
+            {
+                case LoginLock.Daily:
+                    status = LoginStatus.LockedForTheDay;
+                    break;
+                case LoginLock.Reported:
+                    status = LoginStatus.SuspendedByReports;
+                    break;
+                default:
+                    status = LoginStatus.TemporarilyLocked;
+                    break;
+            }
+
+            return status;
         }
 
         private static LoginLock ChooseLock(LoginAttempts attempts)

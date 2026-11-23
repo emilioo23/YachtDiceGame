@@ -235,7 +235,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
         private static bool IsPasswordCorrect(Player player, string password)
         {
-            return !string.IsNullOrEmpty(password) && PasswordHasher.Verify(password, player.PwdHash);
+            return !string.IsNullOrEmpty(password) && CredentialRules.Verify(password, player.PwdHash);
         }
 
         private static TwoFactorActivationResult CreateFailure(TwoFactorActivationStatus status)

@@ -9,7 +9,7 @@ namespace YachtDice.Server.Tests.Logging
     /// The text of an error in the log: what happened, the types of the exceptions and the first 3 levels of the
     /// stack as class and method, nothing else.
     /// </summary>
-    public class ErrorLogFormatterTests
+    public class AppLoggerTests
     {
         private const string Message = "The result of a game could not be saved.";
         private const string SecretPath = "C:\\Projects\\Game\\Server\\Repository.cs";
@@ -19,18 +19,18 @@ namespace YachtDice.Server.Tests.Logging
             "The result of a game could not be saved. Exception: InvalidOperationException. Cause: ArgumentException.";
         private const string ShortStackExpected =
             ErrorWithoutCauseExpected
-            + " Stack: ErrorLogFormatterTests.ThrowFailure, ErrorLogFormatterTests.CatchShortFailure.";
+            + " Stack: AppLoggerTests.ThrowFailure, AppLoggerTests.CatchShortFailure.";
         private const string LongStackExpected =
             ErrorWithoutCauseExpected
-            + " Stack: ErrorLogFormatterTests.ThrowFailure, ErrorLogFormatterTests.CallFromLevelTwo,"
-            + " ErrorLogFormatterTests.CallFromLevelThree.";
+            + " Stack: AppLoggerTests.ThrowFailure, AppLoggerTests.CallFromLevelTwo,"
+            + " AppLoggerTests.CallFromLevelThree.";
 
         [Fact]
         public void Format_ExceptionWithoutCause_WritesWhatHappenedAndTheTypeOfTheException()
         {
             var exception = new InvalidOperationException(SecretPath);
 
-            string textResult = ErrorLogFormatter.Format(exception, Message);
+            string textResult = AppLogger.Format(exception, Message);
 
             Assert.Equal(ErrorWithoutCauseExpected, textResult);
         }
@@ -40,7 +40,7 @@ namespace YachtDice.Server.Tests.Logging
         {
             var exception = new InvalidOperationException(SecretPath, new ArgumentException(SecretPath));
 
-            string textResult = ErrorLogFormatter.Format(exception, Message);
+            string textResult = AppLogger.Format(exception, Message);
 
             Assert.Equal(ErrorWithCauseExpected, textResult);
         }
@@ -52,7 +52,7 @@ namespace YachtDice.Server.Tests.Logging
                 SecretPath,
                 new FormatException(SecretPath, new ArgumentException(SecretPath)));
 
-            string textResult = ErrorLogFormatter.Format(exception, Message);
+            string textResult = AppLogger.Format(exception, Message);
 
             Assert.Equal(ErrorWithCauseExpected, textResult);
         }
@@ -76,7 +76,7 @@ namespace YachtDice.Server.Tests.Logging
         [Fact]
         public void Format_NullException_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => ErrorLogFormatter.Format(null, Message));
+            Assert.Throws<ArgumentNullException>(() => AppLogger.Format(null, Message));
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -108,7 +108,7 @@ namespace YachtDice.Server.Tests.Logging
             }
             catch (InvalidOperationException ex)
             {
-                text = ErrorLogFormatter.Format(ex, Message);
+                text = AppLogger.Format(ex, Message);
             }
 
             return text;
@@ -125,7 +125,7 @@ namespace YachtDice.Server.Tests.Logging
             }
             catch (InvalidOperationException ex)
             {
-                text = ErrorLogFormatter.Format(ex, Message);
+                text = AppLogger.Format(ex, Message);
             }
 
             return text;

@@ -11,7 +11,7 @@ namespace YachtDice.Server.Tests.Configuration
     /// <summary>
     /// Rules to read the game modes, the levels and the achievements from the configuration file.
     /// </summary>
-    public class GameRulesReaderTests
+    public class GameRulesTests
     {
         private const int FastTurnSeconds = 30;
         private const int SecondLevelStart = 200;
@@ -68,7 +68,7 @@ namespace YachtDice.Server.Tests.Configuration
         [Fact]
         public void Read_ValidRules_ReadsTheSecondsOfTheFastMode()
         {
-            GameRules rules = GameRulesReader.Read(XDocument.Parse(ValidRules));
+            GameRules rules = GameRules.Read(XDocument.Parse(ValidRules));
 
             Assert.Equal(FastTurnSeconds, rules.TurnDuration.GetSeconds(GameSpeed.Fast));
         }
@@ -76,7 +76,7 @@ namespace YachtDice.Server.Tests.Configuration
         [Fact]
         public void Read_ValidRules_ReadsTheLevelsInTheirOrder()
         {
-            GameRules rules = GameRulesReader.Read(XDocument.Parse(ValidRules));
+            GameRules rules = GameRules.Read(XDocument.Parse(ValidRules));
 
             Assert.Equal(SecondLevel, rules.LevelTable.GetLevel(SecondLevelStart));
         }
@@ -84,7 +84,7 @@ namespace YachtDice.Server.Tests.Configuration
         [Fact]
         public void Read_AchievementWithHasTitleFalse_HasNoTitle()
         {
-            GameRules rules = GameRulesReader.Read(XDocument.Parse(ValidRules));
+            GameRules rules = GameRules.Read(XDocument.Parse(ValidRules));
 
             Assert.False(rules.Achievements.ExistsTitle(ValidAchievementWithoutTitleId));
         }
@@ -92,7 +92,7 @@ namespace YachtDice.Server.Tests.Configuration
         [Fact]
         public void Read_AchievementWithMinimumGames_KeepsTheMinimum()
         {
-            GameRules rules = GameRulesReader.Read(XDocument.Parse(ValidRules));
+            GameRules rules = GameRules.Read(XDocument.Parse(ValidRules));
 
             Func<AchievementRule, bool> isMinimumGamesRule = achievement => achievement.Id == MinimumGamesId;
             AchievementRule rule = rules.Achievements.Rules.Single(isMinimumGamesRule);
@@ -105,7 +105,7 @@ namespace YachtDice.Server.Tests.Configuration
         {
             XDocument document = XDocument.Parse(WithoutAchievements);
 
-            Assert.Throws<InvalidOperationException>(() => GameRulesReader.Read(document));
+            Assert.Throws<InvalidOperationException>(() => GameRules.Read(document));
         }
 
         [Fact]
@@ -113,7 +113,7 @@ namespace YachtDice.Server.Tests.Configuration
         {
             XDocument document = XDocument.Parse(UnknownMetric);
 
-            Assert.Throws<InvalidOperationException>(() => GameRulesReader.Read(document));
+            Assert.Throws<InvalidOperationException>(() => GameRules.Read(document));
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace YachtDice.Server.Tests.Configuration
         {
             XDocument document = XDocument.Parse(NegativeTurnSeconds);
 
-            Assert.Throws<InvalidOperationException>(() => GameRulesReader.Read(document));
+            Assert.Throws<InvalidOperationException>(() => GameRules.Read(document));
         }
 
         [Fact]
@@ -129,13 +129,13 @@ namespace YachtDice.Server.Tests.Configuration
         {
             XDocument document = XDocument.Parse(InvalidHasTitle);
 
-            Assert.Throws<InvalidOperationException>(() => GameRulesReader.Read(document));
+            Assert.Throws<InvalidOperationException>(() => GameRules.Read(document));
         }
 
         [Fact]
         public void Read_NullDocument_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => GameRulesReader.Read(null));
+            Assert.Throws<ArgumentNullException>(() => GameRules.Read(null));
         }
 
         [Fact]

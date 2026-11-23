@@ -52,7 +52,7 @@ namespace YachtDice.Server.Tests.Authentication
                 Id = PlayerId,
                 Email = Email,
                 DisplayName = DisplayName,
-                PwdHash = PasswordHasher.ComputeHash(OldPassword)
+                PwdHash = CredentialRules.ComputeHash(OldPassword)
             });
             _resets = new InMemoryPasswordResetRepository(_players);
             _service = CreateService(_emailService);
@@ -420,7 +420,7 @@ namespace YachtDice.Server.Tests.Authentication
 
         private bool IsCurrentPassword(string password)
         {
-            return PasswordHasher.Verify(password, _players.Players[0].PwdHash);
+            return CredentialRules.Verify(password, _players.Players[0].PwdHash);
         }
 
         private PasswordResetStatus TryWrongCodeUntilDiscarded()
@@ -453,7 +453,7 @@ namespace YachtDice.Server.Tests.Authentication
             return new PwdResetToken
             {
                 PlayerId = PlayerId,
-                Token = PasswordHasher.ComputeResetCodeHash(PlayerId, code),
+                Token = CredentialRules.ComputeResetCodeHash(PlayerId, code),
                 ExpireDate = expireDate
             };
         }

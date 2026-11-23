@@ -179,7 +179,7 @@ namespace YachtDice.Server.Logic.Passkeys
             {
                 status = PasskeyRemovalStatus.PlayerNotFound;
             }
-            else if (string.IsNullOrEmpty(password) || !PasswordHasher.Verify(password, player.PwdHash))
+            else if (string.IsNullOrEmpty(password) || !CredentialRules.Verify(password, player.PwdHash))
             {
                 _logger.Warning(WrongPasswordLogMessage);
                 status = PasskeyRemovalStatus.InvalidPassword;
@@ -582,7 +582,7 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else if (currentLock != LoginLock.None)
             {
-                result = Reject(LockedLogMessage, LockStatusMapper.ToStatus(currentLock));
+                result = Reject(LockedLogMessage, LoginAttemptTracker.ToStatus(currentLock));
             }
             else
             {

@@ -237,7 +237,7 @@ namespace YachtDice.Server.Host.Composition
             {
                 XDocument document = XDocument.Load(reader);
 
-                gameRules = GameRulesReader.Read(document);
+                gameRules = GameRules.Read(document);
             }
 
             return gameRules;

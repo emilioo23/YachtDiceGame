@@ -138,7 +138,7 @@ namespace YachtDice.Server.Logic.Authentication
         private PasswordResetRequestStatus CreateAndSendCode(Player player, CultureInfo culture)
         {
             string code = SecureCodes.Generate(SecureCodes.CodeLength);
-            string codeHash = PasswordHasher.ComputeResetCodeHash(player.Id, code);
+            string codeHash = CredentialRules.ComputeResetCodeHash(player.Id, code);
 
             var token = new PwdResetToken
             {
@@ -195,7 +195,7 @@ namespace YachtDice.Server.Logic.Authentication
             PwdResetToken token,
             PasswordResetConfirmation confirmation)
         {
-            string enteredHash = PasswordHasher.ComputeResetCodeHash(playerId, confirmation.Code.Trim());
+            string enteredHash = CredentialRules.ComputeResetCodeHash(playerId, confirmation.Code.Trim());
             bool isCorrect = string.Equals(enteredHash, token.Token, StringComparison.OrdinalIgnoreCase);
             PasswordResetStatus status;
 
@@ -213,13 +213,13 @@ namespace YachtDice.Server.Logic.Authentication
 
         private PasswordResetStatus ChangePassword(int playerId, string newPassword)
         {
-            Func<string, bool> isSamePassword = passwordHash => PasswordHasher.Verify(newPassword, passwordHash);
+            Func<string, bool> isSamePassword = passwordHash => CredentialRules.Verify(newPassword, passwordHash);
             bool isUsedBefore = _resetRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
             PasswordResetStatus status = PasswordResetStatus.PasswordUsedBefore;
 
             if (!isUsedBefore)
             {
-                _resetRepository.CompleteReset(playerId, PasswordHasher.ComputeHash(newPassword));
+                _resetRepository.CompleteReset(playerId, CredentialRules.ComputeHash(newPassword));
                 _attempts.Reset(playerId);
                 _logger.Info(ChangedLogMessage);
                 status = PasswordResetStatus.PasswordChanged;

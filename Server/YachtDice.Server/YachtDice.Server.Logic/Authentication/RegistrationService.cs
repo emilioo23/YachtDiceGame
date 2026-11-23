@@ -175,7 +175,7 @@ namespace YachtDice.Server.Logic.Authentication
             player.AvatarId = DefaultAvatarId;
             player.Username = player.Username.Trim();
             player.Email = player.Email.Trim();
-            player.PwdHash = PasswordHasher.ComputeHash(plainPassword);
+            player.PwdHash = CredentialRules.ComputeHash(plainPassword);
             player.State = PlayerState.Unverified.ToString();
             player.RegDate = DateTime.UtcNow;
             player.XP = InitialExperience;

@@ -155,7 +155,7 @@ namespace YachtDice.Server.Logic.TwoFactor
                 codes.Add(SecureCodes.Generate(BackupCodeLength));
             }
 
-            Func<string, string> hashCode = code => PasswordHasher.ComputeResetCodeHash(playerId, code);
+            Func<string, string> hashCode = code => CredentialRules.ComputeResetCodeHash(playerId, code);
 
             _backupCodeRepository.Replace(playerId, codes.Select(hashCode).ToList());
 
@@ -242,7 +242,7 @@ namespace YachtDice.Server.Logic.TwoFactor
 
         private bool TryUseBackupCode(int playerId, string code)
         {
-            string codeHash = PasswordHasher.ComputeResetCodeHash(playerId, code);
+            string codeHash = CredentialRules.ComputeResetCodeHash(playerId, code);
 
             return _backupCodeRepository.TryUse(playerId, codeHash);
         }

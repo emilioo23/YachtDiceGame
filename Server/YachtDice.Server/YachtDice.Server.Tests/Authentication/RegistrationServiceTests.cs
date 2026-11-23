@@ -119,7 +119,7 @@ namespace YachtDice.Server.Tests.Authentication
             var savedPasswordResult = new
             {
                 IsPlainText = savedPlayer.PwdHash == Password,
-                MatchesThePassword = PasswordHasher.Verify(Password, savedPlayer.PwdHash)
+                MatchesThePassword = CredentialRules.Verify(Password, savedPlayer.PwdHash)
             };
             Assert.Equal(savedPasswordExpected, savedPasswordResult);
         }

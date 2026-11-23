@@ -57,7 +57,7 @@
     <Compile Include="Avatars\AvatarCatalogTests.cs" />
     <Compile Include="Avatars\AvatarServiceTests.cs" />
     <Compile Include="Configuration\GameRulesFile.cs" />
-    <Compile Include="Configuration\GameRulesReaderTests.cs" />
+    <Compile Include="Configuration\GameRulesTests.cs" />
     <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Email\AccountLockNotifierTests.cs" />
     <Compile Include="Email\EmailServiceTests.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="InMemory\InMemoryPlayerReportRepository.cs" />
     <Compile Include="InMemory\InMemoryPlayerRepository.cs" />
     <Compile Include="InMemory\InMemoryRoomInviteRepository.cs" />
-    <Compile Include="Logging\ErrorLogFormatterTests.cs" />
+    <Compile Include="Logging\AppLoggerTests.cs" />
     <Compile Include="Logging\PlayerLogNameTests.cs" />
     <Compile Include="Mapping\CultureParserTests.cs" />
     <Compile Include="Mapping\EnumMapperTests.cs" />
@@ -123,7 +123,6 @@
     <Compile Include="Rooms\KickHistoryServiceTests.cs" />
     <Compile Include="Rooms\RoomManagerTests.cs" />
     <Compile Include="Security\CredentialRulesTests.cs" />
-    <Compile Include="Security\PasswordHasherTests.cs" />
     <Compile Include="Security\SecureCodesTests.cs" />
     <Compile Include="Security\SessionRegistryTests.cs" />
     <Compile Include="TwoFactor\BackupCodeTests.cs" />

@@ -511,7 +511,7 @@ namespace YachtDice.Server.Tests.Players
                 Id = id,
                 Username = username,
                 DisplayName = username,
-                PwdHash = PasswordHasher.ComputeHash(CurrentPassword)
+                PwdHash = CredentialRules.ComputeHash(CurrentPassword)
             };
 
             return player;

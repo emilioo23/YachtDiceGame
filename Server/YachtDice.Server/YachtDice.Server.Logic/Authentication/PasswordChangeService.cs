@@ -74,7 +74,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (status == PasswordChangeStatus.Success)
             {
-                _passwordRepository.CompleteReset(player.Id, PasswordHasher.ComputeHash(change.NewPassword));
+                _passwordRepository.CompleteReset(player.Id, CredentialRules.ComputeHash(change.NewPassword));
                 _attemptTracker.RegisterSuccess(player.Id);
                 _logger.Info(ChangedLogMessage);
             }
@@ -112,12 +112,12 @@ namespace YachtDice.Server.Logic.Authentication
         {
             bool hasValidSize = !string.IsNullOrEmpty(password) && password.Length <= CredentialRules.PasswordMaxLength;
 
-            return hasValidSize && PasswordHasher.Verify(password, player.PwdHash);
+            return hasValidSize && CredentialRules.Verify(password, player.PwdHash);
         }
 
         private bool IsUsedBefore(int playerId, string newPassword)
         {
-            Func<string, bool> isSamePassword = passwordHash => PasswordHasher.Verify(newPassword, passwordHash);
+            Func<string, bool> isSamePassword = passwordHash => CredentialRules.Verify(newPassword, passwordHash);
 
             return _passwordRepository.FindRecentPasswordHashes(playerId).Any(isSamePassword);
         }

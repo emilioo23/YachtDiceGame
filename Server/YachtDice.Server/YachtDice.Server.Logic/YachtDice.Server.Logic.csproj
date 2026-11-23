@@ -54,7 +54,6 @@
     <Compile Include="Authentication\LoginCredentials.cs" />
     <Compile Include="Authentication\LoginLock.cs" />
     <Compile Include="Authentication\LoginAttempts.cs" />
-    <Compile Include="Authentication\LockStatusMapper.cs" />
     <Compile Include="Authentication\LoginAttemptTracker.cs" />
     <Compile Include="Authentication\LoginResult.cs" />
     <Compile Include="Authentication\LoginService.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="Game\TurnDuration.cs" />
     <Compile Include="Game\YachtGame.cs" />
     <Compile Include="Logging\AppLogger.cs" />
-    <Compile Include="Logging\ErrorLogFormatter.cs" />
     <Compile Include="Moderation\OffensiveWordFilter.cs" />
     <Compile Include="Passkeys\AuthenticatorData.cs" />
     <Compile Include="Passkeys\CborReader.cs" />
@@ -155,7 +153,6 @@
     <Compile Include="Players\PlayerAchievements.cs" />
     <Compile Include="Players\ProfileService.cs" />
     <Compile Include="Configuration\GameRules.cs" />
-    <Compile Include="Configuration\GameRulesReader.cs" />
     <Compile Include="Players\UsernameChangeStatus.cs" />
     <Compile Include="Players\PlayerStatistics.cs" />
     <Compile Include="Players\PlayerStatisticsService.cs" />
@@ -185,7 +182,6 @@
     <Compile Include="Rooms\RoomStatus.cs" />
     <Compile Include="Rooms\RoomSummary.cs" />
     <Compile Include="Security\CredentialRules.cs" />
-    <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\SessionRegistry.cs" />
     <Compile Include="TwoFactor\BackupCodeCreation.cs" />
     <Compile Include="TwoFactor\BackupCodeCreationStatus.cs" />
