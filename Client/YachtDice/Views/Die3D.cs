@@ -48,7 +48,7 @@ namespace YachtDice.Views
 
             var shadow = new ModelVisual3D
             {
-                Content = new GeometryModel3D(DiceModelFactory.CreateFlatSquare(ShadowSize * Half), materials.Shadow),
+                Content = new GeometryModel3D(DiceMeshFactory.CreateFlatSquare(ShadowSize * Half), materials.Shadow),
                 Transform = _shadowPosition
             };
 
@@ -189,28 +189,28 @@ namespace YachtDice.Views
 
         private void Fly(double progress)
         {
-            double gather = DiceMotion.Gather(progress);
-            double scatter = DiceMotion.Scatter(progress);
+            double gather = DiceThrowPath.Gather(progress);
+            double scatter = DiceThrowPath.Scatter(progress);
             double handX = Blend(_startX, _motion.Hand.X, gather);
             double handZ = Blend(_startZ, _motion.Hand.Z, gather);
 
             _tumble.Axis = _motion.TumbleAxis;
-            _tumble.Angle = DiceMotion.TumbleDegrees(_motion.TumbleDegrees, progress);
+            _tumble.Angle = DiceThrowPath.TumbleDegrees(_motion.TumbleDegrees, progress);
             _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, scatter);
             MoveTo(
                 Blend(handX, _motion.End.X, scatter),
-                DiceMotion.Height(progress, RestHeight),
+                DiceThrowPath.Height(progress, RestHeight),
                 Blend(handZ, _motion.End.Z, scatter));
         }
 
         private void Glide(double progress)
         {
-            double travel = DiceMotion.GlideTravel(progress);
+            double travel = DiceThrowPath.GlideTravel(progress);
 
             _yaw.Angle = Blend(_startYaw, _motion.YawDegrees, travel);
             MoveTo(
                 Blend(_startX, _motion.End.X, travel),
-                DiceMotion.GlideHeight(progress, RestHeight),
+                DiceThrowPath.GlideHeight(progress, RestHeight),
                 Blend(_startZ, _motion.End.Z, travel));
         }
 
@@ -222,7 +222,7 @@ namespace YachtDice.Views
             {
                 DiceVector normal = DiceFaceOrientation.GetNormal(index + FirstFace);
                 var direction = new Vector3D(normal.X, normal.Y, normal.Z);
-                var mesh = DiceModelFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
+                var mesh = DiceMeshFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
 
                 _faces[index] = new GeometryModel3D(mesh, _materials.Blank);
                 body.Children.Add(_faces[index]);

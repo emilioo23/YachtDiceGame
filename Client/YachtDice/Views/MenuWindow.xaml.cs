@@ -200,7 +200,7 @@ namespace YachtDice.Views
             {
                 SenderName = invitation.SenderName,
                 Initial = InitialLetter.From(invitation.SenderName, Strings.Global_UnknownInitial),
-                DetailText = SocialMessages.Describe(invitation),
+                DetailText = ReceivedInvitationTexts.Describe(invitation),
                 RoomCode = invitation.RoomCode,
                 CanJoin = invitation.IsRoomOpen
             };
@@ -376,7 +376,7 @@ namespace YachtDice.Views
                 FriendRequestResultCode result =
                     await _friendGateway.SendRequestAsync(_session.SessionToken, FriendUsernameTextBox.Text);
 
-                CustomDialogWindow.ShowMessage(this, SocialMessages.GetMessage(result));
+                CustomDialogWindow.ShowMessage(this, FriendRequestMessages.GetMessage(result));
 
                 if (result == FriendRequestResultCode.RequestSent)
                 {

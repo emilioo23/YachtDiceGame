@@ -70,11 +70,11 @@ namespace YachtDice.Views
 
             if (!_isActivation)
             {
-                DestinationEmailTextBlock.Text = AccountInputRules.Mask(_email);
+                DestinationEmailTextBlock.Text = EmailMask.Mask(_email);
                 UseBackupCodeLink.Visibility = Visibility.Visible;
             }
 
-            BackupCodeTextBox.MaxLength = AccountInputRules.BackupCodeLength;
+            BackupCodeTextBox.MaxLength = BackupCodeValidator.BackupCodeLength;
 
             LanguageSwitcherControl.ReopenWindowFunc = () => new TwoFactorWindow(challenge);
             Digit1TextBox.Focus();
@@ -173,7 +173,7 @@ namespace YachtDice.Views
         {
             string backupCode = BackupCodeTextBox.Text.Trim();
 
-            if (AccountInputRules.IsValid(backupCode))
+            if (BackupCodeValidator.IsValid(backupCode))
             {
                 UseBackupCodeButton.IsEnabled = false;
                 await VerifyCodeAsync(backupCode);

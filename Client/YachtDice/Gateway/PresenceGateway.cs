@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using YachtDice.Callbacks;
 using YachtDice.PresenceServiceReference;
 using YachtDice.Utils;
 
@@ -15,8 +16,7 @@ namespace YachtDice.Gateway
     /// a network thread while the windows read them in the thread of the interface. The connection, the name
     /// and the list of players change together, so they need the lock.
     /// </summary>
-    [CallbackBehavior(UseSynchronizationContext = false)]
-    public class PresenceGateway : IConnectionLossSource, IPresenceServiceCallback
+    public class PresenceGateway : IConnectionLossSource
     {
         private const string UnavailableLogMessage = "The presence service could not be reached.";
         private const string CloseFailedLogMessage = "The presence connection could not be closed, so it was aborted.";
@@ -149,7 +149,11 @@ namespace YachtDice.Gateway
 
         private async Task OpenConnectionAsync(string displayName)
         {
-            var client = new PresenceServiceClient(new InstanceContext(this));
+            var handler = new PresenceCallbackHandler();
+            handler.PresenceChanged += HandlePresenceChanged;
+            handler.InvitationReceived += HandleInvitationReceived;
+
+            var client = new PresenceServiceClient(new InstanceContext(handler));
             ServerAddress.Apply(client.Endpoint);
 
             try
@@ -243,18 +247,6 @@ namespace YachtDice.Gateway
                 PlayersChanged?.Invoke();
                 ConnectionLost?.Invoke();
             }
-        }
-
-        /// <inheritdoc />
-        void IPresenceServiceCallback.PresenceChanged(string displayName, PresenceEventType eventType)
-        {
-            HandlePresenceChanged(displayName, eventType);
-        }
-
-        /// <inheritdoc />
-        void IPresenceServiceCallback.InvitationReceived(RoomInvitation invitation)
-        {
-            HandleInvitationReceived(invitation);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using YachtDice.Callbacks;
 using YachtDice.ChatServiceReference;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Utils;
@@ -15,8 +16,7 @@ namespace YachtDice.Gateway
     /// while the windows read them in the thread of the interface. The history and the subscribers change
     /// together, so they need the lock.
     /// </summary>
-    [CallbackBehavior(UseSynchronizationContext = false)]
-    public class ChatGateway : DuplexGatewayBase<ChatServiceClient>, IChatServiceCallback
+    public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
         private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
         private const string JoinFailedLogMessage = "The player could not join the chat of the room.";
@@ -144,7 +144,10 @@ namespace YachtDice.Gateway
         /// <inheritdoc />
         protected override ChatServiceClient CreateClient()
         {
-            var client = new ChatServiceClient(new InstanceContext(this));
+            var handler = new ChatCallbackHandler();
+            handler.MessageReceived += HandleMessageReceived;
+
+            var client = new ChatServiceClient(new InstanceContext(handler));
             ServerAddress.Apply(client.Endpoint);
 
             return client;
@@ -169,12 +172,6 @@ namespace YachtDice.Gateway
             }
 
             handler?.Invoke(message);
-        }
-
-        /// <inheritdoc />
-        void IChatServiceCallback.MessageReceived(ChatMessage message)
-        {
-            HandleMessageReceived(message);
         }
     }
 }

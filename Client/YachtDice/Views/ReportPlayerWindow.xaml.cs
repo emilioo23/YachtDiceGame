@@ -47,7 +47,7 @@ namespace YachtDice.Views
         private static List<KeyValuePair<ReportReason, string>> CreateReasonOptions()
         {
             Func<ReportReason, KeyValuePair<ReportReason, string>> createOption =
-                reason => new KeyValuePair<ReportReason, string>(reason, SocialMessages.GetReasonName(reason));
+                reason => new KeyValuePair<ReportReason, string>(reason, ReportResultMessages.GetReasonName(reason));
 
             return Enum.GetValues(typeof(ReportReason)).Cast<ReportReason>().Select(createOption).ToList();
         }
@@ -71,7 +71,7 @@ namespace YachtDice.Views
             try
             {
                 ReportResultCode result = await _friendGateway.ReportPlayerAsync(_session.SessionToken, report);
-                CustomDialogWindow.ShowMessage(this, SocialMessages.GetMessage(result));
+                CustomDialogWindow.ShowMessage(this, ReportResultMessages.GetMessage(result));
                 CloseIfFinished(result);
             }
             catch (GatewayException ex)

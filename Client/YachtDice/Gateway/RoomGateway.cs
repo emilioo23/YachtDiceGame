@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using YachtDice.Callbacks;
 using YachtDice.Models;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
@@ -12,8 +13,7 @@ namespace YachtDice.Gateway
     /// Keeps the player connected to a room of the server while the lobby and the game are open, and keeps
     /// the last state of the room that the server sent. One gateway belongs to one player in one room.
     /// </summary>
-    [CallbackBehavior(UseSynchronizationContext = false)]
-    public class RoomGateway : DuplexGatewayBase<RoomServiceClient>, IRoomServiceCallback
+    public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
         private const string NullSessionMessage = "The session of the player cannot be null.";
 
@@ -206,7 +206,10 @@ namespace YachtDice.Gateway
         /// <inheritdoc />
         protected override RoomServiceClient CreateClient()
         {
-            var client = new RoomServiceClient(new InstanceContext(this));
+            var handler = new RoomCallbackHandler();
+            handler.RoomChanged += HandleRoomChanged;
+
+            var client = new RoomServiceClient(new InstanceContext(handler));
             ServerAddress.Apply(client.Endpoint);
 
             return client;
@@ -268,12 +271,6 @@ namespace YachtDice.Gateway
             };
 
             return member;
-        }
-
-        /// <inheritdoc />
-        void IRoomServiceCallback.RoomChanged(RoomState room, RoomEventType eventType)
-        {
-            HandleRoomChanged(room, eventType);
         }
     }
 }

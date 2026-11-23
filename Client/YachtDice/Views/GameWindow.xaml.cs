@@ -97,7 +97,7 @@ namespace YachtDice.Views
             Closed += HandleWindowClosed;
         }
 
-        private TurnPhase CurrentPhase => TurnRules.ResolvePhase(
+        private TurnPhase CurrentPhase => TurnPhaseResolver.ResolvePhase(
             _state.Status == GameStatus.Finished,
             _state.CurrentPlayerId,
             _playerId);
@@ -200,7 +200,7 @@ namespace YachtDice.Views
                 }
                 else
                 {
-                    errorMessage = GameMessages.GetMessage(result.Code);
+                    errorMessage = GameResultMessages.GetMessage(result.Code);
                 }
             }
             catch (GatewayException ex)
@@ -305,7 +305,7 @@ namespace YachtDice.Views
         private string GetHintText()
         {
             string name = FindPlayerName(_state.CurrentPlayerId);
-            TurnHint hint = TurnRules.ResolveHint(
+            TurnHint hint = TurnPhaseResolver.ResolveHint(
                 CurrentPhase,
                 _state.RollsLeft,
                 MaxRolls);
@@ -531,7 +531,7 @@ namespace YachtDice.Views
 
                 if (result != GameResultCode.Success)
                 {
-                    errorMessage = GameMessages.GetMessage(result);
+                    errorMessage = GameResultMessages.GetMessage(result);
                 }
             }
             catch (GatewayException ex)
@@ -603,7 +603,7 @@ namespace YachtDice.Views
             CategoryScore after = FindYachtScore(state, scorerId);
             bool isFilledBefore = before != null && before.IsFilled;
             bool isCelebrationDue = after != null
-                && TurnRules.IsCelebrationDue(isFilledBefore, after.IsFilled, after.Points);
+                && YachtCelebrationRule.IsCelebrationDue(isFilledBefore, after.IsFilled, after.Points);
 
             if (isCelebrationDue)
             {
@@ -719,14 +719,14 @@ namespace YachtDice.Views
         {
             List<GameParticipant> currentPlayers = ToParticipants(room);
 
-            foreach (GameParticipant departed in RoomListRules.FindDeparted(_presentPlayers, currentPlayers))
+            foreach (GameParticipant departed in PresenceComparer.FindDeparted(_presentPlayers, currentPlayers))
             {
-                AddNotice(GameMessages.GetDepartureMessage(eventType, departed.Name));
+                AddNotice(PresenceMessages.GetDepartureMessage(eventType, departed.Name));
             }
 
-            foreach (GameParticipant arrived in RoomListRules.FindArrived(_presentPlayers, currentPlayers))
+            foreach (GameParticipant arrived in PresenceComparer.FindArrived(_presentPlayers, currentPlayers))
             {
-                AddNotice(GameMessages.GetReturnMessage(arrived.Name));
+                AddNotice(PresenceMessages.GetReturnMessage(arrived.Name));
             }
 
             _presentPlayers = currentPlayers;
