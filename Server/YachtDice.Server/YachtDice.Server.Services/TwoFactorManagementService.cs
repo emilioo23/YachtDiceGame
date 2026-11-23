@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 
 namespace YachtDice.Server.Services
@@ -17,6 +18,7 @@ namespace YachtDice.Server.Services
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
         private const string NullDependencyMessage = "A dependency of the two-factor management cannot be null.";
+        private const string NullAttestationMessage = "The answer of the authenticator cannot be null.";
 
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
         private readonly LogicAuthentication.PasswordChangeService _passwordChangeService;
@@ -177,7 +179,7 @@ namespace YachtDice.Server.Services
         {
             Contracts.PasskeyChallengeData challenge = ExecuteForPlayer(
                 sessionToken,
-                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginRegistration(playerName)));
+                playerName => ToContract(_passkeyService.BeginRegistration(playerName)));
 
             return challenge;
         }
@@ -220,7 +222,7 @@ namespace YachtDice.Server.Services
         {
             List<Contracts.PasskeyInfoData> passkeys = ExecuteForPlayer(
                 sessionToken,
-                playerName => Mapping.PasskeyMapper.ToContract(_passkeyService.ListPasskeys(playerName)));
+                playerName => ToContract(_passkeyService.ListPasskeys(playerName)));
 
             return passkeys;
         }
@@ -251,7 +253,7 @@ namespace YachtDice.Server.Services
         public Contracts.PasskeyChallengeData BeginPasskeyLogin()
         {
             Contracts.PasskeyChallengeData challenge =
-                Execute(() => Mapping.PasskeyMapper.ToContract(_passkeyService.BeginLogin()));
+                Execute(() => ToContract(_passkeyService.BeginLogin()));
 
             return challenge;
         }
@@ -273,7 +275,7 @@ namespace YachtDice.Server.Services
             Contracts.PasskeyAttestationData attestation)
         {
             LogicPasskeys.PasskeyRegistrationStatus status =
-                _passkeyService.CompleteRegistration(displayName, Mapping.PasskeyMapper.ToLogic(attestation));
+                _passkeyService.CompleteRegistration(displayName, ToLogic(attestation));
 
             return Mapping.EnumMapper.Map<
                 LogicPasskeys.PasskeyRegistrationStatus,
@@ -283,7 +285,7 @@ namespace YachtDice.Server.Services
         private AuthenticationContracts.LoginData ProcessPasskeyLogin(Contracts.PasskeyAssertionData assertion)
         {
             LogicAuthentication.LoginResult logicResult =
-                _passkeyService.CompleteLogin(Mapping.PasskeyMapper.ToLogic(assertion));
+                _passkeyService.CompleteLogin(ToLogic(assertion));
             var loginData = new AuthenticationContracts.LoginData
             {
                 Code = Mapping.EnumMapper.Map<
@@ -406,5 +408,83 @@ namespace YachtDice.Server.Services
             return Mapping.EnumMapper.Map<LogicTwoFactor.TwoFactorChangeStatus, Contracts.TwoFactorChangeResultCode>(
                 logicResult);
         }
+
+        /// <summary>
+        /// Converts the challenge of the logic layer into the contract.
+        /// </summary>
+        /// <param name="challenge">Challenge of the logic layer.</param>
+        /// <returns>The challenge for the client.</returns>
+        private static Contracts.PasskeyChallengeData ToContract(LogicPasskeys.PasskeyChallenge challenge)
+        {
+            return new Contracts.PasskeyChallengeData
+            {
+                Code = Mapping.EnumMapper.Map<LogicPasskeys.PasskeyStartStatus, Contracts.PasskeyStartResultCode>(
+                    challenge.Status),
+                ChallengeId = challenge.ChallengeId,
+                Challenge = challenge.Challenge,
+                UserHandle = challenge.UserHandle,
+                UserName = challenge.UserName,
+                ExcludedCredentialIds = challenge.ExcludedCredentialIds.ToList()
+            };
+        }
+
+        /// <summary>
+        /// Converts the passkeys of the logic layer into the contract.
+        /// </summary>
+        /// <param name="summaries">Passkeys of the logic layer.</param>
+        /// <returns>The passkeys for the client.</returns>
+        private static List<Contracts.PasskeyInfoData> ToContract(IEnumerable<LogicPasskeys.PasskeySummary> summaries)
+        {
+            return summaries
+                .Select(summary => new Contracts.PasskeyInfoData { Id = summary.Id, Name = summary.Name })
+                .ToList();
+        }
+
+        /// <summary>
+        /// Converts the answer of a registration into the type of the logic layer.
+        /// </summary>
+        /// <param name="attestation">Answer received from the client.</param>
+        /// <returns>The answer for the logic layer.</returns>
+        /// <exception cref="ArgumentNullException">The answer is null.</exception>
+        private static LogicPasskeys.PasskeyAttestation ToLogic(Contracts.PasskeyAttestationData attestation)
+        {
+            if (attestation == null)
+            {
+                throw new ArgumentNullException(nameof(attestation), NullAttestationMessage);
+            }
+
+            return new LogicPasskeys.PasskeyAttestation
+            {
+                ChallengeId = attestation.ChallengeId,
+                ClientDataJson = attestation.ClientDataJson,
+                AttestationObject = attestation.AttestationObject,
+                Transport = attestation.Transport
+            };
+        }
+
+        /// <summary>
+        /// Converts the answer of a login into the type of the logic layer.
+        /// </summary>
+        /// <param name="assertion">Answer received from the client.</param>
+        /// <returns>The answer for the logic layer.</returns>
+        /// <exception cref="ArgumentNullException">The answer is null.</exception>
+        private static LogicPasskeys.PasskeyAssertion ToLogic(Contracts.PasskeyAssertionData assertion)
+        {
+            if (assertion == null)
+            {
+                throw new ArgumentNullException(nameof(assertion), NullAttestationMessage);
+            }
+
+            return new LogicPasskeys.PasskeyAssertion
+            {
+                ChallengeId = assertion.ChallengeId,
+                CredentialId = assertion.CredentialId,
+                ClientDataJson = assertion.ClientDataJson,
+                AuthenticatorData = assertion.AuthenticatorData,
+                Signature = assertion.Signature,
+                UserHandle = assertion.UserHandle
+            };
+        }
+    
     }
 }
