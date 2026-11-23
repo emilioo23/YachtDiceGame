@@ -58,7 +58,6 @@
     <Compile Include="Authentication\LoginResult.cs" />
     <Compile Include="Authentication\LoginService.cs" />
     <Compile Include="Authentication\LoginStatus.cs" />
-    <Compile Include="Authentication\PasswordChange.cs" />
     <Compile Include="Authentication\SecuritySummary.cs" />
     <Compile Include="Authentication\PasswordChangeStatus.cs" />
     <Compile Include="Authentication\PasswordService.cs" />

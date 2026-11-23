@@ -46,7 +46,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_RightCurrentPassword_ReturnsSuccess()
         {
-            PasswordChangeStatus status = _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
+            PasswordChangeStatus status = _service.ChangePassword(DisplayName, OldPassword, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.Success, status);
         }
@@ -54,7 +54,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_RightCurrentPassword_SavesTheNewPassword()
         {
-            _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
+            _service.ChangePassword(DisplayName, OldPassword, NewPassword);
 
             Assert.True(CredentialRules.Verify(NewPassword, _players.Players.Single().PwdHash));
         }
@@ -64,7 +64,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(WrongPassword, NewPassword));
+                WrongPassword, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.WrongCurrentPassword, status);
         }
@@ -72,7 +72,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_WrongCurrentPassword_KeepsTheOldPassword()
         {
-            _service.ChangePassword(DisplayName, CreateChange(WrongPassword, NewPassword));
+            _service.ChangePassword(DisplayName, WrongPassword, NewPassword);
 
             Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
         }
@@ -82,7 +82,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(string.Empty, NewPassword));
+                string.Empty, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.WrongCurrentPassword, status);
         }
@@ -92,7 +92,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             string tooLong = new string(FillCharacter, CredentialRules.PasswordMaxLength + 1);
 
-            PasswordChangeStatus status = _service.ChangePassword(DisplayName, CreateChange(tooLong, NewPassword));
+            PasswordChangeStatus status = _service.ChangePassword(DisplayName, tooLong, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.WrongCurrentPassword, status);
         }
@@ -105,7 +105,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(OldPassword, weakPassword));
+                OldPassword, weakPassword);
 
             Assert.Equal(PasswordChangeStatus.InvalidNewPassword, status);
         }
@@ -115,7 +115,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             string tooLong = new string(FillCharacter, CredentialRules.PasswordMaxLength) + Digit;
 
-            PasswordChangeStatus status = _service.ChangePassword(DisplayName, CreateChange(OldPassword, tooLong));
+            PasswordChangeStatus status = _service.ChangePassword(DisplayName, OldPassword, tooLong);
 
             Assert.Equal(PasswordChangeStatus.InvalidNewPassword, status);
         }
@@ -123,7 +123,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_WeakNewPassword_KeepsTheOldPassword()
         {
-            _service.ChangePassword(DisplayName, CreateChange(OldPassword, WeakPassword));
+            _service.ChangePassword(DisplayName, OldPassword, WeakPassword);
 
             Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
         }
@@ -133,7 +133,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(OldPassword, OldPassword));
+                OldPassword, OldPassword);
 
             Assert.Equal(PasswordChangeStatus.PasswordUsedBefore, status);
         }
@@ -141,11 +141,11 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_ReturningToThePreviousPassword_ReturnsPasswordUsedBefore()
         {
-            _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
+            _service.ChangePassword(DisplayName, OldPassword, NewPassword);
 
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(NewPassword, OldPassword));
+                NewPassword, OldPassword);
 
             Assert.Equal(PasswordChangeStatus.PasswordUsedBefore, status);
         }
@@ -155,7 +155,7 @@ namespace YachtDice.Server.Tests.Authentication
         {
             PasswordChangeStatus status = _service.ChangePassword(
                 UnknownName,
-                CreateChange(OldPassword, NewPassword));
+                OldPassword, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.PlayerNotFound, status);
         }
@@ -163,7 +163,7 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void ChangePassword_BlankName_ReturnsPlayerNotFound()
         {
-            PasswordChangeStatus status = _service.ChangePassword(BlankName, CreateChange(OldPassword, NewPassword));
+            PasswordChangeStatus status = _service.ChangePassword(BlankName, OldPassword, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.PlayerNotFound, status);
         }
@@ -175,7 +175,7 @@ namespace YachtDice.Server.Tests.Authentication
 
             PasswordChangeStatus status = _service.ChangePassword(
                 DisplayName,
-                CreateChange(OldPassword, NewPassword));
+                OldPassword, NewPassword);
 
             Assert.Equal(PasswordChangeStatus.TooManyAttempts, status);
         }
@@ -185,15 +185,9 @@ namespace YachtDice.Server.Tests.Authentication
         {
             RegisterWrongPasswords(LoginAttemptTracker.FailuresForTemporaryLock);
 
-            _service.ChangePassword(DisplayName, CreateChange(OldPassword, NewPassword));
+            _service.ChangePassword(DisplayName, OldPassword, NewPassword);
 
             Assert.True(CredentialRules.Verify(OldPassword, _players.Players.Single().PwdHash));
-        }
-
-        [Fact]
-        public void ChangePassword_NullRequest_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => _service.ChangePassword(DisplayName, null));
         }
 
         [Fact]
@@ -235,16 +229,11 @@ namespace YachtDice.Server.Tests.Authentication
             Assert.Throws<ArgumentNullException>(() => new PasswordService(_players, null, new InMemoryEmailService()));
         }
 
-        private static PasswordChange CreateChange(string currentPassword, string newPassword)
-        {
-            return new PasswordChange { CurrentPassword = currentPassword, NewPassword = newPassword };
-        }
-
         private void RegisterWrongPasswords(int count)
         {
             for (int attempt = 0; attempt < count; attempt++)
             {
-                _service.ChangePassword(DisplayName, CreateChange(WrongPassword, NewPassword));
+                _service.ChangePassword(DisplayName, WrongPassword, NewPassword);
             }
         }
     }

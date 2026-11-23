@@ -24,7 +24,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
         private const string NullDependencyMessage = "A dependency of the password service cannot be null.";
         private const string WrongPasswordLogMessage = "A wrong current password was typed in a password change.";
-        private const string NullChangeMessage = "The password change cannot be null.";
         private const int RecentLockDays = 7;
         private static readonly CodeEmailTemplate EmailTemplate =
             new CodeEmailTemplate(
@@ -122,23 +121,18 @@ namespace YachtDice.Server.Logic.Authentication
         /// Changes the password of a player after checking the current one.
         /// </summary>
         /// <param name="displayName">Name of the player who is logged in.</param>
-        /// <param name="change">Current password and new password.</param>
+        /// <param name="currentPassword">Password that the player uses now.</param>
+        /// <param name="newPassword">Password that the player wants.</param>
         /// <returns>The result of the change.</returns>
-        /// <exception cref="ArgumentNullException">The change is null.</exception>
         /// <exception cref="Data.Exceptions.DataAccessException">The password could not be read or saved.</exception>
-        public PasswordChangeStatus ChangePassword(string displayName, PasswordChange change)
+        public PasswordChangeStatus ChangePassword(string displayName, string currentPassword, string newPassword)
         {
-            if (change == null)
-            {
-                throw new ArgumentNullException(nameof(change), NullChangeMessage);
-            }
-
             Player player = FindPlayer(displayName);
             PasswordChangeStatus status = PasswordChangeStatus.PlayerNotFound;
 
             if (player != null)
             {
-                status = CheckAndChange(player, change);
+                status = CheckAndChange(player, currentPassword, newPassword);
             }
 
             return status;
@@ -296,13 +290,13 @@ namespace YachtDice.Server.Logic.Authentication
             return status;
         }
 
-        private PasswordChangeStatus CheckAndChange(Player player, PasswordChange change)
+        private PasswordChangeStatus CheckAndChange(Player player, string currentPassword, string newPassword)
         {
-            PasswordChangeStatus status = FindProblem(player, change);
+            PasswordChangeStatus status = FindProblem(player, currentPassword, newPassword);
 
             if (status == PasswordChangeStatus.Success)
             {
-                _resetRepository.CompleteReset(player.Id, CredentialRules.ComputeHash(change.NewPassword));
+                _resetRepository.CompleteReset(player.Id, CredentialRules.ComputeHash(newPassword));
                 _attemptTracker.RegisterSuccess(player.Id);
                 _logger.Info(ChangedFromSettingsLogMessage);
             }
@@ -310,7 +304,7 @@ namespace YachtDice.Server.Logic.Authentication
             return status;
         }
 
-        private PasswordChangeStatus FindProblem(Player player, PasswordChange change)
+        private PasswordChangeStatus FindProblem(Player player, string currentPassword, string newPassword)
         {
             PasswordChangeStatus status = PasswordChangeStatus.Success;
 
@@ -318,17 +312,17 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 status = PasswordChangeStatus.TooManyAttempts;
             }
-            else if (!IsCurrentPassword(player, change.CurrentPassword))
+            else if (!IsCurrentPassword(player, currentPassword))
             {
                 _attemptTracker.RegisterFailure(player.Id, DateTime.UtcNow);
                 _logger.Info(WrongPasswordLogMessage);
                 status = PasswordChangeStatus.WrongCurrentPassword;
             }
-            else if (!CredentialRules.IsStrongPassword(change.NewPassword))
+            else if (!CredentialRules.IsStrongPassword(newPassword))
             {
                 status = PasswordChangeStatus.InvalidNewPassword;
             }
-            else if (IsUsedBefore(player.Id, change.NewPassword))
+            else if (IsUsedBefore(player.Id, newPassword))
             {
                 status = PasswordChangeStatus.PasswordUsedBefore;
             }
