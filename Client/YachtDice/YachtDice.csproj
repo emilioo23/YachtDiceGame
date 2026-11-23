@@ -347,9 +347,7 @@
     <Compile Include="Views\DiceRow.cs" />
     <Compile Include="Views\DiceBoard.cs" />
     <Compile Include="Views\DiceMaterials.cs" />
-    <Compile Include="Views\DiceMeshFactory.cs" />
     <Compile Include="Views\DiceThrowAnimation.cs" />
-    <Compile Include="Views\DiceViewportFactory.cs" />
     <Compile Include="Views\Die3D.cs" />
     <Compile Include="Views\DieMotion.cs" />
     <Compile Include="Views\ElementAnimator.cs" />
@@ -521,6 +519,7 @@
     <Compile Include="Utils\AccountMessages.cs" />
     <Compile Include="Utils\SocialMessages.cs" />
     <Compile Include="Utils\GameMessages.cs" />
+    <Compile Include="Views\DiceModelFactory.cs" />
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

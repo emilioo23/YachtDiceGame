@@ -48,7 +48,7 @@ namespace YachtDice.Views
 
             var shadow = new ModelVisual3D
             {
-                Content = new GeometryModel3D(DiceMeshFactory.CreateFlatSquare(ShadowSize * Half), materials.Shadow),
+                Content = new GeometryModel3D(DiceModelFactory.CreateFlatSquare(ShadowSize * Half), materials.Shadow),
                 Transform = _shadowPosition
             };
 
@@ -222,7 +222,7 @@ namespace YachtDice.Views
             {
                 DiceVector normal = DiceFaceOrientation.GetNormal(index + FirstFace);
                 var direction = new Vector3D(normal.X, normal.Y, normal.Z);
-                var mesh = DiceMeshFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
+                var mesh = DiceModelFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
 
                 _faces[index] = new GeometryModel3D(mesh, _materials.Blank);
                 body.Children.Add(_faces[index]);

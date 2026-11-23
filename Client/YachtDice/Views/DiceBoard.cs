@@ -62,7 +62,7 @@ namespace YachtDice.Views
                 NullResourcesMessage);
             DiceMaterials materials = DiceMaterials.Create(owner);
 
-            _viewport = DiceViewportFactory.Create(ViewportWidth, ViewportHeight);
+            _viewport = DiceModelFactory.CreateViewport(ViewportWidth, ViewportHeight);
             _viewport.Cursor = Cursors.Hand;
             Canvas.SetLeft(_viewport, ViewportOffsetX);
             Canvas.SetTop(_viewport, ViewportOffsetY);
