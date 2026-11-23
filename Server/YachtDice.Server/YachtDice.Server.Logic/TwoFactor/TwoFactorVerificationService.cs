@@ -26,24 +26,19 @@ namespace YachtDice.Server.Logic.TwoFactor
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
-        private readonly TwoFactorDeliveryService _deliveryService;
 
         /// <summary>
         /// Initializes the service with the components it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="codeService">Service that keeps the verification codes.</param>
-        /// <param name="deliveryService">Service that sends the verification code by email.</param>
         public TwoFactorVerificationService(
             IPlayerRepository playerRepository,
-            TwoFactorCodeService codeService,
-            TwoFactorDeliveryService deliveryService)
+            TwoFactorCodeService codeService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
-            _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -222,7 +217,7 @@ namespace YachtDice.Server.Logic.TwoFactor
             else
             {
                 var culture = new CultureInfo(delivery.CultureName);
-                bool isSent = _deliveryService.SendCode(player, delivery.ChallengeId, culture);
+                bool isSent = _codeService.SendCode(player, delivery.ChallengeId, culture);
                 status = isSent ? ResendCodeStatus.CodeSent : ResendCodeStatus.CodeSendFailed;
             }
 

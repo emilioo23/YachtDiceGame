@@ -38,9 +38,8 @@ namespace YachtDice.Server.Tests.Authentication
         /// </summary>
         public LoginServiceTests()
         {
-            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
-            var deliveryService = new TwoFactorDeliveryService(codeService, _emailService);
-            var verificationService = new TwoFactorVerificationService(_players, codeService, deliveryService);
+            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository(), _emailService);
+            var verificationService = new TwoFactorVerificationService(_players, codeService);
 
             _players.Add(new Player
             {
@@ -51,7 +50,7 @@ namespace YachtDice.Server.Tests.Authentication
                 DisplayName = DisplayName,
                 FirstName = FirstName
             });
-            _service = new LoginService(_players, verificationService, deliveryService);
+            _service = new LoginService(_players, verificationService, codeService);
         }
 
         [Fact]

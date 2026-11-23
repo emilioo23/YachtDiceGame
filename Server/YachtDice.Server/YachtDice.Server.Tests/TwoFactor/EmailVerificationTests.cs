@@ -25,8 +25,7 @@ namespace YachtDice.Server.Tests.TwoFactor
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryEmailService _emailService = new InMemoryEmailService();
-        private readonly TwoFactorCodeService _codeService =
-            new TwoFactorCodeService(new InMemoryBackupCodeRepository());
+        private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginService _loginService;
 
@@ -35,10 +34,9 @@ namespace YachtDice.Server.Tests.TwoFactor
         /// </summary>
         public EmailVerificationTests()
         {
-            var deliveryService = new TwoFactorDeliveryService(_codeService, _emailService);
-
-            _verificationService = new TwoFactorVerificationService(_players, _codeService, deliveryService);
-            _loginService = new LoginService(_players, _verificationService, deliveryService);
+            _codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository(), _emailService);
+            _verificationService = new TwoFactorVerificationService(_players, _codeService);
+            _loginService = new LoginService(_players, _verificationService, _codeService);
             _players.Add(new Player
             {
                 Id = PlayerId,

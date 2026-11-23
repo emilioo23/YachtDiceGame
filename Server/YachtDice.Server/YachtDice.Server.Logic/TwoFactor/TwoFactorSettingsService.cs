@@ -30,25 +30,25 @@ namespace YachtDice.Server.Logic.TwoFactor
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorVerificationService _verificationService;
-        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly TwoFactorCodeService _codeService;
 
         /// <summary>
         /// Initializes the service with the components it needs.
         /// </summary>
         /// <param name="playerRepository">Repository used to read and update players.</param>
         /// <param name="verificationService">Service that handles verification challenges and codes.</param>
-        /// <param name="deliveryService">Service that sends the verification code by email.</param>
+        /// <param name="codeService">Service that creates and sends the verification codes.</param>
         public TwoFactorSettingsService(
             IPlayerRepository playerRepository,
             TwoFactorVerificationService verificationService,
-            TwoFactorDeliveryService deliveryService)
+            TwoFactorCodeService codeService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _codeService = codeService
+                ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -274,7 +274,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         private TwoFactorActivationResult SendActivationCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
+            bool isSent = _codeService.SendCode(player, challengeId, culture);
             TwoFactorActivationResult result = CreateFailure(TwoFactorActivationStatus.CodeSendFailed);
 
             if (isSent)

@@ -193,7 +193,6 @@
     <Compile Include="TwoFactor\TwoFactorChangeStatus.cs" />
     <Compile Include="TwoFactor\TwoFactorCode.cs" />
     <Compile Include="TwoFactor\TwoFactorCodeService.cs" />
-    <Compile Include="TwoFactor\TwoFactorDeliveryService.cs" />
     <Compile Include="TwoFactor\TwoFactorSettingsService.cs" />
     <Compile Include="TwoFactor\TwoFactorValidationStatus.cs" />
     <Compile Include="TwoFactor\VerificationCode.cs" />

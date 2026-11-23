@@ -100,7 +100,6 @@ namespace YachtDice.Server.Host.Composition
 
         private static void AddAccountComponents(IServiceCollection services)
         {
-            services.AddTransient<TwoFactorDeliveryService>();
             services.AddTransient<TwoFactorVerificationService>();
             services.AddTransient<IVerificationService, TwoFactorVerificationService>();
             services.AddTransient<IPasswordRecoveryService, PasswordRecoveryService>();

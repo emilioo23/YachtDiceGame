@@ -32,8 +32,7 @@ namespace YachtDice.Server.Tests.TwoFactor
         /// </summary>
         public TwoFactorResendTests()
         {
-            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository());
-            var deliveryService = new TwoFactorDeliveryService(codeService, _emailService);
+            var codeService = new TwoFactorCodeService(new InMemoryBackupCodeRepository(), _emailService);
 
             _players.Add(new Player
             {
@@ -42,8 +41,8 @@ namespace YachtDice.Server.Tests.TwoFactor
                 PwdHash = CredentialRules.ComputeHash(Password),
                 DisplayName = DisplayName
             });
-            _verificationService = new TwoFactorVerificationService(_players, codeService, deliveryService);
-            _settingsService = new TwoFactorSettingsService(_players, _verificationService, deliveryService);
+            _verificationService = new TwoFactorVerificationService(_players, codeService);
+            _settingsService = new TwoFactorSettingsService(_players, _verificationService, codeService);
         }
 
         [Fact]

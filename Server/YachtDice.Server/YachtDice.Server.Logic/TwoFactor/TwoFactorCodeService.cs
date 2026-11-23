@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
+using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
-    /// Generates and validates two-step verification codes, stored in memory. Each player only works with the
-    /// entry of its own email, so a concurrent dictionary is enough and the class needs no lock. It also keeps
-    /// the backup codes, which are saved in the database and can replace the code sent by email; a wrong backup
-    /// code counts as a failed attempt of the same challenge.
+    /// Creates, checks and sends the codes of the second step of the login.
     /// </summary>
     public class TwoFactorCodeService
     {
@@ -30,21 +30,26 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const string GuidFormat = "N";
         private const string NullCodeMessage = "The verification code cannot be null.";
         private const string NullBackupRepositoryMessage = "The data access of the backup codes cannot be null.";
-
+        private const string SubjectResourceKey = "TwoFactor_EmailSubject";
+        private const string BodyResourceKey = "TwoFactor_EmailBody";
+        private const string NullArgumentMessage = "The value cannot be null.";
         private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
             new ConcurrentDictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
-
         private readonly IBackupCodeRepository _backupCodeRepository;
+        private static readonly CodeEmailTemplate EmailTemplate =
+            new CodeEmailTemplate(SubjectResourceKey, BodyResourceKey, SecureCodes.ExpirationMinutes);
+        private readonly CodeEmailSender _emailSender;
 
         /// <summary>
-        /// Initializes the service with the data access of the backup codes.
+        /// Initializes the service with the data access of the backup codes and the service that sends emails.
         /// </summary>
-        /// <param name="backupCodeRepository">Repository where the hashes of the backup codes are saved.</param>
-        /// <exception cref="ArgumentNullException">The repository is null.</exception>
-        public TwoFactorCodeService(IBackupCodeRepository backupCodeRepository)
+        /// <param name="backupCodeRepository">Data access of the backup codes.</param>
+        /// <param name="emailService">Service that sends the email with the code.</param>
+        public TwoFactorCodeService(IBackupCodeRepository backupCodeRepository, IEmailService emailService)
         {
             _backupCodeRepository = backupCodeRepository
                 ?? throw new ArgumentNullException(nameof(backupCodeRepository), NullBackupRepositoryMessage);
+            _emailSender = new CodeEmailSender(emailService, EmailTemplate);
         }
 
         /// <summary>
@@ -216,6 +221,26 @@ namespace YachtDice.Server.Logic.TwoFactor
             }
 
             return isAllowed;
+        }
+
+        /// <summary>
+        /// Generates a new code and sends it to the given email synchronously.
+        /// </summary>
+        /// <param name="player">Player who receives the code. Its email is the recipient.</param>
+        /// <param name="challengeId">Unique session challenge identifier.</param>
+        /// <param name="culture">Language in which the email is written.</param>
+        /// <returns>True if the email was sent successfully.</returns>
+        /// <exception cref="ArgumentNullException">The player or the culture is null.</exception>
+        public bool SendCode(Player player, string challengeId, CultureInfo culture)
+        {
+            if (player == null)
+            {
+                throw new ArgumentNullException(nameof(player), NullArgumentMessage);
+            }
+
+            string code = GenerateCode(player.Email, challengeId);
+
+            return _emailSender.Send(player, code, culture);
         }
 
         private TwoFactorValidationStatus ValidateChallenge(

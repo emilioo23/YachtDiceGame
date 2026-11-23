@@ -35,7 +35,7 @@ namespace YachtDice.Server.Logic.Authentication
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
-        private readonly TwoFactorDeliveryService _deliveryService;
+        private readonly TwoFactorCodeService _codeService;
         private readonly TwoFactorVerificationService _verificationService;
         private readonly LoginAttemptTracker _attemptTracker;
         private readonly string _timingEqualizerHash;
@@ -45,18 +45,18 @@ namespace YachtDice.Server.Logic.Authentication
         /// </summary>
         /// <param name="playerRepository">Repository used to read players.</param>
         /// <param name="verificationService">Service that handles verification challenges and lockouts.</param>
-        /// <param name="deliveryService">Service that sends the verification code by email.</param>
+        /// <param name="codeService">Service that creates and sends the verification codes.</param>
         public LoginService(
             IPlayerRepository playerRepository,
             TwoFactorVerificationService verificationService,
-            TwoFactorDeliveryService deliveryService)
+            TwoFactorCodeService codeService)
         {
             _playerRepository = playerRepository
                 ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
             _verificationService = verificationService
                 ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
-            _deliveryService = deliveryService
-                ?? throw new ArgumentNullException(nameof(deliveryService), NullDependencyMessage);
+            _codeService = codeService
+                ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
             _timingEqualizerHash = CredentialRules.ComputeHash(TimingEqualizerPassword);
             _logger = new AppLogger(GetType());
@@ -279,7 +279,7 @@ namespace YachtDice.Server.Logic.Authentication
         private LoginResult SendCode(Player player, CultureInfo culture)
         {
             string challengeId = _verificationService.CreateChallenge();
-            bool isSent = _deliveryService.SendCode(player, challengeId, culture);
+            bool isSent = _codeService.SendCode(player, challengeId, culture);
             LoginStatus status = isSent ? LoginStatus.VerificationCodeSent : LoginStatus.CodeSendFailed;
 
             if (isSent)
