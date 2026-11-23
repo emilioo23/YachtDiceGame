@@ -386,21 +386,40 @@ namespace YachtDice.Server.Services
         private Contracts.RoomResultCode ProcessKick(LogicRooms.RoomMember member, string targetPlayerId)
         {
             var expelled = new LogicRooms.RoomMember(member.RoomCode, targetPlayerId);
+            bool isComputer = IsComputerPlayer(expelled);
             string hostName = ReadDisplayName(member);
             string targetName = ReadDisplayName(expelled);
             LogicRooms.RoomResult result = _roomManager.KickPlayer(member, targetPlayerId);
 
-            if (result.Status == LogicRooms.RoomStatus.Success)
+            if (result.Status == LogicRooms.RoomStatus.Success && isComputer)
             {
-
-                LogInfo(Describe(KickLogFormat, member.RoomCode));
-                TellRemovedPlayer(result.Room, expelled, Contracts.RoomEventType.PlayerKicked);
-                _gameCoordinator.PlayerRemoved(expelled);
-                Broadcast(result.Room, Contracts.RoomEventType.PlayerKicked);
-                _kickHistoryService.Record(member.RoomCode, hostName, targetName);
+                Broadcast(result.Room, Contracts.RoomEventType.SettingsChanged);
+            }
+            else if (result.Status == LogicRooms.RoomStatus.Success)
+            {
+                AnnounceExpulsion(result.Room, member, expelled, hostName, targetName);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
+        }
+
+        private bool IsComputerPlayer(LogicRooms.RoomMember member)
+        {
+            return _roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer player) && player.IsComputer;
+        }
+
+        private void AnnounceExpulsion(
+            LogicRooms.RoomDetails room,
+            LogicRooms.RoomMember host,
+            LogicRooms.RoomMember expelled,
+            string hostName,
+            string targetName)
+        {
+            LogInfo(Describe(KickLogFormat, host.RoomCode));
+            TellRemovedPlayer(room, expelled, Contracts.RoomEventType.PlayerKicked);
+            _gameCoordinator.PlayerRemoved(expelled);
+            Broadcast(room, Contracts.RoomEventType.PlayerKicked);
+            _kickHistoryService.Record(host.RoomCode, hostName, targetName);
         }
 
         private Contracts.RoomResultCode ProcessHostTransfer(LogicRooms.RoomMember member, string newHostId)

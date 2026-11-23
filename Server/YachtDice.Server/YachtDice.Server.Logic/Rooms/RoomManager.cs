@@ -621,9 +621,9 @@ namespace YachtDice.Server.Logic.Rooms
         {
             RoomStatus status = GetHostActionStatus(room, playerId, targetPlayerId);
 
-            if (status == RoomStatus.Success && IsComputer(room, targetPlayerId))
+            if (status == RoomStatus.Success && IsComputerInStartedGame(room, targetPlayerId))
             {
-                status = RoomStatus.InvalidTarget;
+                status = RoomStatus.GameAlreadyStarted;
             }
             else if (status == RoomStatus.Success)
             {
@@ -631,6 +631,11 @@ namespace YachtDice.Server.Logic.Rooms
             }
 
             return CreateResult(status, room);
+        }
+
+        private static bool IsComputerInStartedGame(GameRoom room, string playerId)
+        {
+            return room.IsStarted && IsComputer(room, playerId);
         }
 
         private static bool IsComputer(GameRoom room, string playerId)

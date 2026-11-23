@@ -130,7 +130,8 @@ namespace YachtDice.Server.Logic.Rooms
 
         /// <summary>
         /// Takes another player out of the room for good, also during the game. Only the host can do it. The
-        /// expelled player cannot come back to a game in progress.
+        /// expelled player cannot come back to a game in progress. A computer player is also removed with this
+        /// method, but only before the game starts, because the game cannot continue without one of its players.
         /// </summary>
         /// <param name="member">Room and identifier of the host who expels the player.</param>
         /// <param name="targetPlayerId">Identifier of the player to expel.</param>

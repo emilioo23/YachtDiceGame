@@ -123,7 +123,7 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
-        public void KickPlayer_ComputerPlayer_ReturnsInvalidTarget()
+        public void KickPlayer_ComputerPlayerBeforeTheGame_ReturnsSuccess()
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
@@ -131,11 +131,11 @@ namespace YachtDice.Server.Tests.Rooms
 
             RoomResult kickResult = _manager.KickPlayer(host, computer.Id);
 
-            Assert.Equal(RoomStatus.InvalidTarget, kickResult.Status);
+            Assert.Equal(RoomStatus.Success, kickResult.Status);
         }
 
         [Fact]
-        public void KickPlayer_ComputerPlayer_KeepsTheComputerInTheRoom()
+        public void KickPlayer_ComputerPlayerBeforeTheGame_TakesTheComputerOutOfTheRoom()
         {
             RoomResult createdRoom = _manager.CreateRoom(HostName);
             RoomMember host = GetMember(createdRoom);
@@ -144,7 +144,46 @@ namespace YachtDice.Server.Tests.Rooms
             _manager.KickPlayer(host, computer.Id);
 
             bool isInRoomResult = _manager.TryGetPlayer(new RoomMember(host.RoomCode, computer.Id), out _);
-            Assert.True(isInRoomResult);
+            Assert.False(isInRoomResult);
+        }
+
+        [Fact]
+        public void KickPlayer_ComputerPlayerBeforeTheGame_FreesThePlaceForAnotherComputer()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
+
+            _manager.KickPlayer(host, computer.Id);
+
+            RoomResult addAgainResult = _manager.AddComputer(host, ComputerDifficulty.Hard);
+            Assert.Equal(RoomStatus.Success, addAgainResult.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_ComputerPlayerAfterTheGameStarts_ReturnsGameAlreadyStarted()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
+            _manager.StartGame(host);
+
+            RoomResult kickResult = _manager.KickPlayer(host, computer.Id);
+
+            Assert.Equal(RoomStatus.GameAlreadyStarted, kickResult.Status);
+        }
+
+        [Fact]
+        public void KickPlayer_ComputerPlayerAskedByAGuest_ReturnsNotHost()
+        {
+            RoomResult createdRoom = _manager.CreateRoom(HostName);
+            RoomMember host = GetMember(createdRoom);
+            RoomMember guest = GetMember(_manager.Join(host.RoomCode, PlayerName));
+            RoomPlayer computer = FindComputer(_manager.AddComputer(host, ComputerDifficulty.Normal).Room);
+
+            RoomResult kickResult = _manager.KickPlayer(guest, computer.Id);
+
+            Assert.Equal(RoomStatus.NotHost, kickResult.Status);
         }
 
         [Fact]
