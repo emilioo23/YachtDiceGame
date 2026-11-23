@@ -141,7 +141,7 @@ namespace YachtDice.Server.Logic.Game
 
         /// <summary>
         /// Plays the turn of the current player when the time is over: rolls if the player did not roll yet
-        /// and writes the points in the box that gives more points (see <see cref="AutoPlayChooser"/>).
+        /// and writes the points in the box that gives more points (see <see cref="ComputerSkill"/>).
         /// </summary>
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus AutoPlay()
@@ -164,7 +164,7 @@ namespace YachtDice.Server.Logic.Game
         /// <summary>
         /// Plays one move of a computer player: the first roll, another roll keeping the dice that its
         /// difficulty chooses, or the points in the best box when no rolls are left or the dice are worth
-        /// keeping (see <see cref="ComputerSkill"/> and <see cref="AutoPlayChooser"/>).
+        /// keeping (see <see cref="ComputerSkill"/> and <see cref="ComputerSkill"/>).
         /// </summary>
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus PlayComputerMove()
@@ -432,7 +432,7 @@ namespace YachtDice.Server.Logic.Game
 
         private ScoreCategory ChooseBestCategory()
         {
-            return AutoPlayChooser.Choose(_players[_turnIndex].Card.GetOptions(_dice));
+            return ComputerSkill.Choose(_players[_turnIndex].Card.GetOptions(_dice));
         }
 
         private void RollAll()
@@ -558,7 +558,7 @@ namespace YachtDice.Server.Logic.Game
             bool hasRollsLeft = _rollsMade < Math.Min(RollsPerTurn, _players[_turnIndex].Skill.MaxRolls);
 
             return !hasRolled
-                || (hasRollsLeft && !AutoPlayChooser.IsWorthKeeping(_players[_turnIndex].Card.GetOptions(_dice)));
+                || (hasRollsLeft && !ComputerSkill.IsWorthKeeping(_players[_turnIndex].Card.GetOptions(_dice)));
         }
 
         private string GetCurrentPlayerId()

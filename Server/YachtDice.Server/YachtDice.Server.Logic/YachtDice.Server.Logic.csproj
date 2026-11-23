@@ -97,7 +97,6 @@
     <Compile Include="Friends\ReportReason.cs" />
     <Compile Include="Friends\ReportStatus.cs" />
     <Compile Include="Friends\RoomInvitationService.cs" />
-    <Compile Include="Game\AutoPlayChooser.cs" />
     <Compile Include="Game\ComputerSkill.cs" />
     <Compile Include="Game\DiceHand.cs" />
     <Compile Include="Game\GameActionResult.cs" />
