@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace YachtDice.Server.Logic.Security
 {
     /// <summary>
-    /// Rules that a new username and a new password must follow. They are checked when an account is created
-    /// and when a password is changed, so the accounts that already exist are not affected.
+    /// Limits and checks of the names, the usernames, the passwords and the email addresses.
     /// </summary>
     public static class CredentialRules
     {
@@ -49,12 +49,10 @@ namespace YachtDice.Server.Logic.Security
         private const string UsernameCharactersPattern = "^[A-Za-z0-9._]+$";
         private const string PersonNamePattern = @"^\p{L}+([ '\-]\p{L}+)*$";
         private const int UsernameRegexTimeoutMilliseconds = 100;
-
         private static readonly Regex UsernameCharacters = new Regex(
             UsernameCharactersPattern,
             RegexOptions.Compiled,
             TimeSpan.FromMilliseconds(UsernameRegexTimeoutMilliseconds));
-
         private static readonly Regex PersonNameCharacters = new Regex(
             PersonNamePattern,
             RegexOptions.Compiled,
@@ -104,6 +102,31 @@ namespace YachtDice.Server.Logic.Security
             bool hasLetterAndDigit = hasLetter && password.Any(char.IsDigit);
 
             return hasLetterAndDigit;
+        }
+
+        /// <summary>
+        /// Tells whether the text is an email address written correctly.
+        /// </summary>
+        /// <param name="email">Text to check, without spaces around it.</param>
+        /// <returns>True if the text is a valid email address; false for empty or malformed text.</returns>
+        public static bool IsValid(string email)
+        {
+            var isValid = false;
+
+            if (!string.IsNullOrWhiteSpace(email) && email.Length <= CredentialRules.EmailMaxLength)
+            {
+                try
+                {
+                    var address = new MailAddress(email);
+                    isValid = address.Address == email;
+                }
+                catch (FormatException)
+                {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
         }
     }
 }

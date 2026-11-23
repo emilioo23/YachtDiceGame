@@ -1,15 +1,18 @@
 ﻿using Xunit;
+using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Security;
 
 namespace YachtDice.Server.Tests.Security
 {
     /// <summary>
-    /// Rules for a new username and a new password.
+    /// Limits and checks of the credentials of the players.
     /// </summary>
     public class CredentialRulesTests
     {
         private const char FillLetter = 'a';
         private const string Digit = "1";
+        private const string UniversityDomain = "@uv.mx";
+        private const string EmailWithSurroundingSpaces = " gabriel@gmail.com ";
 
         [Theory]
         [InlineData("abc")]
@@ -134,6 +137,41 @@ namespace YachtDice.Server.Tests.Security
             bool isStrong = CredentialRules.IsStrongPassword(password);
 
             Assert.False(isStrong);
+        }
+
+        [Theory]
+        [InlineData("gabriel@gmail.com")]
+        [InlineData("emilio.alvarez@uv.mx")]
+        public void IsValid_WellWrittenEmail_ReturnsTrue(string email)
+        {
+            Assert.True(CredentialRules.IsValid(email));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("    ")]
+        [InlineData("gabriel")]
+        [InlineData("gabriel@")]
+        [InlineData("@gmail.com")]
+        [InlineData("gabriel gmail.com")]
+        public void IsValid_EmptyOrMalformedText_ReturnsFalse(string email)
+        {
+            Assert.False(CredentialRules.IsValid(email));
+        }
+
+        [Fact]
+        public void IsValid_EmailLongerThanTheMaximum_ReturnsFalse()
+        {
+            string longEmail = new string('a', CredentialRules.EmailMaxLength) + UniversityDomain;
+
+            Assert.False(CredentialRules.IsValid(longEmail));
+        }
+
+        [Fact]
+        public void IsValid_EmailWithSpacesAround_ReturnsFalse()
+        {
+            Assert.False(CredentialRules.IsValid(EmailWithSurroundingSpaces));
         }
     }
 }

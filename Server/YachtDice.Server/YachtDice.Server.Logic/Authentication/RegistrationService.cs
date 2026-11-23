@@ -104,7 +104,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 result = RegistrationResult.InvalidName;
             }
-            else if (!EmailAddressValidator.IsValid(player.Email.Trim()))
+            else if (!CredentialRules.IsValid(player.Email.Trim()))
             {
                 result = RegistrationResult.InvalidEmail;
             }

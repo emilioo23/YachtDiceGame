@@ -127,7 +127,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             LoginResult result;
 
-            if (EmailAddressValidator.IsValid(email))
+            if (CredentialRules.IsValid(email))
             {
                 Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
 
