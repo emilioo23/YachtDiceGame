@@ -199,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Callbacks\ChatCallbackHandler.cs" />
-    <Compile Include="Callbacks\GameCallbackHandler.cs" />
-    <Compile Include="Callbacks\PresenceCallbackHandler.cs" />
-    <Compile Include="Callbacks\RoomCallbackHandler.cs" />
     <Compile Include="Connected Services\AuthenticationServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

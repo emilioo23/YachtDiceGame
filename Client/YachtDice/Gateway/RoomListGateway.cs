@@ -2,7 +2,6 @@
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using YachtDice.Callbacks;
 using YachtDice.RoomServiceReference;
 using RoomFault = YachtDice.RoomServiceReference.ServiceFault;
 
@@ -12,7 +11,8 @@ namespace YachtDice.Gateway
     /// Asks the server for the rooms that wait for players. It opens a connection only while it asks, so the
     /// player is not inside any room when the list arrives.
     /// </summary>
-    public class RoomListGateway : DuplexGatewayBase<RoomServiceClient>
+    [CallbackBehavior(UseSynchronizationContext = false)]
+    public class RoomListGateway : DuplexGatewayBase<RoomServiceClient>, IRoomServiceCallback
     {
         /// <summary>
         /// Gets the rooms whose game did not start, public and private.
@@ -61,7 +61,7 @@ namespace YachtDice.Gateway
         /// <inheritdoc />
         protected override RoomServiceClient CreateClient()
         {
-            var client = new RoomServiceClient(new InstanceContext(new RoomCallbackHandler()));
+            var client = new RoomServiceClient(new InstanceContext(this));
             ServerAddress.Apply(client.Endpoint);
 
             return client;
@@ -73,6 +73,16 @@ namespace YachtDice.Gateway
             var typedFault = fault as FaultException<RoomFault>;
 
             return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
+        }
+
+        /// <summary>
+        /// Ignores the changes of a room: this gateway only asks for the list and is never inside a room.
+        /// </summary>
+        /// <param name="room">State of the room after the change.</param>
+        /// <param name="eventType">What happened in the room.</param>
+        void IRoomServiceCallback.RoomChanged(RoomState room, RoomEventType eventType)
+        {
+            // The list of rooms does not follow the changes of a room, so there is nothing to do here.
         }
     }
 }

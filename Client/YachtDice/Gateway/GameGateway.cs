@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using YachtDice.Callbacks;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.GameServiceReference;
 using GameFault = YachtDice.GameServiceReference.ServiceFault;
@@ -12,7 +11,8 @@ namespace YachtDice.Gateway
     /// Keeps the player connected to the game of a room. The server decides the dice, the turns and the
     /// points, so this gateway only sends what the player wants to do and receives the state of the game.
     /// </summary>
-    public class GameGateway : DuplexGatewayBase<GameServiceClient>
+    [CallbackBehavior(UseSynchronizationContext = false)]
+    public class GameGateway : DuplexGatewayBase<GameServiceClient>, IGameServiceCallback
     {
         private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
 
@@ -90,10 +90,7 @@ namespace YachtDice.Gateway
         /// <inheritdoc />
         protected override GameServiceClient CreateClient()
         {
-            var handler = new GameCallbackHandler();
-            handler.GameChanged += HandleGameChanged;
-
-            var client = new GameServiceClient(new InstanceContext(handler));
+            var client = new GameServiceClient(new InstanceContext(this));
             ServerAddress.Apply(client.Endpoint);
 
             return client;
@@ -107,7 +104,8 @@ namespace YachtDice.Gateway
             return GatewayErrorCodeParser.Parse(typedFault?.Detail.Code);
         }
 
-        private void HandleGameChanged(GameState state, GameEventType eventType)
+        /// <inheritdoc />
+        void IGameServiceCallback.GameChanged(GameState state, GameEventType eventType)
         {
             GameChanged?.Invoke(state, eventType);
         }
