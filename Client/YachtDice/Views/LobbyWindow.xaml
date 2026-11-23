@@ -317,6 +317,12 @@
                                                         Visibility="{Binding CanBeKicked,
                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         Click="KickButton_Click"/>
+                                                <Button Content="{x:Static properties:Strings.Lobby_HostRemoveComputer}"
+                                                        Style="{StaticResource BtnCompact}"
+                                                        Tag="{Binding PlayerId}"
+                                                        Visibility="{Binding CanBeRemoved,
+                                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        Click="RemoveComputerButton_Click"/>
                                                 <Button Content="{x:Static properties:Strings.Lobby_HostTransfer}"
                                                         Style="{StaticResource BtnCompact}"
                                                         Tag="{Binding PlayerId}"

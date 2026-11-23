@@ -1005,6 +1005,9 @@
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>踢出</value>
   </data>
+  <data name="Lobby_HostRemoveComputer" xml:space="preserve">
+    <value>移除</value>
+  </data>
   <data name="Lobby_HostTransfer" xml:space="preserve">
     <value>转让房主</value>
   </data>

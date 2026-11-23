@@ -63,6 +63,11 @@
         public bool CanBeKicked => CanManage && !IsComputer;
 
         /// <summary>
+        /// Gets a value indicating whether the computer player in the place can be removed by the host.
+        /// </summary>
+        public bool CanBeRemoved => CanManage && IsComputer;
+
+        /// <summary>
         /// Gets a value indicating whether the player in the place can become the host. A computer cannot.
         /// </summary>
         public bool CanBecomeHost => CanManage && !IsComputer;

@@ -1020,6 +1020,9 @@
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>Expulsar</value>
   </data>
+  <data name="Lobby_HostRemoveComputer" xml:space="preserve">
+    <value>Quitar</value>
+  </data>
   <data name="Lobby_HostTransfer" xml:space="preserve">
     <value>Dar anfitrión</value>
   </data>

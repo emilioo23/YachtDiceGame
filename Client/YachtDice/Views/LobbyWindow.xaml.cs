@@ -446,6 +446,13 @@ namespace YachtDice.Views
             }
         }
 
+        private async void RemoveComputerButton_Click(object sender, RoutedEventArgs e)
+        {
+            string computerId = ReadTag(sender);
+
+            await RunHostActionAsync(() => _roomGateway.RemoveComputerAsync(computerId));
+        }
+
         private async void TransferButton_Click(object sender, RoutedEventArgs e)
         {
             string newHostId = ReadTag(sender);

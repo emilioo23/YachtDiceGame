@@ -148,6 +148,20 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
+        /// Asks the server to remove a computer player from the room. Only the host can do it. The server uses
+        /// the same operation that expels a player, but a computer leaves without being recorded as an expulsion.
+        /// </summary>
+        /// <param name="computerId">Identifier of the computer player to remove.</param>
+        /// <returns>Outcome of the removal.</returns>
+        /// <exception cref="GatewayException">The server reported an error or could not be reached.</exception>
+        public async Task<RoomResultCode> RemoveComputerAsync(string computerId)
+        {
+            RoomResultCode result = await KickPlayerAsync(computerId);
+
+            return result;
+        }
+
+        /// <summary>
         /// Asks the server to make another player the host of the room. Only the current host can do it. When
         /// it is done, the server tells every player of the room.
         /// </summary>

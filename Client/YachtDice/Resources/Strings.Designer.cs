@@ -2122,6 +2122,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Quitar.
+        /// </summary>
+        public static string Lobby_HostRemoveComputer {
+            get {
+                return ResourceManager.GetString("Lobby_HostRemoveComputer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Dar anfitrión.
         /// </summary>
         public static string Lobby_HostTransfer {

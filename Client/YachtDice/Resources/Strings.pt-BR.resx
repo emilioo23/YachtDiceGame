@@ -1005,6 +1005,9 @@
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>Expulsar</value>
   </data>
+  <data name="Lobby_HostRemoveComputer" xml:space="preserve">
+    <value>Remover</value>
+  </data>
   <data name="Lobby_HostTransfer" xml:space="preserve">
     <value>Passar anfitrião</value>
   </data>

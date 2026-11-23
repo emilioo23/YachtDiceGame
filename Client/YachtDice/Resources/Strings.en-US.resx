@@ -1020,6 +1020,9 @@
   <data name="Lobby_HostKick" xml:space="preserve">
     <value>Kick</value>
   </data>
+  <data name="Lobby_HostRemoveComputer" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Lobby_HostTransfer" xml:space="preserve">
     <value>Make host</value>
   </data>
