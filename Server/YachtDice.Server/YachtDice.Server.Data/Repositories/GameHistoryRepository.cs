@@ -197,15 +197,10 @@ namespace YachtDice.Server.Data.Repositories
             return scorecards;
         }
 
-        private static void AddScorecard(
-            YachtDiceContext context,
-            GameHistory game,
-            PlayerResultRecord player,
-            int? playerId)
+        private static Scorecard AddScorecard(YachtDiceContext context, GameHistory game, PlayerResultRecord player)
         {
             var scorecard = new Scorecard
             {
-                PlayerId = playerId,
                 GameHistory = game,
                 UpperBonus = player.HasUpperBonus,
                 YachtBonusCt = player.YachtBonusCount
@@ -228,6 +223,8 @@ namespace YachtDice.Server.Data.Repositories
             }
 
             context.Scorecard.Add(scorecard);
+
+            return scorecard;
         }
 
         private static RoomRecordType ChooseRoomType(GameResultRecord result)
@@ -272,12 +269,13 @@ namespace YachtDice.Server.Data.Repositories
                     Status = player.Status.ToString()
                 });
                 UpdateProgress(context, player);
-                AddScorecard(context, game, player, player.PlayerId);
+                Scorecard scorecard = AddScorecard(context, game, player);
+                scorecard.PlayerId = player.PlayerId;
             }
 
             foreach (PlayerResultRecord computer in result.ComputerPlayers)
             {
-                AddScorecard(context, game, computer, null);
+                AddScorecard(context, game, computer);
             }
 
             context.GameHistory.Add(game);

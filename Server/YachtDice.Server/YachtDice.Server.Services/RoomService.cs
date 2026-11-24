@@ -397,7 +397,8 @@ namespace YachtDice.Server.Services
             }
             else if (result.Status == LogicRooms.RoomStatus.Success)
             {
-                AnnounceExpulsion(result.Room, member, expelled, hostName, targetName);
+                AnnounceExpulsion(result.Room, member, expelled);
+                _kickHistoryService.Record(member.RoomCode, hostName, targetName);
             }
 
             return Mapping.RoomMapper.ToResultCode(result.Status);
@@ -411,15 +412,12 @@ namespace YachtDice.Server.Services
         private void AnnounceExpulsion(
             LogicRooms.RoomDetails room,
             LogicRooms.RoomMember host,
-            LogicRooms.RoomMember expelled,
-            string hostName,
-            string targetName)
+            LogicRooms.RoomMember expelled)
         {
             LogInfo(Describe(KickLogFormat, host.RoomCode));
             TellRemovedPlayer(room, expelled, Contracts.RoomEventType.PlayerKicked);
             _gameCoordinator.PlayerRemoved(expelled);
             Broadcast(room, Contracts.RoomEventType.PlayerKicked);
-            _kickHistoryService.Record(host.RoomCode, hostName, targetName);
         }
 
         private Contracts.RoomResultCode ProcessHostTransfer(LogicRooms.RoomMember member, string newHostId)

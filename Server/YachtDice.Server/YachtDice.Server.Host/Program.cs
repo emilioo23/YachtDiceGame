@@ -63,23 +63,7 @@ namespace YachtDice.Server.Host
             {
                 ReportFailure(logger, ex, CommunicationFailedLogMessage);
             }
-            catch (InvalidOperationException ex)
-            {
-                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
-            }
-            catch (ArgumentException ex)
-            {
-                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
-            }
-            catch (IOException ex)
-            {
-                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
-            }
-            catch (XmlException ex)
+            catch (Exception ex) when (IsConfigurationFailure(ex))
             {
                 ReportFailure(logger, ex, ConfigurationFailedLogMessage);
             }
@@ -88,6 +72,14 @@ namespace YachtDice.Server.Host
                 AbortServiceHosts(serviceHosts);
                 provider?.Dispose();
             }
+        }
+
+        private static bool IsConfigurationFailure(Exception exception)
+        {
+            return exception is InvalidOperationException
+                || exception is ArgumentException
+                || exception is IOException
+                || exception is XmlException;
         }
 
         private static void WarmUpDatabase(IServiceProvider provider, AppLogger logger)

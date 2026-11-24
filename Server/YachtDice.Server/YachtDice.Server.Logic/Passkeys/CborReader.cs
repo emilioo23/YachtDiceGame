@@ -10,6 +10,7 @@ namespace YachtDice.Server.Logic.Passkeys
     /// </summary>
     public sealed class CborReader
     {
+        private const int RootDepth = 0;
         private const int MaxDepth = 6;
         private const int MaxItems = 64;
         private const int MajorShift = 5;
@@ -62,7 +63,7 @@ namespace YachtDice.Server.Logic.Passkeys
         /// <exception cref="FormatException">The data ended early or uses something that is not supported.</exception>
         public object ReadItem()
         {
-            return ReadItem(0);
+            return ReadItem(RootDepth);
         }
 
         private object ReadItem(int depth)
@@ -73,8 +74,12 @@ namespace YachtDice.Server.Logic.Passkeys
             }
 
             int initial = ReadByte();
-            int major = initial >> MajorShift;
-            int additional = initial & AdditionalMask;
+
+            return ReadMajorType(initial >> MajorShift, initial & AdditionalMask, depth);
+        }
+
+        private object ReadMajorType(int major, int additional, int depth)
+        {
             object item;
 
             switch (major)
