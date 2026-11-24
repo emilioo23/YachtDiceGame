@@ -6,7 +6,8 @@ using YachtDice.Server.Logic.Rooms;
 namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
-    /// Decisions of the computer players: how it keeps the dice and which category it picks when a player does not choose.
+    /// Decisions of the computer players: how it keeps the dice and which category it picks when a player does not
+    /// choose.
     /// </summary>
     public sealed class ComputerSkill
     {

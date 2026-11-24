@@ -24,7 +24,6 @@ namespace YachtDice.Server.Tests.TwoFactor
         private const string SecondChallengeId = "challenge-2";
         private const string WrongBackupCode = "00000000";
         private const int CodesLeftAfterOneUse = 9;
-        private const int NoCodes = 0;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryBackupCodeRepository _backupCodes = new InMemoryBackupCodeRepository();
@@ -178,7 +177,7 @@ namespace YachtDice.Server.Tests.TwoFactor
 
             _settingsService.Disable(DisplayName, Password);
 
-            Assert.Equal(NoCodes, _backupCodes.Codes.Count);
+            Assert.Empty(_backupCodes.Codes);
         }
 
         private void UseBackupCode(string backupCode, string challengeId)

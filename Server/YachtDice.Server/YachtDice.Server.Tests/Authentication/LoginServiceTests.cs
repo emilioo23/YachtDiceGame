@@ -229,7 +229,8 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_UsernameWithSpacesAround_StillFindsThePlayer()
         {
-            LoginCredentials credentials = CreateCredentials(SurroundingSpaces + Username + SurroundingSpaces, Password);
+            string usernameWithSpaces = SurroundingSpaces + Username + SurroundingSpaces;
+            LoginCredentials credentials = CreateCredentials(usernameWithSpaces, Password);
 
             LoginResult loginResult = _service.LoginPlayer(credentials);
 

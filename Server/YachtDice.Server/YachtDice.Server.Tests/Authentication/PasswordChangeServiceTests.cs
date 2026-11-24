@@ -220,7 +220,8 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void Constructor_NullPlayerRepository_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new PasswordService(null, _passwords, new InMemoryEmailService()));
+            Assert.Throws<ArgumentNullException>(
+                () => new PasswordService(null, _passwords, new InMemoryEmailService()));
         }
 
         [Fact]

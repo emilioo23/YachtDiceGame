@@ -975,7 +975,8 @@ namespace YachtDice.Server.Tests.Rooms
             CreatePublicRoom(HostName);
             string roomId = _manager.GetOpenRooms().Single().RoomId;
 
-            Assert.Throws<ArgumentException>(() => _manager.JoinListed(BlankText, CreateListedRoom(roomId, string.Empty)));
+            Assert.Throws<ArgumentException>(
+                () => _manager.JoinListed(BlankText, CreateListedRoom(roomId, string.Empty)));
         }
 
         [Fact]
