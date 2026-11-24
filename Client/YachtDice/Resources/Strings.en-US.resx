@@ -1146,6 +1146,9 @@
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>There are no other players in the match to expel.</value>
   </data>
+  <data name="Game_ReportNoPlayers" xml:space="preserve">
+    <value>There are no other registered players in the match to report.</value>
+  </data>
   <data name="Menu_PendingMatchPrompt" xml:space="preserve">
     <value>You left a match in progress. Do you want to go back to it?</value>
   </data>
@@ -2431,7 +2434,7 @@
     <value>Thank you. Your report was sent.</value>
   </data>
   <data name="Report_Result_NotAllowed" xml:space="preserve">
-    <value>You can only report registered players you finished a game with today.</value>
+    <value>You can only report registered players you finished a game with today or are playing a game with now.</value>
   </data>
   <data name="Report_Result_AlreadyReported" xml:space="preserve">
     <value>You already reported this player today.</value>

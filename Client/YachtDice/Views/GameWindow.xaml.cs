@@ -30,6 +30,7 @@ namespace YachtDice.Views
         private const int MaxRolls = 3;
         private const int NoRolls = 0;
         private const int NoText = 0;
+        private const int NoCandidates = 0;
         private const int NoWaitingPlayers = 0;
         private const string NameSeparator = ", ";
         private const int ClockIntervalSeconds = 1;
@@ -90,6 +91,7 @@ namespace YachtDice.Views
             _diceBoard.DieClicked += HandleDieClick;
 
             ShowRoom(roomGateway.CurrentRoom);
+            ApplyReportControls();
             ConnectGame();
             StartChat();
             _roomGateway.RoomChanged += HandleRoomChanged;
@@ -757,6 +759,11 @@ namespace YachtDice.Views
             KickPlayerButton.Visibility = room.HostId == _playerId ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        private void ApplyReportControls()
+        {
+            ReportPlayerButton.Visibility = _roomGateway.Session.IsGuest ? Visibility.Collapsed : Visibility.Visible;
+        }
+
         private void ShowRoomPlayers(RoomState room)
         {
             _gamePlayers = GamePlayerFactory.UpdatePresence(_gamePlayers, room.Players);
@@ -881,22 +888,54 @@ namespace YachtDice.Views
             }
             else
             {
-                ShowKickMenu(candidates);
+                ShowPlayerMenu(KickPlayerButton, candidates, KickMenuItem_Click);
             }
         }
 
-        private void ShowKickMenu(IEnumerable<GamePlayer> candidates)
+        private static void ShowPlayerMenu(
+            FrameworkElement anchor,
+            IEnumerable<GamePlayer> candidates,
+            RoutedEventHandler onChosen)
         {
-            var menu = new ContextMenu { PlacementTarget = KickPlayerButton, Placement = PlacementMode.Top };
+            var menu = new ContextMenu { PlacementTarget = anchor, Placement = PlacementMode.Top };
 
             foreach (GamePlayer candidate in candidates)
             {
                 var item = new MenuItem { Header = candidate.Name, Tag = candidate.Id };
-                item.Click += KickMenuItem_Click;
+                item.Click += onChosen;
                 menu.Items.Add(item);
             }
 
             menu.IsOpen = true;
+        }
+
+        private void ReportPlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            Func<GamePlayer, bool> canBeReported =
+                player => !player.IsLocalPlayer && player.IsRegistered && !player.IsComputer;
+            List<GamePlayer> candidates = _gamePlayers
+                .Where(canBeReported)
+                .ToList();
+
+            if (candidates.Count == NoCandidates)
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Game_ReportNoPlayers);
+            }
+            else
+            {
+                ShowPlayerMenu(ReportPlayerButton, candidates, ReportMenuItem_Click);
+            }
+        }
+
+        private void ReportMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (MenuItem)sender;
+            var reportWindow = new ReportPlayerWindow(_roomGateway.Session, (string)item.Header)
+            {
+                Owner = this
+            };
+
+            reportWindow.ShowDialog();
         }
 
         private async void KickMenuItem_Click(object sender, RoutedEventArgs e)

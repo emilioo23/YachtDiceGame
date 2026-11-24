@@ -1366,6 +1366,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No hay otros jugadores registrados en la partida para reportar..
+        /// </summary>
+        public static string Game_ReportNoPlayers {
+            get {
+                return ResourceManager.GetString("Game_ReportNoPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Esa categoría ya tiene puntos..
         /// </summary>
         public static string Game_Result_CategoryFilled {
@@ -4147,7 +4156,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Solo puedes reportar a jugadores registrados con quienes terminaste una partida hoy..
+        ///   Busca una cadena traducida similar a Solo puedes reportar a jugadores registrados con quienes terminaste una partida hoy o juegas una partida ahora..
         /// </summary>
         public static string Report_Result_NotAllowed {
             get {

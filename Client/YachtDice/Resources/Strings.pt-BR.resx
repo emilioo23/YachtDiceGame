@@ -1128,6 +1128,9 @@
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>Não há outros jogadores na partida para expulsar.</value>
   </data>
+  <data name="Game_ReportNoPlayers" xml:space="preserve">
+    <value>Não há outros jogadores registrados na partida para denunciar.</value>
+  </data>
   <data name="Menu_PendingMatchPrompt" xml:space="preserve">
     <value>Você deixou uma partida em andamento. Quer voltar para ela?</value>
   </data>
@@ -2431,7 +2434,7 @@
     <value>Obrigado. Sua denúncia foi enviada.</value>
   </data>
   <data name="Report_Result_NotAllowed" xml:space="preserve">
-    <value>Você só pode denunciar jogadores registrados com quem terminou uma partida hoje.</value>
+    <value>Você só pode denunciar jogadores registrados com quem terminou uma partida hoje ou está jogando uma agora.</value>
   </data>
   <data name="Report_Result_AlreadyReported" xml:space="preserve">
     <value>Você já denunciou este jogador hoje.</value>

@@ -1128,6 +1128,9 @@
   <data name="Game_KickNoPlayers" xml:space="preserve">
     <value>对局中没有其他玩家可以踢出。</value>
   </data>
+  <data name="Game_ReportNoPlayers" xml:space="preserve">
+    <value>对局中没有其他注册玩家可以举报。</value>
+  </data>
   <data name="Menu_PendingMatchPrompt" xml:space="preserve">
     <value>你离开了一场正在进行的对局。要回去吗？</value>
   </data>
@@ -2431,7 +2434,7 @@
     <value>谢谢，你的举报已提交。</value>
   </data>
   <data name="Report_Result_NotAllowed" xml:space="preserve">
-    <value>你只能举报今天与你完成过对局的注册玩家。</value>
+    <value>你只能举报今天与你完成过对局或正在与你对局的注册玩家。</value>
   </data>
   <data name="Report_Result_AlreadyReported" xml:space="preserve">
     <value>你今天已经举报过这名玩家。</value>
