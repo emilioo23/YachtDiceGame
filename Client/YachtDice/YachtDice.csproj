@@ -302,6 +302,7 @@
     <Compile Include="Utils\EnterKeySubmit.cs" />
     <Compile Include="Utils\HowToPlayContent.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
+    <Compile Include="Utils\RoomCodeCopier.cs" />
     <Compile Include="Gateway\IConnectionLossSource.cs" />
     <Compile Include="Composition\ClientServices.cs" />
     <Compile Include="Navigation\ConnectionLossHandler.cs" />

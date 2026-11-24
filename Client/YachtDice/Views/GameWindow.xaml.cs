@@ -121,6 +121,7 @@ namespace YachtDice.Views
             GamePlayersItemsControl.ItemsSource = _gamePlayers;
             _presentPlayers = ToParticipants(room);
             _hostId = room.HostId;
+            RoomCodeTextBlock.Text = string.Format(Strings.Lobby_RoomCodeFormat, room.Code);
             ApplyHostControls(room);
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
         }
@@ -836,6 +837,11 @@ namespace YachtDice.Views
                 RememberLeftMatch();
                 WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
             }
+        }
+
+        private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            RoomCodeCopier.Copy(this, _roomGateway.CurrentRoom.Code);
         }
 
         private void MuteMusicButton_Click(object sender, RoutedEventArgs e)

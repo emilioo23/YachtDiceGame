@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,14 +28,12 @@ namespace YachtDice.Views
         private const double UnselectedBorderThickness = 1.5;
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
         private const string ComputerLabelFormat = "{0} · {1}";
-        private const string CopyFailedLogMessage = "The room code could not be copied to the clipboard.";
         private const string NullRoomGatewayMessage = "The connection to the room cannot be null.";
         private const string NullChatMessage = "The connection to the chat cannot be null.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
         private readonly InvitationListener _invitationListener;
-        private readonly AppLogger _logger = new AppLogger(typeof(LobbyWindow));
 
         private bool _isShowingRoom = true;
         private bool _isLocalPlayerReady;
@@ -489,21 +486,7 @@ namespace YachtDice.Views
 
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
         {
-            string roomCode = _roomGateway.CurrentRoom.Code;
-            string message;
-
-            try
-            {
-                Clipboard.SetText(roomCode);
-                message = string.Format(Strings.Lobby_NotificationCodeCopied, roomCode);
-            }
-            catch (ExternalException ex)
-            {
-                _logger.Error(ex, CopyFailedLogMessage);
-                message = Strings.Dialogs_UnexpectedError;
-            }
-
-            CustomDialogWindow.ShowMessage(this, message);
+            RoomCodeCopier.Copy(this, _roomGateway.CurrentRoom.Code);
         }
 
         private async void RoomNameTextBox_LostFocus(object sender, RoutedEventArgs e)

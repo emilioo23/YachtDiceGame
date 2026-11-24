@@ -133,6 +133,29 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
+                        <StackPanel Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+
+                            <Border Background="{StaticResource BrushCream2}"
+                                    CornerRadius="8"
+                                    Padding="8,4">
+
+                                <TextBlock x:Name="RoomCodeTextBlock"
+                                           FontWeight="Bold"
+                                           FontSize="18"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource BrushWoodDark}"/>
+                            </Border>
+
+                            <Button Content="{x:Static properties:Strings.Lobby_ButtonCopyCode}"
+                                    Style="{StaticResource BtnOutline}"
+                                    FontSize="12"
+                                    Padding="8,3"
+                                    Margin="0,4,0,0"
+                                    Click="CopyCodeButton_Click"/>
+                        </StackPanel>
+
                         <ItemsControl x:Name="GamePlayersItemsControl"
                                       Grid.Column="1"
                                       Focusable="False">
