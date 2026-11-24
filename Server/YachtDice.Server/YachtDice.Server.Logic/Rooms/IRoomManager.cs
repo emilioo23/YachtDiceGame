@@ -58,7 +58,8 @@ namespace YachtDice.Server.Logic.Rooms
         /// </summary>
         /// <param name="firstName">Name of one of the players.</param>
         /// <param name="secondName">Name of the other player.</param>
-        /// <returns><c>true</c> if a room whose game started has both players; a blank name gives <c>false</c>.</returns>
+        /// <returns><c>true</c> if a room whose game started has both players; a blank name gives
+        /// <c>false</c>.</returns>
         bool ArePlayingTogether(string firstName, string secondName);
 
         /// <summary>
