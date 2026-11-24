@@ -144,7 +144,7 @@ namespace YachtDice.Views
             Loaded += HandleWindowLoaded;
         }
 
-        private void RememberLeftMatch()
+        private void RememberFinishedMatch()
         {
             _roomGateway.Session.LastOfferedMatchCode = _roomGateway.CurrentRoom.Code;
         }
@@ -652,7 +652,7 @@ namespace YachtDice.Views
             }
 
             _sounds.Play(SoundEffect.GameOver);
-            RememberLeftMatch();
+            RememberFinishedMatch();
             WindowNavigator.SwitchTo(this, new ResultsWindow(
                 _roomGateway.Session,
                 StandingsBuilder.Build(entries),
@@ -829,7 +829,7 @@ namespace YachtDice.Views
             }
         }
 
-        private void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
+        private async void LeaveMatchButton_Click(object sender, RoutedEventArgs e)
         {
             var dialogContent = new DialogContent
             {
@@ -841,9 +841,15 @@ namespace YachtDice.Views
 
             if (new CustomDialogWindow(dialogContent).ShowDialog() == true)
             {
-                RememberLeftMatch();
-                WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
+                await LeaveMatchAsync();
             }
+        }
+
+        private async Task LeaveMatchAsync()
+        {
+            _roomGateway.Session.LastOfferedMatchCode = string.Empty;
+            await LobbyNavigator.LeaveRoomAsync(_chat, _roomGateway);
+            WindowNavigator.SwitchTo(this, new MenuWindow(_roomGateway.Session));
         }
 
         private void CopyCodeButton_Click(object sender, RoutedEventArgs e)
