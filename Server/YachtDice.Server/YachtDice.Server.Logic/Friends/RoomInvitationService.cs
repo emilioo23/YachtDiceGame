@@ -96,6 +96,12 @@ namespace YachtDice.Server.Logic.Friends
             return invitations;
         }
 
+        /// <inheritdoc />
+        public bool ArePlayingTogether(string firstName, string secondName)
+        {
+            return _roomManager.ArePlayingTogether(firstName, secondName);
+        }
+
         private ReceivedInvitation ToReceivedInvitation(RoomInviteRecord record)
         {
             return new ReceivedInvitation

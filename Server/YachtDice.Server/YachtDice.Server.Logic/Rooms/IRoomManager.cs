@@ -53,6 +53,15 @@ namespace YachtDice.Server.Logic.Rooms
         string FindPendingRoomCode(string playerName);
 
         /// <summary>
+        /// Tells whether two players take part in the same game that is in progress, even if one of them lost the
+        /// connection and can still return.
+        /// </summary>
+        /// <param name="firstName">Name of one of the players.</param>
+        /// <param name="secondName">Name of the other player.</param>
+        /// <returns><c>true</c> if a room whose game started has both players; a blank name gives <c>false</c>.</returns>
+        bool ArePlayingTogether(string firstName, string secondName);
+
+        /// <summary>
         /// Puts back the room of a game saved before the server stopped, with the same code. Every player who did
         /// not lose starts absent, so the menu offers each one to go back to the game. The method gives each saved
         /// player the identifier that the room and the game use.

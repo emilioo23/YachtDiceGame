@@ -87,6 +87,28 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void ReportPlayer_PlayerOfAGameInProgress_ReturnsSent()
+        {
+            ReportDetails details = CreateDetails(StrangerName);
+            details.IsDuringGame = true;
+
+            ReportStatus status = _service.ReportPlayer(ReporterName, details);
+
+            Assert.Equal(ReportStatus.Sent, status);
+        }
+
+        [Fact]
+        public void ReportPlayer_PlayerOfAGameInProgress_SavesTheReportWithoutAGame()
+        {
+            ReportDetails details = CreateDetails(StrangerName);
+            details.IsDuringGame = true;
+
+            _service.ReportPlayer(ReporterName, details);
+
+            Assert.Null(_reports.Reports.Single().GameId);
+        }
+
+        [Fact]
         public void ReportPlayer_SamePlayerTwiceInADay_ReturnsAlreadyReported()
         {
             _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));

@@ -419,6 +419,62 @@ namespace YachtDice.Server.Tests.Rooms
         }
 
         [Fact]
+        public void ArePlayingTogether_TwoPlayersOfAGameInProgress_ReturnsTrue()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            bool arePlayingTogether = _manager.ArePlayingTogether(HostName, PlayerName);
+
+            Assert.True(arePlayingTogether);
+        }
+
+        [Fact]
+        public void ArePlayingTogether_PlayerWhoLeftTheGameAndCanReturn_ReturnsTrue()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomResult player = _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+            _manager.Leave(new RoomMember(host.Room.Code, player.PlayerId));
+
+            bool arePlayingTogether = _manager.ArePlayingTogether(HostName, PlayerName);
+
+            Assert.True(arePlayingTogether);
+        }
+
+        [Fact]
+        public void ArePlayingTogether_RoomWhoseGameDidNotStart_ReturnsFalse()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+
+            bool arePlayingTogether = _manager.ArePlayingTogether(HostName, PlayerName);
+
+            Assert.False(arePlayingTogether);
+        }
+
+        [Fact]
+        public void ArePlayingTogether_PlayerWhoIsNotInTheRoom_ReturnsFalse()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            _manager.Join(host.Room.Code, PlayerName);
+            StartWhenEveryoneIsReady(host);
+
+            bool arePlayingTogether = _manager.ArePlayingTogether(HostName, ThirdPlayerName);
+
+            Assert.False(arePlayingTogether);
+        }
+
+        [Fact]
+        public void ArePlayingTogether_BlankName_ReturnsFalse()
+        {
+            bool arePlayingTogether = _manager.ArePlayingTogether(HostName, BlankText);
+
+            Assert.False(arePlayingTogether);
+        }
+
+        [Fact]
         public void Leave_PlayerWithTheSameNameAsAnother_RemovesOnlyThatPlayer()
         {
             RoomResult first = _manager.CreateRoom(GuestName);

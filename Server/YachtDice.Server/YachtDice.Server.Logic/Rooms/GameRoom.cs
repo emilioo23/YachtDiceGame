@@ -333,6 +333,17 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <summary>
+        /// Checks whether a person with the name takes part in the room, inside it or absent.
+        /// </summary>
+        /// <param name="displayName">Name to look for.</param>
+        /// <returns><c>true</c> if a person with the name is in the room or can return to it; otherwise,
+        /// <c>false</c>.</returns>
+        public bool HasMemberNamed(string displayName)
+        {
+            return TryFindPerson(displayName, out _) || HasAbsentPlayer(displayName);
+        }
+
+        /// <summary>
         /// Makes another player of the room the host.
         /// </summary>
         /// <param name="playerId">Identifier of the player who becomes the host. It must be inside the room.</param>

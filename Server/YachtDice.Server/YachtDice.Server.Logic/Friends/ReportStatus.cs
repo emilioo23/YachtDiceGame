@@ -14,7 +14,7 @@
         /// <summary>The player tried to report themselves.</summary>
         CannotReportSelf,
 
-        /// <summary>The two players did not finish a game together recently.</summary>
+        /// <summary>The two players neither finished a game together recently nor play one now.</summary>
         NoRecentGame,
 
         /// <summary>The player already reported the same player recently.</summary>

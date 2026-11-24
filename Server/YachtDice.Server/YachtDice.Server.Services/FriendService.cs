@@ -287,7 +287,8 @@ namespace YachtDice.Server.Services
                 ReportedName = report?.ReportedName,
                 Reason = Mapping.EnumMapper.Map<Contracts.ReportReason, LogicFriends.ReportReason>(
                     report?.Reason ?? Contracts.ReportReason.Other),
-                Comment = report?.Comment
+                Comment = report?.Comment,
+                IsDuringGame = _invitationService.ArePlayingTogether(displayName, report?.ReportedName)
             };
 
             LogicFriends.ReportStatus status = _friendshipService.ReportPlayer(displayName, details);

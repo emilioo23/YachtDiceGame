@@ -150,6 +150,26 @@ namespace YachtDice.Server.Logic.Rooms
         }
 
         /// <inheritdoc />
+        public bool ArePlayingTogether(string firstName, string secondName)
+        {
+            bool arePlayingTogether = false;
+
+            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(secondName))
+            {
+                lock (_syncRoot)
+                {
+                    Func<GameRoom, bool> hasBoth = room => room.IsStarted
+                        && room.HasMemberNamed(firstName)
+                        && room.HasMemberNamed(secondName);
+
+                    arePlayingTogether = _rooms.Values.Any(hasBoth);
+                }
+            }
+
+            return arePlayingTogether;
+        }
+
+        /// <inheritdoc />
         public bool TryRestoreRoom(SavedGame saved)
         {
             if (saved == null)

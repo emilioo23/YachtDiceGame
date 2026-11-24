@@ -19,5 +19,12 @@
         /// Gets or sets the optional comment that explains what happened.
         /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether both players are in the same game that is still in progress.
+        /// The server decides it; the player who reports cannot say it. In that case the report does not need a
+        /// finished game.
+        /// </summary>
+        public bool IsDuringGame { get; set; }
     }
 }

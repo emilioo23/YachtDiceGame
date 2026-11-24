@@ -167,6 +167,17 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void ArePlayingTogether_PlayersOfTheSameRoomWithoutAGameInProgress_ReturnsFalse()
+        {
+            RoomResult host = _roomManager.CreateRoom(HostName);
+            _roomManager.Join(host.Room.Code, FriendName);
+
+            bool arePlayingTogether = _service.ArePlayingTogether(HostName, FriendName);
+
+            Assert.False(arePlayingTogether);
+        }
+
+        [Fact]
         public void Validate_UnknownRoom_ReturnsNotInRoom()
         {
             RoomResult host = _roomManager.CreateRoom(HostName);

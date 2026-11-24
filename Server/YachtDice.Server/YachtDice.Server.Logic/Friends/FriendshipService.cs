@@ -432,7 +432,6 @@ namespace YachtDice.Server.Logic.Friends
 
         private ReportStatus SaveReportIfAllowed(Player reporter, Player reported, ReportDetails details)
         {
-            DateTime since = DateTime.UtcNow.AddHours(-ReportWindowHours);
             string comment = details.Comment?.Trim() ?? string.Empty;
             ReportStatus status;
 
@@ -444,30 +443,49 @@ namespace YachtDice.Server.Logic.Friends
             {
                 status = ReportStatus.InvalidComment;
             }
-            else if (_reportRepository.HasReportSince(reporter.Id, reported.Id, since))
+            else if (_reportRepository.HasReportSince(reporter.Id, reported.Id, FindReportWindowStart()))
             {
                 status = ReportStatus.AlreadyReported;
             }
             else
             {
-                int gameId = _reportRepository.FindLastSharedGameId(reporter.Id, reported.Id, since);
-                status = gameId == NoGameId ? ReportStatus.NoRecentGame : ReportStatus.Sent;
-
-                if (status == ReportStatus.Sent)
-                {
-                    PlayerReport report = CreateReport(reporter, reported, details);
-                    report.GameId = gameId;
-                    _reportRepository.Add(report);
-                    _logger.Info(string.Format(
-                        CultureInfo.InvariantCulture,
-                        ReportSentLogFormat,
-                        reporter.Id,
-                        reported.Id));
-                    SuspendIfReportedByMany(reported.Id, since);
-                }
+                status = SaveSharedGameReport(reporter, reported, details);
             }
 
             return status;
+        }
+
+        private ReportStatus SaveSharedGameReport(Player reporter, Player reported, ReportDetails details)
+        {
+            DateTime since = FindReportWindowStart();
+            int gameId = _reportRepository.FindLastSharedGameId(reporter.Id, reported.Id, since);
+            ReportStatus status = ReportStatus.NoRecentGame;
+
+            if (gameId != NoGameId || details.IsDuringGame)
+            {
+                PlayerReport report = CreateReport(reporter, reported, details);
+
+                if (gameId != NoGameId)
+                {
+                    report.GameId = gameId;
+                }
+
+                _reportRepository.Add(report);
+                _logger.Info(string.Format(
+                    CultureInfo.InvariantCulture,
+                    ReportSentLogFormat,
+                    reporter.Id,
+                    reported.Id));
+                SuspendIfReportedByMany(reported.Id, since);
+                status = ReportStatus.Sent;
+            }
+
+            return status;
+        }
+
+        private static DateTime FindReportWindowStart()
+        {
+            return DateTime.UtcNow.AddHours(-ReportWindowHours);
         }
 
         private void SuspendIfReportedByMany(int reportedId, DateTime since)
