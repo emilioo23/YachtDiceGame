@@ -194,6 +194,7 @@
     <Compile Include="TwoFactor\TwoFactorVerificationService.cs" />
     <Compile Include="Security\SecureCodes.cs" />
     <Compile Include="Moderation\ChatCensor.cs" />
+    <Compile Include="Moderation\TextSpacing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YachtDice.Server.Data\YachtDice.Server.Data.csproj">

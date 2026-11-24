@@ -501,7 +501,7 @@ namespace YachtDice.Server.Logic.Rooms
                     MaxPlayers = settings.MaxPlayers,
                     IsPrivate = settings.IsPrivate,
                     Speed = settings.Speed,
-                    Name = (settings.Name ?? string.Empty).Trim()
+                    Name = TextSpacing.Collapse(settings.Name ?? string.Empty)
                 };
             }
 
@@ -534,7 +534,7 @@ namespace YachtDice.Server.Logic.Rooms
                 && settings.MaxPlayers >= MinCapacity
                 && settings.MaxPlayers <= MaxCapacity;
             bool hasPlaceForPlayers = isWithinCapacity && settings.MaxPlayers >= room.Players.Count;
-            bool hasValidName = settings?.Name == null || settings.Name.Trim().Length <= MaxRoomNameLength;
+            bool hasValidName = settings?.Name == null || TextSpacing.Collapse(settings.Name).Length <= MaxRoomNameLength;
 
             return hasPlaceForPlayers && hasValidName && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
         }

@@ -23,6 +23,7 @@ namespace YachtDice.Server.Services
         private const string UnexpectedFaultMessage = "An unexpected error occurred.";
         private const string DatabaseLogFormat = "Database error while processing {0}.";
         private const string InvalidDataLogFormat = "Invalid data was received in {0}.";
+        private const string NullDataLogFormat = "Empty data was received in {0}.";
         private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
         private const string RejectedSessionLogFormat = "{0} was rejected because the session is not valid.";
         private const string SessionExpiredMessage = "The session ended. Log in again.";
@@ -64,7 +65,7 @@ namespace YachtDice.Server.Services
             Func<TResult> operation,
             [CallerMemberName] string operationName = "")
         {
-            RejectMissingData(data);
+            RejectMissingData(data, operationName);
 
             return Run(operation, operationName);
         }
@@ -140,10 +141,12 @@ namespace YachtDice.Server.Services
             return true;
         }
 
-        private static void RejectMissingData(object data)
+        private void RejectMissingData(object data, string operationName)
         {
             if (data == null)
             {
+                _logger.Warning(DescribeOperation(NullDataLogFormat, operationName));
+
                 throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, NullDataMessage);
             }
         }

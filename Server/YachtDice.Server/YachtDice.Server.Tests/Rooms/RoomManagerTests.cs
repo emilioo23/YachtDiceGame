@@ -31,6 +31,7 @@ namespace YachtDice.Server.Tests.Rooms
         private const int NoInfractions = 0;
         private const string OffensiveWord = "pendejo";
         private const string RoomName = "Los del salon 4";
+        private const string RoomNameWithManySpaces = "  Los      del   salon        4  ";
         private const string OffensiveRoomName = "Sala de pendejos";
         private const string TooLongRoomName = "Una sala con un nombre demasiado largo para la lista";
         private const string HostName = "Emilio";
@@ -607,6 +608,18 @@ namespace YachtDice.Server.Tests.Rooms
             RoomResult host = _manager.CreateRoom(HostName);
             RoomSettings settings = CreateSettings(TwoPlayers, false);
             settings.Name = RoomName;
+
+            _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
+
+            Assert.Equal(RoomName, _manager.GetOpenRooms().Single().Name);
+        }
+
+        [Fact]
+        public void UpdateSettings_RoomNameWithManySpaces_KeepsASingleSpaceBetweenTheWords()
+        {
+            RoomResult host = _manager.CreateRoom(HostName);
+            RoomSettings settings = CreateSettings(TwoPlayers, false);
+            settings.Name = RoomNameWithManySpaces;
 
             _manager.UpdateSettings(new RoomMember(host.Room.Code, host.PlayerId), settings);
 

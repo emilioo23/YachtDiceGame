@@ -135,7 +135,7 @@ namespace YachtDice.Server.Services
 
         private Contracts.ChatMessage CreateDeliveredMessage(LogicRooms.RoomPlayer author, string content)
         {
-            string text = content.Trim();
+            string text = LogicModeration.TextSpacing.Collapse(content);
 
             if (text.Length > MaxMessageLength)
             {

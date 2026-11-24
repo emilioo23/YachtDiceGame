@@ -6,6 +6,7 @@ using YachtDice.Server.Data;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Logging;
+using YachtDice.Server.Logic.Moderation;
 
 namespace YachtDice.Server.Logic.Friends
 {
@@ -432,7 +433,7 @@ namespace YachtDice.Server.Logic.Friends
 
         private ReportStatus SaveReportIfAllowed(Player reporter, Player reported, ReportDetails details)
         {
-            string comment = details.Comment?.Trim() ?? string.Empty;
+            string comment = TextSpacing.Collapse(details.Comment ?? string.Empty);
             ReportStatus status;
 
             if (reporter.Id == reported.Id)
@@ -508,7 +509,7 @@ namespace YachtDice.Server.Logic.Friends
 
         private static PlayerReport CreateReport(Player reporter, Player reported, ReportDetails details)
         {
-            string comment = details.Comment?.Trim();
+            string comment = TextSpacing.Collapse(details.Comment ?? string.Empty);
             var report = new PlayerReport
             {
                 ReporterId = reporter.Id,
