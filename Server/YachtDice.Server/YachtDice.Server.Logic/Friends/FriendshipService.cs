@@ -476,8 +476,12 @@ namespace YachtDice.Server.Logic.Friends
                     ReportSentLogFormat,
                     reporter.Id,
                     reported.Id));
-                SuspendIfReportedByMany(reported.Id, since);
                 status = ReportStatus.Sent;
+
+                if (SuspendIfReportedByMany(reported.Id, since))
+                {
+                    status = ReportStatus.SentAndSuspended;
+                }
             }
 
             return status;
@@ -488,14 +492,18 @@ namespace YachtDice.Server.Logic.Friends
             return DateTime.UtcNow.AddHours(-ReportWindowHours);
         }
 
-        private void SuspendIfReportedByMany(int reportedId, DateTime since)
+        private bool SuspendIfReportedByMany(int reportedId, DateTime since)
         {
-            if (_reportRepository.CountReportersSince(reportedId, since) >= ReportersForSuspension)
+            bool isSuspended = _reportRepository.CountReportersSince(reportedId, since) >= ReportersForSuspension;
+
+            if (isSuspended)
             {
                 DateTime suspendedUntil = DateTime.UtcNow.AddHours(SuspensionHours);
                 _playerRepository.SaveLock(reportedId, LoginLock.Reported.ToString(), suspendedUntil);
                 _logger.Warning(string.Format(CultureInfo.InvariantCulture, SuspendedLogFormat, reportedId));
             }
+
+            return isSuspended;
         }
 
         private static PlayerReport CreateReport(Player reporter, Player reported, ReportDetails details)

@@ -27,6 +27,7 @@ namespace YachtDice.Server.Tests.Friends
         private const int TooLongCommentLength = 301;
         private const char CommentCharacter = 'a';
         private const int TwoDaysAgo = -2;
+        private const int ThreeDaysAgo = -3;
         private const int SecondReporterId = 4;
         private const int ThirdReporterId = 5;
         private const string SecondReporterName = "ana";
@@ -179,6 +180,40 @@ namespace YachtDice.Server.Tests.Friends
         }
 
         [Fact]
+        public void ReportPlayer_ThirdDifferentReporterInADay_ReturnsSentAndSuspended()
+        {
+            AddReporterWithGame(SecondReporterId, SecondReporterName);
+            AddReporterWithGame(ThirdReporterId, ThirdReporterName);
+            _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));
+            _service.ReportPlayer(SecondReporterName, CreateDetails(ReportedName));
+
+            ReportStatus status = _service.ReportPlayer(ThirdReporterName, CreateDetails(ReportedName));
+
+            Assert.Equal(ReportStatus.SentAndSuspended, status);
+        }
+
+        [Fact]
+        public void ReportPlayer_SecondDifferentReporterInADay_ReturnsSent()
+        {
+            AddReporterWithGame(SecondReporterId, SecondReporterName);
+            _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));
+
+            ReportStatus status = _service.ReportPlayer(SecondReporterName, CreateDetails(ReportedName));
+
+            Assert.Equal(ReportStatus.Sent, status);
+        }
+
+        [Fact]
+        public void ReportPlayer_ThreeReportsOfTheSamePlayerOnThreeDays_DoesNotSuspendThePlayer()
+        {
+            _reports.Add(CreateOldReport(TwoDaysAgo));
+            _reports.Add(CreateOldReport(ThreeDaysAgo));
+            _service.ReportPlayer(ReporterName, CreateDetails(ReportedName));
+
+            Assert.Empty(_players.FindLocks(ReportedId));
+        }
+
+        [Fact]
         public void ReportPlayer_TwoDifferentReporters_DoesNotSuspendThePlayer()
         {
             AddReporterWithGame(SecondReporterId, SecondReporterName);
@@ -197,6 +232,17 @@ namespace YachtDice.Server.Tests.Friends
             game.GameHistoryPlayer.Add(new GameHistoryPlayer { GameId = reporterId, PlayerId = reporterId });
             game.GameHistoryPlayer.Add(new GameHistoryPlayer { GameId = reporterId, PlayerId = ReportedId });
             _reports.AddGame(game);
+        }
+
+        private static PlayerReport CreateOldReport(int daysAgo)
+        {
+            return new PlayerReport
+            {
+                ReporterId = ReporterId,
+                ReportedId = ReportedId,
+                Reason = ReportReason.OffensiveLanguage.ToString(),
+                ReportDate = DateTime.UtcNow.AddDays(daysAgo)
+            };
         }
 
         private static ReportDetails CreateDetails(string reportedName)

@@ -52,7 +52,8 @@ namespace YachtDice.Server.Logic.Friends
 
         /// <summary>
         /// Saves a report about another player. A player can only report someone who finished a game with them in
-        /// the last day, and only once a day for the same player.
+        /// the last day or who plays the same game now, and only once a day for the same player. When it is the
+        /// report that suspends the player, the outcome says so.
         /// </summary>
         /// <param name="displayName">Name of the player who reports.</param>
         /// <param name="details">Name of the player who is reported, the reason and an optional comment.</param>

@@ -141,7 +141,9 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Reports another player who finished a game with the player in the last day.
+        /// Reports another player who finished a game with the player in the last day or who plays the same game
+        /// now. If the report suspends the reported player, the sessions of that player end, so they cannot keep
+        /// using the server.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player who reports.</param>
         /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>
@@ -292,6 +294,12 @@ namespace YachtDice.Server.Services
             };
 
             LogicFriends.ReportStatus status = _friendshipService.ReportPlayer(displayName, details);
+
+            if (status == LogicFriends.ReportStatus.SentAndSuspended)
+            {
+                Sessions.EndFor(details.ReportedName.Trim());
+                status = LogicFriends.ReportStatus.Sent;
+            }
 
             return Mapping.EnumMapper.Map<LogicFriends.ReportStatus, Contracts.ReportResultCode>(status);
         }

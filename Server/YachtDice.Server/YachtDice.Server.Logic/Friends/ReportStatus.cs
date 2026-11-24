@@ -8,6 +8,12 @@
         /// <summary>The report was saved.</summary>
         Sent,
 
+        /// <summary>
+        /// The report was saved and it was the one that suspends the reported player, because several different
+        /// players reported them in the last day.
+        /// </summary>
+        SentAndSuspended,
+
         /// <summary>One of the two players does not have an account.</summary>
         PlayerNotFound,
 
