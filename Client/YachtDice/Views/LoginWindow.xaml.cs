@@ -238,23 +238,37 @@ namespace YachtDice.Views
                 case RegisterResultCode.InvalidEmail:
                     message = Strings.Auth_ErrorInvalidEmail;
                     break;
+                case RegisterResultCode.InvalidUsername:
+                    message = Strings.Auth_ErrorInvalidUsername;
+                    break;
+                case RegisterResultCode.InvalidName:
+                    message = Strings.Auth_ErrorInvalidName;
+                    break;
+                case RegisterResultCode.WeakPassword:
+                    message = Strings.Auth_ErrorWeakPassword;
+                    break;
+                default:
+                    message = GetAccountConflictMessage(code);
+                    break;
+            }
+
+            return message;
+        }
+
+        private static string GetAccountConflictMessage(RegisterResultCode code)
+        {
+            string message;
+
+            switch (code)
+            {
                 case RegisterResultCode.EmailAlreadyRegistered:
                     message = Strings.Dialogs_EmailRegistered;
                     break;
                 case RegisterResultCode.UsernameAlreadyTaken:
                     message = Strings.Dialogs_UsernameTaken;
                     break;
-                case RegisterResultCode.InvalidUsername:
-                    message = Strings.Auth_ErrorInvalidUsername;
-                    break;
-                case RegisterResultCode.WeakPassword:
-                    message = Strings.Auth_ErrorWeakPassword;
-                    break;
                 case RegisterResultCode.OffensiveUsername:
                     message = Strings.Auth_ErrorOffensiveUsername;
-                    break;
-                case RegisterResultCode.InvalidName:
-                    message = Strings.Auth_ErrorInvalidName;
                     break;
                 default:
                     message = Strings.Dialogs_UnexpectedError;

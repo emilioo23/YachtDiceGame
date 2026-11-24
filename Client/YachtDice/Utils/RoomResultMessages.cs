@@ -28,15 +28,6 @@ namespace YachtDice.Utils
                 case RoomResultCode.GameAlreadyStarted:
                     message = Strings.Lobby_Result_GameAlreadyStarted;
                     break;
-                case RoomResultCode.NotHost:
-                    message = Strings.Lobby_Result_NotHost;
-                    break;
-                case RoomResultCode.NotEnoughPlayers:
-                    message = Strings.Lobby_Result_NotEnoughPlayers;
-                    break;
-                case RoomResultCode.InvalidSettings:
-                    message = Strings.Lobby_Result_InvalidSettings;
-                    break;
                 case RoomResultCode.InvalidAccessCode:
                     message = Strings.Lobby_Result_InvalidAccessCode;
                     break;
@@ -45,6 +36,29 @@ namespace YachtDice.Utils
                     break;
                 case RoomResultCode.PlayerExpelled:
                     message = Strings.Lobby_Result_PlayerExpelled;
+                    break;
+                default:
+                    message = GetHostActionMessage(resultCode);
+                    break;
+            }
+
+            return message;
+        }
+
+        private static string GetHostActionMessage(RoomResultCode resultCode)
+        {
+            string message;
+
+            switch (resultCode)
+            {
+                case RoomResultCode.NotHost:
+                    message = Strings.Lobby_Result_NotHost;
+                    break;
+                case RoomResultCode.NotEnoughPlayers:
+                    message = Strings.Lobby_Result_NotEnoughPlayers;
+                    break;
+                case RoomResultCode.InvalidSettings:
+                    message = Strings.Lobby_Result_InvalidSettings;
                     break;
                 case RoomResultCode.PlayersNotReady:
                     message = Strings.Lobby_Result_PlayersNotReady;

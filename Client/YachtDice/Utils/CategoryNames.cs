@@ -37,6 +37,20 @@ namespace YachtDice.Utils
                 case ScoreCategory.Sixes:
                     name = Strings.Game_Category_Sixes;
                     break;
+                default:
+                    name = GetLowerSectionName(category);
+                    break;
+            }
+
+            return name;
+        }
+
+        private static string GetLowerSectionName(ScoreCategory category)
+        {
+            string name;
+
+            switch (category)
+            {
                 case ScoreCategory.FullHouse:
                     name = Strings.Game_Category_FullHouse;
                     break;

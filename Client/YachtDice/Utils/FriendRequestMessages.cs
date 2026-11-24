@@ -22,9 +22,6 @@ namespace YachtDice.Utils
                 case FriendRequestResultCode.RequestSent:
                     message = Strings.Friends_Result_RequestSent;
                     break;
-                case FriendRequestResultCode.RequestAlreadyReceived:
-                    message = Strings.Friends_Result_RequestAlreadyReceived;
-                    break;
                 case FriendRequestResultCode.InvalidUsername:
                     message = Strings.Friends_Result_InvalidUsername;
                     break;
@@ -33,6 +30,23 @@ namespace YachtDice.Utils
                     break;
                 case FriendRequestResultCode.SelfRequest:
                     message = Strings.Friends_Result_SelfRequest;
+                    break;
+                default:
+                    message = GetRelationshipMessage(resultCode);
+                    break;
+            }
+
+            return message;
+        }
+
+        private static string GetRelationshipMessage(FriendRequestResultCode resultCode)
+        {
+            string message;
+
+            switch (resultCode)
+            {
+                case FriendRequestResultCode.RequestAlreadyReceived:
+                    message = Strings.Friends_Result_RequestAlreadyReceived;
                     break;
                 case FriendRequestResultCode.AlreadyFriends:
                     message = Strings.Friends_Result_AlreadyFriends;
