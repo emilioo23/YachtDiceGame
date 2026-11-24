@@ -81,7 +81,7 @@ namespace YachtDice.Server.Logic.Game
             {
                 shouldSave = _trackedRooms.TryGetValue(roomCode, out settings)
                     && snapshot.Version > _savedVersions[roomCode]
-                    && snapshot.Status == GameStatus.InProgress;
+                    && !snapshot.IsFinished;
 
                 if (shouldSave)
                 {

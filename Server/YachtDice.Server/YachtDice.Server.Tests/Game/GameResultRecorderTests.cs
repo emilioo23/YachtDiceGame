@@ -233,7 +233,7 @@ namespace YachtDice.Server.Tests.Game
 
         private static GameSnapshot CreateSnapshot(params PlayerSnapshot[] players)
         {
-            var snapshot = new GameSnapshot { Status = GameStatus.Finished };
+            var snapshot = new GameSnapshot { IsFinished = true };
 
             foreach (PlayerSnapshot player in players)
             {

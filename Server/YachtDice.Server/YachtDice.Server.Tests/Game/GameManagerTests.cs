@@ -53,7 +53,7 @@ namespace YachtDice.Server.Tests.Game
                 CurrentPlayerId = FirstId,
                 Round = FirstRound,
                 RollsLeft = RollsPerTurn,
-                Status = GameStatus.InProgress,
+                IsFinished = false,
                 Dice = NoDice
             };
 
@@ -293,14 +293,14 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartSinglePlayerGame(manager);
-            var gameEndExpected = new { Status = GameStatus.Finished, CurrentPlayerId = string.Empty, IsWinner = true };
+            var gameEndExpected = new { IsFinished = true, CurrentPlayerId = string.Empty, IsWinner = true };
 
             PlayEveryCategory(manager);
 
             GameSnapshot snapshot = manager.GetState(new RoomMember(RoomCode, FirstId)).Snapshot;
             var gameEndResult = new
             {
-                snapshot.Status,
+                snapshot.IsFinished,
                 snapshot.CurrentPlayerId,
                 FindPlayer(snapshot, FirstId).IsWinner
             };
@@ -349,13 +349,13 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var gameEndExpected = new { Status = GameStatus.Finished, AreAllWinners = true };
+            var gameEndExpected = new { IsFinished = true, AreAllWinners = true };
 
             GameActionResult lastResult = PlayTwoPlayerGameToTheEnd(manager);
 
             var gameEndResult = new
             {
-                lastResult.Snapshot.Status,
+                lastResult.Snapshot.IsFinished,
                 AreAllWinners =
                     lastResult.Snapshot.Players.All(player => player.IsWinner)
             };
@@ -414,7 +414,7 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             manager.MarkAbsent(new RoomMember(RoomCode, FirstId));
-            var snapshotExpected = new { CurrentPlayerId = string.Empty, Status = GameStatus.InProgress };
+            var snapshotExpected = new { CurrentPlayerId = string.Empty, IsFinished = false };
 
             GameActionResult paused = manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
 
@@ -451,13 +451,13 @@ namespace YachtDice.Server.Tests.Game
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
             manager.MarkAbsent(new RoomMember(RoomCode, SecondId));
-            var gameEndExpected = new { Status = GameStatus.Finished, FirstWins = true, SecondWins = false };
+            var gameEndExpected = new { IsFinished = true, FirstWins = true, SecondWins = false };
 
             GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, SecondId));
 
             var gameEndResult = new
             {
-                forfeitResult.Snapshot.Status,
+                forfeitResult.Snapshot.IsFinished,
                 FirstWins = FindPlayer(forfeitResult.Snapshot, FirstId).IsWinner,
                 SecondWins = FindPlayer(forfeitResult.Snapshot, SecondId).IsWinner
             };
@@ -491,7 +491,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, ThirdId));
 
-            Assert.Equal(GameStatus.InProgress, forfeitResult.Snapshot.Status);
+            Assert.False(forfeitResult.Snapshot.IsFinished);
         }
 
         [Fact]
@@ -516,7 +516,7 @@ namespace YachtDice.Server.Tests.Game
 
             GameActionResult forfeitResult = manager.Forfeit(new RoomMember(RoomCode, SecondId));
 
-            Assert.Equal(GameStatus.InProgress, forfeitResult.Snapshot.Status);
+            Assert.False(forfeitResult.Snapshot.IsFinished);
         }
 
         [Fact]
@@ -595,13 +595,13 @@ namespace YachtDice.Server.Tests.Game
         {
             GameManager manager = CreateManager(LittleStraightDice);
             StartTwoPlayerGame(manager);
-            var gameEndExpected = new { Status = GameStatus.Finished, PlayerCount = OnePlayerLeft, FirstWins = true };
+            var gameEndExpected = new { IsFinished = true, PlayerCount = OnePlayerLeft, FirstWins = true };
 
             GameActionResult removalResult = manager.Remove(new RoomMember(RoomCode, SecondId));
 
             var gameEndResult = new
             {
-                removalResult.Snapshot.Status,
+                removalResult.Snapshot.IsFinished,
                 PlayerCount = removalResult.Snapshot.Players.Count,
                 FirstWins = FindPlayer(removalResult.Snapshot, FirstId).IsWinner
             };

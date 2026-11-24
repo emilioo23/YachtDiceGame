@@ -183,7 +183,7 @@ namespace YachtDice.Server.Services
             Complete(member.RoomCode, result, Contracts.GameEventType.PlayerDisconnected);
 
             if (result.Status == LogicGame.GameActionStatus.Success
-                && result.Snapshot.Status == LogicGame.GameStatus.InProgress)
+                && !result.Snapshot.IsFinished)
             {
                 _reconnectTimer.Start(member, ReconnectSeconds, () => HandleReconnectExpired(member));
             }
@@ -281,7 +281,7 @@ namespace YachtDice.Server.Services
         {
             Contracts.GameEventType chosen = eventType;
 
-            if (snapshot.Status == LogicGame.GameStatus.Finished)
+            if (snapshot.IsFinished)
             {
                 chosen = Contracts.GameEventType.GameFinished;
             }
@@ -374,7 +374,7 @@ namespace YachtDice.Server.Services
 
         private void UpdateCheckpoint(string roomCode, LogicGame.GameSnapshot snapshot)
         {
-            bool isOver = snapshot == null || snapshot.Status == LogicGame.GameStatus.Finished;
+            bool isOver = snapshot == null || snapshot.IsFinished;
 
             try
             {
@@ -411,7 +411,7 @@ namespace YachtDice.Server.Services
 
         private void SyncTimer(string roomCode, LogicGame.GameSnapshot snapshot)
         {
-            var hasTurn = snapshot.Status == LogicGame.GameStatus.InProgress
+            var hasTurn = !snapshot.IsFinished
                 && !string.IsNullOrEmpty(snapshot.CurrentPlayerId);
             var turn = new LogicGame.GameTurn(roomCode, snapshot.TurnNumber);
 

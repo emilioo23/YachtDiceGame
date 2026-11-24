@@ -19,7 +19,7 @@ namespace YachtDice.Server.Tests.Mapping
         [Fact]
         public void ToContract_FinishedGame_KeepsTheExperienceAndTheTotalOfThePlayer()
         {
-            var snapshot = new LogicGame.GameSnapshot { Status = LogicGame.GameStatus.Finished };
+            var snapshot = new LogicGame.GameSnapshot { IsFinished = true };
             var player = new LogicGame.PlayerSnapshot(PlayerId, PlayerName, true)
             {
                 Total = Total,
@@ -37,7 +37,7 @@ namespace YachtDice.Server.Tests.Mapping
         [Fact]
         public void ToContract_ResultNotSaved_TellsTheClient()
         {
-            var snapshot = new LogicGame.GameSnapshot { Status = LogicGame.GameStatus.Finished };
+            var snapshot = new LogicGame.GameSnapshot { IsFinished = true };
             snapshot.MarkResultNotSaved();
 
             GameContracts.GameState state = GameMapper.ToContract(snapshot, SecondsLeft);

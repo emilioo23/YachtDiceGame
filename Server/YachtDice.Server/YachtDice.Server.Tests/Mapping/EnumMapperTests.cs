@@ -139,14 +139,6 @@ namespace YachtDice.Server.Tests.Mapping
         }
 
         [Fact]
-        public void Map_EveryGameStatus_HasAValueInTheContract()
-        {
-            List<string> missingNames = FindMissingNames<Logic.Game.GameStatus, Contracts.Game.GameStatus>();
-
-            Assert.Empty(missingNames);
-        }
-
-        [Fact]
         public void Map_EveryAccountDeletionStatus_HasAValueInTheContract()
         {
             List<string> missingNames = FindMissingNames<

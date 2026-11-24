@@ -65,9 +65,9 @@ namespace YachtDice.Server.Logic.Game
         public int TurnNumber { get; private set; }
 
         /// <summary>
-        /// Gets the phase of the game.
+        /// Gets a value indicating whether the game already ended.
         /// </summary>
-        public GameStatus Status { get; private set; }
+        public bool IsFinished { get; private set; }
 
         /// <summary>
         /// Tells whether a player takes part in the game. A player who forfeited is out of the game.
@@ -148,7 +148,7 @@ namespace YachtDice.Server.Logic.Game
         {
             var status = GameActionStatus.GameFinished;
 
-            if (Status == GameStatus.InProgress && _turnIndex != NoPlayerIndex)
+            if (!IsFinished && _turnIndex != NoPlayerIndex)
             {
                 if (_rollsMade == NoRolls)
                 {
@@ -171,7 +171,7 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionStatus status;
 
-            if (Status == GameStatus.Finished)
+            if (IsFinished)
             {
                 status = GameActionStatus.GameFinished;
             }
@@ -219,7 +219,7 @@ namespace YachtDice.Server.Logic.Game
             Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
             var player = _players.FirstOrDefault(isSamePlayerId);
 
-            if (player != null && Status == GameStatus.InProgress && !player.IsPresent)
+            if (player != null && !IsFinished && !player.IsPresent)
             {
                 player.HasForfeited = true;
                 FinishIfOnePlayerIsLeft();
@@ -254,7 +254,7 @@ namespace YachtDice.Server.Logic.Game
             var snapshot = new GameSnapshot
             {
                 Version = _version,
-                Status = Status,
+                IsFinished = IsFinished,
                 CurrentPlayerId = GetCurrentPlayerId(),
                 IsComputerTurn = IsComputerTurn(),
                 TurnNumber = TurnNumber,
@@ -356,7 +356,7 @@ namespace YachtDice.Server.Logic.Game
         {
             GameActionStatus status;
 
-            if (Status == GameStatus.Finished)
+            if (IsFinished)
             {
                 status = GameActionStatus.GameFinished;
             }
@@ -494,7 +494,7 @@ namespace YachtDice.Server.Logic.Game
                 TurnNumber++;
                 Array.Clear(_dice, 0, _dice.Length);
                 Array.Clear(_heldDice, 0, _heldDice.Length);
-                Status = GameStatus.Finished;
+                IsFinished = true;
             }
         }
 
@@ -504,7 +504,7 @@ namespace YachtDice.Server.Logic.Game
 
             if (_turnIndex == NoPlayerIndex && isSomeonePresent)
             {
-                Status = GameStatus.Finished;
+                IsFinished = true;
             }
         }
 
@@ -513,7 +513,7 @@ namespace YachtDice.Server.Logic.Game
             Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
             var player = _players.FirstOrDefault(isSamePlayerId);
 
-            if (player != null && !player.HasForfeited && Status == GameStatus.InProgress)
+            if (player != null && !player.HasForfeited && !IsFinished)
             {
                 player.IsPresent = isPresent;
                 RefreshTurnAfterPresenceChange();
@@ -614,7 +614,7 @@ namespace YachtDice.Server.Logic.Game
                 snapshot.Players.Add(CreatePlayerSnapshot(player));
             }
 
-            if (Status == GameStatus.Finished)
+            if (IsFinished)
             {
                 MarkWinners(snapshot);
                 AwardExperience(snapshot);

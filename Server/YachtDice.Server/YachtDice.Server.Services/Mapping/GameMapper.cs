@@ -20,7 +20,7 @@ namespace YachtDice.Server.Services.Mapping
         {
             var state = new Contracts.GameState
             {
-                Status = EnumMapper.Map<LogicGame.GameStatus, Contracts.GameStatus>(snapshot.Status),
+                Status = snapshot.IsFinished ? Contracts.GameStatus.Finished : Contracts.GameStatus.InProgress,
                 Version = snapshot.Version,
                 CurrentPlayerId = snapshot.CurrentPlayerId,
                 TurnNumber = snapshot.TurnNumber,

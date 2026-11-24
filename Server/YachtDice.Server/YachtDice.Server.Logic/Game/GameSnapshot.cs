@@ -22,9 +22,9 @@ namespace YachtDice.Server.Logic.Game
         }
 
         /// <summary>
-        /// Gets or sets the phase of the game.
+        /// Gets or sets a value indicating whether the game already ended.
         /// </summary>
-        public GameStatus Status { get; set; }
+        public bool IsFinished { get; set; }
 
         /// <summary>
         /// Gets or sets the number of the snapshot. It grows every time a snapshot of the same game is made,

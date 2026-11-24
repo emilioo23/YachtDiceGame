@@ -104,7 +104,6 @@
     <Compile Include="Game\GameResultRecorder.cs" />
     <Compile Include="Game\GamePlayer.cs" />
     <Compile Include="Game\GameSnapshot.cs" />
-    <Compile Include="Game\GameStatus.cs" />
     <Compile Include="Game\GameTurn.cs" />
     <Compile Include="Game\IDieRoller.cs" />
     <Compile Include="Game\IGameManager.cs" />
