@@ -80,7 +80,8 @@ namespace YachtDice.Server.Contracts.Friends
         InvitationResultCode InviteToRoom(RoomMember sender, string friendName);
 
         /// <summary>
-        /// Reports another player who finished a game with the player in the last day.
+        /// Reports another player who finished a game with the player in the last day or who plays the same game
+        /// now.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player who reports.</param>
         /// <param name="report">Name of the player who is reported, the reason and an optional comment.</param>

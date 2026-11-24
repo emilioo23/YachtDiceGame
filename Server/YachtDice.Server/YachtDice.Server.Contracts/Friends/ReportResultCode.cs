@@ -20,7 +20,7 @@ namespace YachtDice.Server.Contracts.Friends
         [EnumMember]
         CannotReportSelf,
 
-        /// <summary>The two players did not finish a game together recently.</summary>
+        /// <summary>The two players neither finished a game together recently nor play one now.</summary>
         [EnumMember]
         NoRecentGame,
 
