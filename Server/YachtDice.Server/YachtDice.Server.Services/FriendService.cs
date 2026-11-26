@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -17,8 +18,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class FriendService : ServiceBase, Contracts.IFriendService
     {
-        private const string NullDependencyMessage = "A dependency of the friend service cannot be null.";
-
         private readonly LogicFriends.IFriendshipService _friendshipService;
         private readonly LogicFriends.IRoomInvitationService _invitationService;
         private readonly IPlayerNotifier _notifier;
@@ -35,10 +34,11 @@ namespace YachtDice.Server.Services
             IPlayerNotifier notifier)
         {
             _friendshipService = friendshipService
-                ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(friendshipService), LogMessages.FriendNullDependencyMessage);
             _invitationService = invitationService
-                ?? throw new ArgumentNullException(nameof(invitationService), NullDependencyMessage);
-            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(invitationService), LogMessages.FriendNullDependencyMessage);
+            _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier),
+                LogMessages.FriendNullDependencyMessage);
         }
 
         /// <summary>

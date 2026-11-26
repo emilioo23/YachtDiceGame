@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -17,21 +18,6 @@ namespace YachtDice.Server.Services
     /// </summary>
     public abstract class ServiceBase
     {
-        private const string NullDataMessage = "The provided data cannot be empty.";
-        private const string InvalidDataMessage = "The provided data is invalid.";
-        private const string DatabaseFaultMessage = "The database is not available.";
-        private const string UnexpectedFaultMessage = "An unexpected error occurred.";
-        private const string DatabaseLogFormat = "Database error while processing {0}.";
-        private const string InvalidDataLogFormat = "Invalid data was received in {0}.";
-        private const string NullDataLogFormat = "Empty data was received in {0}.";
-        private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
-        private const string RejectedSessionLogFormat = "{0} was rejected because the session is not valid.";
-        private const string AccountNameLogFormat = "{0} was rejected because a guest used the name of an account.";
-        private const string AccountNameMessage = "The name belongs to a registered player. Log in to use it.";
-        private const string SessionExpiredMessage = "The session ended. Log in again.";
-        private const string SessionReplacedMessage =
-            "The session ended because the player logged in again somewhere else.";
-
         private readonly LogicLogging.AppLogger _logger;
 
         /// <summary>
@@ -136,9 +122,9 @@ namespace YachtDice.Server.Services
             }
             else if (PlayerIds.FindPlayerId(guestName) != LogicFriends.FriendshipService.NoPlayerId)
             {
-                _logger.Warning(DescribeOperation(AccountNameLogFormat, operationName));
+                _logger.Warning(DescribeOperation(LogMessages.AccountNameLogFormat, operationName));
 
-                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, AccountNameMessage);
+                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, LogMessages.AccountNameMessage);
             }
 
             return playerName;
@@ -184,9 +170,9 @@ namespace YachtDice.Server.Services
         {
             if (data == null)
             {
-                _logger.Warning(DescribeOperation(NullDataLogFormat, operationName));
+                _logger.Warning(DescribeOperation(LogMessages.NullDataLogFormat, operationName));
 
-                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, NullDataMessage);
+                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, LogMessages.ServiceNullDataMessage);
             }
         }
 
@@ -246,35 +232,35 @@ namespace YachtDice.Server.Services
 
         private FaultException<Contracts.ServiceFault> CreateDatabaseFault(Exception exception, string operationName)
         {
-            _logger.Error(exception, DescribeOperation(DatabaseLogFormat, operationName));
+            _logger.Error(exception, DescribeOperation(LogMessages.DatabaseLogFormat, operationName));
 
-            return CreateFault(Contracts.ServiceErrorCode.DatabaseUnavailable, DatabaseFaultMessage);
+            return CreateFault(Contracts.ServiceErrorCode.DatabaseUnavailable, LogMessages.DatabaseFaultMessage);
         }
 
         private FaultException<Contracts.ServiceFault> CreateInvalidDataFault(Exception exception, string operationName)
         {
-            _logger.Error(exception, DescribeOperation(InvalidDataLogFormat, operationName));
+            _logger.Error(exception, DescribeOperation(LogMessages.InvalidDataLogFormat, operationName));
 
-            return CreateFault(Contracts.ServiceErrorCode.ValidationFailed, InvalidDataMessage);
+            return CreateFault(Contracts.ServiceErrorCode.ValidationFailed, LogMessages.ServiceInvalidDataMessage);
         }
 
         private FaultException<Contracts.ServiceFault> CreateUnexpectedFault(Exception exception, string operationName)
         {
-            _logger.Error(exception, DescribeOperation(UnexpectedLogFormat, operationName));
+            _logger.Error(exception, DescribeOperation(LogMessages.UnexpectedLogFormat, operationName));
 
-            return CreateFault(Contracts.ServiceErrorCode.UnexpectedError, UnexpectedFaultMessage);
+            return CreateFault(Contracts.ServiceErrorCode.UnexpectedError, LogMessages.UnexpectedFaultMessage);
         }
 
         private FaultException<Contracts.ServiceFault> CreateSessionFault(string sessionToken, string operationName)
         {
-            _logger.Warning(DescribeOperation(RejectedSessionLogFormat, operationName));
+            _logger.Warning(DescribeOperation(LogMessages.RejectedSessionLogFormat, operationName));
 
             FaultException<Contracts.ServiceFault> fault =
-                CreateFault(Contracts.ServiceErrorCode.SessionExpired, SessionExpiredMessage);
+                CreateFault(Contracts.ServiceErrorCode.SessionExpired, LogMessages.SessionExpiredMessage);
 
             if (Sessions.WasReplaced(sessionToken))
             {
-                fault = CreateFault(Contracts.ServiceErrorCode.SessionReplaced, SessionReplacedMessage);
+                fault = CreateFault(Contracts.ServiceErrorCode.SessionReplaced, LogMessages.SessionReplacedMessage);
             }
 
             return fault;

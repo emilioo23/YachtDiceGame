@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -17,9 +18,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class TwoFactorManagementService : ServiceBase, Contracts.ITwoFactorManagementService
     {
-        private const string NullDependencyMessage = "A dependency of the two-factor management cannot be null.";
-        private const string NullAttestationMessage = "The answer of the authenticator cannot be null.";
-
         private readonly LogicTwoFactor.ITwoFactorSettingsService _settingsService;
         private readonly LogicAuthentication.PasswordService _passwordChangeService;
         private readonly LogicPasskeys.IPasskeyService _passkeyService;
@@ -39,11 +37,14 @@ namespace YachtDice.Server.Services
             LogicPasskeys.IPasskeyService passkeyService)
         {
             _settingsService = settingsService
-                ?? throw new ArgumentNullException(nameof(settingsService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(settingsService),
+                    LogMessages.TwoFactorManagementNullDependencyMessage);
             _passwordChangeService = passwordChangeService
-                ?? throw new ArgumentNullException(nameof(passwordChangeService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(passwordChangeService),
+                    LogMessages.TwoFactorManagementNullDependencyMessage);
             _passkeyService = passkeyService
-                ?? throw new ArgumentNullException(nameof(passkeyService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(passkeyService),
+                    LogMessages.TwoFactorManagementNullDependencyMessage);
         }
 
         /// <summary>
@@ -445,7 +446,7 @@ namespace YachtDice.Server.Services
         {
             if (attestation == null)
             {
-                throw new ArgumentNullException(nameof(attestation), NullAttestationMessage);
+                throw new ArgumentNullException(nameof(attestation), LogMessages.NullAttestationMessage);
             }
 
             return new LogicPasskeys.PasskeyAttestation
@@ -467,7 +468,7 @@ namespace YachtDice.Server.Services
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException(nameof(assertion), NullAttestationMessage);
+                throw new ArgumentNullException(nameof(assertion), LogMessages.NullAttestationMessage);
             }
 
             return new LogicPasskeys.PasskeyAssertion

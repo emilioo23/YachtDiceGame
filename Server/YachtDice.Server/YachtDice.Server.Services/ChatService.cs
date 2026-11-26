@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -19,13 +20,6 @@ namespace YachtDice.Server.Services
         private const int MaxMessageLength = 200;
         private const int InfractionsToWarnHost = 3;
         private const int FirstCharacterIndex = 0;
-        private const string IgnoredMessageLogMessage =
-            "A chat message was ignored because it is empty or its author is not inside the room.";
-
-        private const string NotInsideRoomMessage = "A player who is not inside the room cannot join its chat.";
-
-        private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
-        private const string NullDependencyMessage = "A dependency of the chat service cannot be null.";
 
         private readonly LogicRooms.IRoomManager _roomManager;
         private readonly LogicModeration.OffensiveWordFilter _wordFilter;
@@ -42,8 +36,9 @@ namespace YachtDice.Server.Services
         public ChatService(LogicRooms.IRoomManager roomManager, LogicModeration.OffensiveWordFilter wordFilter)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
-            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
+                ?? throw new ArgumentNullException(nameof(roomManager), LogMessages.ChatNullDependencyMessage);
+            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter),
+                LogMessages.NullWordFilterMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -78,7 +73,7 @@ namespace YachtDice.Server.Services
             }
             else
             {
-                _logger.Warning(IgnoredMessageLogMessage);
+                _logger.Warning(LogMessages.IgnoredMessageLogMessage);
             }
         }
 
@@ -169,7 +164,7 @@ namespace YachtDice.Server.Services
             }
             else
             {
-                throw new ArgumentException(NotInsideRoomMessage, nameof(member));
+                throw new ArgumentException(LogMessages.NotInsideRoomMessage, nameof(member));
             }
         }
 

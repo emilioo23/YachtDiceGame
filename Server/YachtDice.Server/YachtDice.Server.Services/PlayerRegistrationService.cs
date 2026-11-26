@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -14,10 +15,7 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerRegistrationService : ServiceBase, Contracts.IPlayerRegistrationService
     {
-        private const string NullDependencyMessage = "A dependency of the player registration service cannot be null.";
-
         private const int CleanupIntervalSeconds = 3600;
-        private const string RemovedAccountsLogFormat = "{0} accounts without a confirmed email were deleted.";
 
         private readonly LogicAuth.IRegistrationService _registrationLogic;
         private TurnClock _cleanupClock;
@@ -29,7 +27,8 @@ namespace YachtDice.Server.Services
         public PlayerRegistrationService(LogicAuth.IRegistrationService registrationLogic)
         {
             _registrationLogic = registrationLogic
-                ?? throw new ArgumentNullException(nameof(registrationLogic), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(registrationLogic),
+                    LogMessages.PlayerRegistrationNullDependencyMessage);
             _cleanupClock = StartCleanupClock();
         }
 
@@ -56,7 +55,8 @@ namespace YachtDice.Server.Services
             {
                 int removedCount = _registrationLogic.RemoveUnverifiedAccounts(DateTime.UtcNow);
 
-                LogInfo(string.Format(CultureInfo.InvariantCulture, RemovedAccountsLogFormat, removedCount));
+                LogInfo(string.Format(CultureInfo.InvariantCulture, LogMessages.RemovedAccountsLogFormat,
+                    removedCount));
             }
             finally
             {

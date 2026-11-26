@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -34,14 +35,6 @@ namespace YachtDice.Server.Services
 
         private const int ComputerMoveSeconds = 2;
 
-        private const string ResultNotSavedLogMessage = "The result of a finished game could not be saved.";
-        private const string CheckpointNotSavedLogMessage = "A game in progress could not be saved for a restart.";
-        private const string GamesNotRestoredLogMessage = "The games in progress could not be restored.";
-        private const string GamesRestoredLogFormat = "Games in progress restored after the restart: {0}.";
-        private const string StartedLogFormat = "The game of room {0} started with {1} players.";
-        private const string FinishedLogFormat = "The game of room {0} finished.";
-        private const string NullDependencyMessage = "A dependency of the game coordinator cannot be null.";
-
         private readonly LogicGame.IGameManager _gameManager;
         private readonly LogicGame.IGameResultRecorder _resultRecorder;
         private readonly LogicGame.IGameCheckpointService _checkpoints;
@@ -72,11 +65,14 @@ namespace YachtDice.Server.Services
             LogicGame.IGameCheckpointService checkpoints)
         {
             _gameManager = gameManager
-                ?? throw new ArgumentNullException(nameof(gameManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameManager),
+                    LogMessages.GameCoordinatorNullDependencyMessage);
             _resultRecorder = resultRecorder
-                ?? throw new ArgumentNullException(nameof(resultRecorder), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(resultRecorder),
+                    LogMessages.GameCoordinatorNullDependencyMessage);
             _checkpoints = checkpoints
-                ?? throw new ArgumentNullException(nameof(checkpoints), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(checkpoints),
+                    LogMessages.GameCoordinatorNullDependencyMessage);
             _timer = new TurnTimer(HandleTurnExpired);
             _computerTimer = new TurnTimer(HandleComputerMove);
             _logger = new LogicLogging.AppLogger(GetType());
@@ -106,7 +102,8 @@ namespace YachtDice.Server.Services
             _savedGames.TryRemove(room.Code, out _);
             TrackGame(room, snapshot);
             SyncTimer(room.Code, snapshot);
-            _logger.Info(string.Format(CultureInfo.InvariantCulture, StartedLogFormat, room.Code, participants.Count));
+            _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.StartedLogFormat, room.Code,
+                participants.Count));
         }
 
         /// <summary>
@@ -249,7 +246,7 @@ namespace YachtDice.Server.Services
         {
             if (roomManager == null)
             {
-                throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+                throw new ArgumentNullException(nameof(roomManager), LogMessages.GameCoordinatorNullDependencyMessage);
             }
 
             int restoredCount = 0;
@@ -265,11 +262,12 @@ namespace YachtDice.Server.Services
                     }
                 }
 
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, GamesRestoredLogFormat, restoredCount));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.GamesRestoredLogFormat,
+                    restoredCount));
             }
             catch (DataExceptions.DataAccessException ex)
             {
-                _logger.Error(ex, GamesNotRestoredLogMessage);
+                _logger.Error(ex, LogMessages.GamesNotRestoredLogMessage);
             }
 
             return restoredCount;
@@ -329,7 +327,7 @@ namespace YachtDice.Server.Services
 
             if (isFirstTime && _roomSettings.TryGetValue(roomCode, out LogicRooms.RoomSettings settings))
             {
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, FinishedLogFormat, roomCode));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.FinishedLogFormat, roomCode));
 
                 try
                 {
@@ -337,7 +335,7 @@ namespace YachtDice.Server.Services
                 }
                 catch (DataExceptions.DataAccessException ex)
                 {
-                    _logger.Error(ex, ResultNotSavedLogMessage);
+                    _logger.Error(ex, LogMessages.ResultNotSavedLogMessage);
                     snapshot.MarkResultNotSaved();
                 }
             }
@@ -368,7 +366,7 @@ namespace YachtDice.Server.Services
             }
             catch (DataExceptions.DataAccessException ex)
             {
-                _logger.Error(ex, CheckpointNotSavedLogMessage);
+                _logger.Error(ex, LogMessages.CheckpointNotSavedLogMessage);
             }
         }
 
@@ -389,7 +387,7 @@ namespace YachtDice.Server.Services
             }
             catch (DataExceptions.DataAccessException ex)
             {
-                _logger.Error(ex, CheckpointNotSavedLogMessage);
+                _logger.Error(ex, LogMessages.CheckpointNotSavedLogMessage);
             }
         }
 

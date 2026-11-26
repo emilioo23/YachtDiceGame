@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -15,8 +16,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
     public class PlayerService : ServiceBase, Contracts.IPlayerService
     {
-        private const string NullDependencyMessage = "A dependency of the player service cannot be null.";
-
         private readonly LogicPlayers.PlayerStatisticsService _statisticsService;
         private readonly LogicAvatars.AvatarService _avatarService;
         private readonly LogicPlayers.ProfileService _profileService;
@@ -32,11 +31,11 @@ namespace YachtDice.Server.Services
             LogicPlayers.ProfileService profileService)
         {
             _statisticsService = statisticsService
-                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(statisticsService), LogMessages.PlayerNullDependencyMessage);
             _avatarService = avatarService
-                ?? throw new ArgumentNullException(nameof(avatarService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(avatarService), LogMessages.PlayerNullDependencyMessage);
             _profileService = profileService
-                ?? throw new ArgumentNullException(nameof(profileService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(profileService), LogMessages.PlayerNullDependencyMessage);
         }
 
         /// <summary>

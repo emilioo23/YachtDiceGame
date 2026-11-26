@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -12,7 +13,6 @@ namespace YachtDice.Server.Services
     internal sealed class TurnTimer
     {
         private const int NoSecondsLeft = 0;
-        private const string NullOnExpiredMessage = "The action when the time is over cannot be null.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, TurnClock> _clocks =
@@ -25,7 +25,8 @@ namespace YachtDice.Server.Services
         /// <param name="onExpired">Action to run with the room code and the turn number when a turn ends.</param>
         public TurnTimer(Action<LogicGame.GameTurn> onExpired)
         {
-            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired), NullOnExpiredMessage);
+            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired),
+                LogMessages.NullOnExpiredMessage);
         }
 
         /// <summary>

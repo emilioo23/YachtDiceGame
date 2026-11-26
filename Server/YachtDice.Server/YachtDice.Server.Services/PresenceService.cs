@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -20,12 +21,6 @@ namespace YachtDice.Server.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
-        private const string NullFinderMessage = "What finds the identifiers of the players cannot be null.";
-        private const string NullSessionsMessage = "The sessions of the players cannot be null.";
-        private const string RejectedSessionLogMessage = "A connection was rejected because the session is not valid.";
-        private const string ConnectedLogFormat = "{0} is now online.";
-        private const string DisconnectedLogFormat = "{0} is now offline.";
-
         private readonly ConcurrentDictionary<string, OnlinePlayer> _players =
             new ConcurrentDictionary<string, OnlinePlayer>(StringComparer.OrdinalIgnoreCase);
 
@@ -40,8 +35,8 @@ namespace YachtDice.Server.Services
         /// <param name="sessions">Sessions of the players who logged in, to know who connects.</param>
         public PresenceService(LogicFriends.IPlayerIdFinder playerIds, LogicSecurity.SessionRegistry sessions)
         {
-            _playerIds = playerIds ?? throw new ArgumentNullException(nameof(playerIds), NullFinderMessage);
-            _sessions = sessions ?? throw new ArgumentNullException(nameof(sessions), NullSessionsMessage);
+            _playerIds = playerIds ?? throw new ArgumentNullException(nameof(playerIds), LogMessages.NullFinderMessage);
+            _sessions = sessions ?? throw new ArgumentNullException(nameof(sessions), LogMessages.NullSessionsMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
@@ -65,13 +60,13 @@ namespace YachtDice.Server.Services
                 WatchChannel(displayName, player.SessionId);
                 _logger.Info(string.Format(
                     CultureInfo.InvariantCulture,
-                    ConnectedLogFormat,
+                    LogMessages.ConnectedLogFormat,
                     PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerConnected);
             }
             else
             {
-                _logger.Warning(RejectedSessionLogMessage);
+                _logger.Warning(LogMessages.RejectedSessionLogMessage);
             }
 
             return onlinePlayers;
@@ -170,7 +165,7 @@ namespace YachtDice.Server.Services
             {
                 _logger.Info(string.Format(
                     CultureInfo.InvariantCulture,
-                    DisconnectedLogFormat,
+                    LogMessages.DisconnectedLogFormat,
                     PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerDisconnected);
             }

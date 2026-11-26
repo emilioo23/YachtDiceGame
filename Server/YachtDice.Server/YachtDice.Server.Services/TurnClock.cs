@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -17,9 +18,6 @@ namespace YachtDice.Server.Services
         /// </summary>
         public const int NoTurnNumber = 0;
 
-        private const string ExpiredActionFailedLogMessage = "The action of an expired countdown failed.";
-        private const string NullOnExpiredMessage = "The action when the time is over cannot be null.";
-
         private readonly Timer _timer;
         private readonly Action _onExpired;
         private readonly LogicLogging.AppLogger _logger;
@@ -34,7 +32,8 @@ namespace YachtDice.Server.Services
         {
             TurnNumber = turnNumber;
             Deadline = DateTime.UtcNow.AddSeconds(seconds);
-            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired), NullOnExpiredMessage);
+            _onExpired = onExpired ?? throw new ArgumentNullException(nameof(onExpired),
+                LogMessages.NullOnExpiredMessage);
             _logger = new LogicLogging.AppLogger(GetType());
             _timer = new Timer(HandleExpired, null, TimeSpan.FromSeconds(seconds), Timeout.InfiniteTimeSpan);
         }
@@ -65,7 +64,7 @@ namespace YachtDice.Server.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ExpiredActionFailedLogMessage);
+                _logger.Error(ex, LogMessages.ExpiredActionFailedLogMessage);
             }
         }
     }

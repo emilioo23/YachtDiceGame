@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Services
 {
@@ -12,9 +13,6 @@ namespace YachtDice.Server.Services
     /// </summary>
     public static class PlayerLogName
     {
-        private const string KnownFormat = "Player {0}";
-        private const string UnknownText = "A player";
-
         /// <summary>
         /// Gets the text that identifies the player in a line of the log.
         /// </summary>
@@ -23,7 +21,7 @@ namespace YachtDice.Server.Services
         /// <returns>The identifier of the account, or a generic text when the player has no account.</returns>
         public static string Describe(LogicFriends.IPlayerIdFinder finder, string displayName)
         {
-            string description = UnknownText;
+            string description = LogMessages.UnknownText;
 
             try
             {
@@ -31,12 +29,12 @@ namespace YachtDice.Server.Services
 
                 if (playerId != LogicFriends.FriendshipService.NoPlayerId)
                 {
-                    description = string.Format(CultureInfo.InvariantCulture, KnownFormat, playerId);
+                    description = string.Format(CultureInfo.InvariantCulture, LogMessages.KnownFormat, playerId);
                 }
             }
             catch (DataAccessException)
             {
-                description = UnknownText;
+                description = LogMessages.UnknownText;
             }
 
             return description;
