@@ -8,6 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Composition;
 using YachtDice.Resources;
@@ -25,10 +26,6 @@ namespace YachtDice
         private const string DarkThemeSource = "Styles/Theme.Dark.xaml";
         private const double PressedScale = 0.94;
         private const int PressMilliseconds = 80;
-        private const string UnhandledErrorLogMessage = "An error that no window handled reached the application.";
-        private const string UnobservedTaskLogMessage = "A background task failed and nobody observed its error.";
-        private const string StartedLogMessage = "The game client started.";
-        private const string ClosedLogMessage = "The game client closed.";
 
         private static readonly TimeSpan PressDuration = TimeSpan.FromMilliseconds(PressMilliseconds);
 
@@ -58,7 +55,7 @@ namespace YachtDice
         {
             base.OnStartup(e);
 
-            _logger.Info(StartedLogMessage);
+            _logger.Info(LogMessages.StartedLogMessage);
             DispatcherUnhandledException += HandleDispatcherUnhandledException;
             TextLimitNotice.Register();
             TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
@@ -113,20 +110,20 @@ namespace YachtDice
         {
             _preferencesStore.Save(CreateCurrentPreferences());
             _provider.Dispose();
-            _logger.Info(ClosedLogMessage);
+            _logger.Info(LogMessages.ClosedLogMessage);
             base.OnExit(e);
         }
 
         private void HandleDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            _logger.Error(e.Exception, UnhandledErrorLogMessage);
+            _logger.Error(e.Exception, LogMessages.UnhandledErrorLogMessage);
             e.Handled = true;
             CustomDialogWindow.ShowMessage(FindActiveWindow(), Strings.Dialogs_UnexpectedError);
         }
 
         private void HandleUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            _logger.Error(e.Exception, UnobservedTaskLogMessage);
+            _logger.Error(e.Exception, LogMessages.UnobservedTaskLogMessage);
             e.SetObserved();
         }
 

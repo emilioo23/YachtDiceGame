@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.FriendServiceReference;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -18,8 +19,6 @@ namespace YachtDice.Views
     public partial class ReportPlayerWindow : Window
     {
         private const int CommentMaxLength = 300;
-        private const string NullSessionMessage = "The session of the player cannot be null.";
-        private const string NullReportedNameMessage = "The name of the reported player cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly string _reportedName;
@@ -34,9 +33,9 @@ namespace YachtDice.Views
         public ReportPlayerWindow(PlayerSession session, string reportedName)
         {
             InitializeComponent();
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             _reportedName = reportedName
-                ?? throw new ArgumentNullException(nameof(reportedName), NullReportedNameMessage);
+                ?? throw new ArgumentNullException(nameof(reportedName), LogMessages.NullReportedNameMessage);
 
             TitleTextBlock.Text = string.Format(Strings.Report_TitleFormat, reportedName);
             CommentTextBox.MaxLength = CommentMaxLength;

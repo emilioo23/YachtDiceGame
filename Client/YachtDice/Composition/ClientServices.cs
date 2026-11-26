@@ -1,5 +1,6 @@
 ﻿using System;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Navigation;
 using YachtDice.Utils;
@@ -13,8 +14,6 @@ namespace YachtDice.Composition
     /// </summary>
     public sealed class ClientServices
     {
-        private const string NullDependencyMessage = "A shared component of the client cannot be null.";
-
         /// <summary>
         /// Initializes the shared components of the client.
         /// </summary>
@@ -23,8 +22,8 @@ namespace YachtDice.Composition
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public ClientServices(AudioSettings audio, MusicPlayer music)
         {
-            Audio = audio ?? throw new ArgumentNullException(nameof(audio), NullDependencyMessage);
-            Music = music ?? throw new ArgumentNullException(nameof(music), NullDependencyMessage);
+            Audio = audio ?? throw new ArgumentNullException(nameof(audio), LogMessages.NullDependencyMessage);
+            Music = music ?? throw new ArgumentNullException(nameof(music), LogMessages.NullDependencyMessage);
             Gameplay = new GameplaySettings();
             ConnectionLoss = new ConnectionLossHandler(this);
         }

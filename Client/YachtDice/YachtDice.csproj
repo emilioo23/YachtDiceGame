@@ -253,7 +253,6 @@
     <Compile Include="Gateway\DuplexGatewayBase.cs" />
     <Compile Include="Gateway\FriendGateway.cs" />
     <Compile Include="Gateway\GatewayBase.cs" />
-    <Compile Include="Gateway\GatewayMessages.cs" />
     <Compile Include="Gateway\PinnedServerCertificateValidator.cs" />
     <Compile Include="Gateway\GatewayErrorCodeParser.cs" />
     <Compile Include="Gateway\GatewayErrorCode.cs" />

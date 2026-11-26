@@ -4,6 +4,7 @@ using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Utils;
 
 namespace YachtDice.Gateway
@@ -16,10 +17,6 @@ namespace YachtDice.Gateway
     public sealed class PinnedServerCertificateValidator : X509CertificateValidator
     {
         private const string ThumbprintKey = "ServerCertificateThumbprint";
-        private const string UnknownCertificateMessage =
-            "The server presented a certificate whose thumbprint is not the one of the game.";
-        private const string UnknownCertificateLogMessage =
-            "The server presented a certificate that is not the one of the game, so the connection was refused.";
 
         private readonly AppLogger _logger;
         private readonly string _expectedThumbprint;
@@ -52,8 +49,8 @@ namespace YachtDice.Gateway
         {
             if (!IsPinned(certificate))
             {
-                _logger.Warning(UnknownCertificateLogMessage);
-                throw new SecurityTokenValidationException(UnknownCertificateMessage);
+                _logger.Warning(LogMessages.UnknownCertificateLogMessage);
+                throw new SecurityTokenValidationException(LogMessages.UnknownCertificateMessage);
             }
         }
 

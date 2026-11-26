@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -40,7 +41,6 @@ namespace YachtDice.Views
         private const string PointsFormat = "N0";
         private const string ViewerRowBrushKey = "BrushGoldButton";
         private const string ViewerTextBrushKey = "BrushFeltDark";
-        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private static readonly GridLength[] ColumnWidths =
         {
@@ -65,7 +65,7 @@ namespace YachtDice.Views
         public LeaderboardWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new LeaderboardWindow(session);
 
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadRankingAsync);

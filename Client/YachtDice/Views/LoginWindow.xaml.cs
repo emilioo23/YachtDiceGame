@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -26,10 +27,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private const string WarmUpFailedLogMessage = "The connection to the server could not be warmed up.";
-        private const string NullServicesMessage = "The shared components of the client cannot be null.";
-        private const string PasskeyFailedLogMessage = "Windows could not use the passkey to log in.";
-
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
         private readonly AuthenticationGateway _gateway = new AuthenticationGateway();
@@ -44,7 +41,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             _logger = new AppLogger(GetType());
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new LoginWindow(services);
             ApplyFieldLimits();
             _ = WarmUpConnectionAsync();
@@ -58,7 +55,7 @@ namespace YachtDice.Views
             }
             catch (GatewayException)
             {
-                _logger.Warning(WarmUpFailedLogMessage);
+                _logger.Warning(LogMessages.WarmUpFailedLogMessage);
             }
         }
 
@@ -201,7 +198,7 @@ namespace YachtDice.Views
             }
             catch (PasskeyException ex)
             {
-                _logger.Error(ex, PasskeyFailedLogMessage);
+                _logger.Error(ex, LogMessages.LoginPasskeyFailedLogMessage);
                 CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
             }
 

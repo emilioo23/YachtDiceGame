@@ -7,6 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using YachtDice.Client.Logic.Audio;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -36,8 +37,6 @@ namespace YachtDice.Views
         private const string PrivacySection = "Privacy";
         private const int ToggleKnobMargin = 3;
         private const int NoMargin = 0;
-        private const string NullSessionMessage = "The session of the player cannot be null.";
-        private const string PasskeyFailedLogMessage = "Windows could not create the passkey.";
         private const int NoSelection = -1;
         private const int FirstItem = 0;
         private const int SinglePasskey = 1;
@@ -65,7 +64,7 @@ namespace YachtDice.Views
             NewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             ConfirmNewPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             DeleteAccountPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             _audio = session.Services.Audio;
             _isInitializing = true;
 
@@ -299,7 +298,7 @@ namespace YachtDice.Views
             }
             catch (PasskeyException ex)
             {
-                _logger.Error(ex, PasskeyFailedLogMessage);
+                _logger.Error(ex, LogMessages.SettingsPasskeyFailedLogMessage);
                 CustomDialogWindow.ShowMessage(this, Strings.Passkey_ErrorWindows);
             }
 

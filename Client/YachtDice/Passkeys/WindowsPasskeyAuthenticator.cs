@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Passkeys;
 using YachtDice.TwoFactorManagementServiceReference;
 using YachtDice.Utils;
@@ -19,11 +20,6 @@ namespace YachtDice.Passkeys
         private const int TimedOut = unchecked((int)0x800705B4);
         private const int EcdsaAlgorithm = PasskeyRules.EcdsaAlgorithm;
         private const int RsaAlgorithm = PasskeyRules.RsaAlgorithm;
-        private const string NullChallengeMessage = "The challenge of the server cannot be null.";
-        private const string InvalidBase64Message = "The server sent a value that is not valid base64url.";
-        private const string CallFailedMessage = "Windows could not complete the passkey operation. HRESULT: 0x{0:X8}.";
-        private const string NoAnswerMessage = "Windows did not return the answer of the passkey operation.";
-        private const string UnavailableLogMessage = "This Windows does not have the passkey API, so passkeys are off.";
 
         private readonly AppLogger _logger;
 
@@ -49,12 +45,12 @@ namespace YachtDice.Passkeys
             }
             catch (DllNotFoundException ex)
             {
-                _logger.Warning(ex, UnavailableLogMessage);
+                _logger.Warning(ex, LogMessages.WindowsPasskeyUnavailableLogMessage);
                 isAvailable = false;
             }
             catch (EntryPointNotFoundException ex)
             {
-                _logger.Warning(ex, UnavailableLogMessage);
+                _logger.Warning(ex, LogMessages.WindowsPasskeyUnavailableLogMessage);
                 isAvailable = false;
             }
 
@@ -72,7 +68,7 @@ namespace YachtDice.Passkeys
         {
             if (challenge == null)
             {
-                throw new ArgumentNullException(nameof(challenge), NullChallengeMessage);
+                throw new ArgumentNullException(nameof(challenge), LogMessages.WindowsPasskeyNullChallengeMessage);
             }
 
             byte[] clientDataJson = PasskeyClientData.Create(PasskeyRules.CreateClientDataType, challenge.Challenge);
@@ -118,7 +114,7 @@ namespace YachtDice.Passkeys
         {
             if (challenge == null)
             {
-                throw new ArgumentNullException(nameof(challenge), NullChallengeMessage);
+                throw new ArgumentNullException(nameof(challenge), LogMessages.WindowsPasskeyNullChallengeMessage);
             }
 
             byte[] clientDataJson = PasskeyClientData.Create(PasskeyRules.GetClientDataType, challenge.Challenge);
@@ -319,12 +315,12 @@ namespace YachtDice.Passkeys
         {
             if (result < 0)
             {
-                throw new PasskeyException(string.Format(CallFailedMessage, result));
+                throw new PasskeyException(string.Format(LogMessages.CallFailedMessage, result));
             }
 
             if (pointer == IntPtr.Zero)
             {
-                throw new PasskeyException(NoAnswerMessage);
+                throw new PasskeyException(LogMessages.NoAnswerMessage);
             }
         }
 
@@ -344,7 +340,7 @@ namespace YachtDice.Passkeys
         {
             if (!Base64Url.TryDecode(text, out byte[] data))
             {
-                throw new PasskeyException(InvalidBase64Message);
+                throw new PasskeyException(LogMessages.InvalidBase64Message);
             }
 
             return data;

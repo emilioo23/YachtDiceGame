@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Utils;
 
 namespace YachtDice.Gateway
@@ -16,10 +17,6 @@ namespace YachtDice.Gateway
     public abstract class DuplexGatewayBase<TClient> : IConnectionLossSource
         where TClient : class, ICommunicationObject
     {
-        private const string NotConnectedMessage = "There is no connection with the server.";
-        private const string ConnectionLostLogMessage = "The connection with the server was lost.";
-        private const string CloseFailedLogMessage = "The connection could not be closed normally, so it was aborted.";
-
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private TClient _client;
@@ -141,20 +138,22 @@ namespace YachtDice.Gateway
             }
             catch (FaultException ex)
             {
-                _logger.Error(ex, GatewayMessages.FaultLogMessage);
-                throw new GatewayException(GetErrorCode(ex), GatewayMessages.FaultMessage, ex);
+                _logger.Error(ex, LogMessages.ServerFaultLogMessage);
+                throw new GatewayException(GetErrorCode(ex), LogMessages.ServerFaultMessage, ex);
             }
             catch (CommunicationException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.ServerUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
             catch (TimeoutException ex)
             {
                 DiscardClient(client);
-                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.ServerUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
 
             return result;
@@ -187,12 +186,12 @@ namespace YachtDice.Gateway
             catch (CommunicationException ex)
             {
                 client.Abort();
-                _logger.Warning(ex, CloseFailedLogMessage);
+                _logger.Warning(ex, LogMessages.DuplexGatewayCloseFailedLogMessage);
             }
             catch (TimeoutException ex)
             {
                 client.Abort();
-                _logger.Warning(ex, CloseFailedLogMessage);
+                _logger.Warning(ex, LogMessages.DuplexGatewayCloseFailedLogMessage);
             }
         }
 
@@ -202,7 +201,7 @@ namespace YachtDice.Gateway
 
             if (client == null)
             {
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, NotConnectedMessage, null);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.NotConnectedMessage, null);
             }
 
             return client;
@@ -266,7 +265,7 @@ namespace YachtDice.Gateway
             if (TryDetach(client))
             {
                 client.Abort();
-                _logger.Warning(ConnectionLostLogMessage);
+                _logger.Warning(LogMessages.ConnectionLostLogMessage);
                 ConnectionLost?.Invoke();
             }
         }

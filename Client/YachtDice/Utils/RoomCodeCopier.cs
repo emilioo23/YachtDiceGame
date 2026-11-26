@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Resources;
 using YachtDice.Views;
 
@@ -12,8 +13,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class RoomCodeCopier
     {
-        private const string CopyFailedLogMessage = "The room code could not be copied to the clipboard.";
-
         private static readonly AppLogger Logger = new AppLogger(typeof(RoomCodeCopier));
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace YachtDice.Utils
             }
             catch (ExternalException ex)
             {
-                Logger.Error(ex, CopyFailedLogMessage);
+                Logger.Error(ex, LogMessages.CopyFailedLogMessage);
                 message = Strings.Dialogs_UnexpectedError;
             }
 

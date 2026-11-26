@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using YachtDice.Client.Logic.Avatars;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -43,7 +44,6 @@ namespace YachtDice.Views
         private const string LockedTextBrushKey = "BrushTextMuted";
         private const string UnlockedBackgroundBrushKey = "BrushGoldButton";
         private const string LockedBackgroundBrushKey = "BrushBorder";
-        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private readonly PlayerSession _session;
         private readonly PlayerGateway _playerGateway = new PlayerGateway();
@@ -64,7 +64,7 @@ namespace YachtDice.Views
         public ProfileWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             UsernameTextBox.Text = session.DisplayName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
 

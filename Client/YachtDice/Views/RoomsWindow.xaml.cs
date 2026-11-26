@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -24,8 +25,6 @@ namespace YachtDice.Views
     {
         private const int RefreshIntervalSeconds = 5;
         private const int MaxSearchLength = 40;
-        private const string AutoRefreshFailedLogMessage = "The list of rooms could not be updated.";
-        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly RoomListGateway _roomListGateway = new RoomListGateway();
@@ -46,7 +45,7 @@ namespace YachtDice.Views
             InitializeComponent();
 
             _logger = new AppLogger(GetType());
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             SearchTextBox.MaxLength = MaxSearchLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new RoomsWindow(session);
 
@@ -96,7 +95,7 @@ namespace YachtDice.Views
             }
             else
             {
-                _logger.Warning(AutoRefreshFailedLogMessage);
+                _logger.Warning(LogMessages.AutoRefreshFailedLogMessage);
             }
         }
 

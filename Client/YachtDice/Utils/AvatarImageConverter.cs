@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using YachtDice.Client.Logic.Avatars;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Utils
 {
@@ -10,8 +11,6 @@ namespace YachtDice.Utils
     /// </summary>
     public sealed class AvatarImageConverter : IValueConverter
     {
-        private const string ConvertBackMessage = "A picture cannot be converted back to an avatar identifier.";
-
         /// <summary>
         /// Converts the identifier of an avatar into its drawing.
         /// </summary>
@@ -42,7 +41,7 @@ namespace YachtDice.Utils
         /// <returns>Never returns.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException(ConvertBackMessage);
+            throw new NotSupportedException(LogMessages.ConvertBackMessage);
         }
     }
 }

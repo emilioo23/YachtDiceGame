@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using YachtDice.Client.Logic.Connection;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Resources;
@@ -20,8 +21,6 @@ namespace YachtDice.Navigation
     /// </summary>
     public sealed class ConnectionLossHandler
     {
-        private const string NullServicesMessage = "The shared components of the client cannot be null.";
-
         private readonly ConnectionLossGate _gate = new ConnectionLossGate();
         private readonly ConnectionLossGate _recoveryGate = new ConnectionLossGate();
         private readonly ClientServices _services;
@@ -33,7 +32,7 @@ namespace YachtDice.Navigation
         /// <param name="services">Shared components that the login window needs when the player goes back.</param>
         public ConnectionLossHandler(ClientServices services)
         {
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
         }
 
         /// <summary>

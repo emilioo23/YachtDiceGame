@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Models;
 using YachtDice.RoomServiceReference;
 using YachtDice.Utils;
@@ -15,15 +16,13 @@ namespace YachtDice.Gateway
     /// </summary>
     public class RoomGateway : DuplexGatewayBase<RoomServiceClient>
     {
-        private const string NullSessionMessage = "The session of the player cannot be null.";
-
         /// <summary>
         /// Initializes the gateway for the player.
         /// </summary>
         /// <param name="session">Session of the player who uses the room.</param>
         public RoomGateway(PlayerSession session)
         {
-            Session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            Session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
         }
 
         /// <summary>

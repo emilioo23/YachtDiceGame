@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Gateway;
 using YachtDice.Resources;
 using YachtDice.Views;
@@ -13,8 +14,6 @@ namespace YachtDice.Utils
     /// </summary>
     public static class GatewayCallRunner
     {
-        private const string UnexpectedErrorLogMessage = "Unexpected exception during a call to the server.";
-
         /// <summary>
         /// Runs the call. A failure of the server is shown with its own message; any other failure is logged
         /// and shown as an unexpected error.
@@ -35,7 +34,7 @@ namespace YachtDice.Utils
             }
             catch (Exception ex)
             {
-                logger.Error(ex, UnexpectedErrorLogMessage);
+                logger.Error(ex, LogMessages.UnexpectedErrorLogMessage);
                 CustomDialogWindow.ShowMessage(owner, Strings.Dialogs_UnexpectedError);
             }
         }

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Players;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Gateway;
@@ -29,7 +30,6 @@ namespace YachtDice.Views
     {
         private const int DefaultPlayerLevel = 1;
         private const double LevelBarAnimationSeconds = 0.8;
-        private const string NullSessionMessage = "The session of the player cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly PlayerGateway _gateway = new PlayerGateway();
@@ -50,7 +50,7 @@ namespace YachtDice.Views
             FriendUsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
 
             _logger = new AppLogger(GetType());
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             PlayerNameTextBlock.Text = session.DisplayName;
             EditProfileButton.IsEnabled = !session.IsGuest;
             PlayerNameHeadingTextBlock.Text = GetGreetingName(session);

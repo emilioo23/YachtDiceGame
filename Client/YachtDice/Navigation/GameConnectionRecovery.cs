@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using YachtDice.Client.Logic.Connection;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.GameServiceReference;
 using YachtDice.Gateway;
 using YachtDice.RoomServiceReference;
@@ -18,11 +19,6 @@ namespace YachtDice.Navigation
     public sealed class GameConnectionRecovery
     {
         private const int MillisecondsPerSecond = 1000;
-        private const string NullGatewayMessage = "The connection of the match cannot be null.";
-        private const string AttemptFailedLogFormat = "An attempt to reconnect to the match failed: {0}.";
-        private const string RoomRefusedLogFormat = "The server did not give back the place in the room: {0}.";
-        private const string GameRefusedLogFormat = "The server did not give back the place in the game: {0}.";
-        private const string RestoredLogMessage = "The connection with the match was restored.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
@@ -39,9 +35,11 @@ namespace YachtDice.Navigation
         /// <exception cref="ArgumentNullException">Any of the connections is null.</exception>
         public GameConnectionRecovery(RoomGateway roomGateway, ChatGateway chat, GameGateway gameGateway)
         {
-            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullGatewayMessage);
-            _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullGatewayMessage);
-            _gameGateway = gameGateway ?? throw new ArgumentNullException(nameof(gameGateway), NullGatewayMessage);
+            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway),
+                LogMessages.NullGatewayMessage);
+            _chat = chat ?? throw new ArgumentNullException(nameof(chat), LogMessages.NullGatewayMessage);
+            _gameGateway = gameGateway ?? throw new ArgumentNullException(nameof(gameGateway),
+                LogMessages.NullGatewayMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -98,7 +96,8 @@ namespace YachtDice.Navigation
             }
             catch (GatewayException ex)
             {
-                _logger.Warning(string.Format(CultureInfo.InvariantCulture, AttemptFailedLogFormat, ex.ErrorCode));
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, LogMessages.AttemptFailedLogFormat,
+                    ex.ErrorCode));
             }
 
             return isRestored;
@@ -108,7 +107,7 @@ namespace YachtDice.Navigation
         {
             if (isRestored)
             {
-                _logger.Info(RestoredLogMessage);
+                _logger.Info(LogMessages.RestoredLogMessage);
             }
         }
 
@@ -135,7 +134,8 @@ namespace YachtDice.Navigation
             }
             else
             {
-                _logger.Warning(string.Format(CultureInfo.InvariantCulture, RoomRefusedLogFormat, roomResult));
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, LogMessages.RoomRefusedLogFormat,
+                    roomResult));
             }
 
             return isRestored;
@@ -152,7 +152,8 @@ namespace YachtDice.Navigation
             }
             else
             {
-                _logger.Warning(string.Format(CultureInfo.InvariantCulture, GameRefusedLogFormat, result.Code));
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, LogMessages.GameRefusedLogFormat,
+                    result.Code));
             }
 
             return isJoined;

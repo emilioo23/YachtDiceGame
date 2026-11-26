@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Utils
 {
@@ -17,7 +18,6 @@ namespace YachtDice.Utils
         private const int DiscardedBits = UnsignedLongBits - DoubleBits;
         private const double DoubleScale = 1.0 / (1UL << DoubleBits);
         private const ulong GeneratedValueCount = (ulong)uint.MaxValue + 1;
-        private const string InvalidMaximumMessage = "The maximum value must be greater than zero.";
 
         /// <summary>
         /// Gets a random integer from zero up to a maximum that is not included.
@@ -29,7 +29,7 @@ namespace YachtDice.Utils
         {
             if (maxExclusive < SmallestExclusiveMaximum)
             {
-                throw new ArgumentOutOfRangeException(nameof(maxExclusive), InvalidMaximumMessage);
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive), LogMessages.InvalidMaximumMessage);
             }
 
             ulong range = (ulong)maxExclusive;

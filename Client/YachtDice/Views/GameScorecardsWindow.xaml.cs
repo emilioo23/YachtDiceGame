@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Models;
 using YachtDice.PlayerServiceReference;
 using YachtDice.Utils;
@@ -14,8 +15,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class GameScorecardsWindow : Window
     {
-        private const string NullScorecardsMessage = "The saved scorecards cannot be null.";
-
         /// <summary>
         /// Initializes the dialog with the scorecards that the server sent.
         /// </summary>
@@ -24,7 +23,7 @@ namespace YachtDice.Views
         {
             if (scorecards == null)
             {
-                throw new ArgumentNullException(nameof(scorecards), NullScorecardsMessage);
+                throw new ArgumentNullException(nameof(scorecards), LogMessages.NullScorecardsMessage);
             }
 
             InitializeComponent();

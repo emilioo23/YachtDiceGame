@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -26,7 +27,6 @@ namespace YachtDice.Views
     {
         private const int MaxDigitsPerBox = 1;
         private const int FirstBoxIndex = 0;
-        private const string NullChallengeMessage = "The verification challenge cannot be null.";
 
         private readonly string _email;
         private readonly PlayerSession _session;
@@ -46,7 +46,7 @@ namespace YachtDice.Views
         {
             if (challenge == null)
             {
-                throw new ArgumentNullException(nameof(challenge), NullChallengeMessage);
+                throw new ArgumentNullException(nameof(challenge), LogMessages.TwoFactorNullChallengeMessage);
             }
 
             InitializeComponent();

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Gateway;
 using YachtDice.Models;
 using YachtDice.Navigation;
@@ -28,8 +29,6 @@ namespace YachtDice.Views
         private const double UnselectedBorderThickness = 1.5;
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
         private const string ComputerLabelFormat = "{0} · {1}";
-        private const string NullRoomGatewayMessage = "The connection to the room cannot be null.";
-        private const string NullChatMessage = "The connection to the chat cannot be null.";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
@@ -52,8 +51,9 @@ namespace YachtDice.Views
             RoomNameTextBox.MaxLength = MaxRoomNameLength;
             FillComputerDifficulties();
 
-            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullRoomGatewayMessage);
-            _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullChatMessage);
+            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway),
+                LogMessages.NullRoomGatewayMessage);
+            _chat = chat ?? throw new ArgumentNullException(nameof(chat), LogMessages.NullChatMessage);
             LanguageSwitcherControl.ReopenWindowFunc = ReopenWindow;
             _roomGateway.RoomChanged += HandleRoomChanged;
             Closed += HandleWindowClosed;

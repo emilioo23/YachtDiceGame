@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using YachtDice.Client.Logic.Dice;
 using YachtDice.Client.Logic.Game;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Utils;
 
 namespace YachtDice.Views
@@ -38,8 +39,6 @@ namespace YachtDice.Views
         private const double NoYaw = 0;
         private const int NoValue = 0;
         private const int IdleFaceOffset = 1;
-        private const string NullCanvasMessage = "The canvas where it is drawn cannot be null.";
-        private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
 
         private readonly Viewport3D _viewport;
         private readonly Die3D[] _dice = new Die3D[HeldDiceSelection.DiceCount];
@@ -56,10 +55,10 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public DiceBoard(Canvas canvas, FrameworkElement resources)
         {
-            Canvas host = canvas ?? throw new ArgumentNullException(nameof(canvas), NullCanvasMessage);
+            Canvas host = canvas ?? throw new ArgumentNullException(nameof(canvas), LogMessages.NullCanvasMessage);
             FrameworkElement owner = resources ?? throw new ArgumentNullException(
                 nameof(resources),
-                NullResourcesMessage);
+                LogMessages.NullResourcesMessage);
             DiceMaterials materials = DiceMaterials.Create(owner);
 
             _viewport = DiceViewportFactory.Create(ViewportWidth, ViewportHeight);

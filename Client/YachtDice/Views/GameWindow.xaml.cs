@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using YachtDice.Client.Logic.Game;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Composition;
 using YachtDice.GameServiceReference;
@@ -36,8 +37,6 @@ namespace YachtDice.Views
         private const int ClockIntervalSeconds = 1;
         private const double TurnPulseScale = 1.15;
         private const int TurnPulseMilliseconds = 400;
-        private const string NullRoomGatewayMessage = "The connection to the room cannot be null.";
-        private const string NullChatMessage = "The connection to the chat cannot be null.";
 
         private readonly string _playerId;
         private readonly RoomGateway _roomGateway;
@@ -75,8 +74,9 @@ namespace YachtDice.Views
         /// <param name="chat">Connection of the player to the chat of the room and whether it is available.</param>
         public GameWindow(RoomGateway roomGateway, ChatGateway chat)
         {
-            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway), NullRoomGatewayMessage);
-            _chat = chat ?? throw new ArgumentNullException(nameof(chat), NullChatMessage);
+            _roomGateway = roomGateway ?? throw new ArgumentNullException(nameof(roomGateway),
+                LogMessages.NullRoomGatewayMessage);
+            _chat = chat ?? throw new ArgumentNullException(nameof(chat), LogMessages.NullChatMessage);
             _services = _roomGateway.Session.Services;
             _sounds = new SoundEffectPlayer(_services.Audio);
             InitializeComponent();

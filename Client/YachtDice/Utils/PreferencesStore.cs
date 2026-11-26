@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.Properties;
 
@@ -12,9 +13,6 @@ namespace YachtDice.Utils
     /// </summary>
     public sealed class PreferencesStore
     {
-        private const string LoadFailedLogMessage = "The saved preferences could not be read, the defaults are used.";
-        private const string SaveFailedLogMessage = "The preferences of the player could not be saved.";
-
         private readonly AppLogger _logger = new AppLogger(typeof(PreferencesStore));
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace YachtDice.Utils
             }
             catch (ConfigurationErrorsException ex)
             {
-                _logger.Error(ex, LoadFailedLogMessage);
+                _logger.Error(ex, LogMessages.LoadFailedLogMessage);
             }
 
             return preferences.Normalize();
@@ -67,7 +65,7 @@ namespace YachtDice.Utils
             }
             catch (ConfigurationErrorsException ex)
             {
-                _logger.Error(ex, SaveFailedLogMessage);
+                _logger.Error(ex, LogMessages.SaveFailedLogMessage);
             }
         }
     }

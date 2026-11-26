@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Resources;
 using YachtDice.Utils;
 
@@ -53,8 +54,6 @@ namespace YachtDice.Views
         private const string GoldBrushKey = "BrushGold";
         private const string CreamBrushKey = "BrushCream";
         private const string DisplayFontKey = "FontDisplay";
-        private const string NullCanvasMessage = "The canvas where it is drawn cannot be null.";
-        private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
 
         private static readonly string[] ConfettiBrushKeys =
         {
@@ -78,8 +77,9 @@ namespace YachtDice.Views
         /// <param name="resources">Element that owns the brushes used by the drawing.</param>
         public YachtCelebration(Canvas canvas, FrameworkElement resources)
         {
-            _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas), NullCanvasMessage);
-            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullResourcesMessage);
+            _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas), LogMessages.NullCanvasMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources),
+                LogMessages.NullResourcesMessage);
         }
 
         /// <summary>

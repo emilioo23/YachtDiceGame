@@ -5,6 +5,7 @@ using System.Media;
 using System.Windows;
 using System.Windows.Resources;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Utils
 {
@@ -15,8 +16,6 @@ namespace YachtDice.Utils
     public sealed class SoundEffectPlayer
     {
         private const string SoundUriFormat = "pack://application:,,,/Resources/Sounds/{0}.wav";
-        private const string PlayFailedLogMessage = "A sound effect could not be played.";
-        private const string NullAudioMessage = "The choices about the sound cannot be null.";
 
         private readonly Dictionary<SoundEffect, SoundPlayer> _players = new Dictionary<SoundEffect, SoundPlayer>();
         private readonly AppLogger _logger = new AppLogger(typeof(SoundEffectPlayer));
@@ -28,7 +27,7 @@ namespace YachtDice.Utils
         /// <param name="audio">Choices of the player about the sound effects.</param>
         public SoundEffectPlayer(AudioSettings audio)
         {
-            _audio = audio ?? throw new ArgumentNullException(nameof(audio), NullAudioMessage);
+            _audio = audio ?? throw new ArgumentNullException(nameof(audio), LogMessages.NullAudioMessage);
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace YachtDice.Utils
                 }
                 catch (Exception ex) when (ex is InvalidOperationException || ex is IOException)
                 {
-                    _logger.Error(ex, PlayFailedLogMessage);
+                    _logger.Error(ex, LogMessages.PlayFailedLogMessage);
                 }
             }
         }

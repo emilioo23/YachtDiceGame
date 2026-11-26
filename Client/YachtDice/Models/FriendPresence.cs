@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Client.Logic.Logging;
+
 namespace YachtDice.Models
 {
     /// <summary>
@@ -6,8 +8,6 @@ namespace YachtDice.Models
     /// </summary>
     public sealed class FriendPresence
     {
-        private const string NullStatusMessage = "The status text cannot be null.";
-
         /// <summary>
         /// Initializes the presence of a friend.
         /// </summary>
@@ -15,7 +15,7 @@ namespace YachtDice.Models
         /// <param name="isOnline">Whether the friend is online.</param>
         public FriendPresence(string status, bool isOnline)
         {
-            Status = status ?? throw new ArgumentNullException(nameof(status), NullStatusMessage);
+            Status = status ?? throw new ArgumentNullException(nameof(status), LogMessages.NullStatusMessage);
             IsOnline = isOnline;
         }
 

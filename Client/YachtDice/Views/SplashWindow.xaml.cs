@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Navigation;
 using YachtDice.Utils;
@@ -11,8 +12,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class SplashWindow : Window
     {
-        private const string NullServicesMessage = "The shared components of the client cannot be null.";
-
         private readonly ClientServices _services;
         private bool _hasContinued;
 
@@ -23,7 +22,7 @@ namespace YachtDice.Views
         public SplashWindow(ClientServices services)
         {
             InitializeComponent();
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
             _services.Music.Play(MusicTrack.MenuTheme);
         }
 

@@ -8,6 +8,7 @@ using System.Resources;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Utils
 {
@@ -17,7 +18,6 @@ namespace YachtDice.Utils
     /// </summary>
     internal sealed class ImageCatalog
     {
-        private const string NullFolderMessage = "The folder of the images cannot be null.";
         private const string ResourcePathFormat = "{0}/{1}.png";
         private const string PackUriFormat = "pack://application:,,,/{0}";
         private const string PackageResourcesSuffix = ".g.resources";
@@ -36,7 +36,7 @@ namespace YachtDice.Utils
         {
             if (folder == null)
             {
-                throw new ArgumentNullException(nameof(folder), NullFolderMessage);
+                throw new ArgumentNullException(nameof(folder), LogMessages.NullFolderMessage);
             }
 
             _folder = folder;

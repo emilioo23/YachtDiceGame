@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Models;
 using YachtDice.Navigation;
 using YachtDice.Utils;
@@ -12,9 +13,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class HowToPlayWindow : Window
     {
-        private const string NullSessionMessage = "The session of the player cannot be null.";
-        private const string NullOwnerMessage = "The window that opens it cannot be null.";
-
         private readonly PlayerSession _session;
         private readonly bool _isDialog;
 
@@ -25,7 +23,7 @@ namespace YachtDice.Views
         public HowToPlayWindow(PlayerSession session)
             : this()
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new HowToPlayWindow(session);
         }
 
@@ -37,7 +35,7 @@ namespace YachtDice.Views
         public HowToPlayWindow(Window owner)
             : this()
         {
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner), NullOwnerMessage);
+            Owner = owner ?? throw new ArgumentNullException(nameof(owner), LogMessages.HowToPlayNullOwnerMessage);
             _isDialog = true;
             LanguageSwitcherControl.Visibility = Visibility.Collapsed;
         }

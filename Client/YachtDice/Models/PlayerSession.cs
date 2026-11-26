@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Gateway;
 
@@ -10,10 +11,6 @@ namespace YachtDice.Models
     /// </summary>
     public class PlayerSession
     {
-        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
-        private const string NullFirstNameMessage = "The first name of the player cannot be null.";
-        private const string NullServicesMessage = "The shared components of the client cannot be null.";
-
         /// <summary>
         /// Initializes the session of the player.
         /// </summary>
@@ -22,9 +19,11 @@ namespace YachtDice.Models
         /// <param name="services">Components that the windows share while the application is open.</param>
         public PlayerSession(string displayName, string firstName, ClientServices services)
         {
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
-            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName), NullFirstNameMessage);
-            Services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName),
+                LogMessages.NullPlayerNameMessage);
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName),
+                LogMessages.NullFirstNameMessage);
+            Services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
             Presence = new PresenceGateway();
             LastOfferedMatchCode = string.Empty;
         }

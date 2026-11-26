@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Media;
 using YachtDice.Client.Logic.Audio;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Utils
 {
@@ -13,8 +14,6 @@ namespace YachtDice.Utils
     {
         private const string MusicFolder = "Resources\\Music";
         private const string TrackExtension = ".mp3";
-        private const string MusicFailedLogMessage = "The background music could not be played.";
-        private const string NullSettingsMessage = "The audio settings of the music cannot be null.";
 
         private readonly MediaPlayer _player = new MediaPlayer();
         private readonly AudioSettings _settings;
@@ -27,7 +26,7 @@ namespace YachtDice.Utils
         /// <param name="settings">Choices of the player; the volume follows their changes.</param>
         public MusicPlayer(AudioSettings settings)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings), LogMessages.NullSettingsMessage);
             _settings.Changed += ApplyVolume;
             _player.MediaEnded += HandleMediaEnded;
             _player.MediaFailed += HandleMediaFailed;
@@ -69,7 +68,7 @@ namespace YachtDice.Utils
 
         private void HandleMediaFailed(object sender, ExceptionEventArgs e)
         {
-            _logger.Error(e.ErrorException, MusicFailedLogMessage);
+            _logger.Error(e.ErrorException, LogMessages.MusicFailedLogMessage);
         }
     }
 }

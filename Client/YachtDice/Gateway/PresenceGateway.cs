@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.PresenceServiceReference;
 using YachtDice.Utils;
 
@@ -18,9 +19,6 @@ namespace YachtDice.Gateway
     /// </summary>
     public class PresenceGateway : IConnectionLossSource
     {
-        private const string UnavailableLogMessage = "The presence service could not be reached.";
-        private const string CloseFailedLogMessage = "The presence connection could not be closed, so it was aborted.";
-
         private readonly object _syncRoot = new object();
         private readonly HashSet<string> _onlinePlayers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly AppLogger _logger;
@@ -126,12 +124,12 @@ namespace YachtDice.Gateway
             catch (CommunicationException ex)
             {
                 client.Abort();
-                _logger.Warning(ex, CloseFailedLogMessage);
+                _logger.Warning(ex, LogMessages.PresenceCloseFailedLogMessage);
             }
             catch (TimeoutException ex)
             {
                 client.Abort();
-                _logger.Warning(ex, CloseFailedLogMessage);
+                _logger.Warning(ex, LogMessages.PresenceCloseFailedLogMessage);
             }
         }
 
@@ -168,14 +166,16 @@ namespace YachtDice.Gateway
             catch (CommunicationException ex)
             {
                 client.Abort();
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.PresenceUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
             catch (TimeoutException ex)
             {
                 client.Abort();
-                _logger.Error(ex, UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.PresenceUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
         }
 

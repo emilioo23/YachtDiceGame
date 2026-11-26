@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Utils;
 
 namespace YachtDice.Gateway
@@ -52,18 +53,20 @@ namespace YachtDice.Gateway
             }
             catch (FaultException ex)
             {
-                _logger.Error(ex, GatewayMessages.FaultLogMessage);
-                throw new GatewayException(GetErrorCode(ex), GatewayMessages.FaultMessage, ex);
+                _logger.Error(ex, LogMessages.ServerFaultLogMessage);
+                throw new GatewayException(GetErrorCode(ex), LogMessages.ServerFaultMessage, ex);
             }
             catch (CommunicationException ex)
             {
-                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.ServerUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
             catch (TimeoutException ex)
             {
-                _logger.Error(ex, GatewayMessages.UnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, GatewayMessages.UnavailableMessage, ex);
+                _logger.Error(ex, LogMessages.ServerUnavailableLogMessage);
+                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
+                    ex);
             }
             finally
             {

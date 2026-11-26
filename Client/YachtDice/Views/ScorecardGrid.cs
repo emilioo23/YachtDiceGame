@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Settings;
 using YachtDice.GameServiceReference;
 using YachtDice.Models;
@@ -37,12 +38,6 @@ namespace YachtDice.Views
         private const string ResourceBrushCream2 = "BrushCream2";
         private const string ResourceBrushFeltLight = "BrushFeltLight";
         private const string ResourceBrushWood = "BrushWood";
-        private const string NullPanelMessage = "The panel where it is drawn cannot be null.";
-        private const string NullResourcesMessage = "The element that holds the resources cannot be null.";
-        private const string NullGameplayMessage = "The choices of the player about the help cannot be null.";
-        private const string NullStateMessage = "The state of the game cannot be null.";
-        private const string NullColumnsMessage = "The players of the columns cannot be null.";
-        private const string NullOnClickMessage = "The action of the click cannot be null.";
 
         private readonly Panel _panel;
         private readonly FrameworkElement _resources;
@@ -56,9 +51,10 @@ namespace YachtDice.Views
         /// <param name="gameplay">Choices of the player about the help while playing.</param>
         public ScorecardGrid(Panel panel, FrameworkElement resources, GameplaySettings gameplay)
         {
-            _panel = panel ?? throw new ArgumentNullException(nameof(panel), NullPanelMessage);
-            _resources = resources ?? throw new ArgumentNullException(nameof(resources), NullResourcesMessage);
-            _gameplay = gameplay ?? throw new ArgumentNullException(nameof(gameplay), NullGameplayMessage);
+            _panel = panel ?? throw new ArgumentNullException(nameof(panel), LogMessages.NullPanelMessage);
+            _resources = resources ?? throw new ArgumentNullException(nameof(resources),
+                LogMessages.NullResourcesMessage);
+            _gameplay = gameplay ?? throw new ArgumentNullException(nameof(gameplay), LogMessages.NullGameplayMessage);
         }
 
         /// <summary>
@@ -262,9 +258,10 @@ namespace YachtDice.Views
             /// <param name="onClick">Work to run when the player clicks a box.</param>
             public RenderContext(GameState state, IReadOnlyList<GamePlayer> columns, Func<ScoreCategory, Task> onClick)
             {
-                State = state ?? throw new ArgumentNullException(nameof(state), NullStateMessage);
-                Columns = columns ?? throw new ArgumentNullException(nameof(columns), NullColumnsMessage);
-                OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick), NullOnClickMessage);
+                State = state ?? throw new ArgumentNullException(nameof(state), LogMessages.NullStateMessage);
+                Columns = columns ?? throw new ArgumentNullException(nameof(columns), LogMessages.NullColumnsMessage);
+                OnCategoryClick = onClick ?? throw new ArgumentNullException(nameof(onClick),
+                    LogMessages.NullOnClickMessage);
                 Func<GamePlayer, bool> isLocalCurrentPlayer =
                     player => player.IsLocalPlayer && player.Id == state.CurrentPlayerId;
                 IsLocalTurn = columns.Any(isLocalCurrentPlayer)

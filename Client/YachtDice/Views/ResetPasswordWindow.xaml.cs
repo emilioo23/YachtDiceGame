@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
 using YachtDice.Client.Logic.Authentication;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Gateway;
 using YachtDice.Navigation;
@@ -18,9 +19,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class ResetPasswordWindow : Window
     {
-        private const string NullEmailMessage = "The email of the account cannot be null.";
-        private const string NullServicesMessage = "The shared components of the client cannot be null.";
-
         private readonly string _email;
         private readonly AppLogger _logger;
         private readonly ClientServices _services;
@@ -34,9 +32,9 @@ namespace YachtDice.Views
         public ResetPasswordWindow(string email, ClientServices services)
         {
             InitializeComponent();
-            _email = email ?? throw new ArgumentNullException(nameof(email), NullEmailMessage);
+            _email = email ?? throw new ArgumentNullException(nameof(email), LogMessages.NullEmailMessage);
             _logger = new AppLogger(GetType());
-            _services = services ?? throw new ArgumentNullException(nameof(services), NullServicesMessage);
+            _services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
             EmailTextBlock.Text = email;
             CodeTextBox.MaxLength = ResetPasswordValidator.CodeLength;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ResetPasswordWindow(email, services);

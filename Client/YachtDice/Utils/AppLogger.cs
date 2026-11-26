@@ -10,8 +10,6 @@ namespace YachtDice.Utils
     /// </summary>
     public class AppLogger
     {
-        private const string NullOwnerTypeMessage = "The type that owns the logger cannot be null.";
-
         private readonly ILog _log;
 
         /// <summary>
@@ -22,7 +20,7 @@ namespace YachtDice.Utils
         {
             if (ownerType == null)
             {
-                throw new ArgumentNullException(nameof(ownerType), NullOwnerTypeMessage);
+                throw new ArgumentNullException(nameof(ownerType), LogMessages.NullOwnerTypeMessage);
             }
 
             _log = LogManager.GetLogger(ownerType);

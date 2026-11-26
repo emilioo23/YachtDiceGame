@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Players;
 using YachtDice.Gateway;
 using YachtDice.Models;
@@ -19,8 +20,6 @@ namespace YachtDice.Views
     /// </summary>
     public partial class HistoryWindow : Window
     {
-        private const string NullSessionMessage = "The session of the player cannot be null.";
-
         private readonly PlayerSession _session;
         private readonly PlayerGateway _gateway = new PlayerGateway();
         private readonly AppLogger _logger = new AppLogger(typeof(HistoryWindow));
@@ -32,7 +31,7 @@ namespace YachtDice.Views
         public HistoryWindow(PlayerSession session)
         {
             InitializeComponent();
-            _session = session ?? throw new ArgumentNullException(nameof(session), NullSessionMessage);
+            _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new HistoryWindow(session);
 
             _ = GatewayCallRunner.RunAsync(this, _logger, LoadHistoryAsync);

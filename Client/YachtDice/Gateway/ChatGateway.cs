@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using YachtDice.Callbacks;
 using YachtDice.ChatServiceReference;
+using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Rooms;
 using YachtDice.Utils;
 using ChatFault = YachtDice.ChatServiceReference.ServiceFault;
@@ -18,9 +19,6 @@ namespace YachtDice.Gateway
     /// </summary>
     public class ChatGateway : DuplexGatewayBase<ChatServiceClient>
     {
-        private const string NullMembershipMessage = "The membership of the player in the room cannot be null.";
-        private const string JoinFailedLogMessage = "The player could not join the chat of the room.";
-
         private readonly object _syncRoot = new object();
         private readonly AppLogger _logger;
         private readonly List<ChatMessage> _history = new List<ChatMessage>();
@@ -36,7 +34,7 @@ namespace YachtDice.Gateway
         {
             if (membership == null)
             {
-                throw new ArgumentNullException(nameof(membership), NullMembershipMessage);
+                throw new ArgumentNullException(nameof(membership), LogMessages.NullMembershipMessage);
             }
 
             _member = new RoomMember
@@ -70,7 +68,7 @@ namespace YachtDice.Gateway
             }
             catch (GatewayException)
             {
-                _logger.Warning(JoinFailedLogMessage);
+                _logger.Warning(LogMessages.JoinFailedLogMessage);
             }
         }
 
