@@ -99,7 +99,7 @@ namespace YachtDice.PresenceServiceReference {
     public interface IPresenceService {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPresenceService/Connect", ReplyAction="urn:yachtdice:contracts/IPresenceService/ConnectResponse")]
-        string[] Connect(string displayName);
+        string[] Connect(string sessionToken);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="urn:yachtdice:contracts/IPresenceService/Disconnect")]
         void Disconnect(string displayName);
@@ -143,8 +143,8 @@ namespace YachtDice.PresenceServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public string[] Connect(string displayName) {
-            return base.Channel.Connect(displayName);
+        public string[] Connect(string sessionToken) {
+            return base.Channel.Connect(sessionToken);
         }
         
         public void Disconnect(string displayName) {

@@ -1060,11 +1060,11 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/CreateRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/CreateRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/CreateRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.CreateRoomResult CreateRoom(string displayName);
+        YachtDice.RoomServiceReference.CreateRoomResult CreateRoom(string sessionToken, string displayName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string displayName, string roomCode);
+        YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string sessionToken, string displayName, string roomCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/GetRoomList", ReplyAction="urn:yachtdice:contracts/IRoomService/GetRoomListResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/GetRoomListServiceFaultFault", Name="ServiceFault")]
@@ -1072,7 +1072,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/JoinListedRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/JoinListedRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/JoinListedRoomServiceFaultFault", Name="ServiceFault")]
-        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess roomAccess);
+        YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string sessionToken, string displayName, YachtDice.RoomServiceReference.RoomAccess roomAccess);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettings", ReplyAction="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/UpdateRoomSettingsServiceFaultFault", Name="ServiceFault")]
@@ -1100,7 +1100,7 @@ namespace YachtDice.RoomServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/FindPendingRoom", ReplyAction="urn:yachtdice:contracts/IRoomService/FindPendingRoomResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/FindPendingRoomServiceFaultFault", Name="ServiceFault")]
-        string FindPendingRoom(string displayName);
+        string FindPendingRoom(string sessionToken);
 
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IRoomService/GetKickHistory", ReplyAction="urn:yachtdice:contracts/IRoomService/GetKickHistoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.RoomServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IRoomService/GetKickHistoryServiceFaultFault", Name="ServiceFault")]
@@ -1146,20 +1146,20 @@ namespace YachtDice.RoomServiceReference {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public YachtDice.RoomServiceReference.CreateRoomResult CreateRoom(string displayName) {
-            return base.Channel.CreateRoom(displayName);
+        public YachtDice.RoomServiceReference.CreateRoomResult CreateRoom(string sessionToken, string displayName) {
+            return base.Channel.CreateRoom(sessionToken, displayName);
         }
         
-        public YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string displayName, string roomCode) {
-            return base.Channel.JoinRoom(displayName, roomCode);
+        public YachtDice.RoomServiceReference.JoinRoomResult JoinRoom(string sessionToken, string displayName, string roomCode) {
+            return base.Channel.JoinRoom(sessionToken, displayName, roomCode);
         }
         
         public YachtDice.RoomServiceReference.RoomSummary[] GetRoomList() {
             return base.Channel.GetRoomList();
         }
         
-        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string displayName, YachtDice.RoomServiceReference.RoomAccess roomAccess) {
-            return base.Channel.JoinListedRoom(displayName, roomAccess);
+        public YachtDice.RoomServiceReference.JoinRoomResult JoinListedRoom(string sessionToken, string displayName, YachtDice.RoomServiceReference.RoomAccess roomAccess) {
+            return base.Channel.JoinListedRoom(sessionToken, displayName, roomAccess);
         }
         
         public YachtDice.RoomServiceReference.RoomResultCode UpdateRoomSettings(YachtDice.RoomServiceReference.RoomMember host, YachtDice.RoomServiceReference.RoomSettings settings) {
@@ -1186,8 +1186,8 @@ namespace YachtDice.RoomServiceReference {
             return base.Channel.AddComputer(host, difficulty);
         }
         
-        public string FindPendingRoom(string displayName) {
-            return base.Channel.FindPendingRoom(displayName);
+        public string FindPendingRoom(string sessionToken) {
+            return base.Channel.FindPendingRoom(sessionToken);
         }
 
         public YachtDice.RoomServiceReference.KickHistoryEntry[] GetKickHistory(string sessionToken) {

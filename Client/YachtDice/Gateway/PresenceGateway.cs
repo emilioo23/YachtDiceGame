@@ -79,14 +79,15 @@ namespace YachtDice.Gateway
         /// Connects the player to the presence service, unless it is already connected.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player, so the server knows who connects.</param>
         /// <returns>A task that finishes when the player is online.</returns>
         /// <exception cref="GatewayException">The server could not be reached.</exception>
-        public async Task ConnectAsync(string displayName)
+        public async Task ConnectAsync(string displayName, string sessionToken)
         {
             if (!IsConnectedAs(displayName))
             {
                 await Task.Run(() => Disconnect());
-                await OpenConnectionAsync(displayName);
+                await OpenConnectionAsync(displayName, sessionToken);
             }
         }
 
@@ -147,7 +148,7 @@ namespace YachtDice.Gateway
             return isConnected;
         }
 
-        private async Task OpenConnectionAsync(string displayName)
+        private async Task OpenConnectionAsync(string displayName, string sessionToken)
         {
             var handler = new PresenceCallbackHandler();
             handler.PresenceChanged += HandlePresenceChanged;
@@ -158,7 +159,7 @@ namespace YachtDice.Gateway
 
             try
             {
-                string[] names = await Task.Run(() => client.Connect(displayName));
+                string[] names = await Task.Run(() => client.Connect(sessionToken));
 
                 client.InnerChannel.Faulted += (sender, e) => HandleConnectionLost(client);
                 client.InnerChannel.Closed += (sender, e) => HandleConnectionLost(client);

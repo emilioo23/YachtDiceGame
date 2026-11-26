@@ -315,7 +315,7 @@ namespace YachtDice.Views
         {
             try
             {
-                bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_session.DisplayName);
+                bool isEnabled = await _twoFactorGateway.IsTwoFactorEnabledAsync(_session.SessionToken);
                 ShowTwoFactorState(isEnabled);
 
                 if (isEnabled)

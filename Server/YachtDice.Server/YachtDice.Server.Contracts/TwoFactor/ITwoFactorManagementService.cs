@@ -12,11 +12,11 @@ namespace YachtDice.Server.Contracts.TwoFactor
         /// <summary>
         /// Indicates whether the player has the two-step verification turned on.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>True if the player must enter a code to log in.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        bool IsTwoFactorEnabled(string displayName);
+        bool IsTwoFactorEnabled(string sessionToken);
 
         /// <summary>
         /// Starts turning on the two-step verification by sending a code to the player's email.

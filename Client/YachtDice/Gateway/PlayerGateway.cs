@@ -82,9 +82,10 @@ namespace YachtDice.Gateway
             return result;
         }
 
-        public async Task<List<Achievement>> GetAchievementsAsync(string playerName)
+        public async Task<List<Achievement>> GetAchievementsAsync(string sessionToken, string playerName)
         {
-            Achievement[] achievements = await ExecuteAsync(client => client.GetAchievements(playerName));
+            Achievement[] achievements =
+                await ExecuteAsync(client => client.GetAchievements(sessionToken, playerName));
 
             return achievements.ToList();
         }
@@ -96,16 +97,17 @@ namespace YachtDice.Gateway
             return result;
         }
 
-        public async Task<List<GameHistoryEntry>> GetGameHistoryAsync(string playerName)
+        public async Task<List<GameHistoryEntry>> GetGameHistoryAsync(string sessionToken, string playerName)
         {
-            GameHistoryEntry[] games = await ExecuteAsync(client => client.GetGameHistory(playerName));
+            GameHistoryEntry[] games = await ExecuteAsync(client => client.GetGameHistory(sessionToken, playerName));
 
             return games.ToList();
         }
 
-        public async Task<List<SavedScorecard>> GetGameScorecardsAsync(string playerName, int gameId)
+        public async Task<List<SavedScorecard>> GetGameScorecardsAsync(string sessionToken, int gameId)
         {
-            SavedScorecard[] scorecards = await ExecuteAsync(client => client.GetGameScorecards(playerName, gameId));
+            SavedScorecard[] scorecards =
+                await ExecuteAsync(client => client.GetGameScorecards(sessionToken, gameId));
 
             return scorecards.ToList();
         }

@@ -14,11 +14,11 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Asks the server whether the player has the two-step verification turned on.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>True if the player must enter a code to log in.</returns>
-        public async Task<bool> IsTwoFactorEnabledAsync(string displayName)
+        public async Task<bool> IsTwoFactorEnabledAsync(string sessionToken)
         {
-            bool isEnabled = await ExecuteAsync(client => client.IsTwoFactorEnabled(displayName));
+            bool isEnabled = await ExecuteAsync(client => client.IsTwoFactorEnabled(sessionToken));
 
             return isEnabled;
         }

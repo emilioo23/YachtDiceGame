@@ -67,11 +67,12 @@ namespace YachtDice.Server.Contracts.Players
         /// <summary>
         /// Gets every achievement and whether the player has unlocked it.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="playerName">Name of the player.</param>
         /// <returns>The achievements, in the order in which they are shown.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<Achievement> GetAchievements(string playerName);
+        List<Achievement> GetAchievements(string sessionToken, string playerName);
 
         /// <summary>
         /// Chooses the title that the player shows in the profile. The player must have unlocked it.
@@ -86,21 +87,22 @@ namespace YachtDice.Server.Contracts.Players
         /// <summary>
         /// Gets the most recent games of a player, from the newest to the oldest.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="playerName">Name of the player.</param>
         /// <returns>The games of the player.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<GameHistoryEntry> GetGameHistory(string playerName);
+        List<GameHistoryEntry> GetGameHistory(string sessionToken, string playerName);
 
         /// <summary>
         /// Gets the scorecards of a past game. Only a player who took part in the game can see them.
         /// </summary>
-        /// <param name="playerName">Name of the player who asks.</param>
+        /// <param name="sessionToken">Token of the session of the player who asks.</param>
         /// <param name="gameId">Identifier of the game.</param>
         /// <returns>The scorecards of the registered players, or an empty list.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<SavedScorecard> GetGameScorecards(string playerName, int gameId);
+        List<SavedScorecard> GetGameScorecards(string sessionToken, int gameId);
 
         /// <summary>
         /// Chooses the country flag that the player shows next to the avatar. Any country can be chosen.

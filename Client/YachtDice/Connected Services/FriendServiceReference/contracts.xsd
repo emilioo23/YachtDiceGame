@@ -145,7 +145,7 @@
   <xs:element name="GetUsername">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -159,6 +159,7 @@
   <xs:element name="GetFriends">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -173,7 +174,7 @@
   <xs:element name="GetFriendRequests">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

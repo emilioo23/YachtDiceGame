@@ -58,11 +58,13 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Creates a room with a new code and puts the player inside as its host.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who creates the room wants to show.</param>
         /// <returns>The identifier of the player and the state of the new room.</returns>
-        public Contracts.CreateRoomResult CreateRoom(string displayName)
+        public Contracts.CreateRoomResult CreateRoom(string sessionToken, string displayName)
         {
-            Contracts.CreateRoomResult result = Execute(displayName, () => ProcessCreation(displayName));
+            Contracts.CreateRoomResult result =
+                Execute(displayName, () => ProcessCreation(ResolvePlayerName(sessionToken, displayName)));
 
             return result;
         }
@@ -71,13 +73,15 @@ namespace YachtDice.Server.Services
         /// Puts the player inside the room that has the code, if it exists and has space. If another player of
         /// the room already shows the name, the server adds a number to it.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomCode">Code of the room.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
-        public Contracts.JoinRoomResult JoinRoom(string displayName, string roomCode)
+        public Contracts.JoinRoomResult JoinRoom(string sessionToken, string displayName, string roomCode)
         {
-            Contracts.JoinRoomResult result =
-                Execute(displayName, () => FinishJoin(_roomManager.Join(roomCode, displayName)));
+            Contracts.JoinRoomResult result = Execute(
+                displayName,
+                () => FinishJoin(_roomManager.Join(roomCode, ResolvePlayerName(sessionToken, displayName))));
 
             return result;
         }
@@ -110,12 +114,18 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Puts the player inside a room of the list. A private room also needs its code.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomAccess">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
-        public Contracts.JoinRoomResult JoinListedRoom(string displayName, Contracts.RoomAccess roomAccess)
+        public Contracts.JoinRoomResult JoinListedRoom(
+            string sessionToken,
+            string displayName,
+            Contracts.RoomAccess roomAccess)
         {
-            Contracts.JoinRoomResult result = Execute(roomAccess, () => ProcessJoinListed(displayName, roomAccess));
+            Contracts.JoinRoomResult result = Execute(
+                roomAccess,
+                () => ProcessJoinListed(ResolvePlayerName(sessionToken, displayName), roomAccess));
 
             return result;
         }
@@ -207,14 +217,13 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Looks for a game in progress that the player left and can still join again, by using the name of
-        /// the player.
+        /// Looks for a game in progress that the player of the session left and can still join again.
         /// </summary>
-        /// <param name="displayName">Name that the player shows.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
-        public string FindPendingRoom(string displayName)
+        public string FindPendingRoom(string sessionToken)
         {
-            string roomCode = Execute(displayName, () => _roomManager.FindPendingRoomCode(displayName));
+            string roomCode = ExecuteForPlayer(sessionToken, _roomManager.FindPendingRoomCode);
 
             return roomCode;
         }

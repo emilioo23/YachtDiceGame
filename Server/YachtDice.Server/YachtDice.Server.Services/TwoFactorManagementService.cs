@@ -49,11 +49,11 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Indicates whether the player has the two-step verification turned on.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>True if the player must enter a code to log in.</returns>
-        public bool IsTwoFactorEnabled(string displayName)
+        public bool IsTwoFactorEnabled(string sessionToken)
         {
-            bool isEnabled = Execute(displayName, () => _settingsService.IsEnabled(displayName));
+            bool isEnabled = ExecuteForPlayer(sessionToken, _settingsService.IsEnabled);
 
             return isEnabled;
         }

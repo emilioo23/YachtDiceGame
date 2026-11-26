@@ -112,7 +112,9 @@ namespace YachtDice.Views
 
         private async Task ShowAchievementsAsync()
         {
-            List<Achievement> achievements = await _playerGateway.GetAchievementsAsync(_session.DisplayName);
+            List<Achievement> achievements = await _playerGateway.GetAchievementsAsync(
+                _session.SessionToken,
+                _session.DisplayName);
 
             ShowTitles(achievements);
             ShowAchievementBadges(achievements);

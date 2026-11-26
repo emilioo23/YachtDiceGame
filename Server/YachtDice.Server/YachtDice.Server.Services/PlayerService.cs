@@ -106,10 +106,10 @@ namespace YachtDice.Server.Services
             return result;
         }
 
-        public List<Contracts.Achievement> GetAchievements(string playerName)
+        public List<Contracts.Achievement> GetAchievements(string sessionToken, string playerName)
         {
             List<Contracts.Achievement> achievements =
-                Execute(playerName, () => ProcessAchievements(playerName));
+                Execute(playerName, () => ProcessAchievements(ResolvePlayerName(sessionToken, playerName)));
 
             return achievements;
         }
@@ -122,19 +122,19 @@ namespace YachtDice.Server.Services
             return result;
         }
 
-        public List<Contracts.GameHistoryEntry> GetGameHistory(string playerName)
+        public List<Contracts.GameHistoryEntry> GetGameHistory(string sessionToken, string playerName)
         {
-            List<Contracts.GameHistoryEntry> history = Execute(playerName, () => ProcessGameHistory(playerName));
+            List<Contracts.GameHistoryEntry> history =
+                Execute(playerName, () => ProcessGameHistory(ResolvePlayerName(sessionToken, playerName)));
 
             return history;
         }
 
-        public List<Contracts.SavedScorecard> GetGameScorecards(string playerName, int gameId)
+        public List<Contracts.SavedScorecard> GetGameScorecards(string sessionToken, int gameId)
         {
-            List<Contracts.SavedScorecard> scorecards = Execute(
-                playerName,
-                () => ToScorecardContracts(
-                    _statisticsService.GetScorecards(playerName, gameId)));
+            List<Contracts.SavedScorecard> scorecards = ExecuteForPlayer(
+                sessionToken,
+                playerName => ToScorecardContracts(_statisticsService.GetScorecards(playerName, gameId)));
 
             return scorecards;
         }

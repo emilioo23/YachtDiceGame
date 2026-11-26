@@ -1222,7 +1222,7 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetAchievements", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetAchievementsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetAchievementsServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string playerName);
+        YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string sessionToken, string playerName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeTitle", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeTitleResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeTitleServiceFaultFault", Name="ServiceFault")]
@@ -1230,11 +1230,11 @@ namespace YachtDice.PlayerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameHistory", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameHistoryResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameHistoryServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName);
+        YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string sessionToken, string playerName);
 
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/GetGameScorecards", ReplyAction="urn:yachtdice:contracts/IPlayerService/GetGameScorecardsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/GetGameScorecardsServiceFaultFault", Name="ServiceFault")]
-        YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string playerName, int gameId);
+        YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string sessionToken, int gameId);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IPlayerService/ChangeFlag", ReplyAction="urn:yachtdice:contracts/IPlayerService/ChangeFlagResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.PlayerServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IPlayerService/ChangeFlagServiceFaultFault", Name="ServiceFault")]
@@ -1296,20 +1296,20 @@ namespace YachtDice.PlayerServiceReference {
             return base.Channel.ChangeUsername(sessionToken, newUsername);
         }
         
-        public YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string playerName) {
-            return base.Channel.GetAchievements(playerName);
+        public YachtDice.PlayerServiceReference.Achievement[] GetAchievements(string sessionToken, string playerName) {
+            return base.Channel.GetAchievements(sessionToken, playerName);
         }
         
         public YachtDice.PlayerServiceReference.TitleChangeResultCode ChangeTitle(string sessionToken, int titleId) {
             return base.Channel.ChangeTitle(sessionToken, titleId);
         }
         
-        public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string playerName) {
-            return base.Channel.GetGameHistory(playerName);
+        public YachtDice.PlayerServiceReference.GameHistoryEntry[] GetGameHistory(string sessionToken, string playerName) {
+            return base.Channel.GetGameHistory(sessionToken, playerName);
         }
 
-        public YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string playerName, int gameId) {
-            return base.Channel.GetGameScorecards(playerName, gameId);
+        public YachtDice.PlayerServiceReference.SavedScorecard[] GetGameScorecards(string sessionToken, int gameId) {
+            return base.Channel.GetGameScorecards(sessionToken, gameId);
         }
         
         public YachtDice.PlayerServiceReference.FlagChangeResultCode ChangeFlag(string sessionToken, string flagCode) {

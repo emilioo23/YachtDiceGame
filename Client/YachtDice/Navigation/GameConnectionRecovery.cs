@@ -123,7 +123,9 @@ namespace YachtDice.Navigation
         {
             var isRestored = false;
 
-            await _roomGateway.Session.Presence.ConnectAsync(_roomGateway.Session.DisplayName);
+            await _roomGateway.Session.Presence.ConnectAsync(
+                _roomGateway.Session.DisplayName,
+                _roomGateway.Session.SessionToken);
             RoomResultCode roomResult = await _roomGateway.JoinRoomAsync(_roomGateway.CurrentRoom.Code);
 
             if (roomResult == RoomResultCode.Success)

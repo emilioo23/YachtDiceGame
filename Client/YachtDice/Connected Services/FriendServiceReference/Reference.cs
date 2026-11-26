@@ -543,15 +543,15 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetUsername", ReplyAction="urn:yachtdice:contracts/IFriendService/GetUsernameResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetUsernameServiceFaultFault", Name="ServiceFault")]
-        string GetUsername(string displayName);
+        string GetUsername(string sessionToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriends", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendsServiceFaultFault", Name="ServiceFault")]
-        string[] GetFriends(string displayName);
+        string[] GetFriends(string sessionToken, string displayName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendRequests", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendRequestsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendRequestsServiceFaultFault", Name="ServiceFault")]
-        string[] GetFriendRequests(string displayName);
+        string[] GetFriendRequests(string sessionToken);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -617,16 +617,16 @@ namespace YachtDice.FriendServiceReference {
             return base.Channel.GetReceivedInvitations(sessionToken);
         }
         
-        public string GetUsername(string displayName) {
-            return base.Channel.GetUsername(displayName);
+        public string GetUsername(string sessionToken) {
+            return base.Channel.GetUsername(sessionToken);
         }
         
-        public string[] GetFriends(string displayName) {
-            return base.Channel.GetFriends(displayName);
+        public string[] GetFriends(string sessionToken, string displayName) {
+            return base.Channel.GetFriends(sessionToken, displayName);
         }
         
-        public string[] GetFriendRequests(string displayName) {
-            return base.Channel.GetFriendRequests(displayName);
+        public string[] GetFriendRequests(string sessionToken) {
+            return base.Channel.GetFriendRequests(sessionToken);
         }
     }
 }

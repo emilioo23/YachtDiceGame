@@ -10,6 +10,7 @@ namespace YachtDice.Server.Services
     using Contracts = YachtDice.Server.Contracts.Presence;
     using LogicFriends = YachtDice.Server.Logic.Friends;
     using LogicLogging = YachtDice.Server.Logic.Logging;
+    using LogicSecurity = YachtDice.Server.Logic.Security;
 
     /// <summary>
     /// Keeps track of the players who are online and warns the others when someone comes or goes. The list is
@@ -20,6 +21,8 @@ namespace YachtDice.Server.Services
     public class PresenceService : Contracts.IPresenceService, IPlayerNotifier
     {
         private const string NullFinderMessage = "What finds the identifiers of the players cannot be null.";
+        private const string NullSessionsMessage = "The sessions of the players cannot be null.";
+        private const string RejectedSessionLogMessage = "A connection was rejected because the session is not valid.";
         private const string ConnectedLogFormat = "{0} is now online.";
         private const string DisconnectedLogFormat = "{0} is now offline.";
 
@@ -28,27 +31,31 @@ namespace YachtDice.Server.Services
 
         private readonly LogicLogging.AppLogger _logger;
         private readonly LogicFriends.IPlayerIdFinder _playerIds;
+        private readonly LogicSecurity.SessionRegistry _sessions;
 
         /// <summary>
         /// Initializes a new instance of the PresenceService class.
         /// </summary>
         /// <param name="playerIds">Finds the identifier of the account of a name, to write it in the log.</param>
-        public PresenceService(LogicFriends.IPlayerIdFinder playerIds)
+        /// <param name="sessions">Sessions of the players who logged in, to know who connects.</param>
+        public PresenceService(LogicFriends.IPlayerIdFinder playerIds, LogicSecurity.SessionRegistry sessions)
         {
             _playerIds = playerIds ?? throw new ArgumentNullException(nameof(playerIds), NullFinderMessage);
+            _sessions = sessions ?? throw new ArgumentNullException(nameof(sessions), NullSessionsMessage);
             _logger = new LogicLogging.AppLogger(GetType());
         }
 
         /// <summary>
-        /// Marks the player as online and warns the other players.
+        /// Marks the player of the session as online and warns the other players. A token that is unknown or
+        /// that ended is ignored, so nobody can appear online in the name of another player.
         /// </summary>
-        /// <param name="displayName">Name of the player who enters the game.</param>
+        /// <param name="sessionToken">Token of the session of the player who enters the game.</param>
         /// <returns>The names of all the players who are online, including the caller.</returns>
-        public string[] Connect(string displayName)
+        public string[] Connect(string sessionToken)
         {
             string[] onlinePlayers = Array.Empty<string>();
 
-            if (!string.IsNullOrWhiteSpace(displayName))
+            if (_sessions.TryGetPlayerName(sessionToken, out string displayName))
             {
                 OnlinePlayer player = CreateCurrentPlayer();
 
@@ -61,6 +68,10 @@ namespace YachtDice.Server.Services
                     ConnectedLogFormat,
                     PlayerLogName.Describe(_playerIds, displayName)));
                 Broadcast(displayName, Contracts.PresenceEventType.PlayerConnected);
+            }
+            else
+            {
+                _logger.Warning(RejectedSessionLogMessage);
             }
 
             return onlinePlayers;

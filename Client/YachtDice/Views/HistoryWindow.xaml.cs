@@ -40,7 +40,8 @@ namespace YachtDice.Views
 
         private async Task LoadHistoryAsync()
         {
-            List<GameHistoryEntry> games = await _gateway.GetGameHistoryAsync(_session.DisplayName);
+            List<GameHistoryEntry> games =
+                await _gateway.GetGameHistoryAsync(_session.SessionToken, _session.DisplayName);
             Func<GameHistoryEntry, HistoryRow> createRow = CreateRow;
 
             HistoryItemsControl.ItemsSource = games.Select(createRow).ToList();
@@ -120,7 +121,7 @@ namespace YachtDice.Views
 
         private async Task ShowScorecardsAsync(int gameId)
         {
-            List<SavedScorecard> scorecards = await _gateway.GetGameScorecardsAsync(_session.DisplayName, gameId);
+            List<SavedScorecard> scorecards = await _gateway.GetGameScorecardsAsync(_session.SessionToken, gameId);
             var scorecardsWindow = new GameScorecardsWindow(scorecards)
             {
                 Owner = this

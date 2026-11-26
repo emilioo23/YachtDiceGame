@@ -3,6 +3,7 @@
   <xs:element name="CreateRoom">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -93,6 +94,7 @@
   <xs:element name="JoinRoom">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -171,6 +173,7 @@
   <xs:element name="JoinListedRoom">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="roomAccess" nillable="true" type="tns:RoomAccess" />
       </xs:sequence>
@@ -282,7 +285,7 @@
   <xs:element name="FindPendingRoom">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="displayName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sessionToken" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

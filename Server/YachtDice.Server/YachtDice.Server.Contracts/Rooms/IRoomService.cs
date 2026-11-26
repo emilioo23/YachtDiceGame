@@ -12,23 +12,25 @@ namespace YachtDice.Server.Contracts.Rooms
         /// <summary>
         /// Creates a room with a new code and puts the player inside as its host.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who creates the room wants to show.</param>
         /// <returns>The identifier of the player and the state of the new room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        CreateRoomResult CreateRoom(string displayName);
+        CreateRoomResult CreateRoom(string sessionToken, string displayName);
 
         /// <summary>
         /// Puts the player inside the room that has the code, if it exists and has space. If another player of
         /// the room already shows the name, the server adds a number to it. If the game of the room already
         /// started, only a player who left it can enter again.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomCode">Code of the room.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        JoinRoomResult JoinRoom(string displayName, string roomCode);
+        JoinRoomResult JoinRoom(string sessionToken, string displayName, string roomCode);
 
         /// <summary>
         /// Gets the rooms that wait for players, public and private. The game of a room that already started
@@ -42,12 +44,13 @@ namespace YachtDice.Server.Contracts.Rooms
         /// <summary>
         /// Puts the player inside a room of the list. A private room also needs its code.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name that the player who enters wants to show.</param>
         /// <param name="roomAccess">Room of the list that the player wants to enter and its code.</param>
         /// <returns>Whether the player entered, the identifier of the player and the state of the room.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        JoinRoomResult JoinListedRoom(string displayName, RoomAccess roomAccess);
+        JoinRoomResult JoinListedRoom(string sessionToken, string displayName, RoomAccess roomAccess);
 
         /// <summary>
         /// Changes the options of the room. Only the host can do it, and only before the game starts.
@@ -110,14 +113,13 @@ namespace YachtDice.Server.Contracts.Rooms
         RoomResultCode AddComputer(RoomMember host, ComputerDifficulty difficulty);
 
         /// <summary>
-        /// Looks for a game in progress that the player left and can still join again, by using the name of
-        /// the player.
+        /// Looks for a game in progress that the player of the session left and can still join again.
         /// </summary>
-        /// <param name="displayName">Name that the player shows.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The code of the room, or an empty string if the player has no pending game.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        string FindPendingRoom(string displayName);
+        string FindPendingRoom(string sessionToken);
 
         /// <summary>
         /// Takes the player out of the room. If the player was the host, the next player becomes the host. If

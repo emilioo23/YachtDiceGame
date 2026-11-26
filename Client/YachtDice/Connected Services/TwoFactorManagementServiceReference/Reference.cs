@@ -1250,7 +1250,7 @@ namespace YachtDice.TwoFactorManagementServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabled", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabledResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.TwoFactorManagementServiceReference.ServiceFault), Action="urn:yachtdice:contracts/ITwoFactorManagementService/IsTwoFactorEnabledServiceFaul" +
             "tFault", Name="ServiceFault")]
-        bool IsTwoFactorEnabled(string displayName);
+        bool IsTwoFactorEnabled(string sessionToken);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/ITwoFactorManagementService/StartTwoFactorActivation", ReplyAction="urn:yachtdice:contracts/ITwoFactorManagementService/StartTwoFactorActivationRespo" +
             "nse")]
@@ -1350,8 +1350,8 @@ namespace YachtDice.TwoFactorManagementServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public bool IsTwoFactorEnabled(string displayName) {
-            return base.Channel.IsTwoFactorEnabled(displayName);
+        public bool IsTwoFactorEnabled(string sessionToken) {
+            return base.Channel.IsTwoFactorEnabled(sessionToken);
         }
         
         public YachtDice.TwoFactorManagementServiceReference.TwoFactorActivationData StartTwoFactorActivation(string sessionToken, string culture) {

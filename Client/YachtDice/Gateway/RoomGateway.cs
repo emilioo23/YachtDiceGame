@@ -54,7 +54,7 @@ namespace YachtDice.Gateway
         public async Task CreateRoomAsync()
         {
             CreateRoomResult result = await ConnectAndExecuteAsync(
-                client => client.CreateRoom(Session.DisplayName));
+                client => client.CreateRoom(Session.SessionToken, Session.DisplayName));
 
             PlayerId = result.PlayerId;
             CurrentRoom = result.Room;
@@ -70,7 +70,7 @@ namespace YachtDice.Gateway
         public async Task<RoomResultCode> JoinRoomAsync(string roomCode)
         {
             JoinRoomResult result = await ConnectAndExecuteAsync(
-                client => client.JoinRoom(Session.DisplayName, roomCode));
+                client => client.JoinRoom(Session.SessionToken, Session.DisplayName, roomCode));
 
             return await ApplyJoinResultAsync(result);
         }
@@ -85,7 +85,7 @@ namespace YachtDice.Gateway
         public async Task<RoomResultCode> JoinListedRoomAsync(RoomAccess roomAccess)
         {
             JoinRoomResult result = await ConnectAndExecuteAsync(
-                client => client.JoinListedRoom(Session.DisplayName, roomAccess));
+                client => client.JoinListedRoom(Session.SessionToken, Session.DisplayName, roomAccess));
 
             return await ApplyJoinResultAsync(result);
         }

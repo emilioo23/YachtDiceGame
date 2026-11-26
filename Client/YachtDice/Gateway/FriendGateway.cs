@@ -121,11 +121,11 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the username that other players use to add the player.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The username of the player.</returns>
-        public async Task<string> GetUsernameAsync(string displayName)
+        public async Task<string> GetUsernameAsync(string sessionToken)
         {
-            string username = await ExecuteAsync(client => client.GetUsername(displayName));
+            string username = await ExecuteAsync(client => client.GetUsername(sessionToken));
 
             return username;
         }
@@ -146,11 +146,12 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the names of the friends of the player.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the friends.</returns>
-        public async Task<List<string>> GetFriendsAsync(string displayName)
+        public async Task<List<string>> GetFriendsAsync(string sessionToken, string displayName)
         {
-            string[] friends = await ExecuteAsync(client => client.GetFriends(displayName));
+            string[] friends = await ExecuteAsync(client => client.GetFriends(sessionToken, displayName));
 
             return friends.ToList();
         }
@@ -158,11 +159,11 @@ namespace YachtDice.Gateway
         /// <summary>
         /// Gets the names of the players who sent a friend request that the player has not answered.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The names of the players who sent a request.</returns>
-        public async Task<List<string>> GetRequestsAsync(string displayName)
+        public async Task<List<string>> GetRequestsAsync(string sessionToken)
         {
-            string[] requesters = await ExecuteAsync(client => client.GetFriendRequests(displayName));
+            string[] requesters = await ExecuteAsync(client => client.GetFriendRequests(sessionToken));
 
             return requesters.ToList();
         }

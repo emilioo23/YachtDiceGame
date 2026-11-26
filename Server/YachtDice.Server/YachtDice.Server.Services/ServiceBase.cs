@@ -26,6 +26,8 @@ namespace YachtDice.Server.Services
         private const string NullDataLogFormat = "Empty data was received in {0}.";
         private const string UnexpectedLogFormat = "Unexpected error while processing {0}.";
         private const string RejectedSessionLogFormat = "{0} was rejected because the session is not valid.";
+        private const string AccountNameLogFormat = "{0} was rejected because a guest used the name of an account.";
+        private const string AccountNameMessage = "The name belongs to a registered player. Log in to use it.";
         private const string SessionExpiredMessage = "The session ended. Log in again.";
         private const string SessionReplacedMessage =
             "The session ended because the player logged in again somewhere else.";
@@ -107,12 +109,39 @@ namespace YachtDice.Server.Services
             Func<string, TResult> operation,
             [CallerMemberName] string operationName = "")
         {
-            if (!Sessions.TryGetPlayerName(sessionToken, out string playerName))
-            {
-                throw CreateSessionFault(sessionToken, operationName);
-            }
+            string playerName = FindSessionPlayer(sessionToken, operationName);
 
             return Run(() => operation(playerName), operationName);
+        }
+
+        /// <summary>
+        /// Gets the name of the player who calls an operation that a guest can also use. With a session token,
+        /// the name is the one of the session; without it, the player is a guest and keeps the name it sent,
+        /// unless the name belongs to an account, so a guest cannot act in the name of a registered player.
+        /// </summary>
+        /// <param name="sessionToken">Token of the session, or an empty text for a guest.</param>
+        /// <param name="guestName">Name that the guest wants to show.</param>
+        /// <param name="operationName">Name of the operation, for the log.</param>
+        /// <returns>The name of the player who calls.</returns>
+        protected string ResolvePlayerName(
+            string sessionToken,
+            string guestName,
+            [CallerMemberName] string operationName = "")
+        {
+            string playerName = guestName;
+
+            if (!string.IsNullOrEmpty(sessionToken))
+            {
+                playerName = FindSessionPlayer(sessionToken, operationName);
+            }
+            else if (PlayerIds.FindPlayerId(guestName) != LogicFriends.FriendshipService.NoPlayerId)
+            {
+                _logger.Warning(DescribeOperation(AccountNameLogFormat, operationName));
+
+                throw CreateFault(Contracts.ServiceErrorCode.ValidationFailed, AccountNameMessage);
+            }
+
+            return playerName;
         }
 
         /// <summary>
@@ -132,6 +161,16 @@ namespace YachtDice.Server.Services
         protected void LogInfo(string message)
         {
             _logger.Info(message);
+        }
+
+        private string FindSessionPlayer(string sessionToken, string operationName)
+        {
+            if (!Sessions.TryGetPlayerName(sessionToken, out string playerName))
+            {
+                throw CreateSessionFault(sessionToken, operationName);
+            }
+
+            return playerName;
         }
 
         private static bool RunOperation(Action operation)

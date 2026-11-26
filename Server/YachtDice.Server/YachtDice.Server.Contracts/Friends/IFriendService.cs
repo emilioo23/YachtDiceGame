@@ -102,28 +102,29 @@ namespace YachtDice.Server.Contracts.Friends
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        string GetUsername(string displayName);
+        string GetUsername(string sessionToken);
 
         /// <summary>
         /// Gets the names of the friends of the player.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the friends, or an empty list if the player has none.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<string> GetFriends(string displayName);
+        List<string> GetFriends(string sessionToken, string displayName);
 
         /// <summary>
         /// Gets the names of the players who sent a friend request that the player has not answered.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The names of the players who sent a request, or an empty list if there is none.</returns>
         [OperationContract]
         [FaultContract(typeof(ServiceFault))]
-        List<string> GetFriendRequests(string displayName);
+        List<string> GetFriendRequests(string sessionToken);
     }
 }

@@ -71,7 +71,9 @@ namespace YachtDice.Views
         {
             try
             {
-                _friendNames = await _friendGateway.GetFriendsAsync(_roomGateway.Session.DisplayName);
+                _friendNames = await _friendGateway.GetFriendsAsync(
+                    _roomGateway.Session.SessionToken,
+                    _roomGateway.Session.DisplayName);
                 ShowFriends();
             }
             catch (GatewayException ex)

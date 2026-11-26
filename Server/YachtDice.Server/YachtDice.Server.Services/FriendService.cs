@@ -172,11 +172,11 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the username that other players use to send a friend request to the player.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The username of the player, or an empty text if the player does not exist.</returns>
-        public string GetUsername(string displayName)
+        public string GetUsername(string sessionToken)
         {
-            string username = Execute(displayName, () => _friendshipService.GetUsername(displayName));
+            string username = ExecuteForPlayer(sessionToken, _friendshipService.GetUsername);
 
             return username;
         }
@@ -184,11 +184,14 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the names of the friends of the player.
         /// </summary>
+        /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name of the player.</param>
         /// <returns>The names of the friends, or an empty list if the player has none.</returns>
-        public List<string> GetFriends(string displayName)
+        public List<string> GetFriends(string sessionToken, string displayName)
         {
-            List<string> friendNames = Execute(displayName, () => _friendshipService.GetFriendNames(displayName));
+            List<string> friendNames = Execute(
+                displayName,
+                () => _friendshipService.GetFriendNames(ResolvePlayerName(sessionToken, displayName)));
 
             return friendNames;
         }
@@ -196,11 +199,11 @@ namespace YachtDice.Server.Services
         /// <summary>
         /// Gets the names of the players who sent a friend request that the player has not answered.
         /// </summary>
-        /// <param name="displayName">Name of the player.</param>
+        /// <param name="sessionToken">Token of the session of the player.</param>
         /// <returns>The names of the players who sent a request, or an empty list if there is none.</returns>
-        public List<string> GetFriendRequests(string displayName)
+        public List<string> GetFriendRequests(string sessionToken)
         {
-            List<string> requesterNames = Execute(displayName, () => _friendshipService.GetRequesterNames(displayName));
+            List<string> requesterNames = ExecuteForPlayer(sessionToken, _friendshipService.GetRequesterNames);
 
             return requesterNames;
         }

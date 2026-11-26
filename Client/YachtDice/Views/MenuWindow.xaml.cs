@@ -95,7 +95,7 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                string roomCode = await new RoomListGateway().FindPendingRoomAsync(_session.DisplayName);
+                string roomCode = await new RoomListGateway().FindPendingRoomAsync(_session.SessionToken);
 
                 await AskToReturnAsync(roomCode);
             }
@@ -125,7 +125,7 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                await _session.Presence.ConnectAsync(playerName);
+                await _session.Presence.ConnectAsync(playerName, _session.SessionToken);
                 _session.Services.ConnectionLoss.Watch(_session.Presence);
             }
         }
@@ -156,9 +156,9 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                _friendNames = await _friendGateway.GetFriendsAsync(_session.DisplayName);
-                List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.DisplayName);
-                OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.DisplayName);
+                _friendNames = await _friendGateway.GetFriendsAsync(_session.SessionToken, _session.DisplayName);
+                List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.SessionToken);
+                OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.SessionToken);
 
                 var requestPresence = new FriendPresence(Strings.Friends_Status_WantsFriend, false);
 

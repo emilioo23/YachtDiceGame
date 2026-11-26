@@ -11,10 +11,10 @@ namespace YachtDice.Server.Contracts.Presence
         /// <summary>
         /// Marks the player as online and warns the other players.
         /// </summary>
-        /// <param name="displayName">Name of the player who enters the game.</param>
+        /// <param name="sessionToken">Token of the session of the player who enters the game.</param>
         /// <returns>The names of all the players who are online, including the caller.</returns>
         [OperationContract]
-        string[] Connect(string displayName);
+        string[] Connect(string sessionToken);
 
         /// <summary>
         /// Marks the player as offline and warns the other players.
