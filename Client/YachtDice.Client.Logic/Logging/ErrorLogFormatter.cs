@@ -15,7 +15,6 @@ namespace YachtDice.Client.Logic.Logging
     public static class ErrorLogFormatter
     {
         private const int MaxStackLevels = 3;
-        private const string NullExceptionMessage = "The exception to log cannot be null.";
         private const string ErrorFormat = "{0} Exception: {1}.";
         private const string CauseFormat = " Cause: {0}.";
         private const string StackFormat = " Stack: {0}.";
@@ -33,7 +32,7 @@ namespace YachtDice.Client.Logic.Logging
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception), NullExceptionMessage);
+                throw new ArgumentNullException(nameof(exception), LogMessages.NullExceptionMessage);
             }
 
             return string.Concat(

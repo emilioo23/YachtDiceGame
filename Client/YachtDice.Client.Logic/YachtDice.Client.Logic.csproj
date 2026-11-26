@@ -69,6 +69,7 @@
     <Compile Include="Dice\DieResourceKey.cs" />
     <Compile Include="Dice\FaceUpRotation.cs" />
     <Compile Include="Dice\PipCell.cs" />
+    <Compile Include="Logging\LogMessages.cs" />
     <Compile Include="Passkeys\Base64Url.cs" />
     <Compile Include="Passkeys\PasskeyClientData.cs" />
     <Compile Include="Passkeys\PasskeyRules.cs" />

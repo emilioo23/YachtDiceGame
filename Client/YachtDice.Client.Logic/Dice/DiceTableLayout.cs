@@ -1,5 +1,6 @@
 ﻿using System;
 using YachtDice.Client.Logic.Game;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Dice
 {
@@ -27,8 +28,6 @@ namespace YachtDice.Client.Logic.Dice
 
         private const double Half = 0.5;
         private const double TableCenter = 0;
-        private const string InvalidDieMessage = "The position of the die is not one of the five dice.";
-        private const string InvalidRackMessage = "The position of the die must be inside the dice of the row.";
 
         /// <summary>
         /// Gets the place of a die in the row that crosses the middle of the table.
@@ -40,7 +39,7 @@ namespace YachtDice.Client.Logic.Dice
         {
             if (index < 0 || index >= HeldDiceSelection.DiceCount)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), InvalidDieMessage);
+                throw new ArgumentOutOfRangeException(nameof(index), LogMessages.InvalidDieMessage);
             }
 
             return new DiceSlot((index - ((HeldDiceSelection.DiceCount - 1) * Half)) * RowSpacing, TableCenter);
@@ -57,7 +56,7 @@ namespace YachtDice.Client.Logic.Dice
         {
             if (count < 1 || position < 0 || position >= count)
             {
-                throw new ArgumentOutOfRangeException(nameof(position), InvalidRackMessage);
+                throw new ArgumentOutOfRangeException(nameof(position), LogMessages.InvalidRackMessage);
             }
 
             return new DiceSlot((position - ((count - 1) * Half)) * RowSpacing, RackDepth);

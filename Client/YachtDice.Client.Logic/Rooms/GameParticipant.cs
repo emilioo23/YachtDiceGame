@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Client.Logic.Logging;
+
 namespace YachtDice.Client.Logic.Rooms
 {
     /// <summary>
@@ -6,9 +8,6 @@ namespace YachtDice.Client.Logic.Rooms
     /// </summary>
     public class GameParticipant
     {
-        private const string NullIdMessage = "The identifier of the player cannot be null.";
-        private const string NullNameMessage = "The name of the player cannot be null.";
-
         /// <summary>
         /// Initializes a participant.
         /// </summary>
@@ -16,8 +15,8 @@ namespace YachtDice.Client.Logic.Rooms
         /// <param name="name">Name that the player shows.</param>
         public GameParticipant(string id, string name)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id), NullIdMessage);
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
+            Id = id ?? throw new ArgumentNullException(nameof(id), LogMessages.NullPlayerIdMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), LogMessages.NullPlayerNameMessage);
         }
 
         /// <summary>

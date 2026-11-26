@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using YachtDice.Client.Logic.Game;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Connection
 {
@@ -19,7 +20,6 @@ namespace YachtDice.Client.Logic.Connection
 
         private const int NoAttempts = 0;
         private const int OneAttempt = 1;
-        private const string NullDelegateMessage = "The delegate of the reconnect loop cannot be null.";
 
         private readonly Func<Task<bool>> _tryRestore;
         private readonly Func<int, Task> _wait;
@@ -34,10 +34,11 @@ namespace YachtDice.Client.Logic.Connection
         /// <exception cref="ArgumentNullException">Any of the delegates is null.</exception>
         public ReconnectLoop(Func<Task<bool>> tryRestore, Func<int, Task> wait, Func<int> getElapsedSeconds)
         {
-            _tryRestore = tryRestore ?? throw new ArgumentNullException(nameof(tryRestore), NullDelegateMessage);
-            _wait = wait ?? throw new ArgumentNullException(nameof(wait), NullDelegateMessage);
+            _tryRestore = tryRestore ?? throw new ArgumentNullException(nameof(tryRestore),
+                LogMessages.NullDelegateMessage);
+            _wait = wait ?? throw new ArgumentNullException(nameof(wait), LogMessages.NullDelegateMessage);
             _getElapsedSeconds = getElapsedSeconds
-                ?? throw new ArgumentNullException(nameof(getElapsedSeconds), NullDelegateMessage);
+                ?? throw new ArgumentNullException(nameof(getElapsedSeconds), LogMessages.NullDelegateMessage);
         }
 
         /// <summary>

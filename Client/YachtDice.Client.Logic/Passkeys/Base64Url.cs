@@ -1,4 +1,5 @@
 ﻿using System;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Passkeys
 {
@@ -13,7 +14,6 @@ namespace YachtDice.Client.Logic.Passkeys
         private const char UrlUnderscore = '_';
         private const char Padding = '=';
         private const int GroupSize = 4;
-        private const string NullDataMessage = "The bytes to encode cannot be null.";
 
         /// <summary>
         /// Writes the bytes as base64url without padding.
@@ -24,7 +24,7 @@ namespace YachtDice.Client.Logic.Passkeys
         {
             if (data == null)
             {
-                throw new ArgumentNullException(nameof(data), NullDataMessage);
+                throw new ArgumentNullException(nameof(data), LogMessages.NullDataMessage);
             }
 
             return Convert.ToBase64String(data)

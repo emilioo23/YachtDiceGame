@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Passkeys
 {
@@ -11,8 +12,6 @@ namespace YachtDice.Client.Logic.Passkeys
     {
         private const string Format =
             "{{\"type\":\"{0}\",\"challenge\":\"{1}\",\"origin\":\"{2}\",\"crossOrigin\":false}}";
-        private const string EmptyTypeMessage = "The type of the ceremony cannot be empty.";
-        private const string EmptyChallengeMessage = "The challenge of the server cannot be empty.";
 
         /// <summary>
         /// Writes the client data of a ceremony.
@@ -24,12 +23,12 @@ namespace YachtDice.Client.Logic.Passkeys
         {
             if (string.IsNullOrEmpty(type))
             {
-                throw new ArgumentException(EmptyTypeMessage, nameof(type));
+                throw new ArgumentException(LogMessages.EmptyTypeMessage, nameof(type));
             }
 
             if (string.IsNullOrEmpty(challenge))
             {
-                throw new ArgumentException(EmptyChallengeMessage, nameof(challenge));
+                throw new ArgumentException(LogMessages.EmptyChallengeMessage, nameof(challenge));
             }
 
             return Encoding.UTF8.GetBytes(string.Format(Format, type, challenge, PasskeyRules.Origin));

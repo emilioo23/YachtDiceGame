@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Dice
 {
@@ -18,7 +19,6 @@ namespace YachtDice.Client.Logic.Dice
         private const int Low = 0;
         private const int Middle = 1;
         private const int High = 2;
-        private const string InvalidValueMessage = "The value of a die goes from zero to six.";
 
         private static readonly Dictionary<int, PipCell[]> Layouts = new Dictionary<int, PipCell[]>
         {
@@ -67,7 +67,7 @@ namespace YachtDice.Client.Logic.Dice
 
             if (!Layouts.TryGetValue(value, out cells))
             {
-                throw new ArgumentOutOfRangeException(nameof(value), InvalidValueMessage);
+                throw new ArgumentOutOfRangeException(nameof(value), LogMessages.InvalidValueMessage);
             }
 
             return cells;

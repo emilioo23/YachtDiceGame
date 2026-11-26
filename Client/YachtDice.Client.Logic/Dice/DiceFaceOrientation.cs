@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Dice
 {
@@ -28,7 +29,6 @@ namespace YachtDice.Client.Logic.Dice
         private const double NoTurnDegrees = 0;
         private const double QuarterTurnDegrees = 90;
         private const double HalfTurnDegrees = 180;
-        private const string InvalidFaceMessage = "The face of a die goes from one to six.";
 
         private static readonly DiceVector XAxis = new DiceVector(1, 0, 0);
         private static readonly DiceVector YAxis = new DiceVector(0, 1, 0);
@@ -68,7 +68,7 @@ namespace YachtDice.Client.Logic.Dice
 
             if (!Normals.TryGetValue(face, out normal))
             {
-                throw new ArgumentOutOfRangeException(nameof(face), InvalidFaceMessage);
+                throw new ArgumentOutOfRangeException(nameof(face), LogMessages.InvalidFaceMessage);
             }
 
             return normal;
@@ -86,7 +86,7 @@ namespace YachtDice.Client.Logic.Dice
 
             if (!FaceUpRotations.TryGetValue(face, out rotation))
             {
-                throw new ArgumentOutOfRangeException(nameof(face), InvalidFaceMessage);
+                throw new ArgumentOutOfRangeException(nameof(face), LogMessages.InvalidFaceMessage);
             }
 
             return rotation;
