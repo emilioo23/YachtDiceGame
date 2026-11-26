@@ -114,7 +114,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The boxes that can be chosen.</returns>
         public IReadOnlyList<ScoreEntry> GetOptions(IReadOnlyList<int> dice)
         {
-            var isJoker = IsJoker(dice);
+            bool isJoker = IsJoker(dice);
             IReadOnlyList<ScoreCategory> categories;
 
             if (isJoker)
@@ -160,7 +160,7 @@ namespace YachtDice.Server.Logic.Game
         public GameActionStatus Score(ScoreCategory category, IReadOnlyList<int> dice)
         {
             Func<ScoreEntry, bool> isSameCategory = option => option.Category == category;
-            var options = GetOptions(dice).Where(isSameCategory).ToList();
+            List<ScoreEntry> options = GetOptions(dice).Where(isSameCategory).ToList();
             GameActionStatus status;
 
             if (IsFilled(category))
@@ -183,7 +183,7 @@ namespace YachtDice.Server.Logic.Game
         private static IReadOnlyList<ScoreCategory> ChooseLowerOrAny(IReadOnlyList<ScoreCategory> openCategories)
         {
             Func<ScoreCategory, bool> isNotUpper = category => !ScoreCalculator.IsUpper(category);
-            var lowerCategories = openCategories.Where(isNotUpper).ToList();
+            List<ScoreCategory> lowerCategories = openCategories.Where(isNotUpper).ToList();
             IReadOnlyList<ScoreCategory> categories;
 
             if (lowerCategories.Any())
@@ -205,8 +205,8 @@ namespace YachtDice.Server.Logic.Game
 
         private IReadOnlyList<ScoreCategory> GetJokerCategories(int diceValue)
         {
-            var matchingCategory = ScoreCalculator.GetUpperCategory(diceValue);
-            var openCategories = GetOpenCategories();
+            ScoreCategory matchingCategory = ScoreCalculator.GetUpperCategory(diceValue);
+            IReadOnlyList<ScoreCategory> openCategories = GetOpenCategories();
             IReadOnlyList<ScoreCategory> categories;
 
             if (openCategories.Contains(matchingCategory))

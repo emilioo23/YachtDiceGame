@@ -143,7 +143,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             Expression<Func<Player, bool>> isSameId = row => row.Id == playerId;
             Expression<Func<PasswordHistory, bool>> isOfPlayer = row => row.PlayerId == playerId;
-            var hashes = context.Player.Where(isSameId).Select(row => row.PwdHash).ToList();
+            List<string> hashes = context.Player.Where(isSameId).Select(row => row.PwdHash).ToList();
 
             hashes.AddRange(context.PasswordHistory
                 .Where(isOfPlayer)

@@ -153,7 +153,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static int ScoreFullHouse(DiceHand hand)
         {
-            var isFullHouse = hand.HasFaceExactly(FullHouseTripleCount)
+            bool isFullHouse = hand.HasFaceExactly(FullHouseTripleCount)
                 && hand.HasFaceExactly(FullHousePairCount);
 
             return isFullHouse ? hand.Sum : NoPoints;
@@ -166,14 +166,14 @@ namespace YachtDice.Server.Logic.Game
 
         private static int ScoreLittleStraight(DiceHand hand)
         {
-            var isStraight = hand.ShowsEachFaceOnce(LittleStraightFirstValue, LittleStraightLastValue);
+            bool isStraight = hand.ShowsEachFaceOnce(LittleStraightFirstValue, LittleStraightLastValue);
 
             return isStraight ? StraightPoints : NoPoints;
         }
 
         private static int ScoreBigStraight(DiceHand hand)
         {
-            var isStraight = hand.ShowsEachFaceOnce(BigStraightFirstValue, BigStraightLastValue);
+            bool isStraight = hand.ShowsEachFaceOnce(BigStraightFirstValue, BigStraightLastValue);
 
             return isStraight ? StraightPoints : NoPoints;
         }

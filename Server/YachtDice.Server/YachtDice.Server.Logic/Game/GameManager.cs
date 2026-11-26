@@ -182,7 +182,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static GameActionStatus ChangePresence(YachtGame game, string playerId, bool isPresent)
         {
-            var status = CheckMember(game, playerId);
+            GameActionStatus status = CheckMember(game, playerId);
 
             if (status == GameActionStatus.Success && isPresent)
             {
@@ -198,7 +198,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static GameActionStatus ForfeitPlayer(YachtGame game, string playerId)
         {
-            var status = CheckMember(game, playerId);
+            GameActionStatus status = CheckMember(game, playerId);
 
             if (status == GameActionStatus.Success)
             {
@@ -210,7 +210,7 @@ namespace YachtDice.Server.Logic.Game
 
         private static GameActionStatus RemovePlayer(YachtGame game, string playerId)
         {
-            var status = CheckMember(game, playerId);
+            GameActionStatus status = CheckMember(game, playerId);
 
             if (status == GameActionStatus.Success)
             {
@@ -238,7 +238,7 @@ namespace YachtDice.Server.Logic.Game
 
             if (_games.TryGetValue(roomCode, out YachtGame game))
             {
-                var status = action(game);
+                GameActionStatus status = action(game);
 
                 if (status == GameActionStatus.Success)
                 {

@@ -30,7 +30,7 @@ namespace YachtDice.Server.Tests.Mapping
             _avatars.SetLevel(HostName, RegisteredLevel);
             RoomResult createdRoom = _manager.CreateRoom(HostName);
 
-            var room = RoomMapper.ToContract(createdRoom.Room);
+            YachtDice.Server.Contracts.Rooms.RoomState room = RoomMapper.ToContract(createdRoom.Room);
 
             Assert.True(room.Players.Single().IsRegistered);
         }
@@ -40,7 +40,7 @@ namespace YachtDice.Server.Tests.Mapping
         {
             RoomResult createdRoom = _manager.CreateRoom(GuestName);
 
-            var room = RoomMapper.ToContract(createdRoom.Room);
+            YachtDice.Server.Contracts.Rooms.RoomState room = RoomMapper.ToContract(createdRoom.Room);
 
             Assert.False(room.Players.Single().IsRegistered);
         }
@@ -53,7 +53,7 @@ namespace YachtDice.Server.Tests.Mapping
             var host = new RoomMember(createdRoom.Room.Code, createdRoom.PlayerId);
             RoomResult withComputer = _manager.AddComputer(host, ComputerDifficulty.Normal);
 
-            var room = RoomMapper.ToContract(withComputer.Room);
+            YachtDice.Server.Contracts.Rooms.RoomState room = RoomMapper.ToContract(withComputer.Room);
 
             Assert.False(room.Players.Single(player => player.IsComputer).IsRegistered);
         }

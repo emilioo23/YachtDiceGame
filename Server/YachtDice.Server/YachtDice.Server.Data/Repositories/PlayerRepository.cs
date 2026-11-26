@@ -287,7 +287,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The accounts could not be deleted.</exception>
         public int RemoveUnverifiedAccounts(string unverifiedState, DateTime registeredBefore)
         {
-            var removedCount = NoAccounts;
+            int removedCount = NoAccounts;
 
             DatabaseOperation.Save(
                 context => removedCount = EraseUnverified(context, unverifiedState, registeredBefore),

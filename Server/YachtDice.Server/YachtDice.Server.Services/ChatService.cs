@@ -67,7 +67,7 @@ namespace YachtDice.Server.Services
         public void SendChatMessage(RoomContracts.RoomMember author, string content)
         {
             LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(author);
-            var hasContent = !string.IsNullOrWhiteSpace(content);
+            bool hasContent = !string.IsNullOrWhiteSpace(content);
 
             if (hasContent && _roomManager.TryGetPlayer(member, out LogicRooms.RoomPlayer writer))
             {

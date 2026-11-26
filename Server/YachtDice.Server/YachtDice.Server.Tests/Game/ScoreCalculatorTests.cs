@@ -33,7 +33,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(category, dice);
+            int points = calculator.Calculate(category, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -45,7 +45,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.FullHouse, dice);
+            int points = calculator.Calculate(ScoreCategory.FullHouse, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -58,7 +58,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.FullHouse, dice);
+            int points = calculator.Calculate(ScoreCategory.FullHouse, dice);
 
             Assert.Equal(0, points);
         }
@@ -71,7 +71,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.FourOfAKind, dice);
+            int points = calculator.Calculate(ScoreCategory.FourOfAKind, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -81,7 +81,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.FourOfAKind, ThreeFoursAndTwoOthers);
+            int points = calculator.Calculate(ScoreCategory.FourOfAKind, ThreeFoursAndTwoOthers);
 
             Assert.Equal(0, points);
         }
@@ -95,7 +95,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.LittleStraight, dice);
+            int points = calculator.Calculate(ScoreCategory.LittleStraight, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -109,7 +109,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.BigStraight, dice);
+            int points = calculator.Calculate(ScoreCategory.BigStraight, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -119,7 +119,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.Choice, NoCombination);
+            int points = calculator.Calculate(ScoreCategory.Choice, NoCombination);
 
             Assert.Equal(NoCombinationChoicePoints, points);
         }
@@ -132,7 +132,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var points = calculator.Calculate(ScoreCategory.Yacht, dice);
+            int points = calculator.Calculate(ScoreCategory.Yacht, dice);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -148,9 +148,9 @@ namespace YachtDice.Server.Tests.Game
         public void CalculateJoker_YachtOfThrees_UsesTheJokerValueOfEachBox(ScoreCategory category, int pointsExpected)
         {
             var calculator = new ScoreCalculator();
-            var yachtOfThrees = YachtOfThrees;
+            int[] yachtOfThrees = YachtOfThrees;
 
-            var points = calculator.CalculateJoker(category, yachtOfThrees);
+            int points = calculator.CalculateJoker(category, yachtOfThrees);
 
             Assert.Equal(pointsExpected, points);
         }
@@ -162,7 +162,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var calculator = new ScoreCalculator();
 
-            var isYacht = calculator.IsYacht(dice);
+            bool isYacht = calculator.IsYacht(dice);
 
             Assert.Equal(isExpectedYacht, isYacht);
         }

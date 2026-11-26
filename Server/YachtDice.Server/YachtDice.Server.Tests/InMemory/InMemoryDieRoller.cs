@@ -24,7 +24,7 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public int Roll()
         {
-            var value = _values[_position % _values.Count];
+            int value = _values[_position % _values.Count];
 
             _position++;
 

@@ -72,7 +72,7 @@ namespace YachtDice.Server.Tests.Game
                 new ScoreEntry(ScoreCategory.Sixes, SixesPoints)
             };
 
-            var category = ComputerSkill.Choose(options);
+            ScoreCategory category = ComputerSkill.Choose(options);
 
             Assert.Equal(ScoreCategory.Choice, category);
         }
@@ -88,7 +88,7 @@ namespace YachtDice.Server.Tests.Game
                 new ScoreEntry(ScoreCategory.Sixes, NoPoints)
             };
 
-            var category = ComputerSkill.Choose(options);
+            ScoreCategory category = ComputerSkill.Choose(options);
 
             Assert.Equal(ScoreCategory.Twos, category);
         }
@@ -98,7 +98,7 @@ namespace YachtDice.Server.Tests.Game
         {
             var options = new List<ScoreEntry> { new ScoreEntry(ScoreCategory.Yacht, NoPoints) };
 
-            var category = ComputerSkill.Choose(options);
+            ScoreCategory category = ComputerSkill.Choose(options);
 
             Assert.Equal(ScoreCategory.Yacht, category);
         }
@@ -112,7 +112,7 @@ namespace YachtDice.Server.Tests.Game
                 new ScoreEntry(ScoreCategory.Choice, TiedPoints)
             };
 
-            var category = ComputerSkill.Choose(options);
+            ScoreCategory category = ComputerSkill.Choose(options);
 
             Assert.Equal(ScoreCategory.Choice, category);
         }
@@ -127,7 +127,7 @@ namespace YachtDice.Server.Tests.Game
                 new ScoreEntry(ScoreCategory.Yacht, YachtPoints)
             };
 
-            var category = ComputerSkill.Choose(options);
+            ScoreCategory category = ComputerSkill.Choose(options);
 
             Assert.Equal(ScoreCategory.Yacht, category);
         }

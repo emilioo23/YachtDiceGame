@@ -199,7 +199,7 @@ namespace YachtDice.Server.Services
         public Contracts.RoomResultCode AddComputer(Contracts.RoomMember host, Contracts.ComputerDifficulty difficulty)
         {
             LogicRooms.RoomMember member = Mapping.RoomMapper.ToLogic(host);
-            var logicDifficulty =
+            LogicRooms.ComputerDifficulty logicDifficulty =
                 Mapping.EnumMapper.Map<Contracts.ComputerDifficulty, LogicRooms.ComputerDifficulty>(difficulty);
             Contracts.RoomResultCode result = Execute(host, () => ProcessAddComputer(member, logicDifficulty));
 

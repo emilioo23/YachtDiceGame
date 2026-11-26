@@ -111,7 +111,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Roll(string playerId, IReadOnlyList<bool> heldDice)
         {
-            var status = CheckTurn(playerId);
+            GameActionStatus status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
@@ -129,7 +129,7 @@ namespace YachtDice.Server.Logic.Game
         /// <returns>The outcome of the action.</returns>
         public GameActionStatus Score(string playerId, ScoreCategory category)
         {
-            var status = CheckTurn(playerId);
+            GameActionStatus status = CheckTurn(playerId);
 
             if (status == GameActionStatus.Success)
             {
@@ -217,7 +217,7 @@ namespace YachtDice.Server.Logic.Game
         public void Forfeit(string playerId)
         {
             Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
-            var player = _players.FirstOrDefault(isSamePlayerId);
+            GamePlayer player = _players.FirstOrDefault(isSamePlayerId);
 
             if (player != null && !IsFinished && !player.IsPresent)
             {
@@ -234,7 +234,7 @@ namespace YachtDice.Server.Logic.Game
         public void Remove(string playerId)
         {
             Predicate<GamePlayer> isSamePlayerId = player => player.PlayerId == playerId;
-            var index = _players.FindIndex(isSamePlayerId);
+            int index = _players.FindIndex(isSamePlayerId);
 
             if (index != NoPlayerIndex)
             {
@@ -292,11 +292,11 @@ namespace YachtDice.Server.Logic.Game
 
         private static void MarkWinners(GameSnapshot snapshot)
         {
-            var contenders = snapshot.Players.Where(player => player.IsPresent).ToList();
+            List<PlayerSnapshot> contenders = snapshot.Players.Where(player => player.IsPresent).ToList();
 
             if (contenders.Count > NoContenders)
             {
-                var bestTotal = contenders.Max(player => player.Total);
+                int bestTotal = contenders.Max(player => player.Total);
 
                 foreach (var player in contenders)
                 {
@@ -467,11 +467,11 @@ namespace YachtDice.Server.Logic.Game
 
         private int FindNextPlayerIndex()
         {
-            var nextIndex = NoPlayerIndex;
+            int nextIndex = NoPlayerIndex;
 
             for (var step = 1; step <= _players.Count && nextIndex == NoPlayerIndex; step++)
             {
-                var candidate = (_turnIndex + step + _players.Count) % _players.Count;
+                int candidate = (_turnIndex + step + _players.Count) % _players.Count;
 
                 if (_players[candidate].CanPlay)
                 {
@@ -500,7 +500,7 @@ namespace YachtDice.Server.Logic.Game
 
         private void UpdateStatus()
         {
-            var isSomeonePresent = _players.Any(player => player.IsPresent);
+            bool isSomeonePresent = _players.Any(player => player.IsPresent);
 
             if (_turnIndex == NoPlayerIndex && isSomeonePresent)
             {
@@ -511,7 +511,7 @@ namespace YachtDice.Server.Logic.Game
         private void SetPresence(string playerId, bool isPresent)
         {
             Func<GamePlayer, bool> isSamePlayerId = candidate => candidate.PlayerId == playerId;
-            var player = _players.FirstOrDefault(isSamePlayerId);
+            GamePlayer player = _players.FirstOrDefault(isSamePlayerId);
 
             if (player != null && !player.HasForfeited && !IsFinished)
             {
@@ -575,11 +575,11 @@ namespace YachtDice.Server.Logic.Game
 
         private int GetCurrentRound()
         {
-            var round = RoundOffset;
+            int round = RoundOffset;
 
             if (_turnIndex != NoPlayerIndex)
             {
-                var openCount = _players[_turnIndex].Card.GetOpenCategories().Count;
+                int openCount = _players[_turnIndex].Card.GetOpenCategories().Count;
                 round = ScoreCalculator.All.Count - openCount + RoundOffset;
             }
 

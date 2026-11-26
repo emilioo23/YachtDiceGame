@@ -81,13 +81,13 @@ namespace YachtDice.Server.Services
         /// <returns>The seconds left, or zero if no turn is counted.</returns>
         public int GetSecondsLeft(string roomCode)
         {
-            var secondsLeft = NoSecondsLeft;
+            int secondsLeft = NoSecondsLeft;
 
             lock (_syncRoot)
             {
                 if (_clocks.ContainsKey(roomCode))
                 {
-                    var remaining = _clocks[roomCode].Deadline - DateTime.UtcNow;
+                    TimeSpan remaining = _clocks[roomCode].Deadline - DateTime.UtcNow;
                     secondsLeft = Math.Max(NoSecondsLeft, (int)Math.Ceiling(remaining.TotalSeconds));
                 }
             }

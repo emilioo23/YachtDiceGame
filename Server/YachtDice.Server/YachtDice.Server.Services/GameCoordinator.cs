@@ -93,7 +93,7 @@ namespace YachtDice.Server.Services
         /// <param name="room">State of the room, with the players who take part in the game.</param>
         public void StartGame(LogicRooms.RoomDetails room)
         {
-            var participants = room.Players
+            List<LogicGame.GameParticipant> participants = room.Players
                 .Select(player => new LogicGame.GameParticipant(player.Id, player.DisplayName)
                 {
                     IsComputer = player.IsComputer,
@@ -411,7 +411,7 @@ namespace YachtDice.Server.Services
 
         private void SyncTimer(string roomCode, LogicGame.GameSnapshot snapshot)
         {
-            var hasTurn = !snapshot.IsFinished
+            bool hasTurn = !snapshot.IsFinished
                 && !string.IsNullOrEmpty(snapshot.CurrentPlayerId);
             var turn = new LogicGame.GameTurn(roomCode, snapshot.TurnNumber);
 

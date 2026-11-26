@@ -251,7 +251,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <inheritdoc />
         public int RegisterChatInfraction(RoomMember member)
         {
-            var infractions = NoInfractions;
+            int infractions = NoInfractions;
 
             lock (_syncRoot)
             {
