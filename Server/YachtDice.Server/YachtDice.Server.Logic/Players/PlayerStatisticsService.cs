@@ -156,11 +156,17 @@ namespace YachtDice.Server.Logic.Players
                 Points = score.Points,
                 IsUsed = score.IsUsed
             };
+            int total = record.Total;
+
+            if (record.PlayerName == null)
+            {
+                total = CalculateComputerTotal(record);
+            }
 
             return new SavedScorecard
             {
                 PlayerName = record.PlayerName ?? string.Empty,
-                Total = record.PlayerName == null ? CalculateComputerTotal(record) : record.Total,
+                Total = total,
                 HasUpperBonus = record.HasUpperBonus,
                 YachtBonusCount = record.YachtBonusCount,
                 Scores = record.Scores.Select(toSavedScore).ToList()

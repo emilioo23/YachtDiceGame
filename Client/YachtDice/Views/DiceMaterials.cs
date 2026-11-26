@@ -83,8 +83,8 @@ namespace YachtDice.Views
 
         private static Material CreateShadow()
         {
-            var center = Color.FromArgb(ShadowAlpha, Transparent, Transparent, Transparent);
-            var edge = Color.FromArgb(Transparent, Transparent, Transparent, Transparent);
+            Color center = Color.FromArgb(ShadowAlpha, Transparent, Transparent, Transparent);
+            Color edge = Color.FromArgb(Transparent, Transparent, Transparent, Transparent);
 
             return Freeze(new DiffuseMaterial(new RadialGradientBrush(center, edge)));
         }

@@ -51,7 +51,7 @@ namespace YachtDice.Client.Logic.Connection
         /// <returns>True if the connection came back; false if the time ran out.</returns>
         public async Task<bool> RunAsync()
         {
-            var attempt = NoAttempts;
+            int attempt = NoAttempts;
             var isRestored = false;
 
             while (!isRestored && _getElapsedSeconds() < ReconnectWaitTracker.ReconnectSeconds)

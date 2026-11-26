@@ -222,7 +222,7 @@ namespace YachtDice.Views
             {
                 DiceVector normal = DiceFaceOrientation.GetNormal(index + FirstFace);
                 var direction = new Vector3D(normal.X, normal.Y, normal.Z);
-                var mesh = DiceMeshFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
+                MeshGeometry3D mesh = DiceMeshFactory.CreateCubeFace(direction, FindRight(direction), CubeSize * Half);
 
                 _faces[index] = new GeometryModel3D(mesh, _materials.Blank);
                 body.Children.Add(_faces[index]);

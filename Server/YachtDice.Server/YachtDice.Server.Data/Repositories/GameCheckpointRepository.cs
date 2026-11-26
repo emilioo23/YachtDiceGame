@@ -254,7 +254,8 @@ namespace YachtDice.Server.Data.Repositories
 
         private static void SaveDice(YachtDiceContext context, TurnState turn, List<RolledDieRecord> dice)
         {
-            Func<RolledDie, bool> isNotRolled = savedDie => dice.All(die => die.Position != savedDie.DiePosition);
+            var rolledPositions = new HashSet<int>(dice.Select(die => die.Position));
+            Func<RolledDie, bool> isNotRolled = savedDie => !rolledPositions.Contains(savedDie.DiePosition);
 
             context.RolledDie.RemoveRange(turn.RolledDie.Where(isNotRolled).ToList());
 

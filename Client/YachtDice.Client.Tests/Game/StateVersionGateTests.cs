@@ -22,7 +22,7 @@ namespace YachtDice.Client.Tests.Game
         {
             var gate = new StateVersionGate();
 
-            var isAccepted = gate.TryAccept(FirstVersion);
+            bool isAccepted = gate.TryAccept(FirstVersion);
 
             Assert.True(isAccepted);
         }
@@ -33,7 +33,7 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(ThirdVersion);
 
-            var isAccepted = gate.TryAccept(FourthVersion);
+            bool isAccepted = gate.TryAccept(FourthVersion);
 
             Assert.True(isAccepted);
         }
@@ -46,7 +46,7 @@ namespace YachtDice.Client.Tests.Game
             var gate = new StateVersionGate();
             gate.TryAccept(ThirdVersion);
 
-            var isAccepted = gate.TryAccept(version);
+            bool isAccepted = gate.TryAccept(version);
 
             Assert.False(isAccepted);
         }
@@ -58,7 +58,7 @@ namespace YachtDice.Client.Tests.Game
             gate.TryAccept(FifthVersion);
             gate.TryAccept(SecondVersion);
 
-            var isAccepted = gate.TryAccept(FourthVersion);
+            bool isAccepted = gate.TryAccept(FourthVersion);
 
             Assert.False(isAccepted);
         }

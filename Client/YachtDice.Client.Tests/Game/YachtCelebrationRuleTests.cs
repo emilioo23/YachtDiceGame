@@ -14,7 +14,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsCelebrationDue_YachtBoxJustFilledWithFifty_ReturnsTrue()
         {
-            var isDue = YachtCelebrationRule.IsCelebrationDue(false, true, YachtPoints);
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, true, YachtPoints);
 
             Assert.True(isDue);
         }
@@ -22,7 +22,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsCelebrationDue_YachtBoxJustFilledWithZero_ReturnsFalse()
         {
-            var isDue = YachtCelebrationRule.IsCelebrationDue(false, true, NoPoints);
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, true, NoPoints);
 
             Assert.False(isDue);
         }
@@ -30,7 +30,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsCelebrationDue_YachtBoxAlreadyFilled_ReturnsFalse()
         {
-            var isDue = YachtCelebrationRule.IsCelebrationDue(true, true, YachtPoints);
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(true, true, YachtPoints);
 
             Assert.False(isDue);
         }
@@ -38,7 +38,7 @@ namespace YachtDice.Client.Tests.Game
         [Fact]
         public void IsCelebrationDue_YachtBoxStillOpen_ReturnsFalse()
         {
-            var isDue = YachtCelebrationRule.IsCelebrationDue(false, false, NoPoints);
+            bool isDue = YachtCelebrationRule.IsCelebrationDue(false, false, NoPoints);
 
             Assert.False(isDue);
         }

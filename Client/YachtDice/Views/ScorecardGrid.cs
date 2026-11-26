@@ -130,7 +130,7 @@ namespace YachtDice.Views
             for (var index = 0; index < context.Columns.Count; index++)
             {
                 GamePlayer player = context.Columns[index];
-                var isFilled = GetPoints(FindCard(context.State, player.Id), category).Length > 0;
+                bool isFilled = GetPoints(FindCard(context.State, player.Id), category).Length > 0;
 
                 isFilledByLocal |= player.IsLocalPlayer && isFilled;
                 AddCell(row, CreateCell(GetCellText(player, category, context), player.IsLocalPlayer, canPick), index);
