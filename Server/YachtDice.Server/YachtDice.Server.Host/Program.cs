@@ -6,6 +6,7 @@ using System.Threading;
 using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Host.Composition;
 using YachtDice.Server.Logic.Logging;
@@ -19,15 +20,7 @@ namespace YachtDice.Server.Host
     /// </summary>
     internal static class Program
     {
-        private const string StartedLogMessage = "Server started. Press Enter or Ctrl+C to stop it.";
-        private const string StoppedLogMessage = "Server stopped gracefully.";
-        private const string CommunicationFailedLogMessage = "The services could not be started or stopped.";
-        private const string ConfigurationFailedLogMessage = "The service configuration is not valid.";
-        private const string AddressInUseLogMessage = "A TCP port is already in use by another application.";
         private const string WarmUpEmail = "warm-up@yachtdice.local";
-        private const string UnhandledErrorLogMessage = "An error that no service handled is closing the server.";
-        private const string WarmUpFailedLogMessage =
-            "The database could not be warmed up; the first request will be slower.";
 
         private static readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
@@ -49,23 +42,23 @@ namespace YachtDice.Server.Host
                 provider = new ServiceCollection().AddServerComponents().BuildServiceProvider();
                 WarmUpDatabase(provider, logger);
                 GameCoordinator gameCoordinator = OpenServiceHosts(provider, serviceHosts);
-                logger.Info(StartedLogMessage);
+                logger.Info(LogMessages.StartedLogMessage);
                 WaitForExit();
                 gameCoordinator.KeepGamesForRestart();
                 CloseServiceHosts(serviceHosts);
-                logger.Info(StoppedLogMessage);
+                logger.Info(LogMessages.StoppedLogMessage);
             }
             catch (AddressAlreadyInUseException ex)
             {
-                ReportFailure(logger, ex, AddressInUseLogMessage);
+                ReportFailure(logger, ex, LogMessages.AddressInUseLogMessage);
             }
             catch (CommunicationException ex)
             {
-                ReportFailure(logger, ex, CommunicationFailedLogMessage);
+                ReportFailure(logger, ex, LogMessages.CommunicationFailedLogMessage);
             }
             catch (Exception ex) when (IsConfigurationFailure(ex))
             {
-                ReportFailure(logger, ex, ConfigurationFailedLogMessage);
+                ReportFailure(logger, ex, LogMessages.ConfigurationFailedLogMessage);
             }
             finally
             {
@@ -90,7 +83,7 @@ namespace YachtDice.Server.Host
             }
             catch (DataAccessException ex)
             {
-                logger.Error(ex, WarmUpFailedLogMessage);
+                logger.Error(ex, LogMessages.WarmUpFailedLogMessage);
             }
         }
 
@@ -98,7 +91,7 @@ namespace YachtDice.Server.Host
         {
             var logger = new AppLogger(typeof(Program));
 
-            logger.Error((Exception)e.ExceptionObject, UnhandledErrorLogMessage);
+            logger.Error((Exception)e.ExceptionObject, LogMessages.UnhandledErrorLogMessage);
         }
 
         private static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)

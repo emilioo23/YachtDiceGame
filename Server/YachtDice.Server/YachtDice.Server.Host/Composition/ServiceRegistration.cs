@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Avatars;
@@ -32,7 +33,6 @@ namespace YachtDice.Server.Host.Composition
         private const string MaxFriendsKey = "Friends.MaxFriends";
         private const string MaxPendingRequestsKey = "Friends.MaxPendingRequests";
         private const string RoomWaitingMinutesKey = "Rooms.WaitingMinutes";
-        private const string InvalidNumberFormat = "The setting {0} is missing or is not a positive whole number.";
         private const int SmallestAllowedNumber = 1;
         private const string OffensiveWordsPath = "Resources\\OffensiveWords.txt";
         private const string GameRulesPath = "Resources\\GameRules.xml";
@@ -211,7 +211,8 @@ namespace YachtDice.Server.Host.Composition
 
             if (!isNumber || value < SmallestAllowedNumber)
             {
-                string message = string.Format(CultureInfo.InvariantCulture, InvalidNumberFormat, key);
+                string message = string.Format(CultureInfo.InvariantCulture,
+                    LogMessages.ServiceRegistrationInvalidNumberFormat, key);
 
                 throw new InvalidOperationException(message);
             }
