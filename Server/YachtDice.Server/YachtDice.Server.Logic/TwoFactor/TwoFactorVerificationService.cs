@@ -119,6 +119,35 @@ namespace YachtDice.Server.Logic.TwoFactor
             _codeService.RemoveBackupCodes(playerId);
         }
 
+        /// <summary>
+        /// Processes the code resend required by the interface.
+        /// </summary>
+        /// <param name="email">The player's email address.</param>
+        /// <param name="delivery">The session challenge and the culture name for email localization.</param>
+        /// <returns>
+        /// Result status of the resend process. A code is only sent when the challenge was issued to that email;
+        /// for any other email the answer is the same as for a sent code, so the screen cannot be used to find
+        /// out which emails have an account (section 8.8 of the standard).
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
+        public ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery)
+        {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+            }
+
+            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
+            ResendCodeStatus status = ResendCodeStatus.CodeSent;
+
+            if (IsOwnerOfTheChallenge(player, delivery))
+            {
+                status = ResendTo(player, delivery);
+            }
+
+            return status;
+        }
+
         private void LogOutcome(TwoFactorValidationStatus status)
         {
             if (status == TwoFactorValidationStatus.Valid)
@@ -164,35 +193,6 @@ namespace YachtDice.Server.Logic.TwoFactor
             {
                 _playerRepository.SaveState(player.Id, PlayerState.Active.ToString());
             }
-        }
-
-        /// <summary>
-        /// Processes the code resend required by the interface.
-        /// </summary>
-        /// <param name="email">The player's email address.</param>
-        /// <param name="delivery">The session challenge and the culture name for email localization.</param>
-        /// <returns>
-        /// Result status of the resend process. A code is only sent when the challenge was issued to that email;
-        /// for any other email the answer is the same as for a sent code, so the screen cannot be used to find
-        /// out which emails have an account (section 8.8 of the standard).
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The delivery data is null.</exception>
-        public ResendCodeStatus ResendPlayerCode(string email, CodeDelivery delivery)
-        {
-            if (delivery == null)
-            {
-                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
-            }
-
-            Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
-            ResendCodeStatus status = ResendCodeStatus.CodeSent;
-
-            if (IsOwnerOfTheChallenge(player, delivery))
-            {
-                status = ResendTo(player, delivery);
-            }
-
-            return status;
         }
 
         private static bool IsOwnerOfTheChallenge(Player player, CodeDelivery delivery)

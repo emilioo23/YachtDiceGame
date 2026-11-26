@@ -112,6 +112,14 @@ namespace YachtDice.Views
 
         private bool CanHold => CanRoll && _state.RollsLeft < MaxRolls;
 
+        /// <summary>
+        /// Makes the window close without asking the player, because the program decided to close it.
+        /// </summary>
+        public void AllowClose()
+        {
+            _isCloseAllowed = true;
+        }
+
         private static List<GameParticipant> ToParticipants(RoomState room)
         {
             return room.Players.Select(player => new GameParticipant(player.Id, player.DisplayName)).ToList();
@@ -768,14 +776,6 @@ namespace YachtDice.Views
         {
             _gamePlayers = GamePlayerFactory.UpdatePresence(_gamePlayers, room.Players);
             GamePlayersItemsControl.ItemsSource = _gamePlayers;
-        }
-
-        /// <summary>
-        /// Makes the window close without asking the player, because the program decided to close it.
-        /// </summary>
-        public void AllowClose()
-        {
-            _isCloseAllowed = true;
         }
 
         private void HandleWindowClosing(object sender, CancelEventArgs e)

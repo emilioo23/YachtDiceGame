@@ -46,6 +46,12 @@ namespace YachtDice.Server.Logic.Game
             ScoreCategory.Yacht
         };
 
+        private ComputerSkill(int maxRolls, bool chasesStraights)
+        {
+            MaxRolls = maxRolls;
+            ChasesStraights = chasesStraights;
+        }
+
         /// <summary>
         /// Gets how many rolls the computer player makes at most in a turn.
         /// </summary>
@@ -136,12 +142,6 @@ namespace YachtDice.Server.Logic.Game
             Func<ScoreEntry, bool> isBest = option => option.Category == best;
 
             return FixedPointCategories.Contains(best) && options.First(isBest).Points > NoPoints;
-        }
-
-        private ComputerSkill(int maxRolls, bool chasesStraights)
-        {
-            MaxRolls = maxRolls;
-            ChasesStraights = chasesStraights;
         }
 
         private static List<int> FindLongestRun(IReadOnlyList<int> dice)

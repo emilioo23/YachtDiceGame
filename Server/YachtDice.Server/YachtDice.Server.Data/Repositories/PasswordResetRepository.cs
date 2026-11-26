@@ -77,26 +77,6 @@ namespace YachtDice.Server.Data.Repositories
                 CompleteFailedMessage);
         }
 
-        private static List<PwdResetToken> SelectByPlayer(YachtDiceContext context, int playerId)
-        {
-            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
-            List<PwdResetToken> tokens = context.PwdResetToken.Where(isSamePlayerId).ToList();
-
-            return tokens;
-        }
-
-        private static void RemoveTokens(YachtDiceContext context, int playerId)
-        {
-            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
-            context.PwdResetToken.RemoveRange(context.PwdResetToken.Where(isSamePlayerId));
-        }
-
-        private static void ReplaceToken(YachtDiceContext context, PwdResetToken token)
-        {
-            RemoveTokens(context, token.PlayerId);
-            context.PwdResetToken.Add(token);
-        }
-
         /// <summary>
         /// Gets the hashes of the last passwords of the player: the current one and the ones before it that are
         /// still remembered.
@@ -126,6 +106,26 @@ namespace YachtDice.Server.Data.Repositories
                 FindFailedMessage);
 
             return dates;
+        }
+
+        private static List<PwdResetToken> SelectByPlayer(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
+            List<PwdResetToken> tokens = context.PwdResetToken.Where(isSamePlayerId).ToList();
+
+            return tokens;
+        }
+
+        private static void RemoveTokens(YachtDiceContext context, int playerId)
+        {
+            Expression<Func<PwdResetToken, bool>> isSamePlayerId = token => token.PlayerId == playerId;
+            context.PwdResetToken.RemoveRange(context.PwdResetToken.Where(isSamePlayerId));
+        }
+
+        private static void ReplaceToken(YachtDiceContext context, PwdResetToken token)
+        {
+            RemoveTokens(context, token.PlayerId);
+            context.PwdResetToken.Add(token);
         }
 
         private static List<DateTime> SelectChangeDates(YachtDiceContext context, int playerId)

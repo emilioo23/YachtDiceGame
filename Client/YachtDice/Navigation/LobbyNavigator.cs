@@ -77,6 +77,27 @@ namespace YachtDice.Navigation
                 () => roomGateway.JoinListedRoomAsync(roomToJoin));
         }
 
+        /// <summary>
+        /// Takes the player out of the chat and of the room. The window of the room is already closed, so if the
+        /// server cannot be told, the player is told on the window that is open now.
+        /// </summary>
+        /// <param name="chat">Chat of the room that the player leaves.</param>
+        /// <param name="roomGateway">Connection of the player to the room that the player leaves.</param>
+        /// <returns>A task that finishes when the player left or was told the problem.</returns>
+        public static async Task LeaveRoomAsync(ChatGateway chat, RoomGateway roomGateway)
+        {
+            try
+            {
+                await Task.WhenAll(chat.LeaveAsync(), roomGateway.LeaveRoomAsync());
+            }
+            catch (GatewayException ex)
+            {
+                Window openWindow = Application.Current.Windows.OfType<Window>().LastOrDefault();
+
+                CustomDialogWindow.ShowMessage(openWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
+            }
+        }
+
         private static async Task JoinAndOpenAsync(
             Window currentWindow,
             RoomGateway roomGateway,
@@ -98,27 +119,6 @@ namespace YachtDice.Navigation
             catch (GatewayException ex)
             {
                 CustomDialogWindow.ShowMessage(currentWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
-            }
-        }
-
-        /// <summary>
-        /// Takes the player out of the chat and of the room. The window of the room is already closed, so if the
-        /// server cannot be told, the player is told on the window that is open now.
-        /// </summary>
-        /// <param name="chat">Chat of the room that the player leaves.</param>
-        /// <param name="roomGateway">Connection of the player to the room that the player leaves.</param>
-        /// <returns>A task that finishes when the player left or was told the problem.</returns>
-        public static async Task LeaveRoomAsync(ChatGateway chat, RoomGateway roomGateway)
-        {
-            try
-            {
-                await Task.WhenAll(chat.LeaveAsync(), roomGateway.LeaveRoomAsync());
-            }
-            catch (GatewayException ex)
-            {
-                Window openWindow = Application.Current.Windows.OfType<Window>().LastOrDefault();
-
-                CustomDialogWindow.ShowMessage(openWindow, GatewayErrorMessages.GetMessage(ex.ErrorCode));
             }
         }
 

@@ -100,6 +100,21 @@ namespace YachtDice.Server.Data.Repositories
             return games;
         }
 
+        /// <summary>
+        /// Finds the saved scorecards of a game, one for each registered player.
+        /// </summary>
+        /// <param name="gameId">Identifier of the game.</param>
+        /// <returns>The scorecards, or an empty list if the game has none.</returns>
+        /// <exception cref="DataAccessException">The database could not be queried.</exception>
+        public List<ScorecardRecord> FindScorecards(int gameId)
+        {
+            List<ScorecardRecord> scorecards = DatabaseOperation.Query(
+                context => SelectScorecards(context, gameId),
+                ScorecardsFailedMessage);
+
+            return scorecards;
+        }
+
         private static List<PlayedGameRecord> SelectRecentGames(YachtDiceContext context, int playerId, int maxGames)
         {
             Expression<Func<GameHistoryPlayer, bool>> isSamePlayer =
@@ -151,21 +166,6 @@ namespace YachtDice.Server.Data.Repositories
             return context.GameHistoryPlayer
                 .Where(isComputerGameOfPlayer)
                 .ToList();
-        }
-
-        /// <summary>
-        /// Finds the saved scorecards of a game, one for each registered player.
-        /// </summary>
-        /// <param name="gameId">Identifier of the game.</param>
-        /// <returns>The scorecards, or an empty list if the game has none.</returns>
-        /// <exception cref="DataAccessException">The database could not be queried.</exception>
-        public List<ScorecardRecord> FindScorecards(int gameId)
-        {
-            List<ScorecardRecord> scorecards = DatabaseOperation.Query(
-                context => SelectScorecards(context, gameId),
-                ScorecardsFailedMessage);
-
-            return scorecards;
         }
 
         private static List<ScorecardRecord> SelectScorecards(YachtDiceContext context, int gameId)
