@@ -1,5 +1,6 @@
 ﻿using System;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Moderation;
@@ -16,10 +17,6 @@ namespace YachtDice.Server.Logic.Authentication
         private const int DefaultAvatarId = 1;
         private const int HoursToVerifyEmail = 48;
         private const int InitialExperience = 0;
-        private const string RegisteredLogMessage = "Player registered successfully.";
-        private const string NullPlayerMessage = "The new player cannot be null.";
-        private const string NullRepositoryMessage = "The player repository cannot be null.";
-        private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -33,8 +30,10 @@ namespace YachtDice.Server.Logic.Authentication
         public RegistrationService(IPlayerRepository playerRepository, OffensiveWordFilter wordFilter)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
-            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.RegistrationNullRepositoryMessage);
+            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter),
+                LogMessages.NullWordFilterMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -48,7 +47,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (newPlayer == null)
             {
-                throw new ArgumentNullException(nameof(newPlayer), NullPlayerMessage);
+                throw new ArgumentNullException(nameof(newPlayer), LogMessages.RegistrationNullPlayerMessage);
             }
 
             RegistrationResult result = FindRegistrationProblem(newPlayer, plainPassword);
@@ -60,7 +59,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (result == RegistrationResult.Success)
             {
-                _logger.Info(RegisteredLogMessage);
+                _logger.Info(LogMessages.RegisteredLogMessage);
             }
 
             return result;

@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Game
 {
     /// <summary>
@@ -6,9 +8,6 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     internal sealed class GamePlayer
     {
-        private const string NullParticipantMessage = "The participant of the game cannot be null.";
-        private const string NullCardMessage = "The scorecard of the player cannot be null.";
-
         /// <summary>
         /// Initializes a player who starts present and with an empty scorecard.
         /// </summary>
@@ -18,14 +17,14 @@ namespace YachtDice.Server.Logic.Game
         {
             if (participant == null)
             {
-                throw new ArgumentNullException(nameof(participant), NullParticipantMessage);
+                throw new ArgumentNullException(nameof(participant), LogMessages.NullParticipantMessage);
             }
 
             PlayerId = participant.PlayerId;
             Name = participant.Name;
             IsComputer = participant.IsComputer;
             Skill = ComputerSkill.For(participant.Difficulty);
-            Card = card ?? throw new ArgumentNullException(nameof(card), NullCardMessage);
+            Card = card ?? throw new ArgumentNullException(nameof(card), LogMessages.NullCardMessage);
             IsPresent = true;
         }
 

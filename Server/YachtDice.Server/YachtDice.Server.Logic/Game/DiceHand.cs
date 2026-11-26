@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -29,9 +30,6 @@ namespace YachtDice.Server.Logic.Game
         private const int SingleOccurrence = 1;
         private const int FaceCount = MaximumFaceValue - MinimumFaceValue + 1;
         private const int CountsLength = MaximumFaceValue + 1;
-        private const string NullDiceMessage = "The dice of a roll cannot be null.";
-        private const string InvalidCountMessage = "A roll must have exactly five dice.";
-        private const string InvalidValueMessage = "A die can only show a value from one to six.";
 
         private readonly int[] _countsByFace = new int[CountsLength];
 
@@ -46,12 +44,12 @@ namespace YachtDice.Server.Logic.Game
         {
             if (dice == null)
             {
-                throw new ArgumentNullException(nameof(dice), NullDiceMessage);
+                throw new ArgumentNullException(nameof(dice), LogMessages.NullDiceMessage);
             }
 
             if (dice.Count != DiceCount)
             {
-                throw new ArgumentException(InvalidCountMessage, nameof(dice));
+                throw new ArgumentException(LogMessages.InvalidCountMessage, nameof(dice));
             }
 
             Func<int, bool> isOutOfRange = value => value < MinimumFaceValue || value > MaximumFaceValue;
@@ -59,7 +57,7 @@ namespace YachtDice.Server.Logic.Game
 
             if (hasInvalidValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(dice), InvalidValueMessage);
+                throw new ArgumentOutOfRangeException(nameof(dice), LogMessages.InvalidValueMessage);
             }
 
             foreach (int value in dice)

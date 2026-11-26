@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Rooms;
 using RoomInvite = YachtDice.Server.Data.RoomInvite;
@@ -13,7 +14,6 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class RoomInvitationService : IRoomInvitationService
     {
-        private const string NullDependencyMessage = "A dependency of the room invitation service cannot be null.";
         private const int InvitationLifetimeHours = 24;
         private const int MaxReceivedInvitations = 20;
 
@@ -33,11 +33,14 @@ namespace YachtDice.Server.Logic.Friends
             IRoomInviteRepository inviteRepository)
         {
             _roomManager = roomManager
-                ?? throw new ArgumentNullException(nameof(roomManager), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(roomManager),
+                    LogMessages.RoomInvitationNullDependencyMessage);
             _friendshipService = friendshipService
-                ?? throw new ArgumentNullException(nameof(friendshipService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(friendshipService),
+                    LogMessages.RoomInvitationNullDependencyMessage);
             _inviteRepository = inviteRepository
-                ?? throw new ArgumentNullException(nameof(inviteRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(inviteRepository),
+                    LogMessages.RoomInvitationNullDependencyMessage);
         }
 
         /// <inheritdoc />

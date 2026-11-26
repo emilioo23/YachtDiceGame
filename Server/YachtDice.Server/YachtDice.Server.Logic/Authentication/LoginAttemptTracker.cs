@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 
 namespace YachtDice.Server.Logic.Authentication
@@ -32,7 +33,6 @@ namespace YachtDice.Server.Logic.Authentication
         public const int DailyLockHours = 24;
 
         private const int NoFailures = 0;
-        private const string NullRepositoryMessage = "The data access of the players cannot be null.";
         private readonly object _syncRoot = new object();
         private readonly Dictionary<int, LoginAttempts> _attemptsByPlayer = new Dictionary<int, LoginAttempts>();
         private readonly IPlayerRepository _playerRepository;
@@ -44,7 +44,7 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginAttemptTracker(IPlayerRepository playerRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.NullPlayerRepositoryMessage);
         }
 
         /// <summary>

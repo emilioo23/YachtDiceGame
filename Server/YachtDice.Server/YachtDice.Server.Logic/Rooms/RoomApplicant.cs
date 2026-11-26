@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
@@ -7,8 +9,6 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     internal sealed class RoomApplicant
     {
-        private const string NullNameMessage = "The name of the player cannot be null.";
-
         /// <summary>
         /// Initializes the applicant.
         /// </summary>
@@ -16,7 +16,7 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="avatarId">Identifier of the avatar of the player.</param>
         public RoomApplicant(string name, int avatarId, int level)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), LogMessages.NullPlayerNameMessage);
             AvatarId = avatarId;
             Level = level;
         }

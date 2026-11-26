@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using log4net;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Logging
 {
@@ -12,9 +13,7 @@ namespace YachtDice.Server.Logic.Logging
     /// </summary>
     public class AppLogger
     {
-        private const string NullOwnerTypeMessage = "The owner type cannot be null when initializing the logger.";
         private const int MaxStackLevels = 3;
-        private const string NullExceptionMessage = "The exception to log cannot be null.";
         private const string ErrorFormat = "{0} Exception: {1}.";
         private const string CauseFormat = " Cause: {0}.";
         private const string StackFormat = " Stack: {0}.";
@@ -30,7 +29,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (ownerType == null)
             {
-                throw new ArgumentNullException(nameof(ownerType), NullOwnerTypeMessage);
+                throw new ArgumentNullException(nameof(ownerType), LogMessages.NullOwnerTypeMessage);
             }
 
             _log = LogManager.GetLogger(ownerType);
@@ -88,7 +87,7 @@ namespace YachtDice.Server.Logic.Logging
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception), NullExceptionMessage);
+                throw new ArgumentNullException(nameof(exception), LogMessages.NullExceptionMessage);
             }
 
             return string.Concat(

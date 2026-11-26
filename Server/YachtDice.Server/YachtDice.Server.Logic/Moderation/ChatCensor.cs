@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Moderation
 {
@@ -18,7 +19,6 @@ namespace YachtDice.Server.Logic.Moderation
         /// </summary>
         public const int RegexTimeoutMilliseconds = 100;
 
-        private const string NullMessageMessage = "The message to censor cannot be null.";
         private const string LinkPattern =
             @"(https?://|www\.)\S+"
             + @"|\b[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|net|org|edu|gov|mx|io|gg|xyz|me|ly|tv|co|info|es|us|app|dev|link)\b"
@@ -38,7 +38,7 @@ namespace YachtDice.Server.Logic.Moderation
         {
             if (message == null)
             {
-                throw new ArgumentNullException(nameof(message), NullMessageMessage);
+                throw new ArgumentNullException(nameof(message), LogMessages.ChatCensorNullMessageMessage);
             }
 
             return Links.Replace(message, match => new string(ChatCensor.CensorCharacter, match.Length));

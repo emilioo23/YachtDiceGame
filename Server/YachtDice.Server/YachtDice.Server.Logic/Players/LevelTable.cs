@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Players
 {
@@ -21,14 +22,7 @@ namespace YachtDice.Server.Logic.Players
 
         private const int StartingExperience = 0;
         private const int FirstLevel = 1;
-        private const string NullThresholdsMessage = "The experience of each level cannot be null.";
-        private const string EmptyThresholdsMessage = "There must be at least one level.";
-        private const string InvalidFirstThresholdMessage = "The first level must need zero experience.";
-        private const string UnorderedThresholdsMessage = "Each level must need more experience than the last one.";
-        private const string NegativeExperienceMessage = "The experience of a player cannot be negative.";
-        private const string InvalidLevelMessage = "The level must be at least one.";
         private const int NoPoints = 0;
-        private const string NegativeTotalMessage = "The total of the scorecard cannot be negative.";
         private readonly List<int> _thresholds;
 
         /// <summary>
@@ -42,24 +36,24 @@ namespace YachtDice.Server.Logic.Players
         {
             if (thresholds == null)
             {
-                throw new ArgumentNullException(nameof(thresholds), NullThresholdsMessage);
+                throw new ArgumentNullException(nameof(thresholds), LogMessages.NullThresholdsMessage);
             }
 
             List<int> levelThresholds = thresholds.ToList();
 
             if (levelThresholds.Count == 0)
             {
-                throw new ArgumentException(EmptyThresholdsMessage, nameof(thresholds));
+                throw new ArgumentException(LogMessages.EmptyThresholdsMessage, nameof(thresholds));
             }
 
             if (levelThresholds.First() != StartingExperience)
             {
-                throw new ArgumentException(InvalidFirstThresholdMessage, nameof(thresholds));
+                throw new ArgumentException(LogMessages.InvalidFirstThresholdMessage, nameof(thresholds));
             }
 
             if (!IsAscending(levelThresholds))
             {
-                throw new ArgumentException(UnorderedThresholdsMessage, nameof(thresholds));
+                throw new ArgumentException(LogMessages.UnorderedThresholdsMessage, nameof(thresholds));
             }
 
             _thresholds = levelThresholds;
@@ -80,7 +74,7 @@ namespace YachtDice.Server.Logic.Players
         {
             if (experience < StartingExperience)
             {
-                throw new ArgumentOutOfRangeException(nameof(experience), NegativeExperienceMessage);
+                throw new ArgumentOutOfRangeException(nameof(experience), LogMessages.NegativeExperienceMessage);
             }
 
             Func<int, bool> isReached = threshold => threshold <= experience;
@@ -98,7 +92,7 @@ namespace YachtDice.Server.Logic.Players
         {
             if (level < FirstLevel)
             {
-                throw new ArgumentOutOfRangeException(nameof(level), InvalidLevelMessage);
+                throw new ArgumentOutOfRangeException(nameof(level), LogMessages.InvalidLevelMessage);
             }
 
             int levelIndex = Math.Min(level, MaxLevel) - 1;
@@ -117,7 +111,7 @@ namespace YachtDice.Server.Logic.Players
         {
             if (level < FirstLevel)
             {
-                throw new ArgumentOutOfRangeException(nameof(level), InvalidLevelMessage);
+                throw new ArgumentOutOfRangeException(nameof(level), LogMessages.InvalidLevelMessage);
             }
 
             return GetLevelStart(Math.Min(level + 1, MaxLevel));
@@ -134,7 +128,7 @@ namespace YachtDice.Server.Logic.Players
         {
             if (total < NoPoints)
             {
-                throw new ArgumentOutOfRangeException(nameof(total), NegativeTotalMessage);
+                throw new ArgumentOutOfRangeException(nameof(total), LogMessages.NegativeTotalMessage);
             }
 
             int baseExperience = isWinner ? WinnerBaseExperience : LoserBaseExperience;

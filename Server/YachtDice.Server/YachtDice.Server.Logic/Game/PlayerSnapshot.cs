@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -8,9 +9,6 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class PlayerSnapshot
     {
-        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
-        private const string NullNameMessage = "The name of the player cannot be null.";
-
         /// <summary>
         /// Initializes a new snapshot.
         /// </summary>
@@ -19,8 +17,8 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="isPresent">True if the player is connected to the game.</param>
         public PlayerSnapshot(string playerId, string name, bool isPresent)
         {
-            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
-            Name = name ?? throw new ArgumentNullException(nameof(name), NullNameMessage);
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), LogMessages.NullPlayerIdMessage);
+            Name = name ?? throw new ArgumentNullException(nameof(name), LogMessages.NullPlayerNameMessage);
             IsPresent = isPresent;
             Scores = new List<ScoreEntry>();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -14,8 +15,6 @@ namespace YachtDice.Server.Logic.Rooms
         private const string IdFormat = "N";
         private const string RepeatedNameFormat = "{0} {1}";
         private const int FirstRepeatedNumber = 2;
-        private const string NullCodeMessage = "The code of the room cannot be null.";
-        private const string NullSettingsMessage = "The settings of the room cannot be null.";
 
         private readonly List<RoomPlayer> _players = new List<RoomPlayer>();
         private readonly List<RoomPlayer> _absentPlayers = new List<RoomPlayer>();
@@ -31,9 +30,9 @@ namespace YachtDice.Server.Logic.Rooms
         public GameRoom(string code, RoomSettings settings, DateTime createdAt)
         {
             Id = Guid.NewGuid().ToString(IdFormat, CultureInfo.InvariantCulture);
-            Code = code ?? throw new ArgumentNullException(nameof(code), NullCodeMessage);
+            Code = code ?? throw new ArgumentNullException(nameof(code), LogMessages.NullRoomCodeMessage);
             HostId = string.Empty;
-            Settings = settings ?? throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings), LogMessages.NullSettingsMessage);
             CreatedAt = createdAt;
         }
 

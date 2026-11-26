@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Security;
@@ -28,11 +29,8 @@ namespace YachtDice.Server.Logic.TwoFactor
         private const int LockMinutes = 15;
         private const int NoFailedAttempts = 0;
         private const string GuidFormat = "N";
-        private const string NullCodeMessage = "The verification code cannot be null.";
-        private const string NullBackupRepositoryMessage = "The data access of the backup codes cannot be null.";
         private const string SubjectResourceKey = "TwoFactor_EmailSubject";
         private const string BodyResourceKey = "TwoFactor_EmailBody";
-        private const string NullArgumentMessage = "The value cannot be null.";
         private readonly ConcurrentDictionary<string, TwoFactorCode> _entries =
             new ConcurrentDictionary<string, TwoFactorCode>(StringComparer.OrdinalIgnoreCase);
         private readonly IBackupCodeRepository _backupCodeRepository;
@@ -48,7 +46,8 @@ namespace YachtDice.Server.Logic.TwoFactor
         public TwoFactorCodeService(IBackupCodeRepository backupCodeRepository, IEmailService emailService)
         {
             _backupCodeRepository = backupCodeRepository
-                ?? throw new ArgumentNullException(nameof(backupCodeRepository), NullBackupRepositoryMessage);
+                ?? throw new ArgumentNullException(nameof(backupCodeRepository),
+                    LogMessages.NullBackupRepositoryMessage);
             _emailSender = new CodeEmailSender(emailService, EmailTemplate);
         }
 
@@ -101,7 +100,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (verificationCode == null)
             {
-                throw new ArgumentNullException(nameof(verificationCode), NullCodeMessage);
+                throw new ArgumentNullException(nameof(verificationCode), LogMessages.TwoFactorCodeNullCodeMessage);
             }
 
             Func<TwoFactorCode, bool> isEmailCode = issuedCode => issuedCode.Code == verificationCode.Code;
@@ -125,7 +124,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (verificationCode == null)
             {
-                throw new ArgumentNullException(nameof(verificationCode), NullCodeMessage);
+                throw new ArgumentNullException(nameof(verificationCode), LogMessages.TwoFactorCodeNullCodeMessage);
             }
 
             Func<TwoFactorCode, bool> isBackupCode = issuedCode => TryUseBackupCode(playerId, verificationCode.Code);
@@ -235,7 +234,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(player), LogMessages.NullArgumentMessage);
             }
 
             string code = GenerateCode(player.Email, challengeId);

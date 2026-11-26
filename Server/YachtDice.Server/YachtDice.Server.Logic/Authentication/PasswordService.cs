@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Email;
 using YachtDice.Server.Logic.Logging;
@@ -15,15 +16,8 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class PasswordService : IPasswordRecoveryService
     {
-        private const string ChangedLogMessage = "Password changed with a recovery code.";
-        private const string TooManyAttemptsLogMessage = "Recovery code discarded after too many wrong attempts.";
-        private const string RequestedLogMessage = "A password recovery code was requested for an account.";
-        private const string ChangedFromSettingsLogMessage = "A player changed the password from the settings.";
-        private const string NullArgumentMessage = "The value cannot be null.";
         private const string EmailSubjectResourceKey = "PasswordReset_EmailSubject";
         private const string EmailBodyResourceKey = "PasswordReset_EmailBody";
-        private const string NullDependencyMessage = "A dependency of the password service cannot be null.";
-        private const string WrongPasswordLogMessage = "A wrong current password was typed in a password change.";
         private const int RecentLockDays = 7;
         private static readonly CodeEmailTemplate EmailTemplate =
             new CodeEmailTemplate(
@@ -49,9 +43,9 @@ namespace YachtDice.Server.Logic.Authentication
             IEmailService emailService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.PasswordNullDependencyMessage);
             _resetRepository = resetRepository
-                ?? throw new ArgumentNullException(nameof(resetRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(resetRepository), LogMessages.PasswordNullDependencyMessage);
             _emailSender = new CodeEmailSender(emailService, EmailTemplate);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
             _logger = new AppLogger(GetType());
@@ -67,7 +61,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (culture == null)
             {
-                throw new ArgumentNullException(nameof(culture), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(culture), LogMessages.NullArgumentMessage);
             }
 
             PasswordResetRequestStatus status = PasswordResetRequestStatus.MissingRequiredField;
@@ -79,7 +73,7 @@ namespace YachtDice.Server.Logic.Authentication
 
                 if (player != null && !WasCodeSentRecently(player.Id))
                 {
-                    _logger.Info(RequestedLogMessage);
+                    _logger.Info(LogMessages.RequestedLogMessage);
                     status = CreateAndSendCode(player, culture);
                 }
             }
@@ -263,7 +257,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 _resetRepository.CompleteReset(playerId, CredentialRules.ComputeHash(newPassword));
                 _attempts.Reset(playerId);
-                _logger.Info(ChangedLogMessage);
+                _logger.Info(LogMessages.ChangedLogMessage);
                 status = PasswordResetStatus.PasswordChanged;
             }
 
@@ -278,7 +272,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 _resetRepository.Delete(playerId);
                 _attempts.Reset(playerId);
-                _logger.Info(TooManyAttemptsLogMessage);
+                _logger.Info(LogMessages.TooManyAttemptsLogMessage);
                 status = PasswordResetStatus.TooManyAttempts;
             }
 
@@ -293,7 +287,7 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 _resetRepository.CompleteReset(player.Id, CredentialRules.ComputeHash(newPassword));
                 _attemptTracker.RegisterSuccess(player.Id);
-                _logger.Info(ChangedFromSettingsLogMessage);
+                _logger.Info(LogMessages.ChangedFromSettingsLogMessage);
             }
 
             return status;
@@ -310,7 +304,7 @@ namespace YachtDice.Server.Logic.Authentication
             else if (!IsCurrentPassword(player, currentPassword))
             {
                 _attemptTracker.RegisterFailure(player.Id, DateTime.UtcNow);
-                _logger.Info(WrongPasswordLogMessage);
+                _logger.Info(LogMessages.PasswordWrongPasswordLogMessage);
                 status = PasswordChangeStatus.WrongCurrentPassword;
             }
             else if (!CredentialRules.IsStrongPassword(newPassword))

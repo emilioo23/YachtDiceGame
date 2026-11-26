@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Rooms
 {
     /// <summary>
@@ -7,9 +9,6 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     public sealed class RoomMember
     {
-        private const string NullRoomCodeMessage = "The code of the room cannot be null.";
-        private const string NullPlayerIdMessage = "The identifier of the player cannot be null.";
-
         /// <summary>
         /// Initializes the member.
         /// </summary>
@@ -17,8 +16,8 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="playerId">Identifier that the room gave to the player.</param>
         public RoomMember(string roomCode, string playerId)
         {
-            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), NullRoomCodeMessage);
-            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), NullPlayerIdMessage);
+            RoomCode = roomCode ?? throw new ArgumentNullException(nameof(roomCode), LogMessages.NullRoomCodeMessage);
+            PlayerId = playerId ?? throw new ArgumentNullException(nameof(playerId), LogMessages.NullPlayerIdMessage);
         }
 
         /// <summary>

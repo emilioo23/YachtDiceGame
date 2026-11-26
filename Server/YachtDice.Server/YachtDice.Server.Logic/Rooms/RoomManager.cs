@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Avatars;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Moderation;
@@ -34,9 +35,6 @@ namespace YachtDice.Server.Logic.Rooms
         private const int NoInfractions = 0;
         private const int ComputerLevel = 0;
         private const string ComputerName = "CPU";
-        private const string BlankNameMessage = "The name of the player cannot be empty.";
-        private const string NullDependencyMessage = "A dependency of the room manager cannot be null.";
-        private const string NullSavedGameMessage = "The saved game cannot be null.";
 
         private readonly IAvatarLookup _avatarLookup;
         private readonly OffensiveWordFilter _wordFilter;
@@ -52,9 +50,9 @@ namespace YachtDice.Server.Logic.Rooms
         public RoomManager(IAvatarLookup avatarLookup, OffensiveWordFilter wordFilter)
         {
             _avatarLookup = avatarLookup
-                ?? throw new ArgumentNullException(nameof(avatarLookup), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(avatarLookup), LogMessages.RoomNullDependencyMessage);
             _wordFilter = wordFilter
-                ?? throw new ArgumentNullException(nameof(wordFilter), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(wordFilter), LogMessages.RoomNullDependencyMessage);
         }
 
         /// <summary>
@@ -174,7 +172,7 @@ namespace YachtDice.Server.Logic.Rooms
         {
             if (saved == null)
             {
-                throw new ArgumentNullException(nameof(saved), NullSavedGameMessage);
+                throw new ArgumentNullException(nameof(saved), LogMessages.NullSavedGameMessage);
             }
 
             GameRoom room = CreateRestoredRoom(saved);
@@ -356,7 +354,7 @@ namespace YachtDice.Server.Logic.Rooms
         {
             if (string.IsNullOrWhiteSpace(playerName))
             {
-                throw new ArgumentException(BlankNameMessage, nameof(playerName));
+                throw new ArgumentException(LogMessages.BlankPlayerNameMessage, nameof(playerName));
             }
         }
 
@@ -534,7 +532,8 @@ namespace YachtDice.Server.Logic.Rooms
                 && settings.MaxPlayers >= MinCapacity
                 && settings.MaxPlayers <= MaxCapacity;
             bool hasPlaceForPlayers = isWithinCapacity && settings.MaxPlayers >= room.Players.Count;
-            bool hasValidName = settings?.Name == null || TextSpacing.Collapse(settings.Name).Length <= MaxRoomNameLength;
+            bool hasValidName = settings?.Name == null
+                || TextSpacing.Collapse(settings.Name).Length <= MaxRoomNameLength;
 
             return hasPlaceForPlayers && hasValidName && Enum.IsDefined(typeof(GameSpeed), settings.Speed);
         }

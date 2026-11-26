@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Logging;
 
 namespace YachtDice.Server.Logic.Email
@@ -17,11 +18,6 @@ namespace YachtDice.Server.Logic.Email
         private const string SmtpUserVariable = "YACHTDICE_SMTP_USER";
         private const string SmtpPasswordVariable = "YACHTDICE_SMTP_PASSWORD";
         private const int SmtpTimeoutMilliseconds = 10000;
-        private const string NullMessageMessage = "The email to send cannot be null.";
-        private const string EmptyRecipientMessage = "The recipient address cannot be empty.";
-        private const string MissingSettingMessage = "The setting '{0}' is missing in the configuration file.";
-        private const string MissingVariableMessage = "The environment variable {0} is not defined on this computer.";
-        private const string SendFailedLogMessage = "An email could not be delivered to the mail server.";
 
         /// <summary>
         /// Sends a plain-text email to its recipient.
@@ -34,12 +30,12 @@ namespace YachtDice.Server.Logic.Email
         {
             if (message == null)
             {
-                throw new ArgumentNullException(nameof(message), NullMessageMessage);
+                throw new ArgumentNullException(nameof(message), LogMessages.EmailNullMessageMessage);
             }
 
             if (string.IsNullOrWhiteSpace(message.ToAddress))
             {
-                throw new ArgumentException(EmptyRecipientMessage, nameof(message));
+                throw new ArgumentException(LogMessages.EmptyRecipientMessage, nameof(message));
             }
 
             string host = ReadSetting(SmtpHostKey);
@@ -78,7 +74,7 @@ namespace YachtDice.Server.Logic.Email
             }
             catch (Exception ex) when (IsDeliveryFailure(ex))
             {
-                logger.Error(ex, SendFailedLogMessage);
+                logger.Error(ex, LogMessages.EmailSendFailedLogMessage);
             }
 
             return isSent;
@@ -90,7 +86,7 @@ namespace YachtDice.Server.Logic.Email
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, MissingSettingMessage, key);
+                string message = string.Format(CultureInfo.InvariantCulture, LogMessages.MissingSettingMessage, key);
 
                 throw new InvalidOperationException(message);
             }
@@ -104,7 +100,7 @@ namespace YachtDice.Server.Logic.Email
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, MissingVariableMessage, name);
+                string message = string.Format(CultureInfo.InvariantCulture, LogMessages.MissingVariableFormat, name);
 
                 throw new InvalidOperationException(message);
             }

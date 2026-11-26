@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Xml;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -129,7 +130,6 @@ namespace YachtDice.Server.Logic.Passkeys
         private const char UrlUnderscore = '_';
         private const char Padding = '=';
         private const int GroupSize = 4;
-        private const string NullDataMessage = "The bytes to encode cannot be null.";
         private const byte SequenceTag = 0x30;
         private const byte IntegerTag = 0x02;
         private const int LongFormFlag = 0x80;
@@ -172,7 +172,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (data == null)
             {
-                throw new ArgumentNullException(nameof(data), NullDataMessage);
+                throw new ArgumentNullException(nameof(data), LogMessages.PasskeyNullDataMessage);
             }
 
             string text = Convert.ToBase64String(data)

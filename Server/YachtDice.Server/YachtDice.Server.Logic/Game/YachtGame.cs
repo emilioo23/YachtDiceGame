@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Players;
 
 namespace YachtDice.Server.Logic.Game
@@ -23,8 +24,6 @@ namespace YachtDice.Server.Logic.Game
         private const int RoundOffset = 1;
         private const int LastPlayerCount = 1;
         private const int NoContenders = 0;
-        private const string NullParticipantsMessage = "The participants of the game cannot be null.";
-        private const string NullDieRollerMessage = "The roller of the dice cannot be null.";
 
         private readonly List<GamePlayer> _players;
         private readonly IDieRoller _dieRoller;
@@ -44,10 +43,12 @@ namespace YachtDice.Server.Logic.Game
         /// <exception cref="ArgumentNullException">The participants or the roller are null.</exception>
         public YachtGame(IEnumerable<GameParticipant> participants, IDieRoller dieRoller, int turnSeconds)
         {
-            _players = (participants ?? throw new ArgumentNullException(nameof(participants), NullParticipantsMessage))
+            _players = (participants ?? throw new ArgumentNullException(nameof(participants),
+                LogMessages.NullParticipantsMessage))
                 .Select(participant => new GamePlayer(participant, new ScoreCard(_calculator)))
                 .ToList();
-            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller), NullDieRollerMessage);
+            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller),
+                LogMessages.NullDieRollerMessage);
             TurnSeconds = turnSeconds;
             TurnNumber = FirstTurnNumber;
             _turnIndex = NoPlayerIndex;

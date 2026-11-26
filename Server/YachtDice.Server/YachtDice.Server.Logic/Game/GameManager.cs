@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Rooms;
 
 namespace YachtDice.Server.Logic.Game
@@ -10,11 +11,6 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameManager : IGameManager
     {
-        private const string NullDieRollerMessage = "The roller of the dice cannot be null.";
-        private const string NullTurnMessage = "The turn cannot be null.";
-        private const string NullTurnDurationMessage = "The duration of the turns cannot be null.";
-        private const string NullSavedGameMessage = "The saved game cannot be null.";
-
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, YachtGame> _games =
             new Dictionary<string, YachtGame>(StringComparer.OrdinalIgnoreCase);
@@ -28,9 +24,10 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="turnDuration">Seconds that a turn lasts for each speed of the game.</param>
         public GameManager(IDieRoller dieRoller, TurnDuration turnDuration)
         {
-            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller), NullDieRollerMessage);
+            _dieRoller = dieRoller ?? throw new ArgumentNullException(nameof(dieRoller),
+                LogMessages.NullDieRollerMessage);
             _turnDuration = turnDuration
-                ?? throw new ArgumentNullException(nameof(turnDuration), NullTurnDurationMessage);
+                ?? throw new ArgumentNullException(nameof(turnDuration), LogMessages.NullTurnDurationMessage);
         }
 
         /// <inheritdoc />
@@ -72,7 +69,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (turn == null)
             {
-                throw new ArgumentNullException(nameof(turn), NullTurnMessage);
+                throw new ArgumentNullException(nameof(turn), LogMessages.NullTurnMessage);
             }
 
             return Execute(turn.RoomCode, game => PlayIfSameTurn(game, turn.TurnNumber, game.AutoPlay));
@@ -83,7 +80,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (turn == null)
             {
-                throw new ArgumentNullException(nameof(turn), NullTurnMessage);
+                throw new ArgumentNullException(nameof(turn), LogMessages.NullTurnMessage);
             }
 
             return Execute(
@@ -120,7 +117,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (saved == null)
             {
-                throw new ArgumentNullException(nameof(saved), NullSavedGameMessage);
+                throw new ArgumentNullException(nameof(saved), LogMessages.NullSavedGameMessage);
             }
 
             int turnSeconds = _turnDuration.GetSeconds(saved.Settings.Speed);

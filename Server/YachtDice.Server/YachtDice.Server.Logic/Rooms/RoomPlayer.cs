@@ -1,4 +1,5 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Rooms
 {
@@ -9,9 +10,6 @@ namespace YachtDice.Server.Logic.Rooms
     /// </summary>
     public class RoomPlayer
     {
-        private const string NullIdMessage = "The identifier of the player cannot be null.";
-        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomPlayer"/> class.
         /// </summary>
@@ -20,8 +18,9 @@ namespace YachtDice.Server.Logic.Rooms
         /// <param name="avatarId">Identifier of the avatar that the player uses.</param>
         public RoomPlayer(string id, string displayName, int avatarId)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id), NullIdMessage);
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
+            Id = id ?? throw new ArgumentNullException(nameof(id), LogMessages.NullPlayerIdMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName),
+                LogMessages.NullPlayerNameMessage);
             AvatarId = avatarId;
         }
 

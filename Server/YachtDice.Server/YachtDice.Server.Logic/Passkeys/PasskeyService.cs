@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Logging;
@@ -19,21 +20,7 @@ namespace YachtDice.Server.Logic.Passkeys
     /// </summary>
     public class PasskeyService : IPasskeyService
     {
-        private const string NullDependencyMessage = "A dependency of the passkey service cannot be null.";
-        private const string NullAttestationMessage = "The answer of the authenticator cannot be null.";
-        private const string NullAssertionMessage = "The answer of the authenticator cannot be null.";
-        private const string BadRegistrationLogMessage =
-            "A passkey could not be saved because its answer is not valid.";
-        private const string ExpiredLogMessage = "A passkey answer arrived with a challenge that is not valid.";
-        private const string UnknownCredentialLogMessage = "Login attempt with a passkey that is not registered.";
-        private const string BadAssertionLogMessage = "Login attempt with a passkey answer that is not valid.";
-        private const string ClonedLogMessage = "Login attempt with a passkey whose counter went back.";
-        private const string LockedLogMessage = "Login attempt with a passkey while the account is locked.";
-        private const string WrongPasswordLogMessage = "Passkey removal with a wrong password.";
         private const string DeviceNameFormat = "{0} {1}";
-        private const string RegisteredLogFormat = "Player {0} registered a passkey.";
-        private const string RemovedLogFormat = "Player {0} removed a passkey.";
-        private const string LoggedInLogFormat = "Player {0} logged in with a passkey.";
         private const string DateFormat = "yyyy-MM-dd";
         private const string AttestationAuthDataKey = "authData";
         private const int HandleSize = 4;
@@ -59,11 +46,11 @@ namespace YachtDice.Server.Logic.Passkeys
             PasskeyChallengeStore challengeStore)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.PasskeyNullDependencyMessage);
             _passkeyRepository = passkeyRepository
-                ?? throw new ArgumentNullException(nameof(passkeyRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(passkeyRepository), LogMessages.PasskeyNullDependencyMessage);
             _challengeStore = challengeStore
-                ?? throw new ArgumentNullException(nameof(challengeStore), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(challengeStore), LogMessages.PasskeyNullDependencyMessage);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
             _logger = new AppLogger(GetType());
         }
@@ -101,7 +88,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (attestation == null)
             {
-                throw new ArgumentNullException(nameof(attestation), NullAttestationMessage);
+                throw new ArgumentNullException(nameof(attestation), LogMessages.NullAttestationMessage);
             }
 
             Player player = FindPlayer(displayName);
@@ -113,7 +100,7 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else if (!TryTakeRegistrationChallenge(attestation, player, out PendingChallenge pending))
             {
-                _logger.Warning(ExpiredLogMessage);
+                _logger.Warning(LogMessages.PasskeyExpiredLogMessage);
                 status = PasskeyRegistrationStatus.ChallengeExpired;
             }
             else
@@ -181,7 +168,7 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else if (string.IsNullOrEmpty(password) || !CredentialRules.Verify(password, player.PwdHash))
             {
-                _logger.Warning(WrongPasswordLogMessage);
+                _logger.Warning(LogMessages.PasskeyWrongPasswordLogMessage);
                 status = PasskeyRemovalStatus.InvalidPassword;
             }
             else
@@ -228,14 +215,14 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException(nameof(assertion), NullAssertionMessage);
+                throw new ArgumentNullException(nameof(assertion), LogMessages.NullAttestationMessage);
             }
 
             LoginResult result;
 
             if (!_challengeStore.TryTake(assertion.ChallengeId, PasskeyPurpose.Login, out PendingChallenge pending))
             {
-                result = Reject(ExpiredLogMessage);
+                result = Reject(LogMessages.PasskeyExpiredLogMessage);
             }
             else
             {
@@ -260,7 +247,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (status == PasskeyRemovalStatus.Removed)
             {
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, RemovedLogFormat, player.Id));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.RemovedLogFormat, player.Id));
             }
         }
 
@@ -345,7 +332,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (data == null || !PasskeyPublicKey.TryParse(data.CredentialPublicKey, out key))
             {
-                _logger.Warning(BadRegistrationLogMessage);
+                _logger.Warning(LogMessages.BadRegistrationLogMessage);
                 status = PasskeyRegistrationStatus.InvalidResponse;
             }
             else
@@ -395,7 +382,7 @@ namespace YachtDice.Server.Logic.Passkeys
             {
                 _passkeyRepository.Add(record);
                 status = PasskeyRegistrationStatus.Registered;
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, RegisteredLogFormat, player.Id));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.RegisteredLogFormat, player.Id));
             }
 
             return status;
@@ -472,11 +459,11 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (record == null)
             {
-                result = Reject(UnknownCredentialLogMessage);
+                result = Reject(LogMessages.UnknownCredentialLogMessage);
             }
             else if (parsed == null || !IsSignatureValid(parsed, record))
             {
-                result = Reject(BadAssertionLogMessage);
+                result = Reject(LogMessages.BadAssertionLogMessage);
             }
             else
             {
@@ -578,16 +565,17 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (isCounterBack)
             {
-                result = Reject(ClonedLogMessage);
+                result = Reject(LogMessages.ClonedLogMessage);
             }
             else if (currentLock != LoginLock.None)
             {
-                result = Reject(LockedLogMessage, LoginAttemptTracker.ToStatus(currentLock));
+                result = Reject(LogMessages.PasskeyLockedLogMessage, LoginAttemptTracker.ToStatus(currentLock));
             }
             else
             {
                 _passkeyRepository.SaveSignCount(record.Id, data.SignCount);
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, LoggedInLogFormat, record.PlayerId));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.PasskeyLoggedInLogFormat,
+                    record.PlayerId));
                 result = new LoginResult(
                     LoginStatus.LoggedIn,
                     record.PlayerDisplayName,

@@ -1,5 +1,6 @@
 ﻿using System;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Authentication
 {
@@ -8,11 +9,6 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginResult
     {
-        private const string NullDisplayNameMessage = "The name of the player cannot be null.";
-        private const string NullFirstNameMessage = "The first name of the player cannot be null.";
-        private const string NullPlayerMessage = "The player cannot be null.";
-        private const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginResult"/> class.
         /// </summary>
@@ -21,7 +17,8 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginResult(LoginStatus status, string displayName)
         {
             Status = status;
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName), NullDisplayNameMessage);
+            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName),
+                LogMessages.NullPlayerNameMessage);
             FirstName = string.Empty;
             Email = string.Empty;
             ChallengeId = string.Empty;
@@ -37,14 +34,15 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullPlayerMessage);
+                throw new ArgumentNullException(nameof(player), LogMessages.NullPlayerMessage);
             }
 
             Status = status;
             DisplayName = player.DisplayName;
             FirstName = player.FirstName;
             Email = player.Email ?? string.Empty;
-            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
+            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId),
+                LogMessages.NullChallengeIdMessage);
         }
 
         /// <summary>
@@ -57,7 +55,8 @@ namespace YachtDice.Server.Logic.Authentication
         public LoginResult(LoginStatus status, string displayName, string firstName)
             : this(status, displayName)
         {
-            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName), NullFirstNameMessage);
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName),
+                LogMessages.NullFirstNameMessage);
         }
 
         /// <summary>

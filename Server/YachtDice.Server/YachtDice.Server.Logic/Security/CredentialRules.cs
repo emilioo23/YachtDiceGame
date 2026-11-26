@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Security
 {
@@ -63,7 +64,6 @@ namespace YachtDice.Server.Logic.Security
         private const int KeyPart = 3;
         private const int NoIterations = 0;
         private const string HexByteFormat = "x2";
-        private const string EmptyValueMessage = "The value cannot be empty.";
         private const string SaltedCodeFormat = "{0}:{1}";
         private const string SaltedHashFormat = "{0}{1}{2}{1}{3}{1}{4}";
         private static readonly Regex UsernameCharacters = new Regex(
@@ -156,7 +156,7 @@ namespace YachtDice.Server.Logic.Security
         {
             if (string.IsNullOrWhiteSpace(plainPassword))
             {
-                throw new ArgumentException(EmptyValueMessage, nameof(plainPassword));
+                throw new ArgumentException(LogMessages.BlankValueMessage, nameof(plainPassword));
             }
 
             byte[] salt = new byte[SaltBytes];
@@ -190,12 +190,12 @@ namespace YachtDice.Server.Logic.Security
         {
             if (string.IsNullOrWhiteSpace(plainPassword))
             {
-                throw new ArgumentException(EmptyValueMessage, nameof(plainPassword));
+                throw new ArgumentException(LogMessages.BlankValueMessage, nameof(plainPassword));
             }
 
             if (string.IsNullOrWhiteSpace(storedHash))
             {
-                throw new ArgumentException(EmptyValueMessage, nameof(storedHash));
+                throw new ArgumentException(LogMessages.BlankValueMessage, nameof(storedHash));
             }
 
             bool isValid;

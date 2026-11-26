@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Security
 {
@@ -15,7 +16,6 @@ namespace YachtDice.Server.Logic.Security
     public sealed class SessionRegistry
     {
         private const int TokenBytes = 32;
-        private const string NullNameMessage = "The name of the player cannot be empty.";
 
         private readonly object _syncRoot = new object();
         private readonly Dictionary<string, string> _playerNamesByToken =
@@ -177,7 +177,7 @@ namespace YachtDice.Server.Logic.Security
         {
             if (string.IsNullOrWhiteSpace(playerName))
             {
-                throw new ArgumentException(NullNameMessage, nameof(playerName));
+                throw new ArgumentException(LogMessages.BlankPlayerNameMessage, nameof(playerName));
             }
         }
 

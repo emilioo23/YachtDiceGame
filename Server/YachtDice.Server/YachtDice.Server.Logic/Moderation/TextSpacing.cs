@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Moderation
 {
@@ -11,7 +12,6 @@ namespace YachtDice.Server.Logic.Moderation
         private const string SpacesPattern = @"\s+";
         private const string SingleSpace = " ";
         private const int SpacesRegexTimeoutMilliseconds = 100;
-        private const string NullTextMessage = "The text to clean cannot be null.";
 
         private static readonly Regex Spaces = new Regex(
             SpacesPattern,
@@ -29,7 +29,7 @@ namespace YachtDice.Server.Logic.Moderation
         {
             if (text == null)
             {
-                throw new ArgumentNullException(nameof(text), NullTextMessage);
+                throw new ArgumentNullException(nameof(text), LogMessages.TextSpacingNullTextMessage);
             }
 
             return Spaces.Replace(text.Trim(), SingleSpace);

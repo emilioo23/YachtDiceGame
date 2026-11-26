@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Logging;
@@ -16,13 +17,6 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorVerificationService : IVerificationService
     {
-        private const string NullDeliveryMessage = "The delivery data of the code cannot be null.";
-        private const string NullDependencyMessage = "A dependency of the two-factor verification cannot be null.";
-        private const string AcceptedLogMessage = "A verification code was accepted.";
-        private const string WrongLogMessage = "A wrong verification code was typed.";
-        private const string ExpiredLogMessage = "A verification code that expired was typed.";
-        private const string LockedLogMessage = "The verification codes are locked after too many wrong tries.";
-
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly TwoFactorCodeService _codeService;
@@ -37,8 +31,10 @@ namespace YachtDice.Server.Logic.TwoFactor
             TwoFactorCodeService codeService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
-            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.TwoFactorVerificationNullDependencyMessage);
+            _codeService = codeService ?? throw new ArgumentNullException(nameof(codeService),
+                LogMessages.TwoFactorVerificationNullDependencyMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -134,7 +130,7 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (delivery == null)
             {
-                throw new ArgumentNullException(nameof(delivery), NullDeliveryMessage);
+                throw new ArgumentNullException(nameof(delivery), LogMessages.NullDeliveryMessage);
             }
 
             Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
@@ -152,19 +148,19 @@ namespace YachtDice.Server.Logic.TwoFactor
         {
             if (status == TwoFactorValidationStatus.Valid)
             {
-                _logger.Info(AcceptedLogMessage);
+                _logger.Info(LogMessages.AcceptedLogMessage);
             }
             else if (status == TwoFactorValidationStatus.Incorrect)
             {
-                _logger.Warning(WrongLogMessage);
+                _logger.Warning(LogMessages.WrongLogMessage);
             }
             else if (status == TwoFactorValidationStatus.Expired)
             {
-                _logger.Warning(ExpiredLogMessage);
+                _logger.Warning(LogMessages.TwoFactorVerificationExpiredLogMessage);
             }
             else if (status == TwoFactorValidationStatus.Locked)
             {
-                _logger.Warning(LockedLogMessage);
+                _logger.Warning(LogMessages.TwoFactorVerificationLockedLogMessage);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Moderation;
@@ -20,11 +21,6 @@ namespace YachtDice.Server.Logic.Players
         private const int FlagCodeLength = 2;
         private const char FirstLetter = 'a';
         private const char LastLetter = 'z';
-        private const string NullRepositoryMessage = "The data access of the players cannot be null.";
-        private const string NullWordFilterMessage = "The filter of offensive words cannot be null.";
-        private const string NullAchievementsMessage = "The achievements of the players cannot be null.";
-        private const string DeletedLogFormat = "The account of player {0} was deleted.";
-        private const string WrongPasswordLogFormat = "Account deletion with a wrong password for player {0}.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(ProfileService));
         private readonly IPlayerRepository _playerRepository;
@@ -44,10 +40,11 @@ namespace YachtDice.Server.Logic.Players
             PlayerAchievements achievements)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullRepositoryMessage);
-            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter), NullWordFilterMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.NullPlayerRepositoryMessage);
+            _wordFilter = wordFilter ?? throw new ArgumentNullException(nameof(wordFilter),
+                LogMessages.NullWordFilterMessage);
             _achievements = achievements
-                ?? throw new ArgumentNullException(nameof(achievements), NullAchievementsMessage);
+                ?? throw new ArgumentNullException(nameof(achievements), LogMessages.NullAchievementsMessage);
         }
 
         /// <summary>
@@ -153,13 +150,14 @@ namespace YachtDice.Server.Logic.Players
 
             if (player != null && !CredentialRules.Verify(password ?? string.Empty, player.PwdHash))
             {
-                _logger.Warning(string.Format(CultureInfo.InvariantCulture, WrongPasswordLogFormat, player.Id));
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, LogMessages.ProfileWrongPasswordLogFormat,
+                    player.Id));
                 status = AccountDeletionStatus.WrongPassword;
             }
             else if (player != null)
             {
                 _playerRepository.Delete(player.Id);
-                _logger.Info(string.Format(CultureInfo.InvariantCulture, DeletedLogFormat, player.Id));
+                _logger.Info(string.Format(CultureInfo.InvariantCulture, LogMessages.DeletedLogFormat, player.Id));
                 status = AccountDeletionStatus.Success;
             }
 

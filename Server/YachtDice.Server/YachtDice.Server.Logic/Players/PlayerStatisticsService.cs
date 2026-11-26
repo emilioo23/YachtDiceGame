@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Game;
 
@@ -19,7 +20,6 @@ namespace YachtDice.Server.Logic.Players
         private const int MaxLeaderboardEntries = 100;
         private const int MaxHistoryGames = 20;
         private const string OpponentSeparator = ", ";
-        private const string NullDependencyMessage = "A dependency of the player statistics service cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameHistoryRepository _gameHistoryRepository;
@@ -37,10 +37,13 @@ namespace YachtDice.Server.Logic.Players
             LevelTable levelTable)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.PlayerStatisticsNullDependencyMessage);
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullDependencyMessage);
-            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository),
+                    LogMessages.PlayerStatisticsNullDependencyMessage);
+            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable),
+                LogMessages.PlayerStatisticsNullDependencyMessage);
         }
 
         /// <summary>

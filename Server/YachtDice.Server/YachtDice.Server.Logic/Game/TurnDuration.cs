@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Rooms;
 
 namespace YachtDice.Server.Logic.Game
@@ -13,9 +14,6 @@ namespace YachtDice.Server.Logic.Game
     public sealed class TurnDuration
     {
         private const int MinimumSeconds = 1;
-        private const string NullSecondsMessage = "The seconds of each speed cannot be null.";
-        private const string TooShortSecondsMessage = "The turn of every speed must last at least one second.";
-        private const string MissingSpeedFormat = "There is no turn duration for the speed {0}.";
 
         private readonly Dictionary<GameSpeed, int> _secondsBySpeed;
 
@@ -29,7 +27,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (secondsBySpeed == null)
             {
-                throw new ArgumentNullException(nameof(secondsBySpeed), NullSecondsMessage);
+                throw new ArgumentNullException(nameof(secondsBySpeed), LogMessages.NullSecondsMessage);
             }
 
             Func<int, bool> isTooShort = seconds => seconds < MinimumSeconds;
@@ -37,7 +35,7 @@ namespace YachtDice.Server.Logic.Game
 
             if (hasTooShortTurn)
             {
-                throw new ArgumentOutOfRangeException(nameof(secondsBySpeed), TooShortSecondsMessage);
+                throw new ArgumentOutOfRangeException(nameof(secondsBySpeed), LogMessages.TooShortSecondsMessage);
             }
 
             _secondsBySpeed = new Dictionary<GameSpeed, int>(secondsBySpeed);
@@ -53,7 +51,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (!_secondsBySpeed.TryGetValue(speed, out int seconds))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, MissingSpeedFormat, speed);
+                string message = string.Format(CultureInfo.InvariantCulture, LogMessages.MissingSpeedFormat, speed);
 
                 throw new ArgumentOutOfRangeException(nameof(speed), message);
             }

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Security.Cryptography;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -11,8 +12,6 @@ namespace YachtDice.Server.Logic.Passkeys
     /// </summary>
     public sealed class PasskeyChallengeStore
     {
-        private const string NullClockMessage = "The clock cannot be null.";
-
         private readonly ConcurrentDictionary<string, PendingChallenge> _pending =
             new ConcurrentDictionary<string, PendingChallenge>();
 
@@ -33,7 +32,7 @@ namespace YachtDice.Server.Logic.Passkeys
         /// <exception cref="ArgumentNullException">The clock is null.</exception>
         public PasskeyChallengeStore(Func<DateTime> clock)
         {
-            _clock = clock ?? throw new ArgumentNullException(nameof(clock), NullClockMessage);
+            _clock = clock ?? throw new ArgumentNullException(nameof(clock), LogMessages.NullClockMessage);
         }
 
         /// <summary>

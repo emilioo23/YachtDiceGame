@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Rooms;
 
@@ -12,9 +13,6 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameCheckpointService : IGameCheckpointService
     {
-        private const string NullDependencyMessage = "A dependency of the game checkpoint service cannot be null.";
-        private const string NullRoomMessage = "The room cannot be null.";
-        private const string NullSnapshotMessage = "The state of the game cannot be null.";
         private const int FirstDiePosition = 1;
         private const int NoPoints = 0;
         private const int NoVersion = 0;
@@ -37,9 +35,11 @@ namespace YachtDice.Server.Logic.Game
             IGameCheckpointRepository checkpointRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.GameCheckpointNullDependencyMessage);
             _checkpointRepository = checkpointRepository
-                ?? throw new ArgumentNullException(nameof(checkpointRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(checkpointRepository),
+                    LogMessages.GameCheckpointNullDependencyMessage);
         }
 
         /// <inheritdoc />
@@ -47,7 +47,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (room == null)
             {
-                throw new ArgumentNullException(nameof(room), NullRoomMessage);
+                throw new ArgumentNullException(nameof(room), LogMessages.NullRoomMessage);
             }
 
             Func<RoomPlayer, bool> isRegisteredPerson =
@@ -71,7 +71,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (snapshot == null)
             {
-                throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
+                throw new ArgumentNullException(nameof(snapshot), LogMessages.NullSnapshotMessage);
             }
 
             RoomSettings settings;

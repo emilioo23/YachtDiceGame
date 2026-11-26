@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Resources;
 
@@ -13,12 +14,6 @@ namespace YachtDice.Server.Logic.Email
     /// </summary>
     public class CodeEmailSender
     {
-        private const string SentLogFormat = "The email {0} was sent.";
-        private const string SendFailedLogFormat = "The email {0} could not be sent.";
-        private const string NullEmailServiceMessage = "The email service cannot be null.";
-        private const string NullTemplateMessage = "The template of the email cannot be null.";
-        private const string NullArgumentMessage = "The value cannot be null.";
-
         private readonly IEmailService _emailService;
         private readonly CodeEmailTemplate _template;
         private readonly AppLogger _logger;
@@ -31,9 +26,9 @@ namespace YachtDice.Server.Logic.Email
         public CodeEmailSender(IEmailService emailService, CodeEmailTemplate template)
         {
             _emailService = emailService
-                ?? throw new ArgumentNullException(nameof(emailService), NullEmailServiceMessage);
+                ?? throw new ArgumentNullException(nameof(emailService), LogMessages.NullEmailServiceMessage);
             _template = template
-                ?? throw new ArgumentNullException(nameof(template), NullTemplateMessage);
+                ?? throw new ArgumentNullException(nameof(template), LogMessages.NullTemplateMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -49,12 +44,12 @@ namespace YachtDice.Server.Logic.Email
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(player), LogMessages.NullArgumentMessage);
             }
 
             if (culture == null)
             {
-                throw new ArgumentNullException(nameof(culture), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(culture), LogMessages.NullArgumentMessage);
             }
 
             string subject = EmailStrings.ResourceManager.GetString(_template.SubjectResourceKey, culture);
@@ -66,7 +61,7 @@ namespace YachtDice.Server.Logic.Email
             };
 
             bool isSent = EmailService.TrySend(_emailService, message, _logger);
-            string logFormat = isSent ? SentLogFormat : SendFailedLogFormat;
+            string logFormat = isSent ? LogMessages.SentLogFormat : LogMessages.SendFailedLogFormat;
 
             _logger.Info(DescribeEmail(logFormat));
 

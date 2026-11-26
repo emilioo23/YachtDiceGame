@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Players;
@@ -15,23 +16,8 @@ namespace YachtDice.Server.Logic.Authentication
     /// </summary>
     public class LoginService : ILoginService
     {
-        private const string InvalidEmailLogMessage = "Login attempt with a malformed email.";
-        private const string UnknownEmailLogMessage = "Login attempt with an email that is not registered.";
-        private const string InvalidUsernameLogMessage = "Login attempt with a malformed username.";
-        private const string UnknownUsernameLogMessage = "Login attempt with a username that is not registered.";
-        private const string TooLongPasswordLogMessage = "Login attempt with a password longer than the maximum.";
         private const char EmailSeparator = '@';
         private const string TimingEqualizerPassword = "password-used-only-to-take-the-same-time";
-        private const string WrongPasswordLogFormat = "Login attempt with a wrong password for player {0}.";
-        private const string LoggedInLogFormat = "Player {0} logged in.";
-        private const string CodeSentLogFormat = "A verification code was sent to player {0}.";
-        private const string DailyLockLogFormat =
-            "The account of player {0} was locked for the day after wrong passwords.";
-        private const string LockedAccountLogMessage = "Login attempt while the two-step verification is locked.";
-        private const string NullCredentialsMessage = "The login credentials cannot be null.";
-        private const string NullDependencyMessage = "A dependency of the login service cannot be null.";
-        private const string LockedLoginLogFormat =
-            "Login attempt while the account of player {0} is locked by wrong passwords.";
 
         private readonly AppLogger _logger;
         private readonly IPlayerRepository _playerRepository;
@@ -52,11 +38,11 @@ namespace YachtDice.Server.Logic.Authentication
             TwoFactorCodeService codeService)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.LoginNullDependencyMessage);
             _verificationService = verificationService
-                ?? throw new ArgumentNullException(nameof(verificationService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(verificationService), LogMessages.LoginNullDependencyMessage);
             _codeService = codeService
-                ?? throw new ArgumentNullException(nameof(codeService), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(codeService), LogMessages.LoginNullDependencyMessage);
             _attemptTracker = new LoginAttemptTracker(playerRepository);
             _timingEqualizerHash = CredentialRules.ComputeHash(TimingEqualizerPassword);
             _logger = new AppLogger(GetType());
@@ -77,7 +63,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (credentials == null)
             {
-                throw new ArgumentNullException(nameof(credentials), NullCredentialsMessage);
+                throw new ArgumentNullException(nameof(credentials), LogMessages.NullCredentialsMessage);
             }
 
             LoginResult result;
@@ -88,7 +74,7 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else if (credentials.Password.Length > CredentialRules.PasswordMaxLength)
             {
-                result = Reject(LoginStatus.InvalidCredentials, TooLongPasswordLogMessage);
+                result = Reject(LoginStatus.InvalidCredentials, LogMessages.TooLongPasswordLogMessage);
             }
             else
             {
@@ -131,11 +117,11 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 Player player = _playerRepository.FindByEmail(email).FirstOrDefault();
 
-                result = CheckPlayer(player, credentials, UnknownEmailLogMessage);
+                result = CheckPlayer(player, credentials, LogMessages.UnknownEmailLogMessage);
             }
             else
             {
-                result = Reject(LoginStatus.InvalidEmail, InvalidEmailLogMessage);
+                result = Reject(LoginStatus.InvalidEmail, LogMessages.InvalidEmailLogMessage);
             }
 
             return result;
@@ -149,11 +135,11 @@ namespace YachtDice.Server.Logic.Authentication
             {
                 Player player = _playerRepository.FindByUsername(username).FirstOrDefault();
 
-                result = CheckPlayer(player, credentials, UnknownUsernameLogMessage);
+                result = CheckPlayer(player, credentials, LogMessages.UnknownUsernameLogMessage);
             }
             else
             {
-                result = Reject(LoginStatus.InvalidCredentials, InvalidUsernameLogMessage);
+                result = Reject(LoginStatus.InvalidCredentials, LogMessages.InvalidUsernameLogMessage);
             }
 
             return result;
@@ -206,7 +192,8 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (newLock == LoginLock.None)
             {
-                result = Reject(LoginStatus.InvalidCredentials, Describe(WrongPasswordLogFormat, player));
+                result = Reject(LoginStatus.InvalidCredentials, Describe(LogMessages.LoginWrongPasswordLogFormat,
+                    player));
             }
             else
             {
@@ -221,7 +208,7 @@ namespace YachtDice.Server.Logic.Authentication
         {
             if (newLock == LoginLock.Daily)
             {
-                _logger.Warning(Describe(DailyLockLogFormat, player));
+                _logger.Warning(Describe(LogMessages.DailyLockLogFormat, player));
                 AccountLockedForTheDay?.Invoke(player, culture);
             }
         }
@@ -233,7 +220,8 @@ namespace YachtDice.Server.Logic.Authentication
 
         private LoginResult RejectLocked(Player player, LoginLock currentLock)
         {
-            return Reject(LoginAttemptTracker.ToStatus(currentLock), Describe(LockedLoginLogFormat, player));
+            return Reject(LoginAttemptTracker.ToStatus(currentLock), Describe(LogMessages.LockedLoginLogFormat,
+                player));
         }
 
         private LoginResult CompleteLogin(Player player, CultureInfo culture)
@@ -242,7 +230,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (_verificationService.IsLocked(player.Email))
             {
-                _logger.Warning(LockedAccountLogMessage);
+                _logger.Warning(LogMessages.LockedAccountLogMessage);
                 result = new LoginResult(LoginStatus.VerificationLocked, string.Empty);
             }
             else if (IsUnverified(player) || _playerRepository.HasTwoFactorEnabled(player.Id))
@@ -251,7 +239,7 @@ namespace YachtDice.Server.Logic.Authentication
             }
             else
             {
-                _logger.Info(Describe(LoggedInLogFormat, player));
+                _logger.Info(Describe(LogMessages.LoginLoggedInLogFormat, player));
                 result = new LoginResult(LoginStatus.LoggedIn, player, string.Empty);
             }
 
@@ -284,7 +272,7 @@ namespace YachtDice.Server.Logic.Authentication
 
             if (isSent)
             {
-                _logger.Info(Describe(CodeSentLogFormat, player));
+                _logger.Info(Describe(LogMessages.CodeSentLogFormat, player));
             }
 
             return new LoginResult(status, player, challengeId);

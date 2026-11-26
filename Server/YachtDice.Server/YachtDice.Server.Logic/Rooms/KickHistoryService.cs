@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 
 namespace YachtDice.Server.Logic.Rooms
@@ -13,7 +14,6 @@ namespace YachtDice.Server.Logic.Rooms
     public class KickHistoryService
     {
         private const int MaxHistoryEntries = 20;
-        private const string NullDependencyMessage = "A dependency of the history of expulsions cannot be null.";
 
         private readonly IPlayerRepository _playerRepository;
         private readonly IKickLogRepository _kickLogRepository;
@@ -27,9 +27,11 @@ namespace YachtDice.Server.Logic.Rooms
         public KickHistoryService(IPlayerRepository playerRepository, IKickLogRepository kickLogRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.KickHistoryNullDependencyMessage);
             _kickLogRepository = kickLogRepository
-                ?? throw new ArgumentNullException(nameof(kickLogRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(kickLogRepository),
+                    LogMessages.KickHistoryNullDependencyMessage);
         }
 
         /// <summary>

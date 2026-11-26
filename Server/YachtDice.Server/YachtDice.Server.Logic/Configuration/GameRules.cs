@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Game;
 using YachtDice.Server.Logic.Players;
 using YachtDice.Server.Logic.Rooms;
@@ -14,7 +15,6 @@ namespace YachtDice.Server.Logic.Configuration
     /// </summary>
     public sealed class GameRules
     {
-        private const string NullRuleMessage = "A rule of the game cannot be null.";
         private const string GameModesElement = "gameModes";
         private const string ModeElement = "mode";
         private const string SpeedAttribute = "speed";
@@ -29,11 +29,6 @@ namespace YachtDice.Server.Logic.Configuration
         private const string RequiredValueAttribute = "requiredValue";
         private const string MinimumGamesAttribute = "minimumGames";
         private const string HasTitleAttribute = "hasTitle";
-        private const string NullDocumentMessage = "The document of the rules of the game cannot be null.";
-        private const string MissingSectionFormat = "The rules of the game have no {0} section.";
-        private const string InvalidValueFormat = "The attribute {0} of the element {1} has a value that is not valid.";
-        private const string InvalidNumberFormat =
-            "The attribute {0} of the element {1} is missing or is not a whole number of zero or more.";
 
         /// <summary>
         /// Initializes the rules of the game.
@@ -44,9 +39,11 @@ namespace YachtDice.Server.Logic.Configuration
         /// <exception cref="ArgumentNullException">Any of the parameters is null.</exception>
         public GameRules(TurnDuration turnDuration, LevelTable levelTable, AchievementCatalog achievements)
         {
-            TurnDuration = turnDuration ?? throw new ArgumentNullException(nameof(turnDuration), NullRuleMessage);
-            LevelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullRuleMessage);
-            Achievements = achievements ?? throw new ArgumentNullException(nameof(achievements), NullRuleMessage);
+            TurnDuration = turnDuration ?? throw new ArgumentNullException(nameof(turnDuration),
+                LogMessages.NullRuleMessage);
+            LevelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), LogMessages.NullRuleMessage);
+            Achievements = achievements ?? throw new ArgumentNullException(nameof(achievements),
+                LogMessages.NullRuleMessage);
         }
 
         /// <summary>
@@ -74,7 +71,8 @@ namespace YachtDice.Server.Logic.Configuration
         /// <exception cref="ArgumentException">The levels, the modes or the achievements break their rules.</exception>
         public static GameRules Read(XDocument document)
         {
-            XElement root = document?.Root ?? throw new ArgumentNullException(nameof(document), NullDocumentMessage);
+            XElement root = document?.Root ?? throw new ArgumentNullException(nameof(document),
+                LogMessages.NullDocumentMessage);
 
             return new GameRules(
                 ReadTurnDuration(GetSection(root, GameModesElement)),
@@ -88,7 +86,8 @@ namespace YachtDice.Server.Logic.Configuration
 
             if (section == null)
             {
-                string message = string.Format(CultureInfo.InvariantCulture, MissingSectionFormat, sectionName);
+                string message = string.Format(CultureInfo.InvariantCulture, LogMessages.MissingSectionFormat,
+                    sectionName);
 
                 throw new InvalidOperationException(message);
             }
@@ -153,7 +152,8 @@ namespace YachtDice.Server.Logic.Configuration
 
             if (!isValid)
             {
-                throw new InvalidOperationException(FormatProblem(InvalidValueFormat, achievement, HasTitleAttribute));
+                throw new InvalidOperationException(FormatProblem(LogMessages.InvalidValueFormat, achievement,
+                    HasTitleAttribute));
             }
 
             return hasTitle;
@@ -166,7 +166,8 @@ namespace YachtDice.Server.Logic.Configuration
 
             if (!isNumber)
             {
-                throw new InvalidOperationException(FormatProblem(InvalidNumberFormat, element, attributeName));
+                throw new InvalidOperationException(FormatProblem(LogMessages.GameInvalidNumberFormat, element,
+                    attributeName));
             }
 
             return value;
@@ -181,7 +182,8 @@ namespace YachtDice.Server.Logic.Configuration
 
             if (!isDefinedName)
             {
-                throw new InvalidOperationException(FormatProblem(InvalidValueFormat, element, attributeName));
+                throw new InvalidOperationException(FormatProblem(LogMessages.InvalidValueFormat, element,
+                    attributeName));
             }
 
             return value;

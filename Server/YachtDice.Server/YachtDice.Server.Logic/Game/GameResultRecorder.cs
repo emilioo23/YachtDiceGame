@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Rooms;
 
@@ -16,10 +17,6 @@ namespace YachtDice.Server.Logic.Game
     /// </summary>
     public sealed class GameResultRecorder : IGameResultRecorder
     {
-        private const string NullSettingsMessage = "The settings of the room cannot be null.";
-        private const string NullSnapshotMessage = "The state of the game cannot be null.";
-        private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
-        private const string NullGameHistoryRepositoryMessage = "The data access of the game history cannot be null.";
         private const int NoExperience = 0;
         private const int NoBonusPoints = 0;
 
@@ -34,9 +31,10 @@ namespace YachtDice.Server.Logic.Game
         public GameResultRecorder(IPlayerRepository playerRepository, IGameHistoryRepository gameHistoryRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullPlayerRepositoryMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.NullPlayerRepositoryMessage);
             _gameHistoryRepository = gameHistoryRepository
-                ?? throw new ArgumentNullException(nameof(gameHistoryRepository), NullGameHistoryRepositoryMessage);
+                ?? throw new ArgumentNullException(nameof(gameHistoryRepository),
+                    LogMessages.NullGameHistoryRepositoryMessage);
         }
 
         /// <inheritdoc />
@@ -44,12 +42,12 @@ namespace YachtDice.Server.Logic.Game
         {
             if (settings == null)
             {
-                throw new ArgumentNullException(nameof(settings), NullSettingsMessage);
+                throw new ArgumentNullException(nameof(settings), LogMessages.NullSettingsMessage);
             }
 
             if (snapshot == null)
             {
-                throw new ArgumentNullException(nameof(snapshot), NullSnapshotMessage);
+                throw new ArgumentNullException(nameof(snapshot), LogMessages.NullSnapshotMessage);
             }
 
             var result = new GameResultRecord

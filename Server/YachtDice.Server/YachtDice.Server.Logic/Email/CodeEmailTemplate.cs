@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Email
 {
     /// <summary>
@@ -7,9 +9,6 @@ namespace YachtDice.Server.Logic.Email
     /// </summary>
     public sealed class CodeEmailTemplate
     {
-        private const string NullSubjectResourceKeyMessage = "The resource key of the subject cannot be null.";
-        private const string NullBodyResourceKeyMessage = "The resource key of the body cannot be null.";
-
         /// <summary>
         /// Initializes the template.
         /// </summary>
@@ -19,9 +18,10 @@ namespace YachtDice.Server.Logic.Email
         public CodeEmailTemplate(string subjectResourceKey, string bodyResourceKey, int expirationMinutes)
         {
             SubjectResourceKey = subjectResourceKey
-                ?? throw new ArgumentNullException(nameof(subjectResourceKey), NullSubjectResourceKeyMessage);
+                ?? throw new ArgumentNullException(nameof(subjectResourceKey),
+                    LogMessages.NullSubjectResourceKeyMessage);
             BodyResourceKey = bodyResourceKey
-                ?? throw new ArgumentNullException(nameof(bodyResourceKey), NullBodyResourceKeyMessage);
+                ?? throw new ArgumentNullException(nameof(bodyResourceKey), LogMessages.NullBodyResourceKeyMessage);
             ExpirationMinutes = expirationMinutes;
         }
 

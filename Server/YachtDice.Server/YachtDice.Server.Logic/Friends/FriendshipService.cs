@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Authentication;
 using YachtDice.Server.Logic.Logging;
@@ -38,10 +39,6 @@ namespace YachtDice.Server.Logic.Friends
         private const int NoGameId = 0;
         private const int ReportersForSuspension = 3;
         private const int SuspensionHours = 24;
-        private const string ReportSentLogFormat = "Player {0} reported player {1}.";
-        private const string SuspendedLogFormat = "Player {0} was suspended after reports from several players.";
-        private const string NullReportMessage = "The details of the report cannot be null.";
-        private const string NullDependencyMessage = "A dependency of the friendship service cannot be null.";
 
         private readonly AppLogger _logger = new AppLogger(typeof(FriendshipService));
         private readonly IPlayerRepository _playerRepository;
@@ -60,11 +57,14 @@ namespace YachtDice.Server.Logic.Friends
             IPlayerReportRepository reportRepository)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository),
+                    LogMessages.FriendshipNullDependencyMessage);
             _friendRepository = friendRepository
-                ?? throw new ArgumentNullException(nameof(friendRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(friendRepository),
+                    LogMessages.FriendshipNullDependencyMessage);
             _reportRepository = reportRepository
-                ?? throw new ArgumentNullException(nameof(reportRepository), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(reportRepository),
+                    LogMessages.FriendshipNullDependencyMessage);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace YachtDice.Server.Logic.Friends
         {
             if (details == null)
             {
-                throw new ArgumentNullException(nameof(details), NullReportMessage);
+                throw new ArgumentNullException(nameof(details), LogMessages.FriendshipNullReportMessage);
             }
 
             Player reporter = _playerRepository.FindByName(displayName).FirstOrDefault();
@@ -474,7 +474,7 @@ namespace YachtDice.Server.Logic.Friends
                 _reportRepository.Add(report);
                 _logger.Info(string.Format(
                     CultureInfo.InvariantCulture,
-                    ReportSentLogFormat,
+                    LogMessages.ReportSentLogFormat,
                     reporter.Id,
                     reported.Id));
                 status = ReportStatus.Sent;
@@ -501,7 +501,8 @@ namespace YachtDice.Server.Logic.Friends
             {
                 DateTime suspendedUntil = DateTime.UtcNow.AddHours(SuspensionHours);
                 _playerRepository.SaveLock(reportedId, LoginLock.Reported.ToString(), suspendedUntil);
-                _logger.Warning(string.Format(CultureInfo.InvariantCulture, SuspendedLogFormat, reportedId));
+                _logger.Warning(string.Format(CultureInfo.InvariantCulture, LogMessages.SuspendedLogFormat,
+                    reportedId));
             }
 
             return isSuspended;

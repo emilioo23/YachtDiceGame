@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -34,8 +35,6 @@ namespace YachtDice.Server.Logic.Passkeys
         private const int SimpleTrue = 21;
         private const int SimpleNull = 22;
         private const int BitsPerByte = 8;
-        private const string InvalidDataMessage = "The CBOR data is not valid.";
-        private const string NullDataMessage = "The CBOR data cannot be null.";
 
         private readonly byte[] _data;
         private int _position;
@@ -47,7 +46,7 @@ namespace YachtDice.Server.Logic.Passkeys
         /// <exception cref="ArgumentNullException">The data is null.</exception>
         public CborReader(byte[] data)
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data), NullDataMessage);
+            _data = data ?? throw new ArgumentNullException(nameof(data), LogMessages.CborReaderNullDataMessage);
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (depth > MaxDepth)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             int initial = ReadByte();
@@ -106,7 +105,7 @@ namespace YachtDice.Server.Logic.Passkeys
                     item = ReadSimple(additional);
                     break;
                 default:
-                    throw new FormatException(InvalidDataMessage);
+                    throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return item;
@@ -116,7 +115,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (_position >= _data.Length)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             int value = _data[_position];
@@ -130,7 +129,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (length > _data.Length - _position)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             var bytes = new byte[length];
@@ -147,7 +146,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (length > _data.Length)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return (int)length;
@@ -179,7 +178,7 @@ namespace YachtDice.Server.Logic.Passkeys
             }
             else
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return argument;
@@ -196,7 +195,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (number > long.MaxValue)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return (long)number;
@@ -206,7 +205,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (count > MaxItems)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             var items = new List<object>();
@@ -223,7 +222,7 @@ namespace YachtDice.Server.Logic.Passkeys
         {
             if (count > MaxItems)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             var map = new Dictionary<object, object>();
@@ -247,7 +246,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
             if (hasInvalidKey)
             {
-                throw new FormatException(InvalidDataMessage);
+                throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return map;
@@ -269,7 +268,7 @@ namespace YachtDice.Server.Logic.Passkeys
                     value = null;
                     break;
                 default:
-                    throw new FormatException(InvalidDataMessage);
+                    throw new FormatException(LogMessages.CborReaderInvalidDataMessage);
             }
 
             return value;

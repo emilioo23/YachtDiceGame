@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -22,8 +23,6 @@ namespace YachtDice.Server.Logic.Game
         public const int UpperBonusPoints = 35;
 
         private const int NoPoints = 0;
-        private const string NullScoresMessage = "The saved boxes cannot be null.";
-        private const string NullCalculatorMessage = "The score calculator cannot be null.";
 
         private readonly Dictionary<ScoreCategory, int> _scores = new Dictionary<ScoreCategory, int>();
         private readonly ScoreCalculator _calculator;
@@ -34,7 +33,8 @@ namespace YachtDice.Server.Logic.Game
         /// <param name="calculator">Calculator that gives the points of each box.</param>
         public ScoreCard(ScoreCalculator calculator)
         {
-            _calculator = calculator ?? throw new ArgumentNullException(nameof(calculator), NullCalculatorMessage);
+            _calculator = calculator ?? throw new ArgumentNullException(nameof(calculator),
+                LogMessages.NullCalculatorMessage);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (scores == null)
             {
-                throw new ArgumentNullException(nameof(scores), NullScoresMessage);
+                throw new ArgumentNullException(nameof(scores), LogMessages.NullScoresMessage);
             }
 
             foreach (ScoreEntry score in scores)

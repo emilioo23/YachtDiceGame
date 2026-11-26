@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Logic.Logging;
 using YachtDice.Server.Logic.Resources;
 
@@ -19,10 +20,6 @@ namespace YachtDice.Server.Logic.Email
 
         private const string SubjectResourceKey = "AccountLock_EmailSubject";
         private const string BodyResourceKey = "AccountLock_EmailBody";
-        private const string SentLogMessage = "The email about the locked account was sent.";
-        private const string SendFailedLogMessage = "The email about the locked account could not be sent.";
-        private const string NullEmailServiceMessage = "The email service cannot be null.";
-        private const string NullArgumentMessage = "The value cannot be null.";
 
         private readonly IEmailService _emailService;
         private readonly AppLogger _logger;
@@ -35,7 +32,7 @@ namespace YachtDice.Server.Logic.Email
         public AccountLockNotifier(IEmailService emailService)
         {
             _emailService = emailService
-                ?? throw new ArgumentNullException(nameof(emailService), NullEmailServiceMessage);
+                ?? throw new ArgumentNullException(nameof(emailService), LogMessages.NullEmailServiceMessage);
             _logger = new AppLogger(GetType());
         }
 
@@ -51,12 +48,12 @@ namespace YachtDice.Server.Logic.Email
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(player), LogMessages.NullArgumentMessage);
             }
 
             if (culture == null)
             {
-                throw new ArgumentNullException(nameof(culture), NullArgumentMessage);
+                throw new ArgumentNullException(nameof(culture), LogMessages.NullArgumentMessage);
             }
 
             string body = EmailStrings.ResourceManager.GetString(BodyResourceKey, culture);
@@ -68,7 +65,9 @@ namespace YachtDice.Server.Logic.Email
             };
 
             bool isSent = EmailService.TrySend(_emailService, message, _logger);
-            string logMessage = isSent ? SentLogMessage : SendFailedLogMessage;
+            string logMessage = isSent
+                ? LogMessages.SentLogMessage
+                : LogMessages.AccountLockNotifierSendFailedLogMessage;
 
             _logger.Info(logMessage);
 

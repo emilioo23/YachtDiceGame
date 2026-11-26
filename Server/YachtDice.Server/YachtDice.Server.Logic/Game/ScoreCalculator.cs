@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Game
 {
@@ -23,7 +24,6 @@ namespace YachtDice.Server.Logic.Game
         private const int LittleStraightLastValue = 5;
         private const int BigStraightFirstValue = 2;
         private const int BigStraightLastValue = 6;
-        private const string UnknownCategoryMessage = "The box does not exist in the scorecard.";
         private const int FaceToCategoryOffset = 1;
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace YachtDice.Server.Logic.Game
         {
             if (!ScoreCalculator.IsUpper(category))
             {
-                throw new ArgumentOutOfRangeException(nameof(category), UnknownCategoryMessage);
+                throw new ArgumentOutOfRangeException(nameof(category), LogMessages.UnknownCategoryMessage);
             }
 
             int value = ScoreCalculator.GetFaceValue(category);

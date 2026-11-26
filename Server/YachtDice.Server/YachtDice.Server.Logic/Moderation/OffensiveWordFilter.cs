@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Moderation
 {
@@ -18,8 +19,6 @@ namespace YachtDice.Server.Logic.Moderation
         private const string WordSeparator = "|";
         private const string WholeWordPatternFormat = @"\b({0})\b";
         private const string NeverMatchingPattern = "(?!)";
-        private const string NullWordsMessage = "The list of offensive words cannot be null.";
-        private const string NullTextMessage = "The text to check cannot be null.";
 
         private static readonly Dictionary<char, char> LookAlikeLetters = new Dictionary<char, char>
         {
@@ -46,7 +45,7 @@ namespace YachtDice.Server.Logic.Moderation
         {
             if (words == null)
             {
-                throw new ArgumentNullException(nameof(words), NullWordsMessage);
+                throw new ArgumentNullException(nameof(words), LogMessages.NullWordsMessage);
             }
 
             Func<string, bool> hasText = word => !string.IsNullOrWhiteSpace(word);
@@ -74,7 +73,7 @@ namespace YachtDice.Server.Logic.Moderation
         {
             if (username == null)
             {
-                throw new ArgumentNullException(nameof(username), NullTextMessage);
+                throw new ArgumentNullException(nameof(username), LogMessages.OffensiveWordFilterNullTextMessage);
             }
 
             string plainUsername = ToPlainLetters(username);
@@ -93,7 +92,7 @@ namespace YachtDice.Server.Logic.Moderation
         {
             if (message == null)
             {
-                throw new ArgumentNullException(nameof(message), NullTextMessage);
+                throw new ArgumentNullException(nameof(message), LogMessages.OffensiveWordFilterNullTextMessage);
             }
 
             return _wholeWords.Replace(message, match => new string(ChatCensor.CensorCharacter, match.Length));

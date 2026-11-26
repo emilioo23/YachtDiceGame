@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Players
 {
@@ -16,9 +17,6 @@ namespace YachtDice.Server.Logic.Players
         public const int DefaultTitleId = 0;
 
         private const int NoMeasuredValue = 0;
-        private const string NullRulesMessage = "The rules of the achievements cannot be null.";
-        private const string RepeatedIdMessage = "Two achievements cannot have the same identifier.";
-        private const string DefaultTitleIdMessage = "An achievement cannot use the identifier of the default title.";
 
         private readonly IReadOnlyList<AchievementRule> _rules;
 
@@ -32,7 +30,7 @@ namespace YachtDice.Server.Logic.Players
         {
             if (rules == null)
             {
-                throw new ArgumentNullException(nameof(rules), NullRulesMessage);
+                throw new ArgumentNullException(nameof(rules), LogMessages.NullRulesMessage);
             }
 
             List<AchievementRule> ruleList = rules.ToList();
@@ -41,12 +39,12 @@ namespace YachtDice.Server.Logic.Players
 
             if (hasRepeatedId)
             {
-                throw new ArgumentException(RepeatedIdMessage, nameof(rules));
+                throw new ArgumentException(LogMessages.RepeatedIdMessage, nameof(rules));
             }
 
             if (usesDefaultTitle)
             {
-                throw new ArgumentException(DefaultTitleIdMessage, nameof(rules));
+                throw new ArgumentException(LogMessages.DefaultTitleIdMessage, nameof(rules));
             }
 
             _rules = ruleList;

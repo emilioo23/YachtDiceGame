@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.TwoFactor
 {
     /// <summary>
@@ -6,9 +8,6 @@ namespace YachtDice.Server.Logic.TwoFactor
     /// </summary>
     public class TwoFactorActivationResult
     {
-        private const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
-        private const string NullMaskedEmailMessage = "The masked email cannot be null.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TwoFactorActivationResult"/> class.
         /// </summary>
@@ -18,8 +17,10 @@ namespace YachtDice.Server.Logic.TwoFactor
         public TwoFactorActivationResult(TwoFactorActivationStatus status, string challengeId, string maskedEmail)
         {
             Status = status;
-            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId), NullChallengeIdMessage);
-            MaskedEmail = maskedEmail ?? throw new ArgumentNullException(nameof(maskedEmail), NullMaskedEmailMessage);
+            ChallengeId = challengeId ?? throw new ArgumentNullException(nameof(challengeId),
+                LogMessages.NullChallengeIdMessage);
+            MaskedEmail = maskedEmail ?? throw new ArgumentNullException(nameof(maskedEmail),
+                LogMessages.NullMaskedEmailMessage);
         }
 
         /// <summary>

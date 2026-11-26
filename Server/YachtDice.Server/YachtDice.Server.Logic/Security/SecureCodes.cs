@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Security.Cryptography;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Security
 {
@@ -33,9 +34,7 @@ namespace YachtDice.Server.Logic.Security
         private const int DecimalBase = 10;
         private const int BufferStartIndex = 0;
         private const char PaddingCharacter = '0';
-        private const string InvalidLengthMessage = "The code must have at least one digit.";
         private const ulong GeneratedValueCount = (ulong)uint.MaxValue + 1;
-        private const string InvalidRangeMessage = "The maximum value must be greater than the minimum value.";
 
         /// <summary>
         /// Creates a random code made only of digits.
@@ -46,7 +45,7 @@ namespace YachtDice.Server.Logic.Security
         {
             if (length < MinimumLength)
             {
-                throw new ArgumentOutOfRangeException(nameof(length), InvalidLengthMessage);
+                throw new ArgumentOutOfRangeException(nameof(length), LogMessages.InvalidLengthMessage);
             }
 
             var upperBound = (long)Math.Pow(DecimalBase, length);
@@ -75,7 +74,7 @@ namespace YachtDice.Server.Logic.Security
         {
             if (maxExclusive <= minValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(maxExclusive), InvalidRangeMessage);
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive), LogMessages.InvalidRangeMessage);
             }
 
             var range = (ulong)((long)maxExclusive - minValue);

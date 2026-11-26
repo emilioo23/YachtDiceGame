@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using YachtDice.Server.Data;
+using YachtDice.Server.Data.Logging;
 using YachtDice.Server.Data.Repositories;
 using YachtDice.Server.Logic.Players;
 
@@ -20,8 +21,6 @@ namespace YachtDice.Server.Logic.Avatars
         private const int GuestLevel = 0;
         private const int DefaultLevel = 1;
         private const int DefaultExperience = 0;
-        private const string NullPlayerRepositoryMessage = "The data access of the players cannot be null.";
-        private const string NullLevelTableMessage = "The table of levels cannot be null.";
         private const int FirstAvatarId = 1;
         private const int FreeLevel = 1;
         private const int RookieLevel = 2;
@@ -77,8 +76,9 @@ namespace YachtDice.Server.Logic.Avatars
         public AvatarService(IPlayerRepository playerRepository, LevelTable levelTable)
         {
             _playerRepository = playerRepository
-                ?? throw new ArgumentNullException(nameof(playerRepository), NullPlayerRepositoryMessage);
-            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable), NullLevelTableMessage);
+                ?? throw new ArgumentNullException(nameof(playerRepository), LogMessages.NullPlayerRepositoryMessage);
+            _levelTable = levelTable ?? throw new ArgumentNullException(nameof(levelTable),
+                LogMessages.NullLevelTableMessage);
         }
 
         /// <summary>

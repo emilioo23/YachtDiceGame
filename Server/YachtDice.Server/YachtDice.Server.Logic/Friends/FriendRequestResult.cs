@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
@@ -6,8 +8,6 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class FriendRequestResult
     {
-        private const string NullFriendNameMessage = "The name of the friend cannot be null.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FriendRequestResult"/> class.
         /// </summary>
@@ -16,7 +16,8 @@ namespace YachtDice.Server.Logic.Friends
         public FriendRequestResult(FriendRequestStatus status, string friendName)
         {
             Status = status;
-            FriendName = friendName ?? throw new ArgumentNullException(nameof(friendName), NullFriendNameMessage);
+            FriendName = friendName ?? throw new ArgumentNullException(nameof(friendName),
+                LogMessages.NullFriendNameMessage);
         }
 
         /// <summary>

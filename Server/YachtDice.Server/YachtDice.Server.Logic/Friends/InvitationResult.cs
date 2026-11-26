@@ -1,4 +1,6 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
+
 namespace YachtDice.Server.Logic.Friends
 {
     /// <summary>
@@ -6,8 +8,6 @@ namespace YachtDice.Server.Logic.Friends
     /// </summary>
     public class InvitationResult
     {
-        private const string NullSenderNameMessage = "The name of the sender cannot be null.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InvitationResult"/> class.
         /// </summary>
@@ -16,7 +16,8 @@ namespace YachtDice.Server.Logic.Friends
         public InvitationResult(InvitationStatus status, string senderName)
         {
             Status = status;
-            SenderName = senderName ?? throw new ArgumentNullException(nameof(senderName), NullSenderNameMessage);
+            SenderName = senderName ?? throw new ArgumentNullException(nameof(senderName),
+                LogMessages.NullSenderNameMessage);
         }
 
         /// <summary>

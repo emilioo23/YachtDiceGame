@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Players
 {
@@ -10,8 +11,6 @@ namespace YachtDice.Server.Logic.Players
     /// </summary>
     public sealed class PlayerAchievements
     {
-        private const string NullDependencyMessage = "A dependency of the achievements of the players cannot be null.";
-
         private readonly PlayerStatisticsService _statisticsService;
         private readonly AchievementCatalog _catalog;
 
@@ -24,8 +23,10 @@ namespace YachtDice.Server.Logic.Players
         public PlayerAchievements(PlayerStatisticsService statisticsService, AchievementCatalog catalog)
         {
             _statisticsService = statisticsService
-                ?? throw new ArgumentNullException(nameof(statisticsService), NullDependencyMessage);
-            _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog), NullDependencyMessage);
+                ?? throw new ArgumentNullException(nameof(statisticsService),
+                    LogMessages.PlayerAchievementsNullDependencyMessage);
+            _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog),
+                LogMessages.PlayerAchievementsNullDependencyMessage);
         }
 
         /// <summary>
