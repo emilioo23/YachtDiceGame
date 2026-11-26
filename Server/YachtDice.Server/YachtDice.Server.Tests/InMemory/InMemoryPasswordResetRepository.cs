@@ -12,9 +12,9 @@ namespace YachtDice.Server.Tests.InMemory
     /// </summary>
     internal sealed class InMemoryPasswordResetRepository : IPasswordResetRepository
     {
-        private readonly InMemoryPlayerRepository _players;
         private const int PreviousPasswordsKept = 2;
 
+        private readonly InMemoryPlayerRepository _players;
         private readonly List<PwdResetToken> _tokens = new List<PwdResetToken>();
         private readonly List<string> _previousHashes = new List<string>();
         private readonly List<DateTime> _changeDates = new List<DateTime>();

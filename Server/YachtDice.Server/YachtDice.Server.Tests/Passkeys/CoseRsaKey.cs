@@ -8,12 +8,12 @@ namespace YachtDice.Server.Tests.Passkeys
     /// </summary>
     internal static class CoseRsaKey
     {
-        private static readonly byte[] Start = { 0xA4, 0x01, 0x03, 0x03, 0x39, 0x01, 0x00 };
-        private static readonly byte[] ModulusLabel = { 0x20, 0x59 };
-        private static readonly byte[] ExponentLabel = { 0x21, 0x43 };
         private const int ByteMask = 0xFF;
         private const int BitsPerByte = 8;
 
+        private static readonly byte[] Start = { 0xA4, 0x01, 0x03, 0x03, 0x39, 0x01, 0x00 };
+        private static readonly byte[] ModulusLabel = { 0x20, 0x59 };
+        private static readonly byte[] ExponentLabel = { 0x21, 0x43 };
         /// <summary>
         /// Writes the key.
         /// </summary>

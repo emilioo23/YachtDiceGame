@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Xunit;
 using YachtDice.Client.Logic.Dice;
+using YachtDice.Client.Tests.InMemory;
 
 namespace YachtDice.Client.Tests.Dice
 {
@@ -20,20 +21,13 @@ namespace YachtDice.Client.Tests.Dice
         private const double CandidateZ = 0;
         private const double Tolerance = 0.000001;
 
-        private static Func<double> Cycle(params double[] values)
-        {
-            var position = 0;
-
-            return () => values[position++ % values.Length];
-        }
-
         [Fact]
         public void Choose_NoDiceOnTheTable_StaysInsideTheLandingRadius()
         {
             bool isInsideExpected = true;
             var occupied = new List<DiceSlot>();
 
-            DiceSlot slot = DiceLanding.Choose(occupied, Cycle(FarUnit, SideUnit));
+            DiceSlot slot = DiceLanding.Choose(occupied, new InMemoryUnitSequence(FarUnit, SideUnit).Next);
 
             double distance = Math.Sqrt((slot.X * slot.X) + (slot.Z * slot.Z));
             bool isInsideResult = distance <= DiceTableLayout.LandingRadius + Tolerance;
@@ -48,7 +42,7 @@ namespace YachtDice.Client.Tests.Dice
 
             DiceSlot slot = DiceLanding.Choose(
                 occupied,
-                Cycle(RadiusUnit, AngleUnit, FarRadiusUnit, OppositeAngleUnit));
+                new InMemoryUnitSequence(RadiusUnit, AngleUnit, FarRadiusUnit, OppositeAngleUnit).Next);
 
             double deltaX = slot.X - CandidateX;
             double deltaZ = slot.Z - CandidateZ;
@@ -64,7 +58,7 @@ namespace YachtDice.Client.Tests.Dice
             var slotExpected = new DiceSlot(candidateX, CandidateZ);
             var occupied = new List<DiceSlot> { new DiceSlot(CandidateX, CandidateZ) };
 
-            DiceSlot slotResult = DiceLanding.Choose(occupied, Cycle(RadiusUnit, AngleUnit));
+            DiceSlot slotResult = DiceLanding.Choose(occupied, new InMemoryUnitSequence(RadiusUnit, AngleUnit).Next);
 
             Assert.Equivalent(slotExpected, slotResult);
         }

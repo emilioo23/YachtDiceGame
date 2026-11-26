@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
+    <Compile Include="InMemory\InMemoryUnitSequence.cs" />
     <Compile Include="Passkeys\Base64UrlTests.cs" />
     <Compile Include="Passkeys\PasskeyClientDataTests.cs" />
     <Compile Include="Authentication\EmailMaskTests.cs" />

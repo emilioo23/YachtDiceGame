@@ -24,6 +24,9 @@ namespace YachtDice.Server.Tests.Passkeys
         private const byte AttestedCredentialFlag = 0x40;
         private const int PartsInSignature = 2;
         private const byte ByteStringWithOneByteLength = 0x58;
+        private const string ClientDataFormat =
+            "{{\"type\":\"{0}\",\"challenge\":\"{1}\",\"origin\":\"{2}\",\"crossOrigin\":false}}";
+
         private static readonly byte[] CoseKeyStart =
             { 0xA5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20 };
         private static readonly byte[] CoseKeySecondCoordinate = { 0x22, 0x58, 0x20 };
@@ -35,9 +38,6 @@ namespace YachtDice.Server.Tests.Passkeys
             0x68, 0x61, 0x75, 0x74, 0x68, 0x44, 0x61, 0x74, 0x61,
             ByteStringWithOneByteLength
         };
-        private const string ClientDataFormat =
-            "{{\"type\":\"{0}\",\"challenge\":\"{1}\",\"origin\":\"{2}\",\"crossOrigin\":false}}";
-
         private readonly ECDsa _key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
 
         /// <summary>

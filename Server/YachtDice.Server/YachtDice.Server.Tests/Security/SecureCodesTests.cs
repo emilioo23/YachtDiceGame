@@ -66,16 +66,6 @@ namespace YachtDice.Server.Tests.Security
                 () => SecureCodes.Generate(NoDigits));
         }
 
-        private static bool IsDigitsOfLength(string code, int length)
-        {
-            return code.Length == length && code.All(char.IsDigit);
-        }
-
-        private static bool IsSixDigitCode(string code)
-        {
-            return code.Length == SixDigits && code.All(char.IsDigit);
-        }
-
         [Fact]
         public void Next_DieRange_StaysInsideTheRange()
         {
@@ -125,6 +115,16 @@ namespace YachtDice.Server.Tests.Security
         public void Next_MaximumNotGreaterThanMinimum_ThrowsArgumentOutOfRangeException(int minValue, int maxValue)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => SecureCodes.Next(minValue, maxValue));
+        }
+
+        private static bool IsDigitsOfLength(string code, int length)
+        {
+            return code.Length == length && code.All(char.IsDigit);
+        }
+
+        private static bool IsSixDigitCode(string code)
+        {
+            return code.Length == SixDigits && code.All(char.IsDigit);
         }
 
         private static int RollDie()

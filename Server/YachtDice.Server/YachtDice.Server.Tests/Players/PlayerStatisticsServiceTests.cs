@@ -217,39 +217,6 @@ namespace YachtDice.Server.Tests.Players
             Assert.Equal(EndDate.AddDays(OneDayAgo), games[0].PlayedAt);
         }
 
-        private void AddGame(int gameId, DateTime endDate, bool isWinner)
-        {
-            AddRecord(gameId, endDate, new PlayedGameRecord
-            {
-                PlayerId = PlayerId,
-                PlayerName = PlayerName,
-                FinalScore = PlayerScore,
-                IsWinner = isWinner
-            });
-            AddRecord(gameId, endDate, new PlayedGameRecord
-            {
-                PlayerId = FirstOpponentId,
-                PlayerName = FirstOpponentName,
-                FinalScore = BestOpponentScore,
-                IsWinner = !isWinner
-            });
-            AddRecord(gameId, endDate, new PlayedGameRecord
-            {
-                PlayerId = SecondOpponentId,
-                PlayerName = SecondOpponentName,
-                FinalScore = LowerOpponentScore,
-                IsWinner = false
-            });
-        }
-
-        private void AddRecord(int gameId, DateTime endDate, PlayedGameRecord record)
-        {
-            record.GameId = gameId;
-            record.EndDate = endDate;
-            record.IsAgainstComputer = false;
-            _history.AddPlayedGameRecord(record);
-        }
-
         [Fact]
         public void GetTopPlayers_SamePointsDifferentWins_PutsTheOneWithMoreWinsFirst()
         {
@@ -324,6 +291,39 @@ namespace YachtDice.Server.Tests.Players
             LeaderboardEntry leaderboardEntry = _service.GetTopPlayers(PlayerName).Single();
 
             Assert.Equivalent(leaderboardEntryExpected, leaderboardEntry);
+        }
+
+        private void AddGame(int gameId, DateTime endDate, bool isWinner)
+        {
+            AddRecord(gameId, endDate, new PlayedGameRecord
+            {
+                PlayerId = PlayerId,
+                PlayerName = PlayerName,
+                FinalScore = PlayerScore,
+                IsWinner = isWinner
+            });
+            AddRecord(gameId, endDate, new PlayedGameRecord
+            {
+                PlayerId = FirstOpponentId,
+                PlayerName = FirstOpponentName,
+                FinalScore = BestOpponentScore,
+                IsWinner = !isWinner
+            });
+            AddRecord(gameId, endDate, new PlayedGameRecord
+            {
+                PlayerId = SecondOpponentId,
+                PlayerName = SecondOpponentName,
+                FinalScore = LowerOpponentScore,
+                IsWinner = false
+            });
+        }
+
+        private void AddRecord(int gameId, DateTime endDate, PlayedGameRecord record)
+        {
+            record.GameId = gameId;
+            record.EndDate = endDate;
+            record.IsAgainstComputer = false;
+            _history.AddPlayedGameRecord(record);
         }
 
         private static ScorecardRecord CreateScorecard(string playerName)
