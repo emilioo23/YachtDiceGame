@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -10,10 +11,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class PlayerReportRepository : IPlayerReportRepository
     {
-        private const string NullReportMessage = "The report cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while reading the player reports.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the player report.";
-
         /// <summary>
         /// Saves a new report.
         /// </summary>
@@ -25,12 +22,13 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (report == null)
             {
-                throw new ArgumentNullException(nameof(report), NullReportMessage);
+                throw new ArgumentNullException(nameof(report), LogMessages.PlayerReportNullReportMessage);
             }
 
             TextGuard.RejectBlank(report.Reason, nameof(report.Reason));
 
-            DatabaseOperation.Save(context => context.PlayerReport.Add(report), UpdateFailedMessage);
+            DatabaseOperation.Save(context => context.PlayerReport.Add(report),
+                LogMessages.PlayerReportUpdateFailedMessage);
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace YachtDice.Server.Data.Repositories
                 report.ReporterId == reporterId && report.ReportedId == reportedId && report.ReportDate >= since;
             bool hasReport = DatabaseOperation.Query(
                 context => ExistsReport(context, isRecentReportOfPair),
-                QueryFailedMessage);
+                LogMessages.PlayerReportQueryFailedMessage);
 
             return hasReport;
         }
@@ -63,7 +61,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             int reporterCount = DatabaseOperation.Query(
                 context => CountDistinctReporters(context, reportedId, since),
-                QueryFailedMessage);
+                LogMessages.PlayerReportQueryFailedMessage);
 
             return reporterCount;
         }
@@ -84,7 +82,7 @@ namespace YachtDice.Server.Data.Repositories
                 && game.GameHistoryPlayer.Any(historyPlayer => historyPlayer.PlayerId == secondPlayerId);
             int gameId = DatabaseOperation.Query(
                 context => SelectLastGameId(context, isRecentSharedGame),
-                QueryFailedMessage);
+                LogMessages.PlayerReportQueryFailedMessage);
 
             return gameId;
         }

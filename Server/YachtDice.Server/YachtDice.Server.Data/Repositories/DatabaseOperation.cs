@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -18,7 +19,6 @@ namespace YachtDice.Server.Data.Repositories
     internal static class DatabaseOperation
     {
         private const string PropertySeparator = ", ";
-        private const string InvalidEntityFormat = "The data did not pass the model validation. Properties: {0}.";
         private const string ServerVariable = "YACHTDICE_DB_SERVER";
         private const string UserVariable = "YACHTDICE_DB_USER";
         private const string PasswordVariable = "YACHTDICE_DB_PASSWORD";
@@ -28,7 +28,6 @@ namespace YachtDice.Server.Data.Repositories
         private const string ModelMetadata = "res://YachtDice.Server.Data/YachtDiceContext.csdl"
             + "|res://YachtDice.Server.Data/YachtDiceContext.ssdl"
             + "|res://YachtDice.Server.Data/YachtDiceContext.msl";
-        private const string MissingVariableFormat = "The environment variable {0} is not defined on this computer.";
 
         /// <summary>
         /// Reads data from the database.
@@ -100,7 +99,7 @@ namespace YachtDice.Server.Data.Repositories
 
             return string.Format(
                 CultureInfo.InvariantCulture,
-                InvalidEntityFormat,
+                LogMessages.InvalidEntityFormat,
                 string.Join(PropertySeparator, propertyNames));
         }
 
@@ -138,7 +137,7 @@ namespace YachtDice.Server.Data.Repositories
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, MissingVariableFormat, name);
+                string message = string.Format(CultureInfo.InvariantCulture, LogMessages.MissingVariableFormat, name);
 
                 throw new DataAccessException(message);
             }

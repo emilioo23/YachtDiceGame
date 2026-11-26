@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -11,11 +12,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class PasswordResetRepository : IPasswordResetRepository
     {
-        private const string FindFailedMessage = "Database error occurred while searching the recovery code.";
-        private const string SaveFailedMessage = "Could not save the recovery code due to a database failure.";
-        private const string DeleteFailedMessage = "Could not delete the recovery code due to a database failure.";
-        private const string CompleteFailedMessage = "Could not save the new password due to a database failure.";
-        private const string NullTokenMessage = "The recovery code cannot be null.";
         private const int PreviousPasswordsKept = 2;
 
         /// <summary>
@@ -28,7 +24,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<PwdResetToken> tokens = DatabaseOperation.Query(
                 context => SelectByPlayer(context, playerId),
-                FindFailedMessage);
+                LogMessages.FindFailedMessage);
 
             return tokens;
         }
@@ -44,12 +40,12 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (token == null)
             {
-                throw new ArgumentNullException(nameof(token), NullTokenMessage);
+                throw new ArgumentNullException(nameof(token), LogMessages.NullTokenMessage);
             }
 
             TextGuard.RejectBlank(token.Token, nameof(token.Token));
 
-            DatabaseOperation.Save(context => ReplaceToken(context, token), SaveFailedMessage);
+            DatabaseOperation.Save(context => ReplaceToken(context, token), LogMessages.PasswordResetSaveFailedMessage);
         }
 
         /// <summary>
@@ -59,7 +55,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The code could not be deleted.</exception>
         public void Delete(int playerId)
         {
-            DatabaseOperation.Save(context => RemoveTokens(context, playerId), DeleteFailedMessage);
+            DatabaseOperation.Save(context => RemoveTokens(context, playerId),
+                LogMessages.PasswordResetDeleteFailedMessage);
         }
 
         /// <summary>
@@ -74,7 +71,7 @@ namespace YachtDice.Server.Data.Repositories
 
             DatabaseOperation.Save(
                 context => ApplyNewPassword(context, playerId, newPasswordHash),
-                CompleteFailedMessage);
+                LogMessages.CompleteFailedMessage);
         }
 
         /// <summary>
@@ -88,7 +85,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<string> hashes = DatabaseOperation.Query(
                 context => SelectRecentHashes(context, playerId),
-                FindFailedMessage);
+                LogMessages.FindFailedMessage);
 
             return hashes;
         }
@@ -103,7 +100,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<DateTime> dates = DatabaseOperation.Query(
                 context => SelectChangeDates(context, playerId),
-                FindFailedMessage);
+                LogMessages.FindFailedMessage);
 
             return dates;
         }

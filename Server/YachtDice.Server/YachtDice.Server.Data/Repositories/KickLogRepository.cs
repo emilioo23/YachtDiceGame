@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -11,10 +12,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class KickLogRepository : IKickLogRepository
     {
-        private const string NullKickMessage = "The expulsion cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while reading the expulsions.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the expulsion.";
-
         /// <summary>
         /// Saves a new expulsion.
         /// </summary>
@@ -25,10 +22,10 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (kickLog == null)
             {
-                throw new ArgumentNullException(nameof(kickLog), NullKickMessage);
+                throw new ArgumentNullException(nameof(kickLog), LogMessages.NullKickMessage);
             }
 
-            DatabaseOperation.Save(context => context.KickLog.Add(kickLog), UpdateFailedMessage);
+            DatabaseOperation.Save(context => context.KickLog.Add(kickLog), LogMessages.KickLogUpdateFailedMessage);
         }
 
         /// <summary>
@@ -42,7 +39,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<KickLogRecord> kicks = DatabaseOperation.Query(
                 context => SelectByPlayer(context, playerId, maxCount),
-                QueryFailedMessage);
+                LogMessages.KickLogQueryFailedMessage);
 
             return kicks;
         }

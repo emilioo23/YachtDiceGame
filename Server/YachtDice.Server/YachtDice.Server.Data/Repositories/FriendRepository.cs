@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -11,10 +12,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class FriendRepository : IFriendRepository
     {
-        private const string NullFriendshipMessage = "The friendship cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while querying the friendships.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the friendships.";
-
         /// <summary>
         /// Finds the friendships between two players, no matter who sent the request.
         /// </summary>
@@ -105,7 +102,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (friendship == null)
             {
-                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+                throw new ArgumentNullException(nameof(friendship), LogMessages.NullFriendshipMessage);
             }
 
             TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
@@ -134,7 +131,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (friendship == null)
             {
-                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+                throw new ArgumentNullException(nameof(friendship), LogMessages.NullFriendshipMessage);
             }
 
             TextGuard.RejectBlank(friendship.Status, nameof(friendship.Status));
@@ -152,7 +149,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (friendship == null)
             {
-                throw new ArgumentNullException(nameof(friendship), NullFriendshipMessage);
+                throw new ArgumentNullException(nameof(friendship), LogMessages.NullFriendshipMessage);
             }
 
             Save(context => DeleteFriendship(context, friendship));
@@ -279,12 +276,12 @@ namespace YachtDice.Server.Data.Repositories
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)
         {
-            return DatabaseOperation.Query(query, QueryFailedMessage);
+            return DatabaseOperation.Query(query, LogMessages.FriendQueryFailedMessage);
         }
 
         private static void Save(Action<YachtDiceContext> change)
         {
-            DatabaseOperation.Save(change, UpdateFailedMessage);
+            DatabaseOperation.Save(change, LogMessages.FriendUpdateFailedMessage);
         }
     }
 }

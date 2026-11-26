@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -12,22 +13,11 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class GameHistoryRepository : IGameHistoryRepository
     {
-        private const string RecentGamesFailedMessage = "Database error occurred while reading the recent games.";
-        private const string FindByPlayerFailedMessage =
-            "Database error occurred while fetching game history by player ID.";
-
         private const int NoExperience = 0;
-        private const string RankingFailedMessage = "Database error occurred while calculating player rankings.";
-        private const string SaveFailedMessage = "Database error occurred while saving the result of a game.";
-        private const string NullResultMessage = "The result of the game cannot be null.";
         private const string ArchivedRoomName = "Partida";
         private const string RoomCodeFormat = "N";
         private const int RoomCodeLength = 6;
         private const int NoYachtBonus = 0;
-        private const string ScorecardsFailedMessage =
-            "Database error occurred while reading the scorecards of a game.";
-        private const string ComputerGamesFailedMessage =
-            "Database error occurred while reading the games against the computer.";
 
         /// <summary>
         /// Gets the result of every game played by a player.
@@ -39,7 +29,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<GameHistoryPlayer> history = DatabaseOperation.Query(
                 context => SelectByPlayerId(context, playerId),
-                FindByPlayerFailedMessage);
+                LogMessages.FindByPlayerFailedMessage);
 
             return history;
         }
@@ -49,7 +39,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<GameHistoryPlayer> history = DatabaseOperation.Query(
                 context => SelectComputerGames(context, playerId),
-                ComputerGamesFailedMessage);
+                LogMessages.ComputerGamesFailedMessage);
 
             return history;
         }
@@ -61,7 +51,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The database could not be queried.</exception>
         public List<PlayerRankingRecord> GetRanking()
         {
-            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(QueryRanking, RankingFailedMessage);
+            List<PlayerRankingRecord> ranking = DatabaseOperation.Query(QueryRanking, LogMessages.RankingFailedMessage);
 
             return ranking;
         }
@@ -78,10 +68,10 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (result == null)
             {
-                throw new ArgumentNullException(nameof(result), NullResultMessage);
+                throw new ArgumentNullException(nameof(result), LogMessages.NullResultMessage);
             }
 
-            DatabaseOperation.Save(context => AddResult(context, result), SaveFailedMessage);
+            DatabaseOperation.Save(context => AddResult(context, result), LogMessages.GameHistorySaveFailedMessage);
         }
 
         /// <summary>
@@ -95,7 +85,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<PlayedGameRecord> games = DatabaseOperation.Query(
                 context => SelectRecentGames(context, playerId, maxGames),
-                RecentGamesFailedMessage);
+                LogMessages.RecentGamesFailedMessage);
 
             return games;
         }
@@ -110,7 +100,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<ScorecardRecord> scorecards = DatabaseOperation.Query(
                 context => SelectScorecards(context, gameId),
-                ScorecardsFailedMessage);
+                LogMessages.ScorecardsFailedMessage);
 
             return scorecards;
         }

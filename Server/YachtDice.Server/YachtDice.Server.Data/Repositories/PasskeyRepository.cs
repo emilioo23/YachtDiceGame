@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -12,10 +13,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class PasskeyRepository : IPasskeyRepository
     {
-        private const string NullRecordMessage = "The passkey to save cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while reading the passkeys.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the passkeys.";
-
         /// <summary>
         /// Looks for the passkeys of a player.
         /// </summary>
@@ -26,7 +23,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             List<PasskeyRecord> records = DatabaseOperation.Query(
                 context => SelectByPlayer(context, playerId),
-                QueryFailedMessage);
+                LogMessages.PasskeyQueryFailedMessage);
 
             return records;
         }
@@ -43,7 +40,7 @@ namespace YachtDice.Server.Data.Repositories
 
             PasskeyRecord record = DatabaseOperation.Query(
                 context => SelectByCredentialId(context, credentialId),
-                QueryFailedMessage);
+                LogMessages.PasskeyQueryFailedMessage);
 
             return record;
         }
@@ -58,10 +55,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (record == null)
             {
-                throw new ArgumentNullException(nameof(record), NullRecordMessage);
+                throw new ArgumentNullException(nameof(record), LogMessages.NullRecordMessage);
             }
 
-            DatabaseOperation.Save(context => context.Passkey.Add(CreateEntity(record)), UpdateFailedMessage);
+            DatabaseOperation.Save(context => context.Passkey.Add(CreateEntity(record)),
+                LogMessages.PasskeyUpdateFailedMessage);
         }
 
         /// <summary>
@@ -72,7 +70,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The counter could not be saved.</exception>
         public void SaveSignCount(int passkeyId, long signCount)
         {
-            DatabaseOperation.Save(context => UpdateSignCount(context, passkeyId, signCount), UpdateFailedMessage);
+            DatabaseOperation.Save(context => UpdateSignCount(context, passkeyId, signCount),
+                LogMessages.PasskeyUpdateFailedMessage);
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <param name="passkeyId">Identifier of the passkey.</param>
         public void Delete(int passkeyId)
         {
-            DatabaseOperation.Save(context => RemoveEntity(context, passkeyId), UpdateFailedMessage);
+            DatabaseOperation.Save(context => RemoveEntity(context, passkeyId), LogMessages.PasskeyUpdateFailedMessage);
         }
 
         private static void RemoveEntity(YachtDiceContext context, int passkeyId)

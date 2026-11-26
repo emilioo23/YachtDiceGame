@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -14,10 +15,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class GameCheckpointRepository : IGameCheckpointRepository
     {
-        private const string NullCheckpointMessage = "The game in progress cannot be null.";
-        private const string SaveFailedMessage = "Database error occurred while saving the game in progress.";
-        private const string QueryFailedMessage = "Database error occurred while reading the games in progress.";
-        private const string RemoveFailedMessage = "Database error occurred while removing the game in progress.";
         private const int DefaultMaxPlayers = 4;
         private const int NoRolls = 0;
         private const int NoYachtBonus = 0;
@@ -32,10 +29,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (checkpoint == null)
             {
-                throw new ArgumentNullException(nameof(checkpoint), NullCheckpointMessage);
+                throw new ArgumentNullException(nameof(checkpoint), LogMessages.NullCheckpointMessage);
             }
 
-            DatabaseOperation.Save(context => ApplyCheckpoint(context, checkpoint), SaveFailedMessage);
+            DatabaseOperation.Save(context => ApplyCheckpoint(context, checkpoint),
+                LogMessages.GameCheckpointSaveFailedMessage);
         }
 
         /// <summary>
@@ -45,7 +43,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The games could not be read.</exception>
         public List<GameCheckpointRecord> FindAll()
         {
-            List<GameCheckpointRecord> checkpoints = DatabaseOperation.Query(SelectCheckpoints, QueryFailedMessage);
+            List<GameCheckpointRecord> checkpoints = DatabaseOperation.Query(SelectCheckpoints,
+                LogMessages.GameCheckpointQueryFailedMessage);
 
             return checkpoints;
         }
@@ -57,7 +56,7 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The game could not be removed.</exception>
         public void Remove(string roomCode)
         {
-            DatabaseOperation.Save(context => RemoveCheckpoint(context, roomCode), RemoveFailedMessage);
+            DatabaseOperation.Save(context => RemoveCheckpoint(context, roomCode), LogMessages.RemoveFailedMessage);
         }
 
         private static IQueryable<Room> QueryPlayingRooms(YachtDiceContext context)

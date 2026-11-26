@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -11,10 +12,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class RoomInviteRepository : IRoomInviteRepository
     {
-        private const string NullInviteMessage = "The invitation cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while reading the invitations.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the invitation.";
-
         /// <summary>
         /// Saves a new invitation.
         /// </summary>
@@ -25,10 +22,11 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (invite == null)
             {
-                throw new ArgumentNullException(nameof(invite), NullInviteMessage);
+                throw new ArgumentNullException(nameof(invite), LogMessages.NullInviteMessage);
             }
 
-            DatabaseOperation.Save(context => context.RoomInvite.Add(invite), UpdateFailedMessage);
+            DatabaseOperation.Save(context => context.RoomInvite.Add(invite),
+                LogMessages.RoomInviteUpdateFailedMessage);
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace YachtDice.Server.Data.Repositories
                 invite.InvitedId == invitedId && invite.SendDate >= since;
             List<RoomInviteRecord> invites = DatabaseOperation.Query(
                 context => SelectNewest(context, isRecentForPlayer, maxCount),
-                QueryFailedMessage);
+                LogMessages.RoomInviteQueryFailedMessage);
 
             return invites;
         }

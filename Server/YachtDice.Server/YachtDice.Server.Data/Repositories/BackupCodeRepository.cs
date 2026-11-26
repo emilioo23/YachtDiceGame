@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -11,9 +12,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     public class BackupCodeRepository : IBackupCodeRepository
     {
-        private const string NullHashesMessage = "The hashes of the backup codes cannot be null.";
-        private const string QueryFailedMessage = "Database error occurred while reading the backup codes.";
-        private const string UpdateFailedMessage = "Database error occurred while saving the backup codes.";
         private const int NoCodeId = 0;
 
         /// <summary>
@@ -27,7 +25,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (codeHashes == null)
             {
-                throw new ArgumentNullException(nameof(codeHashes), NullHashesMessage);
+                throw new ArgumentNullException(nameof(codeHashes), LogMessages.NullHashesMessage);
             }
 
             List<string> hashes = codeHashes.ToList();
@@ -137,12 +135,12 @@ namespace YachtDice.Server.Data.Repositories
 
         private static TResult Query<TResult>(Func<YachtDiceContext, TResult> query)
         {
-            return DatabaseOperation.Query(query, QueryFailedMessage);
+            return DatabaseOperation.Query(query, LogMessages.BackupCodeQueryFailedMessage);
         }
 
         private static void Save(Action<YachtDiceContext> change)
         {
-            DatabaseOperation.Save(change, UpdateFailedMessage);
+            DatabaseOperation.Save(change, LogMessages.BackupCodeUpdateFailedMessage);
         }
     }
 }

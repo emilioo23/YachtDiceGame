@@ -1,4 +1,5 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -8,8 +9,6 @@ namespace YachtDice.Server.Data.Repositories
     /// </summary>
     internal static class TextGuard
     {
-        private const string BlankValueMessage = "The value cannot be empty.";
-
         /// <summary>
         /// Throws when the text is null, empty or only spaces.
         /// </summary>
@@ -20,7 +19,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException(BlankValueMessage, parameterName);
+                throw new ArgumentException(LogMessages.BlankValueMessage, parameterName);
             }
         }
     }

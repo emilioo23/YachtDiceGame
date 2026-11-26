@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using YachtDice.Server.Data.Exceptions;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Data.Repositories
 {
@@ -16,33 +17,9 @@ namespace YachtDice.Server.Data.Repositories
         private const string ActiveStatus = "Active";
         private const string InactiveStatus = "Inactive";
         private const string NoSecretKey = "";
-        private const string NullPlayerMessage = "The player cannot be null.";
-        private const string FindByEmailFailedMessage = "Database error occurred while searching player by email.";
-        private const string FindByNameFailedMessage = "Database error occurred while searching player by name.";
-        private const string FindByUsernameFailedMessage =
-            "Database error occurred while searching player by username.";
-        private const string EmailExistsFailedMessage = "Database error occurred while verifying email existence.";
-        private const string UsernameExistsFailedMessage =
-            "Database error occurred while verifying username existence.";
-        private const string SaveFailedMessage = "Could not save the player due to a database failure.";
-        private const string TwoFactorQueryFailedMessage =
-            "Database error occurred while checking the two-step verification.";
-        private const string TwoFactorUpdateFailedMessage =
-            "Could not save the two-step verification setting due to a database failure.";
         private const string NoTitle = "";
         private const string NoFlagCode = "";
-        private const string FlagQueryFailedMessage = "Could not read the flag due to a database failure.";
-        private const string FlagUpdateFailedMessage = "Could not save the flag due to a database failure.";
-        private const string TitleQueryFailedMessage = "Could not read the title due to a database failure.";
-        private const string TitleUpdateFailedMessage = "Could not save the title due to a database failure.";
-        private const string UsernameUpdateFailedMessage = "Could not save the username due to a database failure.";
-        private const string DeleteFailedMessage = "Could not delete the player due to a database failure.";
-        private const string StateUpdateFailedMessage =
-            "Could not save the state of the account due to a database failure.";
         private const int NoAccounts = 0;
-        private const string LockQueryFailedMessage = "Could not read the login lock due to a database failure.";
-        private const string LockUpdateFailedMessage = "Could not save the login lock due to a database failure.";
-        private const string AvatarUpdateFailedMessage = "Could not save the avatar due to a database failure.";
 
         private readonly AccountEraser _accountEraser = new AccountEraser();
 
@@ -58,7 +35,7 @@ namespace YachtDice.Server.Data.Repositories
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByEmail(context, email),
-                FindByEmailFailedMessage);
+                LogMessages.FindByEmailFailedMessage);
 
             return players;
         }
@@ -75,7 +52,7 @@ namespace YachtDice.Server.Data.Repositories
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByName(context, name),
-                FindByNameFailedMessage);
+                LogMessages.FindByNameFailedMessage);
 
             return players;
         }
@@ -92,7 +69,7 @@ namespace YachtDice.Server.Data.Repositories
 
             List<Player> players = DatabaseOperation.Query(
                 context => SelectByUsername(context, username),
-                FindByUsernameFailedMessage);
+                LogMessages.FindByUsernameFailedMessage);
 
             return players;
         }
@@ -109,7 +86,7 @@ namespace YachtDice.Server.Data.Repositories
 
             bool isRegistered = DatabaseOperation.Query(
                 context => IsEmailRegistered(context, email),
-                EmailExistsFailedMessage);
+                LogMessages.EmailExistsFailedMessage);
 
             return isRegistered;
         }
@@ -126,7 +103,7 @@ namespace YachtDice.Server.Data.Repositories
 
             bool isTaken = DatabaseOperation.Query(
                 context => IsUsernameTaken(context, username),
-                UsernameExistsFailedMessage);
+                LogMessages.UsernameExistsFailedMessage);
 
             return isTaken;
         }
@@ -140,10 +117,10 @@ namespace YachtDice.Server.Data.Repositories
         {
             if (player == null)
             {
-                throw new ArgumentNullException(nameof(player), NullPlayerMessage);
+                throw new ArgumentNullException(nameof(player), LogMessages.NullPlayerMessage);
             }
 
-            DatabaseOperation.Save(context => context.Player.Add(player), SaveFailedMessage);
+            DatabaseOperation.Save(context => context.Player.Add(player), LogMessages.PlayerSaveFailedMessage);
         }
 
         /// <summary>
@@ -156,7 +133,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             bool isEnabled = DatabaseOperation.Query(
                 context => IsTwoFactorActive(context, playerId),
-                TwoFactorQueryFailedMessage);
+                LogMessages.TwoFactorQueryFailedMessage);
 
             return isEnabled;
         }
@@ -171,7 +148,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             DatabaseOperation.Save(
                 context => ApplyTwoFactorStatus(context, playerId, isEnabled),
-                TwoFactorUpdateFailedMessage);
+                LogMessages.TwoFactorUpdateFailedMessage);
         }
 
         /// <summary>
@@ -184,7 +161,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             DatabaseOperation.Save(
                 context => ApplyAvatar(context, playerId, avatarId),
-                AvatarUpdateFailedMessage);
+                LogMessages.AvatarUpdateFailedMessage);
         }
 
         /// <summary>
@@ -197,7 +174,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             DatabaseOperation.Save(
                 context => ApplyUsername(context, playerId, username),
-                UsernameUpdateFailedMessage);
+                LogMessages.UsernameUpdateFailedMessage);
         }
 
         /// <summary>
@@ -210,7 +187,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             string title = DatabaseOperation.Query(
                 context => SelectTitle(context, playerId),
-                TitleQueryFailedMessage);
+                LogMessages.TitleQueryFailedMessage);
 
             return title;
         }
@@ -225,7 +202,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             DatabaseOperation.Save(
                 context => ApplyTitle(context, playerId, title),
-                TitleUpdateFailedMessage);
+                LogMessages.TitleUpdateFailedMessage);
         }
 
         /// <summary>
@@ -238,7 +215,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             string flagCode = DatabaseOperation.Query(
                 context => SelectFlagCode(context, playerId),
-                FlagQueryFailedMessage);
+                LogMessages.FlagQueryFailedMessage);
 
             return flagCode;
         }
@@ -253,7 +230,7 @@ namespace YachtDice.Server.Data.Repositories
         {
             DatabaseOperation.Save(
                 context => GetOrCreateSettings(context, playerId).FlagCode = flagCode,
-                FlagUpdateFailedMessage);
+                LogMessages.FlagUpdateFailedMessage);
         }
 
         /// <summary>
@@ -263,7 +240,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The player could not be deleted.</exception>
         public void Delete(int playerId)
         {
-            DatabaseOperation.Save(context => _accountEraser.Erase(context, playerId), DeleteFailedMessage);
+            DatabaseOperation.Save(context => _accountEraser.Erase(context, playerId),
+                LogMessages.PlayerDeleteFailedMessage);
         }
 
         /// <summary>
@@ -274,7 +252,8 @@ namespace YachtDice.Server.Data.Repositories
         /// <exception cref="DataAccessException">The state could not be saved.</exception>
         public void SaveState(int playerId, string state)
         {
-            DatabaseOperation.Save(context => ApplyState(context, playerId, state), StateUpdateFailedMessage);
+            DatabaseOperation.Save(context => ApplyState(context, playerId, state),
+                LogMessages.StateUpdateFailedMessage);
         }
 
         /// <summary>
@@ -291,7 +270,7 @@ namespace YachtDice.Server.Data.Repositories
 
             DatabaseOperation.Save(
                 context => removedCount = EraseUnverified(context, unverifiedState, registeredBefore),
-                DeleteFailedMessage);
+                LogMessages.PlayerDeleteFailedMessage);
 
             return removedCount;
         }
@@ -303,7 +282,7 @@ namespace YachtDice.Server.Data.Repositories
 
             return DatabaseOperation.Query(
                 context => context.AccountLock.Where(isSamePlayer).ToList(),
-                LockQueryFailedMessage);
+                LogMessages.LockQueryFailedMessage);
         }
 
         /// <inheritdoc />
@@ -316,7 +295,7 @@ namespace YachtDice.Server.Data.Repositories
                     LockType = lockType,
                     LockedUntil = lockedUntil
                 }),
-                LockUpdateFailedMessage);
+                LogMessages.LockUpdateFailedMessage);
         }
 
         private static void ApplyLock(YachtDiceContext context, AccountLock newLock)
