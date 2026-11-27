@@ -65,6 +65,12 @@ namespace YachtDice.Server.Logic.Passkeys
         public const int DeviceNameMaxLength = 100;
 
         /// <summary>
+        /// Maximum size in bytes of the identifier of a passkey; encoded in base64url it fills the 400 characters
+        /// of its column in the database.
+        /// </summary>
+        public const int MaxCredentialIdSize = 300;
+
+        /// <summary>
         /// Identifier of the ECDSA with P-256 and SHA-256 algorithm in the COSE registry.
         /// </summary>
         public const int EcdsaAlgorithm = -7;

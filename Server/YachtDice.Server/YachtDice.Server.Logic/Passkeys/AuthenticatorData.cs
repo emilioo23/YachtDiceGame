@@ -111,7 +111,9 @@ namespace YachtDice.Server.Logic.Passkeys
                 int credentialLength = (data[lengthOffset] << BitsPerByte) | data[lengthOffset + 1];
                 int credentialOffset = lengthOffset + CredentialLengthSize;
 
-                isValid = credentialLength > 0 && credentialOffset + credentialLength < data.Length;
+                isValid = credentialLength > 0
+                    && credentialLength <= PasskeyRules.MaxCredentialIdSize
+                    && credentialOffset + credentialLength < data.Length;
 
                 if (isValid)
                 {

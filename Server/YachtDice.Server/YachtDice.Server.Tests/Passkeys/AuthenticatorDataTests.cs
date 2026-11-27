@@ -17,6 +17,12 @@ namespace YachtDice.Server.Tests.Passkeys
         private const int CounterLastOffset = 36;
         private const byte CounterValue = 7;
         private const byte AttestedFlag = 0x40;
+        private const int CredentialLengthOffset = 53;
+        private const int CredentialLengthLowOffset = 54;
+        private const int CredentialOffset = 55;
+        private const int BitsPerByte = 8;
+        private const int ByteMask = 0xFF;
+        private const int ExtraByte = 1;
 
         [Fact]
         public void TryParse_DataShorterThanTheFixedPart_ReturnsFalse()
@@ -66,16 +72,40 @@ namespace YachtDice.Server.Tests.Passkeys
         }
 
         [Fact]
+        public void TryParse_CredentialIdLargerThanTheMaximum_ReturnsFalse()
+        {
+            using (var authenticator = new FakeAuthenticator())
+            {
+                int credentialLength = PasskeyRules.MaxCredentialIdSize + ExtraByte;
+                byte[] bytes = ResizeCredentialId(ReadRegistrationData(authenticator), credentialLength);
+
+                bool isParsed = AuthenticatorData.TryParse(bytes, out AuthenticatorData data);
+
+                Assert.False(isParsed);
+            }
+        }
+
+        [Fact]
+        public void TryParse_CredentialIdOfTheMaximumSize_ReturnsTrue()
+        {
+            using (var authenticator = new FakeAuthenticator())
+            {
+                int credentialLength = PasskeyRules.MaxCredentialIdSize;
+                byte[] bytes = ResizeCredentialId(ReadRegistrationData(authenticator), credentialLength);
+
+                bool isParsed = AuthenticatorData.TryParse(bytes, out AuthenticatorData data);
+
+                Assert.True(isParsed);
+            }
+        }
+
+        [Fact]
         public void TryParse_RegistrationData_ReadsTheCredentialId()
         {
             using (var authenticator = new FakeAuthenticator())
             {
                 byte[] credentialIdExpected = authenticator.CredentialId;
-                var challenge = new PasskeyChallenge(PasskeyStartStatus.Created) { Challenge = ChallengeText };
-                PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
-                PasskeyRules.TryDecode(attestation.AttestationObject, out byte[] attestationObject);
-                int start = IndexOfAuthenticatorData(attestationObject);
-                byte[] bytes = attestationObject.Skip(start).ToArray();
+                byte[] bytes = ReadRegistrationData(authenticator);
 
                 AuthenticatorData.TryParse(bytes, out AuthenticatorData data);
                 byte[] credentialIdResult = data.CredentialId;
@@ -91,6 +121,30 @@ namespace YachtDice.Server.Tests.Passkeys
             data[FlagsOffset] = flags;
 
             return data;
+        }
+
+        private static byte[] ReadRegistrationData(FakeAuthenticator authenticator)
+        {
+            var challenge = new PasskeyChallenge(PasskeyStartStatus.Created) { Challenge = ChallengeText };
+            PasskeyAttestation attestation = authenticator.CreateAttestation(challenge, new AuthenticatorOptions());
+            PasskeyRules.TryDecode(attestation.AttestationObject, out byte[] attestationObject);
+            int start = IndexOfAuthenticatorData(attestationObject);
+
+            return attestationObject.Skip(start).ToArray();
+        }
+
+        private static byte[] ResizeCredentialId(byte[] registrationData, int credentialLength)
+        {
+            int currentLength = (registrationData[CredentialLengthOffset] << BitsPerByte)
+                | registrationData[CredentialLengthLowOffset];
+            byte[] head = registrationData.Take(CredentialOffset).ToArray();
+            byte[] tail = registrationData.Skip(CredentialOffset + currentLength).ToArray();
+            byte[] resized = head.Concat(new byte[credentialLength]).Concat(tail).ToArray();
+
+            resized[CredentialLengthOffset] = (byte)(credentialLength >> BitsPerByte);
+            resized[CredentialLengthLowOffset] = (byte)(credentialLength & ByteMask);
+
+            return resized;
         }
 
         private static int IndexOfAuthenticatorData(byte[] attestationObject)
