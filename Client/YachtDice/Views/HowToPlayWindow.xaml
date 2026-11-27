@@ -53,6 +53,14 @@
                                    Dice="{Binding Dice}"
                                    VerticalAlignment="Center"/>
 
+                    <Image Grid.Column="0"
+                           Source="{Binding ImageSource}"
+                           Width="40"
+                           Height="40"
+                           Margin="3"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+
                     <StackPanel Grid.Column="1"
                                 VerticalAlignment="Center">
 

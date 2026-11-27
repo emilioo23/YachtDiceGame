@@ -19,6 +19,8 @@ namespace YachtDice.Utils
         private const string BigStraightExample = "2 3 4 5 6";
         private const string YachtExample = "6 6 6 6 6";
         private const string ChoiceExample = "1 3 4 5 6";
+        private const string UpperBonusImage = "pack://application:,,,/Resources/Images/Rule_UpperBonus.png";
+        private const string JokerImage = "pack://application:,,,/Resources/Images/Rule_Joker.png";
 
         /// <summary>
         /// Gets the steps of a turn.
@@ -43,7 +45,7 @@ namespace YachtDice.Utils
             return new List<CategoryRule>
             {
                 CreateRule(Strings.HowToPlay_UpperRuleTitle, Strings.HowToPlay_UpperRuleText, UpperExample),
-                CreateRule(Strings.Game_Category_Bonus, Strings.HowToPlay_BonusText, NoExample)
+                CreateImageRule(Strings.Game_Category_Bonus, Strings.HowToPlay_BonusText, UpperBonusImage)
             };
         }
 
@@ -90,7 +92,7 @@ namespace YachtDice.Utils
                 CreateRule(Strings.Game_Category_Yacht, Strings.HowToPlay_YachtText, YachtExample),
                 CreateRule(Strings.Game_Category_Choice, Strings.HowToPlay_ChoiceText, ChoiceExample),
                 CreateRule(Strings.Game_Category_YachtBonus, Strings.HowToPlay_YachtBonusText, YachtExample),
-                CreateRule(Strings.HowToPlay_JokerTitle, Strings.HowToPlay_JokerText, NoExample)
+                CreateImageRule(Strings.HowToPlay_JokerTitle, Strings.HowToPlay_JokerText, JokerImage)
             };
         }
 
@@ -105,6 +107,17 @@ namespace YachtDice.Utils
         /// <param name="text">Text of the step.</param>
         /// <param name="stepIndex">Position of the step in the list, starting at zero.</param>
         /// <returns>The step with its number, starting at one.</returns>
+        private static CategoryRule CreateImageRule(string title, string description, string imageSource)
+        {
+            return new CategoryRule
+            {
+                Title = title,
+                Description = description,
+                Dice = NoExample,
+                ImageSource = imageSource
+            };
+        }
+
         private static RuleStep CreateStep(string text, int stepIndex)
         {
             return new RuleStep { Number = stepIndex + 1, Text = text };

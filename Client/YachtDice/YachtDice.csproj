@@ -749,6 +749,8 @@
     <Resource Include="Resources\Avatars\*.png" />
     <Resource Include="Resources\Dice\*.png" />
     <Resource Include="Resources\Flags\*.png" />
+    <Resource Include="Resources\Images\Rule_Joker.png" />
+    <Resource Include="Resources\Images\Rule_UpperBonus.png" />
     <Resource Include="Resources\Images\SplashBackground.png" />
     <Resource Include="Resources\Sounds\Click.wav" />
     <Resource Include="Resources\Sounds\DiceRoll.wav" />

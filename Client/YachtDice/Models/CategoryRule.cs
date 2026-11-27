@@ -20,5 +20,11 @@
         /// when the rule has no example.
         /// </summary>
         public string Dice { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address of the picture shown in place of the dice, for a rule that has no dice of
+        /// its own, such as the bonus or the joker. It is null when the rule shows dice.
+        /// </summary>
+        public string ImageSource { get; set; }
     }
 }
