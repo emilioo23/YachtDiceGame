@@ -150,6 +150,8 @@ namespace YachtDice.Views
             _clock.Tick += HandleClockTick;
             RollButton.IsEnabled = false;
             MusicVolumeSlider.Value = _services.Audio.MusicVolume;
+            SoundEffectsCheckBox.IsChecked = _services.Audio.AreEffectsEnabled;
+            PotentialPointsCheckBox.IsChecked = _services.Gameplay.ShowsPotentialPoints;
             RenderMuteMusicButton();
             _services.Music.Play(MusicTrack.GameTheme);
             Loaded += HandleWindowLoaded;
@@ -884,6 +886,21 @@ namespace YachtDice.Views
         private void MusicVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             _services.Audio.SetMusicVolume((int)e.NewValue);
+        }
+
+        private void SoundEffectsCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            _services.Audio.SetEffectsEnabled(SoundEffectsCheckBox.IsChecked == true);
+        }
+
+        private void PotentialPointsCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            _services.Gameplay.SetShowPotentialPoints(PotentialPointsCheckBox.IsChecked == true);
+
+            if (_state != null)
+            {
+                RenderState();
+            }
         }
 
         private void RenderMuteMusicButton()

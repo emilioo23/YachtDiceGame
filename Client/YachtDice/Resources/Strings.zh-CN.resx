@@ -2325,6 +2325,9 @@
   <data name="Game_Chat_InfractionNotice" xml:space="preserve">
     <value>仅你可见：{0} 已发送 3 条含有违禁词的消息。你可以将其移出房间。</value>
   </data>
+  <data name="Global_SymbolSettings" xml:space="preserve">
+    <value>⚙</value>
+  </data>
   <data name="Global_SymbolBlock" xml:space="preserve">
     <value>⊘</value>
   </data>

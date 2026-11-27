@@ -2325,6 +2325,9 @@
   <data name="Game_Chat_InfractionNotice" xml:space="preserve">
     <value>Solo tú ves esto: {0} ya escribió 3 mensajes con palabras prohibidas. Puedes expulsarlo de la sala.</value>
   </data>
+  <data name="Global_SymbolSettings" xml:space="preserve">
+    <value>⚙</value>
+  </data>
   <data name="Global_SymbolBlock" xml:space="preserve">
     <value>⊘</value>
   </data>
