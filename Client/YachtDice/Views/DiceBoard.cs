@@ -98,25 +98,9 @@ namespace YachtDice.Views
         {
             PrepareDice(values);
 
-            int rackCount = CountHeld(isHeld);
             List<DiceSlot> occupied = FindTablePlaces(isHeld);
-            double finish = NoDuration;
-            var rackPosition = 0;
 
-            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
-            {
-                if (isHeld(index))
-                {
-                    finish = Math.Max(finish, SendToRack(index, rackPosition, rackCount));
-                    rackPosition++;
-                }
-                else
-                {
-                    finish = Math.Max(finish, ReturnToTable(index, occupied));
-                }
-            }
-
-            Play(finish);
+            MoveDice(isHeld, index => ReturnToTable(index, occupied));
         }
 
         /// <summary>
@@ -129,25 +113,9 @@ namespace YachtDice.Views
         {
             PrepareDice(values);
 
-            int rackCount = CountHeld(isHeld);
             var landed = new List<DiceSlot>();
-            double finish = NoDuration;
-            var rackPosition = 0;
 
-            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
-            {
-                if (isHeld(index))
-                {
-                    finish = Math.Max(finish, SendToRack(index, rackPosition, rackCount));
-                    rackPosition++;
-                }
-                else
-                {
-                    finish = Math.Max(finish, Throw(index, landed));
-                }
-            }
-
-            Play(finish);
+            MoveDice(isHeld, index => Throw(index, landed));
         }
 
         private static int ReadValue(IReadOnlyList<int> values, int index)
@@ -182,6 +150,28 @@ namespace YachtDice.Views
                 DelayMilliseconds = delayMilliseconds,
                 DurationMilliseconds = GlideMilliseconds
             };
+        }
+
+        private void MoveDice(Func<int, bool> isHeld, Func<int, double> moveFreeDie)
+        {
+            int rackCount = CountHeld(isHeld);
+            double finish = NoDuration;
+            var rackPosition = 0;
+
+            for (var index = 0; index < HeldDiceSelection.DiceCount; index++)
+            {
+                if (isHeld(index))
+                {
+                    finish = Math.Max(finish, SendToRack(index, rackPosition, rackCount));
+                    rackPosition++;
+                }
+                else
+                {
+                    finish = Math.Max(finish, moveFreeDie(index));
+                }
+            }
+
+            Play(finish);
         }
 
         private void PrepareDice(IReadOnlyList<int> values)
