@@ -336,7 +336,6 @@ namespace YachtDice.Server.Services
 
             return contract;
         }
-    
 
         /// <summary>
         /// Creates the data contract that is sent back to the client.
@@ -418,6 +417,5 @@ namespace YachtDice.Server.Services
 
             return contract;
         }
-    
     }
 }

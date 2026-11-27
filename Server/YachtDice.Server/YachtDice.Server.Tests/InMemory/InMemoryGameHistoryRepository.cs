@@ -22,6 +22,11 @@ namespace YachtDice.Server.Tests.InMemory
         /// </summary>
         public IReadOnlyList<GameResultRecord> SavedResults => _savedResults;
 
+        /// <summary>
+        /// Gets or sets the scorecards that <see cref="FindScorecards"/> returns for any game.
+        /// </summary>
+        public List<ScorecardRecord> Scorecards { get; set; } = new List<ScorecardRecord>();
+
         /// <inheritdoc />
         public List<GameHistoryPlayer> FindByPlayerId(int playerId)
         {
@@ -101,11 +106,6 @@ namespace YachtDice.Server.Tests.InMemory
         {
             _rankingRecords.Add(record);
         }
-
-        /// <summary>
-        /// Gets or sets the scorecards that <see cref="FindScorecards"/> returns for any game.
-        /// </summary>
-        public List<ScorecardRecord> Scorecards { get; set; } = new List<ScorecardRecord>();
 
         /// <inheritdoc />
         public List<ScorecardRecord> FindScorecards(int gameId)

@@ -481,6 +481,5 @@ namespace YachtDice.Server.Services
                 UserHandle = assertion.UserHandle
             };
         }
-    
     }
 }
