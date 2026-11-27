@@ -82,6 +82,7 @@
     <Compile Include="InMemory\InMemoryEmailService.cs" />
     <Compile Include="InMemory\InMemoryFailingEmailService.cs" />
     <Compile Include="InMemory\InMemoryFailingPlayerIdFinder.cs" />
+    <Compile Include="InMemory\InMemoryService.cs" />
     <Compile Include="InMemory\InMemoryFriendRepository.cs" />
     <Compile Include="InMemory\InMemoryFriendshipService.cs" />
     <Compile Include="InMemory\InMemoryGameCheckpointRepository.cs" />
@@ -125,6 +126,8 @@
     <Compile Include="Security\CredentialRulesTests.cs" />
     <Compile Include="Security\SecureCodesTests.cs" />
     <Compile Include="Security\SessionRegistryTests.cs" />
+    <Compile Include="Services\PresenceServiceTests.cs" />
+    <Compile Include="Services\ServiceBaseTests.cs" />
     <Compile Include="TwoFactor\BackupCodeTests.cs" />
     <Compile Include="TwoFactor\EmailVerificationTests.cs" />
     <Compile Include="TwoFactor\TwoFactorResendTests.cs" />
