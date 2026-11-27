@@ -347,12 +347,12 @@ namespace YachtDice.Server.Services
 
             Contracts.GameState state = Mapping.GameMapper.ToContract(snapshot, _timer.GetSecondsLeft(roomCode));
 
+            _callbacks.Notify(roomCode, callback => callback.GameChanged(state, eventType));
+
             if (!_isStopping)
             {
                 UpdateCheckpoint(roomCode, snapshot);
             }
-
-            _callbacks.Notify(roomCode, callback => callback.GameChanged(state, eventType));
         }
 
         private void TrackGame(LogicRooms.RoomDetails room, LogicGame.GameSnapshot snapshot)
