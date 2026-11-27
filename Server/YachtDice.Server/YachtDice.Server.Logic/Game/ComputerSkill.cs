@@ -152,9 +152,9 @@ namespace YachtDice.Server.Logic.Game
 
             foreach (int value in values)
             {
-                bool continuesRun = currentRun.Count > 0 && currentRun.Last() + NextValue == value;
+                bool isRunContinuing = currentRun.Count > 0 && currentRun.Last() + NextValue == value;
 
-                if (!continuesRun)
+                if (!isRunContinuing)
                 {
                     currentRun = new List<int>();
                 }

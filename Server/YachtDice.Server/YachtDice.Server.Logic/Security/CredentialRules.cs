@@ -77,7 +77,7 @@ namespace YachtDice.Server.Logic.Security
 
         /// <summary>
         /// Indicates whether a first name or a last name has a valid length and is made only of letters, with
-        /// single spaces, hyphens or apostrophes between the words (for example "María José", "Anne-Marie" or
+        /// single spaces, hyphens or apostrophes between the words (for example "Mary Jane", "Anne-Marie" or
         /// "O'Brien"). Digits and symbols are not allowed.
         /// </summary>
         /// <param name="name">Name already trimmed.</param>
