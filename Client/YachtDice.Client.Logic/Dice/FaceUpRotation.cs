@@ -1,4 +1,5 @@
 ﻿using System;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Client.Logic.Dice
 {
@@ -16,7 +17,7 @@ namespace YachtDice.Client.Logic.Dice
         /// <param name="degrees">Angle of the turn, positive in the direction of the right-hand rule.</param>
         public FaceUpRotation(DiceVector axis, double degrees)
         {
-            Axis = axis;
+            Axis = axis ?? throw new ArgumentNullException(nameof(axis), LogMessages.NullAxisMessage);
             Degrees = degrees;
         }
 

@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using YachtDice.Client.Logic.Dice;
+using YachtDice.Client.Logic.Logging;
 
 namespace YachtDice.Views
 {
@@ -26,8 +28,8 @@ namespace YachtDice.Views
 
         private DiceMaterials(Material[] faces, Material shadow)
         {
-            _faces = faces;
-            Shadow = shadow;
+            _faces = faces ?? throw new ArgumentNullException(nameof(faces), LogMessages.NullFacesMessage);
+            Shadow = shadow ?? throw new ArgumentNullException(nameof(shadow), LogMessages.NullShadowMessage);
         }
 
         /// <summary>

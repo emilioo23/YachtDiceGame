@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -30,7 +31,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
         private PasskeyPublicKey(byte[] coseKey, CoseFields fields)
         {
-            _coseKey = coseKey;
+            _coseKey = coseKey ?? throw new ArgumentNullException(nameof(coseKey), LogMessages.NullCoseKeyMessage);
             _algorithm = (long)fields.Algorithm;
 
             if (_algorithm == PasskeyRules.EcdsaAlgorithm)

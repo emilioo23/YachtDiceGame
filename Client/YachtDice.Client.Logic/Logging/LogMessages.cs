@@ -22,6 +22,11 @@
         public const string NullAudioMessage = "The choices about the sound cannot be null.";
 
         /// <summary>
+        /// Exception message: The axis of the rotation cannot be null.
+        /// </summary>
+        public const string NullAxisMessage = "The axis of the rotation cannot be null.";
+
+        /// <summary>
         /// Exception message: The canvas where it is drawn cannot be null.
         /// </summary>
         public const string NullCanvasMessage = "The canvas where it is drawn cannot be null.";
@@ -30,6 +35,11 @@
         /// Exception message: The connection to the chat cannot be null.
         /// </summary>
         public const string NullChatMessage = "The connection to the chat cannot be null.";
+
+        /// <summary>
+        /// Exception message: The client data of the ceremony cannot be null.
+        /// </summary>
+        public const string NullClientDataMessage = "The client data of the ceremony cannot be null.";
 
         /// <summary>
         /// Exception message: The players of the columns cannot be null.
@@ -60,6 +70,11 @@
         /// Exception message: The exception to log cannot be null.
         /// </summary>
         public const string NullExceptionMessage = "The exception to log cannot be null.";
+
+        /// <summary>
+        /// Exception message: The materials of the faces cannot be null.
+        /// </summary>
+        public const string NullFacesMessage = "The materials of the faces cannot be null.";
 
         /// <summary>
         /// Exception message: The first name of the player cannot be null.
@@ -150,6 +165,11 @@
         /// Exception message: The audio settings of the music cannot be null.
         /// </summary>
         public const string NullSettingsMessage = "The audio settings of the music cannot be null.";
+
+        /// <summary>
+        /// Exception message: The material of the shadow cannot be null.
+        /// </summary>
+        public const string NullShadowMessage = "The material of the shadow cannot be null.";
 
         /// <summary>
         /// Exception message: The final places cannot be null.

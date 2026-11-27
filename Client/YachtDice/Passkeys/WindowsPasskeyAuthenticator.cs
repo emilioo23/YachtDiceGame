@@ -351,7 +351,8 @@ namespace YachtDice.Passkeys
             public Ceremony(string challengeId, byte[] clientDataJson)
             {
                 ChallengeId = challengeId;
-                ClientDataJson = clientDataJson;
+                ClientDataJson = clientDataJson ?? throw new ArgumentNullException(nameof(clientDataJson),
+                    LogMessages.NullClientDataMessage);
             }
 
             public string ChallengeId { get; }

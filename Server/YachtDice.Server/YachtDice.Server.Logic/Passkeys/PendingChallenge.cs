@@ -1,4 +1,5 @@
 ﻿using System;
+using YachtDice.Server.Data.Logging;
 
 namespace YachtDice.Server.Logic.Passkeys
 {
@@ -16,7 +17,8 @@ namespace YachtDice.Server.Logic.Passkeys
         public PendingChallenge(string id, byte[] challenge, DateTime expiresAt)
         {
             Id = id;
-            Challenge = challenge;
+            Challenge = challenge ?? throw new ArgumentNullException(nameof(challenge),
+                LogMessages.NullChallengeMessage);
             ExpiresAt = expiresAt;
         }
 

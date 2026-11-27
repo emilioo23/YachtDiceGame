@@ -277,7 +277,7 @@ namespace YachtDice.Server.Logic.Passkeys
 
             public DerReader(byte[] data)
             {
-                _data = data;
+                _data = data ?? throw new ArgumentNullException(nameof(data), LogMessages.DerReaderNullDataMessage);
             }
 
             public bool IsAtEnd => _position == _data.Length;

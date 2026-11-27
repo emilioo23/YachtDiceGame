@@ -33,6 +33,11 @@
         public const string ChatNullDependencyMessage = "A dependency of the chat service cannot be null.";
 
         /// <summary>
+        /// Exception message: The DER data cannot be null.
+        /// </summary>
+        public const string DerReaderNullDataMessage = "The DER data cannot be null.";
+
+        /// <summary>
         /// Exception message: The email to send cannot be null.
         /// </summary>
         public const string EmailNullMessageMessage = "The email to send cannot be null.";
@@ -126,6 +131,11 @@
         public const string NullChallengeIdMessage = "The identifier of the challenge cannot be null.";
 
         /// <summary>
+        /// Exception message: The bytes of the challenge cannot be null.
+        /// </summary>
+        public const string NullChallengeMessage = "The bytes of the challenge cannot be null.";
+
+        /// <summary>
         /// Exception message: The game in progress cannot be null.
         /// </summary>
         public const string NullCheckpointMessage = "The game in progress cannot be null.";
@@ -139,6 +149,11 @@
         /// Exception message: The list of backup codes cannot be null.
         /// </summary>
         public const string NullCodesMessage = "The list of backup codes cannot be null.";
+
+        /// <summary>
+        /// Exception message: The COSE key of the passkey cannot be null.
+        /// </summary>
+        public const string NullCoseKeyMessage = "The COSE key of the passkey cannot be null.";
 
         /// <summary>
         /// Exception message: The login credentials cannot be null.
