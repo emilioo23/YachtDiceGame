@@ -37,8 +37,8 @@ namespace YachtDice.Server.Tests.Authentication
         private const int TenHours = 10;
         private const int OneAccount = 1;
         private const string LastNameWithNumber = "Hernandez3";
-        private const string FirstNameWithAccent = "José María";
-        private const string LastNameWithAccent = "O'Brien-Núñez";
+        private const string FirstNameWithAccent = "Jos\u00E9 Mar\u00EDa";
+        private const string LastNameWithAccent = "O'Brien-N\u00FA\u00F1ez";
         private const string FirstNameWithNumber = "Gabriel2";
 
         private static readonly string UsernameAtTheLimit = new string(FillCharacter, UsernameMaxLength);

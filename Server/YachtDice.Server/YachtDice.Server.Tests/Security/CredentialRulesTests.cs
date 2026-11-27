@@ -45,11 +45,11 @@ namespace YachtDice.Server.Tests.Security
 
         [Theory]
         [InlineData("Gabriel")]
-        [InlineData("María José")]
+        [InlineData("Mar\u00EDa Jos\u00E9")]
         [InlineData("Anne-Marie")]
         [InlineData("O'Brien")]
-        [InlineData("Hernández")]
-        [InlineData("李明")]
+        [InlineData("Hern\u00E1ndez")]
+        [InlineData("\u674E\u660E")]
         public void IsValidPersonName_LettersWithSpacesHyphensAndApostrophes_ReturnsTrue(string name)
         {
             bool isValid = CredentialRules.IsValidPersonName(name);
@@ -100,7 +100,7 @@ namespace YachtDice.Server.Tests.Security
         [Theory]
         [InlineData("ab")]
         [InlineData("gabriel hm")]
-        [InlineData("josé")]
+        [InlineData("jos\u00E9")]
         [InlineData("dice-king")]
         [InlineData("'; DROP TABLE Player;--")]
         [InlineData("<script>")]
@@ -125,7 +125,7 @@ namespace YachtDice.Server.Tests.Security
         [Theory]
         [InlineData("Secret123")]
         [InlineData("abcdefg1")]
-        [InlineData("contraseña 2026")]
+        [InlineData("contrase\u00F1a 2026")]
         public void IsStrongPassword_LetterDigitAndValidLength_ReturnsTrue(string password)
         {
             bool isStrong = CredentialRules.IsStrongPassword(password);
@@ -194,10 +194,10 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_SamePlayerAndCode_ReturnsTheSameHash()
         {
-            string first = CredentialRules.ComputeResetCodeHash(FirstPlayerId, Code);
-            string second = CredentialRules.ComputeResetCodeHash(FirstPlayerId, Code);
+            string hashExpected = CredentialRules.ComputeResetCodeHash(FirstPlayerId, Code);
+            string hashResult = CredentialRules.ComputeResetCodeHash(FirstPlayerId, Code);
 
-            Assert.Equal(first, second);
+            Assert.Equal(hashExpected, hashResult);
         }
 
         [Fact]
@@ -237,11 +237,11 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Compute_NullCode_ReturnsTheSameHashAsAnEmptyCode()
         {
-            string emptyCodeHash = CredentialRules.ComputeResetCodeHash(FirstPlayerId, string.Empty);
+            string hashExpected = CredentialRules.ComputeResetCodeHash(FirstPlayerId, string.Empty);
 
-            string nullCodeHash = CredentialRules.ComputeResetCodeHash(FirstPlayerId, null);
+            string hashResult = CredentialRules.ComputeResetCodeHash(FirstPlayerId, null);
 
-            Assert.Equal(emptyCodeHash, nullCodeHash);
+            Assert.Equal(hashExpected, hashResult);
         }
 
         [Fact]
@@ -294,9 +294,7 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void ComputeHash_EmptyPassword_ThrowsArgumentException()
         {
-            Action compute = () => CredentialRules.ComputeHash(EmptyText);
-
-            Assert.Throws<ArgumentException>(compute);
+            Assert.Throws<ArgumentException>(() => CredentialRules.ComputeHash(EmptyText));
         }
 
         [Fact]
@@ -349,17 +347,13 @@ namespace YachtDice.Server.Tests.Security
         [Fact]
         public void Verify_EmptyPassword_ThrowsArgumentException()
         {
-            Action verify = () => CredentialRules.Verify(EmptyText, LegacyHashOfPassword);
-
-            Assert.Throws<ArgumentException>(verify);
+            Assert.Throws<ArgumentException>(() => CredentialRules.Verify(EmptyText, LegacyHashOfPassword));
         }
 
         [Fact]
         public void Verify_EmptyStoredHash_ThrowsArgumentException()
         {
-            Action verify = () => CredentialRules.Verify(Password, EmptyText);
-
-            Assert.Throws<ArgumentException>(verify);
+            Assert.Throws<ArgumentException>(() => CredentialRules.Verify(Password, EmptyText));
         }
     }
 }

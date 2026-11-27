@@ -9,8 +9,8 @@ namespace YachtDice.Client.Tests.Players
     public class InitialLetterTests
     {
         private const string Unknown = "?";
-        private const string AccentedName = "álvaro";
-        private const string AccentedInitial = "Á";
+        private const string AccentedName = "\u00E1lvaro";
+        private const string AccentedInitial = "\u00C1";
         private const string LowercaseName = "emilio";
         private const string LowercaseInitial = "E";
         private const string SpacedName = "   gabriel";

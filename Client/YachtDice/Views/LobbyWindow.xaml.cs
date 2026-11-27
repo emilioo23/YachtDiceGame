@@ -28,7 +28,7 @@ namespace YachtDice.Views
         private const double SelectedBorderThickness = 2.0;
         private const double UnselectedBorderThickness = 1.5;
         private const string DifficultyKeyPrefix = "Lobby_Difficulty_";
-        private const string ComputerLabelFormat = "{0} · {1}";
+        private const string ComputerLabelFormat = "{0} \u00B7 {1}";
 
         private readonly RoomGateway _roomGateway;
         private readonly ChatGateway _chat;
