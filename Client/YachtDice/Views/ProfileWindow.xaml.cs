@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Client.Logic.Avatars;
 using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Players;
@@ -64,6 +65,7 @@ namespace YachtDice.Views
         public ProfileWindow(PlayerSession session)
         {
             InitializeComponent();
+            UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
             _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             UsernameTextBox.Text = session.DisplayName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);
@@ -256,7 +258,20 @@ namespace YachtDice.Views
                 item.Visibility = IsFlagItemShown(item, query) ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            FlagComboBox.IsDropDownOpen = query.Length > NoQueryLength;
+            Func<ComboBoxItem, bool> isShownCountry = IsShownCountry;
+            bool hasQuery = query.Length > NoQueryLength;
+            bool hasMatches = FlagComboBox.Items.Cast<ComboBoxItem>().Any(isShownCountry);
+            bool hasNoResults = hasQuery && !hasMatches;
+
+            FlagNoResultsTextBlock.Visibility = hasNoResults ? Visibility.Visible : Visibility.Collapsed;
+            FlagComboBox.IsDropDownOpen = hasQuery && hasMatches;
+        }
+
+        private static bool IsShownCountry(ComboBoxItem item)
+        {
+            var code = (string)item.Tag;
+
+            return code != NoFlagCode && item.Visibility == Visibility.Visible;
         }
 
         private static bool IsFlagItemShown(ComboBoxItem item, string query)
@@ -363,7 +378,14 @@ namespace YachtDice.Views
 
         private async void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            await GatewayCallRunner.RunAsync(this, _logger, SaveChangesAsync);
+            if (string.IsNullOrWhiteSpace(UsernameTextBox.Text))
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Profile_UsernameRequired);
+            }
+            else
+            {
+                await GatewayCallRunner.RunAsync(this, _logger, SaveChangesAsync);
+            }
         }
 
         private async Task SaveChangesAsync()

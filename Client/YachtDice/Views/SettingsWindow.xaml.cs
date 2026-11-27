@@ -578,10 +578,12 @@ namespace YachtDice.Views
 
         private async void DeleteAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            bool isConfirmed = CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FirstConfirmation)
-                && CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FinalConfirmation);
-
-            if (isConfirmed)
+            if (string.IsNullOrEmpty(DeleteAccountPasswordBox.Password))
+            {
+                CustomDialogWindow.ShowMessage(this, Strings.Settings_DeleteAccount_PasswordRequired);
+            }
+            else if (CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FirstConfirmation)
+                && CustomDialogWindow.Confirm(this, Strings.Settings_DeleteAccount_FinalConfirmation))
             {
                 var button = (Button)sender;
 

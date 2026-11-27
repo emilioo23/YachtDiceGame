@@ -252,6 +252,12 @@
                                   VerticalAlignment="Center"
                                   SelectionChanged="FlagComboBox_SelectionChanged"/>
                     </Grid>
+                    <TextBlock x:Name="FlagNoResultsTextBlock"
+                               Text="{x:Static properties:Strings.Profile_FlagSearchNoResults}"
+                               FontSize="15"
+                               Foreground="{StaticResource BrushTextMuted}"
+                               Visibility="Collapsed"
+                               Margin="0,-16,0,16"/>
                     <TextBlock Text="{x:Static properties:Strings.Profile_StatisticsHeader}"
                                FontSize="18"
                                FontWeight="Bold"

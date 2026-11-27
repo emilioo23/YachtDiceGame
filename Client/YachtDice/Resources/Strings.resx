@@ -207,8 +207,17 @@
   <data name="MainMenu_PlayerLevel" xml:space="preserve">
     <value>Nivel {0}</value>
   </data>
+  <data name="Profile_FlagSearchNoResults" xml:space="preserve">
+    <value>No hay países que coincidan con la búsqueda.</value>
+  </data>
   <data name="Profile_SavedMessage" xml:space="preserve">
     <value>Perfil guardado con éxito.</value>
+  </data>
+  <data name="Profile_UsernameRequired" xml:space="preserve">
+    <value>Escribe un nombre de usuario.</value>
+  </data>
+  <data name="Settings_DeleteAccount_PasswordRequired" xml:space="preserve">
+    <value>Escribe tu contraseña para borrar la cuenta.</value>
   </data>
   <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>Código reenviado.</value>

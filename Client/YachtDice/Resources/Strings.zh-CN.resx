@@ -207,8 +207,17 @@
   <data name="MainMenu_PlayerLevel" xml:space="preserve">
     <value>等级 {0}</value>
   </data>
+  <data name="Profile_FlagSearchNoResults" xml:space="preserve">
+    <value>没有符合搜索的国家。</value>
+  </data>
   <data name="Profile_SavedMessage" xml:space="preserve">
     <value>资料保存成功。</value>
+  </data>
+  <data name="Profile_UsernameRequired" xml:space="preserve">
+    <value>请输入用户名。</value>
+  </data>
+  <data name="Settings_DeleteAccount_PasswordRequired" xml:space="preserve">
+    <value>请输入密码以删除账户。</value>
   </data>
   <data name="TwoFactor_CodeResentMessage" xml:space="preserve">
     <value>验证码已重新发送。</value>

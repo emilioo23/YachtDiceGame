@@ -466,6 +466,24 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No hay países que coincidan con la búsqueda..
+        /// </summary>
+        public static string Profile_FlagSearchNoResults {
+            get {
+                return ResourceManager.GetString("Profile_FlagSearchNoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe un nombre de usuario..
+        /// </summary>
+        public static string Profile_UsernameRequired {
+            get {
+                return ResourceManager.GetString("Profile_UsernameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Música de fondo.
         /// </summary>
         public static string Settings_Audio_Music {
@@ -1299,6 +1317,15 @@ namespace YachtDice.Resources {
         public static string Settings_DeleteAccount_PasswordLabel {
             get {
                 return ResourceManager.GetString("Settings_DeleteAccount_PasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Escribe tu contraseña para borrar la cuenta..
+        /// </summary>
+        public static string Settings_DeleteAccount_PasswordRequired {
+            get {
+                return ResourceManager.GetString("Settings_DeleteAccount_PasswordRequired", resourceCulture);
             }
         }
         
