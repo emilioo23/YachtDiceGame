@@ -145,6 +145,51 @@ namespace YachtDice.Server.Tests.Authentication
             Assert.Throws<ArgumentNullException>(() => new LoginAttemptTracker(null));
         }
 
+        [Fact]
+        public void ToStatus_TemporaryLock_ReturnsTemporarilyLocked()
+        {
+            LoginStatus status = LoginAttemptTracker.ToStatus(LoginLock.Temporary);
+
+            Assert.Equal(LoginStatus.TemporarilyLocked, status);
+        }
+
+        [Fact]
+        public void ToStatus_DailyLock_ReturnsLockedForTheDay()
+        {
+            LoginStatus status = LoginAttemptTracker.ToStatus(LoginLock.Daily);
+
+            Assert.Equal(LoginStatus.LockedForTheDay, status);
+        }
+
+        [Fact]
+        public void ToStatus_LockForReports_ReturnsSuspendedByReports()
+        {
+            LoginStatus status = LoginAttemptTracker.ToStatus(LoginLock.Reported);
+
+            Assert.Equal(LoginStatus.SuspendedByReports, status);
+        }
+
+        [Fact]
+        public void RegisterFailure_WrongPasswordDuringATemporaryLock_KeepsTheAccountLocked()
+        {
+            FailTimes(PlayerId, LoginAttemptTracker.FailuresForTemporaryLock, Start);
+            _tracker.RegisterFailure(PlayerId, Start.AddMinutes(FourMinutes));
+
+            LoginLock currentLock = _tracker.GetLock(PlayerId, Start.AddMinutes(FourMinutes));
+
+            Assert.Equal(LoginLock.Temporary, currentLock);
+        }
+
+        [Fact]
+        public void RegisterSuccess_AccountWithoutFailures_DoesNotLock()
+        {
+            _tracker.RegisterSuccess(PlayerId);
+
+            LoginLock currentLock = _tracker.GetLock(PlayerId, Start);
+
+            Assert.Equal(LoginLock.None, currentLock);
+        }
+
         private void FailTimes(int playerId, int failures, DateTime moment)
         {
             for (int failureIndex = 0; failureIndex < failures; failureIndex++)

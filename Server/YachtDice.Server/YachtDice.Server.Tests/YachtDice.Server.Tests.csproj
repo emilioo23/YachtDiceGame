@@ -132,6 +132,7 @@
     <Compile Include="Services\ServiceBaseTests.cs" />
     <Compile Include="TwoFactor\BackupCodeTests.cs" />
     <Compile Include="TwoFactor\EmailVerificationTests.cs" />
+    <Compile Include="TwoFactor\TwoFactorCodeServiceTests.cs" />
     <Compile Include="TwoFactor\TwoFactorResendTests.cs" />
   </ItemGroup>
   <ItemGroup>
