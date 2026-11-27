@@ -134,7 +134,7 @@ namespace YachtDice.Views
             CustomDialogWindow.ShowMessage(Window.GetWindow(this), message);
         }
 
-        private async void InviteMenuItem_Click(object sender, RoutedEventArgs e)
+        private async void InviteButton_Click(object sender, RoutedEventArgs e)
         {
             await InviteAsync((string)((FrameworkElement)sender).Tag);
         }

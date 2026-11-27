@@ -874,7 +874,10 @@
     <value>Amigos</value>
   </data>
   <data name="Lobby_Friends_Hint" xml:space="preserve">
-    <value>Da clic derecho a un amigo en línea para invitarlo a la sala.</value>
+    <value>Usa el botón Invitar de un amigo en línea para invitarlo a la sala.</value>
+  </data>
+  <data name="Lobby_Friends_ButtonInvite" xml:space="preserve">
+    <value>Invitar</value>
   </data>
   <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
     <value>Invitar al jugador a la sala</value>

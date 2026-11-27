@@ -874,7 +874,10 @@
     <value>Friends</value>
   </data>
   <data name="Lobby_Friends_Hint" xml:space="preserve">
-    <value>Right-click an online friend to invite them to the room.</value>
+    <value>Use the Invite button of an online friend to invite them to the room.</value>
+  </data>
+  <data name="Lobby_Friends_ButtonInvite" xml:space="preserve">
+    <value>Invite</value>
   </data>
   <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
     <value>Invite player to the room</value>

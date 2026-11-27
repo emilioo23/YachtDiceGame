@@ -51,19 +51,12 @@
                                     Padding="10"
                                     Margin="0,0,0,8">
 
-                                <Border.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="{x:Static properties:Strings.Lobby_Friends_MenuInvite}"
-                                                  Tag="{Binding Name}"
-                                                  IsEnabled="{Binding IsOnline}"
-                                                  Click="InviteMenuItem_Click"/>
-                                    </ContextMenu>
-                                </Border.ContextMenu>
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Border Grid.Column="0"
@@ -103,6 +96,15 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                     </StackPanel>
+                                    <Button Grid.Column="2"
+                                            Content="{x:Static properties:Strings.Lobby_Friends_ButtonInvite}"
+                                            ToolTip="{x:Static properties:Strings.Lobby_Friends_MenuInvite}"
+                                            Style="{StaticResource BtnCompact}"
+                                            Tag="{Binding Name}"
+                                            IsEnabled="{Binding IsOnline}"
+                                            VerticalAlignment="Center"
+                                            Margin="8,0,0,0"
+                                            Click="InviteButton_Click"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>

@@ -862,7 +862,10 @@
     <value>好友</value>
   </data>
   <data name="Lobby_Friends_Hint" xml:space="preserve">
-    <value>右键点击在线好友即可邀请其加入房间。</value>
+    <value>点击在线好友旁的“邀请”按钮即可邀请其加入房间。</value>
+  </data>
+  <data name="Lobby_Friends_ButtonInvite" xml:space="preserve">
+    <value>邀请</value>
   </data>
   <data name="Lobby_Friends_MenuInvite" xml:space="preserve">
     <value>邀请玩家加入房间</value>

@@ -2113,11 +2113,20 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Da clic derecho a un amigo en línea para invitarlo a la sala..
+        ///   Busca una cadena traducida similar a Usa el botón Invitar de un amigo en línea para invitarlo a la sala..
         /// </summary>
         public static string Lobby_Friends_Hint {
             get {
                 return ResourceManager.GetString("Lobby_Friends_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invitar.
+        /// </summary>
+        public static string Lobby_Friends_ButtonInvite {
+            get {
+                return ResourceManager.GetString("Lobby_Friends_ButtonInvite", resourceCulture);
             }
         }
         
