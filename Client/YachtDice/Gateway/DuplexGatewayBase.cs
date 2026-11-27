@@ -145,8 +145,7 @@ namespace YachtDice.Gateway
             {
                 DiscardClient(client);
                 _logger.Error(ex, LogMessages.ServerUnavailableLogMessage);
-                throw new GatewayException(GatewayErrorCode.ServerUnavailable, LogMessages.ServerUnavailableMessage,
-                    ex);
+                throw new GatewayException(GatewayErrorCode.ConnectionLost, LogMessages.ConnectionLostMessage, ex);
             }
             catch (TimeoutException ex)
             {

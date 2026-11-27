@@ -385,6 +385,15 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Se perdió la conexión con el servidor. La red o el servidor se cayeron; inténtalo de nuevo en unos momentos..
+        /// </summary>
+        public static string Dialogs_NetworkDown {
+            get {
+                return ResourceManager.GetString("Dialogs_NetworkDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo..
         /// </summary>
         public static string Dialogs_ServerUnavailable {

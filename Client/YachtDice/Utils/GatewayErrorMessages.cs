@@ -22,6 +22,9 @@ namespace YachtDice.Utils
                 case GatewayErrorCode.ServerUnavailable:
                     message = Strings.Dialogs_ServerUnavailable;
                     break;
+                case GatewayErrorCode.ConnectionLost:
+                    message = Strings.Dialogs_NetworkDown;
+                    break;
                 case GatewayErrorCode.DatabaseUnavailable:
                     message = Strings.Dialogs_DatabaseUnavailable;
                     break;

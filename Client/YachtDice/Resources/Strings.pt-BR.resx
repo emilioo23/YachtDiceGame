@@ -711,6 +711,9 @@
   <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
     <value>Aguarde alguns segundos antes de pedir outro código.</value>
   </data>
+  <data name="Dialogs_NetworkDown" xml:space="preserve">
+    <value>A conexão com o servidor foi perdida. A rede ou o servidor caiu; tente novamente em alguns instantes.</value>
+  </data>
   <data name="Dialogs_ServerUnavailable" xml:space="preserve">
     <value>Não foi possível conectar ao servidor. Verifique sua conexão com a internet e tente novamente.</value>
   </data>

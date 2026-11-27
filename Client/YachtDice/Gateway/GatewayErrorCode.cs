@@ -11,6 +11,9 @@
         /// <summary>The server could not be reached or did not answer in time.</summary>
         ServerUnavailable,
 
+        /// <summary>The connection with the server dropped because the network or the server went down.</summary>
+        ConnectionLost,
+
         /// <summary>The server could not reach its database.</summary>
         DatabaseUnavailable,
 

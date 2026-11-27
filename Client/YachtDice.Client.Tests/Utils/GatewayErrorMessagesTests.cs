@@ -21,6 +21,22 @@ namespace YachtDice.Client.Tests.Utils
         }
 
         [Fact]
+        public void GetMessage_ConnectionLost_ReturnsTheLostConnectionMessage()
+        {
+            string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.ConnectionLost);
+
+            Assert.Equal(Strings.Dialogs_NetworkDown, message);
+        }
+
+        [Fact]
+        public void GetMessage_ConnectionLost_IsNotTheMessageOfAnUnreachableServer()
+        {
+            string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.ConnectionLost);
+
+            Assert.NotEqual(Strings.Dialogs_ServerUnavailable, message);
+        }
+
+        [Fact]
         public void GetMessage_DatabaseUnavailable_ReturnsTheDatabaseMessage()
         {
             string message = GatewayErrorMessages.GetMessage(GatewayErrorCode.DatabaseUnavailable);

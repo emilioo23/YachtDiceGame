@@ -711,6 +711,9 @@
   <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
     <value>请等待几秒后再申请新的验证码。</value>
   </data>
+  <data name="Dialogs_NetworkDown" xml:space="preserve">
+    <value>与服务器的连接已断开。网络或服务器出现故障，请稍后重试。</value>
+  </data>
   <data name="Dialogs_ServerUnavailable" xml:space="preserve">
     <value>无法连接到服务器。请检查网络连接后重试。</value>
   </data>

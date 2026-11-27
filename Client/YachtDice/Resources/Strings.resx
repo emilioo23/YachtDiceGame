@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -710,6 +710,9 @@
   </data>
   <data name="TwoFactor_ErrorResendTooSoon" xml:space="preserve">
     <value>Espera unos segundos antes de solicitar otro código.</value>
+  </data>
+  <data name="Dialogs_NetworkDown" xml:space="preserve">
+    <value>Se perdió la conexión con el servidor. La red o el servidor se cayeron; inténtalo de nuevo en unos momentos.</value>
   </data>
   <data name="Dialogs_ServerUnavailable" xml:space="preserve">
     <value>No se pudo conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.</value>

@@ -267,6 +267,11 @@
         public const string ServerUnavailableMessage = "The server is not available.";
 
         /// <summary>
+        /// Exception message: The connection with the server was lost.
+        /// </summary>
+        public const string ConnectionLostMessage = "The connection with the server was lost.";
+
+        /// <summary>
         /// Exception message: The server presented a certificate whose thumbprint is not the one of the game.
         /// </summary>
         public const string UnknownCertificateMessage =
