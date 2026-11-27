@@ -272,6 +272,7 @@
                                        Foreground="{StaticResource BrushTextMuted}"/>
 
                             <PasswordBox x:Name="CurrentPasswordBox"
+                                         utils:EnterKeySubmit.Button="{Binding ElementName=SavePasswordButton}"
                                          Style="{StaticResource PasswordBoxRounded}"
                                          Width="300"
                                          FontSize="18"
@@ -285,6 +286,7 @@
                                        Foreground="{StaticResource BrushTextMuted}"/>
 
                             <PasswordBox x:Name="NewPasswordBox"
+                                         utils:EnterKeySubmit.Button="{Binding ElementName=SavePasswordButton}"
                                          Style="{StaticResource PasswordBoxRounded}"
                                          Width="300"
                                          FontSize="18"
