@@ -284,24 +284,40 @@
                     <Grid Grid.Row="4"
                           Margin="0,10,0,0">
                         <ToggleButton x:Name="GameSettingsToggleButton"
-                                      Content="{x:Static properties:Strings.Global_SymbolSettings}"
-                                      ToolTip="{x:Static properties:Strings.MainMenu_Nav_Settings}"
+                                      Content="{x:Static properties:Strings.MainMenu_Nav_Settings}"
                                       HorizontalAlignment="Left"
-                                      FontSize="20"
+                                      Background="{StaticResource BrushWhite}"
+                                      Foreground="{StaticResource BrushWoodDark}"
+                                      BorderBrush="{StaticResource BrushBorder}"
+                                      FontFamily="{StaticResource FontBodySemibold}"
+                                      FontWeight="SemiBold"
+                                      FontSize="14"
+                                      Padding="12,6"
                                       Cursor="Hand">
                             <ToggleButton.Style>
                                 <Style TargetType="ToggleButton">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ToggleButton">
-                                                <Border Background="{StaticResource BrushCream}"
-                                                        BorderBrush="{StaticResource BrushGold}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="8"
-                                                        Padding="12,2">
+                                                <Border x:Name="bd"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="1.5"
+                                                        CornerRadius="10"
+                                                        Padding="{TemplateBinding Padding}">
                                                     <ContentPresenter HorizontalAlignment="Center"
                                                                       VerticalAlignment="Center"/>
                                                 </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushCream2}"/>
+                                                        <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushWood}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushCream2}"/>
+                                                        <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushWood}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>

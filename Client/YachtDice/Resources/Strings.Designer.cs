@@ -1213,15 +1213,6 @@ namespace YachtDice.Resources {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a ⚙.
-        /// </summary>
-        public static string Global_SymbolSettings {
-            get {
-                return ResourceManager.GetString("Global_SymbolSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a ⊘.
         /// </summary>
         public static string Global_SymbolBlock {
