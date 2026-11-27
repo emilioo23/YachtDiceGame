@@ -50,5 +50,8 @@
 		<achievement id="21" metric="Level" requiredValue="20" />
 		<achievement id="22" metric="Experience" requiredValue="1000" hasTitle="false" />
 		<achievement id="23" metric="Experience" requiredValue="5000" />
+		<achievement id="24" metric="GamesAgainstComputer" requiredValue="1" hasTitle="false" />
+		<achievement id="25" metric="WinsAgainstComputer" requiredValue="5" hasTitle="false" />
+		<achievement id="26" metric="WinsAgainstComputer" requiredValue="10" />
 	</achievements>
 </gameRules>

@@ -1389,6 +1389,24 @@
   <data name="Achievement_23_Description" xml:space="preserve">
     <value>Acumula 5000 de XP</value>
   </data>
+  <data name="Achievement_24_Name" xml:space="preserve">
+    <value>Contra la máquina</value>
+  </data>
+  <data name="Achievement_24_Description" xml:space="preserve">
+    <value>Juega una partida contra la computadora</value>
+  </data>
+  <data name="Achievement_25_Name" xml:space="preserve">
+    <value>Vence a la máquina</value>
+  </data>
+  <data name="Achievement_25_Description" xml:space="preserve">
+    <value>Gana 5 partidas contra la computadora</value>
+  </data>
+  <data name="Achievement_26_Name" xml:space="preserve">
+    <value>Terror de los robots</value>
+  </data>
+  <data name="Achievement_26_Description" xml:space="preserve">
+    <value>Gana 10 partidas contra la computadora</value>
+  </data>
   <data name="Title_0" xml:space="preserve">
     <value>Debutante</value>
   </data>
@@ -1457,6 +1475,9 @@
   </data>
   <data name="Title_23" xml:space="preserve">
     <value>Titán</value>
+  </data>
+  <data name="Title_26" xml:space="preserve">
+    <value>Cazarrobots</value>
   </data>
   <data name="Profile_TitleLocked" xml:space="preserve">
     <value>{0} (bloqueado)</value>

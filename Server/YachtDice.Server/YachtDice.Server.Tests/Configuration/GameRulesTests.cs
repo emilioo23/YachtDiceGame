@@ -16,7 +16,7 @@ namespace YachtDice.Server.Tests.Configuration
         private const int FastTurnSeconds = 30;
         private const int SecondLevelStart = 200;
         private const int SecondLevel = 2;
-        private const int AchievementCount = 23;
+        private const int AchievementCount = 26;
         private const int AchievementWithoutTitleId = 22;
         private const string Modes =
             "<gameModes>"

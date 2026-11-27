@@ -33,6 +33,16 @@
         /// <summary>
         /// Total experience of the player.
         /// </summary>
-        Experience
+        Experience,
+
+        /// <summary>
+        /// Number of games played against the computer.
+        /// </summary>
+        GamesAgainstComputer,
+
+        /// <summary>
+        /// Number of games won against the computer.
+        /// </summary>
+        WinsAgainstComputer
     }
 }

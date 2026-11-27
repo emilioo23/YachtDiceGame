@@ -140,6 +140,12 @@ namespace YachtDice.Server.Logic.Players
                 case AchievementMetric.Experience:
                     value = statistics.Experience;
                     break;
+                case AchievementMetric.GamesAgainstComputer:
+                    value = statistics.GamesAgainstComputer;
+                    break;
+                case AchievementMetric.WinsAgainstComputer:
+                    value = statistics.WinsAgainstComputer;
+                    break;
                 default:
                     value = NoMeasuredValue;
                     break;

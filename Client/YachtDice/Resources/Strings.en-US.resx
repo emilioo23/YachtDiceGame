@@ -1389,6 +1389,24 @@
   <data name="Achievement_23_Description" xml:space="preserve">
     <value>Earn 5000 XP</value>
   </data>
+  <data name="Achievement_24_Name" xml:space="preserve">
+    <value>Against the machine</value>
+  </data>
+  <data name="Achievement_24_Description" xml:space="preserve">
+    <value>Play a game against the computer</value>
+  </data>
+  <data name="Achievement_25_Name" xml:space="preserve">
+    <value>Beat the machine</value>
+  </data>
+  <data name="Achievement_25_Description" xml:space="preserve">
+    <value>Win 5 games against the computer</value>
+  </data>
+  <data name="Achievement_26_Name" xml:space="preserve">
+    <value>Robot terror</value>
+  </data>
+  <data name="Achievement_26_Description" xml:space="preserve">
+    <value>Win 10 games against the computer</value>
+  </data>
   <data name="Title_0" xml:space="preserve">
     <value>Debutant</value>
   </data>
@@ -1457,6 +1475,9 @@
   </data>
   <data name="Title_23" xml:space="preserve">
     <value>Titan</value>
+  </data>
+  <data name="Title_26" xml:space="preserve">
+    <value>Robot hunter</value>
   </data>
   <data name="Profile_TitleLocked" xml:space="preserve">
     <value>{0} (locked)</value>

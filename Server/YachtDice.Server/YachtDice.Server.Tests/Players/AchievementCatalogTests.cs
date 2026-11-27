@@ -28,7 +28,12 @@ namespace YachtDice.Server.Tests.Players
         private const int GrandMasterAchievementId = 21;
         private const int CollectorAchievementId = 22;
         private const int MountainAchievementId = 23;
-        private const int AchievementCount = 23;
+        private const int AchievementCount = 26;
+        private const int AgainstTheMachineAchievementId = 24;
+        private const int BeatTheMachineAchievementId = 25;
+        private const int RobotTerrorAchievementId = 26;
+        private const int FourWins = 4;
+        private const int TenWins = 10;
         private const int UnknownTitleId = 99;
         private const int OneGame = 1;
         private const int FiveGames = 5;
@@ -244,6 +249,82 @@ namespace YachtDice.Server.Tests.Players
             };
 
             Assert.Throws<ArgumentException>(() => new AchievementCatalog(rules));
+        }
+
+        [Fact]
+        public void GetUnlockedIds_OneGameAgainstTheComputer_UnlocksAgainstTheMachine()
+        {
+            var statistics = new PlayerStatistics { GamesPlayed = OneGame, GamesAgainstComputer = OneGame };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.Contains(AgainstTheMachineAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void GetUnlockedIds_GamesOnlyAgainstPeople_DoesNotUnlockAgainstTheMachine()
+        {
+            var statistics = new PlayerStatistics { GamesPlayed = TenGames };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.DoesNotContain(AgainstTheMachineAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void GetUnlockedIds_FourWinsAgainstTheComputer_DoesNotUnlockBeatTheMachine()
+        {
+            var statistics = new PlayerStatistics { GamesAgainstComputer = FourWins, WinsAgainstComputer = FourWins };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.DoesNotContain(BeatTheMachineAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void GetUnlockedIds_FiveWinsAgainstTheComputer_UnlocksBeatTheMachine()
+        {
+            var statistics = new PlayerStatistics { GamesAgainstComputer = FiveWins, WinsAgainstComputer = FiveWins };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.Contains(BeatTheMachineAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void GetUnlockedIds_TenWinsAgainstTheComputer_UnlocksRobotTerror()
+        {
+            var statistics = new PlayerStatistics { GamesAgainstComputer = TenWins, WinsAgainstComputer = TenWins };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.Contains(RobotTerrorAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void GetUnlockedIds_TenWinsOnlyAgainstPeople_DoesNotUnlockRobotTerror()
+        {
+            var statistics = new PlayerStatistics { GamesPlayed = TenGames, Wins = TenWins };
+
+            List<int> unlockedIds = _catalog.GetUnlockedIds(statistics);
+
+            Assert.DoesNotContain(RobotTerrorAchievementId, unlockedIds);
+        }
+
+        [Fact]
+        public void ExistsTitle_RobotTerror_ReturnsTrue()
+        {
+            bool exists = _catalog.ExistsTitle(RobotTerrorAchievementId);
+
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public void ExistsTitle_BeatTheMachine_ReturnsFalse()
+        {
+            bool exists = _catalog.ExistsTitle(BeatTheMachineAchievementId);
+
+            Assert.False(exists);
         }
 
         [Fact]

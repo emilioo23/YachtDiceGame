@@ -1371,6 +1371,24 @@
   <data name="Achievement_23_Description" xml:space="preserve">
     <value>累计5000经验值</value>
   </data>
+  <data name="Achievement_24_Name" xml:space="preserve">
+    <value>人机对战</value>
+  </data>
+  <data name="Achievement_24_Description" xml:space="preserve">
+    <value>与电脑进行一局游戏</value>
+  </data>
+  <data name="Achievement_25_Name" xml:space="preserve">
+    <value>击败电脑</value>
+  </data>
+  <data name="Achievement_25_Description" xml:space="preserve">
+    <value>战胜电脑 5 局</value>
+  </data>
+  <data name="Achievement_26_Name" xml:space="preserve">
+    <value>机器人克星</value>
+  </data>
+  <data name="Achievement_26_Description" xml:space="preserve">
+    <value>战胜电脑 10 局</value>
+  </data>
   <data name="Title_0" xml:space="preserve">
     <value>新手登场</value>
   </data>
@@ -1439,6 +1457,9 @@
   </data>
   <data name="Title_23" xml:space="preserve">
     <value>泰坦</value>
+  </data>
+  <data name="Title_26" xml:space="preserve">
+    <value>机器人猎手</value>
   </data>
   <data name="Profile_TitleLocked" xml:space="preserve">
     <value>{0}（未解锁）</value>
