@@ -58,6 +58,8 @@ namespace YachtDice.Views
         public SettingsWindow(PlayerSession session, string initialSection = AccountSection)
         {
             InitializeComponent();
+            MusicVolumeSlider.Minimum = AudioSettings.MinVolume;
+            MusicVolumeSlider.Maximum = AudioSettings.MaxVolume;
             TwoFactorPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             PasskeyPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;
             CurrentPasswordBox.MaxLength = RegistrationLimits.PasswordMaxLength;

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
+using YachtDice.Client.Logic.Audio;
 using YachtDice.Client.Logic.Game;
 using YachtDice.Client.Logic.Logging;
 using YachtDice.Client.Logic.Rooms;
@@ -80,6 +81,8 @@ namespace YachtDice.Views
             _services = _roomGateway.Session.Services;
             _sounds = new SoundEffectPlayer(_services.Audio);
             InitializeComponent();
+            MusicVolumeSlider.Minimum = AudioSettings.MinVolume;
+            MusicVolumeSlider.Maximum = AudioSettings.MaxVolume;
 
             _playerId = roomGateway.PlayerId;
             _gameGateway = new GameGateway(new RoomMembership(_playerId, roomGateway.CurrentRoom.Code));
