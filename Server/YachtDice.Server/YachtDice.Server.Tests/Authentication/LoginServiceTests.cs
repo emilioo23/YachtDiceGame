@@ -123,11 +123,11 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_UnknownEmailAndWrongPasswordOfARegisteredEmail_ReturnTheSameResult()
         {
-            LoginResult unknownEmailResult = _service.LoginPlayer(CreateCredentials(UnknownEmail, WrongPassword));
+            LoginResult loginExpected = _service.LoginPlayer(CreateCredentials(UnknownEmail, WrongPassword));
 
-            LoginResult wrongPasswordResult = _service.LoginPlayer(CreateCredentials(Email, WrongPassword));
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Email, WrongPassword));
 
-            Assert.Equivalent(unknownEmailResult, wrongPasswordResult);
+            Assert.Equivalent(loginExpected, loginResult);
         }
 
         [Fact]
@@ -260,12 +260,11 @@ namespace YachtDice.Server.Tests.Authentication
         [Fact]
         public void LoginPlayer_UnknownUsernameAndWrongPasswordOfARegisteredUsername_ReturnTheSameResult()
         {
-            LoginResult unknownUsernameResult =
-                _service.LoginPlayer(CreateCredentials(UnknownUsername, WrongPassword));
+            LoginResult loginExpected = _service.LoginPlayer(CreateCredentials(UnknownUsername, WrongPassword));
 
-            LoginResult wrongPasswordResult = _service.LoginPlayer(CreateCredentials(Username, WrongPassword));
+            LoginResult loginResult = _service.LoginPlayer(CreateCredentials(Username, WrongPassword));
 
-            Assert.Equivalent(unknownUsernameResult, wrongPasswordResult);
+            Assert.Equivalent(loginExpected, loginResult);
         }
 
         [Theory]

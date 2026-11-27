@@ -117,12 +117,12 @@ namespace YachtDice.Client.Tests.Connection
         {
             _failuresBeforeSuccess = NeverWorks;
             ReconnectLoop loop = CreateLoop();
-            int attemptsInTheTimeOfTheServer = ReconnectWaitTracker.ReconnectSeconds
-                / ReconnectLoop.RetryIntervalSeconds;
+            int attemptsExpected = ReconnectWaitTracker.ReconnectSeconds / ReconnectLoop.RetryIntervalSeconds;
 
             await loop.RunAsync();
 
-            Assert.Equal(attemptsInTheTimeOfTheServer, _attempts);
+            int attemptsResult = _attempts;
+            Assert.Equal(attemptsExpected, attemptsResult);
         }
 
         [Fact]

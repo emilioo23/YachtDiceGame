@@ -90,7 +90,7 @@ namespace YachtDice.Client.Tests.Settings
         [Fact]
         public void Normalize_ChosenThemeAndAudio_KeepsTheChoices()
         {
-            var preferences = new UserPreferences
+            var preferencesExpected = new UserPreferences
             {
                 IsDarkTheme = true,
                 AreEffectsEnabled = false,
@@ -98,9 +98,9 @@ namespace YachtDice.Client.Tests.Settings
                 MusicVolume = QuietVolume
             };
 
-            UserPreferences normalized = preferences.Normalize();
+            UserPreferences preferencesResult = preferencesExpected.Normalize();
 
-            Assert.Equivalent(preferences, normalized);
+            Assert.Equivalent(preferencesExpected, preferencesResult);
         }
     }
 }

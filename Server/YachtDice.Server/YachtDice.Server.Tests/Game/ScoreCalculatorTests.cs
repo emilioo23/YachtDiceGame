@@ -158,13 +158,13 @@ namespace YachtDice.Server.Tests.Game
         [Theory]
         [InlineData(new[] { 2, 2, 2, 2, 2 }, true)]
         [InlineData(new[] { 2, 2, 2, 2, 3 }, false)]
-        public void IsYacht_Dice_TellsWhetherAllAreEqual(int[] dice, bool isExpectedYacht)
+        public void IsYacht_Dice_TellsWhetherAllAreEqual(int[] dice, bool isYachtExpected)
         {
             var calculator = new ScoreCalculator();
 
-            bool isYacht = calculator.IsYacht(dice);
+            bool isYachtResult = calculator.IsYacht(dice);
 
-            Assert.Equal(isExpectedYacht, isYacht);
+            Assert.Equal(isYachtExpected, isYachtResult);
         }
 
         [Fact]

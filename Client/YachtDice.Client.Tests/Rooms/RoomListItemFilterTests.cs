@@ -146,9 +146,11 @@ namespace YachtDice.Client.Tests.Rooms
         [Fact]
         public void Apply_NullSearchText_KeepsEveryRoom()
         {
-            List<RoomListItem> filteredRoomsResult = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, null);
+            List<RoomListItem> roomsExpected = _rooms;
 
-            Assert.Equal(_rooms, filteredRoomsResult);
+            List<RoomListItem> roomsResult = RoomListItemFilter.Apply(_rooms, RoomPrivacyFilter.All, null);
+
+            Assert.Equal(roomsExpected, roomsResult);
         }
 
         [Fact]
