@@ -164,7 +164,22 @@ namespace YachtDice.Views
         {
             _isLeavingOnClose = false;
 
-            return new GameWindow(_roomGateway, _chat);
+            var window = new GameWindow(_roomGateway, _chat);
+            window.ContinueTurn(_state, _heldDice);
+
+            return window;
+        }
+
+        private void ContinueTurn(GameState state, HeldDiceSelection heldDice)
+        {
+            bool[] held = heldDice.ToArray();
+
+            _state = state;
+
+            for (int index = 0; index < held.Length; index++)
+            {
+                _heldDice.Toggle(index, held[index]);
+            }
         }
 
         private void StartChat()
