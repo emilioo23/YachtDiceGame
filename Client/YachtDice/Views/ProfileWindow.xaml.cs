@@ -35,6 +35,7 @@ namespace YachtDice.Views
         private const int FlagIconGap = 8;
         private const int NotFoundIndex = -1;
         private const int NoQueryLength = 0;
+        private const int MaxFlagSearchLength = 40;
         private const double BadgeFontSize = 14;
         private const double BadgeCornerRadius = 16;
         private const double BadgeHorizontalPadding = 12;
@@ -66,6 +67,7 @@ namespace YachtDice.Views
         {
             InitializeComponent();
             UsernameTextBox.MaxLength = RegistrationLimits.UsernameMaxLength;
+            FlagSearchTextBox.MaxLength = MaxFlagSearchLength;
             _session = session ?? throw new ArgumentNullException(nameof(session), LogMessages.NullSessionMessage);
             UsernameTextBox.Text = session.DisplayName;
             LanguageSwitcherControl.ReopenWindowFunc = () => new ProfileWindow(session);

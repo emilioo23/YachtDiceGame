@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using YachtDice.AuthenticationServiceReference;
+using YachtDice.Client.Logic.Authentication;
 using YachtDice.Client.Logic.Logging;
 using YachtDice.Composition;
 using YachtDice.Gateway;
@@ -28,6 +29,7 @@ namespace YachtDice.Views
         public ForgotPasswordWindow(ClientServices services)
         {
             InitializeComponent();
+            EmailTextBox.MaxLength = RegistrationLimits.EmailMaxLength;
             _logger = new AppLogger(GetType());
             _services = services ?? throw new ArgumentNullException(nameof(services), LogMessages.NullServicesMessage);
             LanguageSwitcherControl.ReopenWindowFunc = () => new ForgotPasswordWindow(services);
