@@ -300,17 +300,29 @@ namespace YachtDice.Views
 
         private async void AddFriendButton_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
             await SendFriendRequestAsync();
+            button.IsEnabled = true;
         }
 
         private async void AcceptRequestButton_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
             await RespondToRequestAsync(ReadTag(sender), true);
+            button.IsEnabled = true;
         }
 
         private async void RejectRequestButton_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
+
+            button.IsEnabled = false;
             await RespondToRequestAsync(ReadTag(sender), false);
+            button.IsEnabled = true;
         }
 
         private async void RemoveFriendButton_Click(object sender, RoutedEventArgs e)

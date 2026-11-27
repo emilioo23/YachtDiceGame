@@ -386,7 +386,9 @@ namespace YachtDice.Views
             }
             else
             {
+                SaveChangesButton.IsEnabled = false;
                 await GatewayCallRunner.RunAsync(this, _logger, SaveChangesAsync);
+                SaveChangesButton.IsEnabled = true;
             }
         }
 

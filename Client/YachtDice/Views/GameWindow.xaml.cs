@@ -404,6 +404,7 @@ namespace YachtDice.Views
         {
             _isReconnecting = true;
             RollButton.IsEnabled = false;
+            LanguageSwitcherControl.IsEnabled = false;
 
             bool isRecovered = await _connectionRecovery.RecoverAsync();
 
@@ -411,6 +412,7 @@ namespace YachtDice.Views
 
             if (!_isClosed)
             {
+                LanguageSwitcherControl.IsEnabled = true;
                 LinkBanner.Visibility = Visibility.Collapsed;
                 RenderRollButtonIfStateKnown();
             }
@@ -539,6 +541,7 @@ namespace YachtDice.Views
             {
                 _isBusy = true;
                 RollButton.IsEnabled = false;
+                LanguageSwitcherControl.IsEnabled = false;
 
                 string errorMessage = await TryExecuteAsync(action);
 
@@ -546,6 +549,7 @@ namespace YachtDice.Views
 
                 if (!_isClosed)
                 {
+                    LanguageSwitcherControl.IsEnabled = !_isReconnecting;
                     RenderRollButton();
                     ShowActionError(errorMessage);
                 }
