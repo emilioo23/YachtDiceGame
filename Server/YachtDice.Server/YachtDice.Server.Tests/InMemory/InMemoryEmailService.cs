@@ -15,10 +15,16 @@ namespace YachtDice.Server.Tests.InMemory
         /// </summary>
         public IReadOnlyList<string> Recipients => _recipients;
 
+        /// <summary>
+        /// Gets the last email that was sent, or null if none was sent.
+        /// </summary>
+        public EmailMessage LastMessage { get; private set; }
+
         /// <inheritdoc />
         public void Send(EmailMessage message)
         {
             _recipients.Add(message.ToAddress);
+            LastMessage = message;
         }
     }
 }

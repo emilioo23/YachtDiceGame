@@ -59,6 +59,8 @@
     <Compile Include="Configuration\GameRulesTests.cs" />
     <Compile Include="Data\PlayerRepositoryTests.cs" />
     <Compile Include="Email\AccountLockNotifierTests.cs" />
+    <Compile Include="Email\CodeEmailSenderTests.cs" />
+    <Compile Include="Email\CodeEmailTemplateTests.cs" />
     <Compile Include="Email\EmailServiceTests.cs" />
     <Compile Include="Friends\FriendshipServiceTests.cs" />
     <Compile Include="Friends\PlayerReportTests.cs" />
