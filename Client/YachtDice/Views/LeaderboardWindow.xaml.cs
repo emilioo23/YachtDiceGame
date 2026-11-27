@@ -158,10 +158,10 @@ namespace YachtDice.Views
 
         private async Task ShowFriendsRankingAsync()
         {
-            List<string> friendNames = await _friendGateway.GetFriendsAsync(
+            Dictionary<string, int> friends = await _friendGateway.GetFriendsAsync(
                 _session.SessionToken,
                 _session.DisplayName);
-            var allowedNames = new HashSet<string>(friendNames, StringComparer.OrdinalIgnoreCase)
+            var allowedNames = new HashSet<string>(friends.Keys, StringComparer.OrdinalIgnoreCase)
             {
                 _session.DisplayName
             };

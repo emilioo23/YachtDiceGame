@@ -31,28 +31,39 @@ namespace YachtDice.Utils
         /// <summary>
         /// Creates the rows of the friends who are online.
         /// </summary>
-        /// <param name="friendNames">Names of all the friends.</param>
+        /// <param name="friends">Avatar of each friend by name.</param>
         /// <param name="onlineNames">Names of all the players who are online.</param>
         /// <returns>One row for each friend who is online, ordered by name.</returns>
-        public static List<FriendItem> CreateOnline(IEnumerable<string> friendNames, ICollection<string> onlineNames)
+        public static List<FriendItem> CreateOnline(IDictionary<string, int> friends, ICollection<string> onlineNames)
         {
             var presence = new FriendPresence(Strings.MainMenu_Friends_StatusOnline, true);
+            Func<string, bool> isOnline = name => IsOnline(name, onlineNames);
 
-            return Create(friendNames.Where(name => IsOnline(name, onlineNames)), presence);
+            return WithAvatars(Create(friends.Keys.Where(isOnline), presence), friends);
         }
 
         /// <summary>
         /// Creates the rows of the friends who are not online.
         /// </summary>
-        /// <param name="friendNames">Names of all the friends.</param>
+        /// <param name="friends">Avatar of each friend by name.</param>
         /// <param name="onlineNames">Names of all the players who are online.</param>
         /// <returns>One row for each friend who is offline, ordered by name.</returns>
-        public static List<FriendItem> CreateOffline(IEnumerable<string> friendNames, ICollection<string> onlineNames)
+        public static List<FriendItem> CreateOffline(IDictionary<string, int> friends, ICollection<string> onlineNames)
         {
             Func<string, bool> isNotOnline = name => !IsOnline(name, onlineNames);
             var presence = new FriendPresence(Strings.MainMenu_Friends_StatusOffline, false);
 
-            return Create(friendNames.Where(isNotOnline), presence);
+            return WithAvatars(Create(friends.Keys.Where(isNotOnline), presence), friends);
+        }
+
+        private static List<FriendItem> WithAvatars(List<FriendItem> friendItems, IDictionary<string, int> friends)
+        {
+            foreach (FriendItem friendItem in friendItems)
+            {
+                friendItem.AvatarId = friends[friendItem.Name];
+            }
+
+            return friendItems;
         }
 
         private static bool IsOnline(string name, ICollection<string> onlineNames)

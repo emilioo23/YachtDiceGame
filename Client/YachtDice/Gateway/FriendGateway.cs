@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -144,16 +145,17 @@ namespace YachtDice.Gateway
         }
 
         /// <summary>
-        /// Gets the names of the friends of the player.
+        /// Gets the friends of the player with the avatar that each one shows.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The names of the friends.</returns>
-        public async Task<List<string>> GetFriendsAsync(string sessionToken, string displayName)
+        /// <returns>The avatar of each friend by name, ignoring the case of the name.</returns>
+        public async Task<Dictionary<string, int>> GetFriendsAsync(string sessionToken, string displayName)
         {
-            string[] friends = await ExecuteAsync(client => client.GetFriends(sessionToken, displayName));
+            Dictionary<string, int> friends =
+                await ExecuteAsync(client => client.GetFriends(sessionToken, displayName));
 
-            return friends.ToList();
+            return new Dictionary<string, int>(friends, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

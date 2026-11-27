@@ -547,7 +547,7 @@ namespace YachtDice.FriendServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriends", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendsServiceFaultFault", Name="ServiceFault")]
-        string[] GetFriends(string sessionToken, string displayName);
+        System.Collections.Generic.Dictionary<string, int> GetFriends(string sessionToken, string displayName);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:yachtdice:contracts/IFriendService/GetFriendRequests", ReplyAction="urn:yachtdice:contracts/IFriendService/GetFriendRequestsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(YachtDice.FriendServiceReference.ServiceFault), Action="urn:yachtdice:contracts/IFriendService/GetFriendRequestsServiceFaultFault", Name="ServiceFault")]
@@ -621,7 +621,7 @@ namespace YachtDice.FriendServiceReference {
             return base.Channel.GetUsername(sessionToken);
         }
         
-        public string[] GetFriends(string sessionToken, string displayName) {
+        public System.Collections.Generic.Dictionary<string, int> GetFriends(string sessionToken, string displayName) {
             return base.Channel.GetFriends(sessionToken, displayName);
         }
         

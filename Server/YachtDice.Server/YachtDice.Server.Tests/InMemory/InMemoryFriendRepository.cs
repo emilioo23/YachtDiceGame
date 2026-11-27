@@ -49,7 +49,12 @@ namespace YachtDice.Server.Tests.InMemory
         /// <inheritdoc />
         public List<Player> FindFriends(int playerId)
         {
-            return new List<Player>();
+            List<int> friendIds = _friendships
+                .Where(friendship => IsAcceptedWith(friendship, playerId))
+                .Select(friendship => FindOtherPlayerId(friendship, playerId))
+                .ToList();
+
+            return _players.Players.Where(player => friendIds.Contains(player.Id)).ToList();
         }
 
         /// <inheritdoc />
@@ -132,6 +137,23 @@ namespace YachtDice.Server.Tests.InMemory
         private static bool IsBlockedBy(Friendship friendship, int playerId)
         {
             return friendship.RequesterId == playerId && friendship.Status == FriendshipStatus.Blocked;
+        }
+
+        private static bool IsAcceptedWith(Friendship friendship, int playerId)
+        {
+            return IsWithPlayer(friendship, playerId) && friendship.Status == FriendshipStatus.Accepted;
+        }
+
+        private static int FindOtherPlayerId(Friendship friendship, int playerId)
+        {
+            int otherPlayerId = friendship.RequesterId;
+
+            if (otherPlayerId == playerId)
+            {
+                otherPlayerId = friendship.AddresseeId;
+            }
+
+            return otherPlayerId;
         }
 
         private static bool IsWithPlayer(Friendship friendship, int playerId)

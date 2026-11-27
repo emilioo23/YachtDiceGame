@@ -182,18 +182,18 @@ namespace YachtDice.Server.Services
         }
 
         /// <summary>
-        /// Gets the names of the friends of the player.
+        /// Gets the friends of the player with the avatar that each one shows.
         /// </summary>
         /// <param name="sessionToken">Token of the session of the player, or an empty text for a guest.</param>
         /// <param name="displayName">Name of the player.</param>
-        /// <returns>The names of the friends, or an empty list if the player has none.</returns>
-        public List<string> GetFriends(string sessionToken, string displayName)
+        /// <returns>The avatar of each friend by name, or an empty dictionary if the player has none.</returns>
+        public Dictionary<string, int> GetFriends(string sessionToken, string displayName)
         {
-            List<string> friendNames = Execute(
+            Dictionary<string, int> friendAvatars = Execute(
                 displayName,
-                () => _friendshipService.GetFriendNames(ResolvePlayerName(sessionToken, displayName)));
+                () => _friendshipService.GetFriendAvatars(ResolvePlayerName(sessionToken, displayName)));
 
-            return friendNames;
+            return friendAvatars;
         }
 
         /// <summary>

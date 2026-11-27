@@ -11,6 +11,7 @@ namespace YachtDice.Server.Tests.InMemory
     public class InMemoryFriendshipService : IFriendshipService
     {
         private const string NotSupportedMessage = "The tests that use this service do not need this operation.";
+        private const int DefaultAvatarId = 1;
 
         private readonly Dictionary<string, int> _playerIds =
             new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -33,6 +34,19 @@ namespace YachtDice.Server.Tests.InMemory
         public List<string> GetFriendNames(string displayName)
         {
             return new List<string>(GetOrCreateList(displayName));
+        }
+
+        /// <inheritdoc />
+        public Dictionary<string, int> GetFriendAvatars(string displayName)
+        {
+            var avatars = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string friendName in GetOrCreateList(displayName))
+            {
+                avatars[friendName] = DefaultAvatarId;
+            }
+
+            return avatars;
         }
 
         /// <inheritdoc />

@@ -16,6 +16,11 @@
         public string Initial { get; set; }
 
         /// <summary>
+        /// Identifier of the avatar that the friend shows; zero when it is not known, as in a request.
+        /// </summary>
+        public int AvatarId { get; set; }
+
+        /// <summary>
         /// Current connection or activity status.
         /// </summary>
         public string Status { get; set; }

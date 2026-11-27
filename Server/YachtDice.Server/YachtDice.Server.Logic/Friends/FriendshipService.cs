@@ -301,6 +301,27 @@ namespace YachtDice.Server.Logic.Friends
             return names;
         }
 
+        /// <summary>
+        /// Gets the friends of the player with the avatar that each one shows.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The avatar of each friend by name, or an empty dictionary if the player has none.</returns>
+        public Dictionary<string, int> GetFriendAvatars(string displayName)
+        {
+            var avatars = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            Player player = _playerRepository.FindByName(displayName).FirstOrDefault();
+
+            if (player != null)
+            {
+                foreach (Player friend in _friendRepository.FindFriends(player.Id))
+                {
+                    avatars[friend.DisplayName] = friend.AvatarId;
+                }
+            }
+
+            return avatars;
+        }
+
         private static List<string> ToNames(List<Player> players)
         {
             Func<string, bool> hasName = name => !string.IsNullOrWhiteSpace(name);

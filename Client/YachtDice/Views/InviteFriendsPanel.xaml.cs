@@ -20,7 +20,7 @@ namespace YachtDice.Views
     {
         private readonly FriendGateway _friendGateway = new FriendGateway();
         private RoomGateway _roomGateway;
-        private List<string> _friendNames = new List<string>();
+        private Dictionary<string, int> _friends = new Dictionary<string, int>();
 
         /// <summary>
         /// Initializes the panel without friends.
@@ -71,7 +71,7 @@ namespace YachtDice.Views
         {
             try
             {
-                _friendNames = await _friendGateway.GetFriendsAsync(
+                _friends = await _friendGateway.GetFriendsAsync(
                     _roomGateway.Session.SessionToken,
                     _roomGateway.Session.DisplayName);
                 ShowFriends();
@@ -85,8 +85,8 @@ namespace YachtDice.Views
         private void ShowFriends()
         {
             List<string> onlineNames = _roomGateway.Session.Presence.OnlinePlayers;
-            List<FriendItem> friends = FriendItemFactory.CreateOnline(_friendNames, onlineNames)
-                .Concat(FriendItemFactory.CreateOffline(_friendNames, onlineNames))
+            List<FriendItem> friends = FriendItemFactory.CreateOnline(_friends, onlineNames)
+                .Concat(FriendItemFactory.CreateOffline(_friends, onlineNames))
                 .ToList();
 
             FriendsItemsControl.ItemsSource = friends;

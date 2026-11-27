@@ -36,7 +36,7 @@ namespace YachtDice.Views
         private readonly FriendGateway _friendGateway = new FriendGateway();
         private readonly PlayerSession _session;
         private readonly InvitationListener _invitationListener;
-        private List<string> _friendNames = new List<string>();
+        private Dictionary<string, int> _friends = new Dictionary<string, int>();
 
         /// <summary>
         /// Initializes the main menu for the given player.
@@ -156,7 +156,7 @@ namespace YachtDice.Views
         {
             if (!_session.IsGuest)
             {
-                _friendNames = await _friendGateway.GetFriendsAsync(_session.SessionToken, _session.DisplayName);
+                _friends = await _friendGateway.GetFriendsAsync(_session.SessionToken, _session.DisplayName);
                 List<string> requesterNames = await _friendGateway.GetRequestsAsync(_session.SessionToken);
                 OwnUsernameTextBox.Text = await _friendGateway.GetUsernameAsync(_session.SessionToken);
 
@@ -287,8 +287,8 @@ namespace YachtDice.Views
         private void ShowOnlinePlayers()
         {
             List<string> onlineNames = _session.Presence.OnlinePlayers;
-            List<FriendItem> onlineFriends = FriendItemFactory.CreateOnline(_friendNames, onlineNames);
-            List<FriendItem> offlineFriends = FriendItemFactory.CreateOffline(_friendNames, onlineNames);
+            List<FriendItem> onlineFriends = FriendItemFactory.CreateOnline(_friends, onlineNames);
+            List<FriendItem> offlineFriends = FriendItemFactory.CreateOffline(_friends, onlineNames);
 
             InMatchFriendsList.ItemsSource = new List<FriendItem>();
             OnlineFriendsList.ItemsSource = onlineFriends;

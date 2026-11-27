@@ -76,6 +76,13 @@ namespace YachtDice.Server.Logic.Friends
         List<string> GetFriendNames(string displayName);
 
         /// <summary>
+        /// Gets the friends of the player with the avatar that each one shows.
+        /// </summary>
+        /// <param name="displayName">Name of the player.</param>
+        /// <returns>The avatar of each friend by name, or an empty dictionary if the player has none.</returns>
+        Dictionary<string, int> GetFriendAvatars(string displayName);
+
+        /// <summary>
         /// Gets the names of the players who sent a friend request that the player has not answered.
         /// </summary>
         /// <param name="displayName">Name of the player.</param>

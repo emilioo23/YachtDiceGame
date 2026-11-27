@@ -25,6 +25,7 @@ namespace YachtDice.Server.Tests.Friends
         private const int ConfiguredMaxFriends = 2;
         private const int EightDays = 8;
         private const int FiveRequests = 5;
+        private const int TargetAvatarId = 4;
 
         private readonly InMemoryPlayerRepository _players = new InMemoryPlayerRepository();
         private readonly InMemoryFriendRepository _friends;
@@ -75,6 +76,47 @@ namespace YachtDice.Server.Tests.Friends
             FriendActionStatus status = _service.RespondToRequest(TargetDisplayName, RequesterName, true);
 
             Assert.Equal(FriendActionStatus.RelationNotFound, status);
+        }
+
+        [Fact]
+        public void GetFriendAvatars_Friend_ReturnsTheAvatarOfTheFriend()
+        {
+            _players.FindByName(TargetDisplayName).Single().AvatarId = TargetAvatarId;
+            AcceptRequestBetweenThePlayers();
+
+            int avatarId = _service.GetFriendAvatars(RequesterName)[TargetDisplayName];
+
+            Assert.Equal(TargetAvatarId, avatarId);
+        }
+
+        [Fact]
+        public void GetFriendAvatars_FriendNameInOtherCase_FindsTheFriend()
+        {
+            AcceptRequestBetweenThePlayers();
+
+            bool hasFriend = _service.GetFriendAvatars(RequesterName).ContainsKey(TargetDisplayName.ToUpperInvariant());
+
+            Assert.True(hasFriend);
+        }
+
+        [Fact]
+        public void GetFriendAvatars_PlayerWithoutFriends_ReturnsAnEmptyDictionary()
+        {
+            Assert.Empty(_service.GetFriendAvatars(RequesterName));
+        }
+
+        [Fact]
+        public void GetFriendAvatars_UnknownPlayer_ReturnsAnEmptyDictionary()
+        {
+            Assert.Empty(_service.GetFriendAvatars(UnknownRequesterName));
+        }
+
+        [Fact]
+        public void GetFriendAvatars_PendingRequest_DoesNotIncludeThePlayer()
+        {
+            _service.SendRequest(RequesterName, TargetUsername);
+
+            Assert.Empty(_service.GetFriendAvatars(RequesterName));
         }
 
         [Fact]
