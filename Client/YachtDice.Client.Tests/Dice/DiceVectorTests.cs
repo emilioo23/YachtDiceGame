@@ -27,6 +27,48 @@ namespace YachtDice.Client.Tests.Dice
         }
 
         [Fact]
+        public void Constructor_AnyValues_KeepsTheValuesInOrder()
+        {
+            var valuesExpected = new { X = FirstValue, Y = SecondValue, Z = ThirdValue };
+
+            var vector = new DiceVector(FirstValue, SecondValue, ThirdValue);
+
+            Assert.Equivalent(valuesExpected, new { vector.X, vector.Y, vector.Z });
+        }
+
+        [Fact]
+        public void Negate_VectorNegatedTwice_ReturnsTheSameValues()
+        {
+            var vector = new DiceVector(FirstValue, SecondValue, ThirdValue);
+
+            DiceVector vectorResult = vector.Negate().Negate();
+
+            Assert.Equivalent(vector, vectorResult);
+        }
+
+        [Fact]
+        public void Negate_Vector_DoesNotChangeTheOriginal()
+        {
+            var vectorExpected = new DiceVector(FirstValue, SecondValue, ThirdValue);
+            var vector = new DiceVector(FirstValue, SecondValue, ThirdValue);
+
+            vector.Negate();
+
+            Assert.Equivalent(vectorExpected, vector);
+        }
+
+        [Fact]
+        public void Round_NegativeValuesWithLongDecimals_KeepsTheSign()
+        {
+            var vectorExpected = new DiceVector(-RoundedValue, -RoundedValue, -RoundedValue);
+            var vector = new DiceVector(-LongDecimalsValue, -LongDecimalsValue, -LongDecimalsValue);
+
+            DiceVector vectorResult = vector.Round(RoundingDecimals);
+
+            Assert.Equivalent(vectorExpected, vectorResult);
+        }
+
+        [Fact]
         public void Round_ValuesWithLongDecimals_KeepsOnlyTheRequestedDecimals()
         {
             var vectorExpected = new DiceVector(RoundedValue, RoundedValue, RoundedValue);

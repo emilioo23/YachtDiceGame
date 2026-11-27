@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\AudioSettingsTests.cs" />
+    <Compile Include="Dice\FaceUpRotationTests.cs" />
     <Compile Include="InMemory\InMemoryUnitSequence.cs" />
     <Compile Include="Passkeys\Base64UrlTests.cs" />
     <Compile Include="Passkeys\PasskeyClientDataTests.cs" />
@@ -73,6 +74,8 @@
     <Compile Include="Game\YachtCelebrationRuleTests.cs" />
     <Compile Include="Players\FlagCodesTests.cs" />
     <Compile Include="Players\HistoryDisplayTests.cs" />
+    <Compile Include="Rooms\GameParticipantTests.cs" />
+    <Compile Include="Rooms\RoomMembershipTests.cs" />
     <Compile Include="Settings\LanguageCatalogTests.cs" />
     <Compile Include="Settings\GameplaySettingsTests.cs" />
     <Compile Include="Settings\UserPreferencesTests.cs" />
