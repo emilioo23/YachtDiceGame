@@ -38,6 +38,7 @@
 
                     <Button x:Name="AccountNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Account}"
+                            utils:ButtonIcon.Key="Account"
                             Style="{StaticResource TabButtonActive}"
                             Margin="0,0,0,8"
                             Click="AccountNavButton_Click"
@@ -45,6 +46,7 @@
 
                     <Button x:Name="AppearanceNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Appearance}"
+                            utils:ButtonIcon.Key="Appearance"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="AppearanceNavButton_Click"
@@ -52,6 +54,7 @@
 
                     <Button x:Name="SecurityNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Security}"
+                            utils:ButtonIcon.Key="Security"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="SecurityNavButton_Click"
@@ -59,6 +62,7 @@
 
                     <Button x:Name="NotificationsNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Notifications}"
+                            utils:ButtonIcon.Key="Notifications"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="NotificationsNavButton_Click"
@@ -66,6 +70,7 @@
 
                     <Button x:Name="PreferencesNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Preferences}"
+                            utils:ButtonIcon.Key="Preferences"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,8"
                             Click="PreferencesNavButton_Click"
@@ -73,6 +78,7 @@
 
                     <Button x:Name="PrivacyNavButton"
                             Content="{x:Static properties:Strings.Settings_Nav_Privacy}"
+                            utils:ButtonIcon.Key="Privacy"
                             Style="{StaticResource BtnOutline}"
                             Margin="0,0,0,20"
                             Click="PrivacyNavButton_Click"
@@ -83,6 +89,7 @@
                             Margin="0,0,0,20"/>
 
                     <Button Content="{x:Static properties:Strings.Global_ButtonBack}"
+                            utils:ButtonIcon.Key="Back"
                             Style="{StaticResource BtnBack}"
                             HorizontalAlignment="Stretch"
                             IsCancel="True"

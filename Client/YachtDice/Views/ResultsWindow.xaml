@@ -1,5 +1,6 @@
 ﻿<Window x:Class="YachtDice.Views.ResultsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:utils="clr-namespace:YachtDice.Utils"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:YachtDice.Resources"
         xmlns:views="clr-namespace:YachtDice.Views"
@@ -126,8 +127,10 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="{x:Static properties:Strings.Results_ButtonMenu}"
+                            utils:ButtonIcon.Key="Home"
                             Style="{StaticResource BtnOutline}" Padding="26,12" Margin="0,0,10,0" IsCancel="True" Click="MenuButton_Click"/>
                     <Button Content="{x:Static properties:Strings.Results_ButtonNewGame}"
+                            utils:ButtonIcon.Key="Dice"
                             Style="{StaticResource BtnPrimary}" Padding="26,12" Click="NewGameButton_Click"/>
                 </StackPanel>
 

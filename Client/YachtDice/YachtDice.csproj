@@ -298,6 +298,7 @@
     <Compile Include="Utils\AvatarImageConverter.cs" />
     <Compile Include="Utils\AvatarImages.cs" />
     <Compile Include="Utils\ImageCatalog.cs" />
+    <Compile Include="Utils\ButtonIcon.cs" />
     <Compile Include="Utils\EnterKeySubmit.cs" />
     <Compile Include="Utils\HowToPlayContent.cs" />
     <Compile Include="Utils\GatewayCallRunner.cs" />
@@ -426,6 +427,10 @@
     <Compile Include="Views\TwoFactorWindow.xaml.cs">
       <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Theme.Dark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -56,6 +56,7 @@
 
                         <Button Grid.Column="0"
                                 Content="{x:Static res:Strings.Global_ButtonBack}"
+                                utils:ButtonIcon.Key="Back"
                                 Style="{StaticResource BtnBack}"
                                 VerticalAlignment="Center"
                                 IsCancel="True"

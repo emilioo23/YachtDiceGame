@@ -190,6 +190,7 @@
                                    Foreground="{StaticResource BrushText}"/>
 
                         <Button Content="{x:Static properties:Strings.Global_ButtonBack}"
+                                utils:ButtonIcon.Key="Back"
                                 Style="{StaticResource BtnOutline}"
                                 HorizontalAlignment="Right"
                                 Padding="14,6"
@@ -360,6 +361,7 @@
                     <Button x:Name="SaveChangesButton"
                             Grid.Row="2"
                             Content="{x:Static properties:Strings.Profile_ButtonSaveChanges}"
+                            utils:ButtonIcon.Key="Save"
                             Style="{StaticResource BtnPrimary}"
                             HorizontalAlignment="Stretch"
                             FontSize="18"

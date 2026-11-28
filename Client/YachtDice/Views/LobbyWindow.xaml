@@ -1,5 +1,6 @@
 ﻿<Window x:Class="YachtDice.Views.LobbyWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:utils="clr-namespace:YachtDice.Utils"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:YachtDice.Resources"
         xmlns:views="clr-namespace:YachtDice.Views"
@@ -35,6 +36,7 @@
 
                 <Button x:Name="BackToMenuButton"
                         Content="{x:Static properties:Strings.Lobby_ButtonBackToMenu}"
+                        utils:ButtonIcon.Key="Back"
                         Style="{StaticResource BtnOutline}"
                         Padding="20,10"
                         FontSize="16"
@@ -42,6 +44,7 @@
 
                 <Button x:Name="HowToPlayButton"
                         Content="{x:Static properties:Strings.Game_Sidebar_ButtonHowToPlay}"
+                        utils:ButtonIcon.Key="HowToPlay"
                         Style="{StaticResource BtnOutline}"
                         Margin="10,0,0,0"
                         Padding="20,10"
@@ -349,6 +352,7 @@
                                                        TextWrapping="Wrap"/>
 
                                             <Button Content="{x:Static properties:Strings.Lobby_ButtonAddComputer}"
+                                                    utils:ButtonIcon.Key="Computer"
                                                     Style="{StaticResource BtnCompact}"
                                                     Margin="0,8,0,0"
                                                     Visibility="{Binding CanAddComputer,
@@ -370,6 +374,7 @@
 
                         <Button Grid.Column="0"
                                 Content="{x:Static properties:Strings.Lobby_ButtonCopyCode}"
+                                utils:ButtonIcon.Key="Copy"
                                 Style="{StaticResource BtnOutline}"
                                 Margin="0,0,10,0"
                                 Padding="0,13"
@@ -379,6 +384,7 @@
                         <Button x:Name="StartGameButton"
                                 Grid.Column="1"
                                 Content="{x:Static properties:Strings.Lobby_ButtonStartMatch}"
+                                utils:ButtonIcon.Key="Play"
                                 Style="{StaticResource BtnPrimary}"
                                 FontSize="17"
                                 Padding="0,13"
