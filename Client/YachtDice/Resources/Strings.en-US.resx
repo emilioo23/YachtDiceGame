@@ -181,7 +181,7 @@
     <value>Email is required.</value>
   </data>
   <data name="Global_ButtonBack" xml:space="preserve">
-    <value>← Back</value>
+    <value>Back</value>
   </data>
   <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
     <value>Edit profile</value>
@@ -256,7 +256,7 @@
     <value>Player list</value>
   </data>
   <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
-    <value>+ Add</value>
+    <value>Add</value>
   </data>
   <data name="MainMenu_Play_Welcome" xml:space="preserve">
     <value>Welcome back,</value>
@@ -274,7 +274,7 @@
     <value>Enter a room code</value>
   </data>
   <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
-    <value>Join →</value>
+    <value>Join</value>
   </data>
   <data name="MainMenu_Play_StatGames" xml:space="preserve">
     <value>Games</value>
@@ -331,7 +331,7 @@
     <value>Copy code</value>
   </data>
   <data name="Lobby_ButtonStartMatch" xml:space="preserve">
-    <value>Start game →</value>
+    <value>Start game</value>
   </data>
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
     <value>Code copied: {0}</value>
@@ -865,7 +865,7 @@
     <value>Rooms</value>
   </data>
   <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
-    <value>← Back to menu</value>
+    <value>Back to menu</value>
   </data>
   <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
     <value>The room code is not correct.</value>

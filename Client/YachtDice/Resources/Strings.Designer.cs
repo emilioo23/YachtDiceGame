@@ -1573,7 +1573,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ← Volver.
+        ///   Busca una cadena traducida similar a Volver.
         /// </summary>
         public static string Global_ButtonBack {
             get {
@@ -2041,7 +2041,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ← Regresar al menú.
+        ///   Busca una cadena traducida similar a Regresar al menú.
         /// </summary>
         public static string Lobby_ButtonBackToMenu {
             get {
@@ -2059,7 +2059,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Iniciar partida →.
+        ///   Busca una cadena traducida similar a Iniciar partida.
         /// </summary>
         public static string Lobby_ButtonStartMatch {
             get {
@@ -2563,7 +2563,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a + Agregar.
+        ///   Busca una cadena traducida similar a Agregar.
         /// </summary>
         public static string MainMenu_Friends_ButtonAdd {
             get {
@@ -2671,7 +2671,7 @@ namespace YachtDice.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Entrar →.
+        ///   Busca una cadena traducida similar a Entrar.
         /// </summary>
         public static string MainMenu_Play_ButtonJoin {
             get {

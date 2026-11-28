@@ -181,7 +181,7 @@
     <value>O e-mail é obrigatório.</value>
   </data>
   <data name="Global_ButtonBack" xml:space="preserve">
-    <value>← Voltar</value>
+    <value>Voltar</value>
   </data>
   <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
     <value>Editar perfil</value>
@@ -256,7 +256,7 @@
     <value>Lista de jogadores</value>
   </data>
   <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
-    <value>+ Adicionar</value>
+    <value>Adicionar</value>
   </data>
   <data name="MainMenu_Play_Welcome" xml:space="preserve">
     <value>Bem-vindo de volta,</value>
@@ -274,7 +274,7 @@
     <value>Digite o código de uma sala</value>
   </data>
   <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
-    <value>Entrar →</value>
+    <value>Entrar</value>
   </data>
   <data name="MainMenu_Play_StatGames" xml:space="preserve">
     <value>Partidas</value>
@@ -331,7 +331,7 @@
     <value>Copiar código</value>
   </data>
   <data name="Lobby_ButtonStartMatch" xml:space="preserve">
-    <value>Iniciar partida →</value>
+    <value>Iniciar partida</value>
   </data>
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
     <value>Código copiado: {0}</value>
@@ -853,7 +853,7 @@
     <value>Salas</value>
   </data>
   <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
-    <value>← Voltar ao menu</value>
+    <value>Voltar ao menu</value>
   </data>
   <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
     <value>O código da sala não está correto.</value>

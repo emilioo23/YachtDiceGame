@@ -181,7 +181,7 @@
     <value>请输入邮箱。</value>
   </data>
   <data name="Global_ButtonBack" xml:space="preserve">
-    <value>← 返回</value>
+    <value>返回</value>
   </data>
   <data name="MainMenu_ButtonEditProfile" xml:space="preserve">
     <value>编辑资料</value>
@@ -256,7 +256,7 @@
     <value>玩家列表</value>
   </data>
   <data name="MainMenu_Friends_ButtonAdd" xml:space="preserve">
-    <value>+ 添加</value>
+    <value>添加</value>
   </data>
   <data name="MainMenu_Play_Welcome" xml:space="preserve">
     <value>欢迎回来，</value>
@@ -274,7 +274,7 @@
     <value>输入房间代码</value>
   </data>
   <data name="MainMenu_Play_ButtonJoin" xml:space="preserve">
-    <value>进入 →</value>
+    <value>进入</value>
   </data>
   <data name="MainMenu_Play_StatGames" xml:space="preserve">
     <value>对局</value>
@@ -331,7 +331,7 @@
     <value>复制代码</value>
   </data>
   <data name="Lobby_ButtonStartMatch" xml:space="preserve">
-    <value>开始对局 →</value>
+    <value>开始对局</value>
   </data>
   <data name="Lobby_NotificationCodeCopied" xml:space="preserve">
     <value>已复制代码：{0}</value>
@@ -853,7 +853,7 @@
     <value>房间</value>
   </data>
   <data name="Lobby_ButtonBackToMenu" xml:space="preserve">
-    <value>← 返回菜单</value>
+    <value>返回菜单</value>
   </data>
   <data name="Lobby_Result_InvalidAccessCode" xml:space="preserve">
     <value>房间代码不正确。</value>
